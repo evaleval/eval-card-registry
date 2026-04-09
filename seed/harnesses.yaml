@@ -1,0 +1,86 @@
+# Known canonical evaluation harnesses — pre-populated on seed.
+# Source: derived from scanning all EEE configs (scripts/scan_eee_entities.py).
+
+- id: lm-evaluation-harness
+  display_name: LM Evaluation Harness
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: helm
+  display_name: HELM
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench
+  display_name: RewardBench
+  aliases: ["rewardbench"]
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-bench-harness
+  display_name: SWE-bench Harness
+  aliases: ["swe-bench"]
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: wordle-arena
+  display_name: Wordle Arena
+  aliases: ["wordle_arena"]
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: exgentic
+  display_name: Exgentic
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: archipelago
+  display_name: Archipelago
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bfcl-harness
+  display_name: BFCL
+  aliases: ["BFCL"]
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: sciarena-harness
+  display_name: SciArena
+  aliases: ["SciArena"]
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-prize-leaderboard
+  display_name: ARC Prize Leaderboard
+  aliases: ["ARC Prize leaderboard"]
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: kaggle-kernel
+  display_name: Kaggle Kernel
+  aliases: ["kaggle kernel"]
+  version: null
+  fork_url: null
+  metadata: '{}'
+  review_status: reviewed

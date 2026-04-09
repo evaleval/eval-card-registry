@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "eval-entity-resolver"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "pandas>=2.2.0",
+    "pyarrow>=16.0.0",
+    "huggingface-hub>=0.23.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eval_entity_resolver"]

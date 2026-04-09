@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - LOCAL_MODE=${LOCAL_MODE:-true}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - HF_DATASET_REPO=${HF_DATASET_REPO:-}
+      - RESOLVER_AUTO_MERGE_THRESHOLD=${RESOLVER_AUTO_MERGE_THRESHOLD:-0.85}
+      - SYNC_OUTPUT_DIR=/app/output
+    volumes:
+      - ./fixtures:/app/fixtures
+      - ./output:/app/output

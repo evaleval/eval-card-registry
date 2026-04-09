@@ -1,0 +1,333 @@
+# Known canonical benchmarks — pre-populated on seed.
+# id: lowercase slug used as canonical ID and in alias lookups.
+# Source: derived from scanning all EEE configs (scripts/scan_eee_entities.py).
+
+# --- Core leaderboard benchmarks (hfopenllm_v2, la_leaderboard) ---
+
+- id: ifeval
+  display_name: IFEval
+  description: Instruction Following Evaluation — tests instruction-following with verifiable constraints.
+  dataset_repo: HuggingFaceH4/ifeval
+  parent_benchmark_id: null
+  tags: '["instruction-following"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bbh
+  display_name: BBH
+  description: BIG-Bench Hard — subset of BIG-Bench tasks where prior models performed below human average.
+  dataset_repo: lukaemon/bbh
+  parent_benchmark_id: null
+  tags: '["reasoning", "multi-task"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: gpqa
+  display_name: GPQA
+  description: Graduate-Level Google-Proof Q&A — expert-level science questions.
+  dataset_repo: Idavidrein/gpqa
+  parent_benchmark_id: null
+  tags: '["science", "expert-knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: musr
+  display_name: MuSR
+  aliases: ["MUSR"]
+  description: Multistep Soft Reasoning — evaluates multi-step reasoning over long narratives.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mmlu-pro
+  display_name: MMLU-Pro
+  aliases: ["MMLU-PRO", "mmlu_pro"]
+  description: Massive Multitask Language Understanding Pro — harder version with more answer choices.
+  dataset_repo: TIGER-Lab/MMLU-Pro
+  parent_benchmark_id: null
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: math
+  display_name: MATH
+  aliases: ["MATH Level 5"]
+  description: MATH dataset — competition mathematics problems at various difficulty levels.
+  dataset_repo: hendrycks/math
+  parent_benchmark_id: null
+  tags: '["math", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- HELM benchmarks ---
+
+- id: mmlu
+  display_name: MMLU
+  aliases: ["MMLU All Subjects"]
+  description: Massive Multitask Language Understanding — 57-subject multiple-choice benchmark.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: null
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: narrativeqa
+  display_name: NarrativeQA
+  description: Reading comprehension over full-length books and movie scripts.
+  dataset_repo: deepmind/narrativeqa
+  parent_benchmark_id: null
+  tags: '["reading-comprehension"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: naturalquestions
+  display_name: NaturalQuestions
+  aliases: ["NaturalQuestions (closed-book)"]
+  description: Google Natural Questions — closed-book factoid QA.
+  dataset_repo: google-research-datasets/natural_questions
+  parent_benchmark_id: null
+  tags: '["qa", "knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: openbookqa
+  display_name: OpenbookQA
+  description: Elementary science QA requiring multi-hop reasoning with open book facts.
+  dataset_repo: allenai/openbookqa
+  parent_benchmark_id: null
+  tags: '["science", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: gsm8k
+  display_name: GSM8K
+  description: Grade School Math 8K — grade school math word problems.
+  dataset_repo: openai/gsm8k
+  parent_benchmark_id: null
+  tags: '["math", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: legalbench
+  display_name: LegalBench
+  description: Legal reasoning benchmark covering 162 tasks from legal professionals.
+  dataset_repo: nguha/legalbench
+  parent_benchmark_id: null
+  tags: '["legal", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: medqa
+  display_name: MedQA
+  description: Medical QA from USMLE-style questions.
+  dataset_repo: bigbio/med_qa
+  parent_benchmark_id: null
+  tags: '["medical", "knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: wmt-2014
+  display_name: WMT 2014
+  aliases: ["WMT 2014"]
+  description: Machine translation benchmark from the 2014 Workshop on Machine Translation.
+  dataset_repo: wmt/wmt14
+  parent_benchmark_id: null
+  tags: '["translation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- RewardBench family ---
+
+- id: rewardbench
+  display_name: RewardBench
+  description: Evaluates reward models across chat, safety, and reasoning sub-categories.
+  dataset_repo: allenai/reward-bench
+  parent_benchmark_id: null
+  tags: '["reward-model", "alignment"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-chat
+  display_name: RewardBench Chat
+  aliases: ["Chat"]
+  description: RewardBench sub-category — chat prompts.
+  dataset_repo: allenai/reward-bench
+  parent_benchmark_id: rewardbench
+  tags: '["reward-model", "chat"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-chat-hard
+  display_name: RewardBench Chat Hard
+  aliases: ["Chat Hard"]
+  description: RewardBench sub-category — hard chat prompts.
+  dataset_repo: allenai/reward-bench
+  parent_benchmark_id: rewardbench
+  tags: '["reward-model", "chat"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-safety
+  display_name: RewardBench Safety
+  aliases: ["Safety"]
+  description: RewardBench sub-category — safety-focused prompts.
+  dataset_repo: allenai/reward-bench
+  parent_benchmark_id: rewardbench
+  tags: '["reward-model", "safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-reasoning
+  display_name: RewardBench Reasoning
+  aliases: ["Reasoning"]
+  description: RewardBench sub-category — reasoning prompts.
+  dataset_repo: allenai/reward-bench
+  parent_benchmark_id: rewardbench
+  tags: '["reward-model", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Agent / coding benchmarks ---
+
+- id: swe-bench
+  display_name: SWE-bench
+  aliases: ["swe-bench"]
+  description: Software Engineering Benchmark — evaluates LLMs on real GitHub issue resolution.
+  dataset_repo: princeton-nlp/SWE-bench
+  parent_benchmark_id: null
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: appworld-test-normal
+  display_name: AppWorld Test Normal
+  aliases: ["appworld/test_normal"]
+  description: AppWorld benchmark — tests LLM agents on realistic app-based tasks (normal subset).
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "tool-use"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: browsecompplus
+  display_name: BrowseCompPlus
+  aliases: ["browsecompplus"]
+  description: Web browsing comprehension benchmark (extended version).
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "web-browsing"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: tau-bench-airline
+  display_name: Tau-Bench Airline
+  aliases: ["tau-bench-2/airline"]
+  description: Tau-Bench 2 airline domain — agent-based customer service tasks.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "customer-service"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: tau-bench-retail
+  display_name: Tau-Bench Retail
+  aliases: ["tau-bench-2/retail"]
+  description: Tau-Bench 2 retail domain — agent-based customer service tasks.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "customer-service"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: tau-bench-telecom
+  display_name: Tau-Bench Telecom
+  aliases: ["tau-bench-2/telecom"]
+  description: Tau-Bench 2 telecom domain — agent-based customer service tasks.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "customer-service"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Function calling ---
+
+- id: bfcl
+  display_name: BFCL
+  description: Berkeley Function Calling Leaderboard — evaluates LLM function calling capabilities.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: null
+  tags: '["function-calling", "tool-use"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Multilingual ---
+
+- id: global-mmlu-lite
+  display_name: Global MMLU Lite
+  description: Lightweight multilingual MMLU covering 16 languages.
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: null
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: la-leaderboard
+  display_name: LA Leaderboard
+  aliases: ["la_leaderboard"]
+  description: LLM evaluation for Spanish varieties and languages of Spain and Latin America.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["multilingual", "spanish"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Other well-known benchmarks ---
+
+- id: wildbench
+  display_name: WildBench
+  description: Evaluates LLMs on challenging real-world user queries.
+  dataset_repo: allenai/WildBench
+  parent_benchmark_id: null
+  tags: '["chat", "real-world"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: omni-math
+  display_name: Omni-MATH
+  aliases: ["Omni-MATH"]
+  description: Comprehensive math benchmark spanning diverse mathematical domains.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["math", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-agi
+  display_name: ARC-AGI
+  description: Abstraction and Reasoning Corpus — tests general fluid intelligence.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["reasoning", "abstraction"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: sciarena
+  display_name: SciArena
+  description: Scientific arena evaluation for LLMs.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["science"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livecodebench
+  display_name: LiveCodeBench
+  aliases: ["livecodebenchpro"]
+  description: Live code generation benchmark with continuously updated problems.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding"]'
+  metadata: '{}'
+  review_status: reviewed
