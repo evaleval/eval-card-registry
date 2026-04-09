@@ -3,6 +3,23 @@ EEE sync pipeline.
 
 Per-record processing → sub-category detection → resolution → eval_results table.
 Pushes HF Hub at end of run.
+
+Known data-quality issues
+---------------------------------------------------
+Some configs use a metric keyword as ``evaluation_name`` for aggregate /
+summary rows instead of a real benchmark name.  These create problematic benchmark
+entities (``score``, ``overall``, ``mean-score``, ``mean-win-rate``).
+
+* ``reward-bench``: ``"Score"`` — composite metric across rewardbench
+  subcategories (chat, chat-hard, safety, reasoning).
+* ``ace``: ``"Overall"`` / ``"overall"`` — rollup across ACE/APEX
+  sub-evaluations.
+* ``helm_capabilities``: ``"Mean score"`` — mean across all HELM capability
+  benchmarks for a model.
+* ``helm_instruct``: ``"Mean win rate"`` — mean win rate across all HELM
+  instruct benchmarks.
+
+Fix should happen upstream as part of wider discussion on schema design.
 """
 from __future__ import annotations
 
@@ -10,6 +27,8 @@ import json
 import sys
 from collections import defaultdict
 from typing import Any, Iterator, Optional
+
+from eval_entity_resolver.eee import clean_eval_name, extract_metric
 
 from eval_card_registry.config import settings
 from eval_card_registry.store.hf_store import RegistryStore
@@ -24,115 +43,6 @@ def _iter_eee_config(source_config: str) -> Iterator[dict]:
     ds = datasets.load_dataset("evaleval/EEE_datastore", source_config)["train"]
     for i in range(len(ds)):
         yield dict(ds[i])
-
-
-def _extract_metric(metric_desc: str) -> str:
-    """
-    Extract a reusable metric name from an EEE evaluation description.
-
-    EEE configs rarely provide a structured metric_id.  Instead the metric
-    lives inside ``evaluation_description`` in one of several formats:
-
-    * **"X on Y"** — ``"Accuracy on IFEval"`` → ``"Accuracy"``
-    * **Dot notation** — ``"bfcl.live.live_accuracy"`` → ``"accuracy"``
-    * **Verbose description** — ``"Chat accuracy - includes easy subsets"``
-      → ``"accuracy"`` (keyword extraction)
-    * **No keyword** — ``"Global MMLU Lite - Arabic"`` → ``"score"``
-      (generic fallback)
-
-    The returned string is passed to the resolver, which maps it to a
-    canonical metric entity via alias lookup / normalized match.
-    """
-    import re
-
-    text = metric_desc.strip()
-    if not text:
-        return text
-
-    from_dot = False
-
-    # 1. Dot notation: "bfcl.live.live_accuracy" → last segment → "live accuracy"
-    if "." in text and " " not in text:
-        text = text.rsplit(".", 1)[1].replace("_", " ").strip()
-        from_dot = True
-
-    # 2. "X on Y" pattern: "Accuracy on IFEval" → "Accuracy"
-    if not from_dot:
-        m = re.match(r"^(.+?)\s+on\s+\S+", text, re.IGNORECASE)
-        if m:
-            text = m.group(1).strip()
-
-    # 3. Determine if the text is a description (needs keyword extraction)
-    #    vs. an already-clean metric name (pass through to resolver).
-    is_description = from_dot or (
-        text.rstrip(".!?") != text          # ends with sentence punctuation
-        or " - " in text                    # qualifier separator
-        or ": " in text                     # label separator
-        or text.lower().startswith(("how ", "the "))
-        or len(text.split()) > 2            # 3+ words
-    )
-
-    if is_description:
-        canonical = _keyword_extract(text)
-        if canonical:
-            return canonical
-        # Long description with no keyword → generic fallback
-        if not from_dot:
-            return "score"
-        # Dot-notation segment with no keyword → return extracted segment as-is
-
-    return text
-
-
-# Ordered from most-specific to most-generic.  When multiple patterns
-# match, the earliest *position* in the input text wins (see
-# _keyword_extract).
-_METRIC_KEYWORDS: list[tuple[str, str]] = [
-    # Multi-word / compound patterns
-    (r"pass@8",                          "Pass@8"),
-    (r"pass@1",                          "Pass@1"),
-    (r"mean[\s_-]*win[\s_-]*rate",       "Mean Win Rate"),
-    (r"win[\s_-]*rate",                  "Win Rate"),
-    (r"mean[\s_-]*response[\s_-]*time",  "Mean Response Time"),
-    (r"mean[\s_-]*score",                "Mean Score"),
-    (r"exact[\s_-]*match",               "Exact Match"),
-    (r"bleu[\s_-]*4",                    "BLEU-4"),
-    (r"cot[\s_-]*correct",              "COT correct"),
-    (r"wb[\s_-]*score",                  "WB Score"),
-    (r"avg[\s_-]*attempts",              "Average Attempts"),
-    (r"latency[\s_-]*mean",              "mean-latency"),
-    (r"latency[\s_-]*p95",               "p95-latency"),
-    (r"latency[\s_-]*std",               "latency-stddev"),
-    (r"max[\s_-]*delta",                 "max-delta"),
-    (r"benchmark\s+evaluation",          "score"),
-    (r"outperform",                      "rank"),
-    # Single-word patterns (generic, checked last by position)
-    (r"\baccuracy\b",                    "Accuracy"),
-    (r"\bacc\b",                         "Accuracy"),
-    (r"\bscores?\b",                     "score"),
-    (r"\bf1\b",                          "F1"),
-    (r"\bem\b",                          "Exact Match"),
-    (r"\belo\b",                         "Elo Rating"),
-    (r"\branks?\b",                      "rank"),
-    (r"\bcosts?\b",                      "cost"),
-    (r"\bharmlessness\b",                "harmlessness"),
-    (r"\bstddev\b",                      "stddev"),
-]
-
-
-def _keyword_extract(text: str) -> str | None:
-    """Return the canonical metric name for the first keyword found in *text*."""
-    import re
-
-    lower = text.lower()
-    best: str | None = None
-    best_pos = len(lower) + 1
-    for pattern, canonical in _METRIC_KEYWORDS:
-        m = re.search(pattern, lower)
-        if m and m.start() < best_pos:
-            best_pos = m.start()
-            best = canonical
-    return best
 
 
 def _detect_sub_categories(
@@ -246,8 +156,9 @@ def process_record(
         parent_dataset = eval_to_parent.get(eval_name)
         parent_benchmark_id = parent_cache.get(parent_dataset) if parent_dataset else None
 
+        bench_name = clean_eval_name(eval_name)
         bench_res = svc.resolve(
-            raw_value=eval_name,
+            raw_value=bench_name,
             entity_type="benchmark",
             source_config=source_config,
             source_field="evaluation_results[].evaluation_name",
@@ -258,9 +169,9 @@ def process_record(
         # Metric — try metric_name first (human-readable, e.g. "Win Rate"),
         # then metric_id (may be dot-notation like "bfcl.live.accuracy"),
         # then evaluation_description (verbose, e.g. "Accuracy on IFEval").
-        # _extract_metric normalises all three forms to a reusable metric name.
+        # extract_metric normalises all three forms to a reusable metric name.
         metric_config = er.get("metric_config") or {}
-        metric_raw = _extract_metric(
+        metric_raw = extract_metric(
             metric_config.get("metric_name")
             or metric_config.get("metric_id")
             or metric_config.get("evaluation_description")

@@ -2,7 +2,7 @@
 import pytest
 
 from eval_card_registry.services.ingestion import (
-    _detect_sub_categories, _extract_metric, process_record,
+    _detect_sub_categories, process_record,
 )
 from eval_card_registry.store.hf_store import RegistryStore
 from eval_card_registry.services.resolution_service import ResolutionService
@@ -84,7 +84,6 @@ def _seeded_store() -> RegistryStore:
         {"id": "exact-match", "display_name": "Exact Match", "_aliases": ["EM"]},
         {"id": "f1", "display_name": "F1 Score", "_aliases": ["F1"]},
         {"id": "pass-at-1", "display_name": "Pass@1"},
-        {"id": "overall-score", "display_name": "Overall Score"},
         {"id": "mean-win-rate", "display_name": "Mean Win Rate", "_aliases": ["Mean win rate"]},
         {"id": "score", "display_name": "Score", "_aliases": ["score"]},
         {"id": "bleu-4", "display_name": "BLEU-4"},
@@ -367,82 +366,6 @@ class TestEvalResultsUpsert:
         assert len(store.table("eval_results")) == 2
 
 
-class TestExtractMetric:
-    # --- "X on Y" pattern (preserved from _strip_benchmark_qualifier) ---
-
-    def test_strips_on_suffix(self):
-        assert _extract_metric("Accuracy on IFEval") == "Accuracy"
-
-    def test_strips_on_suffix_multiword(self):
-        assert _extract_metric("Exact Match on MATH Level 5") == "Exact Match"
-
-    def test_strips_em_abbreviation(self):
-        assert _extract_metric("EM on GSM8K") == "EM"
-
-    # --- Short metric names pass through unchanged ---
-
-    def test_preserves_bare_metric(self):
-        assert _extract_metric("Accuracy") == "Accuracy"
-
-    def test_preserves_empty(self):
-        assert _extract_metric("") == ""
-
-    def test_preserves_short_name(self):
-        assert _extract_metric("F1") == "F1"
-
-    def test_preserves_two_word_name(self):
-        assert _extract_metric("Win Rate") == "Win Rate"
-
-    # --- Dot notation ---
-
-    def test_dot_notation_extracts_accuracy(self):
-        assert _extract_metric("bfcl.live.live_accuracy") == "Accuracy"
-
-    def test_dot_notation_extracts_win_rate(self):
-        assert _extract_metric("fibble1_arena.win_rate") == "Win Rate"
-
-    def test_dot_notation_extracts_rank(self):
-        assert _extract_metric("bfcl.overall.rank") == "rank"
-
-    def test_dot_notation_extracts_cost(self):
-        assert _extract_metric("bfcl.overall.total_cost_usd") == "cost"
-
-    def test_dot_notation_extracts_latency(self):
-        assert _extract_metric("bfcl.overall.latency_mean_s") == "mean-latency"
-
-    def test_dot_notation_extracts_stddev(self):
-        assert _extract_metric("bfcl.format_sensitivity.stddev") == "stddev"
-
-    # --- Verbose descriptions → keyword extraction ---
-
-    def test_description_with_score(self):
-        assert _extract_metric("Overall ACE score (paper snapshot, approximate).") == "score"
-
-    def test_description_with_accuracy(self):
-        assert _extract_metric("Chat accuracy - includes easy chat subsets") == "Accuracy"
-
-    def test_description_with_pass_at_1(self):
-        assert _extract_metric("Investment banking world Pass@1.") == "Pass@1"
-
-    def test_description_with_mean_score(self):
-        assert _extract_metric("Corporate lawyer world mean score.") == "Mean Score"
-
-    def test_benchmark_evaluation_becomes_score(self):
-        assert _extract_metric("SWE-bench benchmark evaluation") == "score"
-
-    def test_outperform_becomes_rank(self):
-        assert _extract_metric("How many models this model outperforms") == "rank"
-
-    # --- No keyword fallback ---
-
-    def test_no_keyword_description_falls_back_to_score(self):
-        assert _extract_metric("Global MMLU Lite - Arabic") == "score"
-
-    # --- First keyword wins (by position) ---
-
-    def test_first_keyword_wins(self):
-        # "score" appears before "accuracy" in this description
-        assert _extract_metric("Factuality score - measures factual accuracy") == "score"
 
 
 class TestResolutionCorrectness:

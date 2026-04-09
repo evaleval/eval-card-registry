@@ -1,5 +1,5 @@
 # Known canonical evaluation harnesses — pre-populated on seed.
-# Source: derived from scanning all EEE configs (scripts/scan_eee_entities.py).
+# Source: derived from scanning all current EEE configs (scripts/scan_eee_entities.py).
 
 - id: lm-evaluation-harness
   display_name: LM Evaluation Harness

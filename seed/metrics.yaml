@@ -11,6 +11,16 @@
   metadata: '{}'
   review_status: reviewed
 
+- id: ast-accuracy
+  display_name: AST Accuracy
+  aliases: ["AST Accuracy"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+
 - id: exact-match
   display_name: Exact Match
   aliases: ["EM"]
@@ -38,16 +48,6 @@
   lower_is_better: false
   min_score: 0.0
   max_score: 1.0
-  metadata: '{}'
-  review_status: reviewed
-
-- id: overall-score
-  display_name: Overall Score
-  aliases: ["Overall Score"]
-  score_type: continuous
-  lower_is_better: false
-  min_score: null
-  max_score: null
   metadata: '{}'
   review_status: reviewed
 
