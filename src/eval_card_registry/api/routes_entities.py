@@ -3,11 +3,13 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from eval_card_registry.api.deps import writable as _writable
 from eval_card_registry.api.schemas import (
     BenchmarkCreate, BenchmarkPatch,
     HarnessCreate, HarnessPatch,
     MetricCreate, MetricPatch,
     ModelCreate, ModelPatch,
+    ReviewStatus,
 )
 from eval_card_registry.store.hf_store import get_store, RegistryStore
 from eval_card_registry.store import queries
@@ -58,7 +60,7 @@ def _decode(entity: dict) -> dict:
 def list_models(
     search: Optional[str] = None,
     developer: Optional[str] = None,
-    review_status: Optional[str] = None,
+    review_status: Optional[ReviewStatus] = None,
     store: RegistryStore = Depends(get_store),
 ):
     return [_decode(e) for e in queries.list_entities(store, "canonical_models", search=search, review_status=review_status, developer=developer)]
@@ -69,12 +71,12 @@ def get_model(model_id: str, store: RegistryStore = Depends(get_store)):
     return _decode(_get_or_404(store, "canonical_models", model_id))
 
 
-@router.post("/models", status_code=201)
+@router.post("/models", status_code=201, dependencies=_writable)
 def create_model(body: ModelCreate, store: RegistryStore = Depends(get_store)):
     return _decode(queries.upsert_entity(store, "canonical_models", _encode(body.model_dump())))
 
 
-@router.patch("/models/{model_id:path}")
+@router.patch("/models/{model_id:path}", dependencies=_writable)
 def patch_model(model_id: str, body: ModelPatch, store: RegistryStore = Depends(get_store)):
     _get_or_404(store, "canonical_models", model_id)
     data = {k: v for k, v in body.model_dump().items() if v is not None}
@@ -89,7 +91,7 @@ def patch_model(model_id: str, body: ModelPatch, store: RegistryStore = Depends(
 @router.get("/benchmarks")
 def list_benchmarks(
     search: Optional[str] = None,
-    review_status: Optional[str] = None,
+    review_status: Optional[ReviewStatus] = None,
     store: RegistryStore = Depends(get_store),
 ):
     return [_decode(e) for e in queries.list_entities(store, "canonical_benchmarks", search=search, review_status=review_status)]
@@ -100,12 +102,12 @@ def get_benchmark(benchmark_id: str, store: RegistryStore = Depends(get_store)):
     return _decode(_get_or_404(store, "canonical_benchmarks", benchmark_id))
 
 
-@router.post("/benchmarks", status_code=201)
+@router.post("/benchmarks", status_code=201, dependencies=_writable)
 def create_benchmark(body: BenchmarkCreate, store: RegistryStore = Depends(get_store)):
     return _decode(queries.upsert_entity(store, "canonical_benchmarks", _encode(body.model_dump())))
 
 
-@router.patch("/benchmarks/{benchmark_id}")
+@router.patch("/benchmarks/{benchmark_id}", dependencies=_writable)
 def patch_benchmark(benchmark_id: str, body: BenchmarkPatch, store: RegistryStore = Depends(get_store)):
     _get_or_404(store, "canonical_benchmarks", benchmark_id)
     data = {k: v for k, v in body.model_dump().items() if v is not None}
@@ -120,7 +122,7 @@ def patch_benchmark(benchmark_id: str, body: BenchmarkPatch, store: RegistryStor
 @router.get("/metrics")
 def list_metrics(
     search: Optional[str] = None,
-    review_status: Optional[str] = None,
+    review_status: Optional[ReviewStatus] = None,
     store: RegistryStore = Depends(get_store),
 ):
     return [_decode(e) for e in queries.list_entities(store, "canonical_metrics", search=search, review_status=review_status)]
@@ -131,12 +133,12 @@ def get_metric(metric_id: str, store: RegistryStore = Depends(get_store)):
     return _decode(_get_or_404(store, "canonical_metrics", metric_id))
 
 
-@router.post("/metrics", status_code=201)
+@router.post("/metrics", status_code=201, dependencies=_writable)
 def create_metric(body: MetricCreate, store: RegistryStore = Depends(get_store)):
     return _decode(queries.upsert_entity(store, "canonical_metrics", _encode(body.model_dump())))
 
 
-@router.patch("/metrics/{metric_id}")
+@router.patch("/metrics/{metric_id}", dependencies=_writable)
 def patch_metric(metric_id: str, body: MetricPatch, store: RegistryStore = Depends(get_store)):
     _get_or_404(store, "canonical_metrics", metric_id)
     data = {k: v for k, v in body.model_dump().items() if v is not None}
@@ -151,7 +153,7 @@ def patch_metric(metric_id: str, body: MetricPatch, store: RegistryStore = Depen
 @router.get("/harnesses")
 def list_harnesses(
     search: Optional[str] = None,
-    review_status: Optional[str] = None,
+    review_status: Optional[ReviewStatus] = None,
     store: RegistryStore = Depends(get_store),
 ):
     return [_decode(e) for e in queries.list_entities(store, "eval_harnesses", search=search, review_status=review_status)]
@@ -162,12 +164,12 @@ def get_harness(harness_id: str, store: RegistryStore = Depends(get_store)):
     return _decode(_get_or_404(store, "eval_harnesses", harness_id))
 
 
-@router.post("/harnesses", status_code=201)
+@router.post("/harnesses", status_code=201, dependencies=_writable)
 def create_harness(body: HarnessCreate, store: RegistryStore = Depends(get_store)):
     return _decode(queries.upsert_entity(store, "eval_harnesses", _encode(body.model_dump())))
 
 
-@router.patch("/harnesses/{harness_id}")
+@router.patch("/harnesses/{harness_id}", dependencies=_writable)
 def patch_harness(harness_id: str, body: HarnessPatch, store: RegistryStore = Depends(get_store)):
     _get_or_404(store, "eval_harnesses", harness_id)
     data = {k: v for k, v in body.model_dump().items() if v is not None}

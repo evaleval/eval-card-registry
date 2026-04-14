@@ -53,7 +53,6 @@
 
 - id: math
   display_name: MATH
-  aliases: ["MATH Level 5"]
   description: MATH dataset — competition mathematics problems at various difficulty levels.
   dataset_repo: hendrycks/math
   parent_benchmark_id: null
@@ -66,7 +65,67 @@
 - id: mmlu
   display_name: MMLU
   aliases: ["MMLU All Subjects"]
-  description: Massive Multitask Language Understanding — 57-subject multiple-choice benchmark.
+  scoped_aliases:
+    helm_mmlu:
+      - "helm_mmlu"
+      - "Abstract Algebra"
+      - "Anatomy"
+      - "Astronomy"
+      - "Business Ethics"
+      - "Clinical Knowledge"
+      - "College Biology"
+      - "College Chemistry"
+      - "College Computer Science"
+      - "College Mathematics"
+      - "College Medicine"
+      - "College Physics"
+      - "Computer Security"
+      - "Conceptual Physics"
+      - "Econometrics"
+      - "Electrical Engineering"
+      - "Elementary Mathematics"
+      - "Formal Logic"
+      - "Global Facts"
+      - "High School Biology"
+      - "High School Chemistry"
+      - "High School Computer Science"
+      - "High School European History"
+      - "High School Geography"
+      - "High School Government And Politics"
+      - "High School Macroeconomics"
+      - "High School Mathematics"
+      - "High School Microeconomics"
+      - "High School Physics"
+      - "High School Psychology"
+      - "High School Statistics"
+      - "High School Us History"
+      - "High School World History"
+      - "Human Aging"
+      - "Human Sexuality"
+      - "International Law"
+      - "Jurisprudence"
+      - "Logical Fallacies"
+      - "Machine Learning"
+      - "Management"
+      - "Marketing"
+      - "Medical Genetics"
+      - "Miscellaneous"
+      - "Moral Disputes"
+      - "Moral Scenarios"
+      - "Nutrition"
+      - "Philosophy"
+      - "Prehistory"
+      - "Professional Accounting"
+      - "Professional Law"
+      - "Professional Medicine"
+      - "Professional Psychology"
+      - "Public Relations"
+      - "Security Studies"
+      - "Sociology"
+      - "Us Foreign Policy"
+      - "Virology"
+      - "World Religions"
+  description: Massive Multitask Language Understanding — 57-subject multiple-choice benchmark. Subject names under helm_mmlu scope to this parent.
   dataset_repo: cais/mmlu
   parent_benchmark_id: null
   tags: '["multi-task", "knowledge"]'
@@ -221,35 +280,32 @@
   metadata: '{}'
   review_status: reviewed
 
-- id: tau-bench-airline
-  display_name: Tau-Bench Airline
-  aliases: ["tau-bench-2/airline"]
-  description: Tau-Bench 2 airline domain — agent-based customer service tasks.
+- id: tau-bench-2
+  display_name: Tau-Bench 2
+  # Global aliases are reserved for fully-qualified strings that cannot
+  # collide (the benchmark's own name + fully-qualified domain splits).
+  # Bare domain tokens like "airline" go in scoped_aliases only.
+  aliases:
+    - "tau-bench-2"
+    - "tau-bench-2/airline"
+    - "tau-bench-2/retail"
+    - "tau-bench-2/telecom"
+    - "tau-bench-2_airline"
+    - "tau-bench-2_retail"
+    - "tau-bench-2_telecom"
+  description: Tau-Bench 2 — agent-based customer service tasks across airline, retail, and telecom domains. Distinct benchmark from Tau-Bench v1; do not merge. The three domain splits currently fold into this parent canonical.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["agent", "customer-service"]'
   metadata: '{}'
   review_status: reviewed
-
-- id: tau-bench-retail
-  display_name: Tau-Bench Retail
-  aliases: ["tau-bench-2/retail"]
-  description: Tau-Bench 2 retail domain — agent-based customer service tasks.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["agent", "customer-service"]'
-  metadata: '{}'
-  review_status: reviewed
-
-- id: tau-bench-telecom
-  display_name: Tau-Bench Telecom
-  aliases: ["tau-bench-2/telecom"]
-  description: Tau-Bench 2 telecom domain — agent-based customer service tasks.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["agent", "customer-service"]'
-  metadata: '{}'
-  review_status: reviewed
+  scoped_aliases:
+    tau-bench-2_airline:
+      - "airline"
+    tau-bench-2_retail:
+      - "retail"
+    tau-bench-2_telecom:
+      - "telecom"
 
 # --- Function calling ---
 
@@ -266,7 +322,27 @@
 
 - id: global-mmlu-lite
   display_name: Global MMLU Lite
-  description: Lightweight multilingual MMLU covering 16 languages.
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Culturally Sensitive"
+      - "Culturally Agnostic"
+      - "Arabic"
+      - "English"
+      - "Bengali"
+      - "German"
+      - "French"
+      - "Hindi"
+      - "Indonesian"
+      - "Italian"
+      - "Japanese"
+      - "Korean"
+      - "Portuguese"
+      - "Spanish"
+      - "Swahili"
+      - "Yoruba"
+      - "Chinese"
+      - "Burmese"
+  description: Lightweight multilingual MMLU covering 16 languages plus culturally-sensitive / culturally-agnostic cuts.
   dataset_repo: CohereForAI/Global-MMLU-Lite
   parent_benchmark_id: null
   tags: '["multi-task", "multilingual"]'
@@ -315,7 +391,10 @@
 
 - id: sciarena
   display_name: SciArena
-  description: Scientific arena evaluation for LLMs.
+  aliases: ["SciArena leaderboard API"]
+  scoped_aliases:
+    sciarena: ["overall", "Overall"]
+  description: Scientific arena evaluation for LLMs — Elo/rank across scientific query responses.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["science"]'
@@ -324,10 +403,363 @@
 
 - id: livecodebench
   display_name: LiveCodeBench
-  aliases: ["livecodebenchpro"]
-  description: Live code generation benchmark with continuously updated problems.
+  aliases: []
+  description: Live code generation benchmark with continuously updated problems. Distinct from LiveCodeBench Pro — do not alias Pro into this entry.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["coding"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livecodebench-pro
+  display_name: LiveCodeBench Pro
+  aliases: ["livecodebenchpro", "LiveCodeBench Pro"]
+  description: LiveCodeBench Pro — separately curated coding benchmark partitioned into Easy/Medium/Hard problems. Distinct benchmark from LiveCodeBench (different curation, different paper); do not merge. The three difficulty splits currently fold into this parent canonical.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding"]'
+  metadata: '{}'
+  review_status: reviewed
+  scoped_aliases:
+    livecodebenchpro:
+      - "Easy Problems"
+      - "Medium Problems"
+      - "Hard Problems"
+
+# --- Added from evaleval/card_backend eval-list (sub-benchmarks & families) ---
+
+- id: math-level-5
+  display_name: MATH Level 5
+  aliases: ["math_level_5", "MATH-Level-5"]
+  description: MATH Level 5 — the hardest subset of MATH competition problems used in hfopenllm_v2.
+  dataset_repo: DigitalLearningGmbH/MATH-lighteval
+  parent_benchmark_id: math
+  tags: '["math", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-2
+  display_name: RewardBench 2
+  aliases: ["reward-bench-2", "Reward bench 2", "RewardBench 2"]
+  description: Second iteration of RewardBench evaluating reward models across factuality, focus, math, precise IF, safety, and ties.
+  dataset_repo: allenai/reward-bench-2-results
+  parent_benchmark_id: null
+  tags: '["reward-model", "alignment"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-2-factuality
+  display_name: RewardBench 2 Factuality
+  aliases: ["Factuality"]
+  description: RewardBench 2 sub-category — factual-accuracy prompts.
+  dataset_repo: allenai/reward-bench-2-results
+  parent_benchmark_id: rewardbench-2
+  tags: '["reward-model", "factuality"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-2-focus
+  display_name: RewardBench 2 Focus
+  aliases: ["Focus"]
+  description: RewardBench 2 sub-category — focus prompts.
+  dataset_repo: allenai/reward-bench-2-results
+  parent_benchmark_id: rewardbench-2
+  tags: '["reward-model"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-2-math
+  display_name: RewardBench 2 Math
+  description: RewardBench 2 sub-category — math prompts.
+  dataset_repo: allenai/reward-bench-2-results
+  parent_benchmark_id: rewardbench-2
+  tags: '["reward-model", "math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-2-precise-if
+  display_name: RewardBench 2 Precise IF
+  aliases: ["Precise IF"]
+  description: RewardBench 2 sub-category — precise instruction-following.
+  dataset_repo: allenai/reward-bench-2-results
+  parent_benchmark_id: rewardbench-2
+  tags: '["reward-model", "instruction-following"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-2-safety
+  display_name: RewardBench 2 Safety
+  description: RewardBench 2 sub-category — safety prompts.
+  dataset_repo: allenai/reward-bench-2-results
+  parent_benchmark_id: rewardbench-2
+  tags: '["reward-model", "safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rewardbench-2-ties
+  display_name: RewardBench 2 Ties
+  aliases: ["Ties"]
+  description: RewardBench 2 sub-category — tie resolution.
+  dataset_repo: allenai/reward-bench-2-results
+  parent_benchmark_id: rewardbench-2
+  tags: '["reward-model"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# BFCL sub-benchmarks (card_backend exposes Live, Memory, Multi-turn, Non-live, Overall, Relevance, Web search)
+
+- id: bfcl-live
+  display_name: BFCL Live
+  aliases: ["Live"]
+  description: BFCL Live — function-calling benchmark with live user queries.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bfcl-memory
+  display_name: BFCL Memory
+  description: BFCL Memory — function calling with persistent memory across turns.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling", "memory"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bfcl-multi-turn
+  display_name: BFCL Multi-turn
+  aliases: ["Multi turn", "multi_turn"]
+  description: BFCL multi-turn function calling.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling", "multi-turn"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bfcl-non-live
+  display_name: BFCL Non-live
+  aliases: ["Non live", "non_live"]
+  description: BFCL Non-live — static function-calling subset.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bfcl-overall
+  display_name: BFCL Overall
+  description: BFCL overall aggregate score (summary).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling", "summary"]'
+  metadata: '{"is_summary_score": true}'
+  review_status: reviewed
+
+- id: bfcl-relevance
+  display_name: BFCL Relevance
+  description: BFCL relevance/irrelevance detection subset.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling", "relevance"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bfcl-web-search
+  display_name: BFCL Web Search
+  aliases: ["Web search", "web_search"]
+  description: BFCL web-search function-calling subset.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling", "web-search"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# ARC-AGI variants (card_backend: v1_semi_private, v2_semi_private, v2_public_eval)
+
+- id: arc-agi-v1-semi-private
+  display_name: ARC-AGI v1 Semi-Private
+  aliases: ["v1_Semi_Private", "v1_semi_private"]
+  description: ARC-AGI v1 semi-private evaluation set.
+  dataset_repo: null
+  parent_benchmark_id: arc-agi
+  tags: '["reasoning", "abstraction"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-agi-v2-semi-private
+  display_name: ARC-AGI v2 Semi-Private
+  aliases: ["v2_Semi_Private", "v2_semi_private"]
+  description: ARC-AGI v2 semi-private evaluation set.
+  dataset_repo: null
+  parent_benchmark_id: arc-agi
+  tags: '["reasoning", "abstraction"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-agi-v2-public-eval
+  display_name: ARC-AGI v2 Public Eval
+  aliases: ["v2_Public_Eval", "v2_public_eval"]
+  description: ARC-AGI v2 public evaluation set.
+  dataset_repo: null
+  parent_benchmark_id: arc-agi
+  tags: '["reasoning", "abstraction"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- 0% coverage configs (benchmarks scanned from EEE: ace, apex, fibble, wordle, helm_instruct) ---
+
+- id: ace
+  display_name: ACE
+  scoped_aliases:
+    ace:
+      - "Gaming"
+      - "Overall"
+      - "DIY"
+      - "Shopping"
+      - "Food"
+      - "Gaming Score"
+      - "Overall Score"
+      - "DIY Score"
+      - "Shopping Score"
+      - "Food Score"
+  description: ACE consumer-task domain evaluation (archipelago harness) — overall and per-domain scores.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["consumer-tasks"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: apex-agents
+  display_name: APEX Agents
+  aliases: ["apex-agents"]
+  scoped_aliases:
+    apex-agents:
+      - "Corporate Lawyer"
+      - "Corporate Lawyer Mean Score"
+      - "Overall"
+      - "Overall Pass@1"
+      - "Overall Pass@8"
+      - "Overall Mean Score"
+      - "Corporate Law"
+      - "Corporate Law Pass@1"
+      - "Investment Banking"
+      - "Investment Banking Pass@1"
+      - "Management Consulting"
+      - "Management Consulting Pass@1"
+  description: APEX long-horizon professional-services agent benchmark — mean scores and Pass@k across legal / finance / consulting tasks.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "professional-services"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: apex-v1
+  display_name: APEX v1
+  aliases: ["apex-v1"]
+  scoped_aliases:
+    apex-v1:
+      - "Overall"
+      - "Overall Score"
+      - "Medicine (MD)"
+      - "Medicine (MD) Score"
+      - "Consulting"
+      - "Consulting Score"
+      - "Investment Banking"
+      - "Investment Banking Score"
+      - "Big Law"
+      - "Big Law Score"
+  description: APEX v1 professional-work benchmark — overall and per-job scores (MD / consulting / finance / legal).
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "professional-services"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: wordle-arena
+  display_name: Wordle Arena
+  aliases: ["wordle_arena", "wordle arena", "Wordle Arena Word Set", "wordle_arena_daily"]
+  description: Daily NYT Wordle puzzle arena (0 lies, 6 guesses).
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["word-game"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: fibble-arena
+  display_name: Fibble Arena
+  aliases: ["fibble_arena", "fibble arena", "Fibble Arena Word Set", "fibble_arena_daily"]
+  description: Fibble Arena — Wordle variant with lies in feedback, parent family covering fibble1..fibble5.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["word-game"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: fibble1-arena
+  display_name: Fibble Arena (1 lie)
+  aliases: ["fibble1_arena", "fibble1 arena", "Fibble Arena (1 lie) Word Set", "fibble1_arena_daily"]
+  description: Fibble Arena with 1 lie per row, 8 max guesses.
+  dataset_repo: null
+  parent_benchmark_id: fibble-arena
+  tags: '["word-game"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: fibble2-arena
+  display_name: Fibble Arena (2 lies)
+  aliases: ["fibble2_arena", "fibble2 arena", "Fibble2 Arena (2 lies) Word Set", "fibble2_arena_daily"]
+  description: Fibble² Arena — Wordle variant with 2 lies per row, 8 attempts.
+  dataset_repo: null
+  parent_benchmark_id: fibble-arena
+  tags: '["word-game"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: fibble3-arena
+  display_name: Fibble Arena (3 lies)
+  aliases: ["fibble3_arena", "fibble3 arena", "Fibble Arena (3 lies) Word Set", "fibble3_arena_daily"]
+  description: Fibble³ Arena — Wordle variant with 3 lies per row.
+  dataset_repo: null
+  parent_benchmark_id: fibble-arena
+  tags: '["word-game"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: fibble4-arena
+  display_name: Fibble Arena (4 lies)
+  aliases: ["fibble4_arena", "fibble4 arena", "Fibble Arena (4 lies) Word Set", "fibble4_arena_daily"]
+  description: Fibble⁴ Arena — Wordle variant with 4 lies per row.
+  dataset_repo: null
+  parent_benchmark_id: fibble-arena
+  tags: '["word-game"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: fibble5-arena
+  display_name: Fibble Arena (5 lies)
+  aliases: ["fibble5_arena", "fibble5 arena", "Fibble Arena (5 lies) Word Set", "fibble5_arena_daily"]
+  description: Fibble⁵ Arena — Wordle variant with 5 lies per row.
+  dataset_repo: null
+  parent_benchmark_id: fibble-arena
+  tags: '["word-game"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: helm-instruct
+  display_name: HELM Instruct
+  aliases: ["helm_instruct"]
+  scoped_aliases:
+    helm_instruct:
+      - "Anthropic RLHF dataset"
+      - "Best ChatGPT Prompts"
+      - "Koala test dataset"
+      - "Open Assistant"
+      - "Self Instruct"
+      - "Vicuna"
+  description: HELM-Instruct evaluation across multiple instruction-following prompt datasets (Anthropic RLHF, Koala, Open Assistant, Self Instruct, Vicuna, Best ChatGPT Prompts). The per-dataset splits currently fold into this parent canonical.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["instruction-following", "harmlessness"]'
   metadata: '{}'
   review_status: reviewed

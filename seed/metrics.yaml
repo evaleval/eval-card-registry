@@ -169,3 +169,55 @@
   max_score: null
   metadata: '{}'
   review_status: reviewed
+
+# --- Added from evaleval/card_backend (BFCL leaderboard metric_config) ---
+
+- id: p95-latency
+  display_name: Latency 95th Percentile
+  aliases: ["latency_p95", "Latency 95th Percentile"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mean-latency
+  display_name: Latency Mean
+  aliases: ["latency_mean", "Latency Mean"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: latency-stddev
+  display_name: Latency Standard Deviation
+  aliases: ["latency_std", "Latency Standard Deviation"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: total-cost
+  display_name: Total Cost
+  aliases: ["total_cost", "Total Cost"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: rank
+  display_name: Rank
+  aliases: ["Rank", "rank"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 1.0
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed

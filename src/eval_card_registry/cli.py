@@ -14,6 +14,7 @@ import yaml
 
 from eval_card_registry.store.hf_store import get_store
 from eval_card_registry.store import queries
+from eval_card_registry.store.queries import _is_na
 
 app = typer.Typer(help="eval-card-registry CLI")
 
@@ -51,8 +52,8 @@ def seed(
 
     alias_count = 0
     # Track all seed entity IDs and alias keys so we can remove stale ones.
-    # Each entry: (table, entity_type, set_of_ids, set_of (raw_value, entity_type, canonical_id))
-    seed_snapshot: list[tuple[str, str, set[str], set[tuple[str, str, str]]]] = []
+    # Alias key: (raw_value, entity_type, canonical_id, source_config)
+    seed_snapshot: list[tuple[str, str, set[str], set[tuple[str, str, str, Optional[str]]]]] = []
 
     for table, yaml_file, label, entity_type in seed_specs:
         if not yaml_file.exists():
@@ -62,29 +63,40 @@ def seed(
             items = yaml.safe_load(f) or []
 
         yaml_ids: set[str] = set()
-        yaml_alias_keys: set[tuple[str, str, str]] = set()  # (raw_value, entity_type, canonical_id)
+        yaml_alias_keys: set[tuple[str, str, str, Optional[str]]] = set()
 
         for item in items:
-            # Pop 'aliases' before upserting — it's not a table column.
+            # Pop 'aliases' / 'scoped_aliases' before upserting — not table columns.
             extra_aliases = item.pop("aliases", []) or []
+            scoped_aliases = item.pop("scoped_aliases", {}) or {}
             queries.upsert_entity(store, table, item)
             canonical_id = item["id"]
             display_name = item.get("display_name", "")
             yaml_ids.add(canonical_id)
 
-            # Create global aliases so the resolver can match against seed entities.
-            # At minimum: display_name → id, id → id, plus any extra aliases from YAML.
-            alias_strings = {canonical_id, display_name} | set(extra_aliases)
-            for raw_value in alias_strings:
-                if not raw_value:
-                    continue
-                yaml_alias_keys.add((raw_value, entity_type, canonical_id))
+            # Global aliases (source_config=None): matched regardless of caller's source_config.
+            # Scoped aliases (source_config=<name>): matched only when the caller passes that
+            # source_config — lets short tokens ("Overall", "Arabic") map to different
+            # benchmarks depending on which EEE config they came from.
+            global_aliases = {canonical_id, display_name} | set(extra_aliases)
+
+            alias_specs: list[tuple[str, Optional[str]]] = [
+                (raw, None) for raw in global_aliases if raw
+            ]
+            for source_cfg, raw_values in scoped_aliases.items():
+                for raw in raw_values or []:
+                    if raw:
+                        alias_specs.append((raw, source_cfg))
+
+            for raw_value, source_cfg in alias_specs:
+                # Index stale-removal by (raw_value, entity_type, canonical_id, source_config)
+                yaml_alias_keys.add((raw_value, entity_type, canonical_id, source_cfg))
                 try:
                     queries.add_alias(store, {
                         "raw_value": raw_value,
                         "entity_type": entity_type,
                         "canonical_id": canonical_id,
-                        "source_config": None,
+                        "source_config": source_cfg,
                         "source_field": "seed",
                         "status": "confirmed",
                         "strategy": "seed",
@@ -112,7 +124,10 @@ def seed(
             stale_alias_mask = seed_mask.copy()
             for idx in seed_aliases.index:
                 row = seed_aliases.loc[idx]
-                key = (row["raw_value"], row["entity_type"], row["canonical_id"])
+                sc = row.get("source_config")
+                if _is_na(sc):
+                    sc = None
+                key = (row["raw_value"], row["entity_type"], row["canonical_id"], sc)
                 if key in yaml_alias_keys:
                     stale_alias_mask[idx] = False
             n_stale = stale_alias_mask.sum()

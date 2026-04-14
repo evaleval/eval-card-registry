@@ -65,6 +65,50 @@ class TestExactStrategy:
         assert result.strategy == "no_match"
 
 
+class TestScopedAliasIsolation:
+    """Scoped aliases (source_config != None) must not leak into unrelated lookups."""
+
+    def test_scoped_isolated_from_other_config(self):
+        store = _store_with_aliases(
+            ("Overall", "benchmark", "ace", "ace", "confirmed"),
+            ("Overall", "benchmark", "apex-v1", "apex-v1", "confirmed"),
+        )
+        resolver = Resolver(store)
+        # Different config — scoped alias must not match.
+        result = resolver.resolve("Overall", "benchmark", source_config="hfopenllm_v2")
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
+
+    def test_scoped_isolated_without_source_config(self):
+        store = _store_with_aliases(
+            ("Arabic", "benchmark", "global-mmlu-lite", "global-mmlu-lite", "confirmed"),
+        )
+        resolver = Resolver(store)
+        # No source_config provided — scoped alias must not match.
+        result = resolver.resolve("Arabic", "benchmark")
+        assert result.canonical_id is None
+
+    def test_scoped_normalized_match_respects_scope(self):
+        store = _store_with_aliases(
+            ("Abstract Algebra", "benchmark", "mmlu", "helm_mmlu", "confirmed"),
+        )
+        resolver = Resolver(store)
+        # Same scope, different casing — normalized strategy must match.
+        result = resolver.resolve("abstract algebra", "benchmark", source_config="helm_mmlu")
+        assert result.canonical_id == "mmlu"
+        assert result.strategy == "normalized"
+        # Different scope — must NOT match via normalized either.
+        result = resolver.resolve("abstract algebra", "benchmark", source_config="helm_lite")
+        assert result.canonical_id is None
+
+    def test_global_alias_still_matches_any_scope(self):
+        store = _store_with_aliases(("MMLU", "benchmark", "mmlu", None, "confirmed"))
+        resolver = Resolver(store)
+        for sc in [None, "helm_mmlu", "helm_lite", "some_other"]:
+            result = resolver.resolve("MMLU", "benchmark", source_config=sc)
+            assert result.canonical_id == "mmlu", f"failed for source_config={sc}"
+
+
 class TestNormalizedStrategy:
     def test_normalized_match(self):
         store = _store_with_aliases(("MATH Level 5", "benchmark", "math-level-5", None, "confirmed"))
@@ -118,6 +162,72 @@ class TestFuzzyStrategy:
         store = _store_with_aliases(("completely-different", "harness", "x", None, "confirmed"))
         resolver = Resolver(store)
         result = resolver.resolve("unrelated string xyz", "harness")
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
+
+    def test_thinking_budget_suffix_stripped(self):
+        """claude-opus-4-5-thinking-16k should match claude-opus-4-5 (card_backend pattern)."""
+        store = _store_with_aliases(
+            ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("anthropic/claude-opus-4-5-thinking-16k", "model")
+        assert result.canonical_id == "anthropic/claude-opus-4-5"
+        assert result.strategy == "fuzzy"
+
+    def test_thinking_none_suffix_stripped(self):
+        store = _store_with_aliases(
+            ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("anthropic/claude-opus-4-5-thinking-none", "model")
+        assert result.canonical_id == "anthropic/claude-opus-4-5"
+        assert result.strategy == "fuzzy"
+
+    def test_date_version_suffix_stripped(self):
+        """Date suffixes like -20251101 should be stripped (card_backend pattern)."""
+        store = _store_with_aliases(
+            ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("anthropic/claude-opus-4-5-20251101", "model")
+        assert result.canonical_id == "anthropic/claude-opus-4-5"
+        assert result.strategy == "fuzzy"
+
+    def test_date_plus_thinking_double_strip(self):
+        """Combined date + thinking suffix should resolve via double-strip."""
+        store = _store_with_aliases(
+            ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("anthropic/claude-opus-4-5-20251101-thinking-16k", "model")
+        assert result.canonical_id == "anthropic/claude-opus-4-5"
+        assert result.strategy == "fuzzy"
+
+    def test_dot_version_normalizes_to_hyphen(self):
+        """claude-opus-4.5 should normalize the same as claude-opus-4-5."""
+        store = _store_with_aliases(
+            ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("anthropic/claude-opus-4.5", "model")
+        assert result.canonical_id == "anthropic/claude-opus-4-5"
+        assert result.strategy == "normalized"
+
+    def test_meta_llama_org_alias(self):
+        """meta-llama/ → meta/ via expanded org alias map."""
+        store = _store_with_aliases(("meta/llama-3-70b", "model", "meta/llama-3-70b", None, "confirmed"))
+        resolver = Resolver(store)
+        result = resolver.resolve("meta-llama/llama-3-70b", "model")
+        assert result.canonical_id == "meta/llama-3-70b"
+        assert result.strategy == "fuzzy"
+
+    def test_short_date_not_stripped(self):
+        """Avoid stripping non-date numeric suffixes like -2024 (only YYYYMMDD)."""
+        store = _store_with_aliases(("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"))
+        resolver = Resolver(store)
+        # "-2024" is 4 digits, not 8 → must not match the date pattern
+        result = resolver.resolve("openai/gpt-5-2024", "model")
         assert result.canonical_id is None
         assert result.strategy == "no_match"
 

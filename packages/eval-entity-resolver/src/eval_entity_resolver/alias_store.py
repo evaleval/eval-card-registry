@@ -35,8 +35,9 @@ class AliasStore:
         self._df = df.copy()
         self.read_only = read_only
         # Per-entity_type caches — built lazily on first access
-        self._normalized_cache: dict[str, dict[str, str]] = {}
-        self._candidates_cache: dict[str, list[tuple[str, str]]] = {}
+        # Normalized lookup key: (entity_type, source_config or None)
+        self._normalized_cache: dict[tuple[str, Optional[str]], dict[str, str]] = {}
+        self._candidates_cache: dict[tuple[str, Optional[str]], list[tuple[str, str]]] = {}
         self._lookup_index: dict[tuple[str, str, Optional[str]], str] | None = None
 
     def _ensure_lookup_index(self) -> None:
@@ -174,26 +175,56 @@ class AliasStore:
     def to_dataframe(self) -> pd.DataFrame:
         return self._df.copy()
 
-    def get_normalized_lookup(self, entity_type: str) -> dict[str, str]:
-        """Return {normalized_raw_value: canonical_id} for use by strategies. Cached per entity_type."""
-        if entity_type in self._normalized_cache:
-            return self._normalized_cache[entity_type]
+    def get_normalized_lookup(
+        self, entity_type: str, source_config: Optional[str] = None
+    ) -> dict[str, str]:
+        """Return {normalized_raw_value: canonical_id} for use by strategies.
+
+        When ``source_config`` is given, the returned map merges config-scoped
+        aliases on top of global (source_config IS NULL) aliases, so scoped
+        matches win over global for the same normalized form. When
+        ``source_config`` is None, only global aliases are included — scoped
+        aliases do NOT leak into unrelated lookups.
+        """
+        key = (entity_type, source_config)
+        if key in self._normalized_cache:
+            return self._normalized_cache[key]
 
         from eval_entity_resolver.normalization import normalize
 
-        df = self._df[(self._df["entity_type"] == entity_type) & (self._df["status"] != "rejected")]
-        result = {}
-        for _, row in df.iterrows():
+        base = self._df[(self._df["entity_type"] == entity_type) & (self._df["status"] != "rejected")]
+        # Start from global aliases.
+        global_df = base[base["source_config"].isna()]
+        result: dict[str, str] = {}
+        for _, row in global_df.iterrows():
             result[normalize(row["raw_value"])] = row["canonical_id"]
-        self._normalized_cache[entity_type] = result
+        # Overlay scoped aliases for the requested source_config.
+        if source_config:
+            scoped_df = base[base["source_config"] == source_config]
+            for _, row in scoped_df.iterrows():
+                result[normalize(row["raw_value"])] = row["canonical_id"]
+        self._normalized_cache[key] = result
         return result
 
-    def get_all_for_type(self, entity_type: str) -> list[tuple[str, str]]:
-        """Return [(raw_value, canonical_id)] for all non-rejected aliases of entity_type. Cached."""
-        if entity_type in self._candidates_cache:
-            return self._candidates_cache[entity_type]
+    def get_all_for_type(
+        self, entity_type: str, source_config: Optional[str] = None
+    ) -> list[tuple[str, str]]:
+        """Return [(raw_value, canonical_id)] for non-rejected aliases of ``entity_type``.
 
-        df = self._df[(self._df["entity_type"] == entity_type) & (self._df["status"] != "rejected")]
+        Filtering matches ``get_normalized_lookup`` — when ``source_config`` is
+        given, includes global + that config's scoped aliases; otherwise global
+        only. Cached per (entity_type, source_config).
+        """
+        key = (entity_type, source_config)
+        if key in self._candidates_cache:
+            return self._candidates_cache[key]
+
+        base = self._df[(self._df["entity_type"] == entity_type) & (self._df["status"] != "rejected")]
+        if source_config:
+            mask = base["source_config"].isna() | (base["source_config"] == source_config)
+            df = base[mask]
+        else:
+            df = base[base["source_config"].isna()]
         result = list(zip(df["raw_value"].tolist(), df["canonical_id"].tolist()))
-        self._candidates_cache[entity_type] = result
+        self._candidates_cache[key] = result
         return result

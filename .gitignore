@@ -16,5 +16,20 @@ output/
 # Parquet files (fixtures are generated via `eval-card-registry seed --local`)
 *.parquet
 
+# Claude Code
+CLAUDE.md
+.claude/
+
 # macOS
 .DS_Store
+
+# Scratch HF Space clones (nested working copies)
+registry-test/
+
+# Local API smoke-test notebooks
+deploy/smoke_test.ipynb
+deploy/test.ipynb
+deploy/.ipynb_checkpoints/
+
+# Design specs (local-only)
+specs/

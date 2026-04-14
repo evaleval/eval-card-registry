@@ -55,6 +55,32 @@ def _build_alias_store(registry_store: RegistryStore) -> AliasStore:
     return AliasStore(aliases_df, read_only=True)
 
 
+def _no_match_result() -> dict:
+    return {
+        "canonical_id": None,
+        "strategy": "no_match",
+        "confidence": 0.0,
+        "created_new": False,
+        "review_status": None,
+    }
+
+
+def _match_result(
+    canonical_id: str,
+    strategy: str,
+    confidence: float,
+    review_status: Optional[str],
+    created_new: bool = False,
+) -> dict:
+    return {
+        "canonical_id": canonical_id,
+        "strategy": strategy,
+        "confidence": confidence,
+        "created_new": created_new,
+        "review_status": review_status,
+    }
+
+
 class ResolutionService:
     def __init__(self, registry_store: RegistryStore) -> None:
         self.store = registry_store
@@ -89,36 +115,46 @@ class ResolutionService:
         - canonical_id, strategy, confidence, created_new, review_status
         """
         if not raw_value or not raw_value.strip():
-            return {
-                "canonical_id": None,
-                "strategy": "no_match",
-                "confidence": 0.0,
-                "created_new": False,
-                "review_status": None,
-            }
+            return _no_match_result()
 
         # Fast path: return cached result for duplicate (raw_value, entity_type, source_config)
         cache_key = (raw_value, entity_type, source_config)
         if not rerun and cache_key in self._resolve_cache:
             return self._resolve_cache[cache_key]
 
+        # Read-only mode: resolve only, no side effects on entity data
+        if settings.read_only:
+            resolver = self._get_resolver()
+            result: ResolutionResult = resolver.resolve(raw_value, entity_type, source_config)
+            if result.canonical_id is not None:
+                entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], result.canonical_id)
+                result_dict = _match_result(
+                    result.canonical_id,
+                    result.strategy,
+                    result.confidence,
+                    entity.get("review_status") if entity else None,
+                )
+            else:
+                result_dict = _no_match_result()
+            self._resolve_cache[cache_key] = result_dict
+            return result_dict
+
         # Check if alias already exists (skip resolver on rerun=False)
         if not rerun:
             existing = queries.get_alias(self.store, raw_value, entity_type, source_config)
             if existing:
                 entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], existing["canonical_id"])
-                result_dict = {
-                    "canonical_id": existing["canonical_id"],
-                    "strategy": existing["strategy"],
-                    "confidence": existing["confidence"],
-                    "created_new": False,
-                    "review_status": entity.get("review_status") if entity else None,
-                }
+                result_dict = _match_result(
+                    existing["canonical_id"],
+                    existing["strategy"],
+                    existing["confidence"],
+                    entity.get("review_status") if entity else None,
+                )
                 self._resolve_cache[cache_key] = result_dict
                 return result_dict
 
         resolver = self._get_resolver()
-        result: ResolutionResult = resolver.resolve(raw_value, entity_type, source_config)
+        result = resolver.resolve(raw_value, entity_type, source_config)
 
         created_new = False
         alias_status = "auto"
@@ -194,13 +230,13 @@ class ResolutionService:
             self.invalidate_resolver()
 
         entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], canonical_id)
-        result_dict = {
-            "canonical_id": canonical_id,
-            "strategy": strategy_used,
-            "confidence": result.confidence,
-            "created_new": created_new,
-            "review_status": entity.get("review_status") if entity else "draft",
-        }
+        result_dict = _match_result(
+            canonical_id,
+            strategy_used,
+            result.confidence,
+            entity.get("review_status") if entity else "draft",
+            created_new=created_new,
+        )
         self._resolve_cache[cache_key] = result_dict
         return result_dict
 

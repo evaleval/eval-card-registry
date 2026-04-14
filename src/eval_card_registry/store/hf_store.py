@@ -27,7 +27,7 @@ def _fixtures_path() -> Path:
     return Path(os.environ.get("FIXTURES_PATH", settings.fixtures_path))
 
 
-_TABLE_NAMES = [
+TABLE_NAMES = [
     "canonical_models",
     "canonical_benchmarks",
     "canonical_metrics",
@@ -36,6 +36,15 @@ _TABLE_NAMES = [
     "resolution_log",
     "eval_results",
     "sync_runs",
+]
+
+# Tables needed for query-only (read-only) mode
+QUERY_TABLE_NAMES = [
+    "canonical_models",
+    "canonical_benchmarks",
+    "canonical_metrics",
+    "eval_harnesses",
+    "aliases",
 ]
 
 
@@ -50,26 +59,31 @@ class RegistryStore:
     # Lifecycle
     # ------------------------------------------------------------------
 
-    def load(self) -> None:
-        """Load all tables from HF Hub or local fixtures."""
+    def load(self, tables: list[str] | None = None) -> None:
+        """Load tables from HF Hub or local fixtures.
+
+        Args:
+            tables: Specific table names to load. If None, loads all tables.
+        """
+        names = tables or TABLE_NAMES
         if _local_mode():
-            self._load_from_fixtures(_fixtures_path())
+            self._load_from_fixtures(_fixtures_path(), names)
         else:
-            self._load_from_hf(settings.hf_dataset_repo)
+            self._load_from_hf(settings.hf_dataset_repo, names)
         self._loaded = True
 
-    def _load_from_fixtures(self, path: Path) -> None:
-        for table in _TABLE_NAMES:
+    def _load_from_fixtures(self, path: Path, names: list[str]) -> None:
+        for table in names:
             p = path / f"{table}.parquet"
             if p.exists():
                 self._tables[table] = pd.read_parquet(p)
             else:
                 self._tables[table] = schemas.empty(table)
 
-    def _load_from_hf(self, repo_id: str) -> None:
+    def _load_from_hf(self, repo_id: str, names: list[str]) -> None:
         from huggingface_hub import hf_hub_download
 
-        for table in _TABLE_NAMES:
+        for table in names:
             try:
                 local = hf_hub_download(
                     repo_id=repo_id,
@@ -115,6 +129,9 @@ class RegistryStore:
 
     def table(self, name: str) -> pd.DataFrame:
         return self._tables[name]
+
+    def has_table(self, name: str) -> bool:
+        return name in self._tables
 
     def set_table(self, name: str, df: pd.DataFrame) -> None:
         self._tables[name] = df

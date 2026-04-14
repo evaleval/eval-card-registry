@@ -5,6 +5,8 @@ from fastapi.testclient import TestClient
 from eval_card_registry.main import app
 from eval_card_registry.store.hf_store import get_store
 from eval_card_registry.store import schemas as s
+from eval_card_registry.services.resolution_service import ResolutionService
+from eval_card_registry.services.log_writer import ResolveLogWriter
 
 
 @pytest.fixture(autouse=True)
@@ -19,6 +21,10 @@ def fresh_store(monkeypatch):
     ]}
     store._loaded = True
     monkeypatch.setattr(hf_store, "_store", store)
+
+    # Set up app.state so route dependencies work without lifespan
+    app.state.resolution_service = ResolutionService(store)
+    app.state.log_writer = ResolveLogWriter("")  # disabled (no bucket)
     return store
 
 
@@ -91,3 +97,23 @@ class TestEntityCRUD:
         r = client.get("/api/v1/models")
         assert r.status_code == 200
         assert len(r.json()) >= 1
+
+    def test_list_search_with_null_columns_serializes(self, client):
+        """Regression: list endpoints with a search term used to 500 when
+        matching rows had nullable columns (pd.NA / NaN) — those fields
+        must serialize to JSON null, not raise."""
+        client.post("/api/v1/benchmarks", json={"id": "math", "display_name": "MATH"})
+        r = client.get("/api/v1/benchmarks?search=math")
+        assert r.status_code == 200
+        rows = r.json()
+        assert len(rows) == 1
+        assert rows[0]["parent_benchmark_id"] is None
+        assert rows[0]["description"] is None
+
+    def test_get_entity_with_null_columns_serializes(self, client):
+        client.post("/api/v1/benchmarks", json={"id": "nullish", "display_name": "N"})
+        r = client.get("/api/v1/benchmarks/nullish")
+        assert r.status_code == 200
+        body = r.json()
+        assert body["parent_benchmark_id"] is None
+        assert body["dataset_repo"] is None

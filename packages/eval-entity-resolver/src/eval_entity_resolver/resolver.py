@@ -33,7 +33,7 @@ class Resolver:
         # 2. Normalized (confidence 0.95 — only return if above threshold)
         _NORMALIZED_CONFIDENCE = 0.95
         if _NORMALIZED_CONFIDENCE >= self.config.threshold:
-            canonical_id = normalized_match(raw_value, entity_type, self.store)
+            canonical_id = normalized_match(raw_value, entity_type, self.store, source_config)
             if canonical_id is not None:
                 return ResolutionResult(
                     raw_value=raw_value,
@@ -46,7 +46,7 @@ class Resolver:
 
         # 3. Fuzzy
         canonical_id, confidence = fuzzy_match(
-            raw_value, entity_type, self.config.threshold, self.store
+            raw_value, entity_type, self.config.threshold, self.store, source_config
         )
         if canonical_id is not None:
             return ResolutionResult(

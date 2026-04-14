@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     hf_dataset_repo: str = ""
     hf_token: str = ""
     resolver_auto_merge_threshold: float = 0.85
+    read_only: bool = False
+    hf_log_bucket: str = ""
+    log_flush_interval_seconds: int = 300
 
 
 settings = Settings()

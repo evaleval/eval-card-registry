@@ -6,6 +6,24 @@ Entity resolution registry for AI evaluation data. Maps raw model, benchmark, me
 
 ## Quickstart
 
+Resolve a raw string against the hosted registry:
+
+```bash
+curl -X POST https://evaleval-entity-registry.hf.space/api/v1/resolve \
+  -H 'Content-Type: application/json' \
+  -d '{"raw_value": "MATH Level 5", "entity_type": "benchmark"}'
+```
+
+```json
+{"canonical_id": "math-level-5", "strategy": "exact", "confidence": 1.0, "created_new": false, "review_status": "reviewed"}
+```
+
+`entity_type` is one of `benchmark`, `model`, `metric`, `harness`. See the [API section](#api) for batch resolve, entity browsing, and the full endpoint list.
+
+---
+
+## Local development
+
 ```bash
 git clone <repo>
 cd eval-card-registry
@@ -31,11 +49,11 @@ Expected output:
 
 ```
   models      total=0  draft=0
-  benchmarks  total=34  draft=0
-  metrics     total=17  draft=0
+  benchmarks  total=61  draft=0
+  metrics     total=22  draft=0
   harnesses   total=11  draft=0
 
-  aliases        total=0  uncertain=0
+  aliases        total=403  uncertain=0
   eval_results   total=0
   resolution_log total=0
   sync_runs      total=0
@@ -48,9 +66,6 @@ uv run eval-card-registry sync --config hfopenllm_v2 --local
 ```
 
 This downloads the EEE dataset config from HuggingFace (first run will take a few minutes), resolves every raw string to a canonical entity, and writes results to `fixtures/eval_results.parquet` — the mapping table (one row per model × benchmark × metric result).
-
-TODO: decide on a stable initial dataset then separate data loading for starting this registry vs data loading for evalcards backend.
-
 
 **4. Verify results:**
 
@@ -76,13 +91,11 @@ You should now see `eval_results`, `aliases`, and entity counts populated. Each 
 }
 ```
 
-TODO: `benchmark_card_id` is `null` until an [auto-benchmarkcard](https://github.com/...) card is generated and linked for that benchmark.
-
 ---
 
 ## How it works
 
-Raw strings from EEE (e.g. `"MATH Level 5"`, `"lm-evaluation-harness"`) are resolved to canonical IDs (`math`, `lm-evaluation-harness`) through a strategy chain: exact alias match → normalized match (collapses case, hyphens, underscores, spaces) → fuzzy stem match (strips known suffixes like `-fc`/`-prompt`, normalizes org prefixes) → auto-create draft. Every resolution is logged with its strategy and confidence score.
+Raw strings from EEE (e.g. `"MATH Level 5"`, `"lm-evaluation-harness"`) are resolved to canonical IDs (`math`, `lm-evaluation-harness`) through a strategy chain: exact alias match → normalized match (collapses case + all separators — spaces, hyphens, underscores, and slashes) → fuzzy stem match (strips known suffixes like `-fc`/`-prompt`, normalizes org prefixes) → auto-create draft. Every resolution is logged with its strategy and confidence score.
 
 Canonical entities start as `draft` and can be promoted to `reviewed`. Aliases that fall below the confidence threshold are flagged `uncertain` for human review.
 
@@ -151,9 +164,9 @@ curl -X POST http://localhost:8000/api/v1/resolve \
 
 ```json
 {
-  "canonical_id": "math",
-  "strategy": "normalized",
-  "confidence": 0.95,
+  "canonical_id": "math-level-5",
+  "strategy": "exact",
+  "confidence": 1.0,
   "created_new": false,
   "review_status": "reviewed"
 }
@@ -287,7 +300,55 @@ uv run eval-card-registry sync --config hfopenllm_v2
 
 Data is stored as one parquet config per table in the HF Dataset repo.
 
---
+---
+
+## HF Space deployment (query-only API)
+
+The service can be deployed to a HuggingFace Space as a **query-only** disambiguation API — read-only resolve + entity/alias GETs, no writes.
+
+**Architecture:**
+- **Space** (`evaleval/entity-registry`) — Docker SDK, runs FastAPI on port 7860
+- **Dataset repo** (`evaleval/entity-registry-data`) — entity parquet tables, read at startup
+- **Storage Bucket** (`evaleval/entity-registry-storage`) — async resolve logs, written periodically
+
+**Read-only mode behaviour:**
+- `POST /resolve` runs the full resolver chain but does NOT auto-create draft entities or write aliases on no_match — `canonical_id` is `null`
+- `POST`/`PATCH` entity + alias endpoints return `405 Method Not Allowed`
+- Only 5 tables (models, benchmarks, metrics, harnesses, aliases) are loaded — `eval_results`, `resolution_log`, `sync_runs` are skipped
+- Every resolve request is logged asynchronously to the Storage Bucket (buffered in memory, flushed every 5 min as partitioned parquet)
+
+**Deploy:**
+
+```bash
+# Prerequisites: create the Space, Dataset repo, and Storage Bucket on HF;
+# seed + sync the Dataset repo with entity data locally first.
+
+bash deploy/push-to-space.sh
+```
+
+Configure the Space in HF Space Settings:
+
+| Variable | Type | Value |
+|---|---|---|
+| `HF_TOKEN` | Secret | Token with read access to dataset + write access to log bucket |
+| `HF_DATASET_REPO` | Variable | `evaleval/entity-registry-data` |
+| `HF_LOG_BUCKET` | Variable | `evaleval/entity-registry-storage` |
+
+`READ_ONLY=true` and `LOCAL_MODE=false` are set in the Dockerfile ENV.
+
+**Local test of read-only mode:**
+
+```bash
+READ_ONLY=true LOCAL_MODE=true uv run uvicorn eval_card_registry.main:app --reload
+```
+
+See `deploy/END_TO_END.md` for a step-by-step verification guide (local smoke
+test, Docker test, Space deploy + checks).
+
+---
 
 ## TODO
-- Verify metric extraction logic (this should be partially addressed in future schema versions when metric is an explicit field)
+- Combine logic with EEE codebase's model registry and evalcard backend metric registry
+- Verify metric extraction logic — although likely partially addressed with future schema versions and fixes.
+- Clean up how we implement registry updates + check against regression
+- Populate `benchmark_card_id` once an auto-benchmarkcard has been generated and linked for each benchmark.

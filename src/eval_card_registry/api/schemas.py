@@ -1,12 +1,17 @@
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 from pydantic import BaseModel
+
+
+EntityType = Literal["benchmark", "model", "metric", "harness"]
+ReviewStatus = Literal["draft", "reviewed"]
+AliasStatus = Literal["auto", "uncertain", "confirmed", "rejected"]
 
 
 # --- Resolve ---
 
 class ResolveRequest(BaseModel):
     raw_value: str
-    entity_type: str
+    entity_type: EntityType
     source_config: Optional[str] = None
     source_field: Optional[str] = None
 

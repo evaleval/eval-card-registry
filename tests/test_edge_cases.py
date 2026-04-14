@@ -67,8 +67,11 @@ class TestNormalization:
         assert normalize("lm-evaluation-harness") == normalize("lm evaluation harness")
         assert normalize("mmlu_pro") == normalize("MMLU-PRO")
 
-    def test_slash_preserved(self):
-        assert normalize("meta-llama/Llama-3") == "meta llama/llama 3"
+    def test_slash_collapsed_like_other_separators(self):
+        # '/' collapses with space/_/- so that 'tau-bench-2/airline' and
+        # 'tau-bench-2_airline' resolve to the same canonical entity.
+        assert normalize("meta-llama/Llama-3") == "meta llama llama 3"
+        assert normalize("tau-bench-2/airline") == normalize("tau-bench-2_airline")
 
     def test_consistent_casing(self):
         assert normalize("MATH Level 5") == normalize("math level 5")

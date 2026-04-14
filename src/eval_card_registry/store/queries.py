@@ -25,6 +25,26 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _is_na(value) -> bool:
+    try:
+        return bool(pd.isna(value))
+    except (TypeError, ValueError):
+        return False
+
+
+def _row_to_dict(row: pd.Series) -> dict:
+    """Convert a Series to dict, coercing pandas NA/NaN/NaT to None for JSON.
+    Uses Series.to_dict() so numpy scalars are unboxed to Python types."""
+    return {k: (None if _is_na(v) else v) for k, v in row.to_dict().items()}
+
+
+def _records(df: pd.DataFrame) -> list[dict]:
+    """Convert a DataFrame to list-of-dicts, coercing NA/NaN to None for JSON."""
+    if df.empty:
+        return []
+    return df.astype(object).mask(df.isna(), None).to_dict(orient="records")
+
+
 # ------------------------------------------------------------------
 # Pending-row buffer  (avoids O(n²) pd.concat-per-row)
 # ------------------------------------------------------------------
@@ -62,7 +82,7 @@ def get_entity(store: RegistryStore, table: str, entity_id: str) -> Optional[dic
             if pending_row.get("id") == entity_id:
                 return pending_row
         return None
-    return row.iloc[0].to_dict()
+    return _row_to_dict(row.iloc[0])
 
 
 def list_entities(
@@ -83,7 +103,7 @@ def list_entities(
     for col, val in filters.items():
         if col in df.columns and val is not None:
             df = df[df[col] == val]
-    return df.to_dict(orient="records")
+    return _records(df)
 
 
 def upsert_entity(store: RegistryStore, table: str, data: dict, buffered: bool = False) -> dict:
@@ -116,8 +136,7 @@ def upsert_entity(store: RegistryStore, table: str, data: dict, buffered: bool =
                 df.loc[df["id"] == entity_id, col] = val
         df.loc[df["id"] == entity_id, "updated_at"] = now
         store.set_table(table, df)
-        row = df[df["id"] == entity_id].iloc[0].to_dict()
-        return row
+        return _row_to_dict(df[df["id"] == entity_id].iloc[0])
 
 
 # ------------------------------------------------------------------
@@ -172,10 +191,10 @@ def get_alias(
     if source_config:
         scoped = df[mask & (df["source_config"] == source_config)]
         if not scoped.empty:
-            return scoped.iloc[0].to_dict()
+            return _row_to_dict(scoped.iloc[0])
     global_ = df[mask & df["source_config"].isna()]
     if not global_.empty:
-        return global_.iloc[0].to_dict()
+        return _row_to_dict(global_.iloc[0])
     return None
 
 
@@ -250,7 +269,7 @@ def update_alias(store: RegistryStore, alias_id: str, updates: dict) -> Optional
             df.loc[df["id"] == alias_id, col] = val
     df.loc[df["id"] == alias_id, "updated_at"] = _now()
     store.set_table("aliases", df)
-    return df[df["id"] == alias_id].iloc[0].to_dict()
+    return _row_to_dict(df[df["id"] == alias_id].iloc[0])
 
 
 # ------------------------------------------------------------------
@@ -292,7 +311,7 @@ def upsert_eval_result(store: RegistryStore, data: dict) -> dict:
                 df.loc[df["id"] == row_id, col] = val
         df.loc[df["id"] == row_id, "updated_at"] = now
         store.set_table("eval_results", df)
-        return df[df["id"] == row_id].iloc[0].to_dict()
+        return _row_to_dict(df[df["id"] == row_id].iloc[0])
 
     # New row — buffer it
     row = {**data, "id": row_id, "created_at": now, "updated_at": now}
@@ -315,7 +334,7 @@ def get_eval_results(
         df = df[df["benchmark_id"] == benchmark_id]
     if source_config:
         df = df[df["source_config"] == source_config]
-    return df.to_dict(orient="records")
+    return _records(df)
 
 
 # ------------------------------------------------------------------

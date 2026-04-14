@@ -96,7 +96,17 @@ _METRIC_KEYWORDS: list[tuple[str, str]] = [
     (r"benchmark\s+evaluation",          "score"),
     (r"outperform",                      "rank"),
     # Compound accuracy types (before generic accuracy)
+    # Patterns sourced from metric_names in evaleval/card_backend eval-list.
     (r"ast[\s_-]*accuracy",              "AST Accuracy"),
+    (r"overall[\s_-]*accuracy",          "Accuracy"),
+    (r"(?:ir)?relevance[\s_-]*detection[\s_-]*accuracy", "Accuracy"),
+    (r"no[\s_-]*snippet[\s_-]*accuracy", "Accuracy"),
+    (r"long[\s_-]*context[\s_-]*accuracy", "Accuracy"),
+    (r"kv[\s_-]*accuracy",               "Accuracy"),
+    (r"vector[\s_-]*accuracy",           "Accuracy"),
+    (r"recursive[\s_-]*summarization[\s_-]*accuracy", "Accuracy"),
+    (r"total[\s_-]*cost",                "cost"),
+    (r"cost[\s_-]*per[\s_-]*task",       "cost-per-task"),
     # Single-word patterns (generic, checked last by position)
     (r"\baccuracy\b",                    "Accuracy"),
     (r"\bacc\b",                         "Accuracy"),
