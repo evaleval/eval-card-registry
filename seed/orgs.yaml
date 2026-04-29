@@ -1,0 +1,330 @@
+# Known canonical orgs — pre-populated on seed.
+#
+# `id` is the canonical org slug. Match models.dev provider slugs where they
+# exist (anthropic, openai, google, etc.) so the models seed generator
+# (scripts/refresh_from_modelsdev.py) can map provider -> org_id by name.
+#
+# `aliases` covers the casing/whitespace variants and formal names that show
+# up as `source_metadata.source_organization_name` in EEE records, plus HF
+# org variants (e.g. `meta-llama` is HF's org for Meta's Llama models, mapped
+# to canonical `meta`).
+#
+# This is an ongoing seed: add new orgs as EEE surfaces them, or as new model
+# providers ship. Re-seeding is idempotent — `uv run eval-card-registry seed
+# --local` merges new entries and prunes removed ones.
+
+# --- Major closed-source labs ---
+
+- id: anthropic
+  display_name: Anthropic
+  website: https://www.anthropic.com
+  hf_org: anthropic
+  aliases: ["Anthropic, PBC", "Anthropic PBC"]
+  tags: '["lab", "closed-source"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: openai
+  display_name: OpenAI
+  website: https://openai.com
+  hf_org: openai
+  aliases: ["OpenAI, Inc.", "Open AI"]
+  tags: '["lab", "closed-source"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: google
+  display_name: Google
+  website: https://ai.google
+  hf_org: google
+  aliases: ["Google LLC", "Google AI", "Google Research"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: google-deepmind
+  display_name: Google DeepMind
+  parent_org_id: google
+  website: https://deepmind.google
+  aliases: ["DeepMind", "Google DeepMind LLC"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: xai
+  display_name: xAI
+  website: https://x.ai
+  hf_org: xai-org
+  aliases: ["X AI", "x.ai", "X.AI"]
+  tags: '["lab", "closed-source"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cohere
+  display_name: Cohere
+  website: https://cohere.com
+  hf_org: cohereforai
+  aliases: ["Cohere Inc.", "CohereForAI", "Cohere For AI", "cohere-labs"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Major open-weight model authors ---
+
+- id: meta
+  display_name: Meta
+  website: https://ai.meta.com
+  hf_org: meta-llama
+  aliases: ["Meta AI", "Meta Platforms", "meta-llama", "Facebook AI Research", "FAIR"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mistralai
+  display_name: Mistral AI
+  website: https://mistral.ai
+  hf_org: mistralai
+  aliases: ["Mistral", "mistral-ai", "Mistral.AI"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: deepseek
+  display_name: DeepSeek
+  website: https://www.deepseek.com
+  hf_org: deepseek-ai
+  aliases: ["deepseek-ai", "DeepSeek AI", "DeepSeek-AI"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: alibaba
+  display_name: Alibaba
+  website: https://qwen.ai
+  hf_org: qwen
+  aliases: ["Alibaba Cloud", "Qwen", "qwen", "Qwen Team", "Alibaba DAMO Academy"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: microsoft
+  display_name: Microsoft
+  website: https://www.microsoft.com/research
+  hf_org: microsoft
+  aliases: ["Microsoft Research", "MSR", "Microsoft AI"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: nvidia
+  display_name: NVIDIA
+  website: https://www.nvidia.com
+  hf_org: nvidia
+  aliases: ["Nvidia", "nvidia-nemo", "NVIDIA Corp."]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: tiiuae
+  display_name: Technology Innovation Institute
+  website: https://www.tii.ae
+  hf_org: tiiuae
+  aliases: ["TII", "tii-uae", "Technology Innovation Institute UAE"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: 01-ai
+  display_name: 01.AI
+  website: https://www.01.ai
+  hf_org: 01-ai
+  aliases: ["01.AI", "01 AI", "Yi"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: ibm-granite
+  display_name: IBM Granite
+  parent_org_id: ibm
+  website: https://www.ibm.com/granite
+  hf_org: ibm-granite
+  aliases: ["Granite", "Granite Team"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: ibm
+  display_name: IBM
+  website: https://www.ibm.com
+  aliases: ["IBM Corp.", "International Business Machines", "IBM Research"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: stabilityai
+  display_name: Stability AI
+  website: https://stability.ai
+  hf_org: stabilityai
+  aliases: ["Stability", "stability-ai"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: moonshotai
+  display_name: Moonshot AI
+  website: https://www.moonshot.cn
+  hf_org: moonshotai
+  aliases: ["Moonshot", "Kimi"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: stepfun
+  display_name: StepFun
+  website: https://www.stepfun.com
+  hf_org: stepfun-ai
+  aliases: ["Step", "Step-Star"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: minimax
+  display_name: MiniMax
+  website: https://www.minimax.io
+  hf_org: minimax
+  aliases: ["MiniMax-AI", "Minimax"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: zai
+  display_name: Z.AI
+  website: https://z.ai
+  hf_org: zai-org
+  aliases: ["Z AI", "Zhipu", "ZhipuAI", "GLM Team"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: inception
+  display_name: Inception Labs
+  website: https://www.inceptionlabs.ai
+  aliases: ["Inception"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: nous-research
+  display_name: Nous Research
+  website: https://nousresearch.com
+  hf_org: nousresearch
+  aliases: ["Nous", "NousResearch"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: upstage
+  display_name: Upstage
+  website: https://www.upstage.ai
+  hf_org: upstage
+  aliases: ["Upstage AI"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: perplexity
+  display_name: Perplexity AI
+  website: https://www.perplexity.ai
+  aliases: ["Perplexity", "perplexity-ai"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Research orgs / academic groups commonly seen as evaluators ---
+
+- id: stanford-crfm
+  display_name: Stanford CRFM
+  parent_org_id: stanford
+  website: https://crfm.stanford.edu
+  aliases: ["CRFM", "Stanford Center for Research on Foundation Models", "Stanford HELM"]
+  tags: '["academic", "evaluator"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: stanford
+  display_name: Stanford University
+  website: https://www.stanford.edu
+  aliases: ["Stanford"]
+  tags: '["academic"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: allenai
+  display_name: Allen Institute for AI
+  website: https://allenai.org
+  hf_org: allenai
+  aliases: ["AI2", "Ai2", "Allen AI", "Allen Institute"]
+  tags: '["lab", "academic", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: eleutherai
+  display_name: EleutherAI
+  website: https://www.eleuther.ai
+  hf_org: eleutherai
+  aliases: ["Eleuther", "EleutherAI Research"]
+  tags: '["lab", "academic", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: huggingface
+  display_name: Hugging Face
+  website: https://huggingface.co
+  hf_org: huggingfaceh4
+  aliases: ["HuggingFace", "Hugging Face Inc.", "HuggingFaceH4", "HF", "HuggingFaceTB", "huggingfacetb"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bigscience
+  display_name: BigScience
+  hf_org: bigscience
+  aliases: ["BigScience Workshop"]
+  tags: '["academic", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: amazon
+  display_name: Amazon
+  website: https://aws.amazon.com/bedrock/
+  aliases: ["Amazon Web Services", "AWS", "Amazon Bedrock"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: writer
+  display_name: Writer
+  website: https://writer.com
+  hf_org: writer
+  aliases: ["Writer Inc.", "Writer AI"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: databricks
+  display_name: Databricks
+  website: https://www.databricks.com
+  hf_org: databricks
+  aliases: ["Databricks Inc.", "Databricks Mosaic"]
+  tags: '["lab", "open-weight"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: ai21
+  display_name: AI21 Labs
+  website: https://www.ai21.com
+  hf_org: ai21labs
+  aliases: ["AI21", "AI21labs", "ai21labs"]
+  tags: '["lab"]'
+  metadata: '{}'
+  review_status: reviewed

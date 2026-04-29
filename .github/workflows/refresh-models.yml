@@ -1,0 +1,102 @@
+name: Refresh seed/models.yaml from models.dev
+
+on:
+  schedule:
+    # Mondays at 09:00 UTC. Weekly is enough — models.dev is community-curated
+    # and rarely shifts mid-week.
+    - cron: "0 9 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Sync dependencies
+        run: uv sync
+
+      - name: Refresh seed/models.yaml
+        run: uv run python scripts/refresh_from_modelsdev.py
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet seed/models.yaml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::seed/models.yaml unchanged — nothing to do."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "diffstat<<EOF"
+              git diff --stat seed/models.yaml
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Open PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          DATE=$(date -u +%Y-%m-%d)
+          BRANCH="auto/models-refresh-${DATE}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # If a branch from an earlier same-day run exists, reuse its name —
+          # force-push to refresh its diff. Different days get fresh branches.
+          git checkout -B "$BRANCH"
+          git add seed/models.yaml
+          git commit -m "chore(seed): refresh models.yaml from models.dev (${DATE})"
+          git push --force-with-lease origin "$BRANCH"
+
+          # Reuse an open PR for this branch if one exists; otherwise create.
+          # `// empty` makes jq emit nothing (vs. literal "null") when the
+          # array is empty, so the [ -n ] test correctly distinguishes
+          # no-PR from PR-#0 (impossible but defensive).
+          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty' || true)
+          if [ -n "$EXISTING" ]; then
+            echo "::notice::PR #${EXISTING} already open for ${BRANCH}; force-push refreshed it."
+            exit 0
+          fi
+
+          gh pr create \
+            --title "models.dev refresh — ${DATE}" \
+            --body "$(cat <<'EOF'
+          Automated refresh of `seed/models.yaml` from [models.dev](https://models.dev).
+
+          ## What this does
+          Re-runs `scripts/refresh_from_modelsdev.py`, which fetches the
+          current models.dev API and regenerates the seed file. Hand-curated
+          entries in `seed/_overrides/models.yaml` are preserved.
+
+          ## What to check
+          - **Unexpected drops:** an entry disappearing usually means
+            models.dev removed or restructured a model. Decide whether to
+            keep it via overrides.
+          - **New families:** review additions for correct `org_id` and
+            sensible `display_name`.
+          - **Display-name regressions:** the generator falls back to a
+            humanized slug when no exact-id snapshot exists. If a real name
+            is preferable, add an override.
+          - **Org coverage:** if any new entry references an `org_id` not in
+            `seed/orgs.yaml`, the seed CLI will fail — add the org first.
+
+          After merging, run locally to update fixtures:
+          ```
+          uv run eval-card-registry seed --local
+          ```
+
+          See `NOTICES.md` for models.dev attribution.
+          EOF
+          )"

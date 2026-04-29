@@ -33,3 +33,6 @@ deploy/.ipynb_checkpoints/
 
 # Design specs (local-only)
 specs/
+
+AGENTS.md
+NOTICES.md
