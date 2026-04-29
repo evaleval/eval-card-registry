@@ -64,7 +64,7 @@
 
 - id: mmlu
   display_name: MMLU
-  aliases: ["MMLU All Subjects"]
+  aliases: ["MMLU All Subjects", "helm_mmlu", "HELM MMLU"]
   scoped_aliases:
     helm_mmlu:
       - "helm_mmlu"
@@ -143,8 +143,8 @@
 
 - id: naturalquestions
   display_name: NaturalQuestions
-  aliases: ["NaturalQuestions (closed-book)"]
-  description: Google Natural Questions — closed-book factoid QA.
+  aliases: ["NaturalQuestions (closed-book)", "NaturalQuestions (open-book)", "Natural Questions (Open Book)", "naturalquestions_open_book", "naturalquestions_closed_book"]
+  description: Google Natural Questions — QA dataset of real Google search queries with Wikipedia-sourced answers (Kwiatkowski et al. 2019). Reported in evaluations under both closed-book (Roberts et al. 2020 formulation) and open-book setups.
   dataset_repo: google-research-datasets/natural_questions
   parent_benchmark_id: null
   tags: '["qa", "knowledge"]'
@@ -201,6 +201,7 @@
 
 - id: rewardbench
   display_name: RewardBench
+  aliases: ["reward-bench", "Reward-Bench"]
   description: Evaluates reward models across chat, safety, and reasoning sub-categories.
   dataset_repo: allenai/reward-bench
   parent_benchmark_id: null
@@ -265,7 +266,7 @@
   aliases: ["appworld/test_normal"]
   description: AppWorld benchmark — tests LLM agents on realistic app-based tasks (normal subset).
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: appworld
   tags: '["agent", "tool-use"]'
   metadata: '{}'
   review_status: reviewed
@@ -293,6 +294,7 @@
     - "tau-bench-2_airline"
     - "tau-bench-2_retail"
     - "tau-bench-2_telecom"
+    - "hal-taubench-airline"
   description: Tau-Bench 2 — agent-based customer service tasks across airline, retail, and telecom domains. Distinct benchmark from Tau-Bench v1; do not merge. The three domain splits currently fold into this parent canonical.
   dataset_repo: null
   parent_benchmark_id: null
@@ -761,5 +763,524 @@
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["instruction-following", "harmlessness"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# =====================================================================
+# 2026-04-29 additions — HELM/HAL/SWE-Verified/NQ/ToM seed pass.
+# See specs/entity-modeling.md sections (a)–(e) for the principles
+# that govern this batch.
+# =====================================================================
+
+# --- HELM family (sub-suites that are HELM-curated; not transitive aliases) ---
+
+- id: helm
+  display_name: HELM
+  aliases: ["helm", "HELM", "helm_classic", "HELM Classic", "Holistic Evaluation of Language Models"]
+  description: Holistic Evaluation of Language Models — Stanford CRFM's umbrella project for LLM evaluation. Encompasses the original HELM (now called HELM Classic) plus newer sub-suites including HELM Lite, HELM Capabilities, HELM Instruct, HELM Safety, HELM AIR-Bench, and HELM MMLU.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["umbrella", "leaderboard"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: helm-capabilities
+  display_name: HELM Capabilities
+  aliases: ["helm_capabilities", "helm-capabilities"]
+  description: HELM Capabilities — HELM-curated aggregation reporting model performance on MMLU-Pro, GPQA, IFEval, WildBench, and Omni-MATH, plus a Mean Score aggregate.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["leaderboard", "aggregation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: helm-lite
+  display_name: HELM Lite
+  aliases: ["helm_lite", "helm-lite"]
+  description: HELM Lite — HELM-curated aggregation reporting NarrativeQA, NaturalQuestions (closed-book), OpenbookQA, MMLU, MATH, GSM8K, LegalBench, MedQA, and WMT 2014, plus a Mean Win Rate aggregate.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["leaderboard", "aggregation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: helm-safety
+  display_name: HELM Safety
+  aliases: ["helm_safety", "helm-safety"]
+  description: HELM Safety — HELM-curated safety aggregation across BBQ, SimpleSafetyTests, HarmBench, XSTest, AnthropicRedTeam (five external safety benchmarks bundled into one HELM sub-leaderboard). Covers risk categories like violence, fraud, discrimination, sexual content, harassment, and deception.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["safety", "leaderboard", "aggregation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# helm-mmlu and helm-air-bench are NOT minted as separate canonicals.
+# Per spec section (b), they're transitive aliases on the underlying benchmarks
+# (mmlu and air-bench-2024). helm_mmlu / HELM MMLU are added as global aliases
+# on `mmlu`; helm_air_bench is an alias on air-bench-2024 below.
+
+- id: air-bench-2024
+  display_name: AIR-Bench 2024
+  aliases: ["air-bench", "air-bench-2024", "AIR-Bench", "AIR-Bench 2024", "helm_air_bench", "helm-air-bench"]
+  description: AIR-Bench 2024 — AI Risk Benchmark by Stanford CRFM (Zeng et al. 2024, arXiv2407.17436). Safety benchmark aligned with government regulations and company policies; 5694 prompts across a 4-tier taxonomy with 314 risk categories spanning System & Operational, Content Safety, Societal, and Legal & Rights risk domains. Hosted on HELM as helm_air_bench.
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: null
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- HAL family (HAL is a publishing surface; most listings are transitive aliases) ---
+
+- id: hal
+  display_name: HAL
+  aliases: ["hal", "HAL", "Holistic Agent Leaderboard"]
+  description: Holistic Agent Leaderboard — Princeton's leaderboard for evaluating language model agents across multiple agent benchmarks including AssistantBench, GAIA, SciCode, ScienceAgentBench, USACO, Online-Mind2Web, CORE-Bench Hard, SWE-bench Verified Mini, and tau-bench airline.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["umbrella", "leaderboard", "agent"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: assistantbench
+  display_name: AssistantBench
+  aliases: ["assistantbench", "AssistantBench", "hal-assistantbench"]
+  description: AssistantBench — 214 realistic, time-consuming web tasks (research, shopping, etc.) requiring open-web browsing; evaluates web agents end-to-end. Yoran et al. 2024, arXiv2407.15711, COLM 2024.
+  dataset_repo: AssistantBench/AssistantBench
+  parent_benchmark_id: null
+  tags: '["agent", "web-browsing"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: gaia
+  display_name: GAIA
+  aliases: ["gaia", "GAIA", "hal-gaia"]
+  description: GAIA — 466 real-world questions for general AI assistants requiring reasoning, multimodality, web browsing, and tool use. Mialon et al. 2023, arXiv2311.12983, ICLR 2024.
+  dataset_repo: gaia-benchmark/GAIA
+  parent_benchmark_id: null
+  tags: '["agent", "general-assistant"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: online-mind2web
+  display_name: Online-Mind2Web
+  aliases: ["online-mind2web", "online_mind2web", "Online-Mind2Web", "hal-online-mind2web"]
+  description: Online-Mind2Web — 300 web agent tasks evaluated against the live internet (not cached snapshots) with WebJudge LLM-as-judge scoring. Distinct artifact from the original Mind2Web (NeurIPS 2023). Xue et al. 2025, arXiv2504.01382, COLM 2025.
+  dataset_repo: osunlp/Online-Mind2Web
+  parent_benchmark_id: null
+  tags: '["agent", "web-browsing"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: scicode
+  display_name: SciCode
+  aliases: ["scicode", "SciCode", "hal-scicode"]
+  description: SciCode — 80 main scientific coding problems decomposed into 338 subproblems across 16 subdomains in physics, math, materials science, biology, and chemistry; gold solutions and tests authored by scientists. Tian et al. 2024, arXiv2407.13168, NeurIPS 2024. Data on GitHub at scicode-bench/SciCode (no canonical HF dataset).
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding", "science"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: scienceagentbench
+  display_name: ScienceAgentBench
+  aliases: ["scienceagentbench", "ScienceAgentBench", "hal-scienceagentbench"]
+  description: ScienceAgentBench — 102 data-driven scientific discovery tasks from 44 peer-reviewed papers in bioinformatics, computational chemistry, GIS, and psychology/cognitive neuroscience. Agents produce a self-contained Python program. Chen et al. 2024, arXiv2410.05080, ICLR 2025.
+  dataset_repo: osunlp/ScienceAgentBench
+  parent_benchmark_id: null
+  tags: '["agent", "science"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: usaco
+  display_name: USACO
+  aliases: ["usaco", "USACO", "USACO 307", "hal-usaco"]
+  description: USACO 307 — 307 problems from the USA Computing Olympiad spanning bronze/silver/gold/platinum tiers, with unit tests, reference code, and official analyses. Shi et al. 2024, arXiv2404.10952, ICML 2024. Data on GitHub at princeton-nlp/USACO (no canonical HF dataset).
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding", "competitive-programming"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: core-bench
+  display_name: CORE-Bench
+  aliases: ["core-bench", "corebench", "core_bench", "CORE-Bench"]
+  description: CORE-Bench — Computational Reproducibility Agent Benchmark, 270 reproducibility tasks across CS, social science, and medicine. Three difficulty tiers — easy, medium, and hard. Siegel et al. 2024, arXiv2409.11363.
+  dataset_repo: siegelz/core-bench
+  parent_benchmark_id: null
+  tags: '["agent", "reproducibility"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: core-bench-easy
+  display_name: CORE-Bench Easy
+  aliases: ["core-bench-easy", "core_bench_easy", "corebench-easy", "CORE-Bench Easy"]
+  description: CORE-Bench Easy — easiest of the three CORE-Bench difficulty tiers; agent receives the most scaffolding.
+  dataset_repo: siegelz/core-bench
+  parent_benchmark_id: core-bench
+  tags: '["agent", "reproducibility"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: core-bench-medium
+  display_name: CORE-Bench Medium
+  aliases: ["core-bench-medium", "core_bench_medium", "corebench-medium", "CORE-Bench Medium"]
+  description: CORE-Bench Medium — middle difficulty tier of CORE-Bench.
+  dataset_repo: siegelz/core-bench
+  parent_benchmark_id: core-bench
+  tags: '["agent", "reproducibility"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: core-bench-hard
+  display_name: CORE-Bench Hard
+  aliases: ["core-bench-hard", "core_bench_hard", "corebench-hard", "CORE-Bench Hard", "hal-corebench-hard"]
+  description: CORE-Bench Hard — hardest of the three CORE-Bench difficulty tiers; agent receives only the README and must figure out env setup, run code, and answer questions. HAL is the official leaderboard for the Hard tier.
+  dataset_repo: siegelz/core-bench
+  parent_benchmark_id: core-bench
+  tags: '["agent", "reproducibility"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- SWE-bench Verified family (genuine decomposition: Verified ⊂ SWE-bench, Mini ⊂ Verified) ---
+
+- id: swe-bench-verified
+  display_name: SWE-bench Verified
+  aliases: ["SWE-bench Verified", "swe-bench-verified", "swe-bench-verified-leaderboard", "swe_bench_verified"]
+  description: 500-task human-filtered subset of SWE-bench, created jointly with OpenAI to ensure problem descriptions are clear, test patches are correct, and tasks are solvable. Note that OpenAI's later audit found contamination in frontier models — Verified scores have caveats.
+  dataset_repo: princeton-nlp/SWE-bench_Verified
+  parent_benchmark_id: swe-bench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-bench-verified-mini
+  display_name: SWE-bench Verified Mini
+  aliases: ["SWE-bench Verified Mini", "swe-bench-verified-mini", "hal-swebench-verified-mini", "swe_bench_verified_mini"]
+  description: 50-task random subset of SWE-bench Verified for cheap evaluation; hosted on HAL (hal.cs.princeton.edu/swebench_verified_mini).
+  dataset_repo: null
+  parent_benchmark_id: swe-bench-verified
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- ARC-AGI new variants (matching grandfathered per-variant pattern) ---
+
+- id: arc-agi-v1-public-eval
+  display_name: ARC-AGI v1 Public Eval
+  aliases: ["v1_Public_Eval", "v1_public_eval", "arc_agi_v1_public_eval"]
+  description: ARC-AGI v1 public evaluation set.
+  dataset_repo: null
+  parent_benchmark_id: arc-agi
+  tags: '["reasoning", "abstraction"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-agi-v2-private-eval
+  display_name: ARC-AGI v2 Private Eval
+  aliases: ["v2_Private_Eval", "v2_private_eval", "arc_agi_v2_private_eval"]
+  description: ARC-AGI v2 private evaluation set.
+  dataset_repo: null
+  parent_benchmark_id: arc-agi
+  tags: '["reasoning", "abstraction"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-agi-v3-semi-private
+  display_name: ARC-AGI v3 Semi-Private
+  aliases: ["v3_Semi_Private", "v3_semi_private", "arc_agi_v3_semi_private"]
+  description: ARC-AGI v3 semi-private evaluation set.
+  dataset_repo: null
+  parent_benchmark_id: arc-agi
+  tags: '["reasoning", "abstraction"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- HELM-Instruct prompt datasets (promoted to standalones per task #1) ---
+# Strings under helm_instruct config still scope to helm-instruct (suite context); these
+# globals catch the strings outside helm_instruct.
+
+- id: anthropic-rlhf-dataset
+  display_name: Anthropic RLHF Dataset
+  aliases: ["anthropic_rlhf_dataset", "Anthropic RLHF dataset", "Anthropic RLHF Dataset"]
+  description: Anthropic's RLHF prompt dataset (HH + RedTeam), used as a stimulus corpus in HELM-Instruct's harmlessness rubric.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["instruction-following", "harmlessness", "prompt-dataset"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: best-chatgpt-prompts
+  display_name: Best ChatGPT Prompts
+  aliases: ["best_chatgpt_prompts", "Best ChatGPT Prompts"]
+  description: Best ChatGPT Prompts dataset, used as a stimulus corpus in HELM-Instruct.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["prompt-dataset"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: koala-test-dataset
+  display_name: Koala Test Dataset
+  aliases: ["koala_test_dataset", "Koala test dataset", "Koala Test Dataset"]
+  description: Koala test prompts dataset, used as a stimulus corpus in HELM-Instruct.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["prompt-dataset"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: open-assistant
+  display_name: OpenAssistant
+  aliases: ["open_assistant", "Open Assistant", "OpenAssistant"]
+  description: OpenAssistant prompts, used as a stimulus corpus in HELM-Instruct.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["prompt-dataset"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: self-instruct
+  display_name: Self-Instruct
+  aliases: ["self_instruct", "Self Instruct", "Self-Instruct"]
+  description: Self-Instruct prompts dataset (Wang et al. 2022), used as a stimulus corpus in HELM-Instruct.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["prompt-dataset", "instruction-following"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: vicuna
+  display_name: Vicuna
+  aliases: ["vicuna", "Vicuna"]
+  description: Vicuna prompts, used as a stimulus corpus in HELM-Instruct.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["prompt-dataset"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Atomic NLP benchmarks (often reported in HELM Classic / HELM Lite / other suites) ---
+
+- id: boolq
+  display_name: BoolQ
+  aliases: ["boolq", "BoolQ"]
+  description: BoolQ — yes/no question answering benchmark from naturally occurring web queries (Clark et al. 2019).
+  dataset_repo: google/boolq
+  parent_benchmark_id: null
+  tags: '["qa"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: civilcomments
+  display_name: CivilComments
+  aliases: ["civilcomments", "CivilComments", "civil_comments", "Civil Comments"]
+  description: CivilComments — toxic comment classification benchmark.
+  dataset_repo: google/civil_comments
+  parent_benchmark_id: null
+  tags: '["safety", "classification"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cnn-dailymail
+  display_name: CNN/DailyMail
+  aliases: ["cnn_dailymail", "CNN/DailyMail", "cnn-dailymail", "CNN-DailyMail"]
+  description: CNN/DailyMail — news summarization benchmark.
+  dataset_repo: abisee/cnn_dailymail
+  parent_benchmark_id: null
+  tags: '["summarization"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: hellaswag
+  display_name: HellaSwag
+  aliases: ["hellaswag", "HellaSwag"]
+  description: HellaSwag — commonsense natural language inference benchmark (Zellers et al. 2019).
+  dataset_repo: Rowan/hellaswag
+  parent_benchmark_id: null
+  tags: '["reasoning", "commonsense"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: imdb
+  display_name: IMDb
+  aliases: ["imdb", "IMDb", "IMDB"]
+  description: IMDb — sentiment classification on movie reviews.
+  dataset_repo: stanfordnlp/imdb
+  parent_benchmark_id: null
+  tags: '["sentiment-analysis"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: ms-marco-trec
+  display_name: MS MARCO TREC
+  aliases: ["ms_marco_trec", "MS MARCO TREC", "ms-marco-trec"]
+  description: MS MARCO TREC — passage and document retrieval benchmark.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["retrieval"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: quac
+  display_name: QuAC
+  aliases: ["quac", "QuAC"]
+  description: QuAC — Question Answering in Context, conversational reading comprehension.
+  dataset_repo: allenai/quac
+  parent_benchmark_id: null
+  tags: '["qa", "conversational"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: raft
+  display_name: RAFT
+  aliases: ["raft", "RAFT"]
+  description: RAFT — Real-world Annotated Few-shot Tasks benchmark for few-shot classification.
+  dataset_repo: ought/raft
+  parent_benchmark_id: null
+  tags: '["few-shot", "classification"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: truthfulqa
+  display_name: TruthfulQA
+  aliases: ["truthfulqa", "TruthfulQA"]
+  description: TruthfulQA — measures whether language models generate truthful answers (Lin et al. 2022).
+  dataset_repo: truthfulqa/truthful_qa
+  parent_benchmark_id: null
+  tags: '["truthfulness", "qa"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: xsum
+  display_name: XSum
+  aliases: ["xsum", "XSum"]
+  description: XSum — extreme summarization benchmark on BBC news articles.
+  dataset_repo: EdinburghNLP/xsum
+  parent_benchmark_id: null
+  tags: '["summarization"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Leaderboards / aggregators (umbrella entities; their constituent benchmarks resolve to atomic canonicals) ---
+
+- id: hf-open-llm-v2
+  display_name: HF Open LLM Leaderboard v2
+  aliases: ["hfopenllm_v2", "hf-open-llm-v2", "HF Open LLM v2", "HF Open LLM Leaderboard v2", "hf_open_llm_v2"]
+  description: Hugging Face Open LLM Leaderboard v2 — aggregated leaderboard reporting model performance on IFEval, BBH, MATH Level 5, GPQA, MUSR, and MMLU-PRO using lm-evaluation-harness. Constituent benchmarks resolve to their own atomic canonicals.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["leaderboard", "aggregation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: llm-stats
+  display_name: LLM-Stats
+  aliases: ["llm-stats", "llm_stats", "LLM Stats", "LLM-Stats"]
+  description: LLM-Stats — third-party leaderboard aggregator at llm-stats.com.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["leaderboard", "aggregation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: vals-ai
+  display_name: Vals AI
+  aliases: ["vals-ai", "vals_ai", "Vals AI"]
+  description: Vals AI — third-party benchmark/leaderboard aggregator at vals.ai.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["leaderboard", "aggregation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: artificial-analysis-llms
+  display_name: Artificial Analysis LLMs
+  aliases: ["artificial-analysis-llms", "artificial_analysis_llms", "Artificial Analysis", "Artificial Analysis LLMs"]
+  description: Artificial Analysis — third-party LLM leaderboard at artificialanalysis.ai.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["leaderboard", "aggregation"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: openeval
+  display_name: OpenEval
+  aliases: ["openeval", "OpenEval", "open_eval", "open-eval"]
+  description: OpenEval — leaderboard aggregator.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["leaderboard"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Other new benchmarks ---
+
+- id: appworld
+  display_name: AppWorld
+  aliases: ["appworld", "AppWorld"]
+  description: AppWorld — agent benchmark for tasks across realistic apps.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "tool-use"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: bfcl-format-sensitivity
+  display_name: BFCL Format Sensitivity
+  aliases: ["bfcl_format_sensitivity", "BFCL Format Sensitivity"]
+  description: BFCL subset evaluating sensitivity to function-call format variations.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl
+  tags: '["function-calling"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cocoabench
+  display_name: CocoaBench
+  aliases: ["cocoabench", "CocoaBench"]
+  description: CocoaBench benchmark.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: multi-swe-bench-leaderboard
+  display_name: Multi-SWE-Bench Leaderboard
+  aliases: ["multi-swe-bench-leaderboard", "multi_swe_bench_leaderboard", "Multi-SWE-Bench Leaderboard", "multi-swe-bench"]
+  description: Multi-SWE-Bench — multi-language software engineering benchmark extending SWE-bench.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-leaderboard
+  display_name: SWE-PolyBench Leaderboard
+  aliases: ["swe-polybench-leaderboard", "swe_polybench_leaderboard", "SWE-PolyBench"]
+  description: SWE-PolyBench — multilingual software engineering benchmark/leaderboard.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: terminal-bench-2
+  display_name: Terminal-Bench 2.0
+  aliases: ["terminal-bench-2.0", "terminal_bench_2.0", "terminal_bench_2_0", "terminal-bench-2", "Terminal-Bench 2.0", "Terminal-Bench 2"]
+  description: Terminal-Bench 2.0 — agent benchmark evaluating tasks in terminal environments.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "terminal"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: theory-of-mind
+  display_name: Theory of Mind
+  aliases: ["theory_of_mind", "Theory of Mind"]
+  description: Sally-Anne / false-belief reasoning task. The EEE config `theory_of_mind_samples` uses Inspect AI's bundled `theory_of_mind` example dataset (100 samples), whose format derives from ToMi (Le et al. 2019, arXiv1808.00188) and ultimately bAbI Task 13.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["reasoning", "theory-of-mind"]'
   metadata: '{}'
   review_status: reviewed

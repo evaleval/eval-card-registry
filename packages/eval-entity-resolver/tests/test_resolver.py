@@ -240,3 +240,27 @@ class TestNoMatch:
         assert result.canonical_id is None
         assert result.strategy == "no_match"
         assert result.confidence == 0.0
+
+
+class TestSnakeCaseEquivalence:
+    """Snake_case forms of seeded display-form aliases resolve via normalized matcher,
+    without requiring the snake_case alias to be listed explicitly."""
+
+    @pytest.mark.parametrize(
+        "raw,expected_canonical",
+        [
+            ("easy_problems", "livecodebench-pro"),
+            ("medium_problems", "livecodebench-pro"),
+            ("hard_problems", "livecodebench-pro"),
+        ],
+    )
+    def test_lcb_pro_difficulty_tiers_normalize(self, raw, expected_canonical):
+        store = _store_with_aliases(
+            ("Easy Problems", "benchmark", "livecodebench-pro", "livecodebenchpro", "confirmed"),
+            ("Medium Problems", "benchmark", "livecodebench-pro", "livecodebenchpro", "confirmed"),
+            ("Hard Problems", "benchmark", "livecodebench-pro", "livecodebenchpro", "confirmed"),
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve(raw, "benchmark", source_config="livecodebenchpro")
+        assert result.canonical_id == expected_canonical
+        assert result.strategy == "normalized"
