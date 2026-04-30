@@ -47,7 +47,16 @@ class AliasStore:
         self._lookup_index = {}
         df = self._df[self._df["status"] != "rejected"]
         for _, row in df.iterrows():
-            key = (row["raw_value"], row["entity_type"], row.get("source_config"))
+            # Convert pandas NaN to None so dict.get((..., ..., None))
+            # finds rows whose source_config is null. Without this,
+            # exact_match silently misses every global alias (since
+            # NaN != None in dict-key comparison) and the resolver
+            # falls through to normalized_match, which can't
+            # disambiguate when two canonicals share a normalized form.
+            sc = row.get("source_config")
+            if pd.isna(sc):
+                sc = None
+            key = (row["raw_value"], row["entity_type"], sc)
             self._lookup_index[key] = row["canonical_id"]
 
     def _invalidate_caches(self) -> None:

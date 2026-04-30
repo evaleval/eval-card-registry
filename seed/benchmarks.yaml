@@ -953,11 +953,52 @@
   metadata: '{}'
   review_status: reviewed
 
-- id: swe-bench-verified-mini
-  display_name: SWE-bench Verified Mini
-  aliases: ["SWE-bench Verified Mini", "swe-bench-verified-mini", "hal-swebench-verified-mini", "swe_bench_verified_mini"]
-  description: 50-task random subset of SWE-bench Verified for cheap evaluation; hosted on HAL (hal.cs.princeton.edu/swebench_verified_mini).
+- id: swe-bench-verified-mini-hal
+  display_name: SWE-bench Verified (Mini)
+  # HAL / Princeton's curated 50-task subset. Renamed on 2026-04-30
+  # from ``swe-bench-verified-mini`` because the bare canonical id is
+  # implicitly aliased back to itself by the seed loader, which
+  # collided with MariusHobbhahn's separately-maintained variant
+  # (different 50-task subset, distributed at the bare HF path
+  # ``MariusHobbhahn/swe-bench-verified-mini``). With distinguishing
+  # ``-hal`` suffix on this canonical id, Marius's bare-string aliases
+  # resolve cleanly to ``swebench-verified-mini-mariushobbhahn``.
+  #
+  # Both HAL and Marius have aliases that normalize to the same key
+  # ``swe_bench_verified_mini``. Disambiguation depends on the resolver's
+  # exact_match (strategy="exact") matching the literal raw_value first,
+  # before normalized_match (which is order-dependent and can't pick
+  # between collisions). Each canonical's aliases must be the HAL/Marius
+  # branding the upstream actually emits, and the literal raw_value
+  # match is the tiebreaker.
+  aliases:
+    - "SWE-bench Verified Mini"
+    - "SWE-bench Verified (Mini)"
+    - "hal-swebench-verified-mini"
+  description: HAL's 50-task random subset of SWE-bench Verified for cheap evaluation; hosted at hal.cs.princeton.edu/swebench_verified_mini. Distinct from MariusHobbhahn's ``swe-bench-verified-mini`` HF dataset (a different 50-task subset).
   dataset_repo: null
+  parent_benchmark_id: swe-bench-verified
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swebench-verified-mini-mariushobbhahn
+  display_name: SWE-bench Verified Mini (MariusHobbhahn)
+  # Marius Hobbhahn's mini variant, distributed via the HF dataset
+  # ``MariusHobbhahn/swe-bench-verified-mini``. Different 50-task
+  # subset from HAL's, same parent benchmark (SWE-bench Verified).
+  # The bare ``swe-bench-verified-mini`` and ``swe_bench_verified_mini``
+  # aliases live here because that's the string the upstream EEE
+  # corpus emits for this variant (see Arcadia Impact / inspect_ai
+  # rows). HAL's variant uses ``hal-swebench-verified-mini`` or the
+  # paren-form ``SWE-bench Verified (Mini)`` instead.
+  aliases:
+    - "swe-bench-verified-mini"
+    - "swe_bench_verified_mini"
+    - "MariusHobbhahn/swe-bench-verified-mini"
+    - "SWEBench-verified-mini"
+  description: MariusHobbhahn's 50-task random subset of SWE-bench Verified, distributed via the HF dataset ``MariusHobbhahn/swe-bench-verified-mini``. Distinct curated set from HAL's variant; both share parent benchmark SWE-bench Verified.
+  dataset_repo: MariusHobbhahn/swe-bench-verified-mini
   parent_benchmark_id: swe-bench-verified
   tags: '["coding", "software-engineering"]'
   metadata: '{}'
@@ -1256,9 +1297,23 @@
   review_status: reviewed
 
 - id: swe-polybench-leaderboard
-  display_name: SWE-PolyBench Leaderboard
-  aliases: ["swe-polybench-leaderboard", "swe_polybench_leaderboard", "SWE-PolyBench"]
-  description: SWE-PolyBench — multilingual software engineering benchmark/leaderboard.
+  display_name: SWE-PolyBench
+  # The EEE corpus emits a "Verified" curated subset alongside the
+  # unqualified full set, each split across four language subtasks
+  # (Java, JavaScript, Python, TypeScript). Both the "SWE-PolyBench
+  # Verified" parent name and the unqualified parent name are added
+  # here so the pipeline's paren-form leaf ("SWE-PolyBench Verified")
+  # resolves to this canonical id; per-language splits land as
+  # subtasks of those leaves on the pipeline side, not as separate
+  # canonicals. Future split into per-language child canonicals stays
+  # an option if signal work demands it.
+  aliases:
+    - "swe-polybench-leaderboard"
+    - "swe_polybench_leaderboard"
+    - "SWE-PolyBench"
+    - "swe-polybench"
+    - "SWE-PolyBench Verified"
+  description: SWE-PolyBench — multilingual software engineering benchmark/leaderboard. Splits cover Java, JavaScript, Python, and TypeScript, each available as a Verified curated subset and an unqualified full set. The two parents currently fold into this canonical id.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["coding", "software-engineering"]'
