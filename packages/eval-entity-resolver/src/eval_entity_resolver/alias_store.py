@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import logging
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 _SCHEMA = {
@@ -71,15 +74,41 @@ class AliasStore:
     @classmethod
     def from_parquet(cls, path: str | Path, read_only: bool = False) -> "AliasStore":
         p = Path(path) / "aliases.parquet"
-        if p.exists():
+        if not p.exists():
+            # Missing dir / missing file is the legitimate "fresh store"
+            # case (used by tests and first-time seed runs), so log at INFO
+            # instead of WARNING — but still surface it.
+            logger.info(
+                "AliasStore.from_parquet: %s not found; falling back to empty store",
+                p,
+            )
+            return cls(_empty_df(), read_only=read_only)
+        try:
             df = pd.read_parquet(p)
-        else:
+        except (OSError, ValueError) as exc:
+            # OSError covers permission / IO errors; ValueError is what
+            # pyarrow raises for corrupt parquet (ArrowInvalid is a
+            # ValueError subclass). Keep the empty-store fallback so a
+            # corrupt local cache doesn't hard-crash callers, but log so
+            # the failure isn't silent.
+            logger.warning(
+                "AliasStore.from_parquet: failed to read %s (%s: %s); "
+                "falling back to empty store",
+                p,
+                type(exc).__name__,
+                exc,
+            )
             df = _empty_df()
         return cls(df, read_only=read_only)
 
     @classmethod
     def from_hf(cls, repo_id: str, read_only: bool = False) -> "AliasStore":
         from huggingface_hub import hf_hub_download
+        from huggingface_hub.errors import (
+            EntryNotFoundError,
+            HfHubHTTPError,
+            RepositoryNotFoundError,
+        )
 
         try:
             local = hf_hub_download(
@@ -88,7 +117,36 @@ class AliasStore:
                 repo_type="dataset",
             )
             df = pd.read_parquet(local)
-        except Exception:
+        except (
+            RepositoryNotFoundError,
+            EntryNotFoundError,
+            HfHubHTTPError,
+            FileNotFoundError,
+            OSError,
+            ValueError,
+        ) as exc:
+            # Specific catches:
+            #   - RepositoryNotFoundError: repo missing or auth failure
+            #     (HF returns 401 disguised as 404 when token is invalid).
+            #   - EntryNotFoundError: repo exists but aliases/part-0.parquet
+            #     hasn't been seeded yet.
+            #   - HfHubHTTPError: catch-all for other HTTP failures
+            #     (network errors, 5xx, rate limits).
+            #   - FileNotFoundError / OSError: filesystem-level errors
+            #     reading the downloaded file.
+            #   - ValueError: pyarrow.lib.ArrowInvalid (parquet corruption)
+            #     subclasses ValueError.
+            # We keep the fallback-to-empty recovery (callers expect the
+            # store to construct), but emit a warning so the failure is
+            # visible — silent fallback was masking auth and corruption
+            # issues during deploys.
+            logger.warning(
+                "AliasStore.from_hf: failed to load aliases from %r (%s: %s); "
+                "falling back to empty store",
+                repo_id,
+                type(exc).__name__,
+                exc,
+            )
             df = _empty_df()
         return cls(df, read_only=read_only)
 

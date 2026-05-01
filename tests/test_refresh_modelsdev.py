@@ -139,36 +139,8 @@ def test_generate_reports_missing_org_ids(mod):
     assert any("anthropic" in m for m in missing)
 
 
-def test_apply_overrides_replaces_matching_id(mod):
-    generated = [
-        {"id": "anthropic/claude-opus-4-5", "display_name": "Auto", "org_id": "anthropic"},
-    ]
-    overrides = [
-        {"id": "anthropic/claude-opus-4-5", "display_name": "Curated", "org_id": "anthropic"},
-    ]
-    merged = mod._apply_overrides(generated, overrides, set())
-    assert merged[0]["display_name"] == "Curated"
-
-
-def test_apply_overrides_appends_new_ids(mod):
-    generated = [{"id": "openai/gpt-5", "display_name": "GPT-5", "org_id": "openai"}]
-    overrides = [{"id": "meta/llama-3.1-8b", "display_name": "Llama", "org_id": "meta"}]
-    merged = mod._apply_overrides(generated, overrides, set())
-    assert {e["id"] for e in merged} == {"openai/gpt-5", "meta/llama-3.1-8b"}
-
-
-def test_apply_overrides_skip_ids_drops_generated(mod):
-    generated = [
-        {"id": "openai/gpt-5", "display_name": "GPT-5", "org_id": "openai"},
-        {"id": "openai/gpt-5-mini", "display_name": "Mini", "org_id": "openai"},
-    ]
-    merged = mod._apply_overrides(generated, [], skip_ids={"openai/gpt-5-mini"})
-    assert {e["id"] for e in merged} == {"openai/gpt-5"}
-
-
-def test_apply_overrides_skip_ids_strict_against_overrides(mod):
-    """skip_ids is a strict deny-list — even override entries with matching ids are dropped."""
-    generated = [{"id": "openai/gpt-5", "display_name": "Auto", "org_id": "openai"}]
-    overrides = [{"id": "openai/gpt-5", "display_name": "Override", "org_id": "openai"}]
-    merged = mod._apply_overrides(generated, overrides, skip_ids={"openai/gpt-5"})
-    assert merged == []
+# Override-merge tests previously lived here. The refresh script no longer
+# merges overrides into the generated YAML — the seed CLI loader
+# (`_load_models_merged` in `eval_card_registry.cli`) applies
+# `seed/models/core.yaml` and `seed/models/enrichments/aliases.yaml` at
+# load time. Add merge coverage there if needed.

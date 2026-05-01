@@ -32,6 +32,11 @@ def _is_na(value) -> bool:
         return False
 
 
+def _source_config_key(value) -> Optional[str]:
+    """Normalize nullable source_config values for alias-index keys."""
+    return None if _is_na(value) else value
+
+
 def _row_to_dict(row: pd.Series) -> dict:
     """Convert a Series to dict, coercing pandas NA/NaN/NaT to None for JSON.
     Uses Series.to_dict() so numpy scalars are unboxed to Python types."""
@@ -154,13 +159,22 @@ def _rebuild_alias_index(store: RegistryStore) -> None:
     _alias_index = {}
     df = store.table("aliases")
     for _, row in df.iterrows():
-        key = (row["entity_type"], row["raw_value"], row.get("source_config"))
         if row.get("status") != "rejected":
-            _alias_index[key] = row.to_dict()
+            row_dict = _row_to_dict(row)
+            key = (
+                row_dict["entity_type"],
+                row_dict["raw_value"],
+                _source_config_key(row_dict.get("source_config")),
+            )
+            _alias_index[key] = row_dict
     # Also index pending aliases
     for pending_row in _get_pending(store, "aliases"):
         if pending_row.get("status") != "rejected":
-            key = (pending_row["entity_type"], pending_row["raw_value"], pending_row.get("source_config"))
+            key = (
+                pending_row["entity_type"],
+                pending_row["raw_value"],
+                _source_config_key(pending_row.get("source_config")),
+            )
             _alias_index[key] = pending_row
 
 
@@ -170,6 +184,7 @@ def get_alias(
     entity_type: str,
     source_config: Optional[str],
 ) -> Optional[dict]:
+    source_config = _source_config_key(source_config)
     # Fast path: use index if available
     if _alias_index:
         if source_config:
@@ -208,7 +223,7 @@ def add_alias(store: RegistryStore, data: dict, buffered: bool = False) -> dict:
     """
     raw_value = data["raw_value"]
     entity_type = data["entity_type"]
-    source_config = data.get("source_config")
+    source_config = _source_config_key(data.get("source_config"))
     key = (entity_type, raw_value, source_config)
 
     # Check uniqueness via index if available
@@ -238,14 +253,21 @@ def add_alias(store: RegistryStore, data: dict, buffered: bool = False) -> dict:
     # Check pending buffer
     for p in _get_pending(store, "aliases"):
         if (p["entity_type"] == entity_type and p["raw_value"] == raw_value
-                and p.get("source_config") == source_config and p.get("status") != "rejected"):
+                and _source_config_key(p.get("source_config")) == source_config
+                and p.get("status") != "rejected"):
             raise ValueError(
                 f"Alias already exists for ({entity_type!r}, {raw_value!r}, source_config={source_config!r}). "
                 "Use update_alias() to modify an existing alias."
             )
 
     now = _now()
-    row = {**data, "id": str(uuid.uuid4()), "created_at": now, "updated_at": now}
+    row = {
+        **data,
+        "source_config": source_config,
+        "id": str(uuid.uuid4()),
+        "created_at": now,
+        "updated_at": now,
+    }
 
     if buffered:
         _get_pending(store, "aliases").append(row)
@@ -254,8 +276,9 @@ def add_alias(store: RegistryStore, data: dict, buffered: bool = False) -> dict:
         df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
         store.set_table("aliases", df)
 
-    # Update index (only non-rejected aliases block future inserts)
-    if row.get("status") != "rejected":
+    # Update index only if it has already been built. If it is empty, get_alias
+    # should keep using the DataFrame/pending slow path instead of a partial index.
+    if _alias_index and row.get("status") != "rejected":
         _alias_index[key] = row
     return row
 
@@ -269,7 +292,20 @@ def update_alias(store: RegistryStore, alias_id: str, updates: dict) -> Optional
             df.loc[df["id"] == alias_id, col] = val
     df.loc[df["id"] == alias_id, "updated_at"] = _now()
     store.set_table("aliases", df)
-    return _row_to_dict(df[df["id"] == alias_id].iloc[0])
+    updated = _row_to_dict(df[df["id"] == alias_id].iloc[0])
+    # Keep the in-memory index in sync if it was built — otherwise a follow-up
+    # add_alias() / get_alias() would see stale canonical data for this key.
+    if _alias_index:
+        key = (
+            updated["entity_type"],
+            updated["raw_value"],
+            _source_config_key(updated.get("source_config")),
+        )
+        if updated.get("status") != "rejected":
+            _alias_index[key] = updated
+        else:
+            _alias_index.pop(key, None)
+    return updated
 
 
 # ------------------------------------------------------------------

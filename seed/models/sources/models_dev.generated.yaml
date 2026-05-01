@@ -1,9 +1,16 @@
 # Generated from models.dev (https://models.dev) — DO NOT EDIT BY HAND.
-# To update: edit seed/_overrides/models.yaml (overrides win), then run
-# `python scripts/refresh_from_modelsdev.py` to regenerate this file.
+# To update: edit seed/models/core.yaml (curated canonicals win at load
+# time), then run `python scripts/refresh_from_modelsdev.py` to regenerate
+# this file.
 #
 # Source: https://models.dev/api.json (MIT, (c) 2025 models.dev)
-# Last refresh date is in git history — see `git log -1 -- seed/models.yaml`.
+# Last refresh date is in git history — see
+# `git log -1 -- seed/models/sources/models_dev.generated.yaml`.
+#
+# This file is one data source among potentially several under
+# `seed/models/sources/`. It contains pure models.dev output — no curated
+# overlays. The seed CLI loader merges sources → core → enrichments at
+# load time (field-level merge: aliases / tags UNION).
 #
 # Each entry collapses all snapshots / dated variants of a model family
 # into one canonical id (`<org>/<family-slug>`). The resolver's fuzzy stem
@@ -12,8 +19,6 @@
 # resolve to this family canonical without needing per-snapshot entries.
 #
 # `aliases` lists snapshot IDs we observed in models.dev for this family.
-# Hand-curated additions go in seed/_overrides/models.yaml — they survive
-# refresh.
 
 - id: 01-ai/yi-1.5-34b
   display_name: Yi 1.5 34B
@@ -3051,17 +3056,12 @@
   aliases:
   - Mistral-Large
   - Mistral-Large-Instruct
-  - Mistral-Large-2402
-  - Mistral-Large-2407
-  - Mistral-Large-2411
   - mistralai/Mistral-Large
-  - mistralai/Mistral-Large-Instruct-2407
-  - mistralai/Mistral-Large-Instruct-2411
-  - mistralai/mistral-large-2402
-  - mistralai/mistral-large-2407
-  - mistralai/mistral-large-2411
   metadata: '{}'
   review_status: reviewed
+  # Per-version aliases (2402/2407/2411) moved to per-version canonicals in
+  # _overrides/models.yaml (Phase 1.3 Session 5h). Large 1 (2402) and Large 2
+  # (2407/2411, 123B) are distinct generations.
 - id: mistralai/mistral-large-2.1
   display_name: Mistral Large 2.1
   org_id: mistralai
@@ -3071,11 +3071,10 @@
   parent_model_id: null
   tags:
   - open-weight
-  aliases:
-  - mistral-large-2411
-  - mistralai/mistral-large-2411
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["mistral-large-2411"]}'
   review_status: reviewed
+  # Aliases moved to mistralai/mistral-large-2411 (Phase 1.3 Session 5h).
 - id: mistralai/mistral-large-3
   display_name: Mistral Large 3
   org_id: mistralai
@@ -3153,31 +3152,17 @@
   display_name: Mistral Small
   org_id: mistralai
   family: mistral-small
-  params_billions: 22.0
   tags:
   - open-weight
   aliases:
   - Mistral-Small
   - Mistral-Small-Instruct
-  - Mistral-Small-Instruct-2402
-  - Mistral-Small-Instruct-2409
-  - Mistral-Small-Instruct-2501
-  - Mistral-Small-Instruct-2503
-  - Mistral-Small-2402
-  - Mistral-Small-2403
-  - Mistral-Small-2409
-  - Mistral-Small-2501
-  - Mistral-Small-2503
-  - mistralai/Mistral-Small-Instruct-2402
-  - mistralai/Mistral-Small-Instruct-2409
-  - mistralai/Mistral-Small-Instruct-2501
-  - mistralai/Mistral-Small-Instruct-2503
-  - mistralai/mistral-small-2402
-  - mistralai/mistral-small-2409
-  - mistralai/mistral-small-2501
-  - mistralai/mistral-small-2503
   metadata: '{}'
   review_status: reviewed
+  # Per-version aliases (2402/2409 → mistral-small-legacy ~22B, 2501/2503 →
+  # mistral-small-3 24B) moved to per-version canonicals in _overrides/models.yaml
+  # (Phase 1.3 Session 5h). The legacy 22B params_billions removed since this is
+  # now a parent-family canonical only.
 - id: mistralai/mistral-small-3.2
   display_name: Mistral Small 3.2
   org_id: mistralai
@@ -3419,17 +3404,14 @@
   - gpt-4
   - gpt-4-0613
   - gpt-4-0314
-  - gpt-4-1106-preview
-  - gpt-4-0125-preview
-  - gpt-4-turbo-preview
   - openai/gpt-4
   - openai/gpt-4-0613
   - openai/gpt-4-0314
-  - openai/gpt-4-1106-preview
-  - openai/gpt-4-0125-preview
-  - openai/gpt-4-turbo-preview
   metadata: '{}'
   review_status: reviewed
+  # Per-version turbo aliases (1106-preview, 0125-preview, turbo-preview) moved
+  # to openai/gpt-4-turbo below — these are GPT-4 Turbo preview snapshots, not
+  # base GPT-4 (Phase 1.6 Session 5h).
 - id: openai/gpt-4-turbo
   display_name: GPT-4 Turbo
   org_id: openai
@@ -3438,7 +3420,13 @@
   params_billions: null
   parent_model_id: null
   tags: []
-  aliases: []
+  aliases:
+  - gpt-4-1106-preview
+  - gpt-4-0125-preview
+  - gpt-4-turbo-preview
+  - openai/gpt-4-1106-preview
+  - openai/gpt-4-0125-preview
+  - openai/gpt-4-turbo-preview
   metadata: '{"knowledge_cutoffs": ["2023-12"], "release_dates": ["2023-11-06"], "snapshots": ["gpt-4-turbo"]}'
   review_status: reviewed
 - id: openai/gpt-4.1

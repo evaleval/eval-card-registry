@@ -1,4 +1,4 @@
-name: Refresh seed/models.yaml from models.dev
+name: Refresh models.dev source from models.dev
 
 on:
   schedule:
@@ -10,6 +10,9 @@ on:
 permissions:
   contents: write
   pull-requests: write
+
+env:
+  GENERATED_PATH: seed/models/sources/models_dev.generated.yaml
 
 jobs:
   refresh:
@@ -23,20 +26,20 @@ jobs:
       - name: Sync dependencies
         run: uv sync
 
-      - name: Refresh seed/models.yaml
+      - name: Refresh models.dev generated source
         run: uv run python scripts/refresh_from_modelsdev.py
 
       - name: Detect changes
         id: diff
         run: |
-          if git diff --quiet seed/models.yaml; then
+          if git diff --quiet "$GENERATED_PATH"; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::seed/models.yaml unchanged — nothing to do."
+            echo "::notice::$GENERATED_PATH unchanged — nothing to do."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
             {
               echo "diffstat<<EOF"
-              git diff --stat seed/models.yaml
+              git diff --stat "$GENERATED_PATH"
               echo "EOF"
             } >> "$GITHUB_OUTPUT"
           fi
@@ -56,8 +59,8 @@ jobs:
           # If a branch from an earlier same-day run exists, reuse its name —
           # force-push to refresh its diff. Different days get fresh branches.
           git checkout -B "$BRANCH"
-          git add seed/models.yaml
-          git commit -m "chore(seed): refresh models.yaml from models.dev (${DATE})"
+          git add "$GENERATED_PATH"
+          git commit -m "chore(seed): refresh models.dev source (${DATE})"
           git push --force-with-lease origin "$BRANCH"
 
           # Reuse an open PR for this branch if one exists; otherwise create.
@@ -73,22 +76,23 @@ jobs:
           gh pr create \
             --title "models.dev refresh — ${DATE}" \
             --body "$(cat <<'EOF'
-          Automated refresh of `seed/models.yaml` from [models.dev](https://models.dev).
+          Automated refresh of `seed/models/sources/models_dev.generated.yaml` from [models.dev](https://models.dev).
 
           ## What this does
           Re-runs `scripts/refresh_from_modelsdev.py`, which fetches the
-          current models.dev API and regenerates the seed file. Hand-curated
-          entries in `seed/_overrides/models.yaml` are preserved.
+          current models.dev API and regenerates the data-source file.
+          Curated entries in `seed/models/core.yaml` are layered on top at
+          seed-load time, not merged into this file.
 
           ## What to check
           - **Unexpected drops:** an entry disappearing usually means
             models.dev removed or restructured a model. Decide whether to
-            keep it via overrides.
+            keep it via a `core.yaml` entry.
           - **New families:** review additions for correct `org_id` and
             sensible `display_name`.
           - **Display-name regressions:** the generator falls back to a
             humanized slug when no exact-id snapshot exists. If a real name
-            is preferable, add an override.
+            is preferable, add a `core.yaml` entry.
           - **Org coverage:** if any new entry references an `org_id` not in
             `seed/orgs.yaml`, the seed CLI will fail — add the org first.
 

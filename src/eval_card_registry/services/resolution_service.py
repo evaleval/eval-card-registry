@@ -28,6 +28,13 @@ _ENTITY_TABLE = {
     "benchmark": "canonical_benchmarks",
     "metric": "canonical_metrics",
     "harness": "eval_harnesses",
+    "org": "canonical_orgs",
+}
+
+_PARENT_FIELD = {
+    "model": "parent_model_id",
+    "benchmark": "parent_benchmark_id",
+    "org": "parent_org_id",
 }
 
 
@@ -62,6 +69,7 @@ def _no_match_result() -> dict:
         "confidence": 0.0,
         "created_new": False,
         "review_status": None,
+        "parent_canonical_id": None,
     }
 
 
@@ -71,6 +79,7 @@ def _match_result(
     confidence: float,
     review_status: Optional[str],
     created_new: bool = False,
+    parent_canonical_id: Optional[str] = None,
 ) -> dict:
     return {
         "canonical_id": canonical_id,
@@ -78,17 +87,30 @@ def _match_result(
         "confidence": confidence,
         "created_new": created_new,
         "review_status": review_status,
+        "parent_canonical_id": parent_canonical_id,
     }
+
+
+def _parent_canonical_id(entity_type: str, entity: Optional[dict]) -> Optional[str]:
+    if not entity:
+        return None
+    field = _PARENT_FIELD.get(entity_type)
+    if not field:
+        return None
+    value = entity.get(field)
+    if queries._is_na(value):
+        return None
+    return value or None
 
 
 class ResolutionService:
     def __init__(self, registry_store: RegistryStore) -> None:
         self.store = registry_store
         self._resolver: Optional[Resolver] = None
-        # Cache: (raw_value, entity_type) → resolve result dict.
+        # Cache: (raw_value, entity_type, source_config) → resolve result dict.
         # Avoids re-running the full strategy chain for duplicate strings
         # (e.g. "Accuracy" appears in every record).
-        self._resolve_cache: dict[tuple[str, str], dict] = {}
+        self._resolve_cache: dict[tuple[str, str, Optional[str]], dict] = {}
 
     def _get_resolver(self) -> Resolver:
         if self._resolver is None:
@@ -133,6 +155,7 @@ class ResolutionService:
                     result.strategy,
                     result.confidence,
                     entity.get("review_status") if entity else None,
+                    parent_canonical_id=_parent_canonical_id(entity_type, entity),
                 )
             else:
                 result_dict = _no_match_result()
@@ -149,6 +172,7 @@ class ResolutionService:
                     existing["strategy"],
                     existing["confidence"],
                     entity.get("review_status") if entity else None,
+                    parent_canonical_id=_parent_canonical_id(entity_type, entity),
                 )
                 self._resolve_cache[cache_key] = result_dict
                 return result_dict
@@ -236,6 +260,7 @@ class ResolutionService:
             result.confidence,
             entity.get("review_status") if entity else "draft",
             created_new=created_new,
+            parent_canonical_id=_parent_canonical_id(entity_type, entity),
         )
         self._resolve_cache[cache_key] = result_dict
         return result_dict
@@ -258,16 +283,35 @@ class ResolutionService:
             "updated_at": now,
         }
         if entity_type == "model":
-            base.update({"developer": None, "family": None, "architecture": None, "params_billions": None, "tags": "[]"})
+            base.update({
+                "developer": None,
+                "org_id": self._resolve_model_org_id(raw_value),
+                "family": None,
+                "architecture": None,
+                "params_billions": None,
+                "parent_model_id": None,
+                "tags": "[]",
+            })
         elif entity_type == "benchmark":
             base.update({"description": None, "dataset_repo": None, "parent_benchmark_id": None, "tags": "[]"})
         elif entity_type == "metric":
             base.update({"score_type": None, "lower_is_better": False, "min_score": None, "max_score": None})
         elif entity_type == "harness":
             base.update({"version": None, "fork_url": None})
+        elif entity_type == "org":
+            base.update({"parent_org_id": None, "website": None, "hf_org": None, "tags": "[]"})
 
         queries.upsert_entity(self.store, table, base, buffered=True)
         return candidate_id
+
+    def _resolve_model_org_id(self, raw_value: str) -> Optional[str]:
+        if "/" not in raw_value:
+            return None
+        raw_org = raw_value.split("/", 1)[0].strip()
+        if not raw_org:
+            return None
+        result = self._get_resolver().resolve(raw_org, "org", None)
+        return result.canonical_id
 
     def _find_alias_id(
         self,
