@@ -94,6 +94,7 @@ def seed(
                     raise typer.BadParameter(f"{src_path} must be a flat list")
                 source_entries.extend(loaded)
 
+        skip_source_ids: set[str] = set()
         if core_file.exists():
             with open(core_file) as f:
                 loaded = yaml.safe_load(f) or {}
@@ -102,6 +103,12 @@ def seed(
             elif isinstance(loaded, dict):
                 core_entries = loaded.get("entries", []) or []
                 skip_ids = set(loaded.get("skip_ids", []) or [])
+                # `skip_source_ids` drops these ids from sources/enrichments only,
+                # leaving core entries authoritative. Used when models.dev (or any
+                # auto-generated source) ships bad aliases for a model that core.yaml
+                # curates correctly — otherwise the loader's UNION-merge would
+                # re-introduce the bad aliases on every refresh.
+                skip_source_ids = set(loaded.get("skip_source_ids", []) or [])
             else:
                 raise typer.BadParameter(f"{core_file} unexpected shape {type(loaded)}")
 
@@ -191,20 +198,23 @@ def seed(
 
         by_id: dict[str, dict] = {}
 
-        def _absorb(entries: list[dict]) -> None:
+        def _absorb(entries: list[dict], extra_skip: set[str] = frozenset()) -> None:
+            drop = skip_ids | extra_skip
             for e in entries:
                 if "id" not in e:
                     raise typer.BadParameter(f"models seed entry missing id: {e!r}")
-                if e["id"] in skip_ids:
+                if e["id"] in drop:
                     continue
                 if e["id"] in by_id:
                     by_id[e["id"]] = _merge_into(by_id[e["id"]], e)
                 else:
                     by_id[e["id"]] = e
 
-        _absorb(source_entries)
+        # Sources/enrichments respect both skip_ids and skip_source_ids;
+        # core entries respect only skip_ids so curated overrides always apply.
+        _absorb(source_entries, extra_skip=skip_source_ids)
         _absorb(core_entries)
-        _absorb(enrichment_entries)
+        _absorb(enrichment_entries, extra_skip=skip_source_ids)
         return list(by_id.values())
 
     # table name, yaml file, label, entity_type (for alias creation)
@@ -223,6 +233,11 @@ def seed(
     # Track all seed entity IDs and alias keys so we can remove stale ones.
     # Alias key: (raw_value, entity_type, canonical_id, source_config)
     seed_snapshot: list[tuple[str, str, set[str], set[tuple[str, str, str, Optional[str]]]]] = []
+
+    # Build the alias index once so add_alias collision checks are O(1) instead
+    # of O(N) DataFrame mask scans. Combined with buffered=True below, this
+    # avoids the O(N²) pd.concat-per-row cost on ~1k entities + ~13k aliases.
+    queries._rebuild_alias_index(store)
 
     for table, yaml_file, label, entity_type in seed_specs:
         table_columns = set(schemas.empty(table).columns)
@@ -254,7 +269,7 @@ def seed(
             entity_item = {k: v for k, v in item.items() if k in table_columns}
             if "id" not in entity_item:
                 raise typer.BadParameter(f"{label} seed entry is missing required id: {original_item!r}")
-            queries.upsert_entity(store, table, entity_item)
+            queries.upsert_entity(store, table, entity_item, buffered=True)
             canonical_id = entity_item["id"]
             display_name = entity_item.get("display_name", "")
             yaml_ids.add(canonical_id)
@@ -287,7 +302,7 @@ def seed(
                         "strategy": "seed",
                         "confidence": 1.0,
                         "notes": None,
-                    })
+                    }, buffered=True)
                     alias_count += 1
                 except ValueError:
                     # add_alias raises on uniqueness collision: an alias row
@@ -310,9 +325,30 @@ def seed(
                         mask = mask & aliases_df["source_config"].isna()
                     existing = aliases_df[mask]
                     if existing.empty:
-                        # Collision came from the pending buffer, not the
-                        # committed table — same-canonical re-add within one
-                        # seed run, no action needed.
+                        # Collision came from the pending buffer (this run added
+                        # the same key earlier). For same-canonical re-adds this
+                        # is a no-op; for different-canonical we must mutate the
+                        # pending dict in place so the rename isn't lost on
+                        # flush. _alias_index points at the same dict, so
+                        # updating it here keeps the index consistent.
+                        for p in queries._get_pending(store, "aliases"):
+                            if (p.get("entity_type") == entity_type
+                                    and p.get("raw_value") == raw_value
+                                    and queries._source_config_key(p.get("source_config")) == queries._source_config_key(source_cfg)
+                                    and p.get("status") != "rejected"):
+                                if p["canonical_id"] != canonical_id:
+                                    prev = p["canonical_id"]
+                                    p["canonical_id"] = canonical_id
+                                    p["source_field"] = "seed"
+                                    p["status"] = "confirmed"
+                                    p["strategy"] = "seed"
+                                    p["confidence"] = 1.0
+                                    typer.echo(
+                                        f"  [rename] alias {raw_value!r} ({entity_type}) "
+                                        f"moved {prev!r} -> {canonical_id!r} (pending)"
+                                    )
+                                    alias_count += 1
+                                break
                         continue
                     row = existing.iloc[0]
                     if row["canonical_id"] != canonical_id:
@@ -333,6 +369,11 @@ def seed(
 
         seed_snapshot.append((table, entity_type, yaml_ids, yaml_alias_keys))
         typer.echo(f"  {label}: {len(items)}")
+
+    # Flush all buffered upserts (entities + aliases) into their tables in a
+    # single pd.concat per table. prune_stale below reads store.table(...)
+    # directly, so this must happen before that block.
+    queries.flush_pending(store)
 
     removed_entities = 0
     removed_aliases = 0
