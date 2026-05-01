@@ -3,13 +3,27 @@ import pandas as pd
 
 
 _SCHEMAS: dict[str, dict] = {
+    "canonical_orgs": {
+        "id": pd.StringDtype(),
+        "display_name": pd.StringDtype(),
+        "parent_org_id": pd.StringDtype(),
+        "website": pd.StringDtype(),
+        "hf_org": pd.StringDtype(),
+        "tags": pd.StringDtype(),     # JSON-encoded list
+        "metadata": pd.StringDtype(), # JSON-encoded dict
+        "review_status": pd.StringDtype(),
+        "created_at": pd.StringDtype(),
+        "updated_at": pd.StringDtype(),
+    },
     "canonical_models": {
         "id": pd.StringDtype(),
         "display_name": pd.StringDtype(),
         "developer": pd.StringDtype(),
+        "org_id": pd.StringDtype(),
         "family": pd.StringDtype(),
         "architecture": pd.StringDtype(),
         "params_billions": "float64",
+        "parent_model_id": pd.StringDtype(),
         "tags": pd.StringDtype(),     # JSON-encoded list
         "metadata": pd.StringDtype(), # JSON-encoded dict
         "review_status": pd.StringDtype(),

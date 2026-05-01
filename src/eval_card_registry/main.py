@@ -9,6 +9,7 @@ from eval_card_registry.services.log_writer import ResolveLogWriter
 from eval_card_registry.api.routes_resolve import router as resolve_router
 from eval_card_registry.api.routes_entities import router as entities_router
 from eval_card_registry.api.routes_aliases import router as aliases_router
+from eval_card_registry.api.routes_orgs import router as orgs_router
 from eval_card_registry.api.routes_health import router as health_router
 
 
@@ -44,5 +45,6 @@ PREFIX = "/api/v1"
 
 app.include_router(resolve_router, prefix=PREFIX)
 app.include_router(entities_router, prefix=PREFIX)
+app.include_router(orgs_router, prefix=PREFIX)
 app.include_router(aliases_router, prefix=PREFIX)
 app.include_router(health_router, prefix=PREFIX)

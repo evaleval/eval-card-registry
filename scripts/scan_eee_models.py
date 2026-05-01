@@ -3,7 +3,7 @@
 Scan all EEE configs for raw `model_info.id` values, with frequency and
 per-config breakdown. Optionally check coverage against the current local
 registry — emits the unresolved-by-frequency list as a YAML stub for
-seed/_overrides/models.yaml.
+seed/models/core.yaml.
 
 Usage:
     uv run python scripts/scan_eee_models.py                      # scan + frequency table
@@ -195,7 +195,7 @@ def main() -> int:
 
     if args.emit_overrides_stub:
         print("# Unresolved EEE model_info.id values (top by occurrence count).")
-        print("# Add curated entries to seed/_overrides/models.yaml.")
+        print("# Add curated entries to seed/models/core.yaml.")
         print(f"# Coverage: {summary['occurrences_pct']:.1f}% by occurrence, "
               f"{summary['distinct_pct']:.1f}% by distinct id.")
         print()

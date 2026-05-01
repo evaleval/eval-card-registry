@@ -28,6 +28,7 @@ def _fixtures_path() -> Path:
 
 
 TABLE_NAMES = [
+    "canonical_orgs",
     "canonical_models",
     "canonical_benchmarks",
     "canonical_metrics",
@@ -40,6 +41,7 @@ TABLE_NAMES = [
 
 # Tables needed for query-only (read-only) mode
 QUERY_TABLE_NAMES = [
+    "canonical_orgs",
     "canonical_models",
     "canonical_benchmarks",
     "canonical_metrics",

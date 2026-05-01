@@ -262,6 +262,34 @@ class TestAliasUniqueness:
         })
         assert len(store.table("aliases")) == 2
 
+    def test_rebuilt_alias_index_preserves_global_aliases(self, store):
+        """Global aliases remain lookupable after parquet string columns reload as pd.NA."""
+        import pandas as pd
+
+        queries.add_alias(store, {
+            "raw_value": "MATH",
+            "entity_type": "benchmark",
+            "canonical_id": "math",
+            "source_config": None,
+            "source_field": None,
+            "status": "confirmed",
+            "strategy": "seed",
+            "confidence": 1.0,
+            "notes": None,
+        })
+        aliases = store.table("aliases").copy()
+        aliases["source_config"] = aliases["source_config"].astype("string")
+        aliases.loc[0, "source_config"] = pd.NA
+        store.set_table("aliases", aliases)
+
+        queries._alias_index.clear()
+        queries._rebuild_alias_index(store)
+
+        alias = queries.get_alias(store, "MATH", "benchmark", None)
+        assert alias is not None
+        assert alias["canonical_id"] == "math"
+        assert alias["source_config"] is None
+
 
 # ------------------------------------------------------------------
 # API response consistency (GET vs POST vs PATCH)

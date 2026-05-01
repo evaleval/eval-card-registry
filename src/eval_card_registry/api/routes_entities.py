@@ -52,6 +52,15 @@ def _decode(entity: dict) -> dict:
     return out
 
 
+def _decode_model(store: RegistryStore, entity: dict) -> dict:
+    out = _decode(entity)
+    org_id = out.get("org_id")
+    if org_id and store.has_table("canonical_orgs"):
+        org = queries.get_entity(store, "canonical_orgs", org_id)
+        out["developer"] = org.get("display_name") if org else None
+    return out
+
+
 # ------------------------------------------------------------------
 # Models
 # ------------------------------------------------------------------
@@ -63,17 +72,29 @@ def list_models(
     review_status: Optional[ReviewStatus] = None,
     store: RegistryStore = Depends(get_store),
 ):
-    return [_decode(e) for e in queries.list_entities(store, "canonical_models", search=search, review_status=review_status, developer=developer)]
+    return [
+        _decode_model(store, e)
+        for e in queries.list_entities(
+            store,
+            "canonical_models",
+            search=search,
+            review_status=review_status,
+            developer=developer,
+        )
+    ]
 
 
 @router.get("/models/{model_id:path}")
 def get_model(model_id: str, store: RegistryStore = Depends(get_store)):
-    return _decode(_get_or_404(store, "canonical_models", model_id))
+    return _decode_model(store, _get_or_404(store, "canonical_models", model_id))
 
 
 @router.post("/models", status_code=201, dependencies=_writable)
 def create_model(body: ModelCreate, store: RegistryStore = Depends(get_store)):
-    return _decode(queries.upsert_entity(store, "canonical_models", _encode(body.model_dump())))
+    return _decode_model(
+        store,
+        queries.upsert_entity(store, "canonical_models", _encode(body.model_dump())),
+    )
 
 
 @router.patch("/models/{model_id:path}", dependencies=_writable)
@@ -81,7 +102,10 @@ def patch_model(model_id: str, body: ModelPatch, store: RegistryStore = Depends(
     _get_or_404(store, "canonical_models", model_id)
     data = {k: v for k, v in body.model_dump().items() if v is not None}
     data["id"] = model_id
-    return _decode(queries.upsert_entity(store, "canonical_models", _encode(data)))
+    return _decode_model(
+        store,
+        queries.upsert_entity(store, "canonical_models", _encode(data)),
+    )
 
 
 # ------------------------------------------------------------------

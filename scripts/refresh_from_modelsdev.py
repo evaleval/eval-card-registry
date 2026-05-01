@@ -1,35 +1,35 @@
 #!/usr/bin/env python3
 """
-Generate seed/models.yaml from models.dev (https://models.dev).
+Generate seed/models/sources/models_dev.generated.yaml from models.dev.
 
-models.dev is **one** source — strong on hosted-API model catalogs (Anthropic,
-OpenAI, xAI, Google Gemini), weaker on open-weight families that are released
-directly to HuggingFace (Meta Llama, Mistral 7B / Mixtral, Qwen open weights,
-Gemma, Phi, Yi, OLMo, Falcon, Granite, etc.). To cover those, we maintain
-hand-curated entries in `seed/_overrides/models.yaml` that always win over
-the generated layer.
+This script writes ONE data source — pure models.dev output, no curated
+overlays. The seed CLI loader applies `seed/models/core.yaml` (curated
+canonicals) and `seed/models/enrichments/aliases.yaml` (optional alias
+additions) at load time.
+
+models.dev is strong on hosted-API model catalogs (Anthropic, OpenAI, xAI,
+Google Gemini), weaker on open-weight families released directly to
+HuggingFace (Meta Llama, Mistral / Mixtral, Qwen open weights, Gemma, Phi,
+Yi, OLMo, Falcon, Granite, etc.). Curated entries in `core.yaml` cover
+those and win at load time on id collision.
 
 The right policy: prioritize correct expected coverage of what EEE actually
 contains over the bounds of any single upstream catalog. When a refresh PR
 introduces an unexpected drop or a too-coarse family, prefer adding/keeping
-an override over chasing the upstream catalog.
+a `core.yaml` entry over chasing the upstream catalog.
 
 This script fetches https://models.dev/api.json, filters to known
 model-author providers (labs that release their own models, not re-hosting
-inference providers), collapses models to family granularity, applies
-overrides, and writes seed/models.yaml.
-
-Override semantics:
-- Entries with matching `id` REPLACE the generated entry.
-- New entries are appended.
-- A top-level `skip_ids: [...]` block drops generated entries we don't want.
+inference providers), collapses models to family granularity, and writes
+the generated YAML. Curated entries in core.yaml are NOT merged here — the
+output is pure data-source.
 
 Usage:
     python scripts/refresh_from_modelsdev.py              # fetch + write
     python scripts/refresh_from_modelsdev.py --no-fetch   # use /tmp cache
     python scripts/refresh_from_modelsdev.py --dry-run    # diff vs current
 
-Re-running this is safe: it overwrites seed/models.yaml. The seed CLI
+Re-running this is safe: it overwrites the generated YAML. The seed CLI
 (`uv run eval-card-registry seed --local`) is idempotent over the result.
 
 Source: https://models.dev (MIT, (c) 2025 models.dev)
@@ -67,9 +67,8 @@ _FAMILY_PREVIEW_RE = _FAMILY_DATE_RES[-2]
 _FAMILY_STAGE_SUFFIXES = ("-instruct", "-chat", "-it", "-base")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SEED_PATH = REPO_ROOT / "seed" / "models.yaml"
+SEED_PATH = REPO_ROOT / "seed" / "models" / "sources" / "models_dev.generated.yaml"
 ORGS_SEED_PATH = REPO_ROOT / "seed" / "orgs.yaml"
-OVERRIDES_PATH = REPO_ROOT / "seed" / "_overrides" / "models.yaml"
 CACHE_PATH = Path("/tmp/modelsdev_api.json")
 SOURCE_URL = "https://models.dev/api.json"
 
@@ -274,40 +273,6 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
     return sorted(out, key=lambda e: e["id"]), skipped_no_org
 
 
-def _load_overrides() -> tuple[list[dict], set[str]]:
-    """Returns (override entries, set of skip_ids)."""
-    if not OVERRIDES_PATH.exists():
-        return [], set()
-    data = yaml.safe_load(OVERRIDES_PATH.read_text()) or {}
-    if isinstance(data, list):
-        # Plain list form — no skip_ids
-        return data, set()
-    entries = data.get("entries", []) or []
-    skip = set(data.get("skip_ids", []) or [])
-    return entries, skip
-
-
-def _apply_overrides(generated: list[dict], overrides: list[dict], skip_ids: set[str]) -> list[dict]:
-    """Override entries with matching id REPLACE generated; new ids are appended.
-    Generated ids in skip_ids are dropped. Overrides whose id is in skip_ids
-    are also dropped (with a warning) — skip_ids is a strict deny-list.
-    """
-    by_id = {e["id"]: e for e in generated if e["id"] not in skip_ids}
-    for o in overrides:
-        if "id" not in o:
-            print(f"[refresh] WARNING: override entry missing id: {o!r}", file=sys.stderr)
-            continue
-        if o["id"] in skip_ids:
-            print(
-                f"[refresh] WARNING: override id {o['id']!r} is in skip_ids — skipping. "
-                "Remove from skip_ids or remove the override.",
-                file=sys.stderr,
-            )
-            continue
-        by_id[o["id"]] = o
-    return sorted(by_id.values(), key=lambda e: e["id"])
-
-
 def _load_known_org_ids() -> set[str]:
     if not ORGS_SEED_PATH.exists():
         return set()
@@ -316,11 +281,18 @@ def _load_known_org_ids() -> set[str]:
 
 
 _HEADER = """# Generated from models.dev (https://models.dev) — DO NOT EDIT BY HAND.
-# To update: edit seed/_overrides/models.yaml (overrides win), then run
-# `python scripts/refresh_from_modelsdev.py` to regenerate this file.
+# To update: edit seed/models/core.yaml (curated canonicals win at load
+# time), then run `python scripts/refresh_from_modelsdev.py` to regenerate
+# this file.
 #
 # Source: https://models.dev/api.json (MIT, (c) 2025 models.dev)
-# Last refresh date is in git history — see `git log -1 -- seed/models.yaml`.
+# Last refresh date is in git history — see
+# `git log -1 -- seed/models/sources/models_dev.generated.yaml`.
+#
+# This file is one data source among potentially several under
+# `seed/models/sources/`. It contains pure models.dev output — no curated
+# overlays. The seed CLI loader merges sources → core → enrichments at
+# load time (field-level merge: aliases / tags UNION).
 #
 # Each entry collapses all snapshots / dated variants of a model family
 # into one canonical id (`<org>/<family-slug>`). The resolver's fuzzy stem
@@ -329,8 +301,6 @@ _HEADER = """# Generated from models.dev (https://models.dev) — DO NOT EDIT BY
 # resolve to this family canonical without needing per-snapshot entries.
 #
 # `aliases` lists snapshot IDs we observed in models.dev for this family.
-# Hand-curated additions go in seed/_overrides/models.yaml — they survive
-# refresh.
 """
 
 
@@ -342,7 +312,7 @@ def _write_yaml(entries: list[dict], path: Path) -> str:
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--no-fetch", action="store_true", help="use cached /tmp/modelsdev_api.json")
-    p.add_argument("--dry-run", action="store_true", help="print diff vs current seed/models.yaml; don't write")
+    p.add_argument("--dry-run", action="store_true", help=f"print diff vs current {SEED_PATH}; don't write")
     args = p.parse_args()
 
     api = _fetch(use_cache=args.no_fetch)
@@ -366,9 +336,7 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
-    overrides, skip_ids = _load_overrides()
-    merged = _apply_overrides(generated, overrides, skip_ids)
-    new_text = _write_yaml(merged, SEED_PATH)
+    new_text = _write_yaml(generated, SEED_PATH)
 
     if args.dry_run:
         if SEED_PATH.exists():
@@ -388,10 +356,10 @@ def main() -> int:
             print(new_text)
         return 0
 
+    SEED_PATH.parent.mkdir(parents=True, exist_ok=True)
     SEED_PATH.write_text(new_text)
     print(
-        f"[refresh] wrote {len(merged)} model entries to {SEED_PATH} "
-        f"({len(generated)} from models.dev, {len(overrides)} from overrides, {len(skip_ids)} skipped)",
+        f"[refresh] wrote {len(generated)} model entries to {SEED_PATH}",
         file=sys.stderr,
     )
     return 0

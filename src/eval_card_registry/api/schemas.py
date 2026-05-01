@@ -2,7 +2,7 @@ from typing import Any, Literal, Optional
 from pydantic import BaseModel
 
 
-EntityType = Literal["benchmark", "model", "metric", "harness"]
+EntityType = Literal["benchmark", "model", "metric", "harness", "org"]
 ReviewStatus = Literal["draft", "reviewed"]
 AliasStatus = Literal["auto", "uncertain", "confirmed", "rejected"]
 
@@ -22,6 +22,7 @@ class ResolveResponse(BaseModel):
     confidence: float
     created_new: bool
     review_status: Optional[str]
+    parent_canonical_id: Optional[str] = None
 
 
 # --- Entities ---
@@ -30,9 +31,11 @@ class ModelCreate(BaseModel):
     id: str
     display_name: str
     developer: Optional[str] = None
+    org_id: Optional[str] = None
     family: Optional[str] = None
     architecture: Optional[str] = None
     params_billions: Optional[float] = None
+    parent_model_id: Optional[str] = None
     tags: list[str] = []
     metadata: dict[str, Any] = {}
     review_status: str = "draft"
@@ -41,9 +44,11 @@ class ModelCreate(BaseModel):
 class ModelPatch(BaseModel):
     display_name: Optional[str] = None
     developer: Optional[str] = None
+    org_id: Optional[str] = None
     family: Optional[str] = None
     architecture: Optional[str] = None
     params_billions: Optional[float] = None
+    parent_model_id: Optional[str] = None
     tags: Optional[list[str]] = None
     metadata: Optional[dict[str, Any]] = None
     review_status: Optional[str] = None
@@ -104,6 +109,29 @@ class HarnessPatch(BaseModel):
     display_name: Optional[str] = None
     version: Optional[str] = None
     fork_url: Optional[str] = None
+    metadata: Optional[dict[str, Any]] = None
+    review_status: Optional[str] = None
+
+
+# --- Orgs ---
+
+class OrgCreate(BaseModel):
+    id: str
+    display_name: str
+    parent_org_id: Optional[str] = None
+    website: Optional[str] = None
+    hf_org: Optional[str] = None
+    tags: list[str] = []
+    metadata: dict[str, Any] = {}
+    review_status: str = "draft"
+
+
+class OrgPatch(BaseModel):
+    display_name: Optional[str] = None
+    parent_org_id: Optional[str] = None
+    website: Optional[str] = None
+    hf_org: Optional[str] = None
+    tags: Optional[list[str]] = None
     metadata: Optional[dict[str, Any]] = None
     review_status: Optional[str] = None
 
