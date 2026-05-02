@@ -36,6 +36,14 @@ jobs:
       - name: Push aliases + canonicals to evaleval/entity-registry-data
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          # `Settings.hf_dataset_repo` (pydantic-settings) reads this env var.
+          # Defaults to empty, which produces an empty `repo_id` and a
+          # validation failure deep inside huggingface_hub. Set explicitly.
+          HF_DATASET_REPO: evaleval/entity-registry-data
+          # LOCAL_MODE off → `push_to_hub` actually publishes to the dataset.
+          # Default is False but make it explicit so future re-reads of this
+          # workflow are clear about intent.
+          LOCAL_MODE: "false"
         run: |
           uv run python -c "
           import sys
