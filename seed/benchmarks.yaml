@@ -44,7 +44,42 @@
 
 - id: mmlu-pro
   display_name: MMLU-Pro
-  aliases: ["MMLU-PRO", "mmlu_pro", "artificial_analysis.mmlu_pro"]
+  aliases:
+    - MMLU-PRO
+    - mmlu_pro
+    - artificial_analysis.mmlu_pro
+    - "Mmlu pro biology"
+    - "Mmlu pro business"
+    - "Mmlu pro chemistry"
+    - "Mmlu pro computer science"
+    - "Mmlu pro economics"
+    - "Mmlu pro engineering"
+    - "Mmlu pro health"
+    - "Mmlu pro history"
+    - "Mmlu pro law"
+    - "Mmlu pro math"
+    - "Mmlu pro other"
+    - "Mmlu pro overall"
+    - "Mmlu pro philosophy"
+    - "Mmlu pro physics"
+    - "Mmlu pro psychology"
+    - "vals.ai/mmlu_pro"
+    - vals_ai_mmlu_pro
+    - vals_ai_mmlu_pro_biology
+    - vals_ai_mmlu_pro_business
+    - vals_ai_mmlu_pro_chemistry
+    - vals_ai_mmlu_pro_computer_science
+    - vals_ai_mmlu_pro_economics
+    - vals_ai_mmlu_pro_engineering
+    - vals_ai_mmlu_pro_health
+    - vals_ai_mmlu_pro_history
+    - vals_ai_mmlu_pro_law
+    - vals_ai_mmlu_pro_math
+    - vals_ai_mmlu_pro_other
+    - vals_ai_mmlu_pro_overall
+    - vals_ai_mmlu_pro_philosophy
+    - vals_ai_mmlu_pro_physics
+    - vals_ai_mmlu_pro_psychology
   description: Massive Multitask Language Understanding Pro — harder version with more answer choices.
   dataset_repo: TIGER-Lab/MMLU-Pro
   parent_benchmark_id: null
@@ -172,6 +207,21 @@
   review_status: reviewed
 
 - id: legalbench
+  aliases:
+    - "Legal bench conclusion tasks"
+    - "Legal bench interpretation tasks"
+    - "Legal bench issue tasks"
+    - "Legal bench overall"
+    - "Legal bench rhetoric tasks"
+    - "Legal bench rule tasks"
+    - "vals.ai/legal_bench"
+    - vals_ai_legal_bench
+    - vals_ai_legal_bench_conclusion_tasks
+    - vals_ai_legal_bench_interpretation_tasks
+    - vals_ai_legal_bench_issue_tasks
+    - vals_ai_legal_bench_overall
+    - vals_ai_legal_bench_rhetoric_tasks
+    - vals_ai_legal_bench_rule_tasks
   display_name: LegalBench
   description: Legal reasoning benchmark covering 162 tasks from legal professionals.
   dataset_repo: nguha/legalbench
@@ -181,6 +231,23 @@
   review_status: reviewed
 
 - id: medqa
+  aliases:
+    - "Medqa asian"
+    - "Medqa black"
+    - "Medqa hispanic"
+    - "Medqa indigenous"
+    - "Medqa overall"
+    - "Medqa unbiased"
+    - "Medqa white"
+    - "vals.ai/medqa"
+    - vals_ai_medqa
+    - vals_ai_medqa_asian
+    - vals_ai_medqa_black
+    - vals_ai_medqa_hispanic
+    - vals_ai_medqa_indigenous
+    - vals_ai_medqa_overall
+    - vals_ai_medqa_unbiased
+    - vals_ai_medqa_white
   display_name: MedQA
   description: Medical QA from USMLE-style questions.
   dataset_repo: bigbio/med_qa
@@ -203,7 +270,12 @@
 
 - id: rewardbench
   display_name: RewardBench
-  aliases: ["reward-bench", "Reward-Bench"]
+  aliases:
+    - reward-bench
+    - Reward-Bench
+    - RewardBench
+    - rewardbench
+    - reward_bench
   description: Evaluates reward models across chat, safety, and reasoning sub-categories.
   dataset_repo: allenai/reward-bench
   parent_benchmark_id: null
@@ -255,7 +327,20 @@
 
 - id: swe-bench
   display_name: SWE-bench
-  aliases: ["swe-bench"]
+  aliases:
+    - swe-bench
+    - "Swebench 1 4 hours"
+    - "Swebench 15 min   1 hour"
+    - "Swebench <15 min fix"
+    - "Swebench >4 hours"
+    - "Swebench overall"
+    - "vals.ai/swebench"
+    - vals_ai_swebench
+    - vals_ai_swebench_15_min_1_hour
+    - vals_ai_swebench_15_min_fix
+    - vals_ai_swebench_1_4_hours
+    - vals_ai_swebench_4_hours
+    - vals_ai_swebench_overall
   description: Software Engineering Benchmark — evaluates LLMs on real GitHub issue resolution.
   dataset_repo: princeton-nlp/SWE-bench
   parent_benchmark_id: null
@@ -419,7 +504,12 @@
 
 - id: livecodebench-pro
   display_name: LiveCodeBench Pro
-  aliases: ["livecodebenchpro", "LiveCodeBench Pro"]
+  aliases:
+    - livecodebenchpro
+    - "LiveCodeBench Pro"
+    - LiveCodeBench-Pro
+    - livecodebench-pro
+    - livecodebench_pro
   description: LiveCodeBench Pro — separately curated coding benchmark partitioned into Easy/Medium/Hard problems. Distinct benchmark from LiveCodeBench (different curation, different paper); do not merge. The three difficulty splits currently fold into this parent canonical.
   dataset_repo: null
   parent_benchmark_id: null
@@ -446,10 +536,15 @@
 
 - id: rewardbench-2
   display_name: RewardBench 2
-  aliases: ["reward-bench-2", "Reward bench 2", "RewardBench 2"]
+  aliases:
+    - reward-bench-2
+    - "Reward bench 2"
+    - "RewardBench 2"
+    - RewardBench-2
+    - reward_bench_2
   description: Second iteration of RewardBench evaluating reward models across factuality, focus, math, precise IF, safety, and ties.
   dataset_repo: allenai/reward-bench-2-results
-  parent_benchmark_id: null
+  parent_benchmark_id: rewardbench
   tags: '["reward-model", "alignment"]'
   metadata: '{}'
   review_status: reviewed
@@ -1128,7 +1223,13 @@
 
 - id: cnn-dailymail
   display_name: CNN/DailyMail
-  aliases: ["cnn_dailymail", "CNN/DailyMail", "cnn-dailymail", "CNN-DailyMail"]
+  aliases:
+    - cnn_dailymail
+    - "CNN/DailyMail"
+    - cnn-dailymail
+    - CNN-DailyMail
+    - Cnndm
+    - openeval_cnndm
   description: CNN/DailyMail — news summarization benchmark.
   dataset_repo: abisee/cnn_dailymail
   parent_benchmark_id: null
@@ -1326,7 +1427,23 @@
 
 - id: terminal-bench-2
   display_name: Terminal-Bench 2.0
-  aliases: ["terminal-bench-2.0", "terminal_bench_2.0", "terminal_bench_2_0", "terminal-bench-2", "Terminal-Bench 2.0", "Terminal-Bench 2"]
+  aliases:
+    - terminal-bench-2.0
+    - terminal_bench_2.0
+    - terminal_bench_2_0
+    - terminal-bench-2
+    - "Terminal-Bench 2.0"
+    - "Terminal-Bench 2"
+    - "Terminal Bench 2 easy"
+    - "Terminal Bench 2 hard"
+    - "Terminal Bench 2 medium"
+    - "Terminal Bench 2 overall"
+    - "vals.ai/terminal_bench_2"
+    - vals_ai_terminal_bench_2
+    - vals_ai_terminal_bench_2_easy
+    - vals_ai_terminal_bench_2_hard
+    - vals_ai_terminal_bench_2_medium
+    - vals_ai_terminal_bench_2_overall
   description: Terminal-Bench 2.0 — agent benchmark evaluating tasks in terminal environments.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1363,7 +1480,14 @@
 
 - id: aime
   display_name: AIME
-  aliases: ["AIME", "American Invitational Mathematics Examination", "artificial_analysis.aime"]
+  aliases:
+    - AIME
+    - "American Invitational Mathematics Examination"
+    - artificial_analysis.aime
+    - "Aime overall"
+    - "vals.ai/aime"
+    - vals_ai_aime
+    - vals_ai_aime_overall
   description: American Invitational Mathematics Examination — annual high-school math competition; widely used as a frontier math reasoning benchmark.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1383,7 +1507,13 @@
 
 - id: math-500
   display_name: MATH-500
-  aliases: ["MATH-500", "math_500"]
+  aliases:
+    - MATH-500
+    - math_500
+    - "Math500 overall"
+    - "vals.ai/math500"
+    - vals_ai_math500
+    - vals_ai_math500_overall
   description: MATH-500 — 500-problem subset of Hendrycks MATH released by OpenAI for evaluating math reasoning. Distinct slug from the full MATH set; some leaderboards report this subset specifically. AA reports its `math_500` numbers under both this and MATH parent.
   dataset_repo: null
   parent_benchmark_id: math
@@ -1462,7 +1592,13 @@
 
 - id: mmmu
   display_name: MMMU
-  aliases: ["MMMU", "mmmu"]
+  aliases:
+    - MMMU
+    - mmmu
+    - "Mmmu overall"
+    - "vals.ai/mmmu"
+    - vals_ai_mmmu
+    - vals_ai_mmmu_overall
   description: Massive Multi-discipline Multimodal Understanding — college-level multimodal questions across 30+ subjects.
   dataset_repo: MMMU/MMMU
   parent_benchmark_id: null
@@ -2098,58 +2234,6 @@
   tags: '["knowledge", "multi-domain"]'
   metadata: '{}'
   review_status: reviewed
-
-- id: livecodebench-pro
-  display_name: LiveCodeBench Pro
-  aliases:
-    - LiveCodeBench-Pro
-    - livecodebenchpro
-    - livecodebench-pro
-    - livecodebench_pro
-  description: LiveCodeBench Pro — separately curated coding benchmark partitioned into Easy/Medium/Hard. Distinct from LiveCodeBench.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["coding"]'
-  metadata: '{}'
-  review_status: reviewed
-
-- id: rewardbench
-  display_name: RewardBench
-  aliases:
-    - RewardBench
-    - rewardbench
-    - reward_bench
-    - reward-bench
-  description: RewardBench — benchmark for evaluating reward models on Chat / Chat-Hard / Safety / Reasoning categories.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["reward-model"]'
-  metadata: '{}'
-  review_status: reviewed
-
-- id: rewardbench-2
-  display_name: RewardBench 2
-  aliases:
-    - RewardBench-2
-    - reward_bench_2
-    - reward-bench-2
-  description: RewardBench v2 — second-generation reward-model evaluation.
-  dataset_repo: null
-  parent_benchmark_id: rewardbench
-  tags: '["reward-model"]'
-  metadata: '{}'
-  review_status: reviewed
-
-# ============================================================
-# Session 5g — exhaustive missing canonicals (2026-05-01)
-# ============================================================
-# Auto-generated from unresolved buckets in evaluations_canonicalized.parquet.
-# Each entry covers a benchmark missing from the registry; aliases include
-# every spelling observed across alphaxiv / llm-stats / vals.ai / helm-safety /
-# openeval / hal / judgebench / caparena leaderboards.
-
-- id: 360vot
-  display_name: "360VOT"
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["general"]'
@@ -8212,6 +8296,18 @@
     - finance-agent
     - finance_agent
     - llm_stats_finance_agent
+  scoped_aliases:
+    vals-ai:
+      - "Finance agent adjustments"
+      - "Finance agent beat or miss"
+      - "Finance agent complex retrieval"
+      - "Finance agent financial modeling"
+      - "Finance agent market analysis"
+      - "Finance agent numerical reasoning"
+      - "Finance agent simple retrieval qualitative"
+      - "Finance agent simple retrieval quantitative"
+      - "Finance agent trends"
+      - "Finance agent overall"
 
 - id: financereasoning
   display_name: FinanceReasoning
@@ -13031,12 +13127,26 @@
   display_name: MGSM
   dataset_repo: null
   parent_benchmark_id: null
-  tags: '["math"]'
+  tags: '["math", "multilingual"]'
   metadata: '{}'
   review_status: reviewed
   aliases:
     - llm_stats_mgsm
     - mgsm
+  scoped_aliases:
+    vals-ai:
+      - "Mgsm mgsm bn"
+      - "Mgsm mgsm de"
+      - "Mgsm mgsm en"
+      - "Mgsm mgsm es"
+      - "Mgsm mgsm fr"
+      - "Mgsm mgsm ja"
+      - "Mgsm mgsm ru"
+      - "Mgsm mgsm sw"
+      - "Mgsm mgsm te"
+      - "Mgsm mgsm th"
+      - "Mgsm mgsm zh"
+      - "Mgsm overall"
 
 - id: miabench
   display_name: Miabench
@@ -20350,6 +20460,14 @@
     - llm_stats_tau_bench_airline
     - tau-bench-airline
     - tau_bench_airline
+    - "TAU-bench Airline"
+    - "TAU-bench Airline (HAL)"
+    - tau-bench-airline-hal
+    - hal_taubench_airline_tau_bench_airline
+  scoped_aliases:
+    hal-taubench-airline:
+      - "Tau Bench Airline"
+      - "tau_bench_airline"
 
 - id: tau-bench-retail
   display_name: Tau Bench Retail
@@ -20476,6 +20594,11 @@
     - terminal bench
     - terminal-bench
     - terminal_bench
+  scoped_aliases:
+    vals-ai:
+      - "Terminal Bench easy"
+      - "Terminal Bench medium"
+      - "Terminal Bench overall"
 
 - id: terminus
   display_name: Terminus
@@ -23438,15 +23561,6 @@
     - zno eval
     - zno-eval
     - zno_eval
-
-- id: aime
-  display_name: AIME
-  aliases:
-    - Aime overall
-    - vals.ai/aime
-    - vals_ai_aime
-    - vals_ai_aime_overall
-
 - id: case-law-v2
   display_name: Case Law v2
   description: Case Law v2 — legal benchmark.
@@ -23540,34 +23654,6 @@
     - vals_ai_lcb_hard
     - vals_ai_lcb_medium
     - vals_ai_lcb_overall
-
-- id: legalbench
-  display_name: LegalBench
-  aliases:
-    - Legal bench conclusion tasks
-    - Legal bench interpretation tasks
-    - Legal bench issue tasks
-    - Legal bench overall
-    - Legal bench rhetoric tasks
-    - Legal bench rule tasks
-    - vals.ai/legal_bench
-    - vals_ai_legal_bench
-    - vals_ai_legal_bench_conclusion_tasks
-    - vals_ai_legal_bench_interpretation_tasks
-    - vals_ai_legal_bench_issue_tasks
-    - vals_ai_legal_bench_overall
-    - vals_ai_legal_bench_rhetoric_tasks
-    - vals_ai_legal_bench_rule_tasks
-
-- id: math-500
-  display_name: MATH 500
-  aliases:
-    - Math500 overall
-    - vals.ai/math500
-    - vals_ai_math500
-    - vals_ai_math500_overall
-
-- id: medcode
   display_name: MedCode
   description: MedCode — medical coding benchmark.
   dataset_repo: null
@@ -23580,27 +23666,6 @@
     - medcode
     - vals_ai_medcode
     - vals_ai_medcode_overall
-
-- id: medqa
-  display_name: MedQA
-  aliases:
-    - Medqa asian
-    - Medqa black
-    - Medqa hispanic
-    - Medqa indigenous
-    - Medqa overall
-    - Medqa unbiased
-    - Medqa white
-    - vals.ai/medqa
-    - vals_ai_medqa
-    - vals_ai_medqa_asian
-    - vals_ai_medqa_black
-    - vals_ai_medqa_hispanic
-    - vals_ai_medqa_indigenous
-    - vals_ai_medqa_overall
-    - vals_ai_medqa_unbiased
-    - vals_ai_medqa_white
-
 - id: medscribe
   display_name: MedScribe
   description: MedScribe — medical transcription benchmark.
@@ -23614,52 +23679,6 @@
     - Medscribe overall
     - vals_ai_medscribe
     - vals_ai_medscribe_overall
-
-- id: mmlu-pro
-  display_name: MMLU-Pro
-  aliases:
-    - Mmlu pro biology
-    - Mmlu pro business
-    - Mmlu pro chemistry
-    - Mmlu pro computer science
-    - Mmlu pro economics
-    - Mmlu pro engineering
-    - Mmlu pro health
-    - Mmlu pro history
-    - Mmlu pro law
-    - Mmlu pro math
-    - Mmlu pro other
-    - Mmlu pro overall
-    - Mmlu pro philosophy
-    - Mmlu pro physics
-    - Mmlu pro psychology
-    - vals.ai/mmlu_pro
-    - vals_ai_mmlu_pro
-    - vals_ai_mmlu_pro_biology
-    - vals_ai_mmlu_pro_business
-    - vals_ai_mmlu_pro_chemistry
-    - vals_ai_mmlu_pro_computer_science
-    - vals_ai_mmlu_pro_economics
-    - vals_ai_mmlu_pro_engineering
-    - vals_ai_mmlu_pro_health
-    - vals_ai_mmlu_pro_history
-    - vals_ai_mmlu_pro_law
-    - vals_ai_mmlu_pro_math
-    - vals_ai_mmlu_pro_other
-    - vals_ai_mmlu_pro_overall
-    - vals_ai_mmlu_pro_philosophy
-    - vals_ai_mmlu_pro_physics
-    - vals_ai_mmlu_pro_psychology
-
-- id: mmmu
-  display_name: MMMU
-  aliases:
-    - Mmmu overall
-    - vals.ai/mmmu
-    - vals_ai_mmmu
-    - vals_ai_mmmu_overall
-
-- id: mortgage-tax
   display_name: Mortgage Tax
   description: Mortgage tax extraction benchmark.
   dataset_repo: null
@@ -23718,23 +23737,6 @@
     - vals_ai_sage_linear_algebra
     - vals_ai_sage_overall
     - vals_ai_sage_pdes
-
-- id: swe-bench
-  display_name: SWE-bench
-  aliases:
-    - Swebench 1 4 hours
-    - Swebench 15 min   1 hour
-    - Swebench <15 min fix
-    - Swebench >4 hours
-    - Swebench overall
-    - vals.ai/swebench
-    - vals_ai_swebench
-    - vals_ai_swebench_15_min_1_hour
-    - vals_ai_swebench_15_min_fix
-    - vals_ai_swebench_1_4_hours
-    - vals_ai_swebench_4_hours
-    - vals_ai_swebench_overall
-
 - id: tax-eval-v2
   display_name: Tax Eval v2
   description: Tax evaluation benchmark v2 — correctness and stepwise reasoning.
@@ -23754,21 +23756,6 @@
     - vals_ai_tax_eval_v2_correctness
     - vals_ai_tax_eval_v2_overall
     - vals_ai_tax_eval_v2_stepwise_reasoning
-
-- id: terminal-bench-2
-  display_name: Terminal Bench 2
-  aliases:
-    - Terminal Bench 2 easy
-    - Terminal Bench 2 hard
-    - Terminal Bench 2 medium
-    - Terminal Bench 2 overall
-    - vals.ai/terminal_bench_2
-    - vals_ai_terminal_bench_2
-    - vals_ai_terminal_bench_2_easy
-    - vals_ai_terminal_bench_2_hard
-    - vals_ai_terminal_bench_2_medium
-    - vals_ai_terminal_bench_2_overall
-
 - id: vals-index
   display_name: Vals Index
   description: Vals.ai composite leaderboard index.
@@ -23865,13 +23852,6 @@
   aliases:
     - bbq
     - openeval_bbq
-
-- id: cnn-dailymail
-  display_name: CNN/DailyMail
-  aliases:
-    - Cnndm
-    - openeval_cnndm
-
 - id: disinformation
   display_name: Disinformation
   description: Disinformation evaluation — measures susceptibility to producing disinformation.
@@ -24204,20 +24184,6 @@
     - GAIA Level 3
     - gaia-level-3
     - hal_gaia_gaia_gaia_level_3
-
-- id: tau-bench-airline-hal
-  display_name: TAU-bench Airline (HAL)
-  description: TAU-bench Airline tier — HAL agentic benchmark hub.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["agentic"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - TAU-bench Airline
-    - TAU-bench Airline (HAL)
-    - hal_taubench_airline_tau_bench_airline
-    - tau-bench-airline-hal
 
 # ----------------------------------------------------------------------------
 # HumanEval / MBPP family splits (2026-05-01)
