@@ -89,8 +89,8 @@
 
 - id: math
   display_name: MATH
-  aliases: ["artificial_analysis.math", "artificial_analysis.math_500"]
-  description: MATH dataset — competition mathematics problems at various difficulty levels. AA reports its math results under both `math` and `math_500` identifiers; both alias here.
+  aliases: ["artificial_analysis.math"]
+  description: MATH dataset — competition mathematics problems at various difficulty levels. The `math_500` 500-problem subset has its own canonical (math-500, parent=math).
   dataset_repo: hendrycks/math
   parent_benchmark_id: null
   tags: '["math", "reasoning"]'
@@ -368,35 +368,19 @@
   metadata: '{}'
   review_status: reviewed
 
-- id: tau-bench-2
-  display_name: Tau-Bench 2
-  # Global aliases are reserved for fully-qualified strings that cannot
-  # collide (the benchmark's own name + fully-qualified domain splits).
-  # Bare domain tokens like "airline" go in scoped_aliases only.
+- id: tau2-bench
+  display_name: Tau2-Bench
   aliases:
+    - "tau2-bench"
     - "tau-bench-2"
-    - "tau-bench-2/airline"
-    - "tau-bench-2/retail"
-    - "tau-bench-2/telecom"
-    - "tau-bench-2_airline"
-    - "tau-bench-2_retail"
-    - "tau-bench-2_telecom"
-    - "hal-taubench-airline"
     - "artificial_analysis.tau2"
     - "tau2"
-  description: Tau-Bench 2 — agent-based customer service tasks across airline, retail, and telecom domains. Distinct benchmark from Tau-Bench v1; do not merge. The three domain splits currently fold into this parent canonical.
+  description: Tau2-Bench (sierra-research V2 of Tau-Bench) — agent-based customer service tasks across airline, retail, and telecom domains. Distinct from Tau-Bench v1; do not merge. Per-domain canonicals (tau2-airline / tau2-retail / tau2-telecom) parent here.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["agent", "customer-service"]'
   metadata: '{}'
   review_status: reviewed
-  scoped_aliases:
-    tau-bench-2_airline:
-      - "airline"
-    tau-bench-2_retail:
-      - "retail"
-    tau-bench-2_telecom:
-      - "telecom"
 
 # --- Function calling ---
 
@@ -1509,12 +1493,17 @@
   display_name: MATH-500
   aliases:
     - MATH-500
+    - "MATH 500"
+    - "math 500"
     - math_500
+    - math-500
     - "Math500 overall"
     - "vals.ai/math500"
     - vals_ai_math500
     - vals_ai_math500_overall
-  description: MATH-500 — 500-problem subset of Hendrycks MATH released by OpenAI for evaluating math reasoning. Distinct slug from the full MATH set; some leaderboards report this subset specifically. AA reports its `math_500` numbers under both this and MATH parent.
+    - llm_stats_math_500
+    - "artificial_analysis.math_500"
+  description: MATH-500 — 500-problem subset of Hendrycks MATH released by OpenAI for evaluating math reasoning. Distinct slug from the full MATH set; some leaderboards report this subset specifically.
   dataset_repo: null
   parent_benchmark_id: math
   tags: '["math", "reasoning"]'
@@ -1536,18 +1525,8 @@
   aliases: ["TerminalBench-Hard", "Terminalbench Hard", "terminal-bench-hard", "terminalbench_hard", "artificial_analysis.terminalbench_hard"]
   description: TerminalBench Hard — the hard split of TerminalBench. Distinct from terminal-bench-2 (which is a different benchmark).
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: terminal-bench
   tags: '["agentic", "coding"]'
-  metadata: '{}'
-  review_status: reviewed
-
-- id: lcr
-  display_name: Long Context Reasoning (AA)
-  aliases: ["Lcr", "LCR", "artificial_analysis.lcr"]
-  description: AA's Long-Context-Reasoning column — placeholder canonical pending more detail on AA's exact methodology.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["long-context", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
 
@@ -2323,10 +2302,11 @@
     - llm_stats_aa_index
 
 - id: aa-lcr
-  display_name: Aa Lcr
+  display_name: AA-LCR
+  description: Artificial Analysis Long-Context Reasoning column. Same benchmark as AA's `lcr` leaf; canonicals merged 2026-05-02.
   dataset_repo: null
   parent_benchmark_id: null
-  tags: '["general"]'
+  tags: '["long-context", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
   aliases:
@@ -2334,6 +2314,9 @@
     - aa-lcr
     - aa_lcr
     - llm_stats_aa_lcr
+    - Lcr
+    - LCR
+    - "artificial_analysis.lcr"
 
 - id: abilitylens
   display_name: AbilityLens
@@ -20384,9 +20367,9 @@
     - taskbench
 
 - id: tau2-airline
-  display_name: Tau2 Airline
+  display_name: Tau2-Bench Airline
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: tau2-bench
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
@@ -20395,11 +20378,13 @@
     - llm_stats_tau2_airline
     - tau2-airline
     - tau2_airline
+    - "tau-bench-2_airline"
+    - "tau-bench-2/airline"
 
 - id: tau2-retail
-  display_name: Tau2 Retail
+  display_name: Tau2-Bench Retail
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: tau2-bench
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
@@ -20408,11 +20393,16 @@
     - tau2 retail
     - tau2-retail
     - tau2_retail
+    - "tau-bench-2_retail"
+    - "tau-bench-2/retail"
 
+# NOTE: upstream ABC card mislabels this canonical as "TeleMath" (arxiv 2506.10674,
+# an unrelated telecom math benchmark). display_name override fixes the eval-list
+# label; card detail body still says TeleMath. See notes/upstream-data-issues.md.
 - id: tau2-telecom
-  display_name: Tau2 Telecom
+  display_name: Tau2-Bench Telecom
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: tau2-bench
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
@@ -20421,6 +20411,8 @@
     - tau2 telecom
     - tau2-telecom
     - tau2_telecom
+    - "tau-bench-2_telecom"
+    - "tau-bench-2/telecom"
 
 - id: tau3-bench
   display_name: Tau3 Bench
@@ -20464,6 +20456,7 @@
     - "TAU-bench Airline (HAL)"
     - tau-bench-airline-hal
     - hal_taubench_airline_tau_bench_airline
+    - hal-taubench-airline
   scoped_aliases:
     hal-taubench-airline:
       - "Tau Bench Airline"
