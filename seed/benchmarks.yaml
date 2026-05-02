@@ -1472,7 +1472,7 @@
 
 - id: mmbench
   display_name: MMBench
-  aliases: ["MMBench", "mmbench"]
+  aliases: ["MMBench", "mmbench", "MM-Bench", "mm-bench", "mm bench", "mm_bench"]
   description: Multimodal benchmark covering perception, reasoning, OCR, math across many sub-tasks.
   dataset_repo: null
   parent_benchmark_id: null
@@ -6342,6 +6342,10 @@
     - Deep Research Bench
     - deep-research-bench
     - deep_research_bench
+    - DeepResearch Bench
+    - deepresearch-bench
+    - deepresearch_bench
+    - deepresearch bench
 
 - id: deepmath-creative
   display_name: DeepMath-Creative
@@ -6355,17 +6359,6 @@
     - deepmath-creative
     - deepmath_creative
 
-- id: deepresearch-bench
-  display_name: DeepResearch Bench
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["retrieval"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - deepresearch bench
-    - deepresearch-bench
-    - deepresearch_bench
 
 - id: deepresearch-reporteval
   display_name: DeepResearch-ReportEval
@@ -7265,18 +7258,6 @@
   aliases:
     - EconWebArena
 
-- id: edit-bench
-  display_name: EDIT-Bench
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - edit bench
-    - edit-bench
-    - edit_bench
-
 - id: editbench
   display_name: EditBench
   dataset_repo: null
@@ -7286,6 +7267,10 @@
   review_status: reviewed
   aliases:
     - editbench
+    - EDIT-Bench
+    - edit-bench
+    - edit bench
+    - edit_bench
 
 - id: editeval
   display_name: EditEval
@@ -8119,15 +8104,7 @@
     - FEA-Bench
     - fea bench
     - fea_bench
-
-- id: feabench
-  display_name: FEABench
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
+    - FEABench
     - feabench
 
 - id: feasibilityqa
@@ -13315,18 +13292,6 @@
     - llm_stats_mlvu_m
     - mlvu-m
     - mlvu_m
-
-- id: mm-bench
-  display_name: MM-Bench
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["multimodal"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - MM-Bench
-    - mm bench
-    - mm_bench
 
 - id: mm-bigbench
   display_name: MM-BigBench
