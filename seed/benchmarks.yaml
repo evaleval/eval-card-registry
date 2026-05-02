@@ -20440,7 +20440,7 @@
 - id: tau-bench-airline
   display_name: Tau Bench Airline
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: tau-bench
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
@@ -20462,7 +20462,7 @@
 - id: tau-bench-retail
   display_name: Tau Bench Retail
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: tau-bench
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
@@ -23705,7 +23705,7 @@
     - vals_ai_proof_bench_overall
 
 - id: sage-vals
-  display_name: SAGE (vals.ai)
+  display_name: SAGE
   description: SAGE (vals.ai) — math/CS benchmark covering linear algebra, calculus, PDEs, automata.
   dataset_repo: null
   parent_benchmark_id: null
