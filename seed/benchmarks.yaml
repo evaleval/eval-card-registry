@@ -2303,7 +2303,7 @@
 
 - id: aa-lcr
   display_name: AA-LCR
-  description: Artificial Analysis Long-Context Reasoning column. Same benchmark as AA's `lcr` leaf; canonicals merged 2026-05-02.
+  description: Artificial Analysis Long-Context Reasoning column.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["long-context", "reasoning"]'
@@ -20396,9 +20396,6 @@
     - "tau-bench-2_retail"
     - "tau-bench-2/retail"
 
-# NOTE: upstream ABC card mislabels this canonical as "TeleMath" (arxiv 2506.10674,
-# an unrelated telecom math benchmark). display_name override fixes the eval-list
-# label; card detail body still says TeleMath. See notes/upstream-data-issues.md.
 - id: tau2-telecom
   display_name: Tau2-Bench Telecom
   dataset_repo: null

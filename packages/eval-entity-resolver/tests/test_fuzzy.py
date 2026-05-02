@@ -529,3 +529,93 @@ class TestDuplicatedOrgPlusSuffixIntegration:
         # producing `moonshotai/moonshotai-kimi-k2`, then dedup collapses.
         result = resolver.resolve("moonshotai/moonshotai-kimi-k2-fc", "model")
         assert result.canonical_id == "moonshotai/kimi-k2"
+
+
+class TestQuantizationAndHfStripping:
+    """Quantization / HF-upload suffix stripping. See PRECISION-LOSS POLICY in
+    fuzzy.py module docstring — these collapses sacrifice precision intentionally."""
+
+    def test_hf_suffix_strips(self):
+        store = _store_with_aliases(
+            ("meta/llama-2-7b", "model", "meta/llama-2-7b", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("meta/llama-2-7b-hf", "model")
+        assert result.canonical_id == "meta/llama-2-7b"
+        assert result.strategy == "fuzzy"
+
+    def test_fp8_suffix_strips(self):
+        store = _store_with_aliases(
+            ("deepseek/deepseek-v4-flash", "model", "deepseek/deepseek-v4-flash", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("deepseek/deepseek-v4-flash-fp8", "model")
+        assert result.canonical_id == "deepseek/deepseek-v4-flash"
+
+    def test_int4_awq_strips_as_one_unit(self):
+        # Compound suffix: -int4-awq is in the strip list before -int4 / -awq alone,
+        # so it should strip in one step (not stripping -awq first then leaving
+        # -int4 behind to fail).
+        store = _store_with_aliases(
+            ("meta/llama-3-70b", "model", "meta/llama-3-70b", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("meta/llama-3-70b-int4-awq", "model")
+        assert result.canonical_id == "meta/llama-3-70b"
+
+    def test_gguf_suffix_strips(self):
+        store = _store_with_aliases(
+            ("alibaba/qwen2-72b", "model", "alibaba/qwen2-72b", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("alibaba/qwen2-72b-gguf", "model")
+        assert result.canonical_id == "alibaba/qwen2-72b"
+
+
+class TestLetterDigitDashCollapse:
+    """Letter-digit boundary dashes: ``qwen-2-72b`` should match ``qwen2-72b``."""
+
+    def test_qwen_dash_form_resolves(self):
+        store = _store_with_aliases(
+            ("alibaba/qwen2-72b", "model", "alibaba/qwen2-72b", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("alibaba/qwen-2-72b", "model")
+        assert result.canonical_id == "alibaba/qwen2-72b"
+        assert result.strategy == "fuzzy"
+
+    def test_dash_form_with_instruct_suffix(self):
+        # alibaba/qwen-2-72b-instruct (real route_id form) must reach
+        # alibaba/qwen2-72b after both the digit-dash collapse AND
+        # whatever path handles -instruct.
+        store = _store_with_aliases(
+            ("alibaba/qwen2-72b-instruct", "model", "alibaba/qwen2-72b", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("alibaba/qwen-2-72b-instruct", "model")
+        assert result.canonical_id == "alibaba/qwen2-72b"
+
+    def test_no_change_when_no_letter_digit_boundary(self):
+        # qwen2-72b already has no boundary dash → collapse no-op.
+        store = _store_with_aliases(
+            ("alibaba/qwen2-72b", "model", "alibaba/qwen2-72b", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("alibaba/qwen2-72b", "model")
+        assert result.canonical_id == "alibaba/qwen2-72b"
+        # exact path, not fuzzy
+        assert result.strategy == "exact"
+
+    def test_distinct_models_stay_distinct(self):
+        # gpt-4 and gpt-4-mini are distinct models; the collapse should
+        # not merge them. Both have letter-digit at "t-4" boundary but
+        # the -mini suffix preserves identity.
+        store = _store_with_aliases(
+            ("openai/gpt4", "model", "openai/gpt4", None, "confirmed"),
+            ("openai/gpt4-mini", "model", "openai/gpt4-mini", None, "confirmed"),
+        )
+        resolver = Resolver(store)
+        # gpt-4 → gpt4 (matches gpt4 canonical)
+        assert resolver.resolve("openai/gpt-4", "model").canonical_id == "openai/gpt4"
+        # gpt-4-mini → gpt4-mini (matches gpt4-mini canonical, NOT gpt4)
+        assert resolver.resolve("openai/gpt-4-mini", "model").canonical_id == "openai/gpt4-mini"

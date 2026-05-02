@@ -16990,3 +16990,79 @@ entries:
   - aya-expanse-32b
   metadata: '{}'
   review_status: reviewed
+
+# ChatGPT-* product names alias to underlying GPT canonicals.
+# All chatgpt-X entries should resolve to the underlying gpt-X family;
+# entries without a clear underlying model are intentionally not aliased.
+- id: openai/gpt-4o
+  aliases:
+  - openai/chatgpt-4o-latest
+  - openai/chatgpt-4o
+  - openai__chatgpt-4o-latest
+  - openai__chatgpt-4o
+  - chatgpt-4o
+- id: openai/gpt-3.5-turbo
+  aliases:
+  - chatgpt-3.5
+  - chatgpt-3.5-turbo
+  - openai/chatgpt-3.5-turbo
+  - openai/chatgpt-3.5
+  - openai__chatgpt-3.5-turbo
+  - openai__chatgpt-3.5
+  - unknown/rag-chatgpt-3.5
+
+# Grok variants not in models.dev.
+- id: xai/grok-2-mini
+  display_name: Grok 2 Mini
+  org_id: xai
+  family: grok-2-mini
+  parent_model_id: xai/grok-2
+  tags:
+  - proprietary
+  aliases:
+  - xai/grok-2-mini
+  - xai__grok-2-mini
+  - grok-2-mini
+  metadata: '{}'
+  review_status: reviewed
+- id: xai/grok-1
+  display_name: Grok 1
+  org_id: xai
+  family: grok-1
+  tags:
+  - proprietary
+  aliases:
+  - xai/grok-1
+  - xai__grok-1
+  - grok-1
+  metadata: '{}'
+  review_status: reviewed
+- id: xai/grok-1.5v
+  display_name: Grok 1.5V
+  org_id: xai
+  family: grok-1.5v
+  tags:
+  - proprietary
+  - multimodal
+  aliases:
+  - xai/grok-1.5v
+  - xai/grok-1-5v
+  - xai__grok-1-5v
+  - xai__grok-1.5v
+  - grok-1.5v
+  - grok-1-5v
+  metadata: '{}'
+  review_status: reviewed
+- id: xai/grok-4-heavy
+  display_name: Grok 4 Heavy
+  org_id: xai
+  family: grok-4-heavy
+  parent_model_id: xai/grok-4
+  tags:
+  - proprietary
+  aliases:
+  - xai/grok-4-heavy
+  - xai__grok-4-heavy
+  - grok-4-heavy
+  metadata: '{}'
+  review_status: reviewed
