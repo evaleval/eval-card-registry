@@ -13,11 +13,16 @@ def normalize(value: str) -> str:
 
     Dots between digits are converted to spaces first so that version
     numbers like ``4.5`` and ``4-5`` normalize identically (both → ``4 5``).
+
+    ``+`` is preserved because it carries identity-relevant meaning for some
+    benchmarks (``MBPP+`` / ``HumanEval+`` are distinct from their non-``+``
+    counterparts; stripping it collides them in the normalized index and
+    last-write-wins assigns the wrong canonical).
     """
     value = value.lower()
     value = value.strip()
     # Convert dots between digits to spaces (e.g. "4.5" → "4 5")
     value = re.sub(r"(?<=\d)\.(?=\d)", " ", value)
-    value = re.sub(r"[^\w\s\-/]", "", value)         # remove punctuation first
+    value = re.sub(r"[^\w\s\-/+]", "", value)        # remove punctuation, keep +
     value = re.sub(r"[\s_\-/]+", " ", value).strip() # collapse separators
     return value
