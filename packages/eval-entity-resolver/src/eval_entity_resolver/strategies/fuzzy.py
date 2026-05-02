@@ -64,6 +64,7 @@ _STRIP_SUFFIXES = [
     # Hosting-provider suffixes
     "-together",
     "-bedrock",
+    "-openrouter",
     # Reasoning-effort suffixes
     "-high",
     "-medium",
