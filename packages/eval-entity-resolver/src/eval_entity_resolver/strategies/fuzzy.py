@@ -15,6 +15,32 @@ sizes, and variants), this uses two targeted approaches:
 
 If neither approach produces a match the strategy returns None so the resolver
 can fall through to auto-draft.
+
+PRECISION-LOSS POLICY for stem stripping
+=========================================
+Some suffixes are stripped at the cost of conflating variants the registry
+considers "the same model" but a precision-sensitive consumer might not.
+The current strip list collapses:
+
+- ``-hf``: HuggingFace re-uploaded copy of an official model release. The
+  weights are the same; the upload path differs.
+- ``-fp8`` / ``-fp16`` / ``-fp4`` / ``-bf16`` / ``-int4`` / ``-int8`` /
+  ``-q4`` / ``-q8`` / ``-quant`` / ``-gguf`` / ``-awq`` / ``-gptq``:
+  quantization variants. The architecture is the same; numerical precision
+  differs. **Benchmark scores can differ measurably between quantization
+  levels** — e.g., a 70B model at FP16 may outperform the same model at
+  INT4. We collapse them anyway so the registry treats them as one canonical
+  identity, but this means a row labeled "Llama-3.1-70B" in the catalog may
+  represent any quantization that was reported.
+
+Consumers needing per-quantization precision should NOT use the canonical_id
+alone — they need the original `model_route_id` (which preserves the suffix
+verbatim) and the `generation_args` payload.
+
+This collapse is intentional: it's far more useful to match a quantized
+inference run to the model family it represents than to leave it unresolved.
+But it's a deliberate precision sacrifice and downstream code that compares
+scores must respect that.
 """
 from __future__ import annotations
 
@@ -46,6 +72,26 @@ _STRIP_SUFFIXES = [
     # Thinking-style suffixes
     "-nothink",
     "-thinking-none",
+    # HuggingFace re-upload variants — same weights as official release.
+    "-hf",
+    # Quantization variants — see PRECISION-LOSS POLICY in module docstring.
+    # Order: longer first so e.g. ``-int8`` doesn't pre-empt ``-int8-awq``.
+    "-int4-awq",
+    "-int8-awq",
+    "-int4-gptq",
+    "-int8-gptq",
+    "-fp4",
+    "-fp8",
+    "-fp16",
+    "-bf16",
+    "-int4",
+    "-int8",
+    "-q4",
+    "-q8",
+    "-awq",
+    "-gptq",
+    "-gguf",
+    "-quant",
 ]
 
 # Regex-based suffix patterns applied after the literal suffixes.
@@ -248,6 +294,24 @@ def _strip_suffix(value: str) -> str | None:
     return None
 
 
+# Letter-then-dash-then-digit pattern: ``qwen-2`` → ``qwen2``. Models commonly
+# appear in two spellings: ``qwen-2-72b`` (pipeline route_id form) vs
+# ``qwen2-72b`` (registry canonical form). Collapsing the boundary dash lets
+# them resolve to the same canonical without having to enumerate every variant
+# as an alias. Safe because real distinguishing tokens are digits or words on
+# the OTHER side of separators (e.g. ``gpt-4`` vs ``gpt-4-mini`` stays
+# distinct because the ``-mini`` separator survives).
+_LETTER_DIGIT_DASH = re.compile(r"([a-zA-Z])-(\d)")
+
+
+def _collapse_letter_digit_dashes(value: str) -> str | None:
+    """Return value with letter-digit boundary dashes removed, or None if no change."""
+    collapsed = _LETTER_DIGIT_DASH.sub(r"\1\2", value)
+    if collapsed == value:
+        return None
+    return collapsed
+
+
 def _normalize_org(value: str) -> str | None:
     """Replace a known org-alias prefix.  Returns the rewritten string or None."""
     if "/" not in value:
@@ -320,7 +384,15 @@ def fuzzy_match(
         if rewritten:
             candidates_to_try.append(rewritten)
 
-    # 5. Check each candidate against exact then normalized lookups.
+    # 5. Letter-digit dash collapse — try every candidate with the
+    # ``letter-digit`` boundary dash removed (e.g. ``qwen-2-72b`` →
+    # ``qwen2-72b``). Run last so it composes with all earlier rewrites.
+    for val in [raw_value] + candidates_to_try[:]:
+        collapsed = _collapse_letter_digit_dashes(val)
+        if collapsed:
+            candidates_to_try.append(collapsed)
+
+    # 6. Check each candidate against exact then normalized lookups.
     # Scoped-aware: config-scoped aliases for ``source_config`` count as
     # candidates; unrelated scoped aliases are excluded.
     norm_lookup = alias_store.get_normalized_lookup(entity_type, source_config)
