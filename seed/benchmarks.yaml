@@ -8212,6 +8212,18 @@
     - finance-agent
     - finance_agent
     - llm_stats_finance_agent
+  scoped_aliases:
+    vals-ai:
+      - "Finance agent adjustments"
+      - "Finance agent beat or miss"
+      - "Finance agent complex retrieval"
+      - "Finance agent financial modeling"
+      - "Finance agent market analysis"
+      - "Finance agent numerical reasoning"
+      - "Finance agent simple retrieval qualitative"
+      - "Finance agent simple retrieval quantitative"
+      - "Finance agent trends"
+      - "Finance agent overall"
 
 - id: financereasoning
   display_name: FinanceReasoning
@@ -13031,12 +13043,26 @@
   display_name: MGSM
   dataset_repo: null
   parent_benchmark_id: null
-  tags: '["math"]'
+  tags: '["math", "multilingual"]'
   metadata: '{}'
   review_status: reviewed
   aliases:
     - llm_stats_mgsm
     - mgsm
+  scoped_aliases:
+    vals-ai:
+      - "Mgsm mgsm bn"
+      - "Mgsm mgsm de"
+      - "Mgsm mgsm en"
+      - "Mgsm mgsm es"
+      - "Mgsm mgsm fr"
+      - "Mgsm mgsm ja"
+      - "Mgsm mgsm ru"
+      - "Mgsm mgsm sw"
+      - "Mgsm mgsm te"
+      - "Mgsm mgsm th"
+      - "Mgsm mgsm zh"
+      - "Mgsm overall"
 
 - id: miabench
   display_name: Miabench
@@ -20350,6 +20376,14 @@
     - llm_stats_tau_bench_airline
     - tau-bench-airline
     - tau_bench_airline
+    - "TAU-bench Airline"
+    - "TAU-bench Airline (HAL)"
+    - tau-bench-airline-hal
+    - hal_taubench_airline_tau_bench_airline
+  scoped_aliases:
+    hal-taubench-airline:
+      - "Tau Bench Airline"
+      - "tau_bench_airline"
 
 - id: tau-bench-retail
   display_name: Tau Bench Retail
@@ -20476,6 +20510,11 @@
     - terminal bench
     - terminal-bench
     - terminal_bench
+  scoped_aliases:
+    vals-ai:
+      - "Terminal Bench easy"
+      - "Terminal Bench medium"
+      - "Terminal Bench overall"
 
 - id: terminus
   display_name: Terminus
@@ -24204,20 +24243,6 @@
     - GAIA Level 3
     - gaia-level-3
     - hal_gaia_gaia_gaia_level_3
-
-- id: tau-bench-airline-hal
-  display_name: TAU-bench Airline (HAL)
-  description: TAU-bench Airline tier — HAL agentic benchmark hub.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["agentic"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - TAU-bench Airline
-    - TAU-bench Airline (HAL)
-    - hal_taubench_airline_tau_bench_airline
-    - tau-bench-airline-hal
 
 # ----------------------------------------------------------------------------
 # HumanEval / MBPP family splits (2026-05-01)
