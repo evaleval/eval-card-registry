@@ -1,0 +1,50 @@
+name: Deploy HF Space
+
+on:
+  push:
+    branches: [main]
+    # Only redeploy when files that actually ship to the Space change.
+    # Data lives in evaleval/entity-registry-data and is updated out-of-band
+    # by sync runs, not by this workflow.
+    paths:
+      - "src/**"
+      - "packages/eval-entity-resolver/src/**"
+      - "packages/eval-entity-resolver/pyproject.toml"
+      - "Dockerfile"
+      - "pyproject.toml"
+      - "uv.lock"
+      - "deploy/hf-space/README.md"
+      - "deploy/push-to-space.sh"
+      - ".github/workflows/deploy-space.yml"
+  workflow_dispatch:
+    inputs:
+      space_repo:
+        description: "Override target Space (defaults to evaleval/entity-registry)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+# Cancel an in-flight deploy if a newer commit lands on main.
+concurrency:
+  group: deploy-space
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Sync dependencies
+        run: uv sync
+
+      - name: Push to HF Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE_REPO: ${{ inputs.space_repo }}
+        run: bash deploy/push-to-space.sh

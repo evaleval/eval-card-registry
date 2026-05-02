@@ -1,0 +1,61 @@
+name: Seed registry data
+
+on:
+  push:
+    branches: [main]
+    # Trigger only when seed YAML or seed CLI changes — code-only changes
+    # don't need a data refresh (the Space deploy workflow handles those).
+    paths:
+      - "seed/**"
+      - "src/eval_card_registry/cli.py"
+      - "src/eval_card_registry/store/**"
+      - ".github/workflows/seed.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+# Cancel an in-flight seed if a newer commit lands on main.
+concurrency:
+  group: seed
+  cancel-in-progress: true
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Sync dependencies
+        run: uv sync
+
+      - name: Push aliases + canonicals to evaleval/entity-registry-data
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          uv run python -c "
+          import sys
+          sys.argv = ['cli', 'seed', '--seed-dir', './seed']
+          from eval_card_registry.cli import app
+          try:
+              app()
+          except SystemExit as e:
+              sys.exit(e.code or 0)
+          "
+
+      # Space loads the parquet at boot, doesn't auto-reload. Restart so
+      # /api/v1/resolve serves the freshly-seeded data. Failure here is
+      # non-fatal — data is already pushed; the Space will load it on
+      # the next natural restart.
+      - name: Restart entity-registry Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          uv run python -c "
+          from huggingface_hub import HfApi
+          HfApi().restart_space('evaleval/entity-registry')
+          " || echo "::warning::Space restart failed; will reload on next manual restart"
