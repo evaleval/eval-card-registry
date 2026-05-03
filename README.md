@@ -15,10 +15,19 @@ curl -X POST https://evaleval-entity-registry.hf.space/api/v1/resolve \
 ```
 
 ```json
-{"canonical_id": "math-level-5", "strategy": "exact", "confidence": 1.0, "created_new": false, "review_status": "reviewed"}
+{
+  "canonical_id": "math-level-5",
+  "strategy": "exact",
+  "confidence": 1.0,
+  "created_new": false,
+  "review_status": "reviewed",
+  "parent_canonical_id": "math"
+}
 ```
 
-`entity_type` is one of `benchmark`, `model`, `metric`, `harness`. See the [API section](#api) for batch resolve, entity browsing, and the full endpoint list.
+(Model-only fields like `parents`, `root_model_id`, `lineage_origin_org_id`, `open_weights`, `release_date`, `params_billions` are present too but null for benchmarks/metrics/harnesses — see [API section](#api) for the full response shape.)
+
+`entity_type` is one of `benchmark`, `model`, `metric`, `harness`, `org`. See the [API section](#api) for batch resolve, entity browsing, and the full endpoint list.
 
 ---
 
@@ -176,15 +185,18 @@ curl -X POST http://localhost:8000/api/v1/resolve \
   "confidence": 1.0,
   "created_new": false,
   "review_status": "reviewed",
-  "parent_canonical_id": null,
+  "parent_canonical_id": "math",
   "resolved_leaf_id": null,
   "root_model_id": null,
   "lineage_origin_org_id": null,
-  "parents": null
+  "parents": null,
+  "open_weights": null,
+  "release_date": null,
+  "params_billions": null
 }
 ```
 
-For models, additional fields are populated:
+For models, the model-only fields are populated:
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/resolve \
@@ -197,16 +209,20 @@ curl -X POST http://localhost:8000/api/v1/resolve \
   "canonical_id": "meta/llama-3.1-8b-instruct",
   "strategy": "exact",
   "confidence": 1.0,
+  "created_new": false,
+  "review_status": "reviewed",
+  "parent_canonical_id": null,
   "resolved_leaf_id": "meta/llama-3.1-8b-instruct-turbo",
   "root_model_id": "meta/llama-3.1-8b-instruct",
   "lineage_origin_org_id": "meta",
   "parents": [{"id": "meta/llama-3.1-8b-instruct", "relationship": "quantized"}],
-  "parent_canonical_id": null,
-  "open_weights": true
+  "open_weights": true,
+  "release_date": "2024-07-18",
+  "params_billions": 8.0
 }
 ```
 
-`canonical_id` is the **identity root** — for quantized chains it returns the unquantized base; the actual matched leaf is in `resolved_leaf_id`. For finetune/merge/adapter relationships, the leaf IS its own identity (no collapse). See CLAUDE.md "Typed parents on canonical_models" for the full schema.
+`canonical_id` is the **identity root** — for quantized chains it collapses to the unquantized base; the actual matched leaf is in `resolved_leaf_id`. For finetune/merge/adapter relationships, the leaf IS its own identity (no collapse). All metadata fields (`open_weights`, `release_date`, `params_billions`) come from the canonical_id row, so they describe the same entity the response identifies. See CLAUDE.md "Typed parents on canonical_models" for the full schema.
 
 **Batch resolve:**
 
@@ -246,25 +262,54 @@ Interactive docs at `http://localhost:8000/docs`.
 
 ## Using the resolver standalone
 
-The `eval-entity-resolver` package can be used independently — no service required:
+The `eval-entity-resolver` package can be used independently — no service required, and **returns the same rich response shape as the HTTP API** (root-collapse for quantized chains, `parents`, `open_weights`, `release_date`, `params_billions`, etc.):
 
 ```python
-from eval_entity_resolver import AliasStore, Resolver, ResolverConfig
+from eval_entity_resolver import Resolver, ResolverConfig
 
-store = AliasStore.from_hf("org/eval-card-registry")
-# or locally:
-store = AliasStore.from_parquet("./fixtures/")
+# Load both aliases AND canonical entities from the production HF Dataset:
+resolver = Resolver.from_hf("evaleval/entity-registry-data",
+                            config=ResolverConfig(threshold=0.85))
 
-resolver = Resolver(store, ResolverConfig(threshold=0.85))
+# Or from a local parquet directory (e.g. after `eval-card-registry seed --local`):
+resolver = Resolver.from_parquet("./fixtures/")
 
 result = resolver.resolve(
-    raw_value="MATH",
-    entity_type="benchmark",
-    source_config="hfopenllm_v2",
+    raw_value="meta/llama-3.1-8b-instruct-turbo",
+    entity_type="model",           # one of: model | benchmark | metric | harness | org
+    source_config=None,             # optional; scopes to per-config aliases
 )
-# result.canonical_id  — None if no match
-# result.strategy      — "exact" | "normalized" | "fuzzy" | "no_match"
-# result.confidence    — 0.0–1.0
+# result is a `ResolutionResult` dataclass mirroring the HTTP API:
+#   raw_value, entity_type, source_config — echo of inputs
+#   canonical_id          — identity root for quantized chains; None on no_match
+#   strategy, confidence  — match info
+#   review_status         — "draft" | "reviewed"
+#   parent_canonical_id   — family/variant parent
+#   resolved_leaf_id      — original match before root-collapse (models only)
+#   root_model_id         — quantized-chain root (None when self IS the root)
+#   lineage_origin_org_id — upstream lab for finetunes / quants
+#   parents               — full typed-edge list
+#   open_weights          — bool / None
+#   release_date          — YYYY-MM-DD / None
+#   params_billions       — float / None
+```
+
+For example, resolving `meta/llama-3.1-8b-instruct-turbo` collapses to the unquantized base canonical; the original turbo id is preserved in `resolved_leaf_id`:
+
+```python
+>>> r = resolver.resolve("meta/llama-3.1-8b-instruct-turbo", "model")
+>>> r.canonical_id, r.resolved_leaf_id, r.open_weights
+('meta/llama-3.1-8b-instruct', 'meta/llama-3.1-8b-instruct-turbo', True)
+```
+
+If you really want the bare matcher (no metadata enrichment), you can construct `Resolver` without a `CanonicalStore`:
+
+```python
+from eval_entity_resolver import AliasStore, Resolver
+resolver = Resolver(AliasStore.from_parquet("./fixtures/"))  # no canonical_store
+# Now `result` only has `canonical_id`, `strategy`, `confidence`. All other
+# fields are None. Useful when you don't have the canonical_models parquet
+# (e.g. an alias-only HF dataset) or just want to avoid the lookup cost.
 ```
 
 Install from this workspace:

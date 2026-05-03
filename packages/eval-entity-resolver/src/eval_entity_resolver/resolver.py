@@ -1,6 +1,19 @@
+"""The bare resolver. Matches a raw value to a canonical id via the
+strategy chain (exact → normalized → fuzzy → no_match), and — when
+given a `CanonicalStore` — enriches the result with the matched
+canonical's metadata, parent edges, model-specific lineage fields,
+and quantized-chain root collapse.
+
+The enrichment matches the HTTP API's response shape exactly. Callers
+using the resolver standalone get the same `ResolutionResult` they'd
+get back from `POST /api/v1/resolve`."""
+from __future__ import annotations
+
+from pathlib import Path
 from typing import Optional
 
 from eval_entity_resolver.alias_store import AliasStore
+from eval_entity_resolver.canonical_store import CanonicalStore
 from eval_entity_resolver.models import ResolutionResult, ResolverConfig
 from eval_entity_resolver.strategies.exact import exact_match
 from eval_entity_resolver.strategies.normalized import normalized_match
@@ -8,9 +21,50 @@ from eval_entity_resolver.strategies.fuzzy import fuzzy_match
 
 
 class Resolver:
-    def __init__(self, store: AliasStore, config: Optional[ResolverConfig] = None) -> None:
+    def __init__(
+        self,
+        store: AliasStore,
+        config: Optional[ResolverConfig] = None,
+        canonical_store: Optional[CanonicalStore] = None,
+    ) -> None:
+        """`store` is required (alias matching is the resolver's core job).
+        `canonical_store` is optional — when provided, results are
+        enriched with parent / lineage / metadata fields. Without it,
+        only the basic match fields (canonical_id, strategy, confidence)
+        are populated."""
         self.store = store
         self.config = config or ResolverConfig()
+        self.canonical_store = canonical_store
+
+    @classmethod
+    def from_parquet(
+        cls,
+        path: str | Path,
+        config: Optional[ResolverConfig] = None,
+    ) -> "Resolver":
+        """Load both alias and canonical stores from a parquet directory
+        (e.g. `./fixtures/`) and return a fully-enriching resolver. This
+        is the recommended convenience for callers who want the same
+        response shape as the HTTP API."""
+        return cls(
+            AliasStore.from_parquet(path),
+            config=config,
+            canonical_store=CanonicalStore.from_parquet(path),
+        )
+
+    @classmethod
+    def from_hf(
+        cls,
+        repo_id: str,
+        config: Optional[ResolverConfig] = None,
+    ) -> "Resolver":
+        """Load both stores from a HF Dataset repo and return a
+        fully-enriching resolver."""
+        return cls(
+            AliasStore.from_hf(repo_id),
+            config=config,
+            canonical_store=CanonicalStore.from_hf(repo_id),
+        )
 
     def resolve(
         self,
@@ -21,27 +75,16 @@ class Resolver:
         # 1. Exact
         canonical_id = exact_match(raw_value, entity_type, source_config, self.store)
         if canonical_id is not None:
-            return ResolutionResult(
-                raw_value=raw_value,
-                entity_type=entity_type,
-                source_config=source_config,
-                canonical_id=canonical_id,
-                strategy="exact",
-                confidence=1.0,
-            )
+            return self._enrich(raw_value, entity_type, source_config, canonical_id, "exact", 1.0)
 
         # 2. Normalized (confidence 0.95 — only return if above threshold)
         _NORMALIZED_CONFIDENCE = 0.95
         if _NORMALIZED_CONFIDENCE >= self.config.threshold:
             canonical_id = normalized_match(raw_value, entity_type, self.store, source_config)
             if canonical_id is not None:
-                return ResolutionResult(
-                    raw_value=raw_value,
-                    entity_type=entity_type,
-                    source_config=source_config,
-                    canonical_id=canonical_id,
-                    strategy="normalized",
-                    confidence=_NORMALIZED_CONFIDENCE,
+                return self._enrich(
+                    raw_value, entity_type, source_config,
+                    canonical_id, "normalized", _NORMALIZED_CONFIDENCE,
                 )
 
         # 3. Fuzzy
@@ -49,13 +92,9 @@ class Resolver:
             raw_value, entity_type, self.config.threshold, self.store, source_config
         )
         if canonical_id is not None:
-            return ResolutionResult(
-                raw_value=raw_value,
-                entity_type=entity_type,
-                source_config=source_config,
-                canonical_id=canonical_id,
-                strategy="fuzzy",
-                confidence=confidence,
+            return self._enrich(
+                raw_value, entity_type, source_config,
+                canonical_id, "fuzzy", confidence,
             )
 
         # 4. No match
@@ -66,4 +105,89 @@ class Resolver:
             canonical_id=None,
             strategy="no_match",
             confidence=0.0,
+        )
+
+    # ------------------------------------------------------------------
+    # Enrichment (no-op when no canonical_store is attached)
+    # ------------------------------------------------------------------
+
+    def build_result(
+        self,
+        raw_value: str,
+        entity_type: str,
+        source_config: Optional[str],
+        canonical_id: str,
+        strategy: str,
+        confidence: float,
+    ) -> ResolutionResult:
+        """Construct an enriched `ResolutionResult` for a canonical_id
+        the caller already knows — useful for callers that bypass the
+        strategy chain (e.g. an alias-table cache hit, an auto-created
+        draft) but want the same rich response shape. Identical to the
+        enrichment that happens inside `resolve()`."""
+        return self._enrich(raw_value, entity_type, source_config, canonical_id, strategy, confidence)
+
+    def _enrich(
+        self,
+        raw_value: str,
+        entity_type: str,
+        source_config: Optional[str],
+        matched_canonical_id: str,
+        strategy: str,
+        confidence: float,
+    ) -> ResolutionResult:
+        """Look up the matched canonical's row and populate the rich
+        response fields. When no canonical_store is attached, the rich
+        fields stay None and the result has just the basic match info."""
+        if self.canonical_store is None:
+            return ResolutionResult(
+                raw_value=raw_value,
+                entity_type=entity_type,
+                source_config=source_config,
+                canonical_id=matched_canonical_id,
+                strategy=strategy,
+                confidence=confidence,
+            )
+
+        cs = self.canonical_store
+        matched_entity = cs.lookup(entity_type, matched_canonical_id)
+        review_status = (matched_entity or {}).get("review_status") if matched_entity else None
+
+        if entity_type == "model":
+            fields = cs.model_metadata_fields(matched_canonical_id, matched_entity)
+            # If the response collapses to a different canonical (root),
+            # surface THAT canonical's review_status — keeps the response
+            # internally consistent.
+            if fields["canonical_id"] != matched_canonical_id:
+                root_entity = cs.lookup("model", fields["canonical_id"])
+                if root_entity:
+                    review_status = root_entity.get("review_status") or review_status
+            return ResolutionResult(
+                raw_value=raw_value,
+                entity_type=entity_type,
+                source_config=source_config,
+                canonical_id=fields["canonical_id"],
+                strategy=strategy,
+                confidence=confidence,
+                review_status=review_status,
+                parent_canonical_id=cs.parent_canonical_id("model", matched_entity),
+                resolved_leaf_id=fields["resolved_leaf_id"],
+                root_model_id=fields["root_model_id"],
+                lineage_origin_org_id=fields["lineage_origin_org_id"],
+                parents=fields["parents"],
+                open_weights=fields["open_weights"],
+                release_date=fields["release_date"],
+                params_billions=fields["params_billions"],
+            )
+
+        # Non-model: only parent_canonical_id and review_status are meaningful
+        return ResolutionResult(
+            raw_value=raw_value,
+            entity_type=entity_type,
+            source_config=source_config,
+            canonical_id=matched_canonical_id,
+            strategy=strategy,
+            confidence=confidence,
+            review_status=review_status,
+            parent_canonical_id=cs.parent_canonical_id(entity_type, matched_entity),
         )
