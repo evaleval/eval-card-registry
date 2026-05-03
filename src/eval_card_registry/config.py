@@ -14,6 +14,12 @@ class Settings(BaseSettings):
     read_only: bool = False
     hf_log_bucket: str = ""
     log_flush_interval_seconds: int = 300
+    # Live hub-stats enrichment at draft creation. When True (default for
+    # CLI sync runs), the resolver's auto-create path looks up unmatched
+    # HF-shaped raw values in cfahlgren1/hub-stats and pre-populates the
+    # draft entity with release_date / params / parents / lineage_origin.
+    # Disable for tests and offline dev — every lookup hits HF.
+    hub_stats_lookup_enabled: bool = True
 
 
 settings = Settings()

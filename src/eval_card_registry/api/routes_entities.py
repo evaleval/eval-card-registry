@@ -24,7 +24,7 @@ def _get_or_404(store, table, entity_id):
     return entity
 
 
-_JSON_FIELDS = {"tags", "metadata"}
+_JSON_FIELDS = {"tags", "metadata", "parents"}
 
 
 def _encode(data: dict) -> dict:

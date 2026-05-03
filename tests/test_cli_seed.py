@@ -163,6 +163,126 @@ def test_repeat_seed_is_idempotent(fresh_seed_env):
     )
 
 
+def _read_models(fixtures_dir: Path):
+    import pandas as pd
+    return pd.read_parquet(fixtures_dir / "canonical_models.parquet")
+
+
+def _read_orgs(fixtures_dir: Path):
+    import pandas as pd
+    return pd.read_parquet(fixtures_dir / "canonical_orgs.parquet")
+
+
+def test_parents_union_by_id_across_sources(fresh_seed_env):
+    """Two seed sources contributing edges for the same model union by id:
+    same parent id from both sides yields one edge; different ids yield
+    multiple edges."""
+    import json
+    seed_dir, fixtures_dir = fresh_seed_env
+
+    # Two parents: one shared between source and core (axis only on source),
+    # one source-only, one core-only. After merge we expect three distinct
+    # edges with axis preserved on the shared one.
+    sources_dir = seed_dir / "models" / "sources"
+    (sources_dir / "test.generated.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "lab/model-a",
+            "display_name": "Model A",
+            "parents": [
+                {"id": "lab/parent-shared", "relationship": "variant", "axis": "size"},
+                {"id": "lab/parent-source-only", "relationship": "variant"},
+            ],
+            "review_status": "reviewed",
+        },
+    ]))
+    (seed_dir / "models" / "core.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "lab/model-a",
+            "display_name": "Model A",
+            "parents": [
+                # Same id as source's first edge — should fold, not duplicate.
+                # Core omits axis; source's axis must survive the merge.
+                {"id": "lab/parent-shared", "relationship": "variant"},
+                {"id": "lab/parent-core-only", "relationship": "finetune"},
+            ],
+            "review_status": "reviewed",
+        },
+    ]))
+    _seed(seed_dir)
+
+    df = _read_models(fixtures_dir)
+    row = df[df["id"] == "lab/model-a"]
+    assert len(row) == 1
+    parents = json.loads(row.iloc[0]["parents"])
+    by_id = {p["id"]: p for p in parents}
+    assert set(by_id) == {"lab/parent-shared", "lab/parent-source-only", "lab/parent-core-only"}
+    # Shared edge: source brought axis=size, core didn't, axis must survive.
+    assert by_id["lab/parent-shared"]["axis"] == "size"
+    assert by_id["lab/parent-shared"]["relationship"] == "variant"
+    # Distinct edges retain their relationships.
+    assert by_id["lab/parent-source-only"]["relationship"] == "variant"
+    assert by_id["lab/parent-core-only"]["relationship"] == "finetune"
+
+
+def test_orgs_generated_curated_wins_on_collision(fresh_seed_env):
+    """seed/orgs.generated.yaml entries are dropped when the id is already
+    in seed/orgs.yaml; non-conflicting entries are still loaded."""
+    seed_dir, fixtures_dir = fresh_seed_env
+
+    (seed_dir / "orgs.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "anthropic",
+            "display_name": "Anthropic",
+            "kind": "lab",
+            "review_status": "reviewed",
+        },
+    ]))
+    (seed_dir / "orgs.generated.yaml").write_text(yaml.safe_dump([
+        # Collides with curated — must be dropped (curated display_name wins).
+        {
+            "id": "anthropic",
+            "display_name": "Anthropic Auto",
+            "kind": "unknown",
+            "review_status": "auto",
+        },
+        # Doesn't collide — must be loaded.
+        {
+            "id": "some-uploader",
+            "display_name": "Some Uploader",
+            "kind": "individual",
+            "review_status": "auto",
+        },
+    ]))
+    _seed(seed_dir)
+
+    orgs = _read_orgs(fixtures_dir)
+    anthropic = orgs[orgs["id"] == "anthropic"].iloc[0]
+    assert anthropic["display_name"] == "Anthropic", "curated entry must win on collision"
+    assert anthropic["kind"] == "lab"
+    assert anthropic["review_status"] == "reviewed"
+
+    auto = orgs[orgs["id"] == "some-uploader"].iloc[0]
+    assert auto["display_name"] == "Some Uploader"
+    assert auto["kind"] == "individual"
+
+
+def test_orgs_generated_alone_loads(fresh_seed_env):
+    """When seed/orgs.yaml is absent, seed/orgs.generated.yaml still loads."""
+    seed_dir, fixtures_dir = fresh_seed_env
+    (seed_dir / "orgs.generated.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "lone-uploader",
+            "display_name": "Lone",
+            "kind": "individual",
+            "review_status": "auto",
+        },
+    ]))
+    _seed(seed_dir)
+
+    orgs = _read_orgs(fixtures_dir)
+    assert "lone-uploader" in set(orgs["id"])
+
+
 def test_scoped_alias_rename_doesnt_drop(fresh_seed_env):
     """Same bug, but for scoped aliases (source_config != None)."""
     seed_dir, fixtures_dir = fresh_seed_env

@@ -242,6 +242,104 @@ class TestNoMatch:
         assert result.confidence == 0.0
 
 
+class TestPromotedVariantResolution:
+    """After the alias-promotion pass, instruct/chat/quantized/snapshot
+    variants are first-class canonicals with their own aliases. Resolving
+    a raw value matching one of those variants must NOT collapse to the
+    base — eval scores on `Llama-3-8B-Instruct` aren't comparable to
+    scores on the base `Llama-3-8B`. Regression coverage: there is no
+    `_FAMILY_STAGE_SUFFIXES` strip in fuzzy.py — the resolver relies on
+    explicit alias entries for instruct/chat/etc., and stays out of the
+    way for unknown post-training suffixes."""
+
+    def _registry_like_store(self):
+        """Mini fixture mimicking the post-promotion registry: base + promoted
+        instruct + promoted instruct-quant, each with their own surface-form
+        aliases."""
+        return _store_with_aliases(
+            # Base
+            ("Llama-3-8B", "model", "meta/llama-3-8b", None, "confirmed"),
+            ("meta/llama-3-8b", "model", "meta/llama-3-8b", None, "confirmed"),
+            # Promoted instruct (variant/mode of the base)
+            ("Llama-3-8B-Instruct", "model", "meta/llama-3-8b-instruct", None, "confirmed"),
+            ("meta-llama/Meta-Llama-3-8B-Instruct", "model", "meta/llama-3-8b-instruct", None, "confirmed"),
+            ("meta/llama-3-8b-instruct", "model", "meta/llama-3-8b-instruct", None, "confirmed"),
+            # Promoted instruct-turbo (quantized of the instruct)
+            ("Llama-3-8B-Instruct-Turbo", "model", "meta/llama-3-8b-instruct-turbo", None, "confirmed"),
+            ("meta/llama-3-8b-instruct-turbo", "model", "meta/llama-3-8b-instruct-turbo", None, "confirmed"),
+            # Promoted snapshot (variant/version of a base)
+            ("gpt-4-0613", "model", "openai/gpt-4-0613", None, "confirmed"),
+            ("openai/gpt-4-0613", "model", "openai/gpt-4-0613", None, "confirmed"),
+            ("openai/gpt-4", "model", "openai/gpt-4", None, "confirmed"),
+        )
+
+    def test_instruct_resolves_to_instruct_canonical(self):
+        resolver = Resolver(self._registry_like_store())
+        result = resolver.resolve("Llama-3-8B-Instruct", "model")
+        assert result.canonical_id == "meta/llama-3-8b-instruct"
+        assert result.strategy == "exact"
+
+    def test_base_still_resolves_to_base(self):
+        resolver = Resolver(self._registry_like_store())
+        result = resolver.resolve("Llama-3-8B", "model")
+        assert result.canonical_id == "meta/llama-3-8b"
+        assert result.strategy == "exact"
+
+    def test_doubled_org_prefix_instruct_resolves_to_instruct(self):
+        """HF-style `meta-llama/Meta-Llama-3-8B-Instruct` (org form duplicated
+        inside the bare model id) should land on the instruct canonical."""
+        resolver = Resolver(self._registry_like_store())
+        result = resolver.resolve("meta-llama/Meta-Llama-3-8B-Instruct", "model")
+        assert result.canonical_id == "meta/llama-3-8b-instruct"
+
+    def test_quantized_variant_resolves_to_quantized_canonical(self):
+        resolver = Resolver(self._registry_like_store())
+        result = resolver.resolve("Llama-3-8B-Instruct-Turbo", "model")
+        assert result.canonical_id == "meta/llama-3-8b-instruct-turbo"
+
+    def test_snapshot_resolves_to_snapshot_canonical(self):
+        resolver = Resolver(self._registry_like_store())
+        result = resolver.resolve("gpt-4-0613", "model")
+        assert result.canonical_id == "openai/gpt-4-0613"
+        # Sanity check that the snapshot is NOT collapsed onto the base
+        assert result.canonical_id != "openai/gpt-4"
+
+    def test_quant_falls_through_to_nearest_parent(self):
+        """When a specific quantization isn't a canonical, the fuzzy stem
+        strip drops the `-fp8` suffix and lands on the next-up canonical
+        (the unquantized instruct, in this case). This is the
+        precision-loss policy we explicitly opted into."""
+        resolver = Resolver(self._registry_like_store())
+        result = resolver.resolve("meta/llama-3-8b-instruct-fp8", "model")
+        # -fp8 is in _STRIP_SUFFIXES, so fuzzy strips and lands on instruct
+        assert result.canonical_id == "meta/llama-3-8b-instruct"
+        assert result.strategy == "fuzzy"
+
+    def test_unknown_finetune_suffix_does_not_collapse_to_base(self):
+        """If a raw value has an unrecognized suffix (a community finetune
+        we haven't catalogued), the resolver must NOT silently strip it
+        and land on the base — that would misattribute scores. Returns
+        no_match so the caller can auto-draft a separate canonical."""
+        resolver = Resolver(self._registry_like_store())
+        result = resolver.resolve("Llama-3-8B-Instruct-CommunityFinetune", "model")
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
+
+    def test_unknown_instruct_does_not_collapse_to_base(self):
+        """Specifically: there is no resolver-side `-instruct` strip. An
+        instruct variant we haven't promoted yet does NOT silently fall
+        through to the base."""
+        store = _store_with_aliases(
+            ("Llama-3-8B", "model", "meta/llama-3-8b", None, "confirmed"),
+            ("meta/llama-3-8b", "model", "meta/llama-3-8b", None, "confirmed"),
+            # NB: no -instruct alias / canonical seeded
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("Llama-3-8B-Instruct", "model")
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
+
+
 class TestSnakeCaseEquivalence:
     """Snake_case forms of seeded display-form aliases resolve via normalized matcher,
     without requiring the snake_case alias to be listed explicitly."""

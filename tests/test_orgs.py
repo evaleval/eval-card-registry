@@ -187,3 +187,180 @@ class TestParentCanonicalId:
         r = svc.resolve("MATH", "benchmark", None, None)
         assert r["canonical_id"] == "math"
         assert r["parent_canonical_id"] is None
+
+    def test_model_populates_from_variant_edge_in_parents(self, fresh_store):
+        """For models, parent_canonical_id derives from the variant edge in
+        the typed `parents` JSON list (not the legacy parent_model_id scalar).
+        Sanity check that finetune/quantized edges are ignored — only variant
+        edges drive the family hierarchy field."""
+        import json
+        # Family root
+        queries.upsert_entity(fresh_store, "canonical_models", {
+            "id": "meta/llama-3", "display_name": "Llama 3",
+            "developer": None, "org_id": "meta", "family": "llama-3",
+            "architecture": None, "params_billions": None,
+            "parents": "[]", "root_model_id": None, "lineage_origin_org_id": "meta",
+            "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+        })
+        # Child with mixed parent types — variant + finetune. Only the
+        # variant edge should drive parent_canonical_id.
+        queries.upsert_entity(fresh_store, "canonical_models", {
+            "id": "meta/llama-3-8b", "display_name": "Llama 3 8B",
+            "developer": None, "org_id": "meta", "family": "llama-3-8b",
+            "architecture": None, "params_billions": 8.0,
+            "parents": json.dumps([
+                {"id": "some-finetune-base", "relationship": "finetune"},
+                {"id": "meta/llama-3", "relationship": "variant", "axis": "size"},
+            ]),
+            "root_model_id": None, "lineage_origin_org_id": "meta",
+            "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+        })
+        queries.add_alias(fresh_store, {
+            "raw_value": "Llama-3-8B", "entity_type": "model",
+            "canonical_id": "meta/llama-3-8b", "source_config": None,
+            "source_field": "test", "status": "confirmed",
+            "strategy": "seed", "confidence": 1.0, "notes": None,
+        })
+        svc = app.state.resolution_service
+        r = svc.resolve("Llama-3-8B", "model", None, None)
+        assert r["canonical_id"] == "meta/llama-3-8b"
+        assert r["parent_canonical_id"] == "meta/llama-3"
+
+    def test_model_null_when_no_variant_edge(self, fresh_store):
+        """A model whose only parent edge is a finetune (not variant) should
+        have parent_canonical_id=None — finetune isn't a family hierarchy."""
+        import json
+        queries.upsert_entity(fresh_store, "canonical_models", {
+            "id": "nous/hermes-3-llama-70b", "display_name": "Hermes 3 70B",
+            "developer": None, "org_id": "nous-research", "family": None,
+            "architecture": None, "params_billions": 70.0,
+            "parents": json.dumps([
+                {"id": "meta/llama-3-70b", "relationship": "finetune"},
+            ]),
+            "root_model_id": None, "lineage_origin_org_id": "meta",
+            "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+        })
+        queries.add_alias(fresh_store, {
+            "raw_value": "Hermes-3-Llama-70B", "entity_type": "model",
+            "canonical_id": "nous/hermes-3-llama-70b", "source_config": None,
+            "source_field": "test", "status": "confirmed",
+            "strategy": "seed", "confidence": 1.0, "notes": None,
+        })
+        svc = app.state.resolution_service
+        r = svc.resolve("Hermes-3-Llama-70B", "model", None, None)
+        assert r["canonical_id"] == "nous/hermes-3-llama-70b"
+        assert r["parent_canonical_id"] is None
+
+
+class TestRootCollapseAndLineage:
+    """Resolver default-returns the identity root for quantized chains, but
+    leaves finetune/variant edges alone. `resolved_leaf_id` always carries
+    the matched leaf for callers who want it. `lineage_origin_org_id` is
+    populated from the deepest non-variant ancestor's org_id."""
+
+    def _seed_chain(self, store):
+        """Set up: meta/llama-3-8b (root) ← variant/mode meta/llama-3-8b-instruct
+        ← quantized meta/llama-3-8b-instruct-fp8."""
+        import json
+        for cid, params in [
+            ("meta/llama-3-8b", {"parents": "[]", "lineage": "meta"}),
+            ("meta/llama-3-8b-instruct", {
+                "parents": json.dumps([{"id": "meta/llama-3-8b", "relationship": "variant", "axis": "mode"}]),
+                "lineage": "meta",
+            }),
+            ("meta/llama-3-8b-instruct-fp8", {
+                "parents": json.dumps([{"id": "meta/llama-3-8b-instruct", "relationship": "quantized"}]),
+                "root": "meta/llama-3-8b-instruct",
+                "lineage": "meta",
+            }),
+        ]:
+            queries.upsert_entity(store, "canonical_models", {
+                "id": cid, "display_name": cid.split("/", 1)[-1],
+                "developer": None, "org_id": "meta", "family": None,
+                "architecture": None, "params_billions": None,
+                "parents": params["parents"],
+                "root_model_id": params.get("root"),
+                "lineage_origin_org_id": params["lineage"],
+                "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+            })
+            queries.add_alias(store, {
+                "raw_value": cid, "entity_type": "model", "canonical_id": cid,
+                "source_config": None, "source_field": "test",
+                "status": "confirmed", "strategy": "seed",
+                "confidence": 1.0, "notes": None,
+            })
+
+    def test_quantized_resolves_to_root_with_leaf_preserved(self, fresh_store):
+        self._seed_chain(fresh_store)
+        svc = app.state.resolution_service
+        r = svc.resolve("meta/llama-3-8b-instruct-fp8", "model", None, None)
+        # canonical_id collapses to the identity root...
+        assert r["canonical_id"] == "meta/llama-3-8b-instruct"
+        # ...but the leaf id is preserved for callers that want it.
+        assert r["resolved_leaf_id"] == "meta/llama-3-8b-instruct-fp8"
+        assert r["root_model_id"] == "meta/llama-3-8b-instruct"
+        assert r["lineage_origin_org_id"] == "meta"
+
+    def test_mode_variant_does_not_collapse(self, fresh_store):
+        """Instruct is variant/mode, not quantized — it IS its own identity
+        root. canonical_id == resolved_leaf_id, root_model_id == None."""
+        self._seed_chain(fresh_store)
+        svc = app.state.resolution_service
+        r = svc.resolve("meta/llama-3-8b-instruct", "model", None, None)
+        assert r["canonical_id"] == "meta/llama-3-8b-instruct"
+        assert r["resolved_leaf_id"] == "meta/llama-3-8b-instruct"
+        assert r["root_model_id"] is None
+        # parents of the matched canonical are surfaced in the response
+        assert r["parents"] == [{
+            "id": "meta/llama-3-8b", "relationship": "variant", "axis": "mode",
+        }]
+
+    def test_root_canonical_response_has_no_parents(self, fresh_store):
+        self._seed_chain(fresh_store)
+        svc = app.state.resolution_service
+        r = svc.resolve("meta/llama-3-8b", "model", None, None)
+        assert r["canonical_id"] == "meta/llama-3-8b"
+        assert r["root_model_id"] is None
+        # Empty parents list decodes to [] not None
+        assert r["parents"] in ([], None)
+
+    def test_open_weights_surfaces_on_resolve(self, fresh_store):
+        """`open_weights` is exposed in ResolveResponse so callers can
+        filter without a follow-up GET. For quantized chains, the value
+        comes from the root (quants don't change weight identity)."""
+        import json
+        # Open-weight base + its quantized variant
+        for cid, params in [
+            ("meta/llama-3-8b", {"parents": "[]", "open_weights": True}),
+            ("meta/llama-3-8b-fp8", {
+                "parents": json.dumps([{"id": "meta/llama-3-8b", "relationship": "quantized"}]),
+                "root": "meta/llama-3-8b",
+                "open_weights": None,  # not set on the quant; should inherit from root
+            }),
+        ]:
+            queries.upsert_entity(fresh_store, "canonical_models", {
+                "id": cid, "display_name": cid, "developer": None,
+                "org_id": "meta", "family": None, "architecture": None,
+                "params_billions": None,
+                "parents": params["parents"],
+                "root_model_id": params.get("root"),
+                "lineage_origin_org_id": "meta",
+                "open_weights": params["open_weights"],
+                "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+            })
+            queries.add_alias(fresh_store, {
+                "raw_value": cid, "entity_type": "model", "canonical_id": cid,
+                "source_config": None, "source_field": "test",
+                "status": "confirmed", "strategy": "seed",
+                "confidence": 1.0, "notes": None,
+            })
+        svc = app.state.resolution_service
+        # Direct resolve of the base canonical
+        r = svc.resolve("meta/llama-3-8b", "model", None, None)
+        assert r["open_weights"] is True
+        # Resolve of the quantized leaf — root collapse means open_weights
+        # comes from the root canonical (correct: quantization doesn't
+        # change whether weights are downloadable).
+        r2 = svc.resolve("meta/llama-3-8b-fp8", "model", None, None)
+        assert r2["canonical_id"] == "meta/llama-3-8b"  # root collapse
+        assert r2["open_weights"] is True  # inherited from root

@@ -105,13 +105,20 @@ Canonical entities start as `draft` and can be promoted to `reviewed`. Aliases t
 
 ```
 eval-card-registry/
-├── packages/eval-entity-resolver/   # Standalone resolver package (uv workspace member)
-├── src/eval_card_registry/          # FastAPI service + CLI
-│   ├── api/                         # Route handlers
-│   ├── services/                    # resolution_service, ingestion pipeline
-│   └── store/                       # In-memory store backed by HF Dataset parquet
-├── seed/                            # Known benchmarks, metrics, harnesses (YAML)
-├── fixtures/                        # Local parquet files for offline dev/tests
+├── packages/eval-entity-resolver/        # Standalone resolver package (uv workspace member)
+├── src/eval_card_registry/               # FastAPI service + CLI
+│   ├── api/                              # Route handlers
+│   ├── services/                         # resolution_service, ingestion pipeline
+│   └── store/                            # In-memory store backed by HF Dataset parquet
+├── seed/                                 # Known canonical entities (YAML)
+│   ├── orgs.yaml                         # Curated orgs (kind: lab)
+│   ├── benchmarks.yaml / metrics.yaml / harnesses.yaml
+│   └── models/                           # Three-layer model seed
+│       ├── core.yaml                     # Hand-curated, source of truth
+│       ├── sources/*.generated.yaml      # Bulk imports (e.g. models.dev)
+│       └── enrichments/aliases.yaml      # Alias-only adds, union onto existing
+├── scripts/                              # One-shot tools and refresh scripts
+├── fixtures/                             # Local parquet files for offline dev/tests
 └── tests/
 ```
 
@@ -168,9 +175,38 @@ curl -X POST http://localhost:8000/api/v1/resolve \
   "strategy": "exact",
   "confidence": 1.0,
   "created_new": false,
-  "review_status": "reviewed"
+  "review_status": "reviewed",
+  "parent_canonical_id": null,
+  "resolved_leaf_id": null,
+  "root_model_id": null,
+  "lineage_origin_org_id": null,
+  "parents": null
 }
 ```
+
+For models, additional fields are populated:
+
+```bash
+curl -X POST http://localhost:8000/api/v1/resolve \
+  -H 'Content-Type: application/json' \
+  -d '{"raw_value": "meta/llama-3.1-8b-instruct-turbo", "entity_type": "model"}'
+```
+
+```json
+{
+  "canonical_id": "meta/llama-3.1-8b-instruct",
+  "strategy": "exact",
+  "confidence": 1.0,
+  "resolved_leaf_id": "meta/llama-3.1-8b-instruct-turbo",
+  "root_model_id": "meta/llama-3.1-8b-instruct",
+  "lineage_origin_org_id": "meta",
+  "parents": [{"id": "meta/llama-3.1-8b-instruct", "relationship": "quantized"}],
+  "parent_canonical_id": null,
+  "open_weights": true
+}
+```
+
+`canonical_id` is the **identity root** — for quantized chains it returns the unquantized base; the actual matched leaf is in `resolved_leaf_id`. For finetune/merge/adapter relationships, the leaf IS its own identity (no collapse). See CLAUDE.md "Typed parents on canonical_models" for the full schema.
 
 **Batch resolve:**
 
@@ -272,8 +308,7 @@ Resolving the same raw string twice returns the same canonical ID. Re-running wi
 
 | Entity | Format | Example |
 |---|---|---|
-| Model (HF) | `{org}/{model}` | `meta-llama/Llama-3.1-8B` |
-| Model (non-HF) | `{org}:{slug}` | `anthropic:claude-opus-4-5` |
+| Model | `{org_id}/{model-slug}` | `meta/llama-3.1-8b`, `anthropic/claude-opus-4.5` |
 | Benchmark / Metric / Harness | lowercase slug | `math`, `lm-evaluation-harness` |
 | `eval_results` row ID | `sha256(evaluation_id:result_index)[:16]` | `a3f2b1c9d4e5f678` |
 

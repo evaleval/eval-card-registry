@@ -107,14 +107,70 @@ def test_generate_skips_mirror_entries(mod):
         assert e["id"].count("/") == 1, f"expected single slash, got {e['id']!r}"
 
 
-def test_generate_collapses_dated_to_family(mod):
-    """claude-opus-4-5 + claude-opus-4-5-20251101 collapse to same canonical.
-    Slug uses dots (from `name` field) so id is `claude-opus-4.5`."""
+def test_generate_dated_snapshot_becomes_child_canonical(mod):
+    """After the parents-shape refactor, dated snapshots are emitted as
+    separate canonical entries with a typed `parents` edge back to the
+    family root (axis: version) — not collapsed into the root's aliases.
+
+    The leaf canonical id inherits the family's dotted spelling (from the
+    lab's `name` field), and the original dashed models.dev id stays on
+    the leaf as an alias so the resolver still maps it via exact match."""
     out, _missing = mod._generate_models(SYNTHETIC_API, KNOWN_ORGS)
     by_id = {e["id"]: e for e in out}
-    entry = by_id["anthropic/claude-opus-4.5"]
-    # The dated snapshot is recorded as an alias, not a separate entry
-    assert "claude-opus-4-5-20251101" in entry["aliases"]
+    root = by_id["anthropic/claude-opus-4.5"]
+    assert root["parents"] == []
+    # Leaf canonical: dotted base + dashed snapshot token
+    snap_id = "anthropic/claude-opus-4.5-20251101"
+    assert snap_id in by_id, f"missing snapshot canonical {snap_id!r} in output"
+    snap = by_id[snap_id]
+    assert snap["parents"] == [{
+        "id": "anthropic/claude-opus-4.5",
+        "relationship": "variant",
+        "axis": "version",
+    }]
+    assert snap["release_date"] == "2025-11-01"
+    # Original models.dev id (dashed) survives as an alias for resolver coverage
+    assert "claude-opus-4-5-20251101" in snap["aliases"]
+    assert "anthropic/claude-opus-4-5-20251101" in snap["aliases"]
+    # Snapshot id is in family root's metadata.snapshots (still a useful index).
+    assert "claude-opus-4-5-20251101" in json.loads(root["metadata"]).get("snapshots", [])
+
+
+def test_generate_emits_mode_variants_as_children(mod):
+    """A dated -instruct snapshot in models.dev produces a multi-level chain:
+    family root, instruct intermediate (variant/mode), and the dated leaf
+    (variant/version of the instruct intermediate). Mirrors the post-promotion
+    shape of curated core.yaml so the loader's parents-merge agrees on edges."""
+    api = {
+        "mistral": {
+            "id": "mistral", "name": "Mistral", "models": {
+                "mistral-7b-instruct-v0-3": {
+                    "id": "mistral-7b-instruct-v0-3",
+                    "name": "Mistral 7B Instruct v0.3",
+                    "release_date": "2024-05-22",
+                    "open_weights": True,
+                },
+            },
+        },
+    }
+    known = {"mistralai"}
+    out, _missing = mod._generate_models(api, known)
+    by_id = {e["id"]: e for e in out}
+    # All three levels emitted:
+    assert "mistralai/mistral-7b" in by_id, "family root missing"
+    assert "mistralai/mistral-7b-instruct" in by_id, "instruct intermediate missing"
+    assert "mistralai/mistral-7b-instruct-v0-3" in by_id, "leaf snapshot missing"
+    # Edges chain correctly:
+    assert by_id["mistralai/mistral-7b"]["parents"] == []
+    assert by_id["mistralai/mistral-7b-instruct"]["parents"] == [{
+        "id": "mistralai/mistral-7b", "relationship": "variant", "axis": "mode",
+    }]
+    assert by_id["mistralai/mistral-7b-instruct-v0-3"]["parents"] == [{
+        "id": "mistralai/mistral-7b-instruct", "relationship": "variant", "axis": "version",
+    }]
+    # Leaf carries the source release_date; intermediate is anchor-only.
+    assert by_id["mistralai/mistral-7b-instruct-v0-3"]["release_date"] == "2024-05-22"
+    assert by_id["mistralai/mistral-7b-instruct"]["release_date"] is None
 
 
 def test_generate_keeps_distinct_major_versions(mod):
@@ -123,6 +179,67 @@ def test_generate_keeps_distinct_major_versions(mod):
     ids = {e["id"] for e in out}
     assert "anthropic/claude-opus-4.5" in ids
     assert "anthropic/claude-opus-4.7" in ids
+
+
+def test_generate_propagates_open_weights_flag(mod):
+    """`open_weights` must round-trip from models.dev to the emitted entries.
+    Closed-API models stay False; open-weight models become True; NULL when
+    the source omits the field. Family root aggregates with `any()` so
+    a single open snapshot in a mixed family marks the root open."""
+    api = {
+        "anthropic": {
+            "id": "anthropic", "name": "Anthropic", "models": {
+                "claude-foo-1": {
+                    "id": "claude-foo-1", "name": "Claude Foo 1",
+                    "release_date": "2025-06-15", "open_weights": False,
+                },
+            },
+        },
+        "mistral": {
+            "id": "mistral", "name": "Mistral", "models": {
+                "mistral-7b-instruct-v0-3": {
+                    "id": "mistral-7b-instruct-v0-3",
+                    "name": "Mistral 7B Instruct v0.3",
+                    "release_date": "2024-05-22", "open_weights": True,
+                },
+            },
+        },
+    }
+    out, _missing = mod._generate_models(api, {"anthropic", "mistralai"})
+    by_id = {e["id"]: e for e in out}
+    # Closed-API: family root + child both False
+    assert by_id["anthropic/claude-foo-1"]["open_weights"] is False
+    # Open-weight: every level of the chain inherits True
+    assert by_id["mistralai/mistral-7b"]["open_weights"] is True
+    assert by_id["mistralai/mistral-7b-instruct"]["open_weights"] is True
+    assert by_id["mistralai/mistral-7b-instruct-v0-3"]["open_weights"] is True
+
+
+def test_generate_promotes_earliest_release_date(mod):
+    """`release_date` is a first-class field — earliest snapshot date for the
+    family. Models without any release_date in the source get None."""
+    api = {
+        "anthropic": {
+            "id": "anthropic", "name": "Anthropic", "models": {
+                "claude-foo-1": {
+                    "id": "claude-foo-1", "name": "Claude Foo 1",
+                    "release_date": "2025-06-15",
+                },
+                "claude-foo-1-20250901": {
+                    "id": "claude-foo-1-20250901", "name": "Claude Foo 1",
+                    "release_date": "2025-09-01",
+                },
+                "claude-bar-1": {
+                    "id": "claude-bar-1", "name": "Claude Bar 1",
+                    # no release_date
+                },
+            },
+        },
+    }
+    out, _missing = mod._generate_models(api, KNOWN_ORGS)
+    by_id = {e["id"]: e for e in out}
+    assert by_id["anthropic/claude-foo-1"]["release_date"] == "2025-06-15"
+    assert by_id["anthropic/claude-bar-1"]["release_date"] is None
 
 
 def test_generate_reports_missing_org_ids(mod):
