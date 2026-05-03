@@ -432,3 +432,4 @@ test, Docker test, Space deploy + checks).
 - Verify metric extraction logic — although likely partially addressed with future schema versions and fixes.
 - Clean up how we implement registry updates + check against regression
 - Populate `benchmark_card_id` once an auto-benchmarkcard has been generated and linked for each benchmark.
+- Implement walking and backfilling for lineage 
