@@ -493,7 +493,8 @@ def seed(
     lineage_counts = queries.derive_model_lineage_fields(store)
     typer.echo(
         f"  derived: root_model_id={lineage_counts['root_set']}, "
-        f"lineage_origin_org_id={lineage_counts['lineage_set']}"
+        f"lineage_origin_org_id={lineage_counts['lineage_set']}, "
+        f"open_weights_inherited={lineage_counts['open_weights_inherited']}"
     )
 
     removed_entities = 0

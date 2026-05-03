@@ -105,6 +105,8 @@ def _no_match_result() -> dict:
         "lineage_origin_org_id": None,
         "parents": None,
         "open_weights": None,
+        "release_date": None,
+        "params_billions": None,
     }
 
 
@@ -130,28 +132,31 @@ def _model_response_fields(
             "lineage_origin_org_id": None,
             "parents": None,
             "open_weights": None,
+            "release_date": None,
+            "params_billions": None,
         }
 
     leaf_root = _na_to_none(matched_entity.get("root_model_id"))
     parents_decoded = queries.decode_parents(matched_entity.get("parents")) or None
 
     if leaf_root:
-        # Resolve to root by default. Look up root entity to surface its
-        # review_status and lineage_origin_org_id (the leaf's lineage_origin
-        # equals the root's by construction, but be explicit).
-        # `open_weights` also comes from the root since identity-root
-        # collapses preserve weight identity (quantizations don't change
-        # whether weights are downloadable).
-        root_entity = queries.get_entity(store, _ENTITY_TABLE["model"], leaf_root)
-        root_lineage = _na_to_none((root_entity or {}).get("lineage_origin_org_id"))
-        root_open = _na_to_none((root_entity or {}).get("open_weights"))
+        # Resolve to root by default. Source the metadata fields from the
+        # root entity since `canonical_id` is the root — keeps the response
+        # internally consistent (the canonical_id and its metadata refer
+        # to the same model). Quantization preserves identity, so root's
+        # release_date / params / open_weights all describe the same
+        # model the caller is being told about. Caller wanting leaf-
+        # specific info reads `resolved_leaf_id` and does a follow-up GET.
+        root_entity = queries.get_entity(store, _ENTITY_TABLE["model"], leaf_root) or {}
         return {
             "canonical_id": leaf_root,
             "resolved_leaf_id": matched_canonical_id,
             "root_model_id": leaf_root,
-            "lineage_origin_org_id": root_lineage,
+            "lineage_origin_org_id": _na_to_none(root_entity.get("lineage_origin_org_id")),
             "parents": parents_decoded,
-            "open_weights": root_open,
+            "open_weights": _na_to_none(root_entity.get("open_weights")),
+            "release_date": _na_to_none(root_entity.get("release_date")),
+            "params_billions": _na_to_none(root_entity.get("params_billions")),
         }
 
     return {
@@ -161,6 +166,8 @@ def _model_response_fields(
         "lineage_origin_org_id": _na_to_none(matched_entity.get("lineage_origin_org_id")),
         "parents": parents_decoded,
         "open_weights": _na_to_none(matched_entity.get("open_weights")),
+        "release_date": _na_to_none(matched_entity.get("release_date")),
+        "params_billions": _na_to_none(matched_entity.get("params_billions")),
     }
 
 
@@ -176,6 +183,8 @@ def _match_result(
     lineage_origin_org_id: Optional[str] = None,
     parents: Optional[list] = None,
     open_weights: Optional[bool] = None,
+    release_date: Optional[str] = None,
+    params_billions: Optional[float] = None,
 ) -> dict:
     return {
         "canonical_id": canonical_id,
@@ -189,6 +198,8 @@ def _match_result(
         "lineage_origin_org_id": lineage_origin_org_id,
         "parents": parents,
         "open_weights": open_weights,
+        "release_date": release_date,
+        "params_billions": params_billions,
     }
 
 
@@ -228,6 +239,8 @@ def _build_match(
             lineage_origin_org_id=fields["lineage_origin_org_id"],
             parents=fields["parents"],
             open_weights=fields["open_weights"],
+            release_date=fields["release_date"],
+            params_billions=fields["params_billions"],
         )
     return _match_result(
         canonical_id=matched_canonical_id,

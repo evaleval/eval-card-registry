@@ -55,6 +55,13 @@ class ResolveResponse(BaseModel):
     # unknown. Lets callers filter "open weights only" without a follow-up
     # GET. Models only.
     open_weights: Optional[bool] = None
+    # ISO date (YYYY-MM-DD or YYYY-MM) of the resolved model's family
+    # debut. Models only. NULL when no source carried release info.
+    release_date: Optional[str] = None
+    # Parameter count in billions, approximate. Models only. NULL when
+    # unknown (closed-API models that don't publish params, or HF entries
+    # without safetensors data).
+    params_billions: Optional[float] = None
 
 
 # --- Entities ---

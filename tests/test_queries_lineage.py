@@ -98,6 +98,84 @@ def test_derive_lineage_origin_falls_back_to_self_org(fresh_store):
     assert row["lineage_origin_org_id"] == "meta"
 
 
+def test_open_weights_inherits_from_parent_via_variant_edges(fresh_store):
+    """A variant/mode of an open-weight base inherits open_weights=True
+    when the variant doesn't have its own value set. Same identity, just
+    different post-training."""
+    _add_model(fresh_store, "meta/llama-3-8b", "meta", [])
+    _add_model(fresh_store, "meta/llama-3-8b-instruct", "meta", [
+        {"id": "meta/llama-3-8b", "relationship": "variant", "axis": "mode"},
+    ])
+    # Set parent explicitly open
+    df = fresh_store.table("canonical_models")
+    df.loc[df["id"] == "meta/llama-3-8b", "open_weights"] = True
+    fresh_store.set_table("canonical_models", df)
+
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    # pandas BooleanDtype returns numpy booleans, so use `==` not `is`.
+    assert df[df["id"] == "meta/llama-3-8b"].iloc[0]["open_weights"] == True
+    assert df[df["id"] == "meta/llama-3-8b-instruct"].iloc[0]["open_weights"] == True
+
+
+def test_open_weights_inherits_through_quantized_chain(fresh_store):
+    """Quantized of open base → open. Inheritance walks both variant
+    and quantized edges (identity-preserving)."""
+    _add_model(fresh_store, "meta/llama-3-8b", "meta", [])
+    _add_model(fresh_store, "meta/llama-3-8b-instruct", "meta", [
+        {"id": "meta/llama-3-8b", "relationship": "variant", "axis": "mode"},
+    ])
+    _add_model(fresh_store, "meta/llama-3-8b-instruct-fp8", "meta", [
+        {"id": "meta/llama-3-8b-instruct", "relationship": "quantized"},
+    ])
+    df = fresh_store.table("canonical_models")
+    df.loc[df["id"] == "meta/llama-3-8b", "open_weights"] = True
+    fresh_store.set_table("canonical_models", df)
+
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    assert df[df["id"] == "meta/llama-3-8b-instruct-fp8"].iloc[0]["open_weights"] == True
+
+
+def test_open_weights_does_not_inherit_through_finetune(fresh_store):
+    """Finetune of an open base does NOT auto-inherit open_weights — a
+    finetune is its own release whose openness depends on whether the
+    finetuner published the weights, not on the base."""
+    _add_model(fresh_store, "meta/llama-3.1-70b", "meta", [])
+    _add_model(fresh_store, "nous/hermes-3-llama-70b", "nous-research", [
+        {"id": "meta/llama-3.1-70b", "relationship": "finetune"},
+    ])
+    df = fresh_store.table("canonical_models")
+    df.loc[df["id"] == "meta/llama-3.1-70b", "open_weights"] = True
+    fresh_store.set_table("canonical_models", df)
+
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    val = df[df["id"] == "nous/hermes-3-llama-70b"].iloc[0]["open_weights"]
+    assert val is None or queries._is_na(val), \
+        "finetune must not auto-inherit open_weights from its base"
+
+
+def test_open_weights_explicit_value_never_overwritten(fresh_store):
+    """If a child has an explicit open_weights value, the inheritance
+    walk MUST NOT overwrite it — even if the parent says otherwise.
+    Curated values take precedence over derived inference."""
+    _add_model(fresh_store, "lab/parent-open", "lab", [])
+    _add_model(fresh_store, "lab/child-explicitly-closed", "lab", [
+        {"id": "lab/parent-open", "relationship": "variant", "axis": "mode"},
+    ])
+    df = fresh_store.table("canonical_models")
+    df.loc[df["id"] == "lab/parent-open", "open_weights"] = True
+    df.loc[df["id"] == "lab/child-explicitly-closed", "open_weights"] = False
+    fresh_store.set_table("canonical_models", df)
+
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    # Explicit False on child must survive — even though the inheritance
+    # walk would have inherited True from the open parent.
+    assert df[df["id"] == "lab/child-explicitly-closed"].iloc[0]["open_weights"] == False
+
+
 def test_derive_variant_edges_do_not_set_lineage_origin_to_parent(fresh_store):
     """Variant edges are within-family hierarchy and DO NOT count toward
     lineage origin. A size variant of a Meta family stays attributed to
