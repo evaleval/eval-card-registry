@@ -9,13 +9,12 @@ Responsibilities:
 """
 from __future__ import annotations
 
-import json
 import re
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from eval_entity_resolver import AliasStore, Resolver, ResolverConfig, ResolutionResult
+from eval_entity_resolver import AliasStore, CanonicalStore, Resolver, ResolverConfig, ResolutionResult
 
 from eval_card_registry.config import settings
 from eval_card_registry.store.hf_store import RegistryStore
@@ -30,43 +29,6 @@ _ENTITY_TABLE = {
     "harness": "eval_harnesses",
     "org": "canonical_orgs",
 }
-
-_PARENT_FIELD = {
-    "benchmark": "parent_benchmark_id",
-    "org": "parent_org_id",
-}
-
-
-def _decode_parents(value) -> list[dict]:
-    """Decode `canonical_models.parents` (JSON-encoded list-of-edges) to a
-    Python list. Tolerant of NaN, None, empty strings, and pre-decoded lists."""
-    if value is None or queries._is_na(value):
-        return []
-    if isinstance(value, list):
-        return value
-    if isinstance(value, str):
-        s = value.strip()
-        if not s or s in ("[]", "null"):
-            return []
-        try:
-            decoded = json.loads(s)
-            return list(decoded) if isinstance(decoded, list) else []
-        except (ValueError, TypeError):
-            return []
-    return []
-
-
-def _variant_parent_id(parents: list[dict]) -> Optional[str]:
-    """Return the id of the first `variant` edge in a parents list, or None.
-    The ResolveResponse `parent_canonical_id` field exposes the family /
-    variant hierarchy that callers historically read off `parent_model_id`."""
-    for edge in parents:
-        if isinstance(edge, dict) and edge.get("relationship") == "variant":
-            pid = edge.get("id")
-            if pid:
-                return pid
-    return None
-
 
 def _slugify(value: str) -> str:
     """
@@ -92,167 +54,46 @@ def _build_alias_store(registry_store: RegistryStore) -> AliasStore:
     return AliasStore(aliases_df, read_only=True)
 
 
+def _build_canonical_store(registry_store: RegistryStore) -> CanonicalStore:
+    """Build a CanonicalStore from the registry's in-memory canonical
+    tables. Lets the bare resolver enrich its results with the same
+    metadata fields the HTTP API exposes."""
+    return CanonicalStore(
+        models_df=registry_store.table("canonical_models"),
+        benchmarks_df=registry_store.table("canonical_benchmarks"),
+        metrics_df=registry_store.table("canonical_metrics"),
+        harnesses_df=registry_store.table("eval_harnesses"),
+        orgs_df=registry_store.table("canonical_orgs") if registry_store.has_table("canonical_orgs") else None,
+    )
+
+
+_RESPONSE_FIELDS = (
+    "canonical_id", "strategy", "confidence", "review_status",
+    "parent_canonical_id", "resolved_leaf_id", "root_model_id",
+    "lineage_origin_org_id", "parents", "open_weights",
+    "release_date", "params_billions",
+)
+
+
+def _result_to_dict(result: ResolutionResult, *, created_new: bool) -> dict:
+    """Convert a `ResolutionResult` dataclass to the dict shape the
+    service contract returns. The dataclass already carries every
+    response field (computed by the resolver via `CanonicalStore`);
+    this just selects the public fields and tacks on `created_new`,
+    which is service-state the resolver doesn't know about."""
+    return {field: getattr(result, field) for field in _RESPONSE_FIELDS} | {
+        "created_new": created_new,
+    }
+
+
 def _no_match_result() -> dict:
-    return {
-        "canonical_id": None,
+    """Stable no-match dict — used by the empty-input guard before any
+    resolver call happens."""
+    return {field: None for field in _RESPONSE_FIELDS} | {
         "strategy": "no_match",
         "confidence": 0.0,
         "created_new": False,
-        "review_status": None,
-        "parent_canonical_id": None,
-        "resolved_leaf_id": None,
-        "root_model_id": None,
-        "lineage_origin_org_id": None,
-        "parents": None,
-        "open_weights": None,
     }
-
-
-def _na_to_none(value):
-    return None if queries._is_na(value) else value
-
-
-def _model_response_fields(
-    store: RegistryStore,
-    matched_canonical_id: str,
-    matched_entity: Optional[dict],
-) -> dict:
-    """Compute model-specific response fields. When the matched canonical
-    has `root_model_id` set, the returned `canonical_id` is the root (=
-    identity-root collapsing for quantization chains); otherwise it's the
-    matched leaf itself. `resolved_leaf_id` always carries the original
-    match so callers wanting leaf-level can opt in."""
-    if not matched_entity:
-        return {
-            "canonical_id": matched_canonical_id,
-            "resolved_leaf_id": matched_canonical_id,
-            "root_model_id": None,
-            "lineage_origin_org_id": None,
-            "parents": None,
-            "open_weights": None,
-        }
-
-    leaf_root = _na_to_none(matched_entity.get("root_model_id"))
-    parents_decoded = queries.decode_parents(matched_entity.get("parents")) or None
-
-    if leaf_root:
-        # Resolve to root by default. Look up root entity to surface its
-        # review_status and lineage_origin_org_id (the leaf's lineage_origin
-        # equals the root's by construction, but be explicit).
-        # `open_weights` also comes from the root since identity-root
-        # collapses preserve weight identity (quantizations don't change
-        # whether weights are downloadable).
-        root_entity = queries.get_entity(store, _ENTITY_TABLE["model"], leaf_root)
-        root_lineage = _na_to_none((root_entity or {}).get("lineage_origin_org_id"))
-        root_open = _na_to_none((root_entity or {}).get("open_weights"))
-        return {
-            "canonical_id": leaf_root,
-            "resolved_leaf_id": matched_canonical_id,
-            "root_model_id": leaf_root,
-            "lineage_origin_org_id": root_lineage,
-            "parents": parents_decoded,
-            "open_weights": root_open,
-        }
-
-    return {
-        "canonical_id": matched_canonical_id,
-        "resolved_leaf_id": matched_canonical_id,
-        "root_model_id": None,
-        "lineage_origin_org_id": _na_to_none(matched_entity.get("lineage_origin_org_id")),
-        "parents": parents_decoded,
-        "open_weights": _na_to_none(matched_entity.get("open_weights")),
-    }
-
-
-def _match_result(
-    canonical_id: str,
-    strategy: str,
-    confidence: float,
-    review_status: Optional[str],
-    created_new: bool = False,
-    parent_canonical_id: Optional[str] = None,
-    resolved_leaf_id: Optional[str] = None,
-    root_model_id: Optional[str] = None,
-    lineage_origin_org_id: Optional[str] = None,
-    parents: Optional[list] = None,
-    open_weights: Optional[bool] = None,
-) -> dict:
-    return {
-        "canonical_id": canonical_id,
-        "strategy": strategy,
-        "confidence": confidence,
-        "created_new": created_new,
-        "review_status": review_status,
-        "parent_canonical_id": parent_canonical_id,
-        "resolved_leaf_id": resolved_leaf_id,
-        "root_model_id": root_model_id,
-        "lineage_origin_org_id": lineage_origin_org_id,
-        "parents": parents,
-        "open_weights": open_weights,
-    }
-
-
-def _build_match(
-    store: RegistryStore,
-    entity_type: str,
-    matched_canonical_id: str,
-    matched_entity: Optional[dict],
-    strategy: str,
-    confidence: float,
-    *,
-    created_new: bool = False,
-    review_status_override: Optional[str] = None,
-) -> dict:
-    """Construct a resolve response dict, applying model-specific
-    root-collapsing when relevant. Non-model entity types pass through
-    with `canonical_id = matched_canonical_id` and the new fields NULL."""
-    review_status = review_status_override if review_status_override is not None else (
-        matched_entity.get("review_status") if matched_entity else None
-    )
-    if entity_type == "model":
-        fields = _model_response_fields(store, matched_canonical_id, matched_entity)
-        # Re-fetch the entity at the response canonical (root may differ from matched leaf)
-        # so review_status reflects the returned canonical when caller surfaces it.
-        if review_status_override is None and fields["canonical_id"] != matched_canonical_id:
-            root_entity = queries.get_entity(store, _ENTITY_TABLE["model"], fields["canonical_id"])
-            review_status = (root_entity or {}).get("review_status")
-        return _match_result(
-            canonical_id=fields["canonical_id"],
-            strategy=strategy,
-            confidence=confidence,
-            review_status=review_status,
-            created_new=created_new,
-            parent_canonical_id=_parent_canonical_id("model", matched_entity),
-            resolved_leaf_id=fields["resolved_leaf_id"],
-            root_model_id=fields["root_model_id"],
-            lineage_origin_org_id=fields["lineage_origin_org_id"],
-            parents=fields["parents"],
-            open_weights=fields["open_weights"],
-        )
-    return _match_result(
-        canonical_id=matched_canonical_id,
-        strategy=strategy,
-        confidence=confidence,
-        review_status=review_status,
-        created_new=created_new,
-        parent_canonical_id=_parent_canonical_id(entity_type, matched_entity),
-    )
-
-
-def _parent_canonical_id(entity_type: str, entity: Optional[dict]) -> Optional[str]:
-    if not entity:
-        return None
-    if entity_type == "model":
-        # Models store a typed parents list. Surface the variant edge here so
-        # the API contract stays stable for callers reading the family parent.
-        return _variant_parent_id(_decode_parents(entity.get("parents")))
-    field = _PARENT_FIELD.get(entity_type)
-    if not field:
-        return None
-    value = entity.get(field)
-    if queries._is_na(value):
-        return None
-    return value or None
 
 
 class ResolutionService:
@@ -277,8 +118,14 @@ class ResolutionService:
     def _get_resolver(self) -> Resolver:
         if self._resolver is None:
             alias_store = _build_alias_store(self.store)
+            canonical_store = _build_canonical_store(self.store)
             config = ResolverConfig(threshold=settings.resolver_auto_merge_threshold)
-            self._resolver = Resolver(alias_store, config)
+            # The resolver returns a fully-enriched `ResolutionResult` —
+            # same fields the HTTP API exposes. The service no longer
+            # duplicates the parent-decode / root-collapse / metadata
+            # lookup; it just converts the dataclass to a dict and adds
+            # `created_new` (auto-draft state the resolver doesn't track).
+            self._resolver = Resolver(alias_store, config, canonical_store=canonical_store)
         return self._resolver
 
     def invalidate_resolver(self) -> None:
@@ -300,10 +147,15 @@ class ResolutionService:
         sync_run_id: Optional[str] = None,
         rerun: bool = False,
     ) -> dict:
-        """
-        Resolve a raw value to a canonical entity. Returns a dict with:
-        - canonical_id, strategy, confidence, created_new, review_status
-        """
+        """Resolve a raw value to a canonical entity. Returns a dict with
+        the full enriched response shape — same fields as
+        `eval_entity_resolver.ResolutionResult` plus `created_new`. The
+        keys are the values in `_RESPONSE_FIELDS` plus `"created_new"`;
+        every match (including auto-drafts and no_match) emits the same
+        shape so callers don't need to branch on missing keys.
+
+        See `api/schemas.py::ResolveResponse` for the field documentation
+        and the README "API" section for an example response."""
         if not raw_value or not raw_value.strip():
             return _no_match_result()
 
@@ -317,25 +169,26 @@ class ResolutionService:
             resolver = self._get_resolver()
             result: ResolutionResult = resolver.resolve(raw_value, entity_type, source_config)
             if result.canonical_id is not None:
-                entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], result.canonical_id)
-                result_dict = _build_match(
-                    self.store, entity_type, result.canonical_id, entity,
-                    result.strategy, result.confidence,
-                )
+                result_dict = _result_to_dict(result, created_new=False)
             else:
                 result_dict = _no_match_result()
             self._resolve_cache[cache_key] = result_dict
             return result_dict
 
-        # Check if alias already exists (skip resolver on rerun=False)
+        # Check if alias already exists (skip resolver on rerun=False).
+        # Build the enriched response via `Resolver.build_result` so we
+        # preserve the original alias's strategy/confidence (audit trail)
+        # while still surfacing the same canonical-collapse / metadata
+        # fields a fresh resolve would produce.
         if not rerun:
             existing = queries.get_alias(self.store, raw_value, entity_type, source_config)
             if existing:
-                entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], existing["canonical_id"])
-                result_dict = _build_match(
-                    self.store, entity_type, existing["canonical_id"], entity,
-                    existing["strategy"], existing["confidence"],
+                resolver = self._get_resolver()
+                enriched = resolver.build_result(
+                    raw_value, entity_type, source_config,
+                    existing["canonical_id"], existing["strategy"], existing["confidence"],
                 )
+                result_dict = _result_to_dict(enriched, created_new=False)
                 self._resolve_cache[cache_key] = result_dict
                 return result_dict
 
@@ -410,18 +263,25 @@ class ResolutionService:
             )
 
         # Only invalidate when a new entity was created — its alias could
-        # help future fuzzy matches.  Scoped aliases for existing entities
-        # don't affect lookups for other raw values.
+        # help future fuzzy matches AND the resolver/canonical-store cache
+        # snapshot needs to refresh so the just-added entity is visible.
         if created_new:
             self.invalidate_resolver()
 
-        entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], canonical_id)
-        result_dict = _build_match(
-            self.store, entity_type, canonical_id, entity,
-            strategy_used, result.confidence,
-            created_new=created_new,
-            review_status_override=(entity.get("review_status") if entity else "draft"),
+        # Build the enriched response via the resolver. For auto-drafts
+        # the freshly-created entity sits in the pending-write buffer and
+        # may NOT be visible to the canonical_store's DataFrame snapshot
+        # yet (`_auto_create_entity` writes with `buffered=True`). When
+        # the lookup misses, the resolver returns review_status=None;
+        # we know auto-drafts land at "draft" by definition, so override.
+        resolver = self._get_resolver()
+        enriched = resolver.build_result(
+            raw_value, entity_type, source_config,
+            canonical_id, strategy_used, result.confidence,
         )
+        result_dict = _result_to_dict(enriched, created_new=created_new)
+        if created_new and result_dict.get("review_status") is None:
+            result_dict["review_status"] = "draft"
         self._resolve_cache[cache_key] = result_dict
         return result_dict
 

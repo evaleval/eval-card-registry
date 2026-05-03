@@ -82,7 +82,8 @@ def decode_parents(value) -> list[dict]:
 
 def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     """Walk `canonical_models.parents` and populate the denormalized
-    `root_model_id` and `lineage_origin_org_id` columns.
+    `root_model_id`, `lineage_origin_org_id`, and inherited `open_weights`
+    columns.
 
     - `root_model_id`: walk parents up through *only* `quantized` edges
       (identity-preserving chain). NULL when self has no quantized
@@ -91,21 +92,30 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
       (quantized / finetune / merge / adapter) to the deepest ancestor,
       then read its `org_id`. For Meta-originated models = self.org_id;
       for finetunes/quants of someone else's weights = upstream lab.
+    - `open_weights`: if the row has an explicit value, keep it. Otherwise
+      walk parents through `variant` + `quantized` edges (identity-
+      preserving — a mode/size variant or a quant of an open-weight base
+      is also open-weight) until we find a parent with an explicit value.
+      Stops at finetune/merge/adapter edges since those produce new
+      releases whose openness is independent of the base.
 
-    Both are caches recomputed on every seed/refresh. Returns counts dict
-    for logging.
+    All three are caches recomputed on every seed/refresh. Returns counts
+    dict for logging.
     """
     df = store.table("canonical_models")
     if df.empty:
-        return {"root_set": 0, "lineage_set": 0}
+        return {"root_set": 0, "lineage_set": 0, "open_weights_inherited": 0}
 
     parents_by_id: dict[str, list[dict]] = {}
     org_by_id: dict[str, Optional[str]] = {}
+    open_by_id: dict[str, Optional[bool]] = {}
     for _, row in df.iterrows():
         cid = row["id"]
         parents_by_id[cid] = decode_parents(row.get("parents"))
         org = row.get("org_id")
         org_by_id[cid] = None if _is_na(org) else org
+        ow = row.get("open_weights")
+        open_by_id[cid] = None if _is_na(ow) else bool(ow)
 
     def _walk(start: str, allowed: set[str]) -> str:
         """Walk parents through edges whose relationship is in `allowed`.
@@ -126,8 +136,35 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
             visited.add(next_id)
             current = next_id
 
+    def _inherit_open_from_ancestors(start: str) -> Optional[bool]:
+        """Walk ONLY ancestors (skip self) through `variant` + `quantized`
+        edges and return the first explicit `open_weights` value found.
+        Returns None when no identity-preserving ancestor has it set.
+        Caller is responsible for preferring self's explicit value over
+        anything this returns."""
+        visited = {start}
+        current = start
+        while True:
+            edges = parents_by_id.get(current, []) or []
+            next_id: Optional[str] = None
+            for p in edges:
+                if not isinstance(p, dict):
+                    continue
+                if p.get("relationship") in {"variant", "quantized"} and p.get("id"):
+                    next_id = p["id"]
+                    break
+            if not next_id or next_id in visited or next_id not in parents_by_id:
+                return None
+            visited.add(next_id)
+            current = next_id
+            v = open_by_id.get(current)
+            if v is not None:
+                return v
+
     root_updates: dict[str, Optional[str]] = {}
     lineage_updates: dict[str, Optional[str]] = {}
+    open_updates: dict[str, Optional[bool]] = {}
+    inherited_count = 0
     for cid in parents_by_id:
         # Identity root via quantized-only walk
         root = _walk(cid, {"quantized"})
@@ -135,15 +172,28 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         # Lineage origin via any non-variant edge; org of deepest ancestor
         ancestor = _walk(cid, {"quantized", "finetune", "merge", "adapter"})
         lineage_updates[cid] = org_by_id.get(ancestor) or org_by_id.get(cid)
+        # Open weights — explicit self value WINS; only fall back to
+        # ancestor inheritance when self has no value set. Never overwrite
+        # an explicit True/False with an inherited value.
+        explicit = open_by_id.get(cid)
+        if explicit is not None:
+            open_updates[cid] = explicit
+        else:
+            inherited = _inherit_open_from_ancestors(cid)
+            open_updates[cid] = inherited
+            if inherited is not None:
+                inherited_count += 1
 
     df = df.copy()
     df["root_model_id"] = df["id"].map(root_updates).astype(pd.StringDtype())
     df["lineage_origin_org_id"] = df["id"].map(lineage_updates).astype(pd.StringDtype())
+    df["open_weights"] = df["id"].map(open_updates).astype(pd.BooleanDtype())
     store.set_table("canonical_models", df)
 
     return {
         "root_set": int(df["root_model_id"].notna().sum()),
         "lineage_set": int(df["lineage_origin_org_id"].notna().sum()),
+        "open_weights_inherited": inherited_count,
     }
 
 
