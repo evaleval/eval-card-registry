@@ -1,35 +1,33 @@
-name: Refresh models.dev source
+name: Refresh hub-stats source
 
 on:
   schedule:
-    # Daily at 09:00 UTC. The seed/orgs.yaml + core.yaml curated layers
-    # take precedence at load time, so daily refresh of the auto-generated
-    # source is safe — no curated content is at risk of being overwritten.
-    - cron: "0 9 * * *"
+    # Daily at 09:30 UTC — 30 min after refresh-models so a same-day
+    # diff from each lands sequentially rather than racing the seed.yml
+    # downstream trigger.
+    - cron: "30 9 * * *"
   workflow_dispatch: {}
 
 # Direct-commit auto-sync (no PR review). When HITL or consumer feedback
-# loops come online we can flip back to PR mode — the prior PR-opening
-# version is in git history if needed.
+# loops come online we can flip to PR mode.
 permissions:
   contents: write
-  # `gh workflow run seed.yml` (downstream dispatch step below) requires
-  # actions:write — the default GITHUB_TOKEN only has actions:read, which
-  # would fail silently via the `||` fallback.
+  # `gh workflow run seed.yml` (downstream dispatch) requires actions:write.
   actions: write
 
 env:
-  GENERATED_PATH: seed/models/sources/models_dev.generated.yaml
+  GENERATED_PATH: seed/models/sources/hub_stats.generated.yaml
 
-# Don't pile up runs if a previous one is mid-fetch.
 concurrency:
-  group: refresh-models-dev
+  group: refresh-hub-stats
   cancel-in-progress: false
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # The DuckDB query against the remote parquet can take a few minutes;
+    # 15 is generous and bounded.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -39,13 +37,13 @@ jobs:
       - name: Sync dependencies
         run: uv sync
 
-      - name: Refresh models.dev generated source
-        run: uv run python scripts/refresh_from_modelsdev.py
+      - name: Refresh hub-stats generated source
+        run: uv run python scripts/refresh_from_hub_stats.py
 
-      # Sanity check: the regenerated YAML must parse and the seed loader
-      # must succeed. If either fails we abort without committing — better
-      # to skip a day's refresh than to break the seed.yml pipeline that
-      # runs on every push to main.
+      # Sanity: the YAML must parse and the seed loader must succeed
+      # before we commit. The seed merge has narrow contracts (parents
+      # union by id, kind enum on orgs) — any malformed entry would
+      # break the seed.yml pipeline that runs on every push to main.
       - name: Validate generated YAML loads
         run: |
           uv run python -c "import yaml; yaml.safe_load(open('$GENERATED_PATH'))"
@@ -69,16 +67,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$GENERATED_PATH"
-          git commit -m "chore(seed): refresh models.dev source ($(date -u +%Y-%m-%d))"
-          # If main moved while we were running, rebase rather than fail.
+          git commit -m "chore(seed): refresh hub-stats source ($(date -u +%Y-%m-%d))"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
-      # GITHUB_TOKEN-authored pushes do NOT trigger downstream workflows
-      # by GH security policy. Dispatch seed.yml explicitly so the
-      # refresh actually deploys to the HF Dataset repo + restarts the
-      # Space. Best-effort: warn if dispatch fails (manual workflow_dispatch
-      # is always available as fallback).
+      # GITHUB_TOKEN-authored pushes do NOT trigger downstream workflows.
+      # Dispatch seed.yml explicitly so the refresh actually deploys.
       - name: Trigger seed deployment
         if: steps.diff.outputs.changed == 'true'
         env:

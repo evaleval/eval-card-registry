@@ -1,0 +1,4753 @@
+# Generated from cfahlgren1/hub-stats — DO NOT EDIT BY HAND.
+# To update: run `python scripts/refresh_from_hub_stats.py`.
+#
+# Source: https://huggingface.co/datasets/cfahlgren1/hub-stats (Apache-2.0)
+# Last refresh date is in git history.
+#
+# Backfill-only: every entry here MERGES into an existing canonical_models
+# row at seed time. Fills in release_date, params_billions, license, tags,
+# etc. via the seed loader's field-level merge (curated values in
+# core.yaml take precedence on conflict).
+#
+# Lineage descendant pre-load (community quants/finetunes of our covered
+# models) is deferred — see deferred task. EEE drafts get on-demand
+# enrichment via the live hub-stats lookup at draft creation (Phase 2).
+
+- id: 01-ai/yi-1.5-34b
+  display_name: Yi-1.5-34B
+  org_id: 01-ai
+  release_date: '2024-05-11'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-1.5-34B
+  metadata: '{"downloads_all_time": 157304, "hf_id": "01-ai/Yi-1.5-34B", "library_name": "transformers", "license": "apache-2.0", "likes": 49, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 17.19
+  open_weights: true
+- id: 01-ai/yi-1.5-34b-chat
+  display_name: Yi-1.5-34B-Chat
+  org_id: 01-ai
+  release_date: '2024-05-10'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-1.5-34B-Chat
+  metadata: '{"downloads_all_time": 399468, "hf_id": "01-ai/Yi-1.5-34B-Chat", "library_name": "transformers", "license": "apache-2.0", "likes": 277, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 17.19
+  open_weights: true
+- id: 01-ai/yi-1.5-6b
+  display_name: Yi-1.5-6B
+  org_id: 01-ai
+  release_date: '2024-05-11'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-1.5-6B
+  metadata: '{"downloads_all_time": 181148, "hf_id": "01-ai/Yi-1.5-6B", "library_name": "transformers", "license": "apache-2.0", "likes": 31, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.03
+  open_weights: true
+- id: 01-ai/yi-1.5-6b-chat
+  display_name: Yi-1.5-6B-Chat
+  org_id: 01-ai
+  release_date: '2024-05-11'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-1.5-6B-Chat
+  metadata: '{"downloads_all_time": 265856, "hf_id": "01-ai/Yi-1.5-6B-Chat", "library_name": "transformers", "license": "apache-2.0", "likes": 41, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.03
+  open_weights: true
+- id: 01-ai/yi-1.5-9b
+  display_name: Yi-1.5-9B
+  org_id: 01-ai
+  release_date: '2024-05-11'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-1.5-9B
+  metadata: '{"downloads_all_time": 405124, "hf_id": "01-ai/Yi-1.5-9B", "library_name": "transformers", "license": "apache-2.0", "likes": 52, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.41
+  open_weights: true
+- id: 01-ai/yi-1.5-9b-chat
+  display_name: Yi-1.5-9B-Chat
+  org_id: 01-ai
+  release_date: '2024-05-10'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-1.5-9B-Chat
+  metadata: '{"downloads_all_time": 519223, "hf_id": "01-ai/Yi-1.5-9B-Chat", "library_name": "transformers", "license": "apache-2.0", "likes": 148, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.41
+  open_weights: true
+- id: 01-ai/yi-34b
+  display_name: Yi-34B
+  org_id: 01-ai
+  release_date: '2023-11-01'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-34B
+  metadata: '{"downloads_all_time": 477442, "hf_id": "01-ai/Yi-34B", "library_name": "transformers", "license": "apache-2.0", "likes": 1301, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 17.19
+  open_weights: true
+- id: 01-ai/yi-34b-chat
+  display_name: Yi-34B-Chat
+  org_id: 01-ai
+  release_date: '2023-11-22'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-34B-Chat
+  metadata: '{"downloads_all_time": 563024, "hf_id": "01-ai/Yi-34B-Chat", "library_name": "transformers", "license": "apache-2.0", "likes": 356, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: 01-ai/yi-6b
+  display_name: Yi-6B
+  org_id: 01-ai
+  release_date: '2023-11-01'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-6B
+  metadata: '{"downloads_all_time": 396483, "hf_id": "01-ai/Yi-6B", "library_name": "transformers", "license": "apache-2.0", "likes": 376, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.03
+  open_weights: true
+- id: 01-ai/yi-6b-chat
+  display_name: Yi-6B-Chat
+  org_id: 01-ai
+  release_date: '2023-11-22'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-6B-Chat
+  metadata: '{"downloads_all_time": 423463, "hf_id": "01-ai/Yi-6B-Chat", "library_name": "transformers", "license": "apache-2.0", "likes": 70, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.03
+  open_weights: true
+- id: 01-ai/yi-coder-1.5b-chat
+  display_name: Yi-Coder-1.5B-Chat
+  org_id: 01-ai
+  release_date: '2024-08-21'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - 01-ai/Yi-Coder-1.5B-Chat
+  metadata: '{"downloads_all_time": 16350, "hf_id": "01-ai/Yi-Coder-1.5B-Chat", "library_name": "transformers", "license": "apache-2.0", "likes": 42, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.74
+  open_weights: true
+- id: adept/fuyu-8b
+  display_name: fuyu-8b
+  org_id: adept
+  release_date: '2023-10-17'
+  tags:
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 964129, "hf_id": "adept/fuyu-8b", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 1018, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.7
+  open_weights: true
+- id: alibaba/qwen1.5-1.8b-chat
+  display_name: Qwen1.5-1.8B-Chat
+  org_id: alibaba
+  release_date: '2024-01-30'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-1.8B-Chat
+  - qwen/qwen1.5-1.8b-chat
+  metadata: '{"downloads_all_time": 1013432, "hf_id": "Qwen/Qwen1.5-1.8B-Chat", "library_name": "transformers", "license": "other", "likes": 74, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.92
+  open_weights: true
+- id: alibaba/qwen1.5-110b
+  display_name: Qwen1.5-110B
+  org_id: alibaba
+  release_date: '2024-04-25'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-110B
+  - qwen/qwen1.5-110b
+  metadata: '{"downloads_all_time": 56650, "hf_id": "Qwen/Qwen1.5-110B", "library_name": "transformers", "license": "other", "likes": 103, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 55.6
+  open_weights: true
+- id: alibaba/qwen1.5-110b-chat
+  display_name: Qwen1.5-110B-Chat
+  org_id: alibaba
+  release_date: '2024-04-25'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-110B-Chat
+  - qwen/qwen1.5-110b-chat
+  metadata: '{"downloads_all_time": 152503, "hf_id": "Qwen/Qwen1.5-110B-Chat", "library_name": "transformers", "license": "other", "likes": 133, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 55.6
+  open_weights: true
+- id: alibaba/qwen1.5-14b
+  display_name: Qwen1.5-14B
+  org_id: alibaba
+  release_date: '2024-01-22'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-14B
+  - qwen/qwen1.5-14b
+  metadata: '{"downloads_all_time": 784110, "hf_id": "Qwen/Qwen1.5-14B", "library_name": "transformers", "license": "other", "likes": 41, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.08
+  open_weights: true
+- id: alibaba/qwen1.5-14b-chat
+  display_name: Qwen1.5-14B-Chat
+  org_id: alibaba
+  release_date: '2024-01-30'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-14B-Chat
+  - qwen/qwen1.5-14b-chat
+  metadata: '{"downloads_all_time": 755953, "hf_id": "Qwen/Qwen1.5-14B-Chat", "library_name": "transformers", "license": "other", "likes": 112, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.08
+  open_weights: true
+- id: alibaba/qwen1.5-32b
+  display_name: Qwen1.5-32B
+  org_id: alibaba
+  release_date: '2024-04-01'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-32B
+  - qwen/qwen1.5-32b
+  metadata: '{"downloads_all_time": 468425, "hf_id": "Qwen/Qwen1.5-32B", "library_name": "transformers", "license": "other", "likes": 85, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.26
+  open_weights: true
+- id: alibaba/qwen1.5-32b-chat
+  display_name: Qwen1.5-32B-Chat
+  org_id: alibaba
+  release_date: '2024-04-03'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-32B-Chat
+  - qwen/qwen1.5-32b-chat
+  metadata: '{"downloads_all_time": 533592, "hf_id": "Qwen/Qwen1.5-32B-Chat", "library_name": "transformers", "license": "other", "likes": 109, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.26
+  open_weights: true
+- id: alibaba/qwen1.5-72b
+  display_name: Qwen1.5-72B
+  org_id: alibaba
+  release_date: '2024-01-23'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-72B
+  - qwen/qwen1.5-72b
+  metadata: '{"downloads_all_time": 219365, "hf_id": "Qwen/Qwen1.5-72B", "library_name": "transformers", "license": "other", "likes": 59, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 36.14
+  open_weights: true
+- id: alibaba/qwen1.5-72b-chat
+  display_name: Qwen1.5-72B-Chat
+  org_id: alibaba
+  release_date: '2024-01-30'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-72B-Chat
+  - qwen/qwen1.5-72b-chat
+  metadata: '{"downloads_all_time": 395458, "hf_id": "Qwen/Qwen1.5-72B-Chat", "library_name": "transformers", "license": "other", "likes": 218, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 36.14
+  open_weights: true
+- id: alibaba/qwen1.5-7b
+  display_name: Qwen1.5-7B
+  org_id: alibaba
+  release_date: '2024-01-22'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-7B
+  - qwen/qwen1.5-7b
+  metadata: '{"downloads_all_time": 3013269, "hf_id": "Qwen/Qwen1.5-7B", "library_name": "transformers", "license": "other", "likes": 56, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.86
+  open_weights: true
+- id: alibaba/qwen1.5-7b-chat
+  display_name: Qwen1.5-7B-Chat
+  org_id: alibaba
+  release_date: '2024-01-30'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen1.5-7B-Chat
+  - qwen/qwen1.5-7b-chat
+  metadata: '{"downloads_all_time": 888404, "hf_id": "Qwen/Qwen1.5-7B-Chat", "library_name": "transformers", "license": "other", "likes": 186, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.86
+  open_weights: true
+- id: alibaba/qwen2-72b
+  display_name: Qwen2-72B
+  org_id: alibaba
+  release_date: '2024-05-22'
+  tags:
+  - en
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen2-72B
+  - qwen/qwen2-72b
+  metadata: '{"downloads_all_time": 439113, "hf_id": "Qwen/Qwen2-72B", "library_name": "transformers", "license": "other", "likes": 200, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 36.35
+  open_weights: true
+- id: alibaba/qwen2-72b-instruct
+  display_name: Qwen2-72B-Instruct
+  org_id: alibaba
+  release_date: '2024-05-28'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen2-72B-Instruct
+  - qwen/qwen2-72b-instruct
+  metadata: '{"downloads_all_time": 1260429, "hf_id": "Qwen/Qwen2-72B-Instruct", "library_name": "transformers", "license": "other", "likes": 718, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 36.35
+  open_weights: true
+- id: alibaba/qwen2-7b
+  display_name: Qwen2-7B
+  org_id: alibaba
+  release_date: '2024-06-04'
+  tags:
+  - en
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2-7B
+  - qwen/qwen2-7b
+  metadata: '{"downloads_all_time": 1574198, "hf_id": "Qwen/Qwen2-7B", "library_name": "transformers", "license": "apache-2.0", "likes": 171, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.81
+  open_weights: true
+- id: alibaba/qwen2-7b-instruct
+  display_name: Qwen2-7B-Instruct
+  org_id: alibaba
+  release_date: '2024-06-04'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2-7B-Instruct
+  - qwen/qwen2-7b-instruct
+  metadata: '{"downloads_all_time": 23412288, "hf_id": "Qwen/Qwen2-7B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 684, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.81
+  open_weights: true
+- id: alibaba/qwen2.5-14b
+  display_name: Qwen2.5-14B
+  org_id: alibaba
+  release_date: '2024-09-15'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-14B
+  - qwen/qwen2.5-14b
+  metadata: '{"downloads_all_time": 3625321, "hf_id": "Qwen/Qwen2.5-14B", "license": "apache-2.0", "likes": 148, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.39
+  open_weights: true
+- id: alibaba/qwen2.5-14b-instruct
+  display_name: Qwen2.5-14B-Instruct
+  org_id: alibaba
+  release_date: '2024-09-16'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-14B-Instruct
+  - qwen/qwen2.5-14b-instruct
+  metadata: '{"downloads_all_time": 36345306, "hf_id": "Qwen/Qwen2.5-14B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 331, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-32b
+  display_name: Qwen2.5-32B
+  org_id: alibaba
+  release_date: '2024-09-15'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-32B
+  - qwen/qwen2.5-32b
+  metadata: '{"downloads_all_time": 3988472, "hf_id": "Qwen/Qwen2.5-32B", "license": "apache-2.0", "likes": 175, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: alibaba/qwen2.5-32b-instruct
+  display_name: Qwen2.5-32B-Instruct
+  org_id: alibaba
+  release_date: '2024-09-17'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-32B-Instruct
+  - qwen/qwen2.5-32b-instruct
+  metadata: '{"downloads_all_time": 21513494, "hf_id": "Qwen/Qwen2.5-32B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 349, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-72b
+  display_name: Qwen2.5-72B
+  org_id: alibaba
+  release_date: '2024-09-15'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-72B
+  - qwen/qwen2.5-72b
+  metadata: '{"downloads_all_time": 565668, "hf_id": "Qwen/Qwen2.5-72B", "library_name": "transformers", "license": "other", "likes": 97, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 36.35
+  open_weights: true
+- id: alibaba/qwen2.5-72b-instruct
+  display_name: Qwen2.5-72B-Instruct
+  org_id: alibaba
+  release_date: '2024-09-16'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-72B-Instruct
+  - qwen/qwen2.5-72b-instruct
+  metadata: '{"downloads_all_time": 6022755, "hf_id": "Qwen/Qwen2.5-72B-Instruct", "library_name": "transformers", "license": "other", "likes": 934, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 36.35
+  open_weights: true
+- id: alibaba/qwen2.5-7b
+  display_name: Qwen2.5-7B
+  org_id: alibaba
+  release_date: '2024-09-15'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-7B
+  - qwen/qwen2.5-7b
+  metadata: '{"downloads_all_time": 17540324, "hf_id": "Qwen/Qwen2.5-7B", "library_name": "transformers", "license": "apache-2.0", "likes": 281, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.81
+  open_weights: true
+- id: alibaba/qwen2.5-7b-instruct
+  display_name: Qwen2.5-7B-Instruct
+  org_id: alibaba
+  release_date: '2024-09-16'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-7B-Instruct
+  - qwen/qwen2.5-7b-instruct
+  metadata: '{"downloads_all_time": 125238636, "hf_id": "Qwen/Qwen2.5-7B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 1253, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.81
+  open_weights: true
+- id: alibaba/qwen2.5-coder-0.5b
+  display_name: Qwen2.5-Coder-0.5B
+  org_id: alibaba
+  release_date: '2024-11-08'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-Coder-0.5B
+  - qwen/qwen2.5-coder-0.5b
+  metadata: '{"downloads_all_time": 413516, "hf_id": "Qwen/Qwen2.5-Coder-0.5B", "library_name": "transformers", "license": "apache-2.0", "likes": 51, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.25
+  open_weights: true
+- id: alibaba/qwen2.5-coder-1.5b
+  display_name: Qwen2.5-Coder-1.5B
+  org_id: alibaba
+  release_date: '2024-09-18'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-Coder-1.5B
+  - qwen/qwen2.5-coder-1.5b
+  metadata: '{"downloads_all_time": 4704824, "hf_id": "Qwen/Qwen2.5-Coder-1.5B", "library_name": "transformers", "license": "apache-2.0", "likes": 91, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-coder-32b
+  display_name: Qwen2.5-Coder-32B
+  org_id: alibaba
+  release_date: '2024-11-08'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-Coder-32B
+  - qwen/qwen2.5-coder-32b
+  metadata: '{"downloads_all_time": 342937, "hf_id": "Qwen/Qwen2.5-Coder-32B", "library_name": "transformers", "license": "apache-2.0", "likes": 151, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: alibaba/qwen2.5-coder-32b-instruct
+  display_name: Qwen2.5-Coder-32B-Instruct
+  org_id: alibaba
+  release_date: '2024-11-06'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-Coder-32B-Instruct
+  - qwen/qwen2.5-coder-32b-instruct
+  metadata: '{"downloads_all_time": 6446386, "hf_id": "Qwen/Qwen2.5-Coder-32B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 2014, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: alibaba/qwen2.5-coder-3b
+  display_name: Qwen2.5-Coder-3B
+  org_id: alibaba
+  release_date: '2024-11-08'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-Coder-3B
+  - qwen/qwen2.5-coder-3b
+  metadata: '{"downloads_all_time": 567880, "hf_id": "Qwen/Qwen2.5-Coder-3B", "library_name": "transformers", "license": "other", "likes": 46, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.54
+  open_weights: true
+- id: alibaba/qwen2.5-coder-7b
+  display_name: Qwen2.5-Coder-7B
+  org_id: alibaba
+  release_date: '2024-09-16'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-Coder-7B
+  - qwen/qwen2.5-coder-7b
+  metadata: '{"downloads_all_time": 2998994, "hf_id": "Qwen/Qwen2.5-Coder-7B", "library_name": "transformers", "license": "apache-2.0", "likes": 142, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.81
+  open_weights: true
+- id: alibaba/qwen2.5-coder-7b-instruct
+  display_name: Qwen2.5-Coder-7B-Instruct
+  org_id: alibaba
+  release_date: '2024-09-17'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-Coder-7B-Instruct
+  - qwen/qwen2.5-coder-7b-instruct
+  metadata: '{"downloads_all_time": 12598594, "hf_id": "Qwen/Qwen2.5-Coder-7B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 703, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.81
+  open_weights: true
+- id: alibaba/qwen2.5-vl-32b-instruct
+  display_name: Qwen2.5-VL-32B-Instruct
+  org_id: alibaba
+  release_date: '2025-03-21'
+  tags:
+  - en
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen2.5-VL-32B-Instruct
+  - qwen/qwen2.5-vl-32b-instruct
+  metadata: '{"downloads_all_time": 8541199, "hf_id": "Qwen/Qwen2.5-VL-32B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 482, "pipeline_tag": "image-text-to-text", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.73
+  open_weights: true
+- id: alibaba/qwen3-1.7b
+  display_name: Qwen3-1.7B
+  org_id: alibaba
+  release_date: '2025-04-27'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3-1.7B
+  - qwen/qwen3-1.7b
+  metadata: '{"downloads_all_time": 37156866, "hf_id": "Qwen/Qwen3-1.7B", "library_name": "transformers", "license": "apache-2.0", "likes": 454, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.02
+  open_weights: true
+- id: alibaba/qwen3-14b
+  display_name: Qwen3-14B
+  org_id: alibaba
+  release_date: '2025-04-27'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3-14B
+  - qwen/qwen3-14b
+  metadata: '{"downloads_all_time": 15929104, "hf_id": "Qwen/Qwen3-14B", "library_name": "transformers", "license": "apache-2.0", "likes": 390, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: alibaba/qwen3-235b-a22b
+  display_name: Qwen3-235B-A22B
+  org_id: alibaba
+  release_date: '2025-04-27'
+  tags:
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3-235B-A22B
+  - qwen/qwen3-235b-a22b
+  metadata: '{"downloads_all_time": 4168075, "hf_id": "Qwen/Qwen3-235B-A22B", "library_name": "transformers", "license": "apache-2.0", "likes": 1091, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 117.55
+  open_weights: true
+- id: alibaba/qwen3-235b-a22b-instruct-2507
+  display_name: Qwen3-235B-A22B-Instruct-2507
+  org_id: alibaba
+  release_date: '2025-07-21'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3-235B-A22B-Instruct-2507
+  - qwen/qwen3-235b-a22b-instruct-2507
+  metadata: '{"downloads_all_time": 1239735, "hf_id": "Qwen/Qwen3-235B-A22B-Instruct-2507", "library_name": "transformers", "license": "apache-2.0", "likes": 775, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: alibaba/qwen3-32b
+  display_name: Qwen3-32B
+  org_id: alibaba
+  release_date: '2025-04-27'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3-32B
+  - qwen/qwen3-32b
+  metadata: '{"downloads_all_time": 30129523, "hf_id": "Qwen/Qwen3-32B", "library_name": "transformers", "license": "apache-2.0", "likes": 692, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: alibaba/qwen3-8b
+  display_name: Qwen3-8B
+  org_id: alibaba
+  release_date: '2025-04-27'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3-8B
+  - qwen/qwen3-8b
+  metadata: '{"downloads_all_time": 55097837, "hf_id": "Qwen/Qwen3-8B", "library_name": "transformers", "license": "apache-2.0", "likes": 1071, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.1
+  open_weights: true
+- id: alibaba/qwen3-coder-30b-a3b-instruct
+  display_name: Qwen3-Coder-30B-A3B-Instruct
+  org_id: alibaba
+  release_date: '2025-07-31'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3-Coder-30B-A3B-Instruct
+  - qwen/qwen3-coder-30b-a3b-instruct
+  metadata: '{"downloads_all_time": 8627729, "hf_id": "Qwen/Qwen3-Coder-30B-A3B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 1039, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 15.27
+  open_weights: true
+- id: alibaba/qwen3.5-122b-a10b
+  display_name: Qwen3.5-122B-A10B
+  org_id: alibaba
+  release_date: '2026-02-24'
+  tags:
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3.5-122B-A10B
+  - qwen/qwen3.5-122b-a10b
+  metadata: '{"downloads_all_time": 2040067, "hf_id": "Qwen/Qwen3.5-122B-A10B", "library_name": "transformers", "license": "apache-2.0", "likes": 534, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 62.54
+  open_weights: true
+- id: alibaba/qwen3.5-27b
+  display_name: Qwen3.5-27B
+  org_id: alibaba
+  release_date: '2026-02-24'
+  tags:
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3.5-27B
+  - qwen/qwen3.5-27b
+  metadata: '{"downloads_all_time": 6798494, "hf_id": "Qwen/Qwen3.5-27B", "library_name": "transformers", "license": "apache-2.0", "likes": 966, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 13.89
+  open_weights: true
+- id: alibaba/qwen3.5-397b-a17b
+  display_name: Qwen3.5-397B-A17B
+  org_id: alibaba
+  release_date: '2026-02-16'
+  tags:
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3.5-397B-A17B
+  - qwen/qwen3.5-397b-a17b
+  metadata: '{"downloads_all_time": 2933274, "hf_id": "Qwen/Qwen3.5-397B-A17B", "library_name": "transformers", "license": "apache-2.0", "likes": 1473, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 201.7
+  open_weights: true
+- id: alibaba/qwen3.6-35b-a3b
+  display_name: Qwen3.6-35B-A3B
+  org_id: alibaba
+  release_date: '2026-04-15'
+  tags:
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/Qwen3.6-35B-A3B
+  - qwen/qwen3.6-35b-a3b
+  metadata: '{"downloads_all_time": 2575808, "hf_id": "Qwen/Qwen3.6-35B-A3B", "library_name": "transformers", "license": "apache-2.0", "likes": 1581, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 17.98
+  open_weights: true
+- id: alibaba/qwq-32b
+  display_name: QwQ-32B
+  org_id: alibaba
+  release_date: '2025-03-05'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/QwQ-32B
+  - qwen/qwq-32b
+  metadata: '{"downloads_all_time": 2903705, "hf_id": "Qwen/QwQ-32B", "library_name": "transformers", "license": "apache-2.0", "likes": 2912, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: alibaba/qwq-32b-preview
+  display_name: QwQ-32B-Preview
+  org_id: alibaba
+  release_date: '2024-11-27'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - Qwen/QwQ-32B-Preview
+  - qwen/qwq-32b-preview
+  metadata: '{"downloads_all_time": 1385590, "hf_id": "Qwen/QwQ-32B-Preview", "library_name": "transformers", "license": "apache-2.0", "likes": 1738, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: allenai/llama-3.1-tulu-3-70b-sft-rm-rb2
+  display_name: Llama-3.1-Tulu-3-70B-SFT-RM-RB2
+  org_id: allenai
+  release_date: '2025-06-02'
+  tags:
+  - en
+  - license:llama3.1
+  aliases:
+  - allenai/Llama-3.1-Tulu-3-70B-SFT-RM-RB2
+  metadata: '{"downloads_all_time": 271, "hf_id": "allenai/Llama-3.1-Tulu-3-70B-SFT-RM-RB2", "library_name": "transformers", "license": "llama3.1", "likes": 0, "pipeline_tag": "text-classification", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: allenai/olmo-2-1124-13b
+  display_name: OLMo-2-1124-13B
+  org_id: allenai
+  release_date: '2024-11-19'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - allenai/OLMo-2-1124-13B
+  metadata: '{"downloads_all_time": 174270, "hf_id": "allenai/OLMo-2-1124-13B", "license": "apache-2.0", "likes": 69, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 6.86
+  open_weights: true
+- id: allenai/olmo-2-1124-13b-instruct
+  display_name: OLMo-2-1124-13B-Instruct
+  org_id: allenai
+  release_date: '2024-12-18'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - allenai/OLMo-2-1124-13B-Instruct
+  metadata: '{"downloads_all_time": 171119, "hf_id": "allenai/OLMo-2-1124-13B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 48, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 6.86
+  open_weights: true
+- id: allenai/olmo-2-1124-7b
+  display_name: OLMo-2-1124-7B
+  org_id: allenai
+  release_date: '2024-10-29'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - allenai/OLMo-2-1124-7B
+  metadata: '{"downloads_all_time": 1183289, "hf_id": "allenai/OLMo-2-1124-7B", "license": "apache-2.0", "likes": 67, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.65
+  open_weights: true
+- id: allenai/olmo-2-1124-7b-instruct
+  display_name: OLMo-2-1124-7B-Instruct
+  org_id: allenai
+  release_date: '2024-12-18'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - allenai/OLMo-2-1124-7B-Instruct
+  metadata: '{"downloads_all_time": 320335, "hf_id": "allenai/OLMo-2-1124-7B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 49, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.65
+  open_weights: true
+- id: allenai/olmo-7b
+  display_name: OLMo-7B
+  org_id: allenai
+  release_date: '2024-01-09'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - allenai/OLMo-7B
+  metadata: '{"downloads_all_time": 298481, "hf_id": "allenai/OLMo-7B", "library_name": "transformers", "license": "apache-2.0", "likes": 651, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: allenai/olmo-7b-instruct
+  display_name: OLMo-7B-Instruct
+  org_id: allenai
+  release_date: '2024-02-23'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - allenai/OLMo-7B-Instruct
+  metadata: '{"downloads_all_time": 86990, "hf_id": "allenai/OLMo-7B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 53, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.44
+  open_weights: true
+- id: allenai/tulu-2-7b
+  display_name: tulu-2-7b
+  org_id: allenai
+  release_date: '2023-11-13'
+  tags:
+  - en
+  aliases: []
+  metadata: '{"downloads_all_time": 137616, "hf_id": "allenai/tulu-2-7b", "library_name": "transformers", "likes": 11, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: allenai/tulu-3-405b
+  display_name: Llama-3.1-Tulu-3-405B
+  org_id: allenai
+  release_date: '2025-01-09'
+  tags:
+  - en
+  - license:llama3.1
+  - safetensors
+  aliases:
+  - allenai/Llama-3.1-Tulu-3-405B
+  - allenai/llama-3.1-tulu-3-405b
+  metadata: '{"downloads_all_time": 19540, "hf_id": "allenai/Llama-3.1-Tulu-3-405B", "library_name": "transformers", "license": "llama3.1", "likes": 111, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: allenai/tulu-3-8b
+  display_name: Llama-3.1-Tulu-3-8B
+  org_id: allenai
+  release_date: '2024-11-20'
+  tags:
+  - en
+  - license:llama3.1
+  - safetensors
+  aliases:
+  - allenai/Llama-3.1-Tulu-3-8B
+  - allenai/llama-3.1-tulu-3-8b
+  metadata: '{"downloads_all_time": 304059, "hf_id": "allenai/Llama-3.1-Tulu-3-8B", "library_name": "transformers", "license": "llama3.1", "likes": 178, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: baichuan-inc/baichuan2-7b-base
+  display_name: Baichuan2-7B-Base
+  org_id: baichuan-inc
+  release_date: '2023-08-30'
+  tags:
+  - en
+  - license:other
+  - zh
+  aliases:
+  - baichuan-inc/Baichuan2-7B-Base
+  metadata: '{"downloads_all_time": 255983, "hf_id": "baichuan-inc/Baichuan2-7B-Base", "library_name": "transformers", "license": "other", "likes": 86, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: baichuan-inc/baichuan2-7b-chat
+  display_name: Baichuan2-7B-Chat
+  org_id: baichuan-inc
+  release_date: '2023-08-29'
+  tags:
+  - en
+  - zh
+  aliases:
+  - baichuan-inc/Baichuan2-7B-Chat
+  metadata: '{"downloads_all_time": 1144943, "hf_id": "baichuan-inc/Baichuan2-7B-Chat", "library_name": "transformers", "likes": 172, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: baichuan/baichuan2-13b-base
+  display_name: Baichuan2-13B-Base
+  org_id: baichuan-inc
+  release_date: '2023-08-30'
+  tags:
+  - en
+  - license:other
+  - zh
+  aliases:
+  - baichuan-inc/Baichuan2-13B-Base
+  - baichuan-inc/baichuan2-13b-base
+  metadata: '{"downloads_all_time": 111630, "hf_id": "baichuan-inc/Baichuan2-13B-Base", "library_name": "transformers", "license": "other", "likes": 82, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: baichuan/baichuan2-13b-chat
+  display_name: Baichuan2-13B-Chat
+  org_id: baichuan-inc
+  release_date: '2023-08-29'
+  tags:
+  - en
+  - license:other
+  - zh
+  aliases:
+  - baichuan-inc/Baichuan2-13B-Chat
+  - baichuan-inc/baichuan2-13b-chat
+  metadata: '{"downloads_all_time": 1260188, "hf_id": "baichuan-inc/Baichuan2-13B-Chat", "library_name": "transformers", "license": "other", "likes": 432, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: bigcode/starcoder
+  display_name: starcoder
+  org_id: bigcode
+  release_date: '2023-04-24'
+  tags:
+  - license:bigcode-openrail-m
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 691056, "hf_id": "bigcode/starcoder", "library_name": "transformers", "license": "bigcode-openrail-m", "likes": 2944, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.91
+  open_weights: true
+- id: bigcode/starcoder2-15b
+  display_name: starcoder2-15b
+  org_id: bigcode
+  release_date: '2024-02-20'
+  tags:
+  - license:bigcode-openrail-m
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 530021, "hf_id": "bigcode/starcoder2-15b", "library_name": "transformers", "license": "bigcode-openrail-m", "likes": 670, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: bigcode/starcoder2-3b
+  display_name: starcoder2-3b
+  org_id: bigcode
+  release_date: '2023-11-29'
+  tags:
+  - license:bigcode-openrail-m
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 6868340, "hf_id": "bigcode/starcoder2-3b", "library_name": "transformers", "license": "bigcode-openrail-m", "likes": 218, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.52
+  open_weights: true
+- id: bigcode/starcoder2-7b
+  display_name: starcoder2-7b
+  org_id: bigcode
+  release_date: '2024-02-20'
+  tags:
+  - license:bigcode-openrail-m
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 794103, "hf_id": "bigcode/starcoder2-7b", "library_name": "transformers", "license": "bigcode-openrail-m", "likes": 215, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.59
+  open_weights: true
+- id: bigscience/bloom-1b1
+  display_name: bloom-1b1
+  org_id: bigscience
+  release_date: '2022-05-19'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - jax
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zhs
+  - zht
+  - zu
+  aliases: []
+  metadata: '{"downloads_all_time": 948539, "hf_id": "bigscience/bloom-1b1", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 66, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.53
+  open_weights: true
+- id: bigscience/bloom-1b7
+  display_name: bloom-1b7
+  org_id: bigscience
+  release_date: '2022-05-19'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - jax
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zhs
+  - zht
+  - zu
+  aliases: []
+  metadata: '{"downloads_all_time": 2966937, "hf_id": "bigscience/bloom-1b7", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 122, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.86
+  open_weights: true
+- id: bigscience/bloom-3b
+  display_name: bloom-3b
+  org_id: bigscience
+  release_date: '2022-05-19'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zhs
+  - zht
+  - zu
+  aliases: []
+  metadata: '{"downloads_all_time": 812004, "hf_id": "bigscience/bloom-3b", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 94, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.5
+  open_weights: true
+- id: bigscience/bloom-560m
+  display_name: bloom-560m
+  org_id: bigscience
+  release_date: '2022-05-19'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - jax
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zhs
+  - zht
+  - zu
+  aliases: []
+  metadata: '{"downloads_all_time": 23780937, "hf_id": "bigscience/bloom-560m", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 371, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.28
+  open_weights: true
+- id: bigscience/bloom-7b1
+  display_name: bloom-7b1
+  org_id: bigscience
+  release_date: '2022-05-19'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - jax
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zhs
+  - zht
+  - zu
+  aliases: []
+  metadata: '{"downloads_all_time": 3644297, "hf_id": "bigscience/bloom-7b1", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 202, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.53
+  open_weights: true
+- id: bigscience/bloomz-3b
+  display_name: bloomz-3b
+  org_id: bigscience
+  release_date: '2022-10-08'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zu
+  aliases: []
+  metadata: '{"downloads_all_time": 775184, "hf_id": "bigscience/bloomz-3b", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 81, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.5
+  open_weights: true
+- id: bigscience/bloomz-7b1
+  display_name: bloomz-7b1
+  org_id: bigscience
+  release_date: '2022-09-27'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zu
+  aliases: []
+  metadata: '{"downloads_all_time": 1435590, "hf_id": "bigscience/bloomz-7b1", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 147, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.53
+  open_weights: true
+- id: bigscience/bloomz-7b1
+  display_name: bloomz-7b1-mt
+  org_id: bigscience
+  release_date: '2022-09-28'
+  tags:
+  - ak
+  - ar
+  - as
+  - bm
+  - bn
+  - ca
+  - en
+  - es
+  - eu
+  - fon
+  - fr
+  - gu
+  - hi
+  - id
+  - ig
+  - ki
+  - kn
+  - lg
+  - license:bigscience-bloom-rail-1.0
+  - ln
+  - ml
+  - mr
+  - ne
+  - nso
+  - ny
+  - or
+  - pa
+  - pt
+  - rn
+  - rw
+  - safetensors
+  - sn
+  - st
+  - sw
+  - ta
+  - te
+  - tn
+  - ts
+  - tum
+  - tw
+  - ur
+  - vi
+  - wo
+  - xh
+  - yo
+  - zh
+  - zu
+  aliases:
+  - bigscience/bloomz-7b1-mt
+  metadata: '{"downloads_all_time": 336491, "hf_id": "bigscience/bloomz-7b1-mt", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 144, "pipeline_tag": "text-generation",
+    "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.53
+  open_weights: true
+- id: bigscience/t0pp
+  display_name: T0pp
+  org_id: bigscience
+  release_date: '2022-03-02'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - bigscience/T0pp
+  metadata: '{"downloads_all_time": 827333, "hf_id": "bigscience/T0pp", "library_name": "transformers", "license": "apache-2.0", "likes": 404, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 5.57
+  open_weights: true
+- id: blackforestlabs/flux-1-dev
+  display_name: FLUX.1-dev
+  org_id: black-forest-labs
+  release_date: '2024-07-31'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - black-forest-labs/FLUX.1-dev
+  - black-forest-labs/flux.1-dev
+  metadata: '{"downloads_all_time": 29958001, "hf_id": "black-forest-labs/FLUX.1-dev", "library_name": "diffusers", "license": "other", "likes": 12744, "pipeline_tag": "text-to-image", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-coder-33b-instruct
+  display_name: deepseek-coder-33b-instruct
+  org_id: deepseek
+  release_date: '2023-11-01'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/deepseek-coder-33b-instruct
+  metadata: '{"downloads_all_time": 728232, "hf_id": "deepseek-ai/deepseek-coder-33b-instruct", "library_name": "transformers", "license": "other", "likes": 566, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.67
+  open_weights: true
+- id: deepseek/deepseek-coder-6.7b-instruct
+  display_name: deepseek-coder-6.7b-instruct
+  org_id: deepseek
+  release_date: '2023-10-29'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/deepseek-coder-6.7b-instruct
+  metadata: '{"downloads_all_time": 2043022, "hf_id": "deepseek-ai/deepseek-coder-6.7b-instruct", "library_name": "transformers", "license": "other", "likes": 492, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.37
+  open_weights: true
+- id: deepseek/deepseek-coder-v2-instruct
+  display_name: DeepSeek-Coder-V2-Instruct
+  org_id: deepseek
+  release_date: '2024-06-14'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-Coder-V2-Instruct
+  - deepseek-ai/deepseek-coder-v2-instruct
+  metadata: '{"downloads_all_time": 1070775, "hf_id": "deepseek-ai/DeepSeek-Coder-V2-Instruct", "library_name": "transformers", "license": "other", "likes": 685, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 117.87
+  open_weights: true
+- id: deepseek/deepseek-coder-v2-lite-instruct
+  display_name: DeepSeek-Coder-V2-Lite-Instruct
+  org_id: deepseek
+  release_date: '2024-06-14'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct
+  - deepseek-ai/deepseek-coder-v2-lite-instruct
+  metadata: '{"downloads_all_time": 6545988, "hf_id": "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct", "library_name": "transformers", "license": "other", "likes": 590, "pipeline_tag": "text-generation",
+    "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.85
+  open_weights: true
+- id: deepseek/deepseek-llm-67b-base
+  display_name: deepseek-llm-67b-base
+  org_id: deepseek
+  release_date: '2023-11-29'
+  tags:
+  - license:other
+  aliases:
+  - deepseek-ai/deepseek-llm-67b-base
+  metadata: '{"downloads_all_time": 224618, "hf_id": "deepseek-ai/deepseek-llm-67b-base", "library_name": "transformers", "license": "other", "likes": 129, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-llm-67b-chat
+  display_name: deepseek-llm-67b-chat
+  org_id: deepseek
+  release_date: '2023-11-29'
+  tags:
+  - license:other
+  aliases:
+  - deepseek-ai/deepseek-llm-67b-chat
+  metadata: '{"downloads_all_time": 143778, "hf_id": "deepseek-ai/deepseek-llm-67b-chat", "library_name": "transformers", "license": "other", "likes": 206, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-llm-7b-chat
+  display_name: deepseek-llm-7b-chat
+  org_id: deepseek
+  release_date: '2023-11-29'
+  tags:
+  - license:other
+  aliases:
+  - deepseek-ai/deepseek-llm-7b-chat
+  metadata: '{"downloads_all_time": 1952674, "hf_id": "deepseek-ai/deepseek-llm-7b-chat", "library_name": "transformers", "license": "other", "likes": 222, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-r1
+  display_name: DeepSeek-R1
+  org_id: deepseek
+  release_date: '2025-01-20'
+  tags:
+  - eval-results
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1
+  - deepseek-ai/deepseek-r1
+  metadata: '{"downloads_all_time": 21757226, "hf_id": "deepseek-ai/DeepSeek-R1", "library_name": "transformers", "license": "mit", "likes": 13317, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 342.27
+  open_weights: true
+- id: deepseek/deepseek-r1-0528
+  display_name: DeepSeek-R1-0528
+  org_id: deepseek
+  release_date: '2025-05-28'
+  tags:
+  - eval-results
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1-0528
+  - deepseek-ai/deepseek-r1-0528
+  metadata: '{"downloads_all_time": 7251667, "hf_id": "deepseek-ai/DeepSeek-R1-0528", "library_name": "transformers", "license": "mit", "likes": 2447, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 342.27
+  open_weights: true
+- id: deepseek/deepseek-r1-distill-llama-70b
+  display_name: DeepSeek-R1-Distill-Llama-70B
+  org_id: deepseek
+  release_date: '2025-01-20'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1-Distill-Llama-70B
+  - deepseek-ai/deepseek-r1-distill-llama-70b
+  metadata: '{"downloads_all_time": 4498494, "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-70B", "library_name": "transformers", "license": "mit", "likes": 772, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-r1-distill-llama-8b
+  display_name: DeepSeek-R1-Distill-Llama-8B
+  org_id: deepseek
+  release_date: '2025-01-20'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+  - deepseek-ai/deepseek-r1-distill-llama-8b
+  metadata: '{"downloads_all_time": 17908593, "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B", "library_name": "transformers", "license": "mit", "likes": 857, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-r1-distill-qwen-1.5b
+  display_name: DeepSeek-R1-Distill-Qwen-1.5B
+  org_id: deepseek
+  release_date: '2025-01-20'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+  - deepseek-ai/deepseek-r1-distill-qwen-1.5b
+  metadata: '{"downloads_all_time": 18124678, "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B", "library_name": "transformers", "license": "mit", "likes": 1498, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.89
+  open_weights: true
+- id: deepseek/deepseek-r1-distill-qwen-14b
+  display_name: DeepSeek-R1-Distill-Qwen-14B
+  org_id: deepseek
+  release_date: '2025-01-20'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+  - deepseek-ai/deepseek-r1-distill-qwen-14b
+  metadata: '{"downloads_all_time": 6841596, "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B", "library_name": "transformers", "license": "mit", "likes": 637, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.39
+  open_weights: true
+- id: deepseek/deepseek-r1-distill-qwen-32b
+  display_name: DeepSeek-R1-Distill-Qwen-32B
+  org_id: deepseek
+  release_date: '2025-01-20'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+  - deepseek-ai/deepseek-r1-distill-qwen-32b
+  metadata: '{"downloads_all_time": 24294929, "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B", "library_name": "transformers", "license": "mit", "likes": 1554, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: deepseek/deepseek-r1-distill-qwen-7b
+  display_name: DeepSeek-R1-Distill-Qwen-7B
+  org_id: deepseek
+  release_date: '2025-01-20'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+  - deepseek-ai/deepseek-r1-distill-qwen-7b
+  metadata: '{"downloads_all_time": 13496523, "hf_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B", "library_name": "transformers", "license": "mit", "likes": 827, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.81
+  open_weights: true
+- id: deepseek/deepseek-v2
+  display_name: DeepSeek-V2
+  org_id: deepseek
+  release_date: '2024-04-22'
+  tags:
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V2
+  - deepseek-ai/deepseek-v2
+  metadata: '{"downloads_all_time": 831925, "hf_id": "deepseek-ai/DeepSeek-V2", "library_name": "transformers", "license": "other", "likes": 334, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 117.87
+  open_weights: true
+- id: deepseek/deepseek-v2-chat
+  display_name: DeepSeek-V2-Chat
+  org_id: deepseek
+  release_date: '2024-04-28'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V2-Chat
+  - deepseek-ai/deepseek-v2-chat
+  metadata: '{"downloads_all_time": 326760, "hf_id": "deepseek-ai/DeepSeek-V2-Chat", "library_name": "transformers", "license": "other", "likes": 462, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 117.87
+  open_weights: true
+- id: deepseek/deepseek-v2-lite
+  display_name: DeepSeek-V2-Lite
+  org_id: deepseek
+  release_date: '2024-05-15'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V2-Lite
+  - deepseek-ai/deepseek-v2-lite
+  metadata: '{"downloads_all_time": 3216932, "hf_id": "deepseek-ai/DeepSeek-V2-Lite", "library_name": "transformers", "license": "other", "likes": 173, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.85
+  open_weights: true
+- id: deepseek/deepseek-v2-lite-chat
+  display_name: DeepSeek-V2-Lite-Chat
+  org_id: deepseek
+  release_date: '2024-05-15'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V2-Lite-Chat
+  - deepseek-ai/deepseek-v2-lite-chat
+  metadata: '{"downloads_all_time": 3645716, "hf_id": "deepseek-ai/DeepSeek-V2-Lite-Chat", "library_name": "transformers", "license": "other", "likes": 137, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 7.85
+  open_weights: true
+- id: deepseek/deepseek-v2.5
+  display_name: DeepSeek-V2.5
+  org_id: deepseek
+  release_date: '2024-09-05'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V2.5
+  - deepseek-ai/deepseek-v2.5
+  metadata: '{"downloads_all_time": 222205, "hf_id": "deepseek-ai/DeepSeek-V2.5", "library_name": "transformers", "license": "other", "likes": 734, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 117.87
+  open_weights: true
+- id: deepseek/deepseek-v3
+  display_name: DeepSeek-V3
+  org_id: deepseek
+  release_date: '2024-12-25'
+  tags:
+  - eval-results
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V3
+  - deepseek-ai/deepseek-v3
+  metadata: '{"downloads_all_time": 15726113, "hf_id": "deepseek-ai/DeepSeek-V3", "library_name": "transformers", "likes": 4064, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 342.27
+  open_weights: true
+- id: deepseek/deepseek-v3.1
+  display_name: DeepSeek-V3.1-Terminus
+  org_id: deepseek
+  release_date: '2025-09-22'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V3.1-Terminus
+  - deepseek-ai/deepseek-v3.1-terminus
+  metadata: '{"downloads_all_time": 180913, "hf_id": "deepseek-ai/DeepSeek-V3.1-Terminus", "library_name": "transformers", "license": "mit", "likes": 364, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-v3.1
+  display_name: DeepSeek-V3.1
+  org_id: deepseek
+  release_date: '2025-08-21'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V3.1
+  - deepseek-ai/deepseek-v3.1
+  metadata: '{"downloads_all_time": 1790163, "hf_id": "deepseek-ai/DeepSeek-V3.1", "library_name": "transformers", "license": "mit", "likes": 823, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-v3.2
+  display_name: DeepSeek-V3.2-Exp
+  org_id: deepseek
+  release_date: '2025-09-29'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V3.2-Exp
+  - deepseek-ai/deepseek-v3.2-exp
+  metadata: '{"downloads_all_time": 674909, "hf_id": "deepseek-ai/DeepSeek-V3.2-Exp", "library_name": "transformers", "license": "mit", "likes": 993, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-v4-pro
+  display_name: DeepSeek-V4-Pro
+  org_id: deepseek
+  release_date: '2026-04-22'
+  tags:
+  - eval-results
+  - license:mit
+  - safetensors
+  aliases:
+  - deepseek-ai/DeepSeek-V4-Pro
+  - deepseek-ai/deepseek-v4-pro
+  metadata: '{"downloads_all_time": 457348, "hf_id": "deepseek-ai/DeepSeek-V4-Pro", "library_name": "transformers", "license": "mit", "likes": 3441, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 430.8
+  open_weights: true
+- id: deepseek/deepseek-vl2
+  display_name: deepseek-vl2
+  org_id: deepseek
+  release_date: '2024-12-13'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/deepseek-vl2
+  metadata: '{"downloads_all_time": 168135, "hf_id": "deepseek-ai/deepseek-vl2", "library_name": "transformers", "license": "other", "likes": 381, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+- id: deepseek/deepseek-vl2-small
+  display_name: deepseek-vl2-small
+  org_id: deepseek
+  release_date: '2024-12-13'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/deepseek-vl2-small
+  metadata: '{"downloads_all_time": 558277, "hf_id": "deepseek-ai/deepseek-vl2-small", "library_name": "transformers", "license": "other", "likes": 179, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 8.07
+  open_weights: true
+- id: deepseek/deepseek-vl2-tiny
+  display_name: deepseek-vl2-tiny
+  org_id: deepseek
+  release_date: '2024-12-13'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - deepseek-ai/deepseek-vl2-tiny
+  metadata: '{"downloads_all_time": 2537886, "hf_id": "deepseek-ai/deepseek-vl2-tiny", "library_name": "transformers", "license": "other", "likes": 248, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+- id: eleutherai/gpt-neo-1.3b
+  display_name: gpt-neo-1.3B
+  org_id: eleutherai
+  release_date: '2022-03-02'
+  tags:
+  - en
+  - jax
+  - license:mit
+  - safetensors
+  aliases:
+  - EleutherAI/gpt-neo-1.3B
+  metadata: '{"downloads_all_time": 11337485, "hf_id": "EleutherAI/gpt-neo-1.3B", "library_name": "transformers", "license": "mit", "likes": 324, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.68
+  open_weights: true
+- id: eleutherai/gpt-neo-125m
+  display_name: gpt-neo-125m
+  org_id: eleutherai
+  release_date: '2022-03-02'
+  tags:
+  - en
+  - jax
+  - license:mit
+  - safetensors
+  aliases:
+  - EleutherAI/gpt-neo-125m
+  metadata: '{"downloads_all_time": 8497052, "hf_id": "EleutherAI/gpt-neo-125m", "library_name": "transformers", "license": "mit", "likes": 228, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.08
+  open_weights: true
+- id: eleutherai/gpt-neo-2.7b
+  display_name: gpt-neo-2.7B
+  org_id: eleutherai
+  release_date: '2022-03-02'
+  tags:
+  - en
+  - jax
+  - license:mit
+  - safetensors
+  aliases:
+  - EleutherAI/gpt-neo-2.7B
+  metadata: '{"downloads_all_time": 9423215, "hf_id": "EleutherAI/gpt-neo-2.7B", "library_name": "transformers", "license": "mit", "likes": 503, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.36
+  open_weights: true
+- id: eleutherai/gpt-neox-20b
+  display_name: gpt-neox-20b
+  org_id: eleutherai
+  release_date: '2022-04-07'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - EleutherAI/gpt-neox-20b
+  metadata: '{"downloads_all_time": 3000562, "hf_id": "EleutherAI/gpt-neox-20b", "library_name": "transformers", "license": "apache-2.0", "likes": 582, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/incoder-1b
+  display_name: incoder-1B
+  org_id: facebook
+  release_date: '2022-04-08'
+  tags:
+  - license:cc-by-nc-4.0
+  aliases:
+  - facebook/incoder-1B
+  metadata: '{"downloads_all_time": 450024, "hf_id": "facebook/incoder-1B", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 40, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/incoder-6b
+  display_name: incoder-6B
+  org_id: facebook
+  release_date: '2022-04-06'
+  tags:
+  - license:cc-by-nc-4.0
+  aliases:
+  - facebook/incoder-6B
+  metadata: '{"downloads_all_time": 189516, "hf_id": "facebook/incoder-6B", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 80, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-1.3b
+  display_name: opt-1.3b
+  org_id: facebook
+  release_date: '2022-05-11'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 29399912, "hf_id": "facebook/opt-1.3b", "library_name": "transformers", "license": "other", "likes": 184, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-125m
+  display_name: opt-125m
+  org_id: facebook
+  release_date: '2022-05-11'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 152996528, "hf_id": "facebook/opt-125m", "library_name": "transformers", "license": "other", "likes": 249, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-13b
+  display_name: opt-13b
+  org_id: facebook
+  release_date: '2022-05-11'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 1477151, "hf_id": "facebook/opt-13b", "library_name": "transformers", "license": "other", "likes": 65, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-2.7b
+  display_name: opt-2.7b
+  org_id: facebook
+  release_date: '2022-05-11'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 4661741, "hf_id": "facebook/opt-2.7b", "library_name": "transformers", "license": "other", "likes": 87, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-30b
+  display_name: opt-30b
+  org_id: facebook
+  release_date: '2022-05-11'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 1079216, "hf_id": "facebook/opt-30b", "library_name": "transformers", "license": "other", "likes": 136, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-350m
+  display_name: opt-350m
+  org_id: facebook
+  release_date: '2022-05-11'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 8443456, "hf_id": "facebook/opt-350m", "library_name": "transformers", "license": "other", "likes": 149, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-6.7b
+  display_name: opt-6.7b
+  org_id: facebook
+  release_date: '2022-05-11'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 4236594, "hf_id": "facebook/opt-6.7b", "library_name": "transformers", "license": "other", "likes": 120, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: facebook/opt-66b
+  display_name: opt-66b
+  org_id: facebook
+  release_date: '2022-06-23'
+  tags:
+  - en
+  - jax
+  - license:other
+  - opt
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 1600292, "hf_id": "facebook/opt-66b", "library_name": "transformers", "license": "other", "likes": 174, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/codegemma-2b
+  display_name: codegemma-2b
+  org_id: google
+  release_date: '2024-03-21'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 173359, "hf_id": "google/codegemma-2b", "library_name": "transformers", "license": "gemma", "likes": 98, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.25
+  open_weights: true
+- id: google/codegemma-2b
+  display_name: codegemma-1.1-2b
+  org_id: google
+  release_date: '2024-04-30'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases:
+  - google/codegemma-1.1-2b
+  metadata: '{"downloads_all_time": 18720, "hf_id": "google/codegemma-1.1-2b", "library_name": "transformers", "license": "gemma", "likes": 24, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/codegemma-7b
+  display_name: codegemma-7b
+  org_id: google
+  release_date: '2024-03-21'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 404694, "hf_id": "google/codegemma-7b", "library_name": "transformers", "license": "gemma", "likes": 217, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/codegemma-7b-it
+  display_name: codegemma-7b-it
+  org_id: google
+  release_date: '2024-03-21'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 149073, "hf_id": "google/codegemma-7b-it", "library_name": "transformers", "license": "gemma", "likes": 251, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/flan-t5-large
+  display_name: flan-t5-large
+  org_id: google
+  release_date: '2022-10-21'
+  tags:
+  - de
+  - en
+  - fr
+  - jax
+  - license:apache-2.0
+  - ro
+  - safetensors
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 40482501, "hf_id": "google/flan-t5-large", "library_name": "transformers", "license": "apache-2.0", "likes": 882, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.39
+  open_weights: true
+- id: google/flan-t5-xxl
+  display_name: flan-t5-xxl
+  org_id: google
+  release_date: '2022-10-21'
+  tags:
+  - de
+  - en
+  - fr
+  - jax
+  - license:apache-2.0
+  - ro
+  - safetensors
+  - tf
+  aliases: []
+  metadata: '{"downloads_all_time": 13024526, "hf_id": "google/flan-t5-xxl", "library_name": "transformers", "license": "apache-2.0", "likes": 1285, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 5.63
+  open_weights: true
+- id: google/gemma-1.1-2b-it
+  display_name: gemma-1.1-2b-it
+  org_id: google
+  release_date: '2024-03-26'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 2601970, "hf_id": "google/gemma-1.1-2b-it", "library_name": "transformers", "license": "gemma", "likes": 173, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.25
+  open_weights: true
+- id: google/gemma-1.1-7b-it
+  display_name: gemma-1.1-7b-it
+  org_id: google
+  release_date: '2024-03-26'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 764080, "hf_id": "google/gemma-1.1-7b-it", "library_name": "transformers", "license": "gemma", "likes": 275, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.27
+  open_weights: true
+- id: google/gemma-2-27b
+  display_name: gemma-2-27b
+  org_id: google
+  release_date: '2024-06-24'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 983876, "hf_id": "google/gemma-2-27b", "library_name": "transformers", "license": "gemma", "likes": 209, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/gemma-2-27b-it
+  display_name: gemma-2-27b-it
+  org_id: google
+  release_date: '2024-06-24'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 4964674, "hf_id": "google/gemma-2-27b-it", "library_name": "transformers", "license": "gemma", "likes": 565, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 13.61
+  open_weights: true
+- id: google/gemma-2-2b
+  display_name: gemma-2-2b
+  org_id: google
+  release_date: '2024-07-16'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 25019859, "hf_id": "google/gemma-2-2b", "library_name": "transformers", "license": "gemma", "likes": 640, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/gemma-2-2b-it
+  display_name: gemma-2-2b-it
+  org_id: google
+  release_date: '2024-07-16'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 9108569, "hf_id": "google/gemma-2-2b-it", "library_name": "transformers", "license": "gemma", "likes": 1347, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.31
+  open_weights: true
+- id: google/gemma-2-9b
+  display_name: gemma-2-9b
+  org_id: google
+  release_date: '2024-06-24'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 1762759, "hf_id": "google/gemma-2-9b", "library_name": "transformers", "license": "gemma", "likes": 701, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/gemma-2-9b-it
+  display_name: gemma-2-9b-it
+  org_id: google
+  release_date: '2024-06-24'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 9142809, "hf_id": "google/gemma-2-9b-it", "library_name": "transformers", "license": "gemma", "likes": 794, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.62
+  open_weights: true
+- id: google/gemma-2b
+  display_name: gemma-2b
+  org_id: google
+  release_date: '2024-02-08'
+  tags:
+  - gguf
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 9360690, "hf_id": "google/gemma-2b", "library_name": "transformers", "license": "gemma", "likes": 1166, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.25
+  open_weights: true
+- id: google/gemma-2b-it
+  display_name: gemma-2b-it
+  org_id: google
+  release_date: '2024-02-08'
+  tags:
+  - gguf
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 4597799, "hf_id": "google/gemma-2b-it", "library_name": "transformers", "license": "gemma", "likes": 876, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/gemma-3-12b-it
+  display_name: gemma-3-12b-it
+  org_id: google
+  release_date: '2025-03-01'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 15376368, "hf_id": "google/gemma-3-12b-it", "library_name": "transformers", "license": "gemma", "likes": 712, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/gemma-3-1b-it
+  display_name: gemma-3-1b-it
+  org_id: google
+  release_date: '2025-03-10'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 35651761, "hf_id": "google/gemma-3-1b-it", "library_name": "transformers", "license": "gemma", "likes": 943, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.5
+  open_weights: true
+- id: google/gemma-3-270m
+  display_name: gemma-3-270m
+  org_id: google
+  release_date: '2025-08-05'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 1105836, "hf_id": "google/gemma-3-270m", "library_name": "transformers", "license": "gemma", "likes": 1019, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.13
+  open_weights: true
+- id: google/gemma-3-27b-it
+  display_name: gemma-3-27b-it
+  org_id: google
+  release_date: '2025-03-01'
+  tags:
+  - eval-results
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 13043080, "hf_id": "google/gemma-3-27b-it", "library_name": "transformers", "license": "gemma", "likes": 1961, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 13.72
+  open_weights: true
+- id: google/gemma-3-4b-it
+  display_name: gemma-3-4b-it
+  org_id: google
+  release_date: '2025-02-20'
+  tags:
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 17845746, "hf_id": "google/gemma-3-4b-it", "library_name": "transformers", "license": "gemma", "likes": 1318, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 2.15
+  open_weights: true
+- id: google/gemma-7b
+  display_name: gemma-7b
+  org_id: google
+  release_date: '2024-02-08'
+  tags:
+  - gguf
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 3034225, "hf_id": "google/gemma-7b", "library_name": "transformers", "license": "gemma", "likes": 3307, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/gemma-7b-it
+  display_name: gemma-7b-it
+  org_id: google
+  release_date: '2024-02-13'
+  tags:
+  - gguf
+  - license:gemma
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 5663253, "hf_id": "google/gemma-7b-it", "library_name": "transformers", "license": "gemma", "likes": 1245, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/medgemma-4b-it
+  display_name: medgemma-4b-it
+  org_id: google
+  release_date: '2025-05-19'
+  tags:
+  - license:other
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 2948017, "hf_id": "google/medgemma-4b-it", "library_name": "transformers", "license": "other", "likes": 950, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/t5-3b
+  display_name: flan-t5-xl
+  org_id: google
+  release_date: '2022-10-21'
+  tags:
+  - de
+  - en
+  - fr
+  - jax
+  - license:apache-2.0
+  - ro
+  - safetensors
+  - tf
+  aliases:
+  - google/flan-t5-xl
+  metadata: '{"downloads_all_time": 10281636, "hf_id": "google/flan-t5-xl", "library_name": "transformers", "license": "apache-2.0", "likes": 533, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.42
+  open_weights: true
+- id: google/t5-base
+  display_name: flan-t5-base
+  org_id: google
+  release_date: '2022-10-21'
+  tags:
+  - de
+  - en
+  - fr
+  - jax
+  - license:apache-2.0
+  - ro
+  - safetensors
+  - tf
+  aliases:
+  - google/flan-t5-base
+  metadata: '{"downloads_all_time": 57603216, "hf_id": "google/flan-t5-base", "library_name": "transformers", "license": "apache-2.0", "likes": 1073, "source": "hub_stats"}'
+  review_status: reviewed
+- id: google/t5-small
+  display_name: flan-t5-small
+  org_id: google
+  release_date: '2022-10-21'
+  tags:
+  - de
+  - en
+  - fr
+  - jax
+  - license:apache-2.0
+  - ro
+  - safetensors
+  - tf
+  aliases:
+  - google/flan-t5-small
+  metadata: '{"downloads_all_time": 15630273, "hf_id": "google/flan-t5-small", "library_name": "transformers", "license": "apache-2.0", "likes": 477, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.04
+  open_weights: true
+- id: google/ul2-20b
+  display_name: flan-ul2
+  org_id: google
+  release_date: '2023-03-03'
+  tags:
+  - de
+  - en
+  - fr
+  - license:apache-2.0
+  - ro
+  aliases:
+  - google/flan-ul2
+  metadata: '{"downloads_all_time": 1896842, "hf_id": "google/flan-ul2", "library_name": "transformers", "license": "apache-2.0", "likes": 562, "source": "hub_stats"}'
+  review_status: reviewed
+- id: huggingface/smollm-1.7b
+  display_name: SmolLM-1.7B
+  org_id: huggingface
+  release_date: '2024-07-14'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - HuggingFaceTB/SmolLM-1.7B
+  - huggingfacetb/smollm-1.7b
+  metadata: '{"downloads_all_time": 793483, "hf_id": "HuggingFaceTB/SmolLM-1.7B", "library_name": "transformers", "license": "apache-2.0", "likes": 181, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.86
+  open_weights: true
+- id: huggingface/smollm-135m
+  display_name: SmolLM-135M
+  org_id: huggingface
+  release_date: '2024-07-14'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - HuggingFaceTB/SmolLM-135M
+  - huggingfacetb/smollm-135m
+  metadata: '{"downloads_all_time": 4259005, "hf_id": "HuggingFaceTB/SmolLM-135M", "library_name": "transformers", "license": "apache-2.0", "likes": 256, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.07
+  open_weights: true
+- id: huggingface/smollm-360m
+  display_name: SmolLM-360M
+  org_id: huggingface
+  release_date: '2024-07-14'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - HuggingFaceTB/SmolLM-360M
+  - huggingfacetb/smollm-360m
+  metadata: '{"downloads_all_time": 859144, "hf_id": "HuggingFaceTB/SmolLM-360M", "library_name": "transformers", "license": "apache-2.0", "likes": 70, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: huggingface/smollm2-1.7b
+  display_name: SmolLM2-1.7B
+  org_id: huggingface
+  release_date: '2024-10-30'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - HuggingFaceTB/SmolLM2-1.7B
+  - huggingfacetb/smollm2-1.7b
+  metadata: '{"downloads_all_time": 638065, "hf_id": "HuggingFaceTB/SmolLM2-1.7B", "library_name": "transformers", "license": "apache-2.0", "likes": 150, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.86
+  open_weights: true
+- id: huggingface/smollm2-135m
+  display_name: SmolLM2-135M
+  org_id: huggingface
+  release_date: '2024-10-31'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - HuggingFaceTB/SmolLM2-135M
+  - huggingfacetb/smollm2-135m
+  metadata: '{"downloads_all_time": 12037547, "hf_id": "HuggingFaceTB/SmolLM2-135M", "library_name": "transformers", "license": "apache-2.0", "likes": 189, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.07
+  open_weights: true
+- id: huggingface/smollm2-360m
+  display_name: SmolLM2-360M
+  org_id: huggingface
+  release_date: '2024-10-31'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - HuggingFaceTB/SmolLM2-360M
+  - huggingfacetb/smollm2-360m
+  metadata: '{"downloads_all_time": 1027905, "hf_id": "HuggingFaceTB/SmolLM2-360M", "library_name": "transformers", "license": "apache-2.0", "likes": 94, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.18
+  open_weights: true
+- id: huggingface/smollm3-3b
+  display_name: SmolLM3-3B
+  org_id: huggingface
+  release_date: '2025-07-08'
+  tags:
+  - ar
+  - en
+  - es
+  - fr
+  - it
+  - license:apache-2.0
+  - pt
+  - ru
+  - safetensors
+  - zh
+  aliases:
+  - HuggingFaceTB/SmolLM3-3B
+  - huggingfacetb/smollm3-3b
+  metadata: '{"downloads_all_time": 2641082, "hf_id": "HuggingFaceTB/SmolLM3-3B", "library_name": "transformers", "license": "apache-2.0", "likes": 945, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.54
+  open_weights: true
+- id: huggingfacem4/idefics-80b-instruct
+  display_name: idefics-80b-instruct
+  org_id: huggingfacem4
+  release_date: '2023-07-25'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - HuggingFaceM4/idefics-80b-instruct
+  metadata: '{"downloads_all_time": 114025, "hf_id": "HuggingFaceM4/idefics-80b-instruct", "library_name": "transformers", "license": "other", "likes": 189, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: huggingfacem4/idefics-9b-instruct
+  display_name: idefics-9b-instruct
+  org_id: huggingfacem4
+  release_date: '2023-07-24'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - HuggingFaceM4/idefics-9b-instruct
+  metadata: '{"downloads_all_time": 392137, "hf_id": "HuggingFaceM4/idefics-9b-instruct", "library_name": "transformers", "license": "other", "likes": 107, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.46
+  open_weights: true
+- id: huggingfacem4/idefics2-8b
+  display_name: idefics2-8b
+  org_id: huggingfacem4
+  release_date: '2024-04-09'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - HuggingFaceM4/idefics2-8b
+  metadata: '{"downloads_all_time": 2527927, "hf_id": "HuggingFaceM4/idefics2-8b", "library_name": "transformers", "license": "apache-2.0", "likes": 621, "pipeline_tag": "image-text-to-text", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.2
+  open_weights: true
+- id: ibm-granite/granite-20b-functioncalling
+  display_name: granite-20b-functioncalling
+  org_id: ibm-granite
+  release_date: '2024-07-09'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 18592, "hf_id": "ibm-granite/granite-20b-functioncalling", "library_name": "transformers", "license": "apache-2.0", "likes": 36, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 10.03
+  open_weights: true
+- id: ibm-granite/granite-3.0-2b-instruct
+  display_name: granite-3.0-2b-instruct
+  org_id: ibm-granite
+  release_date: '2024-10-02'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 200063, "hf_id": "ibm-granite/granite-3.0-2b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 49, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.32
+  open_weights: true
+- id: ibm-granite/granite-3.0-8b-instruct
+  display_name: granite-3.0-8b-instruct
+  org_id: ibm-granite
+  release_date: '2024-10-02'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 526760, "hf_id": "ibm-granite/granite-3.0-8b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 206, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: ibm-granite/granite-3.1-8b-instruct
+  display_name: granite-3.1-8b-instruct
+  org_id: ibm-granite
+  release_date: '2024-12-06'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 1259619, "hf_id": "ibm-granite/granite-3.1-8b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 168, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: ibm-granite/granite-3.2-8b-instruct
+  display_name: granite-3.2-8b-instruct
+  org_id: ibm-granite
+  release_date: '2025-02-17'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 275821, "hf_id": "ibm-granite/granite-3.2-8b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 91, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.09
+  open_weights: true
+- id: ibm-granite/granite-3.3-8b-base
+  display_name: granite-3.3-8b-base
+  org_id: ibm-granite
+  release_date: '2025-04-09'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 1597617, "hf_id": "ibm-granite/granite-3.3-8b-base", "library_name": "transformers", "license": "apache-2.0", "likes": 27, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.09
+  open_weights: true
+- id: ibm-granite/granite-3.3-8b-instruct
+  display_name: granite-3.3-8b-instruct
+  org_id: ibm-granite
+  release_date: '2025-04-09'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 1578500, "hf_id": "ibm-granite/granite-3.3-8b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 155, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.09
+  open_weights: true
+- id: ibm-granite/granite-4.0-350m
+  display_name: granite-4.0-350m
+  org_id: ibm-granite
+  release_date: '2025-10-07'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 135014, "hf_id": "ibm-granite/granite-4.0-350m", "library_name": "transformers", "license": "apache-2.0", "likes": 62, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.18
+  open_weights: true
+- id: ibm-granite/granite-4.0-h-small
+  display_name: granite-4.0-h-small
+  org_id: ibm-granite
+  release_date: '2025-09-16'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 660237, "hf_id": "ibm-granite/granite-4.0-h-small", "library_name": "transformers", "license": "apache-2.0", "likes": 307, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: ibm-granite/granite-4.0-micro
+  display_name: granite-4.0-micro
+  org_id: ibm-granite
+  release_date: '2025-09-16'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 796102, "hf_id": "ibm-granite/granite-4.0-micro", "library_name": "transformers", "license": "apache-2.0", "likes": 271, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: internlm/internlm-7b
+  display_name: internlm-7b
+  org_id: internlm
+  release_date: '2023-07-06'
+  tags: []
+  aliases: []
+  metadata: '{"downloads_all_time": 86919, "hf_id": "internlm/internlm-7b", "library_name": "transformers", "likes": 96, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: internlm/internlm2-20b
+  display_name: internlm2-20b
+  org_id: internlm
+  release_date: '2024-01-12'
+  tags:
+  - license:other
+  aliases: []
+  metadata: '{"downloads_all_time": 553686, "hf_id": "internlm/internlm2-20b", "library_name": "transformers", "license": "other", "likes": 59, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: internlm/internlm2-7b
+  display_name: internlm2-7b
+  org_id: internlm
+  release_date: '2024-01-12'
+  tags:
+  - license:other
+  aliases: []
+  metadata: '{"downloads_all_time": 743308, "hf_id": "internlm/internlm2-7b", "library_name": "transformers", "license": "other", "likes": 43, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: internlm/internlm2-math-20b
+  display_name: internlm2-math-20b
+  org_id: internlm
+  release_date: '2024-01-22'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  - zh
+  aliases: []
+  metadata: '{"downloads_all_time": 4676, "hf_id": "internlm/internlm2-math-20b", "library_name": "transformers", "license": "other", "likes": 18, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 9.93
+  open_weights: true
+- id: internlm/internlm3-8b-instruct
+  display_name: internlm3-8b-instruct
+  org_id: internlm
+  release_date: '2025-01-13'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 473420, "hf_id": "internlm/internlm3-8b-instruct", "license": "apache-2.0", "likes": 231, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: ise-uiuc/magicoder-s-cl-7b
+  display_name: Magicoder-S-CL-7B
+  org_id: ise-uiuc
+  release_date: '2023-12-03'
+  tags:
+  - license:llama2
+  - safetensors
+  aliases:
+  - ise-uiuc/Magicoder-S-CL-7B
+  metadata: '{"downloads_all_time": 65415, "hf_id": "ise-uiuc/Magicoder-S-CL-7B", "library_name": "transformers", "license": "llama2", "likes": 44, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.37
+  open_weights: true
+- id: ise-uiuc/magicoder-s-ds-6.7b
+  display_name: Magicoder-S-DS-6.7B
+  org_id: ise-uiuc
+  release_date: '2023-12-03'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - ise-uiuc/Magicoder-S-DS-6.7B
+  metadata: '{"downloads_all_time": 99620, "hf_id": "ise-uiuc/Magicoder-S-DS-6.7B", "library_name": "transformers", "license": "other", "likes": 206, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.37
+  open_weights: true
+- id: lmms-lab/llava-next-72b
+  display_name: llava-next-72b
+  org_id: lmms-lab
+  release_date: '2024-04-20'
+  tags:
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 15106, "hf_id": "lmms-lab/llava-next-72b", "library_name": "transformers", "likes": 14, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 36.33
+  open_weights: true
+- id: lmsys/vicuna-13b
+  display_name: vicuna-13b-v1.3
+  org_id: lmsys
+  release_date: '2023-06-18'
+  tags: []
+  aliases:
+  - lmsys/vicuna-13b-v1.3
+  metadata: '{"downloads_all_time": 495423, "hf_id": "lmsys/vicuna-13b-v1.3", "library_name": "transformers", "likes": 203, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: lmsys/vicuna-13b-v1.5
+  display_name: vicuna-13b-v1.5
+  org_id: lmsys
+  release_date: '2023-07-29'
+  tags:
+  - license:llama2
+  aliases: []
+  metadata: '{"downloads_all_time": 1886017, "hf_id": "lmsys/vicuna-13b-v1.5", "library_name": "transformers", "license": "llama2", "likes": 242, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: lmsys/vicuna-7b
+  display_name: vicuna-7b-v1.3
+  org_id: lmsys
+  release_date: '2023-06-18'
+  tags: []
+  aliases:
+  - lmsys/vicuna-7b-v1.3
+  metadata: '{"downloads_all_time": 1751099, "hf_id": "lmsys/vicuna-7b-v1.3", "library_name": "transformers", "likes": 140, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: lmsys/vicuna-7b-v1.5
+  display_name: vicuna-7b-v1.5
+  org_id: lmsys
+  release_date: '2023-07-29'
+  tags:
+  - license:llama2
+  aliases: []
+  metadata: '{"downloads_all_time": 14892217, "hf_id": "lmsys/vicuna-7b-v1.5", "library_name": "transformers", "license": "llama2", "likes": 395, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: madeagents/hammer2.1-0.5b
+  display_name: Hammer2.1-0.5b
+  org_id: madeagents
+  release_date: '2024-12-12'
+  tags:
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases:
+  - MadeAgents/Hammer2.1-0.5b
+  metadata: '{"downloads_all_time": 13681, "hf_id": "MadeAgents/Hammer2.1-0.5b", "license": "cc-by-nc-4.0", "likes": 6, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.25
+  open_weights: true
+- id: madeagents/hammer2.1-1.5b
+  display_name: Hammer2.1-1.5b
+  org_id: madeagents
+  release_date: '2024-12-12'
+  tags:
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases:
+  - MadeAgents/Hammer2.1-1.5b
+  metadata: '{"downloads_all_time": 33661, "hf_id": "MadeAgents/Hammer2.1-1.5b", "license": "cc-by-nc-4.0", "likes": 14, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.77
+  open_weights: true
+- id: madeagents/hammer2.1-3b
+  display_name: Hammer2.1-3b
+  org_id: madeagents
+  release_date: '2024-12-12'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - MadeAgents/Hammer2.1-3b
+  metadata: '{"downloads_all_time": 22136, "hf_id": "MadeAgents/Hammer2.1-3b", "license": "other", "likes": 22, "source": "hub_stats"}'
+  review_status: reviewed
+- id: madeagents/hammer2.1-7b
+  display_name: Hammer2.1-7b
+  org_id: madeagents
+  release_date: '2024-12-12'
+  tags:
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases:
+  - MadeAgents/Hammer2.1-7b
+  metadata: '{"downloads_all_time": 23280, "hf_id": "MadeAgents/Hammer2.1-7b", "license": "cc-by-nc-4.0", "likes": 32, "source": "hub_stats"}'
+  review_status: reviewed
+- id: mbzuai/k2-think
+  display_name: K2-Think
+  org_id: llm360
+  release_date: '2025-09-08'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - LLM360/K2-Think
+  - llm360/k2-think
+  metadata: '{"downloads_all_time": 121082, "hf_id": "LLM360/K2-Think", "library_name": "transformers", "license": "apache-2.0", "likes": 365, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: mbzuai/k2-v2
+  display_name: K2-V2
+  org_id: llm360
+  release_date: '2025-12-01'
+  tags:
+  - en
+  - license:apache-2.0
+  aliases:
+  - LLM360/K2-V2
+  - llm360/k2-v2
+  metadata: '{"downloads_all_time": 4580, "hf_id": "LLM360/K2-V2", "license": "apache-2.0", "likes": 32, "source": "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-2-13b
+  display_name: Llama-2-13b
+  org_id: meta
+  release_date: '2023-07-09'
+  tags:
+  - en
+  - license:llama2
+  aliases:
+  - meta-llama/Llama-2-13b
+  - meta-llama/llama-2-13b
+  metadata: '{"downloads_all_time": 914, "hf_id": "meta-llama/Llama-2-13b", "license": "llama2", "likes": 352, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-2-13b-chat
+  display_name: Llama-2-13b-chat
+  org_id: meta
+  release_date: '2023-07-09'
+  tags:
+  - en
+  - license:llama2
+  aliases:
+  - meta-llama/Llama-2-13b-chat
+  - meta-llama/llama-2-13b-chat
+  metadata: '{"downloads_all_time": 437, "hf_id": "meta-llama/Llama-2-13b-chat", "license": "llama2", "likes": 296, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-2-70b
+  display_name: Llama-2-70b
+  org_id: meta
+  release_date: '2023-07-09'
+  tags:
+  - en
+  - license:llama2
+  aliases:
+  - meta-llama/Llama-2-70b
+  - meta-llama/llama-2-70b
+  metadata: '{"downloads_all_time": 346, "hf_id": "meta-llama/Llama-2-70b", "license": "llama2", "likes": 538, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-2-70b-chat
+  display_name: Llama-2-70b-chat
+  org_id: meta
+  release_date: '2023-07-14'
+  tags:
+  - en
+  - license:llama2
+  aliases:
+  - meta-llama/Llama-2-70b-chat
+  - meta-llama/llama-2-70b-chat
+  metadata: '{"downloads_all_time": 125, "hf_id": "meta-llama/Llama-2-70b-chat", "license": "llama2", "likes": 399, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-2-7b
+  display_name: Llama-2-7b
+  org_id: meta
+  release_date: '2023-07-09'
+  tags:
+  - en
+  - license:llama2
+  aliases:
+  - meta-llama/Llama-2-7b
+  - meta-llama/llama-2-7b
+  metadata: '{"downloads_all_time": 5060, "hf_id": "meta-llama/Llama-2-7b", "license": "llama2", "likes": 4481, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-2-7b-chat
+  display_name: Llama-2-7b-chat
+  org_id: meta
+  release_date: '2023-07-09'
+  tags:
+  - en
+  - license:llama2
+  aliases:
+  - meta-llama/Llama-2-7b-chat
+  - meta-llama/llama-2-7b-chat
+  metadata: '{"downloads_all_time": 1221, "hf_id": "meta-llama/Llama-2-7b-chat", "license": "llama2", "likes": 619, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-3.1-405b
+  display_name: Llama-3.1-405B
+  org_id: meta
+  release_date: '2024-07-16'
+  tags:
+  - de
+  - en
+  - es
+  - eval-results
+  - fr
+  - hi
+  - it
+  - license:llama3.1
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.1-405B
+  - meta-llama/llama-3.1-405b
+  metadata: '{"downloads_all_time": 20505044, "hf_id": "meta-llama/Llama-3.1-405B", "library_name": "transformers", "license": "llama3.1", "likes": 970, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 202.93
+  open_weights: true
+- id: meta/llama-3.1-405b-instruct
+  display_name: Llama-3.1-405B-Instruct
+  org_id: meta
+  release_date: '2024-07-16'
+  tags:
+  - de
+  - en
+  - es
+  - eval-results
+  - fr
+  - hi
+  - it
+  - license:llama3.1
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.1-405B-Instruct
+  - meta-llama/llama-3.1-405b-instruct
+  metadata: '{"downloads_all_time": 3717425, "hf_id": "meta-llama/Llama-3.1-405B-Instruct", "library_name": "transformers", "license": "llama3.1", "likes": 595, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 202.93
+  open_weights: true
+- id: meta/llama-3.1-70b
+  display_name: Llama-3.1-70B
+  org_id: meta
+  release_date: '2024-07-14'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.1
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.1-70B
+  - meta-llama/llama-3.1-70b
+  metadata: '{"downloads_all_time": 2048127, "hf_id": "meta-llama/Llama-3.1-70B", "library_name": "transformers", "license": "llama3.1", "likes": 415, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 35.28
+  open_weights: true
+- id: meta/llama-3.1-70b-instruct
+  display_name: Llama-3.1-70B-Instruct
+  org_id: meta
+  release_date: '2024-07-16'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.1
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.1-70B-Instruct
+  - meta-llama/llama-3.1-70b-instruct
+  metadata: '{"downloads_all_time": 21108640, "hf_id": "meta-llama/Llama-3.1-70B-Instruct", "library_name": "transformers", "license": "llama3.1", "likes": 910, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 35.28
+  open_weights: true
+- id: meta/llama-3.1-8b
+  display_name: Llama-3.1-8B
+  org_id: meta
+  release_date: '2024-07-14'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.1
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.1-8B
+  - meta-llama/llama-3.1-8b
+  metadata: '{"downloads_all_time": 22429380, "hf_id": "meta-llama/Llama-3.1-8B", "library_name": "transformers", "license": "llama3.1", "likes": 2177, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.02
+  open_weights: true
+- id: meta/llama-3.1-8b-instruct
+  display_name: Llama-3.1-8B-Instruct
+  org_id: meta
+  release_date: '2024-07-18'
+  tags:
+  - de
+  - en
+  - es
+  - eval-results
+  - fr
+  - hi
+  - it
+  - license:llama3.1
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.1-8B-Instruct
+  - meta-llama/llama-3.1-8b-instruct
+  metadata: '{"downloads_all_time": 145002225, "hf_id": "meta-llama/Llama-3.1-8B-Instruct", "library_name": "transformers", "license": "llama3.1", "likes": 5781, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.02
+  open_weights: true
+- id: meta/llama-3.2-11b-vision
+  display_name: Llama-3.2-11B-Vision
+  org_id: meta
+  release_date: '2024-09-18'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-11B-Vision
+  - meta-llama/llama-3.2-11b-vision
+  metadata: '{"downloads_all_time": 885079, "hf_id": "meta-llama/Llama-3.2-11B-Vision", "library_name": "transformers", "license": "llama3.2", "likes": 586, "pipeline_tag": "image-text-to-text", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 5.32
+  open_weights: true
+- id: meta/llama-3.2-11b-vision-instruct
+  display_name: Llama-3.2-11B-Vision-Instruct
+  org_id: meta
+  release_date: '2024-09-18'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-11B-Vision-Instruct
+  - meta-llama/llama-3.2-11b-vision-instruct
+  metadata: '{"downloads_all_time": 17791366, "hf_id": "meta-llama/Llama-3.2-11B-Vision-Instruct", "library_name": "transformers", "license": "llama3.2", "likes": 1587, "pipeline_tag": "image-text-to-text",
+    "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 5.34
+  open_weights: true
+- id: meta/llama-3.2-1b
+  display_name: Llama-3.2-1B
+  org_id: meta
+  release_date: '2024-09-18'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-1B
+  - meta-llama/llama-3.2-1b
+  metadata: '{"downloads_all_time": 51079074, "hf_id": "meta-llama/Llama-3.2-1B", "library_name": "transformers", "license": "llama3.2", "likes": 2377, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.62
+  open_weights: true
+- id: meta/llama-3.2-1b-instruct
+  display_name: Llama-3.2-1B-Instruct
+  org_id: meta
+  release_date: '2024-09-18'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-1B-Instruct
+  - meta-llama/llama-3.2-1b-instruct
+  metadata: '{"downloads_all_time": 63216884, "hf_id": "meta-llama/Llama-3.2-1B-Instruct", "library_name": "transformers", "license": "llama3.2", "likes": 1392, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.62
+  open_weights: true
+- id: meta/llama-3.2-3b
+  display_name: Llama-3.2-3B
+  org_id: meta
+  release_date: '2024-09-18'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-3B
+  - meta-llama/llama-3.2-3b
+  metadata: '{"downloads_all_time": 11745146, "hf_id": "meta-llama/Llama-3.2-3B", "library_name": "transformers", "license": "llama3.2", "likes": 768, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.61
+  open_weights: true
+- id: meta/llama-3.2-3b-instruct
+  display_name: Llama-3.2-3B-Instruct
+  org_id: meta
+  release_date: '2024-09-18'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-3B-Instruct
+  - meta-llama/llama-3.2-3b-instruct
+  metadata: '{"downloads_all_time": 40691101, "hf_id": "meta-llama/Llama-3.2-3B-Instruct", "library_name": "transformers", "license": "llama3.2", "likes": 2119, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.61
+  open_weights: true
+- id: meta/llama-3.2-90b-vision
+  display_name: Llama-3.2-90B-Vision
+  org_id: meta
+  release_date: '2024-09-19'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-90B-Vision
+  - meta-llama/llama-3.2-90b-vision
+  metadata: '{"downloads_all_time": 141876, "hf_id": "meta-llama/Llama-3.2-90B-Vision", "library_name": "transformers", "license": "llama3.2", "likes": 134, "pipeline_tag": "image-text-to-text", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 44.3
+  open_weights: true
+- id: meta/llama-3.2-90b-vision-instruct
+  display_name: Llama-3.2-90B-Vision-Instruct
+  org_id: meta
+  release_date: '2024-09-19'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.2
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.2-90B-Vision-Instruct
+  - meta-llama/llama-3.2-90b-vision-instruct
+  metadata: '{"downloads_all_time": 720294, "hf_id": "meta-llama/Llama-3.2-90B-Vision-Instruct", "library_name": "transformers", "license": "llama3.2", "likes": 356, "pipeline_tag": "image-text-to-text",
+    "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 44.3
+  open_weights: true
+- id: meta/llama-3.3-70b-instruct
+  display_name: Llama-3.3-70B-Instruct
+  org_id: meta
+  release_date: '2024-11-26'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - it
+  - license:llama3.3
+  - pt
+  - safetensors
+  - th
+  aliases:
+  - meta-llama/Llama-3.3-70B-Instruct
+  - meta-llama/llama-3.3-70b-instruct
+  metadata: '{"downloads_all_time": 11206176, "hf_id": "meta-llama/Llama-3.3-70B-Instruct", "library_name": "transformers", "license": "llama3.3", "likes": 2748, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 35.28
+  open_weights: true
+- id: meta/llama-4-maverick-17b-128e
+  display_name: Llama-4-Maverick-17B-128E
+  org_id: meta
+  release_date: '2025-04-02'
+  tags:
+  - ar
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - id
+  - it
+  - license:other
+  - pt
+  - safetensors
+  - th
+  - tl
+  - vi
+  aliases:
+  - meta-llama/Llama-4-Maverick-17B-128E
+  - meta-llama/llama-4-maverick-17b-128e
+  metadata: '{"downloads_all_time": 74318, "hf_id": "meta-llama/Llama-4-Maverick-17B-128E", "library_name": "transformers", "license": "other", "likes": 94, "pipeline_tag": "image-text-to-text", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 200.79
+  open_weights: true
+- id: meta/llama-4-maverick-17b-128e-instruct
+  display_name: Llama-4-Maverick-17B-128E-Instruct
+  org_id: meta
+  release_date: '2025-04-01'
+  tags:
+  - ar
+  - de
+  - en
+  - es
+  - eval-results
+  - fr
+  - hi
+  - id
+  - it
+  - license:other
+  - pt
+  - safetensors
+  - th
+  - tl
+  - vi
+  aliases:
+  - meta-llama/Llama-4-Maverick-17B-128E-Instruct
+  - meta-llama/llama-4-maverick-17b-128e-instruct
+  metadata: '{"downloads_all_time": 579722, "hf_id": "meta-llama/Llama-4-Maverick-17B-128E-Instruct", "library_name": "transformers", "license": "other", "likes": 480, "pipeline_tag": "image-text-to-text",
+    "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 200.79
+  open_weights: true
+- id: meta/llama-4-maverick-17b-128e-instruct-fp8
+  display_name: Llama-4-Maverick-17B-128E-Instruct-FP8
+  org_id: meta
+  release_date: '2025-04-01'
+  tags:
+  - ar
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - id
+  - it
+  - license:other
+  - pt
+  - safetensors
+  - th
+  - tl
+  - vi
+  aliases:
+  - meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+  - meta-llama/llama-4-maverick-17b-128e-instruct-fp8
+  metadata: '{"downloads_all_time": 1207705, "hf_id": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8", "library_name": "transformers", "license": "other", "likes": 164, "pipeline_tag": "image-text-to-text",
+    "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 200.82
+  open_weights: true
+- id: meta/llama-4-scout-17b-16e
+  display_name: Llama-4-Scout-17B-16E
+  org_id: meta
+  release_date: '2025-04-02'
+  tags:
+  - ar
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - id
+  - it
+  - license:other
+  - pt
+  - safetensors
+  - th
+  - tl
+  - vi
+  aliases:
+  - meta-llama/Llama-4-Scout-17B-16E
+  - meta-llama/llama-4-scout-17b-16e
+  metadata: '{"downloads_all_time": 338325, "hf_id": "meta-llama/Llama-4-Scout-17B-16E", "library_name": "transformers", "license": "other", "likes": 240, "pipeline_tag": "image-text-to-text", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: meta/llama-4-scout-17b-16e-instruct
+  display_name: Llama-4-Scout-17B-16E-Instruct
+  org_id: meta
+  release_date: '2025-04-02'
+  tags:
+  - ar
+  - de
+  - en
+  - es
+  - fr
+  - hi
+  - id
+  - it
+  - license:other
+  - pt
+  - safetensors
+  - th
+  - tl
+  - vi
+  aliases:
+  - meta-llama/Llama-4-Scout-17B-16E-Instruct
+  - meta-llama/llama-4-scout-17b-16e-instruct
+  metadata: '{"downloads_all_time": 5588841, "hf_id": "meta-llama/Llama-4-Scout-17B-16E-Instruct", "library_name": "transformers", "license": "other", "likes": 1279, "pipeline_tag": "image-text-to-text",
+    "source": "hub_stats"}'
+  review_status: reviewed
+- id: microsoft/kosmos-2
+  display_name: kosmos-2-patch14-224
+  org_id: microsoft
+  release_date: '2023-10-02'
+  tags:
+  - license:mit
+  - safetensors
+  aliases:
+  - microsoft/kosmos-2-patch14-224
+  metadata: '{"downloads_all_time": 3877940, "hf_id": "microsoft/kosmos-2-patch14-224", "library_name": "transformers", "license": "mit", "likes": 184, "pipeline_tag": "image-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+- id: microsoft/phi-2
+  display_name: phi-2
+  org_id: microsoft
+  release_date: '2023-12-13'
+  tags:
+  - en
+  - license:mit
+  - nlp
+  - phi
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 19264987, "hf_id": "microsoft/phi-2", "library_name": "transformers", "license": "mit", "likes": 3448, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.39
+  open_weights: true
+- id: microsoft/phi-3-medium-128k-instruct
+  display_name: Phi-3-medium-128k-instruct
+  org_id: microsoft
+  release_date: '2024-05-07'
+  tags:
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3-medium-128k-instruct
+  metadata: '{"downloads_all_time": 1254156, "hf_id": "microsoft/Phi-3-medium-128k-instruct", "library_name": "transformers", "license": "mit", "likes": 388, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: microsoft/phi-3-medium-4k-instruct
+  display_name: Phi-3-medium-4k-instruct
+  org_id: microsoft
+  release_date: '2024-05-07'
+  tags:
+  - eval-results
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3-medium-4k-instruct
+  metadata: '{"downloads_all_time": 888721, "hf_id": "microsoft/Phi-3-medium-4k-instruct", "library_name": "transformers", "license": "mit", "likes": 226, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 6.98
+  open_weights: true
+- id: microsoft/phi-3-mini-128k-instruct
+  display_name: Phi-3-mini-128k-instruct
+  org_id: microsoft
+  release_date: '2024-04-22'
+  tags:
+  - en
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3-mini-128k-instruct
+  metadata: '{"downloads_all_time": 11174052, "hf_id": "microsoft/Phi-3-mini-128k-instruct", "library_name": "transformers", "license": "mit", "likes": 1699, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: microsoft/phi-3-mini-4k-instruct
+  display_name: Phi-3-mini-4k-instruct
+  org_id: microsoft
+  release_date: '2024-04-22'
+  tags:
+  - en
+  - eval-results
+  - fr
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3-mini-4k-instruct
+  metadata: '{"downloads_all_time": 28543143, "hf_id": "microsoft/Phi-3-mini-4k-instruct", "library_name": "transformers", "license": "mit", "likes": 1415, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.91
+  open_weights: true
+- id: microsoft/phi-3-small-128k-instruct
+  display_name: Phi-3-small-128k-instruct
+  org_id: microsoft
+  release_date: '2024-05-07'
+  tags:
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3-small-128k-instruct
+  metadata: '{"downloads_all_time": 178786, "hf_id": "microsoft/Phi-3-small-128k-instruct", "library_name": "transformers", "license": "mit", "likes": 182, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.7
+  open_weights: true
+- id: microsoft/phi-3-small-8k-instruct
+  display_name: Phi-3-small-8k-instruct
+  org_id: microsoft
+  release_date: '2024-05-07'
+  tags:
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3-small-8k-instruct
+  metadata: '{"downloads_all_time": 1026339, "hf_id": "microsoft/Phi-3-small-8k-instruct", "library_name": "transformers", "license": "mit", "likes": 177, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.7
+  open_weights: true
+- id: microsoft/phi-3.5-mini-instruct
+  display_name: Phi-3.5-mini-instruct
+  org_id: microsoft
+  release_date: '2024-08-16'
+  tags:
+  - eval-results
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3.5-mini-instruct
+  metadata: '{"downloads_all_time": 8918886, "hf_id": "microsoft/Phi-3.5-mini-instruct", "library_name": "transformers", "license": "mit", "likes": 974, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.91
+  open_weights: true
+- id: microsoft/phi-3.5-moe-instruct
+  display_name: Phi-3.5-MoE-instruct
+  org_id: microsoft
+  release_date: '2024-08-17'
+  tags:
+  - license:mit
+  - nlp
+  - safetensors
+  aliases:
+  - microsoft/Phi-3.5-MoE-instruct
+  metadata: '{"downloads_all_time": 1705989, "hf_id": "microsoft/Phi-3.5-MoE-instruct", "library_name": "transformers", "license": "mit", "likes": 574, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: microsoft/phi-4
+  display_name: phi-4
+  org_id: microsoft
+  release_date: '2024-12-11'
+  tags:
+  - en
+  - license:mit
+  - nlp
+  - phi
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 10692238, "hf_id": "microsoft/phi-4", "library_name": "transformers", "license": "mit", "likes": 2238, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: microsoft/phi-4-mini-instruct
+  display_name: Phi-4-mini-instruct
+  org_id: microsoft
+  release_date: '2025-02-19'
+  tags:
+  - ar
+  - cs
+  - da
+  - de
+  - en
+  - es
+  - fi
+  - fr
+  - he
+  - hu
+  - it
+  - ja
+  - ko
+  - license:mit
+  - nl
+  - nlp
+  - 'no'
+  - pl
+  - pt
+  - ru
+  - safetensors
+  - sv
+  - th
+  - tr
+  - uk
+  - zh
+  aliases:
+  - microsoft/Phi-4-mini-instruct
+  metadata: '{"downloads_all_time": 5638751, "hf_id": "microsoft/Phi-4-mini-instruct", "library_name": "transformers", "license": "mit", "likes": 733, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: minimax/minimax-m2
+  display_name: MiniMax-M2
+  org_id: minimaxai
+  release_date: '2025-10-22'
+  tags:
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - MiniMaxAI/MiniMax-M2
+  - minimaxai/minimax-m2
+  metadata: '{"downloads_all_time": 1963923, "hf_id": "MiniMaxAI/MiniMax-M2", "library_name": "transformers", "license": "other", "likes": 1491, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 114.35
+  open_weights: true
+- id: minimax/minimax-m2.1
+  display_name: MiniMax-M2.1
+  org_id: minimaxai
+  release_date: '2025-12-20'
+  tags:
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - MiniMaxAI/MiniMax-M2.1
+  - minimaxai/minimax-m2.1
+  metadata: '{"downloads_all_time": 413762, "hf_id": "MiniMaxAI/MiniMax-M2.1", "library_name": "transformers", "license": "other", "likes": 1350, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 114.35
+  open_weights: true
+- id: minimax/minimax-m2.5
+  display_name: MiniMax-M2.5
+  org_id: minimaxai
+  release_date: '2026-02-12'
+  tags:
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - MiniMaxAI/MiniMax-M2.5
+  - minimaxai/minimax-m2.5
+  metadata: '{"downloads_all_time": 1959984, "hf_id": "MiniMaxAI/MiniMax-M2.5", "library_name": "transformers", "license": "other", "likes": 1469, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 114.35
+  open_weights: true
+- id: minimaxai/minimax-text-01
+  display_name: MiniMax-Text-01
+  org_id: minimaxai
+  release_date: '2025-01-12'
+  tags:
+  - safetensors
+  aliases:
+  - MiniMaxAI/MiniMax-Text-01
+  metadata: '{"downloads_all_time": 73282, "hf_id": "MiniMaxAI/MiniMax-Text-01", "likes": 652, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: mistralai/codestral
+  display_name: Codestral-22B-v0.1
+  org_id: mistralai
+  release_date: '2024-05-29'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - mistralai/Codestral-22B-v0.1
+  - mistralai/codestral-22b-v0.1
+  metadata: '{"downloads_all_time": 5053598, "hf_id": "mistralai/Codestral-22B-v0.1", "library_name": "vllm", "license": "other", "likes": 1326, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 11.12
+  open_weights: true
+- id: mistralai/devstral-small-2505
+  display_name: Devstral-Small-2505
+  org_id: mistralai
+  release_date: '2025-05-12'
+  tags:
+  - ar
+  - bn
+  - de
+  - en
+  - es
+  - fa
+  - fr
+  - hi
+  - id
+  - it
+  - ja
+  - ko
+  - license:apache-2.0
+  - ms
+  - ne
+  - pl
+  - pt
+  - ro
+  - ru
+  - safetensors
+  - sr
+  - sv
+  - tr
+  - uk
+  - vi
+  - zh
+  aliases:
+  - mistralai/Devstral-Small-2505
+  metadata: '{"downloads_all_time": 808663, "hf_id": "mistralai/Devstral-Small-2505", "library_name": "vllm", "license": "apache-2.0", "likes": 869, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 11.79
+  open_weights: true
+- id: mistralai/mathstral
+  display_name: Mathstral-7B-v0.1
+  org_id: mistralai
+  release_date: '2024-07-16'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - mistralai/Mathstral-7B-v0.1
+  - mistralai/mathstral-7b-v0.1
+  metadata: '{"downloads_all_time": 5235071, "hf_id": "mistralai/Mathstral-7B-v0.1", "library_name": "mistral-common", "license": "apache-2.0", "likes": 242, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.62
+  open_weights: true
+- id: mistralai/mistral-7b
+  display_name: Mistral-7B-v0.1
+  org_id: mistralai
+  release_date: '2023-09-20'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - mistralai/Mistral-7B-v0.1
+  - mistralai/mistral-7b-v0.1
+  metadata: '{"downloads_all_time": 24458003, "hf_id": "mistralai/Mistral-7B-v0.1", "library_name": "transformers", "license": "apache-2.0", "likes": 4082, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.62
+  open_weights: true
+- id: mistralai/mistral-7b-instruct
+  display_name: Mistral-7B-Instruct-v0.3
+  org_id: mistralai
+  release_date: '2024-05-22'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - mistralai/Mistral-7B-Instruct-v0.3
+  - mistralai/mistral-7b-instruct-v0.3
+  metadata: '{"downloads_all_time": 28297135, "hf_id": "mistralai/Mistral-7B-Instruct-v0.3", "library_name": "vllm", "license": "apache-2.0", "likes": 2547, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.62
+  open_weights: true
+- id: mistralai/mistral-7b-instruct
+  display_name: Mistral-7B-Instruct-v0.2
+  org_id: mistralai
+  release_date: '2023-12-11'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - mistralai/Mistral-7B-Instruct-v0.2
+  - mistralai/mistral-7b-instruct-v0.2
+  metadata: '{"downloads_all_time": 56390263, "hf_id": "mistralai/Mistral-7B-Instruct-v0.2", "library_name": "transformers", "license": "apache-2.0", "likes": 3129, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.62
+  open_weights: true
+- id: mistralai/mistral-7b-instruct
+  display_name: Mistral-7B-Instruct-v0.1
+  org_id: mistralai
+  release_date: '2023-09-27'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - mistralai/Mistral-7B-Instruct-v0.1
+  - mistralai/mistral-7b-instruct-v0.1
+  metadata: '{"downloads_all_time": 16901403, "hf_id": "mistralai/Mistral-7B-Instruct-v0.1", "library_name": "transformers", "license": "apache-2.0", "likes": 1833, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: mistralai/mistral-large-2407
+  display_name: Mistral-Large-Instruct-2407
+  org_id: mistralai
+  release_date: '2024-07-24'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - ja
+  - ko
+  - license:other
+  - pt
+  - ru
+  - safetensors
+  - zh
+  aliases:
+  - mistralai/Mistral-Large-Instruct-2407
+  - mistralai/mistral-large-instruct-2407
+  metadata: '{"downloads_all_time": 5003782, "hf_id": "mistralai/Mistral-Large-Instruct-2407", "library_name": "vllm", "license": "other", "likes": 860, "source": "hub_stats"}'
+  review_status: reviewed
+- id: mistralai/mistral-large-2411
+  display_name: Mistral-Large-Instruct-2411
+  org_id: mistralai
+  release_date: '2024-11-14'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - ja
+  - ko
+  - license:other
+  - pt
+  - ru
+  - safetensors
+  - zh
+  aliases:
+  - mistralai/Mistral-Large-Instruct-2411
+  - mistralai/mistral-large-instruct-2411
+  metadata: '{"downloads_all_time": 4874985, "hf_id": "mistralai/Mistral-Large-Instruct-2411", "library_name": "vllm", "license": "other", "likes": 257, "source": "hub_stats"}'
+  review_status: reviewed
+- id: mistralai/mistral-nemo-base-2407
+  display_name: Mistral-Nemo-Base-2407
+  org_id: mistralai
+  release_date: '2024-07-18'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - ja
+  - license:apache-2.0
+  - pt
+  - ru
+  - safetensors
+  - zh
+  aliases:
+  - mistralai/Mistral-Nemo-Base-2407
+  metadata: '{"downloads_all_time": 5434391, "hf_id": "mistralai/Mistral-Nemo-Base-2407", "library_name": "vllm", "license": "apache-2.0", "likes": 344, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 6.12
+  open_weights: true
+- id: mistralai/mistral-nemo-instruct-2407
+  display_name: Mistral-Nemo-Instruct-2407
+  org_id: mistralai
+  release_date: '2024-07-17'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - ja
+  - license:apache-2.0
+  - pt
+  - ru
+  - safetensors
+  - zh
+  aliases:
+  - mistralai/Mistral-Nemo-Instruct-2407
+  metadata: '{"downloads_all_time": 8422296, "hf_id": "mistralai/Mistral-Nemo-Instruct-2407", "library_name": "vllm", "license": "apache-2.0", "likes": 1667, "source": "hub_stats"}'
+  review_status: reviewed
+- id: mistralai/mistral-small-legacy
+  display_name: Mistral-Small-Instruct-2409
+  org_id: mistralai
+  release_date: '2024-09-17'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - ja
+  - ko
+  - license:other
+  - pt
+  - ru
+  - safetensors
+  - zh
+  aliases:
+  - mistralai/Mistral-Small-Instruct-2409
+  - mistralai/mistral-small-instruct-2409
+  metadata: '{"downloads_all_time": 5203971, "hf_id": "mistralai/Mistral-Small-Instruct-2409", "library_name": "vllm", "license": "other", "likes": 393, "source": "hub_stats"}'
+  review_status: reviewed
+- id: mistralai/mixtral-8x22b
+  display_name: Mixtral-8x22B-v0.1
+  org_id: mistralai
+  release_date: '2024-04-16'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - license:apache-2.0
+  - moe
+  - safetensors
+  aliases:
+  - mistralai/Mixtral-8x22B-v0.1
+  - mistralai/mixtral-8x22b-v0.1
+  metadata: '{"downloads_all_time": 4843485, "hf_id": "mistralai/Mixtral-8x22B-v0.1", "library_name": "vllm", "license": "apache-2.0", "likes": 237, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 70.31
+  open_weights: true
+- id: mistralai/mixtral-8x22b-instruct
+  display_name: Mixtral-8x22B-Instruct-v0.1
+  org_id: mistralai
+  release_date: '2024-04-16'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - mistralai/Mixtral-8x22B-Instruct-v0.1
+  - mistralai/mixtral-8x22b-instruct-v0.1
+  metadata: '{"downloads_all_time": 6064119, "hf_id": "mistralai/Mixtral-8x22B-Instruct-v0.1", "library_name": "vllm", "license": "apache-2.0", "likes": 748, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 70.32
+  open_weights: true
+- id: mistralai/mixtral-8x7b
+  display_name: Mixtral-8x7B-v0.1
+  org_id: mistralai
+  release_date: '2023-12-01'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - license:apache-2.0
+  - moe
+  - safetensors
+  aliases:
+  - mistralai/Mixtral-8x7B-v0.1
+  - mistralai/mixtral-8x7b-v0.1
+  metadata: '{"downloads_all_time": 8176752, "hf_id": "mistralai/Mixtral-8x7B-v0.1", "library_name": "vllm", "license": "apache-2.0", "likes": 1806, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 23.35
+  open_weights: true
+- id: mistralai/mixtral-8x7b-instruct
+  display_name: Mixtral-8x7B-Instruct-v0.1
+  org_id: mistralai
+  release_date: '2023-12-10'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - license:apache-2.0
+  - safetensors
+  aliases:
+  - mistralai/Mixtral-8x7B-Instruct-v0.1
+  - mistralai/mixtral-8x7b-instruct-v0.1
+  metadata: '{"downloads_all_time": 20853139, "hf_id": "mistralai/Mixtral-8x7B-Instruct-v0.1", "library_name": "vllm", "license": "apache-2.0", "likes": 4674, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 23.35
+  open_weights: true
+- id: moonshotai/kimi-k2-thinking
+  display_name: Kimi-K2-Thinking
+  org_id: moonshotai
+  release_date: '2025-11-04'
+  tags:
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - moonshotai/Kimi-K2-Thinking
+  metadata: '{"downloads_all_time": 1403194, "hf_id": "moonshotai/Kimi-K2-Thinking", "library_name": "transformers", "license": "other", "likes": 1697, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 529.06
+  open_weights: true
+- id: moonshotai/kimi-k2.6
+  display_name: Kimi-K2.6
+  org_id: moonshotai
+  release_date: '2026-04-14'
+  tags:
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - moonshotai/Kimi-K2.6
+  metadata: '{"downloads_all_time": 755634, "hf_id": "moonshotai/Kimi-K2.6", "library_name": "transformers", "license": "other", "likes": 1184, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 529.29
+  open_weights: true
+- id: nicolinho/qrm-gemma-2-27b
+  display_name: QRM-Gemma-2-27B
+  org_id: nicolinho
+  release_date: '2024-12-12'
+  tags:
+  - license:llama3
+  - safetensors
+  aliases:
+  - nicolinho/QRM-Gemma-2-27B
+  metadata: '{"downloads_all_time": 5319, "hf_id": "nicolinho/QRM-Gemma-2-27B", "license": "llama3", "likes": 7, "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 13.62
+  open_weights: true
+- id: nvidia/llama-3.1-nemotron-ultra-253b-v1
+  display_name: Llama-3_1-Nemotron-Ultra-253B-v1
+  org_id: nvidia
+  release_date: '2025-04-07'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - nvidia/Llama-3_1-Nemotron-Ultra-253B-v1
+  - nvidia/llama-3-1-nemotron-ultra-253b-v1
+  metadata: '{"downloads_all_time": 604884, "hf_id": "nvidia/Llama-3_1-Nemotron-Ultra-253B-v1", "library_name": "transformers", "license": "other", "likes": 346, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: nvidia/nemotron-cascade-2-30b-a3b
+  display_name: Nemotron-Cascade-2-30B-A3B
+  org_id: nvidia
+  release_date: '2026-03-18'
+  tags:
+  - RL
+  - SFT
+  - en
+  - eval-results
+  - license:other
+  - safetensors
+  aliases:
+  - nvidia/Nemotron-Cascade-2-30B-A3B
+  metadata: '{"downloads_all_time": 324765, "hf_id": "nvidia/Nemotron-Cascade-2-30B-A3B", "library_name": "transformers", "license": "other", "likes": 492, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 15.79
+  open_weights: true
+- id: openai/clip
+  display_name: clip-vit-base-patch32
+  org_id: openai
+  release_date: '2022-03-02'
+  tags:
+  - jax
+  - tf
+  aliases:
+  - openai/clip-vit-base-patch32
+  metadata: '{"downloads_all_time": 575685076, "hf_id": "openai/clip-vit-base-patch32", "library_name": "transformers", "likes": 928, "pipeline_tag": "zero-shot-image-classification", "source": "hub_stats"}'
+  review_status: reviewed
+- id: openai/clip
+  display_name: clip-vit-large-patch14
+  org_id: openai
+  release_date: '2022-03-02'
+  tags:
+  - jax
+  - safetensors
+  - tf
+  aliases:
+  - openai/clip-vit-large-patch14
+  metadata: '{"downloads_all_time": 1130416871, "hf_id": "openai/clip-vit-large-patch14", "library_name": "transformers", "likes": 2000, "pipeline_tag": "zero-shot-image-classification", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.21
+  open_weights: true
+- id: openai/gpt-j-6b
+  display_name: gpt-j-6b
+  org_id: eleutherai
+  release_date: '2022-03-02'
+  tags:
+  - en
+  - jax
+  - license:apache-2.0
+  - tf
+  aliases:
+  - EleutherAI/gpt-j-6b
+  - eleutherai/gpt-j-6b
+  metadata: '{"downloads_all_time": 7779437, "hf_id": "EleutherAI/gpt-j-6b", "library_name": "transformers", "license": "apache-2.0", "likes": 1523, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: openai/gpt-oss-120b
+  display_name: gpt-oss-120b
+  org_id: openai
+  release_date: '2025-08-04'
+  tags:
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 34546669, "hf_id": "openai/gpt-oss-120b", "library_name": "transformers", "license": "apache-2.0", "likes": 4753, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 60.21
+  open_weights: true
+- id: openai/gpt-oss-20b
+  display_name: gpt-oss-20b
+  org_id: openai
+  release_date: '2025-08-04'
+  tags:
+  - eval-results
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 62711477, "hf_id": "openai/gpt-oss-20b", "library_name": "transformers", "license": "apache-2.0", "likes": 4581, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 10.76
+  open_weights: true
+- id: openai/gpt-oss-safeguard-20b
+  display_name: gpt-oss-safeguard-20b
+  org_id: openai
+  release_date: '2025-09-18'
+  tags:
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 361011, "hf_id": "openai/gpt-oss-safeguard-20b", "library_name": "transformers", "license": "apache-2.0", "likes": 220, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: openbmb/ultrarm-13b
+  display_name: UltraRM-13b
+  org_id: openbmb
+  release_date: '2023-09-22'
+  tags:
+  - license:mit
+  aliases:
+  - openbmb/UltraRM-13b
+  metadata: '{"downloads_all_time": 112349, "hf_id": "openbmb/UltraRM-13b", "library_name": "transformers", "license": "mit", "likes": 61, "source": "hub_stats"}'
+  review_status: reviewed
+- id: openllmplayground/pandagpt-13b
+  display_name: pandagpt_13b_max_len_400
+  org_id: openllmplayground
+  release_date: '2023-05-21'
+  tags:
+  - license:cc-by-nc-sa-4.0
+  aliases:
+  - openllmplayground/pandagpt-13b-max-len-400
+  - openllmplayground/pandagpt_13b_max_len_400
+  metadata: '{"downloads_all_time": 0, "hf_id": "openllmplayground/pandagpt_13b_max_len_400", "license": "cc-by-nc-sa-4.0", "likes": 6, "source": "hub_stats"}'
+  review_status: reviewed
+- id: pku-alignment/beaver-7b-cost
+  display_name: beaver-7b-v1.0-cost
+  org_id: pku-alignment
+  release_date: '2023-07-10'
+  tags:
+  - en
+  - safetensors
+  aliases:
+  - PKU-Alignment/beaver-7b-v1.0-cost
+  - pku-alignment/beaver-7b-v1.0-cost
+  metadata: '{"downloads_all_time": 91962, "hf_id": "PKU-Alignment/beaver-7b-v1.0-cost", "library_name": "safe-rlhf", "likes": 10, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.3
+  open_weights: true
+- id: pku-alignment/beaver-7b-cost
+  display_name: beaver-7b-v2.0-cost
+  org_id: pku-alignment
+  release_date: '2024-04-19'
+  tags:
+  - en
+  - safetensors
+  aliases:
+  - PKU-Alignment/beaver-7b-v2.0-cost
+  - pku-alignment/beaver-7b-v2.0-cost
+  metadata: '{"downloads_all_time": 1250, "hf_id": "PKU-Alignment/beaver-7b-v2.0-cost", "library_name": "safe-rlhf", "likes": 0, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.3
+  open_weights: true
+- id: pku-alignment/beaver-7b-reward
+  display_name: beaver-7b-v1.0-reward
+  org_id: pku-alignment
+  release_date: '2023-07-08'
+  tags:
+  - en
+  - safetensors
+  aliases:
+  - PKU-Alignment/beaver-7b-v1.0-reward
+  - pku-alignment/beaver-7b-v1.0-reward
+  metadata: '{"downloads_all_time": 87444, "hf_id": "PKU-Alignment/beaver-7b-v1.0-reward", "library_name": "safe-rlhf", "likes": 17, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.3
+  open_weights: true
+- id: pku-alignment/beaver-7b-reward
+  display_name: beaver-7b-v2.0-reward
+  org_id: pku-alignment
+  release_date: '2024-04-19'
+  tags:
+  - en
+  - safetensors
+  aliases:
+  - PKU-Alignment/beaver-7b-v2.0-reward
+  - pku-alignment/beaver-7b-v2.0-reward
+  metadata: '{"downloads_all_time": 1383, "hf_id": "PKU-Alignment/beaver-7b-v2.0-reward", "library_name": "safe-rlhf", "likes": 0, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.3
+  open_weights: true
+- id: rlhflow/armorm-llama3-8b
+  display_name: ArmoRM-Llama3-8B-v0.1
+  org_id: rlhflow
+  release_date: '2024-05-23'
+  tags:
+  - license:llama3
+  - safetensors
+  aliases:
+  - RLHFlow/ArmoRM-Llama3-8B-v0.1
+  - rlhflow/armorm-llama3-8b-v0.1
+  metadata: '{"downloads_all_time": 475998, "hf_id": "RLHFlow/ArmoRM-Llama3-8B-v0.1", "library_name": "transformers", "license": "llama3", "likes": 184, "pipeline_tag": "text-classification", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: salesforce/instructblip-7b
+  display_name: instructblip-vicuna-7b
+  org_id: salesforce
+  release_date: '2023-05-22'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - Salesforce/instructblip-vicuna-7b
+  - salesforce/instructblip-vicuna-7b
+  metadata: '{"downloads_all_time": 4102887, "hf_id": "Salesforce/instructblip-vicuna-7b", "library_name": "transformers", "license": "other", "likes": 99, "pipeline_tag": "image-text-to-text", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.96
+  open_weights: true
+- id: salesforce/xlam-2-1b-fc-r
+  display_name: xLAM-2-1b-fc-r
+  org_id: salesforce
+  release_date: '2025-03-27'
+  tags:
+  - en
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases:
+  - Salesforce/xLAM-2-1b-fc-r
+  metadata: '{"downloads_all_time": 123658, "hf_id": "Salesforce/xLAM-2-1b-fc-r", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 12, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 0.77
+  open_weights: true
+- id: salesforce/xlam-2-32b-fc-r
+  display_name: xLAM-2-32b-fc-r
+  org_id: salesforce
+  release_date: '2025-03-27'
+  tags:
+  - en
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases:
+  - Salesforce/xLAM-2-32b-fc-r
+  metadata: '{"downloads_all_time": 63524, "hf_id": "Salesforce/xLAM-2-32b-fc-r", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 34, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.38
+  open_weights: true
+- id: salesforce/xlam-2-3b-fc-r
+  display_name: xLAM-2-3b-fc-r
+  org_id: salesforce
+  release_date: '2025-03-27'
+  tags:
+  - en
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases:
+  - Salesforce/xLAM-2-3b-fc-r
+  metadata: '{"downloads_all_time": 170812, "hf_id": "Salesforce/xLAM-2-3b-fc-r", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 16, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.54
+  open_weights: true
+- id: sarvam/sarvam-1
+  display_name: sarvam-1
+  org_id: sarvamai
+  release_date: '2024-10-23'
+  tags:
+  - bn
+  - en
+  - gu
+  - hi
+  - kn
+  - ml
+  - mr
+  - or
+  - pa
+  - safetensors
+  - ta
+  - te
+  aliases:
+  - sarvamai/sarvam-1
+  metadata: '{"downloads_all_time": 71147, "hf_id": "sarvamai/sarvam-1", "library_name": "transformers", "likes": 133, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.26
+  open_weights: true
+- id: sarvam/sarvam-105b
+  display_name: sarvam-105b
+  org_id: sarvamai
+  release_date: '2026-03-03'
+  tags:
+  - as
+  - bn
+  - bo
+  - doi
+  - en
+  - gu
+  - hi
+  - kn
+  - kok
+  - ks
+  - license:apache-2.0
+  - mai
+  - ml
+  - mni
+  - mr
+  - ne
+  - or
+  - pa
+  - sa
+  - safetensors
+  - sat
+  - sd
+  - ta
+  - te
+  - ur
+  aliases:
+  - sarvamai/sarvam-105b
+  metadata: '{"downloads_all_time": 43132, "hf_id": "sarvamai/sarvam-105b", "library_name": "transformers", "license": "apache-2.0", "likes": 266, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 53.02
+  open_weights: true
+- id: sarvam/sarvam-30b
+  display_name: sarvam-30b
+  org_id: sarvamai
+  release_date: '2026-03-03'
+  tags:
+  - as
+  - bn
+  - bo
+  - doi
+  - en
+  - gu
+  - hi
+  - kn
+  - kok
+  - ks
+  - license:apache-2.0
+  - mai
+  - ml
+  - mni
+  - mr
+  - ne
+  - or
+  - pa
+  - sa
+  - safetensors
+  - sat
+  - sd
+  - ta
+  - te
+  - ur
+  aliases:
+  - sarvamai/sarvam-30b
+  metadata: '{"downloads_all_time": 101539, "hf_id": "sarvamai/sarvam-30b", "library_name": "transformers", "license": "apache-2.0", "likes": 187, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 16.08
+  open_weights: true
+- id: sfairxc/fsfairx-llama3-rm
+  display_name: FsfairX-LLaMA3-RM-v0.1
+  org_id: sfairxc
+  release_date: '2024-04-20'
+  tags:
+  - license:cc-by-nc-4.0
+  - safetensors
+  aliases:
+  - sfairXC/FsfairX-LLaMA3-RM-v0.1
+  - sfairxc/fsfairx-llama3-rm-v0.1
+  metadata: '{"downloads_all_time": 226787, "hf_id": "sfairXC/FsfairX-LLaMA3-RM-v0.1", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 60, "pipeline_tag": "text-classification", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.75
+  open_weights: true
+- id: showlab/show-o
+  display_name: show-o
+  org_id: showlab
+  release_date: '2024-08-26'
+  tags:
+  - license:mit
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 4120, "hf_id": "showlab/show-o", "library_name": "diffusers", "license": "mit", "likes": 17, "pipeline_tag": "any-to-any", "source": "hub_stats"}'
+  review_status: reviewed
+- id: skywork/skywork-reward-gemma-2-27b
+  display_name: Skywork-Reward-Gemma-2-27B-v0.2
+  org_id: skywork
+  release_date: '2024-10-14'
+  tags:
+  - safetensors
+  aliases:
+  - Skywork/Skywork-Reward-Gemma-2-27B-v0.2
+  - skywork/skywork-reward-gemma-2-27b-v0.2
+  metadata: '{"downloads_all_time": 89360, "hf_id": "Skywork/Skywork-Reward-Gemma-2-27B-v0.2", "library_name": "transformers", "likes": 34, "pipeline_tag": "text-classification", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 13.61
+  open_weights: true
+- id: stabilityai/stable-diffusion-3.5-large
+  display_name: stable-diffusion-3.5-large
+  org_id: stabilityai
+  release_date: '2024-10-22'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 2281323, "hf_id": "stabilityai/stable-diffusion-3.5-large", "library_name": "diffusers", "license": "other", "likes": 3454, "pipeline_tag": "text-to-image", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: stabilityai/stable-diffusion-3.5-medium
+  display_name: stable-diffusion-3.5-medium
+  org_id: stabilityai
+  release_date: '2024-10-29'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 3633626, "hf_id": "stabilityai/stable-diffusion-3.5-medium", "library_name": "diffusers", "license": "other", "likes": 929, "pipeline_tag": "text-to-image", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: stabilityai/stablelm-2-12b
+  display_name: stablelm-2-12b
+  org_id: stabilityai
+  release_date: '2024-03-21'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - it
+  - license:other
+  - nl
+  - pt
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 59138, "hf_id": "stabilityai/stablelm-2-12b", "library_name": "transformers", "license": "other", "likes": 121, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 6.07
+  open_weights: true
+- id: stabilityai/stablelm-2-12b-chat
+  display_name: stablelm-2-12b-chat
+  org_id: stabilityai
+  release_date: '2024-04-04'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 50592, "hf_id": "stabilityai/stablelm-2-12b-chat", "library_name": "transformers", "license": "other", "likes": 89, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: stabilityai/stablelm-3b-4e1t
+  display_name: stablelm-3b-4e1t
+  org_id: stabilityai
+  release_date: '2023-09-29'
+  tags:
+  - en
+  - license:cc-by-sa-4.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 677258, "hf_id": "stabilityai/stablelm-3b-4e1t", "library_name": "transformers", "license": "cc-by-sa-4.0", "likes": 312, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.4
+  open_weights: true
+- id: stabilityai/stablelm-zephyr-3b
+  display_name: stablelm-zephyr-3b
+  org_id: stabilityai
+  release_date: '2023-11-21'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 474134, "hf_id": "stabilityai/stablelm-zephyr-3b", "library_name": "transformers", "license": "other", "likes": 261, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.4
+  open_weights: true
+- id: tiiuae/falcon-180b-chat
+  display_name: falcon-180B-chat
+  org_id: tiiuae
+  release_date: '2023-09-04'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - license:unknown
+  - safetensors
+  aliases:
+  - tiiuae/falcon-180B-chat
+  metadata: '{"downloads_all_time": 226088, "hf_id": "tiiuae/falcon-180B-chat", "library_name": "transformers", "license": "unknown", "likes": 547, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 89.76
+  open_weights: true
+- id: tiiuae/falcon-40b
+  display_name: falcon-40b
+  org_id: tiiuae
+  release_date: '2023-05-24'
+  tags:
+  - de
+  - en
+  - es
+  - fr
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 2616096, "hf_id": "tiiuae/falcon-40b", "library_name": "transformers", "license": "apache-2.0", "likes": 2437, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 20.92
+  open_weights: true
+- id: tiiuae/falcon-40b-instruct
+  display_name: falcon-40b-instruct
+  org_id: tiiuae
+  release_date: '2023-05-25'
+  tags:
+  - en
+  - license:apache-2.0
+  aliases: []
+  metadata: '{"downloads_all_time": 10474637, "hf_id": "tiiuae/falcon-40b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 1177, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: tiiuae/falcon-7b
+  display_name: falcon-7b
+  org_id: tiiuae
+  release_date: '2023-04-24'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 13272169, "hf_id": "tiiuae/falcon-7b", "library_name": "transformers", "license": "apache-2.0", "likes": 1101, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.61
+  open_weights: true
+- id: tiiuae/falcon-7b
+  display_name: falcon-mamba-7b
+  org_id: tiiuae
+  release_date: '2024-07-17'
+  tags:
+  - en
+  - license:other
+  - safetensors
+  aliases:
+  - tiiuae/falcon-mamba-7b
+  metadata: '{"downloads_all_time": 352145, "hf_id": "tiiuae/falcon-mamba-7b", "library_name": "transformers", "license": "other", "likes": 242, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: tiiuae/falcon-7b-instruct
+  display_name: falcon-7b-instruct
+  org_id: tiiuae
+  release_date: '2023-04-25'
+  tags:
+  - en
+  - license:apache-2.0
+  - safetensors
+  aliases: []
+  metadata: '{"downloads_all_time": 26791376, "hf_id": "tiiuae/falcon-7b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 1032, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.61
+  open_weights: true
+- id: tiiuae/falcon3-10b-instruct
+  display_name: Falcon3-10B-Instruct
+  org_id: tiiuae
+  release_date: '2024-12-14'
+  tags:
+  - license:other
+  - safetensors
+  aliases:
+  - tiiuae/Falcon3-10B-Instruct
+  metadata: '{"downloads_all_time": 468582, "hf_id": "tiiuae/Falcon3-10B-Instruct", "library_name": "transformers", "license": "other", "likes": 117, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+- id: tiiuae/falcon3-7b-instruct
+  display_name: Falcon3-7B-Instruct
+  org_id: tiiuae
+  release_date: '2024-11-29'
+  tags:
+  - en
+  - es
+  - fr
+  - license:other
+  - pt
+  - safetensors
+  aliases:
+  - tiiuae/Falcon3-7B-Instruct
+  metadata: '{"downloads_all_time": 451648, "hf_id": "tiiuae/Falcon3-7B-Instruct", "library_name": "transformers", "license": "other", "likes": 79, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.73
+  open_weights: true
+- id: weqweasdas/rm-gemma-2b
+  display_name: RM-Gemma-2B
+  org_id: weqweasdas
+  release_date: '2024-02-25'
+  tags:
+  - safetensors
+  aliases:
+  - weqweasdas/RM-Gemma-2B
+  metadata: '{"downloads_all_time": 92740, "hf_id": "weqweasdas/RM-Gemma-2B", "library_name": "transformers", "likes": 25, "pipeline_tag": "text-classification", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 1.25
+  open_weights: true
+- id: weqweasdas/rm-gemma-7b
+  display_name: RM-Gemma-7B
+  org_id: weqweasdas
+  release_date: '2024-02-28'
+  tags:
+  - safetensors
+  aliases:
+  - weqweasdas/RM-Gemma-7B
+  metadata: '{"downloads_all_time": 42913, "hf_id": "weqweasdas/RM-Gemma-7B", "library_name": "transformers", "likes": 8, "pipeline_tag": "text-classification", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 4.27
+  open_weights: true
+- id: weqweasdas/rm-mistral-7b
+  display_name: RM-Mistral-7B
+  org_id: weqweasdas
+  release_date: '2024-03-22'
+  tags:
+  - safetensors
+  aliases:
+  - weqweasdas/RM-Mistral-7B
+  metadata: '{"downloads_all_time": 56497, "hf_id": "weqweasdas/RM-Mistral-7B", "library_name": "transformers", "likes": 25, "pipeline_tag": "text-classification", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 3.56
+  open_weights: true
+- id: wizardlm/wizardcoder-15b
+  display_name: WizardCoder-15B-V1.0
+  org_id: wizardlmteam
+  release_date: '2023-06-14'
+  tags:
+  - license:bigscience-openrail-m
+  aliases:
+  - WizardLMTeam/WizardCoder-15B-V1.0
+  - wizardlmteam/wizardcoder-15b-v1.0
+  metadata: '{"downloads_all_time": 177358, "hf_id": "WizardLMTeam/WizardCoder-15B-V1.0", "library_name": "transformers", "license": "bigscience-openrail-m", "likes": 763, "pipeline_tag": "text-generation",
+    "source": "hub_stats"}'
+  review_status: reviewed
+- id: wizardlm/wizardcoder-python-13b
+  display_name: WizardCoder-Python-13B-V1.0
+  org_id: wizardlmteam
+  release_date: '2023-08-26'
+  tags:
+  - license:llama2
+  aliases:
+  - WizardLMTeam/WizardCoder-Python-13B-V1.0
+  - wizardlmteam/wizardcoder-python-13b-v1.0
+  metadata: '{"downloads_all_time": 35539, "hf_id": "WizardLMTeam/WizardCoder-Python-13B-V1.0", "library_name": "transformers", "license": "llama2", "likes": 109, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: wizardlm/wizardcoder-python-34b
+  display_name: WizardCoder-Python-34B-V1.0
+  org_id: wizardlmteam
+  release_date: '2023-08-26'
+  tags:
+  - license:llama2
+  aliases:
+  - WizardLMTeam/WizardCoder-Python-34B-V1.0
+  - wizardlmteam/wizardcoder-python-34b-v1.0
+  metadata: '{"downloads_all_time": 309993, "hf_id": "WizardLMTeam/WizardCoder-Python-34B-V1.0", "library_name": "transformers", "license": "llama2", "likes": 772, "pipeline_tag": "text-generation", "source":
+    "hub_stats"}'
+  review_status: reviewed
+- id: yandex/yalm-100b
+  display_name: yalm-100b
+  org_id: yandex
+  release_date: '2022-06-23'
+  tags:
+  - NLG
+  - en
+  - gpt
+  - license:apache-2.0
+  - ru
+  aliases: []
+  metadata: '{"downloads_all_time": 0, "hf_id": "yandex/yalm-100b", "license": "apache-2.0", "likes": 141, "source": "hub_stats"}'
+  review_status: reviewed
+- id: zai/glm-4.6
+  display_name: GLM-4.6
+  org_id: zai
+  release_date: '2025-09-29'
+  tags:
+  - en
+  - eval-results
+  - license:mit
+  - safetensors
+  - zh
+  aliases:
+  - zai-org/GLM-4.6
+  - zai-org/glm-4.6
+  metadata: '{"downloads_all_time": 688523, "hf_id": "zai-org/GLM-4.6", "library_name": "transformers", "license": "mit", "likes": 1216, "pipeline_tag": "text-generation", "source": "hub_stats"}'
+  review_status: reviewed
+  params_billions: 178.39
+  open_weights: true

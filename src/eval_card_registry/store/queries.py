@@ -61,6 +61,92 @@ def _get_pending(store: RegistryStore, table: str) -> list[dict]:
     return store._pending.setdefault(table, [])
 
 
+def decode_parents(value) -> list[dict]:
+    """Decode `canonical_models.parents` (JSON-encoded list-of-edges) to a
+    Python list. Tolerant of NA/NaN, None, empty strings, and pre-decoded lists."""
+    if _is_na(value) or value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    if isinstance(value, str):
+        s = value.strip()
+        if not s or s in ("[]", "null"):
+            return []
+        try:
+            decoded = json.loads(s)
+            return list(decoded) if isinstance(decoded, list) else []
+        except (ValueError, TypeError):
+            return []
+    return []
+
+
+def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
+    """Walk `canonical_models.parents` and populate the denormalized
+    `root_model_id` and `lineage_origin_org_id` columns.
+
+    - `root_model_id`: walk parents up through *only* `quantized` edges
+      (identity-preserving chain). NULL when self has no quantized
+      ancestor — i.e., self IS the identity root.
+    - `lineage_origin_org_id`: walk through any non-`variant` edge
+      (quantized / finetune / merge / adapter) to the deepest ancestor,
+      then read its `org_id`. For Meta-originated models = self.org_id;
+      for finetunes/quants of someone else's weights = upstream lab.
+
+    Both are caches recomputed on every seed/refresh. Returns counts dict
+    for logging.
+    """
+    df = store.table("canonical_models")
+    if df.empty:
+        return {"root_set": 0, "lineage_set": 0}
+
+    parents_by_id: dict[str, list[dict]] = {}
+    org_by_id: dict[str, Optional[str]] = {}
+    for _, row in df.iterrows():
+        cid = row["id"]
+        parents_by_id[cid] = decode_parents(row.get("parents"))
+        org = row.get("org_id")
+        org_by_id[cid] = None if _is_na(org) else org
+
+    def _walk(start: str, allowed: set[str]) -> str:
+        """Walk parents through edges whose relationship is in `allowed`.
+        Returns the deepest reachable id; stops on no-match or cycle."""
+        visited = {start}
+        current = start
+        while True:
+            edges = parents_by_id.get(current, []) or []
+            next_id: Optional[str] = None
+            for p in edges:
+                if not isinstance(p, dict):
+                    continue
+                if p.get("relationship") in allowed and p.get("id"):
+                    next_id = p["id"]
+                    break
+            if not next_id or next_id in visited or next_id not in parents_by_id:
+                return current
+            visited.add(next_id)
+            current = next_id
+
+    root_updates: dict[str, Optional[str]] = {}
+    lineage_updates: dict[str, Optional[str]] = {}
+    for cid in parents_by_id:
+        # Identity root via quantized-only walk
+        root = _walk(cid, {"quantized"})
+        root_updates[cid] = root if root != cid else None
+        # Lineage origin via any non-variant edge; org of deepest ancestor
+        ancestor = _walk(cid, {"quantized", "finetune", "merge", "adapter"})
+        lineage_updates[cid] = org_by_id.get(ancestor) or org_by_id.get(cid)
+
+    df = df.copy()
+    df["root_model_id"] = df["id"].map(root_updates).astype(pd.StringDtype())
+    df["lineage_origin_org_id"] = df["id"].map(lineage_updates).astype(pd.StringDtype())
+    store.set_table("canonical_models", df)
+
+    return {
+        "root_set": int(df["root_model_id"].notna().sum()),
+        "lineage_set": int(df["lineage_origin_org_id"].notna().sum()),
+    }
+
+
 def flush_pending(store: RegistryStore) -> None:
     """Concat all buffered rows into their respective tables in one shot."""
     pending = getattr(store, "_pending", {})

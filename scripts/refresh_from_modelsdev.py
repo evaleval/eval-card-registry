@@ -57,6 +57,7 @@ _FAMILY_DATE_RES = [
     re.compile(r"-preview-\d{4}-\d{2}-\d{2}$"),  # -preview-2024-05-13 (rare)
     re.compile(r"-preview$"),                # bare -preview
     re.compile(r"-latest$"),                 # -latest hosting tag
+    re.compile(r"-v\d+(\.\d+)*$", re.IGNORECASE),  # version suffix: -v0.3, -v1, -v1.0.0
 ]
 # Legacy alias names kept for any external callers (tests etc.)
 _FAMILY_LATEST_RE = _FAMILY_DATE_RES[-1]
@@ -162,19 +163,118 @@ def _family_for(model: dict) -> str:
     return raw
 
 
-def _build_family_entry(org_id: str, family_slug: str, models: list[dict]) -> dict:
-    """Collapse a list of snapshot/variant model records into one canonical entry.
+# --- Suffix → (relationship, axis) classification --------------------------
+# Used to translate the diff between a snapshot's id and its family slug
+# into a typed `parents` edge. The classification table mirrors the
+# one-shot promotion pass that split buried aliases into their own
+# canonicals — keeping the same enum values here means models.dev
+# refresh and curated core.yaml entries land in identical shapes.
+_TOKEN_CLASSIFICATIONS: dict[str, tuple[str, str | None]] = {
+    "instruct": ("variant", "mode"),
+    "it": ("variant", "mode"),
+    "chat": ("variant", "mode"),
+    "base": ("variant", "mode"),
+    "thinking": ("variant", "mode"),
+    "reasoning": ("variant", "mode"),
+    "nothink": ("variant", "mode"),
+    "guard": ("variant", "mode"),
+    "safeguard": ("variant", "mode"),
+    "moderation": ("variant", "mode"),
+    "vision": ("variant", "modality"),
+    "vl": ("variant", "modality"),
+    "coder": ("variant", "domain"),
+    "code": ("variant", "domain"),
+    "math": ("variant", "domain"),
+    "turbo": ("quantized", None),
+    "fp8": ("quantized", None),
+    "fp16": ("quantized", None),
+    "bf16": ("quantized", None),
+    "int4": ("quantized", None),
+    "int8": ("quantized", None),
+    "awq": ("quantized", None),
+    "gptq": ("quantized", None),
+    "gguf": ("quantized", None),
+}
+_VERSION_RE = re.compile(r"^v\d+(\.\d+)*$", re.IGNORECASE)
+_DATE_8_RE = re.compile(r"^\d{8}$")
+_DATE_4_RE = re.compile(r"^\d{4}$")
+_DATE_3_RE = re.compile(r"^\d{3}$")
+_MOE_ACTIVE_RE = re.compile(r"^a\d+b$", re.IGNORECASE)
 
-    Aliases include every snapshot id we saw under this family + the bare
-    family slug. The fuzzy resolver further strips dates/thinking budgets, so
-    snapshot variants beyond what models.dev lists also resolve correctly.
+
+def _classify_token(token: str) -> tuple[str, str | None] | None:
+    t = token.lower()
+    if t in _TOKEN_CLASSIFICATIONS:
+        return _TOKEN_CLASSIFICATIONS[t]
+    if _VERSION_RE.match(t) or _DATE_8_RE.match(t) or _DATE_4_RE.match(t) or _DATE_3_RE.match(t):
+        return ("variant", "version")
+    if _MOE_ACTIVE_RE.match(t):
+        return ("variant", "size")
+    return None
+
+
+def _classify_suffix_segments(suffix: str) -> list[tuple[str, str | None, str]]:
+    """Greedy left-to-right parse of a hyphen/dot-separated suffix.
+
+    Returns a list of (relationship, axis, token) segments. When a single
+    token can't be classified, falls back to a single (variant, version, suffix)
+    segment so we always emit at least one parent edge — consumer can refine
+    via curated core.yaml entries that override on collision.
     """
-    canonical_id = f"{org_id}/{family_slug}"
+    if not suffix:
+        return []
+    # Normalize separators within the suffix for token splitting (mirrors
+    # what _slugify does to ids — but apply also to dot for v0.1 → v0-1).
+    norm = re.sub(r"[._]+", "-", suffix.lower()).strip("-")
+    if not norm:
+        return []
+    tokens = norm.split("-")
+    segments: list[tuple[str, str | None, str]] = []
+    i = 0
+    while i < len(tokens):
+        # YYYY-MM-DD across 3 tokens
+        if i + 3 <= len(tokens):
+            window = "-".join(tokens[i:i + 3])
+            if re.match(r"^\d{4}-\d{2}-\d{2}$", window):
+                segments.append(("variant", "version", window))
+                i += 3
+                continue
+        # vN-N across 2 tokens (slugified v0.3 → v0-3)
+        if i + 2 <= len(tokens):
+            window = "-".join(tokens[i:i + 2])
+            if re.match(r"^v\d+-\d+$", window) or re.match(r"^\d{4}-\d{2}$", window):
+                segments.append(("variant", "version", window))
+                i += 2
+                continue
+        cls = _classify_token(tokens[i])
+        if cls is None:
+            # Unknown token mid-suffix — bail out and emit the rest as a
+            # single version segment so at least the outer parent edge is set.
+            tail = "-".join(tokens[i:])
+            segments.append(("variant", "version", tail))
+            return segments
+        relationship, axis = cls
+        segments.append((relationship, axis, tokens[i]))
+        i += 1
+    return segments
 
-    # Pick the most descriptive display name: prefer entries whose id matches
-    # the family slug exactly (the "canonical" snapshot for that family).
-    # Fall back to a humanized slug rather than picking an arbitrary snapshot
-    # name (which would produce e.g. "Qwen3 235B-A22B" for the qwen family).
+
+def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> list[dict]:
+    """Emit canonical entries for a family.
+
+    Returns a list:
+      [0]   family root canonical (parents=[])
+      [1..] one child per snapshot/variant whose slugified id != family_slug,
+            each with a typed `parents` edge. Compound suffixes (e.g.
+            `mistral-7b-instruct-v0-3`) materialize their intermediate
+            canonicals so models.dev output matches the post-promotion
+            shape of core.yaml — this matters because the seed loader's
+            parents-merge is union-by-id, so disagreement on the parent
+            id between source and core would produce a spurious second edge.
+    """
+    family_canonical_id = f"{org_id}/{family_slug}"
+
+    # ---- Family root display_name + aggregated metadata ----
     display_name = ""
     for m in models:
         if _slugify(m.get("id", "")) == family_slug:
@@ -183,26 +283,10 @@ def _build_family_entry(org_id: str, family_slug: str, models: list[dict]) -> di
     if not display_name:
         display_name = " ".join(p.capitalize() for p in family_slug.replace("_", "-").split("-"))
 
-    # Aliases: every snapshot id (e.g. claude-opus-4-5-20251101), each
-    # listed both bare AND with the org prefix. EEE corpus contains both
-    # forms (`claude-opus-4-5-20251101` from API logs and
-    # `anthropic/claude-opus-4-5-20251101` from HF-format ids), so both
-    # need exact-match coverage. Display name is added by the seed CLI.
-    snapshot_ids = sorted({_slugify(m["id"]) for m in models if m.get("id")})
-    aliases: list[str] = []
-    for snap in snapshot_ids:
-        if snap != family_slug:
-            aliases.append(snap)
-        # Always include the org-prefixed form (covers HF-format raw values
-        # like `anthropic/claude-3-5-haiku-20241022` that have a different
-        # word order than the lab's display name).
-        prefixed = f"{org_id}/{snap}"
-        if prefixed != canonical_id:
-            aliases.append(prefixed)
-
-    # Extract release dates / open_weights flag from any snapshot that has them
     open_weights = any(m.get("open_weights") for m in models)
     release_dates = sorted({m["release_date"] for m in models if m.get("release_date")})
+    release_date = release_dates[0] if release_dates else None
+    snapshot_ids = sorted({_slugify(m["id"]) for m in models if m.get("id")})
 
     metadata: dict = {"snapshots": snapshot_ids}
     if release_dates:
@@ -212,19 +296,106 @@ def _build_family_entry(org_id: str, family_slug: str, models: list[dict]) -> di
             m["knowledge"] for m in models if m.get("knowledge")
         })
 
-    return {
-        "id": canonical_id,
+    # Family-root aliases — surface forms of the family slug only. Snapshot
+    # ids no longer go on the root; they're emitted as separate canonicals.
+    root_aliases = [f"{org_id}/{family_slug}"] if f"{org_id}/{family_slug}" != family_canonical_id else []
+
+    family_root_entry = {
+        "id": family_canonical_id,
         "display_name": display_name,
         "org_id": org_id,
         "family": family_slug,
         "architecture": None,
         "params_billions": None,
-        "parent_model_id": None,
+        "parents": [],
+        "open_weights": open_weights,
+        "release_date": release_date,
         "tags": ["open-weight"] if open_weights else [],
-        "aliases": aliases,
+        "aliases": root_aliases,
         "metadata": json.dumps(metadata, sort_keys=True),
         "review_status": "reviewed",
     }
+
+    # ---- Child entries: one per snapshot/variant whose id != family_slug ----
+    out_entries: list[dict] = [family_root_entry]
+    seen_ids: dict[str, dict] = {family_canonical_id: family_root_entry}
+
+    # `family_slug` may carry dots from the lab's display name
+    # (`qwen2.5-7b`); slugified ids use dashes (`qwen2-5-7b-instruct`).
+    # Compare on the dashed form, but build chain canonical ids from the
+    # dotted form so children inherit the lab's preferred spelling.
+    family_slug_dashed = re.sub(r"\.", "-", family_slug)
+
+    for m in models:
+        snap_dashed = _slugify(m.get("id", ""))
+        if not snap_dashed:
+            continue
+        # If the model's id already matches the family slug (in either form),
+        # it IS the family root — no child entry needed.
+        if snap_dashed == family_slug_dashed or snap_dashed == family_slug:
+            continue
+        # Snapshot ids that don't share the family-slug prefix are unusual
+        # (mirror entries, etc.) — skip rather than emit a malformed child.
+        if not snap_dashed.startswith(family_slug_dashed + "-"):
+            continue
+        suffix = snap_dashed[len(family_slug_dashed) + 1:]
+        segments = _classify_suffix_segments(suffix)
+        if not segments:
+            continue
+
+        # Walk the chain, materializing intermediates as anchor entries.
+        current_id = family_canonical_id
+        for idx, (relationship, axis, token) in enumerate(segments):
+            new_id = f"{current_id}-{token}"
+            is_leaf = (idx == len(segments) - 1)
+            parent_edge = {"id": current_id, "relationship": relationship}
+            if axis:
+                parent_edge["axis"] = axis
+
+            if new_id in seen_ids:
+                # Intermediate already emitted — walk through.
+                current_id = new_id
+                continue
+
+            # Build the entry. Leaf gets the source model's metadata + the
+            # original models.dev id as an alias (so dashed-form raw values
+            # like `qwen2-5-7b-instruct` resolve via exact match even when
+            # the canonical uses the dotted spelling). Intermediates are
+            # anchor-only — humanized name, no release_date, no aliases.
+            child_aliases: list[str] = []
+            child_release: str | None = None
+            child_open_weights = open_weights
+            if is_leaf:
+                child_aliases = sorted({snap_dashed, f"{org_id}/{snap_dashed}"})
+                if m.get("release_date"):
+                    child_release = m["release_date"]
+                child_open_weights = bool(m.get("open_weights")) or open_weights
+
+            entry = {
+                "id": new_id,
+                "display_name": (m.get("name") or _humanize(new_id.split("/", 1)[-1])) if is_leaf else _humanize(new_id.split("/", 1)[-1]),
+                "org_id": org_id,
+                "family": family_slug,
+                "architecture": None,
+                "params_billions": None,
+                "parents": [parent_edge],
+                "open_weights": child_open_weights,
+                "release_date": child_release,
+                "tags": ["open-weight"] if child_open_weights else [],
+                "aliases": child_aliases,
+                "metadata": "{}",
+                "review_status": "reviewed",
+            }
+            seen_ids[new_id] = entry
+            out_entries.append(entry)
+            current_id = new_id
+
+    return out_entries
+
+
+def _humanize(slug: str) -> str:
+    parts = slug.replace("_", "-").split("-")
+    return " ".join(p.capitalize() if p[:1].isalpha() else p for p in parts)
 
 
 def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict], list[str]]:
@@ -262,7 +433,7 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
         for family_slug, models in sorted(by_family.items()):
             if not family_slug:
                 continue
-            out.append(_build_family_entry(org_id, family_slug, models))
+            out.extend(_build_family_entries(org_id, family_slug, models))
 
     if skipped_providers:
         print(

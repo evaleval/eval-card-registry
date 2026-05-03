@@ -32,10 +32,40 @@ _ENTITY_TABLE = {
 }
 
 _PARENT_FIELD = {
-    "model": "parent_model_id",
     "benchmark": "parent_benchmark_id",
     "org": "parent_org_id",
 }
+
+
+def _decode_parents(value) -> list[dict]:
+    """Decode `canonical_models.parents` (JSON-encoded list-of-edges) to a
+    Python list. Tolerant of NaN, None, empty strings, and pre-decoded lists."""
+    if value is None or queries._is_na(value):
+        return []
+    if isinstance(value, list):
+        return value
+    if isinstance(value, str):
+        s = value.strip()
+        if not s or s in ("[]", "null"):
+            return []
+        try:
+            decoded = json.loads(s)
+            return list(decoded) if isinstance(decoded, list) else []
+        except (ValueError, TypeError):
+            return []
+    return []
+
+
+def _variant_parent_id(parents: list[dict]) -> Optional[str]:
+    """Return the id of the first `variant` edge in a parents list, or None.
+    The ResolveResponse `parent_canonical_id` field exposes the family /
+    variant hierarchy that callers historically read off `parent_model_id`."""
+    for edge in parents:
+        if isinstance(edge, dict) and edge.get("relationship") == "variant":
+            pid = edge.get("id")
+            if pid:
+                return pid
+    return None
 
 
 def _slugify(value: str) -> str:
@@ -70,6 +100,67 @@ def _no_match_result() -> dict:
         "created_new": False,
         "review_status": None,
         "parent_canonical_id": None,
+        "resolved_leaf_id": None,
+        "root_model_id": None,
+        "lineage_origin_org_id": None,
+        "parents": None,
+        "open_weights": None,
+    }
+
+
+def _na_to_none(value):
+    return None if queries._is_na(value) else value
+
+
+def _model_response_fields(
+    store: RegistryStore,
+    matched_canonical_id: str,
+    matched_entity: Optional[dict],
+) -> dict:
+    """Compute model-specific response fields. When the matched canonical
+    has `root_model_id` set, the returned `canonical_id` is the root (=
+    identity-root collapsing for quantization chains); otherwise it's the
+    matched leaf itself. `resolved_leaf_id` always carries the original
+    match so callers wanting leaf-level can opt in."""
+    if not matched_entity:
+        return {
+            "canonical_id": matched_canonical_id,
+            "resolved_leaf_id": matched_canonical_id,
+            "root_model_id": None,
+            "lineage_origin_org_id": None,
+            "parents": None,
+            "open_weights": None,
+        }
+
+    leaf_root = _na_to_none(matched_entity.get("root_model_id"))
+    parents_decoded = queries.decode_parents(matched_entity.get("parents")) or None
+
+    if leaf_root:
+        # Resolve to root by default. Look up root entity to surface its
+        # review_status and lineage_origin_org_id (the leaf's lineage_origin
+        # equals the root's by construction, but be explicit).
+        # `open_weights` also comes from the root since identity-root
+        # collapses preserve weight identity (quantizations don't change
+        # whether weights are downloadable).
+        root_entity = queries.get_entity(store, _ENTITY_TABLE["model"], leaf_root)
+        root_lineage = _na_to_none((root_entity or {}).get("lineage_origin_org_id"))
+        root_open = _na_to_none((root_entity or {}).get("open_weights"))
+        return {
+            "canonical_id": leaf_root,
+            "resolved_leaf_id": matched_canonical_id,
+            "root_model_id": leaf_root,
+            "lineage_origin_org_id": root_lineage,
+            "parents": parents_decoded,
+            "open_weights": root_open,
+        }
+
+    return {
+        "canonical_id": matched_canonical_id,
+        "resolved_leaf_id": matched_canonical_id,
+        "root_model_id": None,
+        "lineage_origin_org_id": _na_to_none(matched_entity.get("lineage_origin_org_id")),
+        "parents": parents_decoded,
+        "open_weights": _na_to_none(matched_entity.get("open_weights")),
     }
 
 
@@ -80,6 +171,11 @@ def _match_result(
     review_status: Optional[str],
     created_new: bool = False,
     parent_canonical_id: Optional[str] = None,
+    resolved_leaf_id: Optional[str] = None,
+    root_model_id: Optional[str] = None,
+    lineage_origin_org_id: Optional[str] = None,
+    parents: Optional[list] = None,
+    open_weights: Optional[bool] = None,
 ) -> dict:
     return {
         "canonical_id": canonical_id,
@@ -88,12 +184,68 @@ def _match_result(
         "created_new": created_new,
         "review_status": review_status,
         "parent_canonical_id": parent_canonical_id,
+        "resolved_leaf_id": resolved_leaf_id,
+        "root_model_id": root_model_id,
+        "lineage_origin_org_id": lineage_origin_org_id,
+        "parents": parents,
+        "open_weights": open_weights,
     }
+
+
+def _build_match(
+    store: RegistryStore,
+    entity_type: str,
+    matched_canonical_id: str,
+    matched_entity: Optional[dict],
+    strategy: str,
+    confidence: float,
+    *,
+    created_new: bool = False,
+    review_status_override: Optional[str] = None,
+) -> dict:
+    """Construct a resolve response dict, applying model-specific
+    root-collapsing when relevant. Non-model entity types pass through
+    with `canonical_id = matched_canonical_id` and the new fields NULL."""
+    review_status = review_status_override if review_status_override is not None else (
+        matched_entity.get("review_status") if matched_entity else None
+    )
+    if entity_type == "model":
+        fields = _model_response_fields(store, matched_canonical_id, matched_entity)
+        # Re-fetch the entity at the response canonical (root may differ from matched leaf)
+        # so review_status reflects the returned canonical when caller surfaces it.
+        if review_status_override is None and fields["canonical_id"] != matched_canonical_id:
+            root_entity = queries.get_entity(store, _ENTITY_TABLE["model"], fields["canonical_id"])
+            review_status = (root_entity or {}).get("review_status")
+        return _match_result(
+            canonical_id=fields["canonical_id"],
+            strategy=strategy,
+            confidence=confidence,
+            review_status=review_status,
+            created_new=created_new,
+            parent_canonical_id=_parent_canonical_id("model", matched_entity),
+            resolved_leaf_id=fields["resolved_leaf_id"],
+            root_model_id=fields["root_model_id"],
+            lineage_origin_org_id=fields["lineage_origin_org_id"],
+            parents=fields["parents"],
+            open_weights=fields["open_weights"],
+        )
+    return _match_result(
+        canonical_id=matched_canonical_id,
+        strategy=strategy,
+        confidence=confidence,
+        review_status=review_status,
+        created_new=created_new,
+        parent_canonical_id=_parent_canonical_id(entity_type, matched_entity),
+    )
 
 
 def _parent_canonical_id(entity_type: str, entity: Optional[dict]) -> Optional[str]:
     if not entity:
         return None
+    if entity_type == "model":
+        # Models store a typed parents list. Surface the variant edge here so
+        # the API contract stays stable for callers reading the family parent.
+        return _variant_parent_id(_decode_parents(entity.get("parents")))
     field = _PARENT_FIELD.get(entity_type)
     if not field:
         return None
@@ -105,12 +257,22 @@ def _parent_canonical_id(entity_type: str, entity: Optional[dict]) -> Optional[s
 
 class ResolutionService:
     def __init__(self, registry_store: RegistryStore) -> None:
+        import threading
         self.store = registry_store
         self._resolver: Optional[Resolver] = None
         # Cache: (raw_value, entity_type, source_config) → resolve result dict.
         # Avoids re-running the full strategy chain for duplicate strings
         # (e.g. "Accuracy" appears in every record).
         self._resolve_cache: dict[tuple[str, str, Optional[str]], dict] = {}
+        # Hub-stats live-lookup state (built lazily on first use). The
+        # indices snapshot the aliases / orgs tables; both get invalidated
+        # by `invalidate_resolver()` whenever a new entity is auto-created
+        # so subsequent lookups can resolve baseModels against the just-
+        # added canonical. Lock guards the lazy build under FastAPI's
+        # threadpool executor.
+        self._hub_stats_client = None
+        self._hub_stats_indices: Optional[tuple[dict[str, str], dict[str, str]]] = None
+        self._hub_stats_indices_lock = threading.Lock()
 
     def _get_resolver(self) -> Resolver:
         if self._resolver is None:
@@ -120,8 +282,14 @@ class ResolutionService:
         return self._resolver
 
     def invalidate_resolver(self) -> None:
-        """Call after alias or entity changes to force resolver rebuild."""
+        """Call after alias or entity changes to force resolver rebuild.
+        Also clears the hub-stats indices cache so subsequent live lookups
+        can resolve `baseModels` parents against just-added canonicals
+        (e.g. when EEE sync creates a parent draft, then sees a child
+        whose baseModels references that parent in the same run)."""
         self._resolver = None
+        with self._hub_stats_indices_lock:
+            self._hub_stats_indices = None
 
     def resolve(
         self,
@@ -150,12 +318,9 @@ class ResolutionService:
             result: ResolutionResult = resolver.resolve(raw_value, entity_type, source_config)
             if result.canonical_id is not None:
                 entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], result.canonical_id)
-                result_dict = _match_result(
-                    result.canonical_id,
-                    result.strategy,
-                    result.confidence,
-                    entity.get("review_status") if entity else None,
-                    parent_canonical_id=_parent_canonical_id(entity_type, entity),
+                result_dict = _build_match(
+                    self.store, entity_type, result.canonical_id, entity,
+                    result.strategy, result.confidence,
                 )
             else:
                 result_dict = _no_match_result()
@@ -167,12 +332,9 @@ class ResolutionService:
             existing = queries.get_alias(self.store, raw_value, entity_type, source_config)
             if existing:
                 entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], existing["canonical_id"])
-                result_dict = _match_result(
-                    existing["canonical_id"],
-                    existing["strategy"],
-                    existing["confidence"],
-                    entity.get("review_status") if entity else None,
-                    parent_canonical_id=_parent_canonical_id(entity_type, entity),
+                result_dict = _build_match(
+                    self.store, entity_type, existing["canonical_id"], entity,
+                    existing["strategy"], existing["confidence"],
                 )
                 self._resolve_cache[cache_key] = result_dict
                 return result_dict
@@ -254,13 +416,11 @@ class ResolutionService:
             self.invalidate_resolver()
 
         entity = queries.get_entity(self.store, _ENTITY_TABLE[entity_type], canonical_id)
-        result_dict = _match_result(
-            canonical_id,
-            strategy_used,
-            result.confidence,
-            entity.get("review_status") if entity else "draft",
+        result_dict = _build_match(
+            self.store, entity_type, canonical_id, entity,
+            strategy_used, result.confidence,
             created_new=created_new,
-            parent_canonical_id=_parent_canonical_id(entity_type, entity),
+            review_status_override=(entity.get("review_status") if entity else "draft"),
         )
         self._resolve_cache[cache_key] = result_dict
         return result_dict
@@ -282,6 +442,13 @@ class ResolutionService:
             "created_at": now,
             "updated_at": now,
         }
+        # Hub-stats live enrichment: when a model raw value looks like an
+        # HF id, query hub-stats for release_date / params / parents /
+        # lineage_origin_org_id and merge into the base draft. Best-effort
+        # — `enrichment` is `{}` on lookup miss or any error.
+        enrichment: dict = {}
+        if entity_type == "model" and self._looks_like_hf_id(raw_value):
+            enrichment = self._lookup_hub_stats(raw_value) or {}
         if entity_type == "model":
             base.update({
                 "developer": None,
@@ -289,9 +456,19 @@ class ResolutionService:
                 "family": None,
                 "architecture": None,
                 "params_billions": None,
-                "parent_model_id": None,
+                "parents": "[]",
+                "root_model_id": None,
+                "lineage_origin_org_id": None,
+                "open_weights": None,
                 "tags": "[]",
             })
+            # Apply hub-stats enrichment last so its non-empty values
+            # override the defaults we just set. The enrichment dict
+            # only contains keys hub-stats actually had data for; other
+            # defaults (None / "[]") survive.
+            for k, v in enrichment.items():
+                if v is not None:
+                    base[k] = v
         elif entity_type == "benchmark":
             base.update({"description": None, "dataset_repo": None, "parent_benchmark_id": None, "tags": "[]"})
         elif entity_type == "metric":
@@ -299,10 +476,108 @@ class ResolutionService:
         elif entity_type == "harness":
             base.update({"version": None, "fork_url": None})
         elif entity_type == "org":
-            base.update({"parent_org_id": None, "website": None, "hf_org": None, "tags": "[]"})
+            base.update({
+                "parent_org_id": None,
+                "website": None,
+                "hf_org": None,
+                "kind": "unknown",
+                "tags": "[]",
+            })
 
         queries.upsert_entity(self.store, table, base, buffered=True)
         return candidate_id
+
+    @staticmethod
+    def _looks_like_hf_id(raw_value: str) -> bool:
+        """HF id heuristic: contains a single `/` with non-empty parts on
+        both sides. Conservative — won't trigger hub-stats lookups for
+        bare model names or paths with multiple slashes (which are likely
+        malformed)."""
+        if not raw_value or raw_value.count("/") != 1:
+            return False
+        org, name = raw_value.split("/", 1)
+        return bool(org.strip()) and bool(name.strip())
+
+    def _lookup_hub_stats(self, hf_id: str) -> Optional[dict]:
+        """Query hub-stats live for `hf_id` and return a partial draft
+        dict (release_date, params_billions, parents, lineage_origin_org_id,
+        tags, metadata) ready to merge. Returns None on miss or any error.
+        Uses the `aliases` table to resolve baseModels parents to our
+        canonical ids, and `canonical_orgs` HF aliases to map authors."""
+        if not settings.hub_stats_lookup_enabled:
+            return None
+        try:
+            client = self._get_hub_stats_client()
+            row = client.lookup(hf_id)
+        except Exception:
+            return None
+        if row is None:
+            return None
+        from eval_card_registry.services import hub_stats as _hs
+        try:
+            aliases_to_canonical, org_alias_map = self._build_hub_stats_indices()
+            return _hs.enrich_draft_from_row(row, aliases_to_canonical, org_alias_map)
+        except Exception:
+            return None
+
+    def _get_hub_stats_client(self):
+        """Lazy-init the hub-stats client. Reused across lookups."""
+        if self._hub_stats_client is None:
+            from eval_card_registry.services.hub_stats import HubStatsClient
+            self._hub_stats_client = HubStatsClient()
+        return self._hub_stats_client
+
+    def _build_hub_stats_indices(self) -> tuple[dict[str, str], dict[str, str]]:
+        """Cache + return the indices `enrich_draft_from_row` needs:
+        - normalized canonical-alias → canonical_id (so baseModels parents
+          can resolve to our registry's ids)
+        - normalized HF org alias → canonical org_id (so author-org
+          mapping picks the right slug)
+        Built lazily, cached until `invalidate_resolver()` clears it.
+        Lock-guarded so two concurrent threads (FastAPI threadpool) don't
+        race the lazy build."""
+        # Fast path: check without taking the lock to avoid the contention
+        # cost on the hot path where the cache is already populated.
+        cached = self._hub_stats_indices
+        if cached is not None:
+            return cached
+        with self._hub_stats_indices_lock:
+            # Double-check after acquiring — another thread may have built it.
+            if self._hub_stats_indices is not None:
+                return self._hub_stats_indices
+            from eval_card_registry.services.hub_stats import normalize as _hsnorm
+
+            aliases_df = self.store.table("aliases")
+            models_df = self.store.table("canonical_models")
+            orgs_df = self.store.table("canonical_orgs")
+
+            a2c: dict[str, str] = {}
+            # Aliases: only model-typed and HF-shaped (containing `/`)
+            for _, row in aliases_df.iterrows():
+                if row.get("entity_type") != "model":
+                    continue
+                raw = row.get("raw_value")
+                cid = row.get("canonical_id")
+                if isinstance(raw, str) and "/" in raw and isinstance(cid, str):
+                    a2c.setdefault(_hsnorm(raw), cid)
+            # Canonical ids themselves
+            for _, row in models_df.iterrows():
+                cid = row.get("id")
+                if isinstance(cid, str):
+                    a2c.setdefault(_hsnorm(cid), cid)
+
+            org_map: dict[str, str] = {}
+            for _, row in orgs_df.iterrows():
+                cid = row.get("id")
+                if not isinstance(cid, str):
+                    continue
+                org_map[_hsnorm(cid)] = cid
+                hf_org = row.get("hf_org")
+                if isinstance(hf_org, str):
+                    org_map[_hsnorm(hf_org)] = cid
+
+            self._hub_stats_indices = (a2c, org_map)
+            return self._hub_stats_indices
 
     def _resolve_model_org_id(self, raw_value: str) -> Optional[str]:
         if "/" not in raw_value:

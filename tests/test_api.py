@@ -117,3 +117,37 @@ class TestEntityCRUD:
         body = r.json()
         assert body["parent_benchmark_id"] is None
         assert body["dataset_repo"] is None
+
+    def test_post_model_with_parents_round_trips(self, client):
+        """Regression: `parents` is a list-of-dicts on the API side but
+        a JSON-encoded string in the parquet column. The route's
+        `_JSON_FIELDS` set must include `parents` so POST→GET round-trips
+        cleanly and the GET response decodes the column to a list."""
+        body = {
+            "id": "lab/test-model",
+            "display_name": "Test Model",
+            "org_id": "lab-org",
+            "parents": [
+                {"id": "lab/parent-a", "relationship": "variant", "axis": "size"},
+                {"id": "lab/parent-b", "relationship": "finetune"},
+            ],
+        }
+        r = client.post("/api/v1/models", json=body)
+        assert r.status_code == 201, r.text
+
+        def _strip_axis_none(parents):
+            # Pydantic serializes Optional[axis] as `axis: None` for edges
+            # where the input omitted axis. Drop None for comparison.
+            return [{k: v for k, v in p.items() if v is not None} for p in parents]
+
+        post_parents = r.json()["parents"]
+        assert isinstance(post_parents, list)
+        assert _strip_axis_none(post_parents) == body["parents"]
+
+        # GET round-trip: same shape (axis=None survives the JSON round-trip
+        # because POST stored it that way via Pydantic model_dump).
+        g = client.get("/api/v1/models/lab/test-model")
+        assert g.status_code == 200
+        get_parents = g.json()["parents"]
+        assert isinstance(get_parents, list)
+        assert _strip_axis_none(get_parents) == body["parents"]

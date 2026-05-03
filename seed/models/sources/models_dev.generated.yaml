@@ -20,141 +20,15 @@
 #
 # `aliases` lists snapshot IDs we observed in models.dev for this family.
 
-- id: 01-ai/yi-1.5-34b
-  display_name: Yi 1.5 34B
-  org_id: 01-ai
-  family: yi-1.5-34b
-  params_billions: 34.0
-  tags:
-  - open-weight
-  aliases:
-  - Yi-1.5-34B
-  - Yi-1.5-34B-Chat
-  - 01-ai/Yi-1.5-34B
-  - 01-ai/Yi-1.5-34B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: 01-ai/yi-1.5-6b
-  display_name: Yi 1.5 6B
-  org_id: 01-ai
-  family: yi-1.5-6b
-  params_billions: 6.0
-  tags:
-  - open-weight
-  aliases:
-  - Yi-1.5-6B
-  - Yi-1.5-6B-Chat
-  - 01-ai/Yi-1.5-6B
-  - 01-ai/Yi-1.5-6B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: 01-ai/yi-1.5-9b
-  display_name: Yi 1.5 9B
-  org_id: 01-ai
-  family: yi-1.5-9b
-  params_billions: 9.0
-  tags:
-  - open-weight
-  aliases:
-  - Yi-1.5-9B
-  - Yi-1.5-9B-Chat
-  - 01-ai/Yi-1.5-9B
-  - 01-ai/Yi-1.5-9B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: 01-ai/yi-34b
-  display_name: Yi 34B
-  org_id: 01-ai
-  family: yi-34b
-  params_billions: 34.0
-  tags:
-  - open-weight
-  aliases:
-  - Yi-34B
-  - Yi-34B-Chat
-  - yi-34b
-  - 01-ai/Yi-34B
-  - 01-ai/Yi-34B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: 01-ai/yi-6b
-  display_name: Yi 6B
-  org_id: 01-ai
-  family: yi-6b
-  params_billions: 6.0
-  tags:
-  - open-weight
-  aliases:
-  - Yi-6B
-  - Yi-6B-Chat
-  - yi-6b
-  - 01-ai/Yi-6B
-  - 01-ai/Yi-6B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: 01-ai/yi-large
-  display_name: Yi-Large
-  org_id: 01-ai
-  family: yi-large
-  tags: []
-  aliases:
-  - Yi-Large
-  - yi-large
-  - yi-large-preview
-  - 01-ai/yi-large
-  - 01-ai/yi-large-preview
-  metadata: '{}'
-  review_status: reviewed
-- id: ai21/jamba
-  display_name: Jamba
-  org_id: ai21
-  family: jamba
-  architecture: hybrid-mamba-transformer
-  tags: []
-  aliases:
-  - jamba
-  - jamba-instruct
-  - ai21/jamba
-  - ai21/jamba-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: ai21/jamba-1.5-large
-  display_name: Jamba 1.5 Large
-  org_id: ai21
-  family: jamba-1.5-large
-  architecture: hybrid-mamba-transformer
-  params_billions: 398.0
-  tags:
-  - open-weight
-  aliases:
-  - Jamba-1.5-Large
-  - jamba-1.5-large
-  - ai21/jamba-1.5-large
-  - ai21labs/AI21-Jamba-1.5-Large
-  metadata: '{}'
-  review_status: reviewed
-- id: ai21/jamba-1.5-mini
-  display_name: Jamba 1.5 Mini
-  org_id: ai21
-  family: jamba-1.5-mini
-  architecture: hybrid-mamba-transformer
-  params_billions: 52.0
-  tags:
-  - open-weight
-  aliases:
-  - Jamba-1.5-Mini
-  - jamba-1.5-mini
-  - ai21/jamba-1.5-mini
-  - ai21labs/AI21-Jamba-1.5-Mini
-  metadata: '{}'
-  review_status: reviewed
 - id: alibaba/qvq-max
   display_name: QVQ Max
   org_id: alibaba
   family: qvq-max
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-03-25'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-03-25"], "snapshots": ["qvq-max"]}'
@@ -165,7 +39,9 @@
   family: qwen-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-07-28'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-07-28"], "snapshots": ["qwen-flash"]}'
@@ -176,7 +52,9 @@
   family: qwen-max
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-04-03'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-04-03"], "snapshots": ["qwen-max"]}'
@@ -187,7 +65,9 @@
   family: qwen-mt-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: 2025-01
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-01"], "snapshots": ["qwen-mt-plus"]}'
@@ -198,7 +78,9 @@
   family: qwen-mt-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: 2025-01
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-01"], "snapshots": ["qwen-mt-turbo"]}'
@@ -209,7 +91,9 @@
   family: qwen-omni-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-01-19'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-01-19"], "snapshots": ["qwen-omni-turbo"]}'
@@ -220,7 +104,9 @@
   family: qwen-omni-turbo-realtime
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-08'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-05-08"], "snapshots": ["qwen-omni-turbo-realtime"]}'
@@ -231,7 +117,9 @@
   family: qwen-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-01-25'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-01-25"], "snapshots": ["qwen-plus"]}'
@@ -242,11 +130,11 @@
   family: qwen-plus-character-japanese
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: 2024-01
   tags: []
-  aliases:
-  - qwen-plus-character-ja
-  - alibaba/qwen-plus-character-ja
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-01"], "snapshots": ["qwen-plus-character-ja"]}'
   review_status: reviewed
 - id: alibaba/qwen-turbo
@@ -255,7 +143,9 @@
   family: qwen-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-11-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-11-01"], "snapshots": ["qwen-turbo"]}'
@@ -266,7 +156,9 @@
   family: qwen-vl-max
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-04-08'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-04-08"], "snapshots": ["qwen-vl-max"]}'
@@ -277,7 +169,9 @@
   family: qwen-vl-ocr
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-10-28'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-10-28"], "snapshots": ["qwen-vl-ocr"]}'
@@ -288,197 +182,143 @@
   family: qwen-vl-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-01-25'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-01-25"], "snapshots": ["qwen-vl-plus"]}'
   review_status: reviewed
-- id: alibaba/qwen1.5-110b
-  display_name: Qwen1.5 110B
-  org_id: alibaba
-  family: qwen1.5-110b
-  params_billions: 110.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen1.5-110B
-  - Qwen1.5-110B-Chat
-  - Qwen/Qwen1.5-110B
-  - Qwen/Qwen1.5-110B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen1.5-14b
-  display_name: Qwen1.5 14B
-  org_id: alibaba
-  family: qwen1.5-14b
-  params_billions: 14.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen1.5-14B
-  - Qwen1.5-14B-Chat
-  - Qwen/Qwen1.5-14B
-  - Qwen/Qwen1.5-14B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen1.5-32b
-  display_name: Qwen1.5 32B
-  org_id: alibaba
-  family: qwen1.5-32b
-  params_billions: 32.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen1.5-32B
-  - Qwen1.5-32B-Chat
-  - Qwen/Qwen1.5-32B
-  - Qwen/Qwen1.5-32B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen1.5-72b
-  display_name: Qwen1.5 72B
-  org_id: alibaba
-  family: qwen1.5-72b
-  params_billions: 72.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen1.5-72B
-  - Qwen1.5-72B-Chat
-  - Qwen/Qwen1.5-72B
-  - Qwen/Qwen1.5-72B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen1.5-7b
-  display_name: Qwen1.5 7B
-  org_id: alibaba
-  family: qwen1.5-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen1.5-7B
-  - Qwen1.5-7B-Chat
-  - Qwen/Qwen1.5-7B
-  - Qwen/Qwen1.5-7B-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen2-72b
-  display_name: Qwen2 72B
-  org_id: alibaba
-  family: qwen2-72b
-  params_billions: 72.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen2-72B
-  - Qwen2-72B-Instruct
-  - Qwen/Qwen2-72B
-  - Qwen/Qwen2-72B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen2-7b
-  display_name: Qwen2 7B
-  org_id: alibaba
-  family: qwen2-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen2-7B
-  - Qwen2-7B-Instruct
-  - Qwen/Qwen2-7B
-  - Qwen/Qwen2-7B-Instruct
-  metadata: '{}'
-  review_status: reviewed
 - id: alibaba/qwen2.5-14b
-  display_name: Qwen2.5 14B
+  display_name: Qwen2.5 14b
   org_id: alibaba
   family: qwen2.5-14b
-  params_billions: 14.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2024-09
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-14b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-14b-instruct
+  display_name: Qwen2.5 14B Instruct
+  org_id: alibaba
+  family: qwen2.5-14b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen2.5-14b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2024-09
   tags:
   - open-weight
   aliases:
-  - Qwen2.5-14B
-  - Qwen2.5-14B-Instruct
-  - Qwen/Qwen2.5-14B
-  - Qwen/Qwen2.5-14B-Instruct
+  - alibaba/qwen2-5-14b-instruct
+  - qwen2-5-14b-instruct
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-32b
-  display_name: Qwen2.5 32B
+  display_name: Qwen2.5 32b
   org_id: alibaba
   family: qwen2.5-32b
-  params_billions: 32.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2024-09
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-32b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-32b-instruct
+  display_name: Qwen2.5 32B Instruct
+  org_id: alibaba
+  family: qwen2.5-32b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen2.5-32b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2024-09
   tags:
   - open-weight
   aliases:
-  - Qwen2.5-32B
-  - Qwen2.5-32B-Instruct
-  - Qwen/Qwen2.5-32B
-  - Qwen/Qwen2.5-32B-Instruct
+  - alibaba/qwen2-5-32b-instruct
+  - qwen2-5-32b-instruct
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-72b
-  display_name: Qwen2.5 72B
+  display_name: Qwen2.5 72b
   org_id: alibaba
   family: qwen2.5-72b
-  params_billions: 72.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2024-09
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-72b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-72b-instruct
+  display_name: Qwen2.5 72B Instruct
+  org_id: alibaba
+  family: qwen2.5-72b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen2.5-72b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2024-09
   tags:
   - open-weight
   aliases:
-  - Qwen2.5-72B
-  - Qwen2.5-72B-Instruct
-  - Qwen/Qwen2.5-72B
-  - Qwen/Qwen2.5-72B-Instruct
-  - qwen/qwen2.5-72b-instruct-turbo
-  - Qwen/Qwen2.5-72B-Instruct-Turbo
+  - alibaba/qwen2-5-72b-instruct
+  - qwen2-5-72b-instruct
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-7b
-  display_name: Qwen2.5 7B
+  display_name: Qwen2.5 7b
   org_id: alibaba
   family: qwen2.5-7b
-  params_billions: 7.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2024-09
   tags:
   - open-weight
-  aliases:
-  - Qwen2.5-7B
-  - Qwen2.5-7B-Instruct
-  - Qwen/Qwen2.5-7B
-  - Qwen/Qwen2.5-7B-Instruct
-  - qwen/qwen2.5-7b-instruct-turbo
-  - Qwen/Qwen2.5-7B-Instruct-Turbo
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-7b-instruct"]}'
   review_status: reviewed
-- id: alibaba/qwen2.5-coder-32b
-  display_name: Qwen2.5 Coder 32B
+- id: alibaba/qwen2.5-7b-instruct
+  display_name: Qwen2.5 7B Instruct
   org_id: alibaba
-  family: qwen2.5-coder-32b
-  params_billions: 32.0
+  family: qwen2.5-7b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen2.5-7b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2024-09
   tags:
   - open-weight
-  - code
   aliases:
-  - Qwen2.5-Coder-32B
-  - Qwen2.5-Coder-32B-Instruct
-  - Qwen/Qwen2.5-Coder-32B
-  - Qwen/Qwen2.5-Coder-32B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen2.5-coder-7b
-  display_name: Qwen2.5 Coder 7B
-  org_id: alibaba
-  family: qwen2.5-coder-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  - code
-  aliases:
-  - Qwen2.5-Coder-7B
-  - Qwen2.5-Coder-7B-Instruct
-  - Qwen/Qwen2.5-Coder-7B
-  - Qwen/Qwen2.5-Coder-7B-Instruct
+  - alibaba/qwen2-5-7b-instruct
+  - qwen2-5-7b-instruct
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-omni-7b
@@ -487,12 +327,12 @@
   family: qwen2.5-omni-7b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2024-12
   tags:
   - open-weight
-  aliases:
-  - qwen2-5-omni-7b
-  - alibaba/qwen2-5-omni-7b
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-12"], "snapshots": ["qwen2-5-omni-7b"]}'
   review_status: reviewed
 - id: alibaba/qwen2.5-vl-72b
@@ -501,13 +341,32 @@
   family: qwen2.5-vl-72b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2024-09
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-vl-72b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-vl-72b-instruct
+  display_name: Qwen2.5-VL 72B Instruct
+  org_id: alibaba
+  family: qwen2.5-vl-72b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen2.5-vl-72b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2024-09
   tags:
   - open-weight
   aliases:
-  - qwen2-5-vl-72b-instruct
   - alibaba/qwen2-5-vl-72b-instruct
-  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-vl-72b-instruct"]}'
+  - qwen2-5-vl-72b-instruct
+  metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-vl-7b
   display_name: Qwen2.5 Vl 7b
@@ -515,89 +374,88 @@
   family: qwen2.5-vl-7b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2024-09
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-vl-7b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen2.5-vl-7b-instruct
+  display_name: Qwen2.5-VL 7B Instruct
+  org_id: alibaba
+  family: qwen2.5-vl-7b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen2.5-vl-7b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2024-09
   tags:
   - open-weight
   aliases:
-  - qwen2-5-vl-7b-instruct
   - alibaba/qwen2-5-vl-7b-instruct
-  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-09"], "snapshots": ["qwen2-5-vl-7b-instruct"]}'
+  - qwen2-5-vl-7b-instruct
+  metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen3-14b
   display_name: Qwen3 14B
   org_id: alibaba
   family: qwen3-14b
-  params_billions: 14.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
-  aliases:
-  - Qwen3-14B
-  - Qwen3-14B-Instruct
-  - Qwen/Qwen3-14B
-  - Qwen/Qwen3-14B-Instruct
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-14b"]}'
   review_status: reviewed
 - id: alibaba/qwen3-235b-a22b
   display_name: Qwen3 235B-A22B
   org_id: alibaba
   family: qwen3-235b-a22b
-  architecture: mixture-of-experts
-  params_billions: 235.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
-  - moe
-  aliases:
-  - Qwen3-235B-A22B
-  - Qwen3-235B-A22B-Instruct
-  - Qwen/Qwen3-235B-A22B
-  - Qwen/Qwen3-235B-A22B-Instruct
-  - qwen/qwen3-235b-a22b-instruct
-  - Qwen/Qwen3-235B-A22B-Instruct-2507
-  - alibaba/qwen3-235b-a22b-instruct-2507
-  - qwen/qwen3-235b-a22b-instruct-2507
-  metadata: '{}'
-  review_status: reviewed
-- id: alibaba/qwen3-30b
-  display_name: Qwen3 30B
-  org_id: alibaba
-  family: qwen3-30b
-  params_billions: 30.0
-  tags:
-  - open-weight
-  aliases:
-  - Qwen3-30B
-  - Qwen3-30B-Instruct
-  - Qwen/Qwen3-30B
-  - qwen/qwen3-30b
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-235b-a22b"]}'
   review_status: reviewed
 - id: alibaba/qwen3-32b
   display_name: Qwen3 32B
   org_id: alibaba
   family: qwen3-32b
-  params_billions: 32.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
-  aliases:
-  - Qwen3-32B
-  - Qwen3-32B-Instruct
-  - Qwen/Qwen3-32B
-  - Qwen/Qwen3-32B-Instruct
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-32b"]}'
   review_status: reviewed
 - id: alibaba/qwen3-8b
   display_name: Qwen3 8B
   org_id: alibaba
   family: qwen3-8b
-  params_billions: 8.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
-  aliases:
-  - Qwen3-8B
-  - Qwen3-8B-Instruct
-  - Qwen/Qwen3-8B
-  - Qwen/Qwen3-8B-Instruct
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-8b"]}'
   review_status: reviewed
 - id: alibaba/qwen3-asr-flash
   display_name: Qwen3-ASR Flash
@@ -605,7 +463,9 @@
   family: qwen3-asr-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-08'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-09-08"], "snapshots": ["qwen3-asr-flash"]}'
@@ -616,13 +476,32 @@
   family: qwen3-coder-30b-a3b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-coder-30b-a3b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen3-coder-30b-a3b-instruct
+  display_name: Qwen3-Coder 30B-A3B Instruct
+  org_id: alibaba
+  family: qwen3-coder-30b-a3b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen3-coder-30b-a3b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
   aliases:
-  - qwen3-coder-30b-a3b-instruct
   - alibaba/qwen3-coder-30b-a3b-instruct
-  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-coder-30b-a3b-instruct"]}'
+  - qwen3-coder-30b-a3b-instruct
+  metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen3-coder-480b-a35b
   display_name: Qwen3 Coder 480b A35b
@@ -630,13 +509,32 @@
   family: qwen3-coder-480b-a35b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-coder-480b-a35b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen3-coder-480b-a35b-instruct
+  display_name: Qwen3-Coder 480B-A35B Instruct
+  org_id: alibaba
+  family: qwen3-coder-480b-a35b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen3-coder-480b-a35b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
   aliases:
-  - qwen3-coder-480b-a35b-instruct
   - alibaba/qwen3-coder-480b-a35b-instruct
-  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-04"], "snapshots": ["qwen3-coder-480b-a35b-instruct"]}'
+  - qwen3-coder-480b-a35b-instruct
+  metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen3-coder-flash
   display_name: Qwen3 Coder Flash
@@ -644,7 +542,9 @@
   family: qwen3-coder-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-07-28'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-07-28"], "snapshots": ["qwen3-coder-flash"]}'
@@ -655,7 +555,9 @@
   family: qwen3-coder-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-23'
   tags:
   - open-weight
   aliases: []
@@ -667,7 +569,9 @@
   family: qwen3-livetranslate-flash-realtime
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-22'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-09-22"], "snapshots": ["qwen3-livetranslate-flash-realtime"]}'
@@ -678,7 +582,9 @@
   family: qwen3-max
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-23'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-09-23"], "snapshots": ["qwen3-max"]}'
@@ -689,13 +595,32 @@
   family: qwen3-next-80b-a3b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2025-09
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-09"], "snapshots": ["qwen3-next-80b-a3b-instruct"]}'
+  review_status: reviewed
+- id: alibaba/qwen3-next-80b-a3b-instruct
+  display_name: Qwen3-Next 80B-A3B Instruct
+  org_id: alibaba
+  family: qwen3-next-80b-a3b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: alibaba/qwen3-next-80b-a3b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: 2025-09
   tags:
   - open-weight
   aliases:
-  - qwen3-next-80b-a3b-instruct
   - alibaba/qwen3-next-80b-a3b-instruct
-  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-09"], "snapshots": ["qwen3-next-80b-a3b-instruct"]}'
+  - qwen3-next-80b-a3b-instruct
+  metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen3-next-80b-a3b-thinking
   display_name: Qwen3-Next 80B-A3B (Thinking)
@@ -703,7 +628,9 @@
   family: qwen3-next-80b-a3b-thinking
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2025-09
   tags:
   - open-weight
   aliases: []
@@ -715,7 +642,9 @@
   family: qwen3-omni-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-15'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-09-15"], "snapshots": ["qwen3-omni-flash"]}'
@@ -726,7 +655,9 @@
   family: qwen3-omni-flash-realtime
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-15'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-09-15"], "snapshots": ["qwen3-omni-flash-realtime"]}'
@@ -737,7 +668,9 @@
   family: qwen3-vl-235b-a22b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
   aliases: []
@@ -749,7 +682,9 @@
   family: qwen3-vl-30b-a3b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: 2025-04
   tags:
   - open-weight
   aliases: []
@@ -761,42 +696,54 @@
   family: qwen3-vl-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-23'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-09-23"], "snapshots": ["qwen3-vl-plus"]}'
   review_status: reviewed
-- id: alibaba/qwen3.5-122b
-  display_name: Qwen3.5 122B
+- id: alibaba/qwen3.5-122b-a10b
+  display_name: Qwen3.5 122B-A10B
   org_id: alibaba
-  family: qwen3.5-122b
-  architecture: mixture-of-experts
-  params_billions: 122.0
+  family: qwen3.5-122b-a10b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-02-23'
   tags:
   - open-weight
-  - moe
-  aliases:
-  - Qwen3.5-122B
-  - Qwen3.5-122B-Instruct
-  - Qwen/Qwen3.5-122B
-  - qwen/qwen3.5-122b
-  - qwen/qwen3.5-122b-nothink
-  metadata: '{}'
+  aliases: []
+  metadata: '{"release_dates": ["2026-02-23"], "snapshots": ["qwen3.5-122b-a10b"]}'
   review_status: reviewed
 - id: alibaba/qwen3.5-27b
   display_name: Qwen3.5 27B
   org_id: alibaba
   family: qwen3.5-27b
-  params_billions: 27.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-02-23'
   tags:
   - open-weight
-  aliases:
-  - Qwen3.5-27B
-  - Qwen3.5-27B-Instruct
-  - Qwen/Qwen3.5-27B
-  - qwen/qwen3.5-27b
-  - qwen/qwen3.5-27b-nothink
-  metadata: '{}'
+  aliases: []
+  metadata: '{"release_dates": ["2026-02-23"], "snapshots": ["qwen3.5-27b"]}'
+  review_status: reviewed
+- id: alibaba/qwen3.5-35b-a3b
+  display_name: Qwen3.5 35B-A3B
+  org_id: alibaba
+  family: qwen3.5-35b-a3b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-02-23'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-02-23"], "snapshots": ["qwen3.5-35b-a3b"]}'
   review_status: reviewed
 - id: alibaba/qwen3.5-397b-a17b
   display_name: Qwen3.5 397B-A17B
@@ -804,21 +751,13 @@
   family: qwen3.5-397b-a17b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-02-15'
   tags:
   - open-weight
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2026-02-16"], "snapshots": ["qwen3.5-397b-a17b"]}'
-  review_status: reviewed
-- id: alibaba/qwen3.5-cloud
-  display_name: Qwen3.5 Cloud
-  org_id: alibaba
-  family: qwen3.5-cloud
-  tags: []
-  aliases:
-  - Qwen3.5-Cloud
-  - qwen/qwen3.5-cloud
-  metadata: '{}'
+  metadata: '{"release_dates": ["2026-02-15"], "snapshots": ["qwen3.5-397b-a17b"]}'
   review_status: reviewed
 - id: alibaba/qwen3.5-plus
   display_name: Qwen3.5 Plus
@@ -826,10 +765,53 @@
   family: qwen3.5-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-16'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2026-02-16"], "snapshots": ["qwen3.5-plus"]}'
+  review_status: reviewed
+- id: alibaba/qwen3.6-27b
+  display_name: Qwen3.6 27B
+  org_id: alibaba
+  family: qwen3.6-27b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-22'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-04-22"], "snapshots": ["qwen3.6-27b"]}'
+  review_status: reviewed
+- id: alibaba/qwen3.6-35b-a3b
+  display_name: Qwen3.6 35B-A3B
+  org_id: alibaba
+  family: qwen3.6-35b-a3b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-17'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-04-17"], "snapshots": ["qwen3.6-35b-a3b"]}'
+  review_status: reviewed
+- id: alibaba/qwen3.6-max
+  display_name: Qwen3.6 Max
+  org_id: alibaba
+  family: qwen3.6-max
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-04-20'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2026-04-20"], "snapshots": ["qwen3.6-max-preview"]}'
   review_status: reviewed
 - id: alibaba/qwen3.6-plus
   display_name: Qwen3.6 Plus
@@ -837,23 +819,12 @@
   family: qwen3.6-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-04-02'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2026-04-02"], "snapshots": ["qwen3.6-plus"]}'
-  review_status: reviewed
-- id: alibaba/qwq-32b-preview
-  display_name: QwQ 32B Preview
-  org_id: alibaba
-  family: qwq-32b-preview
-  params_billions: 32.0
-  tags:
-  - open-weight
-  - reasoning
-  aliases:
-  - QwQ-32B-Preview
-  - Qwen/QwQ-32B-Preview
-  metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwq-plus
   display_name: QwQ Plus
@@ -861,100 +832,12 @@
   family: qwq-plus
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-03-05'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-03-05"], "snapshots": ["qwq-plus"]}'
-  review_status: reviewed
-- id: allenai/olmo-2-1124-13b
-  display_name: OLMo 2 1124 13B
-  org_id: allenai
-  family: olmo-2-1124-13b
-  params_billions: 13.0
-  tags:
-  - open-weight
-  aliases:
-  - OLMo-2-1124-13B
-  - OLMo-2-1124-13B-Instruct
-  - allenai/OLMo-2-1124-13B
-  - allenai/OLMo-2-1124-13B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: allenai/olmo-2-1124-7b
-  display_name: OLMo 2 1124 7B
-  org_id: allenai
-  family: olmo-2-1124-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - OLMo-2-1124-7B
-  - OLMo-2-1124-7B-Instruct
-  - allenai/OLMo-2-1124-7B
-  - allenai/OLMo-2-1124-7B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: allenai/olmo-7b
-  display_name: OLMo 7B
-  org_id: allenai
-  family: olmo-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - OLMo-7B
-  - OLMo-7B-Instruct
-  - olmo-7b
-  - allenai/OLMo-7B
-  - allenai/OLMo-7B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: amazon/nova-lite
-  display_name: Amazon Nova Lite
-  org_id: amazon
-  family: nova-lite
-  tags: []
-  aliases:
-  - nova-lite
-  - amazon/nova-lite-v1:0
-  - nova-lite-v1
-  metadata: '{}'
-  review_status: reviewed
-- id: amazon/nova-micro
-  display_name: Amazon Nova Micro
-  org_id: amazon
-  family: nova-micro
-  tags: []
-  aliases:
-  - nova-micro
-  - amazon/nova-micro-v1:0
-  - nova-micro-v1
-  metadata: '{}'
-  review_status: reviewed
-- id: amazon/nova-pro
-  display_name: Amazon Nova Pro
-  org_id: amazon
-  family: nova-pro
-  tags: []
-  aliases:
-  - nova-pro
-  - amazon/nova-pro-v1:0
-  - nova-pro-v1
-  metadata: '{}'
-  review_status: reviewed
-- id: anthropic/claude-2
-  display_name: Claude 2
-  org_id: anthropic
-  family: claude-2
-  tags: []
-  aliases:
-  - claude-2
-  - claude-2.0
-  - claude-2.1
-  - anthropic/claude-2
-  - anthropic/claude-2.0
-  - anthropic/claude-2.1
-  metadata: '{}'
   review_status: reviewed
 - id: anthropic/claude-haiku-3
   display_name: Claude Haiku 3
@@ -962,11 +845,11 @@
   family: claude-haiku-3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-03-13'
   tags: []
-  aliases:
-  - claude-3-haiku-20240307
-  - anthropic/claude-3-haiku-20240307
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-08-31"], "release_dates": ["2024-03-13"], "snapshots": ["claude-3-haiku-20240307"]}'
   review_status: reviewed
 - id: anthropic/claude-haiku-3.5
@@ -975,13 +858,11 @@
   family: claude-haiku-3.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-10-22'
   tags: []
-  aliases:
-  - claude-3-5-haiku-20241022
-  - anthropic/claude-3-5-haiku-20241022
-  - claude-3-5-haiku-latest
-  - anthropic/claude-3-5-haiku-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-07-31"], "release_dates": ["2024-10-22"], "snapshots": ["claude-3-5-haiku-20241022", "claude-3-5-haiku-latest"]}'
   review_status: reviewed
 - id: anthropic/claude-haiku-4.5
@@ -990,25 +871,29 @@
   family: claude-haiku-4.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-10-15'
   tags: []
-  aliases:
-  - claude-haiku-4-5
-  - anthropic/claude-haiku-4-5
-  - claude-haiku-4-5-20251001
-  - anthropic/claude-haiku-4-5-20251001
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-02-28"], "release_dates": ["2025-10-15"], "snapshots": ["claude-haiku-4-5", "claude-haiku-4-5-20251001"]}'
   review_status: reviewed
-- id: anthropic/claude-instant-1
-  display_name: Claude Instant 1
+- id: anthropic/claude-haiku-4.5-20251001
+  display_name: Claude Haiku 4.5
   org_id: anthropic
-  family: claude-instant-1
+  family: claude-haiku-4.5
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-haiku-4.5
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-10-15'
   tags: []
   aliases:
-  - claude-instant-1
-  - claude-instant-1.2
-  - anthropic/claude-instant-1
-  - anthropic/claude-instant-1.2
+  - anthropic/claude-haiku-4-5-20251001
+  - claude-haiku-4-5-20251001
   metadata: '{}'
   review_status: reviewed
 - id: anthropic/claude-opus-3
@@ -1017,11 +902,11 @@
   family: claude-opus-3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-02-29'
   tags: []
-  aliases:
-  - claude-3-opus-20240229
-  - anthropic/claude-3-opus-20240229
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-08-31"], "release_dates": ["2024-02-29"], "snapshots": ["claude-3-opus-20240229"]}'
   review_status: reviewed
 - id: anthropic/claude-opus-4
@@ -1030,14 +915,48 @@
   family: claude-opus-4
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-22'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-05-22"], "snapshots": ["claude-opus-4-0", "claude-opus-4-20250514"]}'
+  review_status: reviewed
+- id: anthropic/claude-opus-4-0
+  display_name: Claude Opus 4 (latest)
+  org_id: anthropic
+  family: claude-opus-4
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-opus-4
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-05-22'
   tags: []
   aliases:
-  - claude-opus-4-0
   - anthropic/claude-opus-4-0
-  - claude-opus-4-20250514
+  - claude-opus-4-0
+  metadata: '{}'
+  review_status: reviewed
+- id: anthropic/claude-opus-4-20250514
+  display_name: Claude Opus 4
+  org_id: anthropic
+  family: claude-opus-4
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-opus-4
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-05-22'
+  tags: []
+  aliases:
   - anthropic/claude-opus-4-20250514
-  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-05-22"], "snapshots": ["claude-opus-4-0", "claude-opus-4-20250514"]}'
+  - claude-opus-4-20250514
+  metadata: '{}'
   review_status: reviewed
 - id: anthropic/claude-opus-4.1
   display_name: Claude Opus 4.1
@@ -1045,33 +964,61 @@
   family: claude-opus-4.1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-05'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-08-05"], "snapshots": ["claude-opus-4-1", "claude-opus-4-1-20250805"]}'
+  review_status: reviewed
+- id: anthropic/claude-opus-4.1-20250805
+  display_name: Claude Opus 4.1
+  org_id: anthropic
+  family: claude-opus-4.1
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-opus-4.1
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-08-05'
   tags: []
   aliases:
-  - claude-opus-4-1
-  - anthropic/claude-opus-4-1
-  - claude-opus-4-1-20250805
   - anthropic/claude-opus-4-1-20250805
-  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-08-05"], "snapshots": ["claude-opus-4-1", "claude-opus-4-1-20250805"]}'
+  - claude-opus-4-1-20250805
+  metadata: '{}'
   review_status: reviewed
 - id: anthropic/claude-opus-4.5
   display_name: Claude Opus 4.5
   org_id: anthropic
   family: claude-opus-4.5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-01'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-11-01", "2025-11-24"], "snapshots": ["claude-opus-4-5", "claude-opus-4-5-20251101"]}'
+  review_status: reviewed
+- id: anthropic/claude-opus-4.5-20251101
+  display_name: Claude Opus 4.5
+  org_id: anthropic
+  family: claude-opus-4.5
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-opus-4.5
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-11-01'
   tags: []
   aliases:
-  - claude-opus-4-5
-  - claude-opus-4.5
+  - anthropic/claude-opus-4-5-20251101
   - claude-opus-4-5-20251101
-  - claude-opus-4-5-20251124
-  - Claude-Opus-4.5
-  - Opus 4.5
-  - Opus-4.5
-  - opus-4.5
-  - anthropic/Opus 4.5
-  - anthropic/opus-4.5
-  - anthropic/claude-opus-4-5
-  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-11-01", "2025-11-24"], "snapshots": ["claude-opus-4-5", "claude-opus-4-5-20251101"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: anthropic/claude-opus-4.6
   display_name: Claude Opus 4.6
@@ -1079,11 +1026,11 @@
   family: claude-opus-4.6
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-05'
   tags: []
-  aliases:
-  - claude-opus-4-6
-  - anthropic/claude-opus-4-6
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-05-31"], "release_dates": ["2026-02-05"], "snapshots": ["claude-opus-4-6"]}'
   review_status: reviewed
 - id: anthropic/claude-opus-4.7
@@ -1092,11 +1039,11 @@
   family: claude-opus-4.7
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-04-16'
   tags: []
-  aliases:
-  - claude-opus-4-7
-  - anthropic/claude-opus-4-7
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2026-01-31"], "release_dates": ["2026-04-16"], "snapshots": ["claude-opus-4-7"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-3
@@ -1105,11 +1052,11 @@
   family: claude-sonnet-3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-03-04'
   tags: []
-  aliases:
-  - claude-3-sonnet-20240229
-  - anthropic/claude-3-sonnet-20240229
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-08-31"], "release_dates": ["2024-03-04"], "snapshots": ["claude-3-sonnet-20240229"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-3.5
@@ -1118,25 +1065,12 @@
   family: claude-sonnet-3.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-06-20'
   tags: []
-  aliases:
-  - claude-3-5-sonnet-20240620
-  - anthropic/claude-3-5-sonnet-20240620
-  metadata: '{"knowledge_cutoffs": ["2024-04-30"], "release_dates": ["2024-06-20"], "snapshots": ["claude-3-5-sonnet-20240620"]}'
-  review_status: reviewed
-- id: anthropic/claude-sonnet-3.5-v2
-  display_name: Claude Sonnet 3.5 V2
-  org_id: anthropic
-  family: claude-sonnet-3.5-v2
-  architecture: null
-  params_billions: null
-  parent_model_id: null
-  tags: []
-  aliases:
-  - claude-3-5-sonnet-20241022
-  - anthropic/claude-3-5-sonnet-20241022
-  metadata: '{"knowledge_cutoffs": ["2024-04-30"], "release_dates": ["2024-10-22"], "snapshots": ["claude-3-5-sonnet-20241022"]}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04-30"], "release_dates": ["2024-06-20", "2024-10-22"], "snapshots": ["claude-3-5-sonnet-20240620", "claude-3-5-sonnet-20241022"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-3.7
   display_name: Claude Sonnet 3.7
@@ -1144,11 +1078,11 @@
   family: claude-sonnet-3.7
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-02-19'
   tags: []
-  aliases:
-  - claude-3-7-sonnet-20250219
-  - anthropic/claude-3-7-sonnet-20250219
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-10-31"], "release_dates": ["2025-02-19"], "snapshots": ["claude-3-7-sonnet-20250219"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-4
@@ -1157,14 +1091,48 @@
   family: claude-sonnet-4
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-22'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-05-22"], "snapshots": ["claude-sonnet-4-0", "claude-sonnet-4-20250514"]}'
+  review_status: reviewed
+- id: anthropic/claude-sonnet-4-0
+  display_name: Claude Sonnet 4 (latest)
+  org_id: anthropic
+  family: claude-sonnet-4
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-sonnet-4
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-05-22'
   tags: []
   aliases:
-  - claude-sonnet-4-0
   - anthropic/claude-sonnet-4-0
-  - claude-sonnet-4-20250514
+  - claude-sonnet-4-0
+  metadata: '{}'
+  review_status: reviewed
+- id: anthropic/claude-sonnet-4-20250514
+  display_name: Claude Sonnet 4
+  org_id: anthropic
+  family: claude-sonnet-4
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-sonnet-4
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-05-22'
+  tags: []
+  aliases:
   - anthropic/claude-sonnet-4-20250514
-  metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-05-22"], "snapshots": ["claude-sonnet-4-0", "claude-sonnet-4-20250514"]}'
+  - claude-sonnet-4-20250514
+  metadata: '{}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-4.5
   display_name: Claude Sonnet 4.5
@@ -1172,14 +1140,30 @@
   family: claude-sonnet-4.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-29'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-07-31"], "release_dates": ["2025-09-29"], "snapshots": ["claude-sonnet-4-5", "claude-sonnet-4-5-20250929"]}'
+  review_status: reviewed
+- id: anthropic/claude-sonnet-4.5-20250929
+  display_name: Claude Sonnet 4.5
+  org_id: anthropic
+  family: claude-sonnet-4.5
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-sonnet-4.5
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-09-29'
   tags: []
   aliases:
-  - claude-sonnet-4-5
-  - anthropic/claude-sonnet-4-5
-  - claude-sonnet-4-5-20250929
   - anthropic/claude-sonnet-4-5-20250929
-  metadata: '{"knowledge_cutoffs": ["2025-07-31"], "release_dates": ["2025-09-29"], "snapshots": ["claude-sonnet-4-5", "claude-sonnet-4-5-20250929"]}'
+  - claude-sonnet-4-5-20250929
+  metadata: '{}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-4.6
   display_name: Claude Sonnet 4.6
@@ -1187,24 +1171,12 @@
   family: claude-sonnet-4.6
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-17'
   tags: []
-  aliases:
-  - claude-sonnet-4-6
-  - anthropic/claude-sonnet-4-6
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-02-17"], "snapshots": ["claude-sonnet-4-6"]}'
-  review_status: reviewed
-- id: anthropic/claude-v1
-  display_name: Claude v1
-  org_id: anthropic
-  family: claude-v1
-  tags: []
-  aliases:
-  - claude-v1
-  - claude-v1.3
-  - anthropic/claude-v1
-  - anthropic/claude-v1.3
-  metadata: '{}'
   review_status: reviewed
 - id: cohere/aya-expanse-32b
   display_name: Aya Expanse 32b
@@ -1212,12 +1184,12 @@
   family: aya-expanse-32b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-10-24'
   tags:
   - open-weight
-  aliases:
-  - c4ai-aya-expanse-32b
-  - cohere/c4ai-aya-expanse-32b
+  aliases: []
   metadata: '{"release_dates": ["2024-10-24"], "snapshots": ["c4ai-aya-expanse-32b"]}'
   review_status: reviewed
 - id: cohere/aya-expanse-8b
@@ -1226,12 +1198,12 @@
   family: aya-expanse-8b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-10-24'
   tags:
   - open-weight
-  aliases:
-  - c4ai-aya-expanse-8b
-  - cohere/c4ai-aya-expanse-8b
+  aliases: []
   metadata: '{"release_dates": ["2024-10-24"], "snapshots": ["c4ai-aya-expanse-8b"]}'
   review_status: reviewed
 - id: cohere/aya-vision-32b
@@ -1240,12 +1212,12 @@
   family: aya-vision-32b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-04'
   tags:
   - open-weight
-  aliases:
-  - c4ai-aya-vision-32b
-  - cohere/c4ai-aya-vision-32b
+  aliases: []
   metadata: '{"release_dates": ["2025-03-04"], "snapshots": ["c4ai-aya-vision-32b"]}'
   review_status: reviewed
 - id: cohere/aya-vision-8b
@@ -1254,23 +1226,45 @@
   family: aya-vision-8b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-04'
   tags:
   - open-weight
-  aliases:
-  - c4ai-aya-vision-8b
-  - cohere/c4ai-aya-vision-8b
+  aliases: []
   metadata: '{"release_dates": ["2025-03-04"], "snapshots": ["c4ai-aya-vision-8b"]}'
   review_status: reviewed
 - id: cohere/command-a
-  display_name: Cohere Command A
+  display_name: Command A
   org_id: cohere
   family: command-a
-  tags: []
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-13'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-03-13"], "snapshots": ["command-a-03-2025"]}'
+  review_status: reviewed
+- id: cohere/command-a-03-2025
+  display_name: Command A
+  org_id: cohere
+  family: command-a
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command-a
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-03-13'
+  tags:
+  - open-weight
   aliases:
-  - command-a
-  - cohere/command-a
   - cohere/command-a-03-2025
+  - command-a-03-2025
   metadata: '{}'
   review_status: reviewed
 - id: cohere/command-a-reasoning
@@ -1279,13 +1273,32 @@
   family: command-a-reasoning
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-08-21'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-08-21"], "snapshots": ["command-a-reasoning-08-2025"]}'
+  review_status: reviewed
+- id: cohere/command-a-reasoning-08-2025
+  display_name: Command A Reasoning
+  org_id: cohere
+  family: command-a-reasoning
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command-a-reasoning
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-08-21'
   tags:
   - open-weight
   aliases:
-  - command-a-reasoning-08-2025
   - cohere/command-a-reasoning-08-2025
-  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-08-21"], "snapshots": ["command-a-reasoning-08-2025"]}'
+  - command-a-reasoning-08-2025
+  metadata: '{}'
   review_status: reviewed
 - id: cohere/command-a-translate
   display_name: Command A Translate
@@ -1293,13 +1306,32 @@
   family: command-a-translate
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-08-28'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-08-28"], "snapshots": ["command-a-translate-08-2025"]}'
+  review_status: reviewed
+- id: cohere/command-a-translate-08-2025
+  display_name: Command A Translate
+  org_id: cohere
+  family: command-a-translate
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command-a-translate
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-08-28'
   tags:
   - open-weight
   aliases:
-  - command-a-translate-08-2025
   - cohere/command-a-translate-08-2025
-  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-08-28"], "snapshots": ["command-a-translate-08-2025"]}'
+  - command-a-translate-08-2025
+  metadata: '{}'
   review_status: reviewed
 - id: cohere/command-a-vision
   display_name: Command A Vision
@@ -1307,25 +1339,46 @@
   family: command-a-vision
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-31'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-07-31"], "snapshots": ["command-a-vision-07-2025"]}'
+  review_status: reviewed
+- id: cohere/command-a-vision-07-2025
+  display_name: Command A Vision
+  org_id: cohere
+  family: command-a-vision
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command-a-vision
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-07-31'
   tags:
   - open-weight
   aliases:
-  - command-a-vision-07-2025
   - cohere/command-a-vision-07-2025
-  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-07-31"], "snapshots": ["command-a-vision-07-2025"]}'
+  - command-a-vision-07-2025
+  metadata: '{}'
   review_status: reviewed
 - id: cohere/command-r
-  display_name: Cohere Command R
+  display_name: Command R
   org_id: cohere
   family: command-r
-  tags: []
-  aliases:
-  - command-r
-  - cohere/command-r
-  - cohere/command-r-08-2024
-  - cohere/command-r-03-2024
-  metadata: '{}'
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2024-08-30'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2024-08-30"], "snapshots": ["command-r-08-2024"]}'
   review_status: reviewed
 - id: cohere/command-r+
   display_name: Command R+
@@ -1333,24 +1386,31 @@
   family: command-r+
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-08-30'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2024-08-30"], "snapshots": ["command-r-plus-08-2024"]}'
+  review_status: reviewed
+- id: cohere/command-r-08-2024
+  display_name: Command R
+  org_id: cohere
+  family: command-r
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command-r
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-08-30'
   tags:
   - open-weight
   aliases:
-  - command-r-plus-08-2024
-  - cohere/command-r-plus-08-2024
-  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2024-08-30"], "snapshots": ["command-r-plus-08-2024"]}'
-  review_status: reviewed
-- id: cohere/command-r-plus
-  display_name: Cohere Command R+
-  org_id: cohere
-  family: command-r-plus
-  tags: []
-  aliases:
-  - command-r-plus
-  - cohere/command-r-plus
-  - cohere/command-r-plus-08-2024
-  - cohere/command-r-plus-04-2024
+  - cohere/command-r-08-2024
+  - command-r-08-2024
   metadata: '{}'
   review_status: reviewed
 - id: cohere/command-r7b
@@ -1359,13 +1419,32 @@
   family: command-r7b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-02-27'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2024-02-27"], "snapshots": ["command-r7b-12-2024"]}'
+  review_status: reviewed
+- id: cohere/command-r7b-12-2024
+  display_name: Command R7B
+  org_id: cohere
+  family: command-r7b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command-r7b
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-02-27'
   tags:
   - open-weight
   aliases:
-  - command-r7b-12-2024
   - cohere/command-r7b-12-2024
-  metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2024-02-27"], "snapshots": ["command-r7b-12-2024"]}'
+  - command-r7b-12-2024
+  metadata: '{}'
   review_status: reviewed
 - id: cohere/command-r7b-arabic
   display_name: Command R7b Arabic
@@ -1373,30 +1452,31 @@
   family: command-r7b-arabic
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-02-27'
   tags:
   - open-weight
-  aliases:
-  - command-r7b-arabic-02-2025
-  - cohere/command-r7b-arabic-02-2025
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-06-01"], "release_dates": ["2025-02-27"], "snapshots": ["command-r7b-arabic-02-2025"]}'
   review_status: reviewed
-- id: databricks/dbrx
-  display_name: DBRX
-  org_id: databricks
-  family: dbrx
-  architecture: mixture-of-experts
-  params_billions: 132.0
+- id: cohere/command-r7b-arabic-02-2025
+  display_name: Command R7B Arabic
+  org_id: cohere
+  family: command-r7b-arabic
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command-r7b-arabic
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-02-27'
   tags:
   - open-weight
-  - moe
   aliases:
-  - DBRX
-  - DBRX-Base
-  - DBRX-Instruct
-  - dbrx-instruct
-  - databricks/dbrx
-  - databricks/dbrx-instruct
+  - cohere/command-r7b-arabic-02-2025
+  - command-r7b-arabic-02-2025
   metadata: '{}'
   review_status: reviewed
 - id: deepseek/deepseek
@@ -1405,131 +1485,31 @@
   family: deepseek
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-12-01'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-09"], "release_dates": ["2025-12-01"], "snapshots": ["deepseek-chat"]}'
+  review_status: reviewed
+- id: deepseek/deepseek-chat
+  display_name: DeepSeek Chat
+  org_id: deepseek
+  family: deepseek
+  architecture: null
+  params_billions: null
+  parents:
+  - id: deepseek/deepseek
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: '2025-12-01'
   tags:
   - open-weight
   aliases:
   - deepseek-chat
   - deepseek/deepseek-chat
-  metadata: '{"knowledge_cutoffs": ["2025-09"], "release_dates": ["2025-12-01"], "snapshots": ["deepseek-chat"]}'
-  review_status: reviewed
-- id: deepseek/deepseek-llm-67b
-  display_name: DeepSeek LLM 67B
-  org_id: deepseek
-  family: deepseek-llm-67b
-  params_billions: 67.0
-  tags:
-  - open-weight
-  aliases:
-  - DeepSeek-LLM-67B
-  - DeepSeek-LLM-67B-Chat
-  - deepseek-llm-67b
-  - deepseek-llm-67b-chat
-  - deepseek-ai/deepseek-llm-67b-chat
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-r1
-  display_name: DeepSeek R1
-  org_id: deepseek
-  family: deepseek-r1
-  architecture: mixture-of-experts
-  params_billions: 671.0
-  tags:
-  - open-weight
-  - moe
-  - reasoning
-  aliases:
-  - DeepSeek-R1
-  - deepseek-r1
-  - deepseek-r1-0528
-  - deepseek/deepseek-r1
-  - deepseek/deepseek-r1-0528
-  - deepseek-ai/DeepSeek-R1
-  - deepseek-ai/DeepSeek-R1-0528
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-r1-distill-llama-70b
-  display_name: DeepSeek R1 Distill Llama 70B
-  org_id: deepseek
-  family: deepseek-r1-distill-llama-70b
-  params_billions: 70.0
-  tags:
-  - open-weight
-  - distillation
-  - reasoning
-  aliases:
-  - DeepSeek-R1-Distill-Llama-70B
-  - deepseek-ai/DeepSeek-R1-Distill-Llama-70B
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-r1-distill-llama-8b
-  display_name: DeepSeek R1 Distill Llama 8B
-  org_id: deepseek
-  family: deepseek-r1-distill-llama-8b
-  params_billions: 8.0
-  tags:
-  - open-weight
-  - distillation
-  - reasoning
-  aliases:
-  - DeepSeek-R1-Distill-Llama-8B
-  - deepseek-ai/DeepSeek-R1-Distill-Llama-8B
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-r1-distill-qwen-1.5b
-  display_name: DeepSeek R1 Distill Qwen 1.5B
-  org_id: deepseek
-  family: deepseek-r1-distill-qwen-1.5b
-  params_billions: 1.5
-  tags:
-  - open-weight
-  - distillation
-  - reasoning
-  aliases:
-  - DeepSeek-R1-Distill-Qwen-1.5B
-  - deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-r1-distill-qwen-14b
-  display_name: DeepSeek R1 Distill Qwen 14B
-  org_id: deepseek
-  family: deepseek-r1-distill-qwen-14b
-  params_billions: 14.0
-  tags:
-  - open-weight
-  - distillation
-  - reasoning
-  aliases:
-  - DeepSeek-R1-Distill-Qwen-14B
-  - deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-r1-distill-qwen-32b
-  display_name: DeepSeek R1 Distill Qwen 32B
-  org_id: deepseek
-  family: deepseek-r1-distill-qwen-32b
-  params_billions: 32.0
-  tags:
-  - open-weight
-  - distillation
-  - reasoning
-  aliases:
-  - DeepSeek-R1-Distill-Qwen-32B
-  - deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-r1-distill-qwen-7b
-  display_name: DeepSeek R1 Distill Qwen 7B
-  org_id: deepseek
-  family: deepseek-r1-distill-qwen-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  - distillation
-  - reasoning
-  aliases:
-  - DeepSeek-R1-Distill-Qwen-7B
-  - deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
   metadata: '{}'
   review_status: reviewed
 - id: deepseek/deepseek-reasoner
@@ -1538,92 +1518,13 @@
   family: deepseek-reasoner
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-12-01'
   tags:
   - open-weight
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-09"], "release_dates": ["2025-12-01"], "snapshots": ["deepseek-reasoner"]}'
-  review_status: reviewed
-- id: deepseek/deepseek-v2
-  display_name: DeepSeek V2
-  org_id: deepseek
-  family: deepseek-v2
-  architecture: mixture-of-experts
-  params_billions: 236.0
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - DeepSeek-V2
-  - DeepSeek-V2-Chat
-  - deepseek-ai/DeepSeek-V2
-  - deepseek-ai/DeepSeek-V2-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-v2-lite
-  display_name: DeepSeek V2 Lite
-  org_id: deepseek
-  family: deepseek-v2-lite
-  architecture: mixture-of-experts
-  params_billions: 16.0
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - DeepSeek-V2-Lite
-  - DeepSeek-V2-Lite-Chat
-  - deepseek-v2-lite
-  - deepseek-v2-16b
-  - deepseek/deepseek-v2-16b
-  - deepseek-ai/DeepSeek-V2-Lite
-  - deepseek-ai/DeepSeek-V2-Lite-Chat
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-v2.5
-  display_name: DeepSeek V2.5
-  org_id: deepseek
-  family: deepseek-v2.5
-  architecture: mixture-of-experts
-  params_billions: 236.0
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - DeepSeek-V2.5
-  - deepseek-ai/DeepSeek-V2.5
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-v3
-  display_name: DeepSeek V3
-  org_id: deepseek
-  family: deepseek-v3
-  architecture: mixture-of-experts
-  params_billions: 671.0
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - DeepSeek-V3
-  - deepseek-v3
-  - deepseek-ai/DeepSeek-V3
-  - deepseek-ai/deepseek-v3
-  metadata: '{}'
-  review_status: reviewed
-- id: deepseek/deepseek-v3.1
-  display_name: DeepSeek V3.1
-  org_id: deepseek
-  family: deepseek-v3.1
-  architecture: mixture-of-experts
-  params_billions: 671.0
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - DeepSeek-V3.1
-  - deepseek-v3.1
-  - deepseek-ai/DeepSeek-V3.1
-  - deepseek-ai/deepseek-v3.1
-  metadata: '{}'
   review_status: reviewed
 - id: deepseek/deepseek-v4-flash
   display_name: DeepSeek V4 Flash
@@ -1631,7 +1532,9 @@
   family: deepseek-v4-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-24'
   tags:
   - open-weight
   aliases: []
@@ -1643,40 +1546,26 @@
   family: deepseek-v4-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-24'
   tags:
   - open-weight
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2026-04-24"], "snapshots": ["deepseek-v4-pro"]}'
   review_status: reviewed
-- id: google/codegemma-7b
-  display_name: CodeGemma 7B
-  org_id: google
-  family: codegemma-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  - code
-  aliases:
-  - codegemma-7b
-  - CodeGemma-7B
-  - google/codegemma-7b
-  metadata: '{}'
-  review_status: reviewed
 - id: google/gemini-1.5-flash
   display_name: Gemini 1.5 Flash
   org_id: google
   family: gemini-1.5-flash
-  tags:
-  - multimodal
-  aliases:
-  - gemini-1.5-flash
-  - google/gemini-1.5-flash
-  - google/gemini-1.5-flash-001
-  - google/gemini-1.5-flash-002
-  - gemini-1.5-flash-001
-  - gemini-1.5-flash-002
-  metadata: '{}'
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2024-05-14'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-05-14"], "snapshots": ["gemini-1.5-flash"]}'
   review_status: reviewed
 - id: google/gemini-1.5-flash-8b
   display_name: Gemini 1.5 Flash-8B
@@ -1684,7 +1573,9 @@
   family: gemini-1.5-flash-8b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-10-03'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-10-03"], "snapshots": ["gemini-1.5-flash-8b"]}'
@@ -1693,16 +1584,14 @@
   display_name: Gemini 1.5 Pro
   org_id: google
   family: gemini-1.5-pro
-  tags:
-  - multimodal
-  aliases:
-  - gemini-1.5-pro
-  - google/gemini-1.5-pro
-  - google/gemini-1.5-pro-001
-  - google/gemini-1.5-pro-002
-  - gemini-1.5-pro-001
-  - gemini-1.5-pro-002
-  metadata: '{}'
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2024-02-15'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-02-15"], "snapshots": ["gemini-1.5-pro"]}'
   review_status: reviewed
 - id: google/gemini-2.0-flash
   display_name: Gemini 2.0 Flash
@@ -1710,7 +1599,9 @@
   family: gemini-2.0-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-12-11'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-06"], "release_dates": ["2024-12-11"], "snapshots": ["gemini-2.0-flash"]}'
@@ -1721,7 +1612,9 @@
   family: gemini-2.0-flash-lite
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-12-11'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-06"], "release_dates": ["2024-12-11"], "snapshots": ["gemini-2.0-flash-lite"]}'
@@ -1732,15 +1625,11 @@
   family: gemini-2.5-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-03-20'
   tags: []
-  aliases:
-  - gemini-2.5-flash-preview-04-17
-  - google/gemini-2.5-flash-preview-04-17
-  - gemini-2.5-flash-preview-05-20
-  - google/gemini-2.5-flash-preview-05-20
-  - gemini-2.5-flash-preview-09-2025
-  - google/gemini-2.5-flash-preview-09-2025
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-03-20", "2025-04-17", "2025-05-20", "2025-09-25"], "snapshots": ["gemini-2.5-flash", "gemini-2.5-flash-preview-04-17", "gemini-2.5-flash-preview-05-20",
     "gemini-2.5-flash-preview-09-2025"]}'
   review_status: reviewed
@@ -1750,11 +1639,11 @@
   family: gemini-2.5-flash-image
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-26'
   tags: []
-  aliases:
-  - gemini-2.5-flash-image-preview
-  - google/gemini-2.5-flash-image-preview
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-08-26"], "snapshots": ["gemini-2.5-flash-image", "gemini-2.5-flash-image-preview"]}'
   review_status: reviewed
 - id: google/gemini-2.5-flash-lite
@@ -1763,13 +1652,11 @@
   family: gemini-2.5-flash-lite
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-06-17'
   tags: []
-  aliases:
-  - gemini-2.5-flash-lite-preview-06-17
-  - google/gemini-2.5-flash-lite-preview-06-17
-  - gemini-2.5-flash-lite-preview-09-2025
-  - google/gemini-2.5-flash-lite-preview-09-2025
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-06-17", "2025-09-25"], "snapshots": ["gemini-2.5-flash-lite", "gemini-2.5-flash-lite-preview-06-17", "gemini-2.5-flash-lite-preview-09-2025"]}'
   review_status: reviewed
 - id: google/gemini-2.5-flash-preview-tts
@@ -1778,7 +1665,9 @@
   family: gemini-2.5-flash-preview-tts
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-05-01"], "snapshots": ["gemini-2.5-flash-preview-tts"]}'
@@ -1789,13 +1678,11 @@
   family: gemini-2.5-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-03-20'
   tags: []
-  aliases:
-  - gemini-2.5-pro-preview-05-06
-  - google/gemini-2.5-pro-preview-05-06
-  - gemini-2.5-pro-preview-06-05
-  - google/gemini-2.5-pro-preview-06-05
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-03-20", "2025-05-06", "2025-06-05"], "snapshots": ["gemini-2.5-pro", "gemini-2.5-pro-preview-05-06", "gemini-2.5-pro-preview-06-05"]}'
   review_status: reviewed
 - id: google/gemini-2.5-pro-preview-tts
@@ -1804,7 +1691,9 @@
   family: gemini-2.5-pro-preview-tts
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-05-01"], "snapshots": ["gemini-2.5-pro-preview-tts"]}'
@@ -1813,28 +1702,62 @@
   display_name: Gemini 3 Flash
   org_id: google
   family: gemini-3-flash
-  tags:
-  - multimodal
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2025-12-17'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-12-17"], "snapshots": ["gemini-3-flash-preview"]}'
+  review_status: reviewed
+- id: google/gemini-3-flash-preview
+  display_name: Gemini 3 Flash Preview
+  org_id: google
+  family: gemini-3-flash
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemini-3-flash
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-12-17'
+  tags: []
   aliases:
-  - Gemini 3 Flash
-  - gemini-3-flash
-  - google/gemini-3-flash
-  - google/Gemini 3 Flash
+  - gemini-3-flash-preview
+  - google/gemini-3-flash-preview
   metadata: '{}'
   review_status: reviewed
 - id: google/gemini-3-pro
   display_name: Gemini 3 Pro
   org_id: google
   family: gemini-3-pro
-  tags:
-  - multimodal
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-18'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-11-18"], "snapshots": ["gemini-3-pro-preview"]}'
+  review_status: reviewed
+- id: google/gemini-3-pro-preview
+  display_name: Gemini 3 Pro Preview
+  org_id: google
+  family: gemini-3-pro
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemini-3-pro
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-11-18'
+  tags: []
   aliases:
-  - Gemini 3 Pro
-  - gemini-3-pro
-  - google/gemini-3-pro
-  - google/Gemini 3 Pro
-  - google/gemini-3.1-pro
-  - gemini-3.1-pro
+  - gemini-3-pro-preview
+  - google/gemini-3-pro-preview
   metadata: '{}'
   review_status: reviewed
 - id: google/gemini-3.1-flash-image
@@ -1843,11 +1766,11 @@
   family: gemini-3.1-flash-image
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-26'
   tags: []
-  aliases:
-  - gemini-3.1-flash-image-preview
-  - google/gemini-3.1-flash-image-preview
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-02-26"], "snapshots": ["gemini-3.1-flash-image-preview"]}'
   review_status: reviewed
 - id: google/gemini-3.1-flash-lite
@@ -1856,11 +1779,11 @@
   family: gemini-3.1-flash-lite
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-03'
   tags: []
-  aliases:
-  - gemini-3.1-flash-lite-preview
-  - google/gemini-3.1-flash-lite-preview
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-03-03"], "snapshots": ["gemini-3.1-flash-lite-preview"]}'
   review_status: reviewed
 - id: google/gemini-3.1-pro
@@ -1869,11 +1792,11 @@
   family: gemini-3.1-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-19'
   tags: []
-  aliases:
-  - gemini-3.1-pro-preview
-  - google/gemini-3.1-pro-preview
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-02-19"], "snapshots": ["gemini-3.1-pro-preview"]}'
   review_status: reviewed
 - id: google/gemini-3.1-pro-preview-custom-tools
@@ -1882,11 +1805,11 @@
   family: gemini-3.1-pro-preview-custom-tools
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-19'
   tags: []
-  aliases:
-  - gemini-3.1-pro-preview-customtools
-  - google/gemini-3.1-pro-preview-customtools
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-02-19"], "snapshots": ["gemini-3.1-pro-preview-customtools"]}'
   review_status: reviewed
 - id: google/gemini-embedding-001
@@ -1895,7 +1818,9 @@
   family: gemini-embedding-001
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-20'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-05-20"], "snapshots": ["gemini-embedding-001"]}'
@@ -1906,12 +1831,30 @@
   family: gemini-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-25'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-09-25"], "snapshots": ["gemini-flash-latest"]}'
+  review_status: reviewed
+- id: google/gemini-flash-latest
+  display_name: Gemini Flash Latest
+  org_id: google
+  family: gemini-flash
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemini-flash
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-09-25'
   tags: []
   aliases:
   - gemini-flash-latest
   - google/gemini-flash-latest
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-09-25"], "snapshots": ["gemini-flash-latest"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: google/gemini-flash-lite
   display_name: Gemini Flash Lite
@@ -1919,12 +1862,30 @@
   family: gemini-flash-lite
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-25'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-09-25"], "snapshots": ["gemini-flash-lite-latest"]}'
+  review_status: reviewed
+- id: google/gemini-flash-lite-latest
+  display_name: Gemini Flash-Lite Latest
+  org_id: google
+  family: gemini-flash-lite
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemini-flash-lite
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-09-25'
   tags: []
   aliases:
   - gemini-flash-lite-latest
   - google/gemini-flash-lite-latest
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-09-25"], "snapshots": ["gemini-flash-lite-latest"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: google/gemini-live-2.5-flash
   display_name: Gemini Live 2.5 Flash
@@ -1932,7 +1893,9 @@
   family: gemini-live-2.5-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-09-01"], "snapshots": ["gemini-live-2.5-flash"]}'
@@ -1943,130 +1906,109 @@
   family: gemini-live-2.5-flash-preview-native-audio
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-06-17'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-06-17"], "snapshots": ["gemini-live-2.5-flash-preview-native-audio"]}'
   review_status: reviewed
-- id: google/gemma-2-27b
-  display_name: Gemma 2 27B
-  org_id: google
-  family: gemma-2-27b
-  params_billions: 27.0
-  tags:
-  - open-weight
-  aliases:
-  - gemma-2-27b
-  - gemma-2-27b-it
-  - google/gemma-2-27b
-  - google/gemma-2-27b-it
-  metadata: '{}'
-  review_status: reviewed
-- id: google/gemma-2-2b
-  display_name: Gemma 2 2B
-  org_id: google
-  family: gemma-2-2b
-  params_billions: 2.0
-  tags:
-  - open-weight
-  aliases:
-  - gemma-2-2b
-  - gemma-2-2b-it
-  - google/gemma-2-2b
-  - google/gemma-2-2b-it
-  metadata: '{}'
-  review_status: reviewed
-- id: google/gemma-2-9b
-  display_name: Gemma 2 9B
-  org_id: google
-  family: gemma-2-9b
-  params_billions: 9.0
-  tags:
-  - open-weight
-  aliases:
-  - gemma-2-9b
-  - gemma-2-9b-it
-  - google/gemma-2-9b
-  - google/gemma-2-9b-it
-  metadata: '{}'
-  review_status: reviewed
-- id: google/gemma-2b
-  display_name: Gemma 2B
-  org_id: google
-  family: gemma-2b
-  params_billions: 2.0
-  tags:
-  - open-weight
-  aliases:
-  - gemma-2b
-  - gemma-2b-it
-  - google/gemma-2b
-  - google/gemma-2b-it
-  - Gemma-2B
-  metadata: '{}'
-  review_status: reviewed
 - id: google/gemma-3-12b
+  display_name: Gemma 3 12b
+  org_id: google
+  family: gemma-3-12b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-13'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-03-13"], "snapshots": ["gemma-3-12b-it"]}'
+  review_status: reviewed
+- id: google/gemma-3-12b-it
   display_name: Gemma 3 12B
   org_id: google
   family: gemma-3-12b
-  params_billions: 12.0
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemma-3-12b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: '2025-03-13'
   tags:
   - open-weight
-  - multimodal
   aliases:
-  - gemma-3-12b
-  - gemma3-12b
   - gemma-3-12b-it
-  - google/gemma-3-12b
-  - google/gemma3-12b
   - google/gemma-3-12b-it
   metadata: '{}'
   review_status: reviewed
-- id: google/gemma-3-1b
-  display_name: Gemma 3 1B
+- id: google/gemma-3-27b
+  display_name: Gemma 3 27b
   org_id: google
-  family: gemma-3-1b
-  params_billions: 1.0
+  family: gemma-3-27b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-12'
   tags:
   - open-weight
-  aliases:
-  - gemma-3-1b
-  - gemma-3-1b-it
-  - google/gemma-3-1b
-  - google/gemma-3-1b-it
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-03-12"], "snapshots": ["gemma-3-27b-it"]}'
   review_status: reviewed
-- id: google/gemma-3-27b
+- id: google/gemma-3-27b-it
   display_name: Gemma 3 27B
   org_id: google
   family: gemma-3-27b
-  params_billions: 27.0
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemma-3-27b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: '2025-03-12'
   tags:
   - open-weight
-  - multimodal
   aliases:
-  - gemma-3-27b
-  - gemma3-27b
   - gemma-3-27b-it
-  - google/gemma-3-27b
-  - google/gemma3-27b
   - google/gemma-3-27b-it
   metadata: '{}'
   review_status: reviewed
 - id: google/gemma-3-4b
+  display_name: Gemma 3 4b
+  org_id: google
+  family: gemma-3-4b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-13'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-03-13"], "snapshots": ["gemma-3-4b-it"]}'
+  review_status: reviewed
+- id: google/gemma-3-4b-it
   display_name: Gemma 3 4B
   org_id: google
   family: gemma-3-4b
-  params_billions: 4.0
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemma-3-4b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: '2025-03-13'
   tags:
   - open-weight
-  - multimodal
   aliases:
-  - gemma-3-4b
-  - gemma3-4b
   - gemma-3-4b-it
-  - google/gemma-3-4b
-  - google/gemma3-4b
   - google/gemma-3-4b-it
   metadata: '{}'
   review_status: reviewed
@@ -2076,12 +2018,12 @@
   family: gemma-3n-2b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-09'
   tags:
   - open-weight
-  aliases:
-  - gemma-3n-e2b-it
-  - google/gemma-3n-e2b-it
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-07-09"], "snapshots": ["gemma-3n-e2b-it"]}'
   review_status: reviewed
 - id: google/gemma-3n-4b
@@ -2090,12 +2032,12 @@
   family: gemma-3n-4b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-05-20'
   tags:
   - open-weight
-  aliases:
-  - gemma-3n-e4b-it
-  - google/gemma-3n-e4b-it
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-05-20"], "snapshots": ["gemma-3n-e4b-it"]}'
   review_status: reviewed
 - id: google/gemma-4-26b
@@ -2104,13 +2046,49 @@
   family: gemma-4-26b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-02'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-04-02"], "snapshots": ["gemma-4-26b-a4b-it"]}'
+  review_status: reviewed
+- id: google/gemma-4-26b-a4b
+  display_name: Gemma 4 26b A4b
+  org_id: google
+  family: gemma-4-26b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemma-4-26b
+    relationship: variant
+    axis: size
+  open_weights: true
+  release_date: null
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{}'
+  review_status: reviewed
+- id: google/gemma-4-26b-a4b-it
+  display_name: Gemma 4 26B
+  org_id: google
+  family: gemma-4-26b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemma-4-26b-a4b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: '2026-04-02'
   tags:
   - open-weight
   aliases:
   - gemma-4-26b-a4b-it
   - google/gemma-4-26b-a4b-it
-  metadata: '{"release_dates": ["2026-04-02"], "snapshots": ["gemma-4-26b-a4b-it"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: google/gemma-4-31b
   display_name: Gemma 4 31b
@@ -2118,139 +2096,31 @@
   family: gemma-4-31b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-02'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-04-02"], "snapshots": ["gemma-4-31b-it"]}'
+  review_status: reviewed
+- id: google/gemma-4-31b-it
+  display_name: Gemma 4 31B
+  org_id: google
+  family: gemma-4-31b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: google/gemma-4-31b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: '2026-04-02'
   tags:
   - open-weight
   aliases:
   - gemma-4-31b-it
   - google/gemma-4-31b-it
-  metadata: '{"release_dates": ["2026-04-02"], "snapshots": ["gemma-4-31b-it"]}'
-  review_status: reviewed
-- id: google/gemma-7b
-  display_name: Gemma 7B
-  org_id: google
-  family: gemma-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - gemma-7b
-  - gemma-7b-it
-  - google/gemma-7b
-  - google/gemma-7b-it
-  - Gemma-7B
-  metadata: '{}'
-  review_status: reviewed
-- id: huggingface/smollm2-1.7b
-  display_name: SmolLM2 1.7B
-  org_id: huggingface
-  family: smollm2-1.7b
-  params_billions: 1.7
-  tags:
-  - open-weight
-  aliases:
-  - SmolLM2-1.7B
-  - smollm2-1.7b
-  - HuggingFaceTB/SmolLM2-1.7B
-  - huggingfacetb/smollm2-1.7b
-  metadata: '{}'
-  review_status: reviewed
-- id: huggingface/smollm2-135m
-  display_name: SmolLM2 135M
-  org_id: huggingface
-  family: smollm2-135m
-  params_billions: 0.135
-  tags:
-  - open-weight
-  aliases:
-  - SmolLM2-135M
-  - smollm2-135m
-  - HuggingFaceTB/SmolLM2-135M
-  - huggingfacetb/smollm2-135m
-  metadata: '{}'
-  review_status: reviewed
-- id: huggingface/smollm3-3b
-  display_name: SmolLM3 3B
-  org_id: huggingface
-  family: smollm3-3b
-  params_billions: 3.0
-  tags:
-  - open-weight
-  aliases:
-  - SmolLM3-3B
-  - smollm3-3b
-  - HuggingFaceTB/SmolLM3-3B
-  - huggingface/smollm3-3b-nothink
-  metadata: '{}'
-  review_status: reviewed
-- id: ibm-granite/granite-3.0-2b
-  display_name: Granite 3.0 2B
-  org_id: ibm-granite
-  family: granite-3.0-2b
-  params_billions: 2.0
-  tags:
-  - open-weight
-  aliases:
-  - granite-3.0-2b
-  - granite-3.0-2b-instruct
-  - ibm-granite/granite-3.0-2b
-  - ibm-granite/granite-3.0-2b-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: ibm-granite/granite-3.0-8b
-  display_name: Granite 3.0 8B
-  org_id: ibm-granite
-  family: granite-3.0-8b
-  params_billions: 8.0
-  tags:
-  - open-weight
-  aliases:
-  - granite-3.0-8b
-  - granite-3.0-8b-instruct
-  - ibm-granite/granite-3.0-8b
-  - ibm-granite/granite-3.0-8b-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: ibm-granite/granite-3.1-8b
-  display_name: Granite 3.1 8B
-  org_id: ibm-granite
-  family: granite-3.1-8b
-  params_billions: 8.0
-  tags:
-  - open-weight
-  aliases:
-  - granite-3.1-8b
-  - granite-3.1-8b-instruct
-  - ibm-granite/granite-3.1-8b
-  - ibm-granite/granite-3.1-8b-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: ibm-granite/granite-3.2-8b
-  display_name: Granite 3.2 8B
-  org_id: ibm-granite
-  family: granite-3.2-8b
-  params_billions: 8.0
-  tags:
-  - open-weight
-  aliases:
-  - granite-3.2-8b
-  - granite-3.2-8b-instruct
-  - ibm-granite/granite-3.2-8b
-  - ibm-granite/granite-3.2-8b-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: ibm-granite/granite-3.3-8b
-  display_name: Granite 3.3 8B
-  org_id: ibm-granite
-  family: granite-3.3-8b
-  params_billions: 8.0
-  tags:
-  - open-weight
-  aliases:
-  - granite-3.3-8b
-  - granite-3.3-8b-instruct
-  - ibm-granite/granite-3.3-8b
-  - ibm-granite/granite-3.3-8b-instruct
   metadata: '{}'
   review_status: reviewed
 - id: inception/mercury-2
@@ -2259,7 +2129,9 @@
   family: mercury-2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-24'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01-01"], "release_dates": ["2026-02-24"], "snapshots": ["mercury-2"]}'
@@ -2270,526 +2142,12 @@
   family: mercury-edit-2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-30'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2026-03-30"], "snapshots": ["mercury-edit-2"]}'
-  review_status: reviewed
-- id: meta/llama-2
-  display_name: Llama 2
-  org_id: meta
-  family: llama-2
-  tags:
-  - open-weight
-  - family
-  aliases:
-  - meta-llama/llama-2
-  - meta/llama2
-  - Llama-2
-  - llama-2
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-2-13b
-  display_name: Llama 2 13B
-  org_id: meta
-  family: llama-2-13b
-  params_billions: 13.0
-  parent_model_id: meta/llama-2
-  tags:
-  - open-weight
-  aliases:
-  - Llama-2-13b
-  - Llama-2-13b-chat
-  - Llama-2-13b-hf
-  - Llama-2-13b-chat-hf
-  - meta-llama/Llama-2-13b
-  - meta-llama/Llama-2-13b-chat
-  - meta-llama/Llama-2-13b-hf
-  - meta-llama/Llama-2-13b-chat-hf
-  - meta/llama2-13b
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-2-70b
-  display_name: Llama 2 70B
-  org_id: meta
-  family: llama-2-70b
-  params_billions: 70.0
-  parent_model_id: meta/llama-2
-  tags:
-  - open-weight
-  aliases:
-  - Llama-2-70b
-  - Llama-2-70b-chat
-  - Llama-2-70b-hf
-  - Llama-2-70b-chat-hf
-  - meta-llama/Llama-2-70b
-  - meta-llama/Llama-2-70b-chat
-  - meta-llama/Llama-2-70b-hf
-  - meta-llama/Llama-2-70b-chat-hf
-  - meta/llama2-70b
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-2-7b
-  display_name: Llama 2 7B
-  org_id: meta
-  family: llama-2-7b
-  params_billions: 7.0
-  parent_model_id: meta/llama-2
-  tags:
-  - open-weight
-  aliases:
-  - Llama-2-7b
-  - Llama-2-7b-chat
-  - Llama-2-7b-hf
-  - Llama-2-7b-chat-hf
-  - meta-llama/Llama-2-7b
-  - meta-llama/Llama-2-7b-chat
-  - meta-llama/Llama-2-7b-hf
-  - meta-llama/Llama-2-7b-chat-hf
-  - meta/llama2-7b
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3
-  display_name: Llama 3
-  org_id: meta
-  family: llama-3
-  tags:
-  - open-weight
-  - family
-  aliases:
-  - meta-llama/llama-3
-  - meta/llama3
-  - Llama-3
-  - llama-3
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3-70b
-  display_name: Llama 3 70B
-  org_id: meta
-  family: llama-3-70b
-  params_billions: 70.0
-  parent_model_id: meta/llama-3
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3-70B
-  - Llama-3-70B-Instruct
-  - Meta-Llama-3-70B
-  - Meta-Llama-3-70B-Instruct
-  - meta-llama/Meta-Llama-3-70B
-  - meta-llama/Meta-Llama-3-70B-Instruct
-  - meta-llama/Llama-3-70B
-  - meta-llama/Llama-3-70B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3-8b
-  display_name: Llama 3 8B
-  org_id: meta
-  family: llama-3-8b
-  params_billions: 8.0
-  parent_model_id: meta/llama-3
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3-8B
-  - Llama-3-8B-Instruct
-  - Meta-Llama-3-8B
-  - Meta-Llama-3-8B-Instruct
-  - meta-llama/Meta-Llama-3-8B
-  - meta-llama/Meta-Llama-3-8B-Instruct
-  - meta-llama/Llama-3-8B
-  - meta-llama/Llama-3-8B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.1
-  display_name: Llama 3.1
-  org_id: meta
-  family: llama-3.1
-  tags:
-  - open-weight
-  - family
-  aliases:
-  - meta-llama/llama-3.1
-  - meta/llama3.1
-  - Llama-3.1
-  - llama-3.1
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.1-405b
-  display_name: Llama 3.1 405B
-  org_id: meta
-  family: llama-3.1-405b
-  params_billions: 405.0
-  parent_model_id: meta/llama-3.1
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3.1-405B
-  - Llama-3.1-405B-Instruct
-  - Meta-Llama-3.1-405B
-  - Meta-Llama-3.1-405B-Instruct
-  - meta-llama/Llama-3.1-405B
-  - meta-llama/Llama-3.1-405B-Instruct
-  - meta-llama/Meta-Llama-3.1-405B
-  - meta-llama/Meta-Llama-3.1-405B-Instruct
-  - meta/llama3.1-405b
-  - meta-llama/llama3.1-405b
-  - meta/llama-3.1-405b-instruct-turbo
-  - meta-llama/Llama-3.1-405B-Instruct-Turbo
-  - meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.1-70b
-  display_name: Llama 3.1 70B
-  org_id: meta
-  family: llama-3.1-70b
-  params_billions: 70.0
-  parent_model_id: meta/llama-3.1
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3.1-70B
-  - Llama-3.1-70B-Instruct
-  - Meta-Llama-3.1-70B
-  - Meta-Llama-3.1-70B-Instruct
-  - meta-llama/Llama-3.1-70B
-  - meta-llama/Llama-3.1-70B-Instruct
-  - meta-llama/Meta-Llama-3.1-70B
-  - meta-llama/Meta-Llama-3.1-70B-Instruct
-  - meta/llama3.1-70b
-  - meta-llama/llama3.1-70b
-  - meta/llama-3.1-70b-instruct-turbo
-  - meta-llama/Llama-3.1-70B-Instruct-Turbo
-  - meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.1-8b
-  display_name: Llama 3.1 8B
-  org_id: meta
-  family: llama-3.1-8b
-  params_billions: 8.0
-  parent_model_id: meta/llama-3.1
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3.1-8B
-  - Llama-3.1-8B-Instruct
-  - Meta-Llama-3.1-8B
-  - Meta-Llama-3.1-8B-Instruct
-  - meta-llama/Llama-3.1-8B
-  - meta-llama/Llama-3.1-8B-Instruct
-  - meta-llama/Meta-Llama-3.1-8B
-  - meta-llama/Meta-Llama-3.1-8B-Instruct
-  - meta/llama3.1-8b
-  - meta-llama/llama3.1-8b
-  - meta/llama-3.1-8b-instruct-turbo
-  - meta-llama/Llama-3.1-8B-Instruct-Turbo
-  - meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.2
-  display_name: Llama 3.2
-  org_id: meta
-  family: llama-3.2
-  tags:
-  - open-weight
-  - family
-  aliases:
-  - meta-llama/llama-3.2
-  - meta/llama3.2
-  - Llama-3.2
-  - llama-3.2
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.2-11b-vision
-  display_name: Llama 3.2 11B Vision
-  org_id: meta
-  family: llama-3.2-11b-vision
-  params_billions: 11.0
-  parent_model_id: meta/llama-3.2
-  tags:
-  - open-weight
-  - multimodal
-  aliases:
-  - Llama-3.2-11B-Vision
-  - Llama-3.2-11B-Vision-Instruct
-  - meta-llama/Llama-3.2-11B-Vision
-  - meta-llama/Llama-3.2-11B-Vision-Instruct
-  - meta/llama-3.2-11b-vision-instruct-turbo
-  - meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.2-1b
-  display_name: Llama 3.2 1B
-  org_id: meta
-  family: llama-3.2-1b
-  params_billions: 1.0
-  parent_model_id: meta/llama-3.2
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3.2-1B
-  - Llama-3.2-1B-Instruct
-  - meta-llama/Llama-3.2-1B
-  - meta-llama/Llama-3.2-1B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.2-3b
-  display_name: Llama 3.2 3B
-  org_id: meta
-  family: llama-3.2-3b
-  params_billions: 3.0
-  parent_model_id: meta/llama-3.2
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3.2-3B
-  - Llama-3.2-3B-Instruct
-  - meta-llama/Llama-3.2-3B
-  - meta-llama/Llama-3.2-3B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.2-90b-vision
-  display_name: Llama 3.2 90B Vision
-  org_id: meta
-  family: llama-3.2-90b-vision
-  params_billions: 90.0
-  parent_model_id: meta/llama-3.2
-  tags:
-  - open-weight
-  - multimodal
-  aliases:
-  - Llama-3.2-90B-Vision
-  - Llama-3.2-90B-Vision-Instruct
-  - meta-llama/Llama-3.2-90B-Vision
-  - meta-llama/Llama-3.2-90B-Vision-Instruct
-  - meta/llama-3.2-90b-vision-instruct-turbo
-  - meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.3
-  display_name: Llama 3.3
-  org_id: meta
-  family: llama-3.3
-  tags:
-  - open-weight
-  - family
-  aliases:
-  - meta-llama/llama-3.3
-  - meta/llama3.3
-  - Llama-3.3
-  - llama-3.3
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-3.3-70b
-  display_name: Llama 3.3 70B
-  org_id: meta
-  family: llama-3.3-70b
-  params_billions: 70.0
-  parent_model_id: meta/llama-3.3
-  tags:
-  - open-weight
-  aliases:
-  - Llama-3.3-70B
-  - Llama-3.3-70B-Instruct
-  - meta-llama/Llama-3.3-70B
-  - meta-llama/Llama-3.3-70B-Instruct
-  - meta/llama-3.3-70b-instruct-turbo
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-4
-  display_name: Llama 4
-  org_id: meta
-  family: llama-4
-  tags:
-  - open-weight
-  - family
-  aliases:
-  - meta-llama/llama-4
-  - meta/llama4
-  - Llama-4
-  - llama-4
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-4-maverick-17b-128e
-  display_name: Llama 4 Maverick 17B 128E
-  org_id: meta
-  family: llama-4-maverick-17b-128e
-  architecture: mixture-of-experts
-  params_billions: 17.0
-  parent_model_id: meta/llama-4
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - Llama-4-Maverick-17B-128E
-  - Llama-4-Maverick-17B-128E-Instruct
-  - meta-llama/Llama-4-Maverick-17B-128E
-  - meta-llama/Llama-4-Maverick-17B-128E-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: meta/llama-4-scout-17b-16e
-  display_name: Llama 4 Scout 17B 16E
-  org_id: meta
-  family: llama-4-scout-17b-16e
-  architecture: mixture-of-experts
-  params_billions: 17.0
-  parent_model_id: meta/llama-4
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - Llama-4-Scout-17B-16E
-  - Llama-4-Scout-17B-16E-Instruct
-  - meta-llama/Llama-4-Scout-17B-16E
-  - meta-llama/Llama-4-Scout-17B-16E-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-2
-  display_name: Phi-2
-  org_id: microsoft
-  family: phi-2
-  params_billions: 2.7
-  tags:
-  - open-weight
-  aliases:
-  - Phi-2
-  - phi-2
-  - microsoft/phi-2
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3-medium-128k
-  display_name: Phi-3 Medium 128K
-  org_id: microsoft
-  family: phi-3-medium-128k
-  params_billions: 14.0
-  tags:
-  - open-weight
-  aliases:
-  - Phi-3-medium-128k
-  - Phi-3-medium-128k-instruct
-  - microsoft/Phi-3-medium-128k-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3-medium-4k
-  display_name: Phi-3 Medium 4K
-  org_id: microsoft
-  family: phi-3-medium-4k
-  params_billions: 14.0
-  tags:
-  - open-weight
-  aliases:
-  - Phi-3-medium-4k
-  - Phi-3-medium-4k-instruct
-  - microsoft/Phi-3-medium-4k-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3-mini-128k
-  display_name: Phi-3 Mini 128K
-  org_id: microsoft
-  family: phi-3-mini-128k
-  params_billions: 3.8
-  tags:
-  - open-weight
-  aliases:
-  - Phi-3-mini-128k
-  - Phi-3-mini-128k-instruct
-  - microsoft/Phi-3-mini-128k-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3-mini-4k
-  display_name: Phi-3 Mini 4K
-  org_id: microsoft
-  family: phi-3-mini-4k
-  params_billions: 3.8
-  tags:
-  - open-weight
-  aliases:
-  - Phi-3-mini-4k
-  - Phi-3-mini-4k-instruct
-  - microsoft/Phi-3-mini-4k-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3-small-128k
-  display_name: Phi-3 Small 128K
-  org_id: microsoft
-  family: phi-3-small-128k
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - Phi-3-small-128k
-  - Phi-3-small-128k-instruct
-  - microsoft/Phi-3-small-128k-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3-small-8k
-  display_name: Phi-3 Small 8K
-  org_id: microsoft
-  family: phi-3-small-8k
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - Phi-3-small-8k
-  - Phi-3-small-8k-instruct
-  - microsoft/Phi-3-small-8k-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3.5-mini
-  display_name: Phi-3.5 Mini
-  org_id: microsoft
-  family: phi-3.5-mini
-  params_billions: 3.8
-  tags:
-  - open-weight
-  aliases:
-  - Phi-3.5-mini
-  - Phi-3.5-mini-instruct
-  - microsoft/Phi-3.5-mini-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-3.5-moe
-  display_name: Phi-3.5 MoE
-  org_id: microsoft
-  family: phi-3.5-moe
-  architecture: mixture-of-experts
-  params_billions: 41.9
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - Phi-3.5-MoE
-  - Phi-3.5-MoE-instruct
-  - microsoft/Phi-3.5-MoE-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-4
-  display_name: Phi-4
-  org_id: microsoft
-  family: phi-4
-  params_billions: 14.0
-  tags:
-  - open-weight
-  aliases:
-  - Phi-4
-  - phi-4
-  - microsoft/phi-4
-  - microsoft/Phi-4
-  metadata: '{}'
-  review_status: reviewed
-- id: microsoft/phi-4-mini
-  display_name: Phi-4 Mini
-  org_id: microsoft
-  family: phi-4-mini
-  params_billions: 3.8
-  tags:
-  - open-weight
-  aliases:
-  - Phi-4-mini
-  - Phi-4-mini-instruct
-  - microsoft/Phi-4-mini-instruct
-  metadata: '{}'
   review_status: reviewed
 - id: minimax/minimax-m2
   display_name: MiniMax-M2
@@ -2797,7 +2155,9 @@
   family: minimax-m2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-10-27'
   tags:
   - open-weight
   aliases: []
@@ -2809,7 +2169,9 @@
   family: minimax-m2.1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-12-23'
   tags:
   - open-weight
   aliases: []
@@ -2821,7 +2183,9 @@
   family: minimax-m2.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-02-12'
   tags:
   - open-weight
   aliases: []
@@ -2833,7 +2197,9 @@
   family: minimax-m2.5-highspeed
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-02-13'
   tags:
   - open-weight
   aliases: []
@@ -2845,7 +2211,9 @@
   family: minimax-m2.7
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-03-18'
   tags:
   - open-weight
   aliases: []
@@ -2857,7 +2225,9 @@
   family: minimax-m2.7-highspeed
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-03-18'
   tags:
   - open-weight
   aliases: []
@@ -2867,15 +2237,33 @@
   display_name: Codestral
   org_id: mistralai
   family: codestral
-  params_billions: 22.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2024-05-29'
   tags:
   - open-weight
-  - code
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2024-05-29"], "snapshots": ["codestral-latest"]}'
+  review_status: reviewed
+- id: mistralai/codestral-latest
+  display_name: Codestral (latest)
+  org_id: mistralai
+  family: codestral
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/codestral
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-05-29'
+  tags:
+  - open-weight
   aliases:
-  - Codestral
-  - Codestral-22B
-  - Codestral-22B-v0.1
-  - mistralai/Codestral-22B-v0.1
+  - codestral-latest
+  - mistralai/codestral-latest
   metadata: '{}'
   review_status: reviewed
 - id: mistralai/devstral-2
@@ -2884,14 +2272,12 @@
   family: devstral-2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-12-02'
   tags:
   - open-weight
-  aliases:
-  - devstral-2512
-  - mistralai/devstral-2512
-  - devstral-medium-latest
-  - mistralai/devstral-medium-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-12"], "release_dates": ["2025-12-02", "2025-12-09"], "snapshots": ["devstral-2512", "devstral-medium-latest"]}'
   review_status: reviewed
 - id: mistralai/devstral-medium
@@ -2900,13 +2286,32 @@
   family: devstral-medium
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-10'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-07-10"], "snapshots": ["devstral-medium-2507"]}'
+  review_status: reviewed
+- id: mistralai/devstral-medium-2507
+  display_name: Devstral Medium
+  org_id: mistralai
+  family: devstral-medium
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/devstral-medium
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-07-10'
   tags:
   - open-weight
   aliases:
   - devstral-medium-2507
   - mistralai/devstral-medium-2507
-  metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-07-10"], "snapshots": ["devstral-medium-2507"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: mistralai/devstral-small
   display_name: Devstral Small
@@ -2914,12 +2319,12 @@
   family: devstral-small
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-10'
   tags:
   - open-weight
-  aliases:
-  - devstral-small-2507
-  - mistralai/devstral-small-2507
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-07-10"], "snapshots": ["devstral-small-2507"]}'
   review_status: reviewed
 - id: mistralai/devstral-small-2
@@ -2928,12 +2333,12 @@
   family: devstral-small-2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-12-09'
   tags:
   - open-weight
-  aliases:
-  - labs-devstral-small-2512
-  - mistralai/labs-devstral-small-2512
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-12"], "release_dates": ["2025-12-09"], "snapshots": ["labs-devstral-small-2512"]}'
   review_status: reviewed
 - id: mistralai/devstral-small-2505
@@ -2942,11 +2347,32 @@
   family: devstral-small-2505
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-05-07'
   tags:
   - open-weight
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-05-07"], "snapshots": ["devstral-small-2505"]}'
+  review_status: reviewed
+- id: mistralai/devstral-small-2507
+  display_name: Devstral Small
+  org_id: mistralai
+  family: devstral-small
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/devstral-small
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-07-10'
+  tags:
+  - open-weight
+  aliases:
+  - devstral-small-2507
+  - mistralai/devstral-small-2507
+  metadata: '{}'
   review_status: reviewed
 - id: mistralai/magistral-medium
   display_name: Magistral Medium
@@ -2954,13 +2380,32 @@
   family: magistral-medium
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-17'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-03-17"], "snapshots": ["magistral-medium-latest"]}'
+  review_status: reviewed
+- id: mistralai/magistral-medium-latest
+  display_name: Magistral Medium (latest)
+  org_id: mistralai
+  family: magistral-medium
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/magistral-medium
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-03-17'
   tags:
   - open-weight
   aliases:
   - magistral-medium-latest
   - mistralai/magistral-medium-latest
-  metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-03-17"], "snapshots": ["magistral-medium-latest"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: mistralai/magistral-small
   display_name: Magistral Small
@@ -2968,26 +2413,13 @@
   family: magistral-small
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-03-17'
   tags:
   - open-weight
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-03-17"], "snapshots": ["magistral-small"]}'
-  review_status: reviewed
-- id: mistralai/mathstral
-  display_name: Mathstral
-  org_id: mistralai
-  family: mathstral
-  params_billions: 7.0
-  tags:
-  - open-weight
-  - math
-  aliases:
-  - Mathstral
-  - Mathstral-7B
-  - Mathstral-7B-v0.1
-  - mistralai/Mathstral-7B-v0.1
-  metadata: '{}'
   review_status: reviewed
 - id: mistralai/ministral-3b
   display_name: Ministral 3b
@@ -2995,13 +2427,32 @@
   family: ministral-3b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-10-01'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2024-10-01"], "snapshots": ["ministral-3b-latest"]}'
+  review_status: reviewed
+- id: mistralai/ministral-3b-latest
+  display_name: Ministral 3B (latest)
+  org_id: mistralai
+  family: ministral-3b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/ministral-3b
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-10-01'
   tags:
   - open-weight
   aliases:
   - ministral-3b-latest
   - mistralai/ministral-3b-latest
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2024-10-01"], "snapshots": ["ministral-3b-latest"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: mistralai/ministral-8b
   display_name: Ministral 8b
@@ -3009,33 +2460,46 @@
   family: ministral-8b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-10-01'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2024-10-01"], "snapshots": ["ministral-8b-latest"]}'
+  review_status: reviewed
+- id: mistralai/ministral-8b-latest
+  display_name: Ministral 8B (latest)
+  org_id: mistralai
+  family: ministral-8b
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/ministral-8b
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-10-01'
   tags:
   - open-weight
   aliases:
   - ministral-8b-latest
   - mistralai/ministral-8b-latest
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2024-10-01"], "snapshots": ["ministral-8b-latest"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: mistralai/mistral-7b
-  display_name: Mistral 7B
+  display_name: Mistral 7b
   org_id: mistralai
   family: mistral-7b
-  params_billions: 7.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2023-09-27'
   tags:
   - open-weight
-  aliases:
-  - Mistral-7B
-  - Mistral-7B-Instruct
-  - Mistral-7B-v0.1
-  - Mistral-7B-Instruct-v0.1
-  - Mistral-7B-Instruct-v0.2
-  - Mistral-7B-Instruct-v0.3
-  - mistralai/Mistral-7B-v0.1
-  - mistralai/Mistral-7B-Instruct-v0.1
-  - mistralai/Mistral-7B-Instruct-v0.2
-  - mistralai/Mistral-7B-Instruct-v0.3
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2023-12"], "release_dates": ["2023-09-27"], "snapshots": ["open-mistral-7b"]}'
   review_status: reviewed
 - id: mistralai/mistral-embed
   display_name: Mistral Embed
@@ -3043,7 +2507,9 @@
   family: mistral-embed
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2023-12-11'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2023-12-11"], "snapshots": ["mistral-embed"]}'
@@ -3052,42 +2518,62 @@
   display_name: Mistral Large
   org_id: mistralai
   family: mistral-large
-  tags: []
-  aliases:
-  - Mistral-Large
-  - Mistral-Large-Instruct
-  - mistralai/Mistral-Large
-  metadata: '{}'
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2024-11-01'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["mistral-large-latest"]}'
   review_status: reviewed
-  # Per-version aliases (2402/2407/2411) moved to per-version canonicals in
-  # _overrides/models.yaml (Phase 1.3 Session 5h). Large 1 (2402) and Large 2
-  # (2407/2411, 123B) are distinct generations.
 - id: mistralai/mistral-large-2.1
   display_name: Mistral Large 2.1
   org_id: mistralai
   family: mistral-large-2.1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-11-01'
   tags:
   - open-weight
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["mistral-large-2411"]}'
   review_status: reviewed
-  # Aliases moved to mistralai/mistral-large-2411 (Phase 1.3 Session 5h).
 - id: mistralai/mistral-large-3
   display_name: Mistral Large 3
   org_id: mistralai
   family: mistral-large-3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-11-01'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["mistral-large-2512"]}'
+  review_status: reviewed
+- id: mistralai/mistral-large-latest
+  display_name: Mistral Large (latest)
+  org_id: mistralai
+  family: mistral-large
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/mistral-large
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-11-01'
   tags:
   - open-weight
   aliases:
-  - mistral-large-2512
-  - mistralai/mistral-large-2512
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["mistral-large-2512"]}'
+  - mistral-large-latest
+  - mistralai/mistral-large-latest
+  metadata: '{}'
   review_status: reviewed
 - id: mistralai/mistral-medium
   display_name: Mistral Medium
@@ -3095,24 +2581,26 @@
   family: mistral-medium
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-29'
   tags:
   - open-weight
-  aliases:
-  - mistral-medium-latest
-  - mistralai/mistral-medium-latest
-  metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-05-07"], "snapshots": ["mistral-medium-latest"]}'
+  aliases: []
+  metadata: '{"release_dates": ["2026-04-29"], "snapshots": ["mistral-medium-latest"]}'
   review_status: reviewed
 - id: mistralai/mistral-medium-3
   display_name: Mistral Medium 3
   org_id: mistralai
   family: mistral-medium-3
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-07'
   tags: []
-  aliases:
-  - Mistral-Medium-3
-  - mistral-medium-3
-  - mistralai/mistral-medium-3
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-05-07"], "snapshots": ["mistral-medium-2505"]}'
   review_status: reviewed
 - id: mistralai/mistral-medium-3.1
   display_name: Mistral Medium 3.1
@@ -3120,61 +2608,86 @@
   family: mistral-medium-3.1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-12'
   tags: []
-  aliases:
-  - mistral-medium-2508
-  - mistralai/mistral-medium-2508
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2025-08-12"], "snapshots": ["mistral-medium-2508"]}'
+  review_status: reviewed
+- id: mistralai/mistral-medium-3.5
+  display_name: Mistral Medium 3.5
+  org_id: mistralai
+  family: mistral-medium-3.5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-29'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-04-29"], "snapshots": ["mistral-medium-2604"]}'
+  review_status: reviewed
+- id: mistralai/mistral-medium-latest
+  display_name: Mistral Medium (latest)
+  org_id: mistralai
+  family: mistral-medium
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/mistral-medium
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2026-04-29'
+  tags:
+  - open-weight
+  aliases:
+  - mistral-medium-latest
+  - mistralai/mistral-medium-latest
+  metadata: '{}'
   review_status: reviewed
 - id: mistralai/mistral-nemo
   display_name: Mistral Nemo
   org_id: mistralai
   family: mistral-nemo
-  params_billions: 12.0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2024-07-01'
   tags:
   - open-weight
-  aliases:
-  - Mistral-Nemo
-  - Mistral-Nemo-Instruct
-  - Mistral-Nemo-Instruct-2407
-  - Mistral-Nemo-Base
-  - Mistral-Nemo-Base-2407
-  - mistralai/Mistral-Nemo-Instruct-2407
-  - mistralai/Mistral-Nemo-Base-2407
-  - open-mistral-nemo
-  - open-mistral-nemo-2407
-  - mistralai/open-mistral-nemo
-  - mistralai/open-mistral-nemo-2407
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-07"], "release_dates": ["2024-07-01"], "snapshots": ["mistral-nemo"]}'
   review_status: reviewed
 - id: mistralai/mistral-small
   display_name: Mistral Small
   org_id: mistralai
   family: mistral-small
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-03-16'
   tags:
   - open-weight
-  aliases:
-  - Mistral-Small
-  - Mistral-Small-Instruct
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2026-03-16"], "snapshots": ["mistral-small-latest"]}'
   review_status: reviewed
-  # Per-version aliases (2402/2409 → mistral-small-legacy ~22B, 2501/2503 →
-  # mistral-small-3 24B) moved to per-version canonicals in _overrides/models.yaml
-  # (Phase 1.3 Session 5h). The legacy 22B params_billions removed since this is
-  # now a parent-family canonical only.
 - id: mistralai/mistral-small-3.2
   display_name: Mistral Small 3.2
   org_id: mistralai
   family: mistral-small-3.2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-06-20'
   tags:
   - open-weight
-  aliases:
-  - mistral-small-2506
-  - mistralai/mistral-small-2506
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-03"], "release_dates": ["2025-06-20"], "snapshots": ["mistral-small-2506"]}'
   review_status: reviewed
 - id: mistralai/mistral-small-4
@@ -3183,50 +2696,60 @@
   family: mistral-small-4
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-03-16'
   tags:
   - open-weight
-  aliases:
-  - mistral-small-2603
-  - mistralai/mistral-small-2603
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2026-03-16"], "snapshots": ["mistral-small-2603"]}'
   review_status: reviewed
-- id: mistralai/mixtral-8x22b
-  display_name: Mixtral 8x22B
+- id: mistralai/mistral-small-latest
+  display_name: Mistral Small (latest)
   org_id: mistralai
-  family: mixtral-8x22b
-  architecture: mixture-of-experts
-  params_billions: 141.0
+  family: mistral-small
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/mistral-small
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2026-03-16'
   tags:
   - open-weight
-  - moe
   aliases:
-  - Mixtral-8x22B
-  - Mixtral-8x22B-Instruct
-  - Mixtral-8x22B-Instruct-v0.1
-  - mistralai/Mixtral-8x22B-v0.1
-  - mistralai/Mixtral-8x22B-Instruct-v0.1
+  - mistral-small-latest
+  - mistralai/mistral-small-latest
   metadata: '{}'
   review_status: reviewed
-- id: mistralai/mixtral-8x7b
-  display_name: Mixtral 8x7B
+- id: mistralai/mixtral-8x22b
+  display_name: Mixtral 8x22b
   org_id: mistralai
-  family: mixtral-8x7b
-  architecture: mixture-of-experts
-  params_billions: 46.7
+  family: mixtral-8x22b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2024-04-17'
   tags:
   - open-weight
-  - moe
-  aliases:
-  - Mixtral-8x7B
-  - Mixtral-8x7B-Instruct
-  - Mixtral-8x7B-Instruct-v0.1
-  - Mixtral-8x7B-32kseqlen
-  - mistralai/Mixtral-8x7B-v0.1
-  - mistralai/Mixtral-8x7B-Instruct-v0.1
-  - mistralai/Mixtral-8x7B-32kseqlen
-  - mistralai/mixtral-8x7b-32kseqlen
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-04-17"], "snapshots": ["open-mixtral-8x22b"]}'
+  review_status: reviewed
+- id: mistralai/mixtral-8x7b
+  display_name: Mixtral 8x7b
+  org_id: mistralai
+  family: mixtral-8x7b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2023-12-11'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-01"], "release_dates": ["2023-12-11"], "snapshots": ["open-mixtral-8x7b"]}'
   review_status: reviewed
 - id: mistralai/pixtral-12b
   display_name: Pixtral 12B
@@ -3234,7 +2757,9 @@
   family: pixtral-12b
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-09-01'
   tags:
   - open-weight
   aliases: []
@@ -3246,24 +2771,31 @@
   family: pixtral-large
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2024-11-01'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["pixtral-large-latest"]}'
+  review_status: reviewed
+- id: mistralai/pixtral-large-latest
+  display_name: Pixtral Large (latest)
+  org_id: mistralai
+  family: pixtral-large
+  architecture: null
+  params_billions: null
+  parents:
+  - id: mistralai/pixtral-large
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-11-01'
   tags:
   - open-weight
   aliases:
-  - pixtral-large-latest
   - mistralai/pixtral-large-latest
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["pixtral-large-latest"]}'
-  review_status: reviewed
-- id: moonshotai/kimi-k2
-  display_name: Kimi K2
-  org_id: moonshotai
-  family: kimi-k2
-  tags: []
-  aliases:
-  - Kimi-K2
-  - kimi-k2
-  - moonshot/kimi-k2
-  - moonshotai/kimi-k2
+  - pixtral-large-latest
   metadata: '{}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-0711
@@ -3272,13 +2804,32 @@
   family: kimi-k2-0711
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-14'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-07-14"], "snapshots": ["kimi-k2-0711-preview"]}'
+  review_status: reviewed
+- id: moonshotai/kimi-k2-0711-preview
+  display_name: Kimi K2 0711
+  org_id: moonshotai
+  family: kimi-k2-0711
+  architecture: null
+  params_billions: null
+  parents:
+  - id: moonshotai/kimi-k2-0711
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-07-14'
   tags:
   - open-weight
   aliases:
   - kimi-k2-0711-preview
   - moonshotai/kimi-k2-0711-preview
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-07-14"], "snapshots": ["kimi-k2-0711-preview"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-0905
   display_name: Kimi K2 0905
@@ -3286,13 +2837,32 @@
   family: kimi-k2-0905
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-09-05'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-09-05"], "snapshots": ["kimi-k2-0905-preview"]}'
+  review_status: reviewed
+- id: moonshotai/kimi-k2-0905-preview
+  display_name: Kimi K2 0905
+  org_id: moonshotai
+  family: kimi-k2-0905
+  architecture: null
+  params_billions: null
+  parents:
+  - id: moonshotai/kimi-k2-0905
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-09-05'
   tags:
   - open-weight
   aliases:
   - kimi-k2-0905-preview
   - moonshotai/kimi-k2-0905-preview
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-09-05"], "snapshots": ["kimi-k2-0905-preview"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-thinking
   display_name: Kimi K2 Thinking
@@ -3300,7 +2870,9 @@
   family: kimi-k2-thinking
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-11-06'
   tags:
   - open-weight
   aliases: []
@@ -3312,7 +2884,9 @@
   family: kimi-k2-thinking-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-11-06'
   tags:
   - open-weight
   aliases: []
@@ -3324,25 +2898,46 @@
   family: kimi-k2-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-09-05'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-09-05"], "snapshots": ["kimi-k2-turbo-preview"]}'
+  review_status: reviewed
+- id: moonshotai/kimi-k2-turbo-preview
+  display_name: Kimi K2 Turbo
+  org_id: moonshotai
+  family: kimi-k2-turbo
+  architecture: null
+  params_billions: null
+  parents:
+  - id: moonshotai/kimi-k2-turbo
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2025-09-05'
   tags:
   - open-weight
   aliases:
   - kimi-k2-turbo-preview
   - moonshotai/kimi-k2-turbo-preview
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-09-05"], "snapshots": ["kimi-k2-turbo-preview"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: moonshotai/kimi-k2.5
   display_name: Kimi K2.5
   org_id: moonshotai
   family: kimi-k2.5
-  tags: []
-  aliases:
-  - Kimi-K2.5
-  - kimi-k2.5
-  - moonshot/kimi-k2.5
-  - moonshotai/kimi-k2.5
-  metadata: '{}'
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: 2026-01
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-01"], "snapshots": ["kimi-k2.5"]}'
   review_status: reviewed
 - id: moonshotai/kimi-k2.6
   display_name: Kimi K2.6
@@ -3350,7 +2945,9 @@
   family: kimi-k2.6
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-21'
   tags:
   - open-weight
   aliases: []
@@ -3362,71 +2959,68 @@
   family: chatgpt-image
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-12-16'
+  tags: []
+  aliases: []
+  metadata: '{"release_dates": ["2025-12-16"], "snapshots": ["chatgpt-image-latest"]}'
+  review_status: reviewed
+- id: openai/chatgpt-image-latest
+  display_name: chatgpt-image-latest
+  org_id: openai
+  family: chatgpt-image
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/chatgpt-image
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-12-16'
   tags: []
   aliases:
   - chatgpt-image-latest
   - openai/chatgpt-image-latest
-  metadata: '{"release_dates": ["2025-12-16"], "snapshots": ["chatgpt-image-latest"]}'
-  review_status: reviewed
-- id: openai/codex-mini
-  display_name: Codex Mini
-  org_id: openai
-  family: codex-mini
-  tags:
-  - code
-  aliases:
-  - codex-mini
-  - codex-mini-latest
-  - openai/codex-mini
-  - openai/codex-mini-latest
   metadata: '{}'
   review_status: reviewed
 - id: openai/gpt-3.5-turbo
-  display_name: GPT-3.5 Turbo
+  display_name: GPT-3.5-turbo
   org_id: openai
   family: gpt-3.5-turbo
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2023-03-01'
   tags: []
-  aliases:
-  - gpt-3.5-turbo
-  - openai/gpt-3.5-turbo
-  - openai/gpt-3.5-turbo-0613
-  - openai/gpt-3.5-turbo-1106
-  - openai/gpt-3.5-turbo-0125
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2021-09-01"], "release_dates": ["2023-03-01"], "snapshots": ["gpt-3.5-turbo"]}'
   review_status: reviewed
 - id: openai/gpt-4
   display_name: GPT-4
   org_id: openai
   family: gpt-4
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2023-11-06'
   tags: []
-  aliases:
-  - gpt-4
-  - gpt-4-0613
-  - gpt-4-0314
-  - openai/gpt-4
-  - openai/gpt-4-0613
-  - openai/gpt-4-0314
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2023-11"], "release_dates": ["2023-11-06"], "snapshots": ["gpt-4"]}'
   review_status: reviewed
-  # Per-version turbo aliases (1106-preview, 0125-preview, turbo-preview) moved
-  # to openai/gpt-4-turbo below — these are GPT-4 Turbo preview snapshots, not
-  # base GPT-4 (Phase 1.6 Session 5h).
 - id: openai/gpt-4-turbo
   display_name: GPT-4 Turbo
   org_id: openai
   family: gpt-4-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2023-11-06'
   tags: []
-  aliases:
-  - gpt-4-1106-preview
-  - gpt-4-0125-preview
-  - gpt-4-turbo-preview
-  - openai/gpt-4-1106-preview
-  - openai/gpt-4-0125-preview
-  - openai/gpt-4-turbo-preview
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-12"], "release_dates": ["2023-11-06"], "snapshots": ["gpt-4-turbo"]}'
   review_status: reviewed
 - id: openai/gpt-4.1
@@ -3435,7 +3029,9 @@
   family: gpt-4.1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-04-14'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-04-14"], "snapshots": ["gpt-4.1"]}'
@@ -3446,7 +3042,9 @@
   family: gpt-4.1-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-04-14'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-04-14"], "snapshots": ["gpt-4.1-mini"]}'
@@ -3457,7 +3055,9 @@
   family: gpt-4.1-nano
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-04-14'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-04-14"], "snapshots": ["gpt-4.1-nano"]}'
@@ -3468,16 +3068,66 @@
   family: gpt-4o
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-05-13'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2023-09"], "release_dates": ["2024-05-13", "2024-08-06", "2024-11-20"], "snapshots": ["gpt-4o", "gpt-4o-2024-05-13", "gpt-4o-2024-08-06", "gpt-4o-2024-11-20"]}'
+  review_status: reviewed
+- id: openai/gpt-4o-2024-05-13
+  display_name: GPT-4o (2024-05-13)
+  org_id: openai
+  family: gpt-4o
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/gpt-4o
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2024-05-13'
   tags: []
   aliases:
   - gpt-4o-2024-05-13
   - openai/gpt-4o-2024-05-13
+  metadata: '{}'
+  review_status: reviewed
+- id: openai/gpt-4o-2024-08-06
+  display_name: GPT-4o (2024-08-06)
+  org_id: openai
+  family: gpt-4o
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/gpt-4o
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2024-08-06'
+  tags: []
+  aliases:
   - gpt-4o-2024-08-06
   - openai/gpt-4o-2024-08-06
+  metadata: '{}'
+  review_status: reviewed
+- id: openai/gpt-4o-2024-11-20
+  display_name: GPT-4o (2024-11-20)
+  org_id: openai
+  family: gpt-4o
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/gpt-4o
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2024-11-20'
+  tags: []
+  aliases:
   - gpt-4o-2024-11-20
   - openai/gpt-4o-2024-11-20
-  metadata: '{"knowledge_cutoffs": ["2023-09"], "release_dates": ["2024-05-13", "2024-08-06", "2024-11-20"], "snapshots": ["gpt-4o", "gpt-4o-2024-05-13", "gpt-4o-2024-08-06", "gpt-4o-2024-11-20"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: openai/gpt-4o-mini
   display_name: GPT-4o mini
@@ -3485,7 +3135,9 @@
   family: gpt-4o-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-07-18'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-09"], "release_dates": ["2024-07-18"], "snapshots": ["gpt-4o-mini"]}'
@@ -3496,12 +3148,46 @@
   family: gpt-5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-07'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-08-07"], "snapshots": ["gpt-5", "gpt-5-chat-latest"]}'
+  review_status: reviewed
+- id: openai/gpt-5-chat
+  display_name: Gpt 5 Chat
+  org_id: openai
+  family: gpt-5
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/gpt-5
+    relationship: variant
+    axis: mode
+  open_weights: false
+  release_date: null
+  tags: []
+  aliases: []
+  metadata: '{}'
+  review_status: reviewed
+- id: openai/gpt-5-chat-latest
+  display_name: GPT-5 Chat (latest)
+  org_id: openai
+  family: gpt-5
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/gpt-5-chat
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-08-07'
   tags: []
   aliases:
   - gpt-5-chat-latest
   - openai/gpt-5-chat-latest
-  metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-08-07"], "snapshots": ["gpt-5", "gpt-5-chat-latest"]}'
+  metadata: '{}'
   review_status: reviewed
 - id: openai/gpt-5-codex
   display_name: GPT-5-Codex
@@ -3509,7 +3195,9 @@
   family: gpt-5-codex
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-15'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-09-15"], "snapshots": ["gpt-5-codex"]}'
@@ -3520,7 +3208,9 @@
   family: gpt-5-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-07'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05-30"], "release_dates": ["2025-08-07"], "snapshots": ["gpt-5-mini"]}'
@@ -3531,7 +3221,9 @@
   family: gpt-5-nano
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-07'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05-30"], "release_dates": ["2025-08-07"], "snapshots": ["gpt-5-nano"]}'
@@ -3542,7 +3234,9 @@
   family: gpt-5-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-10-06'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-10-06"], "snapshots": ["gpt-5-pro"]}'
@@ -3553,11 +3247,11 @@
   family: gpt-5.1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-13'
   tags: []
-  aliases:
-  - gpt-5.1-chat-latest
-  - openai/gpt-5.1-chat-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-11-13"], "snapshots": ["gpt-5.1", "gpt-5.1-chat-latest"]}'
   review_status: reviewed
 - id: openai/gpt-5.1-codex
@@ -3566,7 +3260,9 @@
   family: gpt-5.1-codex
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-13'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-11-13"], "snapshots": ["gpt-5.1-codex"]}'
@@ -3577,7 +3273,9 @@
   family: gpt-5.1-codex-max
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-13'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-11-13"], "snapshots": ["gpt-5.1-codex-max"]}'
@@ -3588,7 +3286,9 @@
   family: gpt-5.1-codex-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-13'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-11-13"], "snapshots": ["gpt-5.1-codex-mini"]}'
@@ -3599,11 +3299,11 @@
   family: gpt-5.2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-12-11'
   tags: []
-  aliases:
-  - gpt-5.2-chat-latest
-  - openai/gpt-5.2-chat-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2025-12-11"], "snapshots": ["gpt-5.2", "gpt-5.2-chat-latest"]}'
   review_status: reviewed
 - id: openai/gpt-5.2-codex
@@ -3612,7 +3312,9 @@
   family: gpt-5.2-codex
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-12-11'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2025-12-11"], "snapshots": ["gpt-5.2-codex"]}'
@@ -3623,7 +3325,9 @@
   family: gpt-5.2-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-12-11'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2025-12-11"], "snapshots": ["gpt-5.2-pro"]}'
@@ -3634,11 +3338,11 @@
   family: gpt-5.3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-03'
   tags: []
-  aliases:
-  - gpt-5.3-chat-latest
-  - openai/gpt-5.3-chat-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-03-03"], "snapshots": ["gpt-5.3-chat-latest"]}'
   review_status: reviewed
 - id: openai/gpt-5.3-codex
@@ -3647,7 +3351,9 @@
   family: gpt-5.3-codex
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-05'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-02-05"], "snapshots": ["gpt-5.3-codex"]}'
@@ -3658,7 +3364,9 @@
   family: gpt-5.3-codex-spark
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-05'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-02-05"], "snapshots": ["gpt-5.3-codex-spark"]}'
@@ -3669,7 +3377,9 @@
   family: gpt-5.4
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-05'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-03-05"], "snapshots": ["gpt-5.4"]}'
@@ -3680,7 +3390,9 @@
   family: gpt-5.4-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-17'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-03-17"], "snapshots": ["gpt-5.4-mini"]}'
@@ -3691,7 +3403,9 @@
   family: gpt-5.4-nano
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-17'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-03-17"], "snapshots": ["gpt-5.4-nano"]}'
@@ -3702,7 +3416,9 @@
   family: gpt-5.4-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-05'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-03-05"], "snapshots": ["gpt-5.4-pro"]}'
@@ -3713,10 +3429,25 @@
   family: gpt-5.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-04-23'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-12-01"], "release_dates": ["2026-04-23"], "snapshots": ["gpt-5.5"]}'
+  review_status: reviewed
+- id: openai/gpt-5.5-pro
+  display_name: GPT-5.5 Pro
+  org_id: openai
+  family: gpt-5.5-pro
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-04-23'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-12-01"], "release_dates": ["2026-04-23"], "snapshots": ["gpt-5.5-pro"]}'
   review_status: reviewed
 - id: openai/gpt-image-1
   display_name: gpt-image-1
@@ -3724,7 +3455,9 @@
   family: gpt-image-1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-04-24'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2025-04-24"], "snapshots": ["gpt-image-1"]}'
@@ -3735,7 +3468,9 @@
   family: gpt-image-1-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-26'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2025-09-26"], "snapshots": ["gpt-image-1-mini"]}'
@@ -3746,36 +3481,12 @@
   family: gpt-image-1.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-25'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2025-11-25"], "snapshots": ["gpt-image-1.5"]}'
-  review_status: reviewed
-- id: openai/gpt-oss-120b
-  display_name: GPT-OSS 120B
-  org_id: openai
-  family: gpt-oss-120b
-  architecture: mixture-of-experts
-  params_billions: 120.0
-  tags:
-  - open-weight
-  - moe
-  aliases:
-  - gpt-oss-120b
-  - openai/gpt-oss-120b
-  metadata: '{}'
-  review_status: reviewed
-- id: openai/gpt-oss-20b
-  display_name: GPT-OSS 20B
-  org_id: openai
-  family: gpt-oss-20b
-  params_billions: 20.0
-  tags:
-  - open-weight
-  aliases:
-  - gpt-oss-20b
-  - openai/gpt-oss-20b
-  metadata: '{}'
   review_status: reviewed
 - id: openai/o1
   display_name: o1
@@ -3783,11 +3494,11 @@
   family: o1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-09-12'
   tags: []
-  aliases:
-  - o1-preview
-  - openai/o1-preview
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-09"], "release_dates": ["2024-09-12", "2024-12-05"], "snapshots": ["o1", "o1-preview"]}'
   review_status: reviewed
 - id: openai/o1-mini
@@ -3796,10 +3507,30 @@
   family: o1-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-09-12'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-09"], "release_dates": ["2024-09-12"], "snapshots": ["o1-mini"]}'
+  review_status: reviewed
+- id: openai/o1-preview
+  display_name: o1-preview
+  org_id: openai
+  family: o1
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/o1
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2024-09-12'
+  tags: []
+  aliases:
+  - o1-preview
+  - openai/o1-preview
+  metadata: '{}'
   review_status: reviewed
 - id: openai/o1-pro
   display_name: o1-pro
@@ -3807,7 +3538,9 @@
   family: o1-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-03-19'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-09"], "release_dates": ["2025-03-19"], "snapshots": ["o1-pro"]}'
@@ -3818,7 +3551,9 @@
   family: o3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-04-16'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05"], "release_dates": ["2025-04-16"], "snapshots": ["o3"]}'
@@ -3829,7 +3564,9 @@
   family: o3-deep-research
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-06-26'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05"], "release_dates": ["2024-06-26"], "snapshots": ["o3-deep-research"]}'
@@ -3840,7 +3577,9 @@
   family: o3-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-12-20'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05"], "release_dates": ["2024-12-20"], "snapshots": ["o3-mini"]}'
@@ -3851,7 +3590,9 @@
   family: o3-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-06-10'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05"], "release_dates": ["2025-06-10"], "snapshots": ["o3-pro"]}'
@@ -3862,7 +3603,9 @@
   family: o4-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-04-16'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05"], "release_dates": ["2025-04-16"], "snapshots": ["o4-mini"]}'
@@ -3873,7 +3616,9 @@
   family: o4-mini-deep-research
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-06-26'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-05"], "release_dates": ["2024-06-26"], "snapshots": ["o4-mini-deep-research"]}'
@@ -3884,7 +3629,9 @@
   family: text-embedding-3-large
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-01-25'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-01"], "release_dates": ["2024-01-25"], "snapshots": ["text-embedding-3-large"]}'
@@ -3895,7 +3642,9 @@
   family: text-embedding-3-small
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-01-25'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-01"], "release_dates": ["2024-01-25"], "snapshots": ["text-embedding-3-small"]}'
@@ -3906,7 +3655,9 @@
   family: text-embedding-ada-002
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2022-12-15'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2022-12"], "release_dates": ["2022-12-15"], "snapshots": ["text-embedding-ada-002"]}'
@@ -3917,11 +3668,11 @@
   family: perplexity-sonar-deep-research
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-02-01'
   tags: []
-  aliases:
-  - sonar-deep-research
-  - perplexity/sonar-deep-research
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-02-01"], "snapshots": ["sonar-deep-research"]}'
   review_status: reviewed
 - id: perplexity/sonar
@@ -3930,7 +3681,9 @@
   family: sonar
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-01-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-09-01"], "release_dates": ["2024-01-01"], "snapshots": ["sonar"]}'
@@ -3941,7 +3694,9 @@
   family: sonar-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-01-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-09-01"], "release_dates": ["2024-01-01"], "snapshots": ["sonar-pro"]}'
@@ -3952,7 +3707,9 @@
   family: sonar-reasoning-pro
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-01-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-09-01"], "release_dates": ["2024-01-01"], "snapshots": ["sonar-reasoning-pro"]}'
@@ -3963,7 +3720,9 @@
   family: step-1-32k
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-01-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-06"], "release_dates": ["2025-01-01"], "snapshots": ["step-1-32k"]}'
@@ -3974,7 +3733,9 @@
   family: step-2-16k
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-01-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-06"], "release_dates": ["2025-01-01"], "snapshots": ["step-2-16k"]}'
@@ -3985,7 +3746,9 @@
   family: step-3.5-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-01-29'
   tags:
   - open-weight
   aliases: []
@@ -3997,85 +3760,13 @@
   family: step-3.5-flash-2603
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-02'
   tags:
   - open-weight
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-04-02"], "snapshots": ["step-3.5-flash-2603"]}'
-  review_status: reviewed
-- id: tiiuae/falcon-180b
-  display_name: Falcon 180B
-  org_id: tiiuae
-  family: falcon-180b
-  params_billions: 180.0
-  tags:
-  - open-weight
-  aliases:
-  - Falcon-180B
-  - Falcon-180B-Chat
-  - falcon-180b
-  - falcon-180b-chat
-  - tiiuae/falcon-180b
-  - tiiuae/falcon-180B-chat
-  metadata: '{}'
-  review_status: reviewed
-- id: tiiuae/falcon-40b
-  display_name: Falcon 40B
-  org_id: tiiuae
-  family: falcon-40b
-  params_billions: 40.0
-  tags:
-  - open-weight
-  aliases:
-  - Falcon-40B
-  - Falcon-40B-Instruct
-  - falcon-40b
-  - tiiuae/falcon-40b
-  - tiiuae/falcon-40b-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: tiiuae/falcon-7b
-  display_name: Falcon 7B
-  org_id: tiiuae
-  family: falcon-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - Falcon-7B
-  - Falcon-7B-Instruct
-  - falcon-7b
-  - tiiuae/falcon-7b
-  - tiiuae/falcon-7b-instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: tiiuae/falcon3-10b
-  display_name: Falcon3 10B
-  org_id: tiiuae
-  family: falcon3-10b
-  params_billions: 10.0
-  tags:
-  - open-weight
-  aliases:
-  - Falcon3-10B
-  - Falcon3-10B-Instruct
-  - tiiuae/Falcon3-10B
-  - tiiuae/Falcon3-10B-Instruct
-  metadata: '{}'
-  review_status: reviewed
-- id: tiiuae/falcon3-7b
-  display_name: Falcon3 7B
-  org_id: tiiuae
-  family: falcon3-7b
-  params_billions: 7.0
-  tags:
-  - open-weight
-  aliases:
-  - Falcon3-7B
-  - Falcon3-7B-Instruct
-  - tiiuae/Falcon3-7B
-  - tiiuae/Falcon3-7B-Instruct
-  metadata: '{}'
   review_status: reviewed
 - id: upstage/solar-mini
   display_name: solar-mini
@@ -4083,7 +3774,9 @@
   family: solar-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-06-12'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-09"], "release_dates": ["2024-06-12"], "snapshots": ["solar-mini"]}'
@@ -4094,7 +3787,9 @@
   family: solar-pro2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-05-20'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-03"], "release_dates": ["2025-05-20"], "snapshots": ["solar-pro2"]}'
@@ -4105,22 +3800,12 @@
   family: solar-pro3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: 2026-01
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-03"], "release_dates": ["2026-01"], "snapshots": ["solar-pro3"]}'
-  review_status: reviewed
-- id: writer/palmyra-x
-  display_name: Palmyra X
-  org_id: writer
-  family: palmyra-x
-  tags: []
-  aliases:
-  - Palmyra-X
-  - palmyra-x
-  - writer/palmyra-x-004
-  - writer/palmyra-x-005
-  metadata: '{}'
   review_status: reviewed
 - id: xai/grok-2
   display_name: Grok 2
@@ -4128,11 +3813,11 @@
   family: grok-2
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-08-20'
   tags: []
-  aliases:
-  - grok-2-latest
-  - xai/grok-2-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-08-20"], "snapshots": ["grok-2", "grok-2-latest"]}'
   review_status: reviewed
 - id: xai/grok-2-1212
@@ -4141,10 +3826,30 @@
   family: grok-2-1212
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-12-12'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-12-12"], "snapshots": ["grok-2-1212"]}'
+  review_status: reviewed
+- id: xai/grok-2-latest
+  display_name: Grok 2 Latest
+  org_id: xai
+  family: grok-2
+  architecture: null
+  params_billions: null
+  parents:
+  - id: xai/grok-2
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2024-08-20'
+  tags: []
+  aliases:
+  - grok-2-latest
+  - xai/grok-2-latest
+  metadata: '{}'
   review_status: reviewed
 - id: xai/grok-2-vision
   display_name: Grok 2 Vision
@@ -4152,11 +3857,11 @@
   family: grok-2-vision
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-08-20'
   tags: []
-  aliases:
-  - grok-2-vision-latest
-  - xai/grok-2-vision-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-08-20"], "snapshots": ["grok-2-vision", "grok-2-vision-latest"]}'
   review_status: reviewed
 - id: xai/grok-2-vision-1212
@@ -4165,10 +3870,30 @@
   family: grok-2-vision-1212
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-08-20'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-08-20"], "snapshots": ["grok-2-vision-1212"]}'
+  review_status: reviewed
+- id: xai/grok-2-vision-latest
+  display_name: Grok 2 Vision Latest
+  org_id: xai
+  family: grok-2-vision
+  architecture: null
+  params_billions: null
+  parents:
+  - id: xai/grok-2-vision
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2024-08-20'
+  tags: []
+  aliases:
+  - grok-2-vision-latest
+  - xai/grok-2-vision-latest
+  metadata: '{}'
   review_status: reviewed
 - id: xai/grok-3
   display_name: Grok 3
@@ -4176,11 +3901,11 @@
   family: grok-3
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-02-17'
   tags: []
-  aliases:
-  - grok-3-latest
-  - xai/grok-3-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3", "grok-3-latest"]}'
   review_status: reviewed
 - id: xai/grok-3-fast
@@ -4189,12 +3914,48 @@
   family: grok-3-fast
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-02-17'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-fast", "grok-3-fast-latest"]}'
+  review_status: reviewed
+- id: xai/grok-3-fast-latest
+  display_name: Grok 3 Fast Latest
+  org_id: xai
+  family: grok-3-fast
+  architecture: null
+  params_billions: null
+  parents:
+  - id: xai/grok-3-fast
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-02-17'
   tags: []
   aliases:
   - grok-3-fast-latest
   - xai/grok-3-fast-latest
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-fast", "grok-3-fast-latest"]}'
+  metadata: '{}'
+  review_status: reviewed
+- id: xai/grok-3-latest
+  display_name: Grok 3 Latest
+  org_id: xai
+  family: grok-3
+  architecture: null
+  params_billions: null
+  parents:
+  - id: xai/grok-3
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-02-17'
+  tags: []
+  aliases:
+  - grok-3-latest
+  - xai/grok-3-latest
+  metadata: '{}'
   review_status: reviewed
 - id: xai/grok-3-mini
   display_name: Grok 3 Mini
@@ -4202,11 +3963,11 @@
   family: grok-3-mini
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-02-17'
   tags: []
-  aliases:
-  - grok-3-mini-latest
-  - xai/grok-3-mini-latest
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-mini", "grok-3-mini-latest"]}'
   review_status: reviewed
 - id: xai/grok-3-mini-fast
@@ -4215,24 +3976,61 @@
   family: grok-3-mini-fast
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-02-17'
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-mini-fast", "grok-3-mini-fast-latest"]}'
+  review_status: reviewed
+- id: xai/grok-3-mini-fast-latest
+  display_name: Grok 3 Mini Fast Latest
+  org_id: xai
+  family: grok-3-mini-fast
+  architecture: null
+  params_billions: null
+  parents:
+  - id: xai/grok-3-mini-fast
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-02-17'
   tags: []
   aliases:
   - grok-3-mini-fast-latest
   - xai/grok-3-mini-fast-latest
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-mini-fast", "grok-3-mini-fast-latest"]}'
+  metadata: '{}'
+  review_status: reviewed
+- id: xai/grok-3-mini-latest
+  display_name: Grok 3 Mini Latest
+  org_id: xai
+  family: grok-3-mini
+  architecture: null
+  params_billions: null
+  parents:
+  - id: xai/grok-3-mini
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-02-17'
+  tags: []
+  aliases:
+  - grok-3-mini-latest
+  - xai/grok-3-mini-latest
+  metadata: '{}'
   review_status: reviewed
 - id: xai/grok-4
   display_name: Grok 4
   org_id: xai
   family: grok-4
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2025-07-09'
   tags: []
-  aliases:
-  - grok-4
-  - xai/grok-4
-  - xai/grok-4-0709
-  - grok-4-0709
-  metadata: '{}'
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-07-09"], "snapshots": ["grok-4"]}'
   review_status: reviewed
 - id: xai/grok-4-fast
   display_name: Grok 4 Fast
@@ -4240,7 +4038,9 @@
   family: grok-4-fast
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-19'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-09-19"], "snapshots": ["grok-4-fast"]}'
@@ -4251,7 +4051,9 @@
   family: grok-4-fast-non-reasoning
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-09-19'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-09-19"], "snapshots": ["grok-4-fast-non-reasoning"]}'
@@ -4262,11 +4064,11 @@
   family: grok-4.1-fast
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-19'
   tags: []
-  aliases:
-  - grok-4-1-fast
-  - xai/grok-4-1-fast
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-11-19"], "snapshots": ["grok-4-1-fast"]}'
   review_status: reviewed
 - id: xai/grok-4.1-fast-non-reasoning
@@ -4275,11 +4077,11 @@
   family: grok-4.1-fast-non-reasoning
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-11-19'
   tags: []
-  aliases:
-  - grok-4-1-fast-non-reasoning
-  - xai/grok-4-1-fast-non-reasoning
+  aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-11-19"], "snapshots": ["grok-4-1-fast-non-reasoning"]}'
   review_status: reviewed
 - id: xai/grok-4.20-multi-agent
@@ -4288,11 +4090,11 @@
   family: grok-4.20-multi-agent
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-09'
   tags: []
-  aliases:
-  - grok-4.20-multi-agent-0309
-  - xai/grok-4.20-multi-agent-0309
+  aliases: []
   metadata: '{"release_dates": ["2026-03-09"], "snapshots": ["grok-4.20-multi-agent-0309"]}'
   review_status: reviewed
 - id: xai/grok-4.20-non-reasoning
@@ -4301,11 +4103,11 @@
   family: grok-4.20-non-reasoning
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-09'
   tags: []
-  aliases:
-  - grok-4.20-0309-non-reasoning
-  - xai/grok-4.20-0309-non-reasoning
+  aliases: []
   metadata: '{"release_dates": ["2026-03-09"], "snapshots": ["grok-4.20-0309-non-reasoning"]}'
   review_status: reviewed
 - id: xai/grok-4.20-reasoning
@@ -4314,12 +4116,25 @@
   family: grok-4.20-reasoning
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-09'
   tags: []
-  aliases:
-  - grok-4.20-0309-reasoning
-  - xai/grok-4.20-0309-reasoning
+  aliases: []
   metadata: '{"release_dates": ["2026-03-09"], "snapshots": ["grok-4.20-0309-reasoning"]}'
+  review_status: reviewed
+- id: xai/grok-4.3
+  display_name: Grok 4.3
+  org_id: xai
+  family: grok-4.3
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-05-01'
+  tags: []
+  aliases: []
+  metadata: '{"release_dates": ["2026-05-01"], "snapshots": ["grok-4.3"]}'
   review_status: reviewed
 - id: xai/grok-beta
   display_name: Grok Beta
@@ -4327,7 +4142,9 @@
   family: grok-beta
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-11-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-11-01"], "snapshots": ["grok-beta"]}'
@@ -4338,7 +4155,9 @@
   family: grok-code-fast-1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-28'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2023-10"], "release_dates": ["2025-08-28"], "snapshots": ["grok-code-fast-1"]}'
@@ -4349,25 +4168,12 @@
   family: grok-vision-beta
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2024-11-01'
   tags: []
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-11-01"], "snapshots": ["grok-vision-beta"]}'
-  review_status: reviewed
-- id: zai/glm-4
-  display_name: GLM-4
-  org_id: zai
-  family: glm-4
-  tags: []
-  aliases:
-  - GLM-4
-  - glm-4
-  - zai/glm-4
-  - zhipu/glm-4
-  - zhipuai/glm-4
-  - THUDM/glm-4
-  - THUDM/glm-4-9b-chat
-  metadata: '{}'
   review_status: reviewed
 - id: zai/glm-4.5
   display_name: GLM-4.5
@@ -4375,7 +4181,9 @@
   family: glm-4.5
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-28'
   tags:
   - open-weight
   aliases: []
@@ -4387,7 +4195,9 @@
   family: glm-4.5-air
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-28'
   tags:
   - open-weight
   aliases: []
@@ -4399,7 +4209,9 @@
   family: glm-4.5-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-07-28'
   tags:
   - open-weight
   aliases: []
@@ -4411,7 +4223,9 @@
   family: glm-4.5v
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-08-11'
   tags:
   - open-weight
   aliases: []
@@ -4423,7 +4237,9 @@
   family: glm-4.6
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-09-30'
   tags:
   - open-weight
   aliases: []
@@ -4435,7 +4251,9 @@
   family: glm-4.6v
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-12-08'
   tags:
   - open-weight
   aliases: []
@@ -4447,7 +4265,9 @@
   family: glm-4.7
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2025-12-22'
   tags:
   - open-weight
   aliases: []
@@ -4459,7 +4279,9 @@
   family: glm-4.7-flash
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-01-19'
   tags:
   - open-weight
   aliases: []
@@ -4471,7 +4293,9 @@
   family: glm-4.7-flashx
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: true
+  release_date: '2026-01-19'
   tags:
   - open-weight
   aliases: []
@@ -4481,15 +4305,15 @@
   display_name: GLM-5
   org_id: zai
   family: glm-5
-  tags: []
-  aliases:
-  - GLM-5
-  - glm-5
-  - zai/glm-5
-  - zhipu/glm-5
-  - zhipuai/glm-5
-  - THUDM/glm-5
-  metadata: '{}'
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-02-11'
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-02-11"], "snapshots": ["glm-5"]}'
   review_status: reviewed
 - id: zai/glm-5-turbo
   display_name: GLM-5-Turbo
@@ -4497,7 +4321,9 @@
   family: glm-5-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-16'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2026-03-16"], "snapshots": ["glm-5-turbo"]}'
@@ -4508,7 +4334,9 @@
   family: glm-5.1
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-03-27'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2026-03-27"], "snapshots": ["glm-5.1"]}'
@@ -4519,7 +4347,9 @@
   family: glm-5v-turbo
   architecture: null
   params_billions: null
-  parent_model_id: null
+  parents: []
+  open_weights: false
+  release_date: '2026-04-01'
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2026-04-01"], "snapshots": ["glm-5v-turbo"]}'

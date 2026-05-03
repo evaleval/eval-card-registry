@@ -39,6 +39,51 @@ TABLE_NAMES = [
     "sync_runs",
 ]
 
+
+def _reconcile_schema(table: str, df: pd.DataFrame) -> pd.DataFrame:
+    """Bring a freshly-loaded parquet into line with the current schema:
+      * add missing columns (NA-filled, correct dtype)
+      * drop columns no longer in the schema
+      * apply one-shot data migrations (e.g. legacy `parent_model_id`
+        scalar → typed `parents` JSON list).
+
+    The data migration shims here are intentionally narrow and one-way: the
+    parquet file gets re-saved with the new shape on the next sync, after
+    which the shim becomes a no-op. Keep them around at least one release
+    cycle so HF-deployed read-only Spaces survive a schema rollout.
+    """
+    import json as _json
+
+    expected = schemas._SCHEMAS[table]
+    df = df.copy()
+
+    # canonical_models: legacy `parent_model_id` (scalar) → `parents` (JSON list)
+    if table == "canonical_models" and "parent_model_id" in df.columns and "parents" not in df.columns:
+        def _to_parents(legacy):
+            try:
+                if pd.isna(legacy):
+                    return None
+            except (TypeError, ValueError):
+                pass
+            if legacy is None or legacy == "":
+                return None
+            return _json.dumps([{"id": str(legacy), "relationship": "variant", "axis": "size"}])
+        df["parents"] = df["parent_model_id"].map(_to_parents).astype(pd.StringDtype())
+
+    # Add any other missing columns as NA with the schema's dtype.
+    # Use `None` (not `pd.NA`) as the fill value: pandas 3.x rejects pd.NA
+    # when constructing a float64 Series, but None coerces correctly to
+    # both nullable-string (NA) and float64 (NaN).
+    for col, dtype in expected.items():
+        if col not in df.columns:
+            df[col] = pd.Series([None] * len(df), dtype=dtype)
+
+    # Drop columns not in the schema (e.g. legacy `parent_model_id` after the
+    # migration above). Order columns to match the schema for deterministic
+    # parquet output.
+    keep = [c for c in expected if c in df.columns]
+    return df[keep]
+
 # Tables needed for query-only (read-only) mode
 QUERY_TABLE_NAMES = [
     "canonical_orgs",
@@ -78,7 +123,7 @@ class RegistryStore:
         for table in names:
             p = path / f"{table}.parquet"
             if p.exists():
-                self._tables[table] = pd.read_parquet(p)
+                self._tables[table] = _reconcile_schema(table, pd.read_parquet(p))
             else:
                 self._tables[table] = schemas.empty(table)
 
@@ -93,7 +138,7 @@ class RegistryStore:
                     repo_type="dataset",
                     token=settings.hf_token or None,
                 )
-                self._tables[table] = pd.read_parquet(local)
+                self._tables[table] = _reconcile_schema(table, pd.read_parquet(local))
             except Exception:
                 self._tables[table] = schemas.empty(table)
 

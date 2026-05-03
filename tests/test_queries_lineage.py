@@ -1,0 +1,117 @@
+"""Tests for `queries.derive_model_lineage_fields` — the post-seed
+denormalization that walks the `parents` graph to populate
+`root_model_id` and `lineage_origin_org_id`."""
+from __future__ import annotations
+
+import json
+
+import pandas as pd
+import pytest
+
+from eval_card_registry.store import hf_store, queries, schemas
+
+
+@pytest.fixture
+def fresh_store():
+    store = hf_store.RegistryStore()
+    store._tables = {n: schemas.empty(n) for n in [
+        "canonical_orgs", "canonical_models", "canonical_benchmarks",
+        "canonical_metrics", "eval_harnesses", "aliases",
+        "resolution_log", "eval_results", "sync_runs",
+    ]}
+    store._loaded = True
+    return store
+
+
+def _add_model(store, cid, org_id, parents):
+    queries.upsert_entity(store, "canonical_models", {
+        "id": cid, "display_name": cid, "developer": None,
+        "org_id": org_id, "family": None, "architecture": None,
+        "params_billions": None,
+        "parents": json.dumps(parents) if parents else "[]",
+        "root_model_id": None, "lineage_origin_org_id": None,
+        "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+    })
+
+
+def test_derive_handles_cycle_without_infinite_loop(fresh_store):
+    """The `_walk` helper tracks visited ids; a cycle in `parents`
+    (data corruption) must terminate cleanly. Pathological case: A
+    points to B, B points to A — both via `quantized` (so the walk
+    would otherwise loop forever)."""
+    _add_model(fresh_store, "lab/a", "lab", [{"id": "lab/b", "relationship": "quantized"}])
+    _add_model(fresh_store, "lab/b", "lab", [{"id": "lab/a", "relationship": "quantized"}])
+
+    # Should return cleanly, not hang
+    counts = queries.derive_model_lineage_fields(fresh_store)
+    assert counts["root_set"] >= 0  # just verify it returned
+
+    df = fresh_store.table("canonical_models")
+    # Both entries got SOME root_model_id assigned (not relevant which —
+    # the important thing is the walk terminated).
+    assert len(df) == 2
+
+
+def test_derive_lineage_origin_walks_finetune_and_quantized(fresh_store):
+    """`lineage_origin_org_id` walks through any non-variant relationship
+    (quantized/finetune/merge/adapter) to the deepest ancestor and copies
+    its org_id. Variant edges DO NOT count for this walk — they're
+    within-family hierarchy, not lineage."""
+    # Meta's base
+    _add_model(fresh_store, "meta/llama-3.1-70b", "meta", [])
+    # Nous's finetune of Meta's base
+    _add_model(fresh_store, "nous/hermes-3-llama-70b", "nous-research", [
+        {"id": "meta/llama-3.1-70b", "relationship": "finetune"},
+    ])
+    # Quantized of the Nous finetune
+    _add_model(fresh_store, "nous/hermes-3-llama-70b-fp8", "nous-research", [
+        {"id": "nous/hermes-3-llama-70b", "relationship": "quantized"},
+    ])
+
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    by_id = {r["id"]: r for _, r in df.iterrows()}
+
+    # Meta original: lineage = self.org_id; no quantized ancestor → root NA
+    assert by_id["meta/llama-3.1-70b"]["lineage_origin_org_id"] == "meta"
+    assert queries._is_na(by_id["meta/llama-3.1-70b"]["root_model_id"])
+
+    # Nous finetune: lineage = upstream lab (Meta), via the finetune edge.
+    # No root collapse — finetune isn't identity-preserving.
+    assert by_id["nous/hermes-3-llama-70b"]["lineage_origin_org_id"] == "meta"
+    assert queries._is_na(by_id["nous/hermes-3-llama-70b"]["root_model_id"])
+
+    # Quantized of finetune: lineage walks BOTH edges to Meta
+    assert by_id["nous/hermes-3-llama-70b-fp8"]["lineage_origin_org_id"] == "meta"
+    # Root collapses to the unquantized Hermes (NOT all the way to Llama —
+    # the chain only follows `quantized`, stops at the `finetune` edge).
+    assert by_id["nous/hermes-3-llama-70b-fp8"]["root_model_id"] == "nous/hermes-3-llama-70b"
+
+
+def test_derive_lineage_origin_falls_back_to_self_org(fresh_store):
+    """When a model has no walkable non-variant edge (a true root), its
+    `lineage_origin_org_id` is its own `org_id`."""
+    _add_model(fresh_store, "meta/llama-3", "meta", [])
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    row = df[df["id"] == "meta/llama-3"].iloc[0]
+    assert row["lineage_origin_org_id"] == "meta"
+
+
+def test_derive_variant_edges_do_not_set_lineage_origin_to_parent(fresh_store):
+    """Variant edges are within-family hierarchy and DO NOT count toward
+    lineage origin. A size variant of a Meta family stays attributed to
+    Meta (its own org), not walked to a different parent."""
+    _add_model(fresh_store, "meta/llama-3", "meta", [])
+    _add_model(fresh_store, "meta/llama-3-8b", "meta", [
+        {"id": "meta/llama-3", "relationship": "variant", "axis": "size"},
+    ])
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    by_id = {r["id"]: r for _, r in df.iterrows()}
+    # Same org throughout — variant edge doesn't change this, but the
+    # walk must not loop or chain across the variant edge to a sibling.
+    assert by_id["meta/llama-3-8b"]["lineage_origin_org_id"] == "meta"
+    # No quantized chain → root_model_id is NA (== self is identity root)
+    root = by_id["meta/llama-3-8b"]["root_model_id"]
+    assert root is None or queries._is_na(root)

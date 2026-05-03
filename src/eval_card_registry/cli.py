@@ -26,6 +26,27 @@ def _json_encode_if_needed(value):
         return json.dumps(value)
     return value
 
+
+def _legacy_parent_model_id_to_parents(entry: dict) -> None:
+    """Translate a legacy `parent_model_id: X` field to the typed `parents`
+    list shape. Mutates the entry in place.
+
+    Legacy core.yaml / sources/*.generated.yaml use a single scalar
+    `parent_model_id` to express a family/variant relationship (e.g.
+    Llama-3-8B → Llama-3). The new schema replaces this with a typed list
+    of parent edges. This shim converts on load so existing YAML keeps
+    working until each file is migrated to emit `parents` natively.
+
+    No-op when `parents` is already present (new shape wins) or when neither
+    field is set.
+    """
+    if "parents" in entry and entry["parents"] is not None:
+        entry.pop("parent_model_id", None)
+        return
+    legacy = entry.pop("parent_model_id", None)
+    if legacy:
+        entry["parents"] = [{"id": legacy, "relationship": "variant", "axis": "size"}]
+
 from eval_card_registry.store.hf_store import get_store
 from eval_card_registry.store import queries, schemas
 from eval_card_registry.store.queries import _is_na
@@ -185,15 +206,54 @@ def seed(
                     return True
                 return False
 
+            # Union `parents` by id. For an edge present in both, field-merge
+            # within the edge so a later source can fill in `axis` (or correct
+            # `relationship`) without duplicating the edge. Edges from the
+            # target preserve their order; new edges from src are appended.
+            tgt_parents, tgt_p_was_json = _decode_list_field(target.get("parents"))
+            src_parents, src_p_was_json = _decode_list_field(src.get("parents"))
+            parents_by_id: dict[str, dict] = {}
+            parents_order: list[str] = []
+            for p in tgt_parents:
+                if isinstance(p, dict) and p.get("id"):
+                    pid = p["id"]
+                    if pid not in parents_by_id:
+                        parents_order.append(pid)
+                        parents_by_id[pid] = dict(p)
+            for p in src_parents:
+                if not isinstance(p, dict) or not p.get("id"):
+                    continue
+                pid = p["id"]
+                if pid in parents_by_id:
+                    merged_edge = dict(parents_by_id[pid])
+                    for k, v in p.items():
+                        if _is_empty(v):
+                            continue
+                        merged_edge[k] = v
+                    parents_by_id[pid] = merged_edge
+                else:
+                    parents_order.append(pid)
+                    parents_by_id[pid] = dict(p)
+            parents_list = [parents_by_id[pid] for pid in parents_order]
+            parents_merged = (
+                _json.dumps(parents_list)
+                if (tgt_p_was_json or src_p_was_json)
+                else parents_list
+            )
+
             merged = dict(target)
             for k, v in src.items():
-                if k in ("aliases", "tags"):
+                if k in ("aliases", "tags", "parents"):
                     continue  # handled separately
                 if _is_empty(v):
                     continue
                 merged[k] = v
             merged["aliases"] = existing_aliases
             merged["tags"] = tags_merged
+            # Only emit `parents` if at least one side had any (avoids creating
+            # a spurious empty list on entries that never had a parents field).
+            if tgt_parents or src_parents:
+                merged["parents"] = parents_merged
             return merged
 
         by_id: dict[str, dict] = {}
@@ -205,6 +265,9 @@ def seed(
                     raise typer.BadParameter(f"models seed entry missing id: {e!r}")
                 if e["id"] in drop:
                     continue
+                # Translate legacy `parent_model_id` scalar to the typed
+                # `parents` list before any merge / column-filter step.
+                _legacy_parent_model_id_to_parents(e)
                 if e["id"] in by_id:
                     by_id[e["id"]] = _merge_into(by_id[e["id"]], e)
                 else:
@@ -217,9 +280,52 @@ def seed(
         _absorb(enrichment_entries, extra_skip=skip_source_ids)
         return list(by_id.values())
 
+    # ------------------------------------------------------------------
+    # Orgs — two-file load:
+    #   seed/orgs.yaml            → curated first-party labs (the source
+    #                               of truth, hand-edited)
+    #   seed/orgs.generated.yaml  → auto-created orgs from hub-stats refresh
+    #                               (HF authors that aren't curated labs)
+    #
+    # Curated wins on id collision. Unlike the models merge (field-level),
+    # orgs use a simple "drop generated entry if id is in curated" policy:
+    # curated entries are deliberate and richer; auto-created entries are
+    # thin (just id, display_name, kind=unknown), so a partial overlay
+    # would never improve the curated record.
+    # ------------------------------------------------------------------
+    def _load_orgs_merged() -> list[dict]:
+        curated_path = seed_path / "orgs.yaml"
+        generated_path = seed_path / "orgs.generated.yaml"
+
+        curated: list[dict] = []
+        if curated_path.exists():
+            with open(curated_path) as f:
+                loaded = yaml.safe_load(f) or []
+            if not isinstance(loaded, list):
+                raise typer.BadParameter(f"{curated_path} must be a flat list")
+            curated = loaded
+
+        generated: list[dict] = []
+        if generated_path.exists():
+            with open(generated_path) as f:
+                loaded = yaml.safe_load(f) or []
+            if not isinstance(loaded, list):
+                raise typer.BadParameter(f"{generated_path} must be a flat list")
+            generated = loaded
+
+        curated_ids = {e["id"] for e in curated if "id" in e}
+        out = list(curated)
+        for e in generated:
+            if "id" not in e:
+                raise typer.BadParameter(f"orgs.generated.yaml entry missing id: {e!r}")
+            if e["id"] not in curated_ids:
+                out.append(e)
+        return out
+
     # table name, yaml file, label, entity_type (for alias creation)
     seed_specs = [
-        ("canonical_orgs", seed_path / "orgs.yaml", "orgs", "org"),
+        # Orgs: load via merge helper to combine curated + auto-generated.
+        ("canonical_orgs", "__merged_orgs__", "orgs", "org"),
         ("canonical_benchmarks", seed_path / "benchmarks.yaml", "benchmarks", "benchmark"),
         ("canonical_metrics", seed_path / "metrics.yaml", "metrics", "metric"),
         ("eval_harnesses", seed_path / "harnesses.yaml", "harnesses", "harness"),
@@ -246,6 +352,11 @@ def seed(
             if not items:
                 typer.echo(f"  [skip] no model entries found in seed/models.yaml or _overrides/")
                 continue
+        elif yaml_file == "__merged_orgs__":
+            items = _load_orgs_merged()
+            if not items:
+                typer.echo(f"  [skip] no org entries found in seed/orgs.yaml or seed/orgs.generated.yaml")
+                continue
         else:
             if not yaml_file.exists():
                 typer.echo(f"  [skip] {yaml_file} not found")
@@ -261,9 +372,10 @@ def seed(
             # Pop 'aliases' / 'scoped_aliases' before upserting — not table columns.
             extra_aliases = item.pop("aliases", []) or []
             scoped_aliases = item.pop("scoped_aliases", {}) or {}
-            # Normalize tags / metadata: YAML may have native lists/dicts, but
-            # the canonical_* parquet columns are VARCHAR, so encode if needed.
-            for col in ("tags", "metadata"):
+            # Normalize list/dict columns: YAML may have native lists/dicts,
+            # but the canonical_* parquet columns are VARCHAR, so encode if
+            # needed. `parents` is a list-of-edges on canonical_models.
+            for col in ("tags", "metadata", "parents"):
                 if col in item:
                     item[col] = _json_encode_if_needed(item[col])
             entity_item = {k: v for k, v in item.items() if k in table_columns}
@@ -374,6 +486,15 @@ def seed(
     # single pd.concat per table. prune_stale below reads store.table(...)
     # directly, so this must happen before that block.
     queries.flush_pending(store)
+
+    # Derive denormalized parent-walk caches now that all canonical_models
+    # rows are present. `root_model_id` and `lineage_origin_org_id` are
+    # computed from `parents` and need the full graph to be in place.
+    lineage_counts = queries.derive_model_lineage_fields(store)
+    typer.echo(
+        f"  derived: root_model_id={lineage_counts['root_set']}, "
+        f"lineage_origin_org_id={lineage_counts['lineage_set']}"
+    )
 
     removed_entities = 0
     removed_aliases = 0

@@ -9,6 +9,11 @@ _SCHEMAS: dict[str, dict] = {
         "parent_org_id": pd.StringDtype(),
         "website": pd.StringDtype(),
         "hf_org": pd.StringDtype(),
+        # Org category — `lab` (curated first-party), `community` (multi-model
+        # HF org), `individual` (single-person account), `unknown` (auto-
+        # created, undecided). Consumers wanting "real labs only" filter on
+        # `lab` or on `review_status = reviewed`.
+        "kind": pd.StringDtype(),
         "tags": pd.StringDtype(),     # JSON-encoded list
         "metadata": pd.StringDtype(), # JSON-encoded dict
         "review_status": pd.StringDtype(),
@@ -23,7 +28,39 @@ _SCHEMAS: dict[str, dict] = {
         "family": pd.StringDtype(),
         "architecture": pd.StringDtype(),
         "params_billions": "float64",
-        "parent_model_id": pd.StringDtype(),
+        # JSON-encoded list of parent edges:
+        #   [{"id": "...", "relationship": "variant|finetune|quantized|merge|adapter",
+        #     "axis": "size|mode|modality|domain|version"}]
+        # `relationship: quantized` covers all inference-precision variants
+        # (-turbo, -fp8, -int4, -awq, -gguf, etc.) — matches hub-stats's
+        # baseModels.relation values and keeps the source/registry encoding
+        # consistent. Quants are NOT a sub-axis of `variant`.
+        # `axis` is optional and only meaningful for `relationship: variant`.
+        # Multi-element lists support merges (multiple parents share the
+        # `merge` relationship) and the rare case of a model that's both a
+        # family variant AND a finetune of an external base.
+        "parents": pd.StringDtype(),
+        # Identity root: walk `parents` up following only `quantized` edges.
+        # NULL when self has no quantized ancestor (i.e. self IS the identity
+        # root). Resolver default-returns this when set; callers wanting the
+        # leaf get the un-collapsed canonical id in `resolved_leaf_id`.
+        "root_model_id": pd.StringDtype(),
+        # Denormalized: `org_id` of the deepest non-`variant` ancestor in
+        # `parents`. For Meta-originated models = self.org_id. For
+        # finetunes/quants of someone else's weights = the upstream lab's
+        # org_id. Recomputed on every refresh; treat as a cache.
+        "lineage_origin_org_id": pd.StringDtype(),
+        # Open vs closed weights. NULL when unknown. Populated:
+        #   - models.dev refresh   → from `open_weights` field directly
+        #   - hub-stats refresh    → True iff safetensors/gguf data present
+        #   - live hub-stats lookup → same inference as bulk refresh
+        # Closed-API models (Anthropic / OpenAI / Google) get False from
+        # models.dev. Hand-curated core.yaml entries may set explicitly.
+        "open_weights": pd.BooleanDtype(),
+        # ISO date (YYYY-MM-DD or YYYY-MM) of the family's earliest known
+        # snapshot. Populated automatically by scripts/refresh_from_modelsdev.py
+        # from models.dev. Per-snapshot dates remain in metadata.release_dates.
+        "release_date": pd.StringDtype(),
         "tags": pd.StringDtype(),     # JSON-encoded list
         "metadata": pd.StringDtype(), # JSON-encoded dict
         "review_status": pd.StringDtype(),

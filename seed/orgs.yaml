@@ -21,6 +21,7 @@
   hf_org: anthropic
   aliases: ["Anthropic, PBC", "Anthropic PBC"]
   tags: '["lab", "closed-source"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -30,6 +31,7 @@
   hf_org: openai
   aliases: ["OpenAI, Inc.", "Open AI"]
   tags: '["lab", "closed-source"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -39,6 +41,7 @@
   hf_org: google
   aliases: ["Google LLC", "Google AI", "Google Research"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -48,6 +51,7 @@
   website: https://deepmind.google
   aliases: ["DeepMind", "Google DeepMind LLC"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -57,6 +61,7 @@
   hf_org: xai-org
   aliases: ["X AI", "x.ai", "X.AI"]
   tags: '["lab", "closed-source"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -66,6 +71,7 @@
   hf_org: cohereforai
   aliases: ["Cohere Inc.", "CohereForAI", "Cohere For AI", "cohere-labs"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -77,6 +83,7 @@
   hf_org: meta-llama
   aliases: ["Meta AI", "Meta Platforms", "meta-llama", "Facebook AI Research", "FAIR"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -86,6 +93,7 @@
   hf_org: mistralai
   aliases: ["Mistral", "mistral-ai", "Mistral.AI"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -95,6 +103,7 @@
   hf_org: deepseek-ai
   aliases: ["deepseek-ai", "DeepSeek AI", "DeepSeek-AI"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -104,6 +113,7 @@
   hf_org: qwen
   aliases: ["Alibaba Cloud", "Qwen", "qwen", "Qwen Team", "Alibaba DAMO Academy"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -113,6 +123,7 @@
   hf_org: microsoft
   aliases: ["Microsoft Research", "MSR", "Microsoft AI"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -122,6 +133,7 @@
   hf_org: nvidia
   aliases: ["Nvidia", "nvidia-nemo", "NVIDIA Corp."]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -131,6 +143,7 @@
   hf_org: tiiuae
   aliases: ["TII", "tii-uae", "Technology Innovation Institute UAE"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -140,6 +153,7 @@
   hf_org: 01-ai
   aliases: ["01.AI", "01 AI", "Yi"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -150,6 +164,7 @@
   hf_org: ibm-granite
   aliases: ["Granite", "Granite Team"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -158,6 +173,7 @@
   website: https://www.ibm.com
   aliases: ["IBM Corp.", "International Business Machines", "IBM Research"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -167,6 +183,7 @@
   hf_org: stabilityai
   aliases: ["Stability", "stability-ai"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -176,6 +193,7 @@
   hf_org: moonshotai
   aliases: ["Moonshot", "Kimi"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -185,6 +203,7 @@
   hf_org: stepfun-ai
   aliases: ["Step", "Step-Star"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -194,6 +213,7 @@
   hf_org: minimax
   aliases: ["MiniMax-AI", "Minimax"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -203,6 +223,7 @@
   hf_org: zai-org
   aliases: ["Z AI", "Zhipu", "ZhipuAI", "GLM Team"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -211,6 +232,7 @@
   website: https://www.inceptionlabs.ai
   aliases: ["Inception"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -220,6 +242,7 @@
   hf_org: nousresearch
   aliases: ["Nous", "NousResearch"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -229,6 +252,7 @@
   hf_org: upstage
   aliases: ["Upstage AI"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -237,6 +261,7 @@
   website: https://www.perplexity.ai
   aliases: ["Perplexity", "perplexity-ai"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -248,6 +273,7 @@
   website: https://crfm.stanford.edu
   aliases: ["CRFM", "Stanford Center for Research on Foundation Models", "Stanford HELM"]
   tags: '["academic", "evaluator"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -256,6 +282,7 @@
   website: https://www.stanford.edu
   aliases: ["Stanford"]
   tags: '["academic"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -265,6 +292,7 @@
   hf_org: allenai
   aliases: ["AI2", "Ai2", "Allen AI", "Allen Institute"]
   tags: '["lab", "academic", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -274,6 +302,7 @@
   hf_org: eleutherai
   aliases: ["Eleuther", "EleutherAI Research"]
   tags: '["lab", "academic", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -283,6 +312,7 @@
   hf_org: huggingfaceh4
   aliases: ["HuggingFace", "Hugging Face Inc.", "HuggingFaceH4", "HF", "HuggingFaceTB", "huggingfacetb"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -291,6 +321,7 @@
   hf_org: bigscience
   aliases: ["BigScience Workshop"]
   tags: '["academic", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -299,6 +330,7 @@
   website: https://aws.amazon.com/bedrock/
   aliases: ["Amazon Web Services", "AWS", "Amazon Bedrock"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -308,6 +340,7 @@
   hf_org: writer
   aliases: ["Writer Inc.", "Writer AI"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -317,6 +350,7 @@
   hf_org: databricks
   aliases: ["Databricks Inc.", "Databricks Mosaic"]
   tags: '["lab", "open-weight"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
 
@@ -326,5 +360,6 @@
   hf_org: ai21labs
   aliases: ["AI21", "AI21labs", "ai21labs"]
   tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed
