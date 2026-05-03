@@ -165,9 +165,10 @@ def _family_for(model: dict) -> str:
 
 # --- Suffix → (relationship, axis) classification --------------------------
 # Used to translate the diff between a snapshot's id and its family slug
-# into a typed `parents` edge. Mirrors the categorization in
-# scripts/promote_buried_aliases.py so models.dev refresh and curated
-# core.yaml use the same shape.
+# into a typed `parents` edge. The classification table mirrors the
+# one-shot promotion pass that split buried aliases into their own
+# canonicals — keeping the same enum values here means models.dev
+# refresh and curated core.yaml entries land in identical shapes.
 _TOKEN_CLASSIFICATIONS: dict[str, tuple[str, str | None]] = {
     "instruct": ("variant", "mode"),
     "it": ("variant", "mode"),
