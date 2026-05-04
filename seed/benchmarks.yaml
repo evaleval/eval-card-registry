@@ -555,6 +555,8 @@
 
 - id: rewardbench-2-math
   display_name: RewardBench 2 Math
+  scoped_aliases:
+    reward-bench: ["Math"]
   description: RewardBench 2 sub-category — math prompts.
   dataset_repo: allenai/reward-bench-2-results
   parent_benchmark_id: rewardbench-2
