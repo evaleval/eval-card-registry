@@ -4342,7 +4342,7 @@
   metadata: '{"release_dates": ["2026-03-27"], "snapshots": ["glm-5.1"]}'
   review_status: reviewed
 - id: zai/glm-5v-turbo
-  display_name: glm-5v-turbo
+  display_name: GLM-5V-Turbo
   org_id: zai
   family: glm-5v-turbo
   architecture: null
