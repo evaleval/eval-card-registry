@@ -222,14 +222,87 @@ class TestFuzzyStrategy:
         assert result.canonical_id == "meta/llama-3-70b"
         assert result.strategy == "fuzzy"
 
-    def test_short_date_not_stripped(self):
-        """Avoid stripping non-date numeric suffixes like -2024 (only YYYYMMDD)."""
+    def test_qwen_org_alias_to_alibaba(self):
+        """`Qwen/<model>` (HF-namespace upload form) → `alibaba/<model>`
+        via the qwen → alibaba org alias. The reverse direction
+        (alibaba → qwen) was rejected because of the non-Qwen
+        `alibaba/mineru2-pipeline` entry; this direction has no analogous
+        collision."""
+        store = _store_with_aliases(
+            ("alibaba/qwen2-vl-7b-instruct", "model", "alibaba/qwen2-vl-7b-instruct", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("Qwen/Qwen2-VL-7B-Instruct", "model")
+        assert result.canonical_id == "alibaba/qwen2-vl-7b-instruct"
+
+    def test_year_only_strips_for_openai_shaped_via_iso_date_peel(self):
+        """`openai/gpt-5-2024` peels the trailing year to `openai/gpt-5`
+        via the OpenAI ISO-date strip. Strict year-range guard
+        (2015–2035) + lookup verification means non-year 4-digit tails
+        (e.g. `-1024`) and non-aliased truncations are unaffected; see
+        the explicit regression tests below."""
         store = _store_with_aliases(("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"))
         resolver = Resolver(store)
-        # "-2024" is 4 digits, not 8 → must not match the date pattern
         result = resolver.resolve("openai/gpt-5-2024", "model")
+        assert result.canonical_id == "openai/gpt-5"
+        assert result.strategy == "fuzzy"
+
+    def test_iso_date_strip_does_not_apply_to_non_openai(self):
+        """The OpenAI date-peel is org-scoped: `meta/llama-3-2024` must NOT
+        strip to `meta/llama-3` because Meta's release cadence doesn't use
+        the OpenAI YYYY-MM-DD truncated-month convention."""
+        store = _store_with_aliases(("meta/llama-3", "model", "meta/llama-3", None, "confirmed"))
+        resolver = Resolver(store)
+        result = resolver.resolve("meta/llama-3-2024", "model")
         assert result.canonical_id is None
         assert result.strategy == "no_match"
+
+    def test_iso_date_strip_rejects_non_year_4digit_tail(self):
+        """The year-range guard (2015–2035) prevents arbitrary 4-digit
+        tails like `-1024` (a number, not a year) from triggering the
+        peel even on OpenAI-shaped raws."""
+        store = _store_with_aliases(("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"))
+        resolver = Resolver(store)
+        result = resolver.resolve("openai/gpt-5-1024", "model")
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
+
+    def test_iso_date_strip_full_date_progressive_peel(self):
+        """`openai/gpt-5-2025-08-07` peels in three steps until it hits an
+        existing alias. Lookup-verified: when only the bare family is
+        aliased, that's what wins."""
+        store = _store_with_aliases(("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"))
+        resolver = Resolver(store)
+        result = resolver.resolve("openai/gpt-5-2025-08-07", "model")
+        assert result.canonical_id == "openai/gpt-5"
+        assert result.strategy == "fuzzy"
+
+    def test_iso_date_strip_prefers_truncated_month_canonical(self):
+        """When the registry has both the truncated-month canonical and
+        the family root, the peel stops at the first hit (truncated
+        month) — preserves snapshot identity instead of over-collapsing."""
+        store = _store_with_aliases(
+            ("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"),
+            ("openai/gpt-5-2025-08", "model", "openai/gpt-5-2025-08", None, "confirmed"),
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("openai/gpt-5-2025-08-07", "model")
+        assert result.canonical_id == "openai/gpt-5-2025-08"
+        assert result.strategy == "fuzzy"
+
+    def test_iso_date_strip_handles_unknown_host_prefix(self):
+        """`unknown/gpt-5-2025-08-07` (placeholder host prefix) — host
+        strip drops `unknown/`, then ISO-date peel reduces the
+        OpenAI-shaped body. Production registry registers both the
+        bare alias (`gpt-5 → openai/gpt-5`) and the prefixed canonical;
+        the test mirrors that so the host-stripped candidate finds a hit."""
+        store = _store_with_aliases(
+            ("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"),
+            ("gpt-5",        "model", "openai/gpt-5", None, "confirmed"),
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("unknown/gpt-5-2025-08-07", "model")
+        assert result.canonical_id == "openai/gpt-5"
 
 
 class TestNoMatch:

@@ -139,6 +139,13 @@ _ORG_ALIASES: dict[str, str] = {
     # Moonshot → moonshotai
     "moonshot": "moonshotai",
     "moonshot-ai": "moonshotai",
+    # Qwen models live under canonical org `alibaba` (Alibaba Cloud).
+    # HF uploads use the `Qwen/` namespace (e.g. Qwen/Qwen2-VL-7B-Instruct).
+    # The reverse mapping (alibaba → qwen) was rejected because
+    # `alibaba__mineru2-pipeline` is a non-Qwen entry; this direction has
+    # no analogous collision since every `qwen/<X>` upstream id we've seen
+    # corresponds to an Alibaba/Qwen-family model.
+    "qwen": "alibaba",
 }
 
 # Host / gateway / placeholder prefixes that should be DROPPED entirely
@@ -324,6 +331,97 @@ def _normalize_org(value: str) -> str | None:
     return f"{canonical_org}/{rest}"
 
 
+# OpenAI body detection — applied AFTER any host-prefix drop so
+# `unknown/gpt-5-2025-08-07` and `openai/gpt-5-2025-08-07` both qualify.
+# Word-boundary anchored so we don't match e.g. `gptq-int4` (a quant
+# suffix elsewhere) or `o3rganization`.
+_OPENAI_MODEL_BODY_RE = re.compile(
+    r"^(?:gpt|chatgpt|o\d|davinci|babbage|curie|ada)(?:-|$)",
+    re.IGNORECASE,
+)
+
+
+def _is_openai_shaped(value: str) -> bool:
+    """True if `value` looks like an OpenAI model handle.
+
+    Scoped because OpenAI's release cadence emits dated daily snapshots
+    (`gpt-5-2025-08-07`) while the registry typically aliases the
+    truncated-month form (`gpt-5-2025-08`) and root-collapses that to the
+    moving family pointer (`gpt-5`). Other orgs use different conventions
+    (Anthropic compresses to `YYYYMMDD`; Allen-AI uses YYMM tags like
+    `1124`); applying ISO-date peeling broadly would either over-match
+    (false-conflate distinct snapshots) or under-match (different format).
+    """
+    if value.lower().startswith("openai/"):
+        return True
+    body = value.split("/", 1)[1] if "/" in value else value
+    return bool(_OPENAI_MODEL_BODY_RE.match(body))
+
+
+# ISO-date tail capture, anchored. Strict component widths so we don't
+# accidentally peel non-date numeric tokens (e.g. context length `-32k`
+# isn't matched because `\d{4}` requires 4 digits). Year range guard is
+# applied at strip-time, not in regex, so future-dated snapshots stay
+# strippable without a regex bump.
+_ISO_DATE_FULL_RE = re.compile(r"^(.+)-(\d{4})-(\d{2})-(\d{2})$")
+_ISO_DATE_MONTH_RE = re.compile(r"^(.+)-(\d{4})-(\d{2})$")
+_ISO_DATE_YEAR_RE = re.compile(r"^(.+)-(\d{4})$")
+
+
+def _strip_openai_iso_date(value: str) -> list[str]:
+    """For OpenAI-shaped values ending in an ISO-format date, return a
+    list of progressively-truncated candidates (day → month → year → bare).
+
+    Each candidate gets looked up by the caller; the first hit wins.
+    Lookup is verifying — if no truncated form is aliased in the registry,
+    nothing changes (no false matches manufactured by the strip itself).
+
+    Examples:
+        openai/gpt-5-2025-08-07 → [openai/gpt-5-2025-08, openai/gpt-5-2025, openai/gpt-5]
+        openai/o3-mini-2025-01-31 → [openai/o3-mini-2025-01, openai/o3-mini-2025, openai/o3-mini]
+        openai/gpt-4o-mini-2024 → [openai/gpt-4o-mini]
+        meta/llama-3-2024-04-18 → []   (not OpenAI-shaped)
+    """
+    if not _is_openai_shaped(value):
+        return []
+
+    # Year sanity guard — only peel when the year looks like a real
+    # release-snapshot year. Avoids stripping arbitrary 4-digit tokens
+    # that aren't dates (e.g. parameter sizes, batch numbers).
+    def _is_release_year(s: str) -> bool:
+        try:
+            y = int(s)
+        except ValueError:
+            return False
+        return 2015 <= y <= 2035
+
+    candidates: list[str] = []
+    m = _ISO_DATE_FULL_RE.match(value)
+    if m:
+        prefix, y, mo, d = m.groups()
+        if _is_release_year(y) and 1 <= int(mo) <= 12 and 1 <= int(d) <= 31:
+            candidates.append(f"{prefix}-{y}-{mo}")
+            candidates.append(f"{prefix}-{y}")
+            candidates.append(prefix)
+            return candidates
+
+    m = _ISO_DATE_MONTH_RE.match(value)
+    if m:
+        prefix, y, mo = m.groups()
+        if _is_release_year(y) and 1 <= int(mo) <= 12:
+            candidates.append(f"{prefix}-{y}")
+            candidates.append(prefix)
+            return candidates
+
+    m = _ISO_DATE_YEAR_RE.match(value)
+    if m:
+        prefix, y = m.groups()
+        if _is_release_year(y):
+            candidates.append(prefix)
+
+    return candidates
+
+
 def fuzzy_match(
     raw_value: str,
     entity_type: str,
@@ -392,6 +490,18 @@ def fuzzy_match(
         collapsed = _collapse_letter_digit_dashes(val)
         if collapsed:
             candidates_to_try.append(collapsed)
+
+    # 6. OpenAI ISO-date suffix peel — progressively truncate
+    # `-YYYY-MM-DD` → `-YYYY-MM` → `-YYYY` → bare. Scoped to OpenAI-shaped
+    # raws because the cadence (daily snapshot of a monthly pointer that
+    # version-collapses to the family root) is OpenAI-specific. Other
+    # orgs' dated snapshots use different conventions and are handled by
+    # `-\d{8}$` (Anthropic-style YYYYMMDD) or already-aliased canonicals.
+    # Lookup-verified: each truncated candidate must hit an existing
+    # alias to count, so this can never invent a mapping.
+    for val in [raw_value] + candidates_to_try[:]:
+        for peeled in _strip_openai_iso_date(val):
+            candidates_to_try.append(peeled)
 
     # 6. Check each candidate against exact then normalized lookups.
     # Scoped-aware: config-scoped aliases for ``source_config`` count as

@@ -2463,15 +2463,27 @@ entries:
   - claude-4-sonnet
   - anthropic/claude-4-sonnet
   - claude-sonnet-4
-  - claude-4-sonnet-thinking
-  - anthropic/claude-4-sonnet-thinking
   - unknown/claude-sonnet-4
   - unknown/claude-4-sonnet
-  - unknown/claude-4-sonnet-thinking
   - anthropic--claude-4-sonnet
   - anthropic-claude-sonnet-4
   - anthropic.claude-sonnet-4-20250514-v1:0
   metadata: '{"knowledge_cutoffs": ["2025-03-31"], "release_dates": ["2025-05-22"], "snapshots": ["claude-sonnet-4-0", "claude-sonnet-4-20250514"]}'
+  review_status: reviewed
+- id: anthropic/claude-sonnet-4-thinking
+  display_name: Claude Sonnet 4 Thinking
+  org_id: anthropic
+  parents:
+  - id: anthropic/claude-sonnet-4
+    relationship: variant
+    axis: mode
+  aliases:
+  - anthropic/claude-sonnet-4-thinking
+  - claude-sonnet-4-thinking
+  - unknown/claude-sonnet-4-thinking
+  - anthropic/claude-4-sonnet-thinking
+  - claude-4-sonnet-thinking
+  - unknown/claude-4-sonnet-thinking
   review_status: reviewed
 - id: google/gemini-2.0-flash
   display_name: Gemini 2.0 Flash
@@ -3412,7 +3424,14 @@ entries:
   aliases:
   - claude-opus-4.6
   - claude-opus-4-6
+  - Claude-Opus-4.6
+  - Opus 4.6
+  - Opus-4.6
+  - opus-4.6
+  - anthropic/Opus 4.6
+  - anthropic/opus-4.6
   - claude-4-6-opus
+  - claude-4.6-opus
   - anthropic/claude-opus-4-6
   - anthropic/claude-4-6-opus
   - anthropic--claude-4.6-opus
@@ -4967,6 +4986,22 @@ entries:
   - anthropic/claude-4-5-haiku
   - anthropic/claude-haiku-4.5
   - anthropic/claude-4-5-haiku-reasoning
+  review_status: reviewed
+- id: anthropic/claude-haiku-4.5-thinking
+  display_name: Claude Haiku 4.5 Thinking
+  org_id: anthropic
+  parents:
+  - id: anthropic/claude-haiku-4.5
+    relationship: variant
+    axis: mode
+  aliases:
+  - anthropic/claude-haiku-4.5-thinking
+  - anthropic/claude-haiku-4-5-thinking
+  - claude-haiku-4-5-thinking
+  - claude-haiku-4.5-thinking
+  - unknown/claude-haiku-4-5-thinking
+  - anthropic/claude-4-5-haiku-thinking
+  - claude-4-5-haiku-thinking
   review_status: reviewed
 - id: anthropic/claude-opus-4.1
   display_name: Claude Opus 4.1
@@ -15997,6 +16032,18 @@ entries:
   - claude-sonnet-4-20250514
   - anthropic/claude-sonnet-4-20250514
   review_status: reviewed
+- id: anthropic/claude-sonnet-4-20250514-thinking
+  display_name: Claude Sonnet 4 (2025-05-14) Thinking
+  org_id: anthropic
+  parents:
+  - id: anthropic/claude-sonnet-4-20250514
+    relationship: variant
+    axis: mode
+  aliases:
+  - anthropic/claude-sonnet-4-20250514-thinking
+  - claude-sonnet-4-20250514-thinking
+  - unknown/claude-sonnet-4-20250514-thinking
+  review_status: reviewed
 - id: google/gemini-2.0-flash-001
   display_name: Gemini 2.0 Flash 001
   org_id: google
@@ -16264,8 +16311,6 @@ entries:
   - claude-sonnet-4.5-thinking
   - anthropic/claude-4-5-sonnet-thinking
   - claude-4-5-sonnet-thinking
-  - unknown/claude-sonnet-4-thinking
-  - claude-sonnet-4-thinking
   review_status: reviewed
 - id: deepseek/deepseek-v3.2-reasoning
   display_name: DeepSeek V3.2 Reasoning
@@ -17379,6 +17424,19 @@ entries:
     axis: version
   aliases:
   - claude-haiku-4-5-20251001
+  review_status: reviewed
+- id: anthropic/claude-haiku-4.5-20251001-thinking
+  display_name: Claude Haiku 4.5 (2025-10-01) Thinking
+  org_id: anthropic
+  parents:
+  - id: anthropic/claude-haiku-4.5-20251001
+    relationship: variant
+    axis: mode
+  aliases:
+  - anthropic/claude-haiku-4.5-20251001-thinking
+  - anthropic/claude-haiku-4-5-20251001-thinking
+  - claude-haiku-4-5-20251001-thinking
+  - unknown/claude-haiku-4-5-20251001-thinking
   review_status: reviewed
 - id: anthropic/claude-opus-4.1-20250805
   display_name: Claude Opus 4.1 (2025-08-05)
