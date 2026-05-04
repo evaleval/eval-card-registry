@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from eval_entity_resolver import AliasStore, CanonicalStore, Resolver, ResolverConfig, ResolutionResult
+from eval_entity_resolver.display import humanize_model_slug
 
 from eval_card_registry.config import settings
 from eval_card_registry.store.hf_store import RegistryStore
@@ -294,9 +295,17 @@ class ResolutionService:
             candidate_id = f"{candidate_id}-{str(uuid.uuid4())[:8]}"
 
         now = _now()
+        # Models get a humanized display name (`gpt-5-2025-08-07` ->
+        # `GPT-5 (2025-08-07)`); other entity types pass `raw_value`
+        # through — benchmark/metric/harness/org names are usually
+        # already in their preferred display form.
+        if entity_type == "model":
+            display = humanize_model_slug(raw_value) or raw_value
+        else:
+            display = raw_value
         base = {
             "id": candidate_id,
-            "display_name": raw_value,
+            "display_name": display,
             "metadata": "{}",
             "review_status": "draft",
             "created_at": now,

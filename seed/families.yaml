@@ -1,0 +1,22 @@
+# Multi-benchmark family registry. Singleton families default to
+# `family.key == benchmark.key` and don't need to appear here.
+#
+# Each entry's key is the family slug; `benchmarks` lists the canonical
+# benchmark ids that belong to this family. A benchmark may belong to at
+# most one curated family (validated at load time).
+
+mmlu:
+  display: MMLU family
+  benchmarks: [mmlu, mmlu-pro]
+gpqa:
+  display: GPQA family
+  benchmarks: [gpqa, gpqa-diamond]
+swe-bench:
+  display: SWE-bench family
+  benchmarks: [swe-bench, swe-bench-verified]
+bfcl:
+  display: BFCL family
+  benchmarks: [bfcl-live, bfcl-multi-turn, bfcl-non-live, bfcl-web-search]
+judgebench:
+  display: JudgeBench family
+  benchmarks: [judgebench-coding, judgebench-knowledge]

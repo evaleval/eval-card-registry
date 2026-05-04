@@ -122,6 +122,8 @@ eval-card-registry/
 ├── seed/                                 # Known canonical entities (YAML)
 │   ├── orgs.yaml                         # Curated orgs (kind: lab)
 │   ├── benchmarks.yaml / metrics.yaml / harnesses.yaml
+│   ├── composites.yaml / families.yaml    # Backend hierarchy taxonomy hints
+│   ├── slice_overrides.yaml               # Benchmark-vs-slice taxonomy overrides
 │   └── models/                           # Three-layer model seed
 │       ├── core.yaml                     # Hand-curated, source of truth
 │       ├── sources/*.generated.yaml      # Bulk imports (e.g. models.dev)

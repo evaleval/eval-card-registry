@@ -109,8 +109,8 @@ def test_filter_useful_tags(mod):
 
 def test_build_entry_job_a_existing_canonical(mod):
     """Job A: hub-stats id matches an existing canonical → emit
-    enrichment entry (no parents set, even if hub-stats has baseModels —
-    curated parents in core.yaml stay authoritative)."""
+    enrichment entry. With `baseModels: None`, no parents are extracted
+    (vacuous); the `baseModels`-populated case is covered separately."""
     row = {
         "id": "meta-llama/Llama-3.1-70B",
         "author": "meta-llama",
@@ -130,11 +130,68 @@ def test_build_entry_job_a_existing_canonical(mod):
     assert e["org_id"] == "meta"
     assert e["release_date"] == "2024-07-14"
     assert e["params_billions"] == 70.5  # bytes / 2 / 1e9
-    assert "parents" not in e, "Job A enrichment must not set parents"
+    assert "parents" not in e, "no baseModels in row → no parents in entry"
     assert "eval-results" in e["tags"]
     metadata = json.loads(e["metadata"])
     assert metadata["source"] == "hub_stats"
     assert metadata["license"] == "llama3.1"
+
+
+def test_build_entry_propagates_resolvable_parents(mod):
+    """When hub-stats `baseModels` references an HF id that resolves to
+    one of our canonicals, the entry carries `parents` and
+    `lineage_origin_org_id`. The seed loader's `_merge_into` unions
+    these with any curated parents in core.yaml — see
+    test_parents_union_by_id_across_sources for the cross-source merge
+    semantics."""
+    row = {
+        "id": "meta-llama/Llama-3.1-70B-Instruct",
+        "author": "meta-llama",
+        "createdAt": datetime(2024, 7, 23),
+        "tags": ["text-generation"],
+        "cardData": {"license": "llama3.1"},
+        "safetensors": {"total": 141_000_000_000},
+        "baseModels": {
+            "relation": "finetune",
+            "models": [{"id": "meta-llama/Llama-3.1-70B"}],
+        },
+        "library_name": "transformers",
+        "pipeline_tag": "text-generation",
+        "downloadsAllTime": 1_000_000,
+        "likes": 999,
+    }
+    e = mod.build_entry(row, ORG_ALIAS_MAP, ALIASES_TO_CANONICAL)
+    assert e is not None
+    assert e["id"] == "meta/llama-3.1-70b-instruct"
+    assert e["parents"] == [
+        {"id": "meta/llama-3.1-70b", "relationship": "finetune"}
+    ]
+    assert e["lineage_origin_org_id"] == "meta"
+
+
+def test_build_entry_drops_unresolvable_parents(mod):
+    """`baseModels` pointing at an HF id we don't track yields no
+    parents — dangling edges would break the lineage graph."""
+    row = {
+        "id": "meta-llama/Llama-3.1-70B-Instruct",
+        "author": "meta-llama",
+        "createdAt": datetime(2024, 7, 23),
+        "tags": [],
+        "cardData": None,
+        "safetensors": None,
+        "baseModels": {
+            "relation": "finetune",
+            "models": [{"id": "some-org/model-we-dont-track"}],
+        },
+        "library_name": None,
+        "pipeline_tag": None,
+        "downloadsAllTime": None,
+        "likes": None,
+    }
+    e = mod.build_entry(row, ORG_ALIAS_MAP, ALIASES_TO_CANONICAL)
+    assert e is not None
+    assert "parents" not in e
+    assert "lineage_origin_org_id" not in e
 
 
 def test_build_entry_skips_unknown_hf_ids(mod):

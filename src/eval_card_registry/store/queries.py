@@ -85,9 +85,12 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     `root_model_id`, `lineage_origin_org_id`, and inherited `open_weights`
     columns.
 
-    - `root_model_id`: walk parents up through *only* `quantized` edges
-      (identity-preserving chain). NULL when self has no quantized
-      ancestor — i.e., self IS the identity root.
+    - `root_model_id`: walk parents up through edges that preserve API
+      identity — `quantized` (different precision, same model) and
+      `variant axis=version` (dated snapshot of the same release, e.g.
+      `gpt-4o-2024-05-13` -> `gpt-4o`). NULL when self has no such
+      ancestor — i.e., self IS the identity root. Other variant axes
+      (size, mode, modality, domain) keep separate identity at the leaf.
     - `lineage_origin_org_id`: walk through any non-`variant` edge
       (quantized / finetune / merge / adapter) to the deepest ancestor,
       then read its `org_id`. For Meta-originated models = self.org_id;
@@ -117,8 +120,8 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         ow = row.get("open_weights")
         open_by_id[cid] = None if _is_na(ow) else bool(ow)
 
-    def _walk(start: str, allowed: set[str]) -> str:
-        """Walk parents through edges whose relationship is in `allowed`.
+    def _walk(start: str, edge_ok) -> str:
+        """Walk parents through edges where `edge_ok(edge)` is True.
         Returns the deepest reachable id; stops on no-match or cycle."""
         visited = {start}
         current = start
@@ -128,13 +131,24 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
             for p in edges:
                 if not isinstance(p, dict):
                     continue
-                if p.get("relationship") in allowed and p.get("id"):
+                if edge_ok(p) and p.get("id"):
                     next_id = p["id"]
                     break
             if not next_id or next_id in visited or next_id not in parents_by_id:
                 return current
             visited.add(next_id)
             current = next_id
+
+    def _is_identity_edge(p: dict) -> bool:
+        rel = p.get("relationship")
+        if rel == "quantized":
+            return True
+        if rel == "variant" and p.get("axis") == "version":
+            return True
+        return False
+
+    def _is_lineage_edge(p: dict) -> bool:
+        return p.get("relationship") in {"quantized", "finetune", "merge", "adapter"}
 
     def _inherit_open_from_ancestors(start: str) -> Optional[bool]:
         """Walk ONLY ancestors (skip self) through `variant` + `quantized`
@@ -166,11 +180,12 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     open_updates: dict[str, Optional[bool]] = {}
     inherited_count = 0
     for cid in parents_by_id:
-        # Identity root via quantized-only walk
-        root = _walk(cid, {"quantized"})
+        # Identity root via quantized + variant-version walk (both treat
+        # the parent as the same model at the API level — see docstring).
+        root = _walk(cid, _is_identity_edge)
         root_updates[cid] = root if root != cid else None
         # Lineage origin via any non-variant edge; org of deepest ancestor
-        ancestor = _walk(cid, {"quantized", "finetune", "merge", "adapter"})
+        ancestor = _walk(cid, _is_lineage_edge)
         lineage_updates[cid] = org_by_id.get(ancestor) or org_by_id.get(cid)
         # Open weights — explicit self value WINS; only fall back to
         # ancestor inheritance when self has no value set. Never overwrite

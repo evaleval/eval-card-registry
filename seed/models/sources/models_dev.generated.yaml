@@ -190,7 +190,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-01-25"], "snapshots": ["qwen-vl-plus"]}'
   review_status: reviewed
 - id: alibaba/qwen2.5-14b
-  display_name: Qwen2.5 14b
+  display_name: Qwen2.5 14B
   org_id: alibaba
   family: qwen2.5-14b
   architecture: null
@@ -223,7 +223,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-32b
-  display_name: Qwen2.5 32b
+  display_name: Qwen2.5 32B
   org_id: alibaba
   family: qwen2.5-32b
   architecture: null
@@ -256,7 +256,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-72b
-  display_name: Qwen2.5 72b
+  display_name: Qwen2.5 72B
   org_id: alibaba
   family: qwen2.5-72b
   architecture: null
@@ -289,7 +289,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-7b
-  display_name: Qwen2.5 7b
+  display_name: Qwen2.5 7B
   org_id: alibaba
   family: qwen2.5-7b
   architecture: null
@@ -322,7 +322,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-omni-7b
-  display_name: Qwen2.5 Omni 7b
+  display_name: Qwen2.5 Omni 7B
   org_id: alibaba
   family: qwen2.5-omni-7b
   architecture: null
@@ -336,7 +336,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-12"], "snapshots": ["qwen2-5-omni-7b"]}'
   review_status: reviewed
 - id: alibaba/qwen2.5-vl-72b
-  display_name: Qwen2.5 Vl 72b
+  display_name: Qwen2.5 VL 72B
   org_id: alibaba
   family: qwen2.5-vl-72b
   architecture: null
@@ -369,7 +369,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen2.5-vl-7b
-  display_name: Qwen2.5 Vl 7b
+  display_name: Qwen2.5 VL 7B
   org_id: alibaba
   family: qwen2.5-vl-7b
   architecture: null
@@ -471,7 +471,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2025-09-08"], "snapshots": ["qwen3-asr-flash"]}'
   review_status: reviewed
 - id: alibaba/qwen3-coder-30b-a3b
-  display_name: Qwen3 Coder 30b A3b
+  display_name: Qwen3 Coder 30B A3B
   org_id: alibaba
   family: qwen3-coder-30b-a3b
   architecture: null
@@ -504,7 +504,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: alibaba/qwen3-coder-480b-a35b
-  display_name: Qwen3 Coder 480b A35b
+  display_name: Qwen3 Coder 480B A35B
   org_id: alibaba
   family: qwen3-coder-480b-a35b
   architecture: null
@@ -590,7 +590,7 @@
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-09-23"], "snapshots": ["qwen3-max"]}'
   review_status: reviewed
 - id: alibaba/qwen3-next-80b-a3b
-  display_name: Qwen3 Next 80b A3b
+  display_name: Qwen3 Next 80B A3B
   org_id: alibaba
   family: qwen3-next-80b-a3b
   architecture: null
@@ -1179,7 +1179,7 @@
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2026-02-17"], "snapshots": ["claude-sonnet-4-6"]}'
   review_status: reviewed
 - id: cohere/aya-expanse-32b
-  display_name: Aya Expanse 32b
+  display_name: Aya Expanse 32B
   org_id: cohere
   family: aya-expanse-32b
   architecture: null
@@ -1193,7 +1193,7 @@
   metadata: '{"release_dates": ["2024-10-24"], "snapshots": ["c4ai-aya-expanse-32b"]}'
   review_status: reviewed
 - id: cohere/aya-expanse-8b
-  display_name: Aya Expanse 8b
+  display_name: Aya Expanse 8B
   org_id: cohere
   family: aya-expanse-8b
   architecture: null
@@ -1207,7 +1207,7 @@
   metadata: '{"release_dates": ["2024-10-24"], "snapshots": ["c4ai-aya-expanse-8b"]}'
   review_status: reviewed
 - id: cohere/aya-vision-32b
-  display_name: Aya Vision 32b
+  display_name: Aya Vision 32B
   org_id: cohere
   family: aya-vision-32b
   architecture: null
@@ -1221,7 +1221,7 @@
   metadata: '{"release_dates": ["2025-03-04"], "snapshots": ["c4ai-aya-vision-32b"]}'
   review_status: reviewed
 - id: cohere/aya-vision-8b
-  display_name: Aya Vision 8b
+  display_name: Aya Vision 8B
   org_id: cohere
   family: aya-vision-8b
   architecture: null
@@ -1480,7 +1480,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: deepseek/deepseek
-  display_name: Deepseek
+  display_name: DeepSeek
   org_id: deepseek
   family: deepseek
   architecture: null
@@ -1914,7 +1914,7 @@
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-06-17"], "snapshots": ["gemini-live-2.5-flash-preview-native-audio"]}'
   review_status: reviewed
 - id: google/gemma-3-12b
-  display_name: Gemma 3 12b
+  display_name: Gemma 3 12B
   org_id: google
   family: gemma-3-12b
   architecture: null
@@ -1947,7 +1947,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: google/gemma-3-27b
-  display_name: Gemma 3 27b
+  display_name: Gemma 3 27B
   org_id: google
   family: gemma-3-27b
   architecture: null
@@ -1980,7 +1980,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: google/gemma-3-4b
-  display_name: Gemma 3 4b
+  display_name: Gemma 3 4B
   org_id: google
   family: gemma-3-4b
   architecture: null
@@ -2013,7 +2013,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: google/gemma-3n-2b
-  display_name: Gemma 3n 2b
+  display_name: Gemma 3n 2B
   org_id: google
   family: gemma-3n-2b
   architecture: null
@@ -2027,7 +2027,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-07-09"], "snapshots": ["gemma-3n-e2b-it"]}'
   review_status: reviewed
 - id: google/gemma-3n-4b
-  display_name: Gemma 3n 4b
+  display_name: Gemma 3n 4B
   org_id: google
   family: gemma-3n-4b
   architecture: null
@@ -2041,7 +2041,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-05-20"], "snapshots": ["gemma-3n-e4b-it"]}'
   review_status: reviewed
 - id: google/gemma-4-26b
-  display_name: Gemma 4 26b
+  display_name: Gemma 4 26B
   org_id: google
   family: gemma-4-26b
   architecture: null
@@ -2055,7 +2055,7 @@
   metadata: '{"release_dates": ["2026-04-02"], "snapshots": ["gemma-4-26b-a4b-it"]}'
   review_status: reviewed
 - id: google/gemma-4-26b-a4b
-  display_name: Gemma 4 26b A4b
+  display_name: Gemma 4 26B A4B
   org_id: google
   family: gemma-4-26b
   architecture: null
@@ -2091,7 +2091,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: google/gemma-4-31b
-  display_name: Gemma 4 31b
+  display_name: Gemma 4 31B
   org_id: google
   family: gemma-4-31b
   architecture: null
@@ -2342,7 +2342,7 @@
   metadata: '{"knowledge_cutoffs": ["2025-12"], "release_dates": ["2025-12-09"], "snapshots": ["labs-devstral-small-2512"]}'
   review_status: reviewed
 - id: mistralai/devstral-small-2505
-  display_name: Devstral Small 2505
+  display_name: Devstral Small (2505)
   org_id: mistralai
   family: devstral-small-2505
   architecture: null
@@ -2422,7 +2422,7 @@
   metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-03-17"], "snapshots": ["magistral-small"]}'
   review_status: reviewed
 - id: mistralai/ministral-3b
-  display_name: Ministral 3b
+  display_name: Ministral 3B
   org_id: mistralai
   family: ministral-3b
   architecture: null
@@ -2455,7 +2455,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: mistralai/ministral-8b
-  display_name: Ministral 8b
+  display_name: Ministral 8B
   org_id: mistralai
   family: ministral-8b
   architecture: null
@@ -2488,7 +2488,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: mistralai/mistral-7b
-  display_name: Mistral 7b
+  display_name: Mistral 7B
   org_id: mistralai
   family: mistral-7b
   architecture: null
@@ -2799,7 +2799,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-0711
-  display_name: Kimi K2 0711
+  display_name: Kimi K2 (0711)
   org_id: moonshotai
   family: kimi-k2-0711
   architecture: null
@@ -2813,7 +2813,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-07-14"], "snapshots": ["kimi-k2-0711-preview"]}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-0711-preview
-  display_name: Kimi K2 0711
+  display_name: Kimi K2 0711 Preview
   org_id: moonshotai
   family: kimi-k2-0711
   architecture: null
@@ -2832,7 +2832,7 @@
   metadata: '{}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-0905
-  display_name: Kimi K2 0905
+  display_name: Kimi K2 (0905)
   org_id: moonshotai
   family: kimi-k2-0905
   architecture: null
@@ -2846,7 +2846,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-09-05"], "snapshots": ["kimi-k2-0905-preview"]}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-0905-preview
-  display_name: Kimi K2 0905
+  display_name: Kimi K2 0905 Preview
   org_id: moonshotai
   family: kimi-k2-0905
   architecture: null
@@ -3156,7 +3156,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-09-30"], "release_dates": ["2025-08-07"], "snapshots": ["gpt-5", "gpt-5-chat-latest"]}'
   review_status: reviewed
 - id: openai/gpt-5-chat
-  display_name: Gpt 5 Chat
+  display_name: GPT-5 Chat
   org_id: openai
   family: gpt-5
   architecture: null
@@ -3333,7 +3333,7 @@
   metadata: '{"knowledge_cutoffs": ["2025-08-31"], "release_dates": ["2025-12-11"], "snapshots": ["gpt-5.2-pro"]}'
   review_status: reviewed
 - id: openai/gpt-5.3
-  display_name: Gpt 5.3
+  display_name: GPT-5.3
   org_id: openai
   family: gpt-5.3
   architecture: null
@@ -3755,7 +3755,7 @@
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-01-29"], "snapshots": ["step-3.5-flash"]}'
   review_status: reviewed
 - id: stepfun/step-3.5-flash-2603
-  display_name: Step 3.5 Flash 2603
+  display_name: Step 3.5 Flash (2603)
   org_id: stepfun
   family: step-3.5-flash-2603
   architecture: null

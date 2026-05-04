@@ -14,28 +14,38 @@ Lineage descendant pre-load (community quants/finetunes whose
 `baseModels` chain points at our covered models) is intentionally
 NOT done here — initial scoping showed ~177k descendants of our
 4k HF ids, mostly LoRA adapters. The on-demand enrichment at draft
-creation (Phase 2, separate task) handles those when EEE actually
-encounters them.
+creation handles those when EEE actually encounters them.
+
+Re-run efficiency: an etag-watermark in
+`seed/models/sources/hub_stats.state.json` records the parquet's
+content ETag and the candidate HF ids checked against it. When the
+upstream parquet hasn't republished AND the candidate set is unchanged,
+the script exits without querying — most cron cycles are no-ops.
 
 Output:
     seed/models/sources/hub_stats.generated.yaml — enrichment entries
     that merge into existing canonicals at seed time.
+    seed/models/sources/hub_stats.state.json     — etag watermark.
 
 Usage:
     python scripts/refresh_from_hub_stats.py             # full run
     python scripts/refresh_from_hub_stats.py --dry-run   # preview only
+    python scripts/refresh_from_hub_stats.py --force     # ignore etag
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
-from collections import defaultdict
 from pathlib import Path
 from typing import Optional
 
 import duckdb
+import httpx
 import yaml
+
+from eval_entity_resolver.display import humanize_model_slug
 
 # Shared hub-stats helpers live in the package so the runtime resolver
 # (live lookup at draft creation) and this bulk refresh script stay
@@ -45,6 +55,7 @@ from eval_card_registry.services.hub_stats import (
     QUERY_COLUMNS,
     approx_params_billions as _approx_params_billions,
     coerce_date as _coerce_date,
+    enrich_draft_from_row,
     extract_license as _extract_license,
     filter_useful_tags as _filter_useful_tags,
     hf_id_to_canonical,
@@ -55,8 +66,59 @@ from eval_card_registry.services.hub_stats import (
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ORGS_PATH = REPO_ROOT / "seed" / "orgs.yaml"
 MODELS_OUT_PATH = REPO_ROOT / "seed" / "models" / "sources" / "hub_stats.generated.yaml"
+STATE_PATH = REPO_ROOT / "seed" / "models" / "sources" / "hub_stats.state.json"
 CORE_PATH = REPO_ROOT / "seed" / "models" / "core.yaml"
 MODELS_DEV_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "models_dev.generated.yaml"
+
+
+# ---------------------------------------------------------------------------
+# Etag watermark — short-circuits the daily cron on no-op cycles.
+# ---------------------------------------------------------------------------
+
+def fetch_parquet_etag() -> Optional[str]:
+    """HEAD the hub-stats parquet and return its content ETag (a stable
+    SHA-256 of the file body). Returns None on any HTTP/network failure
+    so the caller can fall back to the unconditional re-fetch path."""
+    try:
+        with httpx.Client(follow_redirects=True, timeout=30.0) as c:
+            r = c.head(PARQUET_URL)
+            r.raise_for_status()
+            etag = r.headers.get("etag")
+            return etag.strip('"') if etag else None
+    except Exception as e:
+        print(f"[refresh] WARN: parquet HEAD failed ({e}); skipping etag check", file=sys.stderr)
+        return None
+
+
+def load_state() -> dict:
+    """Read the watermark state file. Returns an empty dict on missing,
+    unreadable, or schema-invalid input — degrades to "no state known,
+    re-check everything" so a corrupted/deleted file never makes the
+    script behave worse than today's unconditional behaviour."""
+    if not STATE_PATH.exists():
+        return {}
+    try:
+        data = json.loads(STATE_PATH.read_text())
+        if not isinstance(data, dict):
+            return {}
+        if not isinstance(data.get("rows_checked_at_etag"), list):
+            return {}
+        return data
+    except (OSError, ValueError):
+        return {}
+
+
+def write_state(etag: str, rows_checked: list[str]) -> None:
+    """Write the watermark. Sorted for diff-clean commits. Called LAST,
+    after the YAML write succeeds — a crash before this line just means
+    next cron run redoes the work, never that we mark rows checked
+    without their data having landed in the YAML."""
+    payload = {
+        "parquet_etag": etag,
+        "rows_checked_at_etag": sorted(set(rows_checked)),
+    }
+    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    STATE_PATH.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
 
 
 # ---------------------------------------------------------------------------
@@ -136,7 +198,16 @@ def build_entry(
 ) -> Optional[dict]:
     """Construct a seed entry from a hub-stats row. Returns None when
     the row's HF id isn't in our existing aliases — backfill only
-    operates on canonicals we already cover."""
+    operates on canonicals we already cover.
+
+    All hub-stats-derived data fields (release_date, params_billions,
+    open_weights, tags, metadata, parents, lineage_origin_org_id) come
+    from `enrich_draft_from_row` so this script and the live-lookup
+    path stay byte-identical on extraction. The seed loader's
+    `_merge_into` unions parents by id across sources — generated
+    parents from hub-stats compose with any curated parents in
+    core.yaml rather than overriding them.
+    """
     hf_id = row["id"]
     canonical_id, org_id = hf_id_to_canonical(hf_id, org_alias_map)
     norm_canon = _normalize(canonical_id)
@@ -148,41 +219,41 @@ def build_entry(
 
     aliases = sorted({hf_id, _slugify(hf_id)})
 
-    metadata = {
-        "source": "hub_stats",
-        "hf_id": hf_id,
-    }
-    if row.get("downloadsAllTime") is not None:
-        metadata["downloads_all_time"] = int(row["downloadsAllTime"])
-    if row.get("likes") is not None:
-        metadata["likes"] = int(row["likes"])
-    if row.get("library_name"):
-        metadata["library_name"] = row["library_name"]
-    if row.get("pipeline_tag"):
-        metadata["pipeline_tag"] = row["pipeline_tag"]
-    license_str = _extract_license(row.get("cardData"))
-    if license_str:
-        metadata["license"] = license_str
+    enrichment = enrich_draft_from_row(row, aliases_to_canonical, org_alias_map)
 
+    # Decode tags from JSON-encoded string (helper output) back to a YAML
+    # list. Loader accepts either form; list-form keeps generated YAML
+    # diffs reviewable.
+    if "tags" in enrichment:
+        try:
+            enrichment["tags"] = json.loads(enrichment["tags"])
+        except (ValueError, TypeError):
+            pass
+
+    # Preserve the existing YAML key order so the diff after this change
+    # is dominated by NEW fields (parents / lineage_origin_org_id) rather
+    # than wholesale reformatting.
     entry: dict = {
         "id": canonical_id,
-        "display_name": hf_id.split("/", 1)[-1] if "/" in hf_id else hf_id,
+        "display_name": humanize_model_slug(hf_id),
         "org_id": org_id,
-        "release_date": _coerce_date(row.get("createdAt")),
-        "tags": _filter_useful_tags(row.get("tags")),
-        "aliases": [a for a in aliases if a != canonical_id],
-        "metadata": json.dumps(metadata, sort_keys=True),
-        "review_status": "reviewed",
     }
-    params = _approx_params_billions(row.get("safetensors"))
-    if params is not None:
-        entry["params_billions"] = params
-    # Anything in hub-stats with downloadable artifacts is open weights.
-    # Mirrors the inference in services/hub_stats.enrich_draft_from_row
-    # so live + bulk paths agree.
-    from eval_card_registry.services.hub_stats import has_downloadable_weights
-    if has_downloadable_weights(row):
-        entry["open_weights"] = True
+    if "release_date" in enrichment:
+        entry["release_date"] = enrichment["release_date"]
+    if "tags" in enrichment:
+        entry["tags"] = enrichment["tags"]
+    entry["aliases"] = [a for a in aliases if a != canonical_id]
+    if "metadata" in enrichment:
+        entry["metadata"] = enrichment["metadata"]
+    entry["review_status"] = "reviewed"
+    if "params_billions" in enrichment:
+        entry["params_billions"] = enrichment["params_billions"]
+    if "open_weights" in enrichment:
+        entry["open_weights"] = enrichment["open_weights"]
+    if "parents" in enrichment:
+        entry["parents"] = json.loads(enrichment["parents"])
+    if "lineage_origin_org_id" in enrichment:
+        entry["lineage_origin_org_id"] = enrichment["lineage_origin_org_id"]
     return entry
 
 
@@ -220,6 +291,7 @@ def write_models_yaml(entries: list[dict]) -> None:
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--dry-run", action="store_true", help="print summary; don't write files")
+    p.add_argument("--force", action="store_true", help="ignore the etag watermark; re-fetch unconditionally")
     args = p.parse_args()
 
     org_alias_map = load_org_alias_to_canonical()
@@ -249,8 +321,45 @@ def main() -> int:
                 initial.add(cid)
     print(f"[refresh] HF-id candidates to look up: {len(initial)}", file=sys.stderr)
 
+    # Etag short-circuit: if the parquet hasn't republished AND we've
+    # already checked every current candidate against this etag AND the
+    # YAML is still on disk, exit without doing any DuckDB work. Etag
+    # fetch failure → fall through to unconditional re-fetch (degrades
+    # to pre-watermark behaviour). The YAML-existence guard catches the
+    # case where someone deleted the YAML but the state file survived;
+    # without it we'd silently leave hub-stats enrichment missing from
+    # the seed merge.
+    current_etag = fetch_parquet_etag()
+    state = load_state()
+    can_short_circuit = (
+        not args.force
+        and not args.dry_run
+        and current_etag is not None
+        and state.get("parquet_etag") == current_etag
+        and MODELS_OUT_PATH.exists()
+        and initial.issubset(set(state.get("rows_checked_at_etag", [])))
+    )
+    if can_short_circuit:
+        print(
+            f"[refresh] no-op: parquet etag unchanged ({current_etag[:12]}...) "
+            f"and all {len(initial)} candidates already checked",
+            file=sys.stderr,
+        )
+        return 0
+
     con = duckdb.connect()
     con.execute("INSTALL httpfs; LOAD httpfs;")
+    # Authenticate parquet fetches when HF_TOKEN is in the environment.
+    # Unauth limit is 500 requests / 5min; one DuckDB read_parquet streams
+    # the file via many range requests and can brush that ceiling on its
+    # own. With auth the limit is ~30k / 5min.
+    hf_token = os.environ.get("HF_TOKEN")
+    if hf_token:
+        escaped = hf_token.replace("'", "''")
+        con.execute(
+            f"CREATE SECRET hf_auth (TYPE HTTP, BEARER_TOKEN '{escaped}', "
+            f"SCOPE 'https://huggingface.co');"
+        )
     rows = query_hub_stats(con, initial)
     print(f"[refresh] hub-stats rows fetched: {len(rows)}", file=sys.stderr)
 
@@ -272,6 +381,13 @@ def main() -> int:
 
     write_models_yaml(entries)
     print(f"[refresh] wrote {MODELS_OUT_PATH}", file=sys.stderr)
+
+    # State write LAST: if anything above crashed, next run sees old
+    # state and redoes the work — safe. Skip when etag fetch failed so
+    # we don't pin a bogus watermark; next run will re-attempt cleanly.
+    if current_etag is not None:
+        write_state(current_etag, sorted(initial))
+        print(f"[refresh] wrote {STATE_PATH}", file=sys.stderr)
     return 0
 
 

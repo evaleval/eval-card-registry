@@ -46,6 +46,10 @@ from pathlib import Path
 
 import yaml
 
+# Resolver lives in the workspace package; this script runs from the repo
+# root via `uv run`, so the import resolves through pyproject's path dep.
+from eval_entity_resolver.display import humanize_model_slug
+
 # Strip trailing date suffixes and `-latest` to collapse a model down to its
 # major-version family slug. Mirrors the resolver's fuzzy stem so per-snapshot
 # entries from models.dev (e.g. `gpt-4o-2024-05-13`, `claude-opus-4-5-20251101`)
@@ -275,13 +279,15 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
     family_canonical_id = f"{org_id}/{family_slug}"
 
     # ---- Family root display_name + aggregated metadata ----
+    # Prefer the lab's preferred name (vendor casing like `GPT-4o`); fall
+    # back to our humanizer when models.dev didn't supply a name.
     display_name = ""
     for m in models:
         if _slugify(m.get("id", "")) == family_slug:
-            display_name = m.get("name") or family_slug
+            display_name = m.get("name") or humanize_model_slug(family_slug)
             break
     if not display_name:
-        display_name = " ".join(p.capitalize() for p in family_slug.replace("_", "-").split("-"))
+        display_name = humanize_model_slug(family_slug)
 
     open_weights = any(m.get("open_weights") for m in models)
     release_dates = sorted({m["release_date"] for m in models if m.get("release_date")})
@@ -373,7 +379,7 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
 
             entry = {
                 "id": new_id,
-                "display_name": (m.get("name") or _humanize(new_id.split("/", 1)[-1])) if is_leaf else _humanize(new_id.split("/", 1)[-1]),
+                "display_name": (m.get("name") or humanize_model_slug(new_id)) if is_leaf else humanize_model_slug(new_id),
                 "org_id": org_id,
                 "family": family_slug,
                 "architecture": None,
@@ -391,11 +397,6 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
             current_id = new_id
 
     return out_entries
-
-
-def _humanize(slug: str) -> str:
-    parts = slug.replace("_", "-").split("-")
-    return " ".join(p.capitalize() if p[:1].isalpha() else p for p in parts)
 
 
 def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict], list[str]]:
