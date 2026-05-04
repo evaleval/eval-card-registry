@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Optional
@@ -23,6 +24,62 @@ from eval_card_registry.store import schemas
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+# Date-suffix patterns used by `_derive_release_date_from_id`. The id
+# encodes the snapshot/release date in three common shapes:
+#   `-YYYY-MM-DD`  — OpenAI / Google daily snapshot (gpt-4o-2024-08-06)
+#   `-YYYYMMDD`    — Anthropic / xAI snapshot (claude-sonnet-4-20250514)
+#   `-YYYY-MM`     — OpenAI monthly pointer (gpt-5-2025-08); day defaults
+#                    to "01" since the snapshot is month-grained
+_DATE_ISO_FULL_RE = re.compile(r"-(\d{4})-(\d{2})-(\d{2})$")
+_DATE_PACKED_RE = re.compile(r"-(\d{4})(\d{2})(\d{2})$")
+_DATE_ISO_MONTH_RE = re.compile(r"-(\d{4})-(\d{2})$")
+
+
+def _derive_release_date_from_id(canonical_id: str) -> Optional[str]:
+    """Best-effort: parse a date suffix off the canonical id and return
+    ISO-8601 YYYY-MM-DD, or None when no recognisable suffix is present.
+
+    Year-range guard (2015-2035) keeps non-year 4-digit tails (parameter
+    counts, batch numbers, etc.) from being mis-interpreted as a release
+    year. The day/month components are validated to plausible ranges.
+    Returns None on guard failure rather than a malformed date.
+    """
+    if not canonical_id:
+        return None
+
+    def _ok_year(s: str) -> bool:
+        try:
+            return 2015 <= int(s) <= 2035
+        except ValueError:
+            return False
+
+    m = _DATE_ISO_FULL_RE.search(canonical_id)
+    if m:
+        y, mo, d = m.groups()
+        if _ok_year(y) and 1 <= int(mo) <= 12 and 1 <= int(d) <= 31:
+            return f"{y}-{mo}-{d}"
+        return None
+
+    m = _DATE_PACKED_RE.search(canonical_id)
+    if m:
+        y, mo, d = m.groups()
+        if _ok_year(y) and 1 <= int(mo) <= 12 and 1 <= int(d) <= 31:
+            return f"{y}-{mo}-{d}"
+        return None
+
+    m = _DATE_ISO_MONTH_RE.search(canonical_id)
+    if m:
+        y, mo = m.groups()
+        if _ok_year(y) and 1 <= int(mo) <= 12:
+            # Monthly pointer: day defaults to 01. Consumers wanting more
+            # precision should rely on hand-curated or hub-stats sourced
+            # release_dates, which always win over this derivation.
+            return f"{y}-{mo}-01"
+        return None
+
+    return None
 
 
 def _is_na(value) -> bool:
@@ -107,11 +164,17 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     """
     df = store.table("canonical_models")
     if df.empty:
-        return {"root_set": 0, "lineage_set": 0, "open_weights_inherited": 0}
+        return {
+            "root_set": 0,
+            "lineage_set": 0,
+            "open_weights_inherited": 0,
+            "release_date_derived_from_id": 0,
+        }
 
     parents_by_id: dict[str, list[dict]] = {}
     org_by_id: dict[str, Optional[str]] = {}
     open_by_id: dict[str, Optional[bool]] = {}
+    release_by_id: dict[str, Optional[str]] = {}
     for _, row in df.iterrows():
         cid = row["id"]
         parents_by_id[cid] = decode_parents(row.get("parents"))
@@ -119,6 +182,8 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         org_by_id[cid] = None if _is_na(org) else org
         ow = row.get("open_weights")
         open_by_id[cid] = None if _is_na(ow) else bool(ow)
+        rd = row.get("release_date")
+        release_by_id[cid] = None if _is_na(rd) else str(rd)
 
     def _walk(start: str, edge_ok) -> str:
         """Walk parents through edges where `edge_ok(edge)` is True.
@@ -178,7 +243,9 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     root_updates: dict[str, Optional[str]] = {}
     lineage_updates: dict[str, Optional[str]] = {}
     open_updates: dict[str, Optional[bool]] = {}
+    release_updates: dict[str, Optional[str]] = {}
     inherited_count = 0
+    release_derived_count = 0
     for cid in parents_by_id:
         # Identity root via quantized + variant-version walk (both treat
         # the parent as the same model at the API level — see docstring).
@@ -199,16 +266,32 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
             if inherited is not None:
                 inherited_count += 1
 
+        # Release date — explicit value (hand-curated, hub-stats createdAt,
+        # or models.dev release_dates) WINS. Fall back to parsing the date
+        # off the id when the canonical name encodes it (`-YYYY-MM-DD`,
+        # `-YYYYMMDD`, `-YYYY-MM`). Avoids the silly "id literally says
+        # 2025-04-14, registry says <NA>" gap on dated openai snapshots.
+        explicit_release = release_by_id.get(cid)
+        if explicit_release is not None and explicit_release.strip():
+            release_updates[cid] = explicit_release
+        else:
+            derived = _derive_release_date_from_id(cid)
+            release_updates[cid] = derived
+            if derived is not None:
+                release_derived_count += 1
+
     df = df.copy()
     df["root_model_id"] = df["id"].map(root_updates).astype(pd.StringDtype())
     df["lineage_origin_org_id"] = df["id"].map(lineage_updates).astype(pd.StringDtype())
     df["open_weights"] = df["id"].map(open_updates).astype(pd.BooleanDtype())
+    df["release_date"] = df["id"].map(release_updates).astype(pd.StringDtype())
     store.set_table("canonical_models", df)
 
     return {
         "root_set": int(df["root_model_id"].notna().sum()),
         "lineage_set": int(df["lineage_origin_org_id"].notna().sum()),
         "open_weights_inherited": inherited_count,
+        "release_date_derived_from_id": release_derived_count,
     }
 
 

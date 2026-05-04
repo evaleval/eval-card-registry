@@ -48,6 +48,10 @@ wasp:
   configs:
     - gpqa-diamond
     - judgebench
+reward-bench:
+  display: RewardBench
+  configs:
+    - reward-bench
 exgentic-open-agent:
   display: Exgentic Open Agent Leaderboard
   configs:

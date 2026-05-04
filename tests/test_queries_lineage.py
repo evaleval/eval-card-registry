@@ -23,13 +23,14 @@ def fresh_store():
     return store
 
 
-def _add_model(store, cid, org_id, parents):
+def _add_model(store, cid, org_id, parents, release_date=None):
     queries.upsert_entity(store, "canonical_models", {
         "id": cid, "display_name": cid, "developer": None,
         "org_id": org_id, "family": None, "architecture": None,
         "params_billions": None,
         "parents": json.dumps(parents) if parents else "[]",
         "root_model_id": None, "lineage_origin_org_id": None,
+        "release_date": release_date,
         "tags": "[]", "metadata": "{}", "review_status": "reviewed",
     })
 
@@ -233,3 +234,91 @@ def test_derive_variant_edges_do_not_set_lineage_origin_to_parent(fresh_store):
     # No quantized chain → root_model_id is NA (== self is identity root)
     root = by_id["meta/llama-3-8b"]["root_model_id"]
     assert root is None or queries._is_na(root)
+
+
+# ---------------------------------------------------------------------------
+# release_date derivation — fills in NULL release_dates by parsing the id's
+# date suffix. Explicit values always win.
+# ---------------------------------------------------------------------------
+
+
+def test_release_date_derived_from_iso_full_suffix(fresh_store):
+    """A canonical with id `<prefix>-YYYY-MM-DD` and NULL release_date
+    inherits the parsed date. Mirrors the openai daily-snapshot pattern."""
+    _add_model(fresh_store, "openai/gpt-4.1-mini-2025-04-14", "openai", [], release_date=None)
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    row = df[df["id"] == "openai/gpt-4.1-mini-2025-04-14"].iloc[0]
+    assert row["release_date"] == "2025-04-14"
+
+
+def test_release_date_derived_from_packed_suffix(fresh_store):
+    """`<prefix>-YYYYMMDD` (8-digit Anthropic-style) parses correctly."""
+    _add_model(fresh_store, "anthropic/claude-haiku-4.5-20251001", "anthropic", [], release_date=None)
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    row = df[df["id"] == "anthropic/claude-haiku-4.5-20251001"].iloc[0]
+    assert row["release_date"] == "2025-10-01"
+
+
+def test_release_date_derived_from_month_only_suffix(fresh_store):
+    """`<prefix>-YYYY-MM` (truncated month) parses with day defaulted to 01."""
+    _add_model(fresh_store, "openai/gpt-5-2025-08", "openai", [], release_date=None)
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    row = df[df["id"] == "openai/gpt-5-2025-08"].iloc[0]
+    assert row["release_date"] == "2025-08-01"
+
+
+def test_explicit_release_date_wins_over_derivation(fresh_store):
+    """When the YAML hand-curated `release_date` differs from the date
+    parseable off the id, the explicit value MUST stick. Anthropic
+    sometimes ships a `-YYYYMMDD` snapshot a few days after the actual
+    public release; the curated date is more accurate."""
+    _add_model(
+        fresh_store, "anthropic/claude-sonnet-4-20250514", "anthropic", [],
+        release_date="2025-05-22",  # actual public release date
+    )
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    row = df[df["id"] == "anthropic/claude-sonnet-4-20250514"].iloc[0]
+    assert row["release_date"] == "2025-05-22"  # NOT 2025-05-14
+
+
+def test_release_date_year_range_guard(fresh_store):
+    """Non-year 4-digit tails (e.g. parameter counts, batch numbers) must
+    NOT be treated as release dates. `model-1024` could be misread as a
+    1024 release; the guard rejects it."""
+    _add_model(fresh_store, "lab/model-1024", "lab", [], release_date=None)
+    _add_model(fresh_store, "lab/model-9999-12-31", "lab", [], release_date=None)
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    by_id = {r["id"]: r for _, r in df.iterrows()}
+    # 1024 is not in 2015-2035 range → no derivation
+    assert queries._is_na(by_id["lab/model-1024"]["release_date"])
+    # 9999 is not in range either → no derivation
+    assert queries._is_na(by_id["lab/model-9999-12-31"]["release_date"])
+
+
+def test_release_date_no_derivation_when_no_date_suffix(fresh_store):
+    """Canonicals whose id doesn't end in a parseable date suffix stay
+    NULL — no manufactured value."""
+    _add_model(fresh_store, "openai/gpt-5", "openai", [], release_date=None)
+    _add_model(fresh_store, "alibaba/qwen2-72b", "alibaba", [], release_date=None)
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    by_id = {r["id"]: r for _, r in df.iterrows()}
+    assert queries._is_na(by_id["openai/gpt-5"]["release_date"])
+    assert queries._is_na(by_id["alibaba/qwen2-72b"]["release_date"])
+
+
+def test_release_date_invalid_month_or_day_rejected(fresh_store):
+    """Out-of-range month/day in the id (data corruption) → no derivation
+    rather than invalid date."""
+    _add_model(fresh_store, "lab/model-2025-13-01", "lab", [], release_date=None)  # month 13
+    _add_model(fresh_store, "lab/model-2025-02-32", "lab", [], release_date=None)  # day 32
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    by_id = {r["id"]: r for _, r in df.iterrows()}
+    assert queries._is_na(by_id["lab/model-2025-13-01"]["release_date"])
+    assert queries._is_na(by_id["lab/model-2025-02-32"]["release_date"])
