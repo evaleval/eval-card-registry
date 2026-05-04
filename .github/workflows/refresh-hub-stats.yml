@@ -17,6 +17,7 @@ permissions:
 
 env:
   GENERATED_PATH: seed/models/sources/hub_stats.generated.yaml
+  STATE_PATH: seed/models/sources/hub_stats.state.json
 
 concurrency:
   group: refresh-hub-stats
@@ -38,6 +39,12 @@ jobs:
         run: uv sync
 
       - name: Refresh hub-stats generated source
+        env:
+          # Authenticated HF requests get ~30k/5min vs 500/5min unauth.
+          # The script's DuckDB query streams parquet via many range
+          # requests; without auth a single cycle can brush the limit
+          # and another cron firing in the same window will trip it.
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: uv run python scripts/refresh_from_hub_stats.py
 
       # Sanity: the YAML must parse and the seed loader must succeed
@@ -52,29 +59,49 @@ jobs:
       - name: Detect changes
         id: diff
         run: |
+          # Two output flags:
+          #   data_changed → YAML changed; downstream seed.yml dispatch needed.
+          #   state_changed → only the etag watermark moved (no parquet diff
+          #                   matched our candidate set this cycle); commit it
+          #                   alone so tomorrow's run can short-circuit.
           if git diff --quiet "$GENERATED_PATH"; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::$GENERATED_PATH unchanged — nothing to commit."
+            echo "data_changed=false" >> "$GITHUB_OUTPUT"
           else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "data_changed=true" >> "$GITHUB_OUTPUT"
             git diff --stat "$GENERATED_PATH"
+          fi
+          if git diff --quiet "$STATE_PATH" 2>/dev/null && [ -z "$(git status --porcelain "$STATE_PATH")" ]; then
+            echo "state_changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "state_changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          if git diff --quiet "$GENERATED_PATH" && git diff --quiet "$STATE_PATH" 2>/dev/null && [ -z "$(git status --porcelain "$STATE_PATH")" ]; then
+            echo "::notice::No changes to $GENERATED_PATH or $STATE_PATH — nothing to commit."
           fi
 
       - name: Commit + push directly
-        if: steps.diff.outputs.changed == 'true'
+        if: steps.diff.outputs.data_changed == 'true' || steps.diff.outputs.state_changed == 'true'
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$GENERATED_PATH"
-          git commit -m "chore(seed): refresh hub-stats source ($(date -u +%Y-%m-%d))"
+          git add "$GENERATED_PATH" "$STATE_PATH"
+          if [ "${{ steps.diff.outputs.data_changed }}" = "true" ]; then
+            msg="chore(seed): refresh hub-stats source ($(date -u +%Y-%m-%d))"
+          else
+            msg="chore(seed): bump hub-stats etag watermark ($(date -u +%Y-%m-%d))"
+          fi
+          git commit -m "$msg"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
       # GITHUB_TOKEN-authored pushes do NOT trigger downstream workflows.
       # Dispatch seed.yml explicitly so the refresh actually deploys.
+      # Only on data changes — etag-only commits don't change what
+      # canonical_models will look like after seed merge, so no need to
+      # redeploy.
       - name: Trigger seed deployment
-        if: steps.diff.outputs.changed == 'true'
+        if: steps.diff.outputs.data_changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh workflow run seed.yml --ref "${GITHUB_REF_NAME}" || echo "::warning::seed.yml dispatch failed; trigger manually"

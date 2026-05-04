@@ -1,0 +1,90 @@
+# Composite (leaderboard) registry. Each entry maps one or more EEE
+# `source_config` values to a composite slug + display name.
+#
+# - The slug is the YAML key (kebab-case).
+# - `display` overrides the composite's user-facing name; otherwise the
+#   leaderboard's source_metadata.source_name is used.
+# - `configs` lists the EEE source_configs that belong to this composite.
+#   When omitted, the slug itself is used as the single config (display-only
+#   override).
+#
+# Source configs not in any entry get default 1:1 treatment:
+# slug = kebab-case(source_config), display = source_metadata.source_name.
+
+hal:
+  display: HAL Leaderboard
+  configs:
+    - hal-assistantbench
+    - hal-corebench-hard
+    - hal-gaia
+    - hal-online-mind2web
+    - hal-scicode
+    - hal-scienceagentbench
+    - hal-swebench-verified-mini
+    - hal-taubench-airline
+    - hal-usaco
+bfcl:
+  display: BFCL
+  configs:
+    - bfcl
+vals-ai:
+  display: Vals.ai
+  configs:
+    - vals-ai
+swe-bench-verified-mini:
+  display: SWE-bench Verified Mini
+  configs:
+    - swe-bench-verified-mini
+theory-of-mind:
+  display: Theory of Mind
+  configs:
+    - theory_of_mind
+llm-stats:
+  display: LLM Stats
+  configs:
+    - llm-stats
+wasp:
+  display: WASP
+  configs:
+    - gpqa-diamond
+    - judgebench
+exgentic-open-agent:
+  display: Exgentic Open Agent Leaderboard
+  configs:
+    - browsecompplus
+    - tau-bench-2_airline
+    - tau-bench-2_retail
+    - tau-bench-2_telecom
+    - appworld_test_normal
+    - swe-bench
+helm-classic:
+  display: HELM Classic
+  # Implicit: configs: [helm_classic]
+helm-lite:
+  display: HELM Lite
+  configs:
+    - helm_lite
+helm-mmlu:
+  display: HELM MMLU
+  configs:
+    - helm_mmlu
+helm-safety:
+  display: HELM Safety
+  configs:
+    - helm_safety
+helm-capabilities:
+  display: HELM Capabilities
+  configs:
+    - helm_capabilities
+helm-instruct:
+  display: HELM Instruct
+  configs:
+    - helm_instruct
+helm-air-bench:
+  display: HELM AIR-Bench
+  configs:
+    - helm_air_bench
+mmlu-pro-leaderboard:
+  display: MMLU-Pro Leaderboard
+  configs:
+    - mmlu-pro

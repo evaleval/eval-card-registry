@@ -155,7 +155,7 @@
   params_billions: 0.74
   open_weights: true
 - id: adept/fuyu-8b
-  display_name: fuyu-8b
+  display_name: Fuyu 8B
   org_id: adept
   release_date: '2023-10-17'
   tags:
@@ -913,7 +913,7 @@
   params_billions: 3.44
   open_weights: true
 - id: allenai/tulu-2-7b
-  display_name: tulu-2-7b
+  display_name: Tulu 2 7B
   org_id: allenai
   release_date: '2023-11-13'
   tags:
@@ -1009,7 +1009,7 @@
   params_billions: 7.91
   open_weights: true
 - id: bigcode/starcoder2-15b
-  display_name: starcoder2-15b
+  display_name: Starcoder2 15B
   org_id: bigcode
   release_date: '2024-02-20'
   tags:
@@ -1020,7 +1020,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: bigcode/starcoder2-3b
-  display_name: starcoder2-3b
+  display_name: Starcoder2 3B
   org_id: bigcode
   release_date: '2023-11-29'
   tags:
@@ -1033,7 +1033,7 @@
   params_billions: 1.52
   open_weights: true
 - id: bigcode/starcoder2-7b
-  display_name: starcoder2-7b
+  display_name: Starcoder2 7B
   org_id: bigcode
   release_date: '2024-02-20'
   tags:
@@ -1168,7 +1168,7 @@
   params_billions: 0.86
   open_weights: true
 - id: bigscience/bloom-3b
-  display_name: bloom-3b
+  display_name: Bloom 3B
   org_id: bigscience
   release_date: '2022-05-19'
   tags:
@@ -1228,7 +1228,7 @@
   params_billions: 1.5
   open_weights: true
 - id: bigscience/bloom-560m
-  display_name: bloom-560m
+  display_name: Bloom 560M
   org_id: bigscience
   release_date: '2022-05-19'
   tags:
@@ -1350,7 +1350,7 @@
   params_billions: 3.53
   open_weights: true
 - id: bigscience/bloomz-3b
-  display_name: bloomz-3b
+  display_name: Bloomz 3B
   org_id: bigscience
   release_date: '2022-10-08'
   tags:
@@ -1552,7 +1552,7 @@
   metadata: '{"downloads_all_time": 29958001, "hf_id": "black-forest-labs/FLUX.1-dev", "library_name": "diffusers", "license": "other", "likes": 12744, "pipeline_tag": "text-to-image", "source": "hub_stats"}'
   review_status: reviewed
 - id: deepseek/deepseek-coder-33b-instruct
-  display_name: deepseek-coder-33b-instruct
+  display_name: DeepSeek Coder 33B Instruct
   org_id: deepseek
   release_date: '2023-11-01'
   tags:
@@ -1566,7 +1566,7 @@
   params_billions: 16.67
   open_weights: true
 - id: deepseek/deepseek-coder-6.7b-instruct
-  display_name: deepseek-coder-6.7b-instruct
+  display_name: DeepSeek Coder 6.7B Instruct
   org_id: deepseek
   release_date: '2023-10-29'
   tags:
@@ -1610,7 +1610,7 @@
   params_billions: 7.85
   open_weights: true
 - id: deepseek/deepseek-llm-67b-base
-  display_name: deepseek-llm-67b-base
+  display_name: DeepSeek LLM 67B Base
   org_id: deepseek
   release_date: '2023-11-29'
   tags:
@@ -1620,7 +1620,7 @@
   metadata: '{"downloads_all_time": 224618, "hf_id": "deepseek-ai/deepseek-llm-67b-base", "library_name": "transformers", "license": "other", "likes": 129, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: deepseek/deepseek-llm-67b-chat
-  display_name: deepseek-llm-67b-chat
+  display_name: DeepSeek LLM 67B Chat
   org_id: deepseek
   release_date: '2023-11-29'
   tags:
@@ -1630,7 +1630,7 @@
   metadata: '{"downloads_all_time": 143778, "hf_id": "deepseek-ai/deepseek-llm-67b-chat", "library_name": "transformers", "license": "other", "likes": 206, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: deepseek/deepseek-llm-7b-chat
-  display_name: deepseek-llm-7b-chat
+  display_name: DeepSeek LLM 7B Chat
   org_id: deepseek
   release_date: '2023-11-29'
   tags:
@@ -1943,7 +1943,7 @@
   params_billions: 0.68
   open_weights: true
 - id: eleutherai/gpt-neo-125m
-  display_name: gpt-neo-125m
+  display_name: GPT Neo 125M
   org_id: eleutherai
   release_date: '2022-03-02'
   tags:
@@ -1973,7 +1973,7 @@
   params_billions: 1.36
   open_weights: true
 - id: eleutherai/gpt-neox-20b
-  display_name: gpt-neox-20b
+  display_name: GPT Neox 20B
   org_id: eleutherai
   release_date: '2022-04-07'
   tags:
@@ -2005,7 +2005,7 @@
   metadata: '{"downloads_all_time": 189516, "hf_id": "facebook/incoder-6B", "library_name": "transformers", "license": "cc-by-nc-4.0", "likes": 80, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-1.3b
-  display_name: opt-1.3b
+  display_name: Opt 1.3B
   org_id: facebook
   release_date: '2022-05-11'
   tags:
@@ -2018,7 +2018,7 @@
   metadata: '{"downloads_all_time": 29399912, "hf_id": "facebook/opt-1.3b", "library_name": "transformers", "license": "other", "likes": 184, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-125m
-  display_name: opt-125m
+  display_name: Opt 125M
   org_id: facebook
   release_date: '2022-05-11'
   tags:
@@ -2031,7 +2031,7 @@
   metadata: '{"downloads_all_time": 152996528, "hf_id": "facebook/opt-125m", "library_name": "transformers", "license": "other", "likes": 249, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-13b
-  display_name: opt-13b
+  display_name: Opt 13B
   org_id: facebook
   release_date: '2022-05-11'
   tags:
@@ -2044,7 +2044,7 @@
   metadata: '{"downloads_all_time": 1477151, "hf_id": "facebook/opt-13b", "library_name": "transformers", "license": "other", "likes": 65, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-2.7b
-  display_name: opt-2.7b
+  display_name: Opt 2.7B
   org_id: facebook
   release_date: '2022-05-11'
   tags:
@@ -2057,7 +2057,7 @@
   metadata: '{"downloads_all_time": 4661741, "hf_id": "facebook/opt-2.7b", "library_name": "transformers", "license": "other", "likes": 87, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-30b
-  display_name: opt-30b
+  display_name: Opt 30B
   org_id: facebook
   release_date: '2022-05-11'
   tags:
@@ -2070,7 +2070,7 @@
   metadata: '{"downloads_all_time": 1079216, "hf_id": "facebook/opt-30b", "library_name": "transformers", "license": "other", "likes": 136, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-350m
-  display_name: opt-350m
+  display_name: Opt 350M
   org_id: facebook
   release_date: '2022-05-11'
   tags:
@@ -2083,7 +2083,7 @@
   metadata: '{"downloads_all_time": 8443456, "hf_id": "facebook/opt-350m", "library_name": "transformers", "license": "other", "likes": 149, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-6.7b
-  display_name: opt-6.7b
+  display_name: Opt 6.7B
   org_id: facebook
   release_date: '2022-05-11'
   tags:
@@ -2096,7 +2096,7 @@
   metadata: '{"downloads_all_time": 4236594, "hf_id": "facebook/opt-6.7b", "library_name": "transformers", "license": "other", "likes": 120, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: facebook/opt-66b
-  display_name: opt-66b
+  display_name: Opt 66B
   org_id: facebook
   release_date: '2022-06-23'
   tags:
@@ -2109,7 +2109,7 @@
   metadata: '{"downloads_all_time": 1600292, "hf_id": "facebook/opt-66b", "library_name": "transformers", "license": "other", "likes": 174, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/codegemma-2b
-  display_name: codegemma-2b
+  display_name: Codegemma 2B
   org_id: google
   release_date: '2024-03-21'
   tags:
@@ -2132,7 +2132,7 @@
   metadata: '{"downloads_all_time": 18720, "hf_id": "google/codegemma-1.1-2b", "library_name": "transformers", "license": "gemma", "likes": 24, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/codegemma-7b
-  display_name: codegemma-7b
+  display_name: Codegemma 7B
   org_id: google
   release_date: '2024-03-21'
   tags:
@@ -2142,7 +2142,7 @@
   metadata: '{"downloads_all_time": 404694, "hf_id": "google/codegemma-7b", "library_name": "transformers", "license": "gemma", "likes": 217, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/codegemma-7b-it
-  display_name: codegemma-7b-it
+  display_name: Codegemma 7B It
   org_id: google
   release_date: '2024-03-21'
   tags:
@@ -2188,7 +2188,7 @@
   params_billions: 5.63
   open_weights: true
 - id: google/gemma-1.1-2b-it
-  display_name: gemma-1.1-2b-it
+  display_name: Gemma 1.1 2B It
   org_id: google
   release_date: '2024-03-26'
   tags:
@@ -2200,7 +2200,7 @@
   params_billions: 1.25
   open_weights: true
 - id: google/gemma-1.1-7b-it
-  display_name: gemma-1.1-7b-it
+  display_name: Gemma 1.1 7B It
   org_id: google
   release_date: '2024-03-26'
   tags:
@@ -2212,7 +2212,7 @@
   params_billions: 4.27
   open_weights: true
 - id: google/gemma-2-27b
-  display_name: gemma-2-27b
+  display_name: Gemma 2 27B
   org_id: google
   release_date: '2024-06-24'
   tags:
@@ -2222,7 +2222,7 @@
   metadata: '{"downloads_all_time": 983876, "hf_id": "google/gemma-2-27b", "library_name": "transformers", "license": "gemma", "likes": 209, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/gemma-2-27b-it
-  display_name: gemma-2-27b-it
+  display_name: Gemma 2 27B It
   org_id: google
   release_date: '2024-06-24'
   tags:
@@ -2234,7 +2234,7 @@
   params_billions: 13.61
   open_weights: true
 - id: google/gemma-2-2b
-  display_name: gemma-2-2b
+  display_name: Gemma 2 2B
   org_id: google
   release_date: '2024-07-16'
   tags:
@@ -2244,7 +2244,7 @@
   metadata: '{"downloads_all_time": 25019859, "hf_id": "google/gemma-2-2b", "library_name": "transformers", "license": "gemma", "likes": 640, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/gemma-2-2b-it
-  display_name: gemma-2-2b-it
+  display_name: Gemma 2 2B It
   org_id: google
   release_date: '2024-07-16'
   tags:
@@ -2256,7 +2256,7 @@
   params_billions: 1.31
   open_weights: true
 - id: google/gemma-2-9b
-  display_name: gemma-2-9b
+  display_name: Gemma 2 9B
   org_id: google
   release_date: '2024-06-24'
   tags:
@@ -2266,7 +2266,7 @@
   metadata: '{"downloads_all_time": 1762759, "hf_id": "google/gemma-2-9b", "library_name": "transformers", "license": "gemma", "likes": 701, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/gemma-2-9b-it
-  display_name: gemma-2-9b-it
+  display_name: Gemma 2 9B It
   org_id: google
   release_date: '2024-06-24'
   tags:
@@ -2278,7 +2278,7 @@
   params_billions: 4.62
   open_weights: true
 - id: google/gemma-2b
-  display_name: gemma-2b
+  display_name: Gemma 2B
   org_id: google
   release_date: '2024-02-08'
   tags:
@@ -2291,7 +2291,7 @@
   params_billions: 1.25
   open_weights: true
 - id: google/gemma-2b-it
-  display_name: gemma-2b-it
+  display_name: Gemma 2B It
   org_id: google
   release_date: '2024-02-08'
   tags:
@@ -2302,7 +2302,7 @@
   metadata: '{"downloads_all_time": 4597799, "hf_id": "google/gemma-2b-it", "library_name": "transformers", "license": "gemma", "likes": 876, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/gemma-3-12b-it
-  display_name: gemma-3-12b-it
+  display_name: Gemma 3 12B It
   org_id: google
   release_date: '2025-03-01'
   tags:
@@ -2312,7 +2312,7 @@
   metadata: '{"downloads_all_time": 15376368, "hf_id": "google/gemma-3-12b-it", "library_name": "transformers", "license": "gemma", "likes": 712, "pipeline_tag": "image-text-to-text", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/gemma-3-1b-it
-  display_name: gemma-3-1b-it
+  display_name: Gemma 3 1B It
   org_id: google
   release_date: '2025-03-10'
   tags:
@@ -2324,7 +2324,7 @@
   params_billions: 0.5
   open_weights: true
 - id: google/gemma-3-270m
-  display_name: gemma-3-270m
+  display_name: Gemma 3 270M
   org_id: google
   release_date: '2025-08-05'
   tags:
@@ -2336,7 +2336,7 @@
   params_billions: 0.13
   open_weights: true
 - id: google/gemma-3-27b-it
-  display_name: gemma-3-27b-it
+  display_name: Gemma 3 27B It
   org_id: google
   release_date: '2025-03-01'
   tags:
@@ -2349,7 +2349,7 @@
   params_billions: 13.72
   open_weights: true
 - id: google/gemma-3-4b-it
-  display_name: gemma-3-4b-it
+  display_name: Gemma 3 4B It
   org_id: google
   release_date: '2025-02-20'
   tags:
@@ -2361,7 +2361,7 @@
   params_billions: 2.15
   open_weights: true
 - id: google/gemma-7b
-  display_name: gemma-7b
+  display_name: Gemma 7B
   org_id: google
   release_date: '2024-02-08'
   tags:
@@ -2372,7 +2372,7 @@
   metadata: '{"downloads_all_time": 3034225, "hf_id": "google/gemma-7b", "library_name": "transformers", "license": "gemma", "likes": 3307, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/gemma-7b-it
-  display_name: gemma-7b-it
+  display_name: Gemma 7B It
   org_id: google
   release_date: '2024-02-13'
   tags:
@@ -2383,7 +2383,7 @@
   metadata: '{"downloads_all_time": 5663253, "hf_id": "google/gemma-7b-it", "library_name": "transformers", "license": "gemma", "likes": 1245, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: google/medgemma-4b-it
-  display_name: medgemma-4b-it
+  display_name: Medgemma 4B It
   org_id: google
   release_date: '2025-05-19'
   tags:
@@ -2572,7 +2572,7 @@
   params_billions: 1.54
   open_weights: true
 - id: huggingfacem4/idefics-80b-instruct
-  display_name: idefics-80b-instruct
+  display_name: Idefics 80B Instruct
   org_id: huggingfacem4
   release_date: '2023-07-25'
   tags:
@@ -2585,7 +2585,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: huggingfacem4/idefics-9b-instruct
-  display_name: idefics-9b-instruct
+  display_name: Idefics 9B Instruct
   org_id: huggingfacem4
   release_date: '2023-07-24'
   tags:
@@ -2599,7 +2599,7 @@
   params_billions: 4.46
   open_weights: true
 - id: huggingfacem4/idefics2-8b
-  display_name: idefics2-8b
+  display_name: Idefics2 8B
   org_id: huggingfacem4
   release_date: '2024-04-09'
   tags:
@@ -2614,7 +2614,7 @@
   params_billions: 4.2
   open_weights: true
 - id: ibm-granite/granite-20b-functioncalling
-  display_name: granite-20b-functioncalling
+  display_name: Granite 20B Functioncalling
   org_id: ibm-granite
   release_date: '2024-07-09'
   tags:
@@ -2627,7 +2627,7 @@
   params_billions: 10.03
   open_weights: true
 - id: ibm-granite/granite-3.0-2b-instruct
-  display_name: granite-3.0-2b-instruct
+  display_name: Granite 3.0 2B Instruct
   org_id: ibm-granite
   release_date: '2024-10-02'
   tags:
@@ -2640,7 +2640,7 @@
   params_billions: 1.32
   open_weights: true
 - id: ibm-granite/granite-3.0-8b-instruct
-  display_name: granite-3.0-8b-instruct
+  display_name: Granite 3.0 8B Instruct
   org_id: ibm-granite
   release_date: '2024-10-02'
   tags:
@@ -2651,7 +2651,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: ibm-granite/granite-3.1-8b-instruct
-  display_name: granite-3.1-8b-instruct
+  display_name: Granite 3.1 8B Instruct
   org_id: ibm-granite
   release_date: '2024-12-06'
   tags:
@@ -2662,7 +2662,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: ibm-granite/granite-3.2-8b-instruct
-  display_name: granite-3.2-8b-instruct
+  display_name: Granite 3.2 8B Instruct
   org_id: ibm-granite
   release_date: '2025-02-17'
   tags:
@@ -2675,7 +2675,7 @@
   params_billions: 4.09
   open_weights: true
 - id: ibm-granite/granite-3.3-8b-base
-  display_name: granite-3.3-8b-base
+  display_name: Granite 3.3 8B Base
   org_id: ibm-granite
   release_date: '2025-04-09'
   tags:
@@ -2688,7 +2688,7 @@
   params_billions: 4.09
   open_weights: true
 - id: ibm-granite/granite-3.3-8b-instruct
-  display_name: granite-3.3-8b-instruct
+  display_name: Granite 3.3 8B Instruct
   org_id: ibm-granite
   release_date: '2025-04-09'
   tags:
@@ -2701,7 +2701,7 @@
   params_billions: 4.09
   open_weights: true
 - id: ibm-granite/granite-4.0-350m
-  display_name: granite-4.0-350m
+  display_name: Granite 4.0 350M
   org_id: ibm-granite
   release_date: '2025-10-07'
   tags:
@@ -2735,7 +2735,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: internlm/internlm-7b
-  display_name: internlm-7b
+  display_name: Internlm 7B
   org_id: internlm
   release_date: '2023-07-06'
   tags: []
@@ -2743,7 +2743,7 @@
   metadata: '{"downloads_all_time": 86919, "hf_id": "internlm/internlm-7b", "library_name": "transformers", "likes": 96, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: internlm/internlm2-20b
-  display_name: internlm2-20b
+  display_name: Internlm2 20B
   org_id: internlm
   release_date: '2024-01-12'
   tags:
@@ -2752,7 +2752,7 @@
   metadata: '{"downloads_all_time": 553686, "hf_id": "internlm/internlm2-20b", "library_name": "transformers", "license": "other", "likes": 59, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: internlm/internlm2-7b
-  display_name: internlm2-7b
+  display_name: Internlm2 7B
   org_id: internlm
   release_date: '2024-01-12'
   tags:
@@ -2761,7 +2761,7 @@
   metadata: '{"downloads_all_time": 743308, "hf_id": "internlm/internlm2-7b", "library_name": "transformers", "license": "other", "likes": 43, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: internlm/internlm2-math-20b
-  display_name: internlm2-math-20b
+  display_name: Internlm2 Math 20B
   org_id: internlm
   release_date: '2024-01-22'
   tags:
@@ -2775,7 +2775,7 @@
   params_billions: 9.93
   open_weights: true
 - id: internlm/internlm3-8b-instruct
-  display_name: internlm3-8b-instruct
+  display_name: Internlm3 8B Instruct
   org_id: internlm
   release_date: '2025-01-13'
   tags:
@@ -2811,7 +2811,7 @@
   params_billions: 3.37
   open_weights: true
 - id: lmms-lab/llava-next-72b
-  display_name: llava-next-72b
+  display_name: Llava Next 72B
   org_id: lmms-lab
   release_date: '2024-04-20'
   tags:
@@ -2822,7 +2822,7 @@
   params_billions: 36.33
   open_weights: true
 - id: lmsys/vicuna-13b
-  display_name: vicuna-13b-v1.3
+  display_name: Vicuna 13B
   org_id: lmsys
   release_date: '2023-06-18'
   tags: []
@@ -2831,7 +2831,7 @@
   metadata: '{"downloads_all_time": 495423, "hf_id": "lmsys/vicuna-13b-v1.3", "library_name": "transformers", "likes": 203, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: lmsys/vicuna-13b-v1.5
-  display_name: vicuna-13b-v1.5
+  display_name: Vicuna 13B V1.5
   org_id: lmsys
   release_date: '2023-07-29'
   tags:
@@ -2840,7 +2840,7 @@
   metadata: '{"downloads_all_time": 1886017, "hf_id": "lmsys/vicuna-13b-v1.5", "library_name": "transformers", "license": "llama2", "likes": 242, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: lmsys/vicuna-7b
-  display_name: vicuna-7b-v1.3
+  display_name: Vicuna 7B
   org_id: lmsys
   release_date: '2023-06-18'
   tags: []
@@ -2849,7 +2849,7 @@
   metadata: '{"downloads_all_time": 1751099, "hf_id": "lmsys/vicuna-7b-v1.3", "library_name": "transformers", "likes": 140, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: lmsys/vicuna-7b-v1.5
-  display_name: vicuna-7b-v1.5
+  display_name: Vicuna 7B V1.5
   org_id: lmsys
   release_date: '2023-07-29'
   tags:
@@ -2858,7 +2858,7 @@
   metadata: '{"downloads_all_time": 14892217, "hf_id": "lmsys/vicuna-7b-v1.5", "library_name": "transformers", "license": "llama2", "likes": 395, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: madeagents/hammer2.1-0.5b
-  display_name: Hammer2.1-0.5b
+  display_name: Hammer2.1 0.5B
   org_id: madeagents
   release_date: '2024-12-12'
   tags:
@@ -2871,7 +2871,7 @@
   params_billions: 0.25
   open_weights: true
 - id: madeagents/hammer2.1-1.5b
-  display_name: Hammer2.1-1.5b
+  display_name: Hammer2.1 1.5B
   org_id: madeagents
   release_date: '2024-12-12'
   tags:
@@ -2884,7 +2884,7 @@
   params_billions: 0.77
   open_weights: true
 - id: madeagents/hammer2.1-3b
-  display_name: Hammer2.1-3b
+  display_name: Hammer2.1 3B
   org_id: madeagents
   release_date: '2024-12-12'
   tags:
@@ -2895,7 +2895,7 @@
   metadata: '{"downloads_all_time": 22136, "hf_id": "MadeAgents/Hammer2.1-3b", "license": "other", "likes": 22, "source": "hub_stats"}'
   review_status: reviewed
 - id: madeagents/hammer2.1-7b
-  display_name: Hammer2.1-7b
+  display_name: Hammer2.1 7B
   org_id: madeagents
   release_date: '2024-12-12'
   tags:
@@ -2933,7 +2933,7 @@
   metadata: '{"downloads_all_time": 4580, "hf_id": "LLM360/K2-V2", "license": "apache-2.0", "likes": 32, "source": "hub_stats"}'
   review_status: reviewed
 - id: meta/llama-2-13b
-  display_name: Llama-2-13b
+  display_name: Llama 2 13B
   org_id: meta
   release_date: '2023-07-09'
   tags:
@@ -2945,7 +2945,7 @@
   metadata: '{"downloads_all_time": 914, "hf_id": "meta-llama/Llama-2-13b", "license": "llama2", "likes": 352, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: meta/llama-2-13b-chat
-  display_name: Llama-2-13b-chat
+  display_name: Llama 2 13B Chat
   org_id: meta
   release_date: '2023-07-09'
   tags:
@@ -2957,7 +2957,7 @@
   metadata: '{"downloads_all_time": 437, "hf_id": "meta-llama/Llama-2-13b-chat", "license": "llama2", "likes": 296, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: meta/llama-2-70b
-  display_name: Llama-2-70b
+  display_name: Llama 2 70B
   org_id: meta
   release_date: '2023-07-09'
   tags:
@@ -2969,7 +2969,7 @@
   metadata: '{"downloads_all_time": 346, "hf_id": "meta-llama/Llama-2-70b", "license": "llama2", "likes": 538, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: meta/llama-2-70b-chat
-  display_name: Llama-2-70b-chat
+  display_name: Llama 2 70B Chat
   org_id: meta
   release_date: '2023-07-14'
   tags:
@@ -2981,7 +2981,7 @@
   metadata: '{"downloads_all_time": 125, "hf_id": "meta-llama/Llama-2-70b-chat", "license": "llama2", "likes": 399, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: meta/llama-2-7b
-  display_name: Llama-2-7b
+  display_name: Llama 2 7B
   org_id: meta
   release_date: '2023-07-09'
   tags:
@@ -2993,7 +2993,7 @@
   metadata: '{"downloads_all_time": 5060, "hf_id": "meta-llama/Llama-2-7b", "license": "llama2", "likes": 4481, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: meta/llama-2-7b-chat
-  display_name: Llama-2-7b-chat
+  display_name: Llama 2 7B Chat
   org_id: meta
   release_date: '2023-07-09'
   tags:
@@ -4128,7 +4128,7 @@
   params_billions: 0.21
   open_weights: true
 - id: openai/gpt-j-6b
-  display_name: gpt-j-6b
+  display_name: GPT J 6B
   org_id: eleutherai
   release_date: '2022-03-02'
   tags:
@@ -4142,7 +4142,7 @@
   metadata: '{"downloads_all_time": 7779437, "hf_id": "EleutherAI/gpt-j-6b", "library_name": "transformers", "license": "apache-2.0", "likes": 1523, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: openai/gpt-oss-120b
-  display_name: gpt-oss-120b
+  display_name: GPT Oss 120B
   org_id: openai
   release_date: '2025-08-04'
   tags:
@@ -4155,7 +4155,7 @@
   params_billions: 60.21
   open_weights: true
 - id: openai/gpt-oss-20b
-  display_name: gpt-oss-20b
+  display_name: GPT Oss 20B
   org_id: openai
   release_date: '2025-08-04'
   tags:
@@ -4168,7 +4168,7 @@
   params_billions: 10.76
   open_weights: true
 - id: openai/gpt-oss-safeguard-20b
-  display_name: gpt-oss-safeguard-20b
+  display_name: GPT Oss Safeguard 20B
   org_id: openai
   release_date: '2025-09-18'
   tags:
@@ -4178,7 +4178,7 @@
   metadata: '{"downloads_all_time": 361011, "hf_id": "openai/gpt-oss-safeguard-20b", "library_name": "transformers", "license": "apache-2.0", "likes": 220, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: openbmb/ultrarm-13b
-  display_name: UltraRM-13b
+  display_name: Ultrarm 13B
   org_id: openbmb
   release_date: '2023-09-22'
   tags:
@@ -4199,7 +4199,7 @@
   metadata: '{"downloads_all_time": 0, "hf_id": "openllmplayground/pandagpt_13b_max_len_400", "license": "cc-by-nc-sa-4.0", "likes": 6, "source": "hub_stats"}'
   review_status: reviewed
 - id: pku-alignment/beaver-7b-cost
-  display_name: beaver-7b-v1.0-cost
+  display_name: Beaver 7B Cost
   org_id: pku-alignment
   release_date: '2023-07-10'
   tags:
@@ -4227,7 +4227,7 @@
   params_billions: 3.3
   open_weights: true
 - id: pku-alignment/beaver-7b-reward
-  display_name: beaver-7b-v1.0-reward
+  display_name: Beaver 7B Reward
   org_id: pku-alignment
   release_date: '2023-07-08'
   tags:
@@ -4268,7 +4268,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: salesforce/instructblip-7b
-  display_name: instructblip-vicuna-7b
+  display_name: Instructblip 7B
   org_id: salesforce
   release_date: '2023-05-22'
   tags:
@@ -4284,7 +4284,7 @@
   params_billions: 3.96
   open_weights: true
 - id: salesforce/xlam-2-1b-fc-r
-  display_name: xLAM-2-1b-fc-r
+  display_name: Xlam 2 1B Fc R
   org_id: salesforce
   release_date: '2025-03-27'
   tags:
@@ -4298,7 +4298,7 @@
   params_billions: 0.77
   open_weights: true
 - id: salesforce/xlam-2-32b-fc-r
-  display_name: xLAM-2-32b-fc-r
+  display_name: Xlam 2 32B Fc R
   org_id: salesforce
   release_date: '2025-03-27'
   tags:
@@ -4312,7 +4312,7 @@
   params_billions: 16.38
   open_weights: true
 - id: salesforce/xlam-2-3b-fc-r
-  display_name: xLAM-2-3b-fc-r
+  display_name: Xlam 2 3B Fc R
   org_id: salesforce
   release_date: '2025-03-27'
   tags:
@@ -4349,7 +4349,7 @@
   params_billions: 1.26
   open_weights: true
 - id: sarvam/sarvam-105b
-  display_name: sarvam-105b
+  display_name: Sarvam 105B
   org_id: sarvamai
   release_date: '2026-03-03'
   tags:
@@ -4385,7 +4385,7 @@
   params_billions: 53.02
   open_weights: true
 - id: sarvam/sarvam-30b
-  display_name: sarvam-30b
+  display_name: Sarvam 30B
   org_id: sarvamai
   release_date: '2026-03-03'
   tags:
@@ -4483,7 +4483,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: stabilityai/stablelm-2-12b
-  display_name: stablelm-2-12b
+  display_name: Stablelm 2 12B
   org_id: stabilityai
   release_date: '2024-03-21'
   tags:
@@ -4502,7 +4502,7 @@
   params_billions: 6.07
   open_weights: true
 - id: stabilityai/stablelm-2-12b-chat
-  display_name: stablelm-2-12b-chat
+  display_name: Stablelm 2 12B Chat
   org_id: stabilityai
   release_date: '2024-04-04'
   tags:
@@ -4513,7 +4513,7 @@
   metadata: '{"downloads_all_time": 50592, "hf_id": "stabilityai/stablelm-2-12b-chat", "library_name": "transformers", "license": "other", "likes": 89, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: stabilityai/stablelm-3b-4e1t
-  display_name: stablelm-3b-4e1t
+  display_name: Stablelm 3B 4e1t
   org_id: stabilityai
   release_date: '2023-09-29'
   tags:
@@ -4527,7 +4527,7 @@
   params_billions: 1.4
   open_weights: true
 - id: stabilityai/stablelm-zephyr-3b
-  display_name: stablelm-zephyr-3b
+  display_name: Stablelm Zephyr 3B
   org_id: stabilityai
   release_date: '2023-11-21'
   tags:
@@ -4557,7 +4557,7 @@
   params_billions: 89.76
   open_weights: true
 - id: tiiuae/falcon-40b
-  display_name: falcon-40b
+  display_name: Falcon 40B
   org_id: tiiuae
   release_date: '2023-05-24'
   tags:
@@ -4573,7 +4573,7 @@
   params_billions: 20.92
   open_weights: true
 - id: tiiuae/falcon-40b-instruct
-  display_name: falcon-40b-instruct
+  display_name: Falcon 40B Instruct
   org_id: tiiuae
   release_date: '2023-05-25'
   tags:
@@ -4584,7 +4584,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: tiiuae/falcon-7b
-  display_name: falcon-7b
+  display_name: Falcon 7B
   org_id: tiiuae
   release_date: '2023-04-24'
   tags:
@@ -4609,7 +4609,7 @@
   metadata: '{"downloads_all_time": 352145, "hf_id": "tiiuae/falcon-mamba-7b", "library_name": "transformers", "license": "other", "likes": 242, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: tiiuae/falcon-7b-instruct
-  display_name: falcon-7b-instruct
+  display_name: Falcon 7B Instruct
   org_id: tiiuae
   release_date: '2023-04-25'
   tags:
@@ -4722,7 +4722,7 @@
     "hub_stats"}'
   review_status: reviewed
 - id: yandex/yalm-100b
-  display_name: yalm-100b
+  display_name: Yalm 100B
   org_id: yandex
   release_date: '2022-06-23'
   tags:

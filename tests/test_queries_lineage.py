@@ -176,6 +176,46 @@ def test_open_weights_explicit_value_never_overwritten(fresh_store):
     assert df[df["id"] == "lab/child-explicitly-closed"].iloc[0]["open_weights"] == False
 
 
+def test_root_collapses_through_variant_version_edge(fresh_store):
+    """`variant axis=version` edges represent dated snapshots of the same
+    release (e.g. `gpt-4o-2024-05-13` -> `gpt-4o`, `grok-4-0709` -> `grok-4`).
+    These collapse to root just like quantized edges — same model identity
+    at the API."""
+    _add_model(fresh_store, "xai/grok-4", "xai", [])
+    _add_model(fresh_store, "xai/grok-4-0709", "xai", [
+        {"id": "xai/grok-4", "relationship": "variant", "axis": "version"},
+    ])
+    # Quantized of the dated snapshot — full chain: quant -> snapshot -> base
+    _add_model(fresh_store, "xai/grok-4-0709-fp8", "xai", [
+        {"id": "xai/grok-4-0709", "relationship": "quantized"},
+    ])
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    by_id = {r["id"]: r for _, r in df.iterrows()}
+
+    # Base: no chain → no root collapse
+    assert queries._is_na(by_id["xai/grok-4"]["root_model_id"])
+    # Snapshot: collapses to base via variant-version
+    assert by_id["xai/grok-4-0709"]["root_model_id"] == "xai/grok-4"
+    # Quant of snapshot: walks both edges all the way to base
+    assert by_id["xai/grok-4-0709-fp8"]["root_model_id"] == "xai/grok-4"
+
+
+def test_root_does_not_collapse_through_non_version_variant(fresh_store):
+    """Other variant axes (mode/size/modality/domain) are NOT identity-
+    preserving for root_model_id — `gpt-4o-mini` is a separate model
+    from `gpt-4o`, with different scores."""
+    _add_model(fresh_store, "openai/gpt-4o", "openai", [])
+    _add_model(fresh_store, "openai/gpt-4o-mini", "openai", [
+        {"id": "openai/gpt-4o", "relationship": "variant", "axis": "size"},
+    ])
+    queries.derive_model_lineage_fields(fresh_store)
+    df = fresh_store.table("canonical_models")
+    by_id = {r["id"]: r for _, r in df.iterrows()}
+    # Size variant: stays at the leaf, no root collapse
+    assert queries._is_na(by_id["openai/gpt-4o-mini"]["root_model_id"])
+
+
 def test_derive_variant_edges_do_not_set_lineage_origin_to_parent(fresh_store):
     """Variant edges are within-family hierarchy and DO NOT count toward
     lineage origin. A size variant of a Meta family stays attributed to

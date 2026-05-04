@@ -1,0 +1,15 @@
+# Slice grouping overrides. The default heuristic groups siblings by
+# stripping recognised suffixes (`-vN`, `-level-N`, `-vs-X`, …) and
+# bucketing benchmarks that share a stem. When the heuristic over-groups,
+# add the benchmark id to `promote_to_benchmark` to leave its
+# parent_benchmark_id NULL — promoting it to a sibling benchmark in the
+# family rather than a slice of the stem.
+
+promote_to_benchmark:
+  - bfcl-live
+  - bfcl-multi-turn
+  - bfcl-non-live
+  - bfcl-web-search
+  - gpqa-diamond
+  - mmlu-pro
+  - swe-bench-verified

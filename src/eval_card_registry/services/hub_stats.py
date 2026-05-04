@@ -199,9 +199,22 @@ class HubStatsClient:
             return self._con
         # Import lazily so processes that never call lookup() don't pay
         # the duckdb import cost.
+        import os
         import duckdb
         con = duckdb.connect()
         con.execute("INSTALL httpfs; LOAD httpfs;")
+        # Authenticate parquet fetches when HF_TOKEN is in the environment
+        # (typical on the deployed Space). Unauth limit is 500 req/5min;
+        # one DuckDB read_parquet against the remote file streams via
+        # several range requests and a sync that auto-creates many drafts
+        # can brush that ceiling. With auth the ceiling is ~30k/5min.
+        hf_token = os.environ.get("HF_TOKEN")
+        if hf_token:
+            escaped = hf_token.replace("'", "''")
+            con.execute(
+                f"CREATE SECRET hf_auth (TYPE HTTP, BEARER_TOKEN '{escaped}', "
+                f"SCOPE 'https://huggingface.co');"
+            )
         self._con = con
         return con
 
