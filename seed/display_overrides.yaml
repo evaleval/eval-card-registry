@@ -1,0 +1,60 @@
+# Display-polish overrides: slugs that should render uppercase in human-
+# facing display rather than title-cased. Ports `ACRONYMS` from the
+# reference hierarchy builder (ref-build_hierarchy.py:152-158) and
+# replaces the SUITE_DISPLAY_NAMES hardcoded map in
+# general-eval-card/components/benchmark-detail.tsx.
+#
+# Producer / frontend behaviour: when a slug appears in this list, the
+# display name is `slug.upper()` rather than the default prettifier
+# (which would yield "Gaia" / "Mmlu" / "Bfcl"). Multi-word slugs preserve
+# dashes (e.g. "swe-bench" → "SWE-BENCH") unless an explicit
+# display_name is curated on the canonical entity.
+#
+# Curated `display_name` on the entity wins over this list. This is just
+# the safety net for slugs that don't have curated display names yet.
+
+acronyms:
+  - gaia
+  - gpqa
+  - mmlu
+  - mmmu
+  - bfcl
+  - helm
+  - ifeval
+  - bbh
+  - mmlu-pro
+  - musr
+  - math
+  - gsm8k
+  - arc-agi
+  - swe-bench
+  - boolq
+  - imdb
+  - raft
+  - quac
+  - hellaswag
+  - openbookqa
+  - narrativeqa
+  - truthfulqa
+  - civilcomments
+  - wildbench
+  - legalbench
+  - medqa
+  - swe
+  - ace
+  - hle
+  - aime
+  - cve
+  - ctf
+  - cot
+  - rlhf
+  - api
+  - csv
+  - json
+  - ai
+  - ml
+  - lcr
+  - ifbench
+  - scicode
+  - hal
+  - usaco

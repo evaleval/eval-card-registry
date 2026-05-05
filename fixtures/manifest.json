@@ -1,0 +1,19 @@
+{
+  "content_hash": "3892c362029ef6ba8e3b8c846a5474839f8fb161748338edad465ef4588f7836",
+  "generated_at": "2026-05-04T23:46:22+00:00",
+  "row_counts": {
+    "aliases": 16469,
+    "canonical_benchmarks": 2535,
+    "canonical_composites": 29,
+    "canonical_families": 13,
+    "canonical_metrics": 22,
+    "canonical_models": 1425,
+    "canonical_orgs": 35,
+    "eval_harnesses": 11,
+    "eval_results": 0,
+    "resolution_log": 0,
+    "sync_runs": 0
+  },
+  "schema_version": "registry.2.0",
+  "seed_git_sha": "ab26bc79a34b3aa02af1074570fb358a63415e8f"
+}

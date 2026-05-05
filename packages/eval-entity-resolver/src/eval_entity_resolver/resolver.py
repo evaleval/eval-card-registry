@@ -180,7 +180,28 @@ class Resolver:
                 params_billions=fields["params_billions"],
             )
 
-        # Non-model: only parent_canonical_id and review_status are meaningful
+        # Benchmark: fill in hierarchy-alignment fields (family_key,
+        # category) by walking canonical_families. composite_keys stays
+        # empty here — see CanonicalStore.benchmark_family_enrichment for
+        # why composite computation belongs in the producer.
+        if entity_type == "benchmark":
+            fam = cs.benchmark_family_enrichment(matched_canonical_id)
+            return ResolutionResult(
+                raw_value=raw_value,
+                entity_type=entity_type,
+                source_config=source_config,
+                canonical_id=matched_canonical_id,
+                strategy=strategy,
+                confidence=confidence,
+                review_status=review_status,
+                parent_canonical_id=cs.parent_canonical_id(entity_type, matched_entity),
+                family_key=fam["family_key"],
+                category=fam["category"],
+                composite_keys=fam["composite_keys"],
+            )
+
+        # Other non-model types (metric, harness, org): only
+        # parent_canonical_id and review_status are meaningful
         return ResolutionResult(
             raw_value=raw_value,
             entity_type=entity_type,

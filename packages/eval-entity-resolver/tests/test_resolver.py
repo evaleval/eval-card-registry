@@ -175,6 +175,29 @@ class TestFuzzyStrategy:
         assert result.canonical_id == "anthropic/claude-opus-4-5"
         assert result.strategy == "fuzzy"
 
+    def test_thinking_budget_prefers_thinking_canonical_when_aliased(self):
+        """When a thinking-mode canonical IS aliased, `-thinking-Nk` should
+        peel only the `-Nk` budget and resolve to the thinking variant —
+        NOT collapse to the bare base (which would lose the thinking-mode
+        signal in eval results). Drop-thinking behavior remains the
+        fallback when no thinking-mode canonical exists (covered by the
+        prior test)."""
+        store = _store_with_aliases(
+            ("anthropic/claude-haiku-4-5-20251001",
+             "model", "anthropic/claude-haiku-4-5-20251001", None, "confirmed"),
+            ("anthropic/claude-haiku-4-5-20251001-thinking",
+             "model", "anthropic/claude-haiku-4-5-20251001-thinking", None, "confirmed"),
+        )
+        resolver = Resolver(store)
+        for budget in ("1k", "8k", "16k", "32k"):
+            raw = f"anthropic/claude-haiku-4-5-20251001-thinking-{budget}"
+            result = resolver.resolve(raw, "model")
+            assert result.canonical_id == "anthropic/claude-haiku-4-5-20251001-thinking", (
+                f"{raw!r} expected to peel just the budget and stay on the "
+                f"thinking-mode canonical; got {result.canonical_id!r}"
+            )
+            assert result.strategy == "fuzzy"
+
     def test_thinking_none_suffix_stripped(self):
         store = _store_with_aliases(
             ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")

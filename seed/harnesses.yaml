@@ -70,8 +70,8 @@
   review_status: reviewed
 
 - id: arc-prize-leaderboard
-  display_name: ARC Prize Leaderboard
-  aliases: ["ARC Prize leaderboard"]
+  display_name: ARC Prize
+  aliases: ["ARC Prize leaderboard", "ARC Prize Leaderboard"]
   version: null
   fork_url: null
   metadata: '{}'

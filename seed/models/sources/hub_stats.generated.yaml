@@ -1408,64 +1408,6 @@
   params_billions: 1.5
   open_weights: true
 - id: bigscience/bloomz-7b1
-  display_name: bloomz-7b1
-  org_id: bigscience
-  release_date: '2022-09-27'
-  tags:
-  - ak
-  - ar
-  - as
-  - bm
-  - bn
-  - ca
-  - en
-  - es
-  - eu
-  - fon
-  - fr
-  - gu
-  - hi
-  - id
-  - ig
-  - ki
-  - kn
-  - lg
-  - license:bigscience-bloom-rail-1.0
-  - ln
-  - ml
-  - mr
-  - ne
-  - nso
-  - ny
-  - or
-  - pa
-  - pt
-  - rn
-  - rw
-  - safetensors
-  - sn
-  - st
-  - sw
-  - ta
-  - te
-  - tn
-  - ts
-  - tum
-  - tw
-  - ur
-  - vi
-  - wo
-  - xh
-  - yo
-  - zh
-  - zu
-  aliases: []
-  metadata: '{"downloads_all_time": 1435590, "hf_id": "bigscience/bloomz-7b1", "library_name": "transformers", "license": "bigscience-bloom-rail-1.0", "likes": 147, "pipeline_tag": "text-generation", "source":
-    "hub_stats"}'
-  review_status: reviewed
-  params_billions: 3.53
-  open_weights: true
-- id: bigscience/bloomz-7b1
   display_name: bloomz-7b1-mt
   org_id: bigscience
   release_date: '2022-09-28'
@@ -1849,21 +1791,11 @@
   - license:mit
   - safetensors
   aliases:
+  - deepseek-ai/DeepSeek-V3.1
   - deepseek-ai/DeepSeek-V3.1-Terminus
+  - deepseek-ai/deepseek-v3.1
   - deepseek-ai/deepseek-v3.1-terminus
   metadata: '{"downloads_all_time": 180913, "hf_id": "deepseek-ai/DeepSeek-V3.1-Terminus", "library_name": "transformers", "license": "mit", "likes": 364, "pipeline_tag": "text-generation", "source": "hub_stats"}'
-  review_status: reviewed
-- id: deepseek/deepseek-v3.1
-  display_name: DeepSeek-V3.1
-  org_id: deepseek
-  release_date: '2025-08-21'
-  tags:
-  - license:mit
-  - safetensors
-  aliases:
-  - deepseek-ai/DeepSeek-V3.1
-  - deepseek-ai/deepseek-v3.1
-  metadata: '{"downloads_all_time": 1790163, "hf_id": "deepseek-ai/DeepSeek-V3.1", "library_name": "transformers", "license": "mit", "likes": 823, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: deepseek/deepseek-v3.2
   display_name: DeepSeek-V3.2-Exp
@@ -2108,18 +2040,6 @@
   aliases: []
   metadata: '{"downloads_all_time": 1600292, "hf_id": "facebook/opt-66b", "library_name": "transformers", "license": "other", "likes": 174, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
-- id: google/codegemma-2b
-  display_name: Codegemma 2B
-  org_id: google
-  release_date: '2024-03-21'
-  tags:
-  - license:gemma
-  - safetensors
-  aliases: []
-  metadata: '{"downloads_all_time": 173359, "hf_id": "google/codegemma-2b", "library_name": "transformers", "license": "gemma", "likes": 98, "pipeline_tag": "text-generation", "source": "hub_stats"}'
-  review_status: reviewed
-  params_billions: 1.25
-  open_weights: true
 - id: google/codegemma-2b
   display_name: codegemma-1.1-2b
   org_id: google
@@ -3810,40 +3730,16 @@
   - license:apache-2.0
   - safetensors
   aliases:
+  - mistralai/Mistral-7B-Instruct-v0.1
+  - mistralai/Mistral-7B-Instruct-v0.2
   - mistralai/Mistral-7B-Instruct-v0.3
+  - mistralai/mistral-7b-instruct-v0.1
+  - mistralai/mistral-7b-instruct-v0.2
   - mistralai/mistral-7b-instruct-v0.3
   metadata: '{"downloads_all_time": 28297135, "hf_id": "mistralai/Mistral-7B-Instruct-v0.3", "library_name": "vllm", "license": "apache-2.0", "likes": 2547, "source": "hub_stats"}'
   review_status: reviewed
   params_billions: 3.62
   open_weights: true
-- id: mistralai/mistral-7b-instruct
-  display_name: Mistral-7B-Instruct-v0.2
-  org_id: mistralai
-  release_date: '2023-12-11'
-  tags:
-  - license:apache-2.0
-  - safetensors
-  aliases:
-  - mistralai/Mistral-7B-Instruct-v0.2
-  - mistralai/mistral-7b-instruct-v0.2
-  metadata: '{"downloads_all_time": 56390263, "hf_id": "mistralai/Mistral-7B-Instruct-v0.2", "library_name": "transformers", "license": "apache-2.0", "likes": 3129, "pipeline_tag": "text-generation", "source":
-    "hub_stats"}'
-  review_status: reviewed
-  params_billions: 3.62
-  open_weights: true
-- id: mistralai/mistral-7b-instruct
-  display_name: Mistral-7B-Instruct-v0.1
-  org_id: mistralai
-  release_date: '2023-09-27'
-  tags:
-  - license:apache-2.0
-  - safetensors
-  aliases:
-  - mistralai/Mistral-7B-Instruct-v0.1
-  - mistralai/mistral-7b-instruct-v0.1
-  metadata: '{"downloads_all_time": 16901403, "hf_id": "mistralai/Mistral-7B-Instruct-v0.1", "library_name": "transformers", "license": "apache-2.0", "likes": 1833, "pipeline_tag": "text-generation", "source":
-    "hub_stats"}'
-  review_status: reviewed
 - id: mistralai/mistral-large-2407
   display_name: Mistral-Large-Instruct-2407
   org_id: mistralai
@@ -4111,22 +4007,9 @@
   - tf
   aliases:
   - openai/clip-vit-base-patch32
+  - openai/clip-vit-large-patch14
   metadata: '{"downloads_all_time": 575685076, "hf_id": "openai/clip-vit-base-patch32", "library_name": "transformers", "likes": 928, "pipeline_tag": "zero-shot-image-classification", "source": "hub_stats"}'
   review_status: reviewed
-- id: openai/clip
-  display_name: clip-vit-large-patch14
-  org_id: openai
-  release_date: '2022-03-02'
-  tags:
-  - jax
-  - safetensors
-  - tf
-  aliases:
-  - openai/clip-vit-large-patch14
-  metadata: '{"downloads_all_time": 1130416871, "hf_id": "openai/clip-vit-large-patch14", "library_name": "transformers", "likes": 2000, "pipeline_tag": "zero-shot-image-classification", "source": "hub_stats"}'
-  review_status: reviewed
-  params_billions: 0.21
-  open_weights: true
 - id: openai/gpt-j-6b
   display_name: GPT J 6B
   org_id: eleutherai
@@ -4199,20 +4082,6 @@
   metadata: '{"downloads_all_time": 0, "hf_id": "openllmplayground/pandagpt_13b_max_len_400", "license": "cc-by-nc-sa-4.0", "likes": 6, "source": "hub_stats"}'
   review_status: reviewed
 - id: pku-alignment/beaver-7b-cost
-  display_name: Beaver 7B Cost
-  org_id: pku-alignment
-  release_date: '2023-07-10'
-  tags:
-  - en
-  - safetensors
-  aliases:
-  - PKU-Alignment/beaver-7b-v1.0-cost
-  - pku-alignment/beaver-7b-v1.0-cost
-  metadata: '{"downloads_all_time": 91962, "hf_id": "PKU-Alignment/beaver-7b-v1.0-cost", "library_name": "safe-rlhf", "likes": 10, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
-  review_status: reviewed
-  params_billions: 3.3
-  open_weights: true
-- id: pku-alignment/beaver-7b-cost
   display_name: beaver-7b-v2.0-cost
   org_id: pku-alignment
   release_date: '2024-04-19'
@@ -4220,23 +4089,11 @@
   - en
   - safetensors
   aliases:
+  - PKU-Alignment/beaver-7b-v1.0-cost
   - PKU-Alignment/beaver-7b-v2.0-cost
+  - pku-alignment/beaver-7b-v1.0-cost
   - pku-alignment/beaver-7b-v2.0-cost
   metadata: '{"downloads_all_time": 1250, "hf_id": "PKU-Alignment/beaver-7b-v2.0-cost", "library_name": "safe-rlhf", "likes": 0, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
-  review_status: reviewed
-  params_billions: 3.3
-  open_weights: true
-- id: pku-alignment/beaver-7b-reward
-  display_name: Beaver 7B Reward
-  org_id: pku-alignment
-  release_date: '2023-07-08'
-  tags:
-  - en
-  - safetensors
-  aliases:
-  - PKU-Alignment/beaver-7b-v1.0-reward
-  - pku-alignment/beaver-7b-v1.0-reward
-  metadata: '{"downloads_all_time": 87444, "hf_id": "PKU-Alignment/beaver-7b-v1.0-reward", "library_name": "safe-rlhf", "likes": 17, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
   review_status: reviewed
   params_billions: 3.3
   open_weights: true
@@ -4248,7 +4105,9 @@
   - en
   - safetensors
   aliases:
+  - PKU-Alignment/beaver-7b-v1.0-reward
   - PKU-Alignment/beaver-7b-v2.0-reward
+  - pku-alignment/beaver-7b-v1.0-reward
   - pku-alignment/beaver-7b-v2.0-reward
   metadata: '{"downloads_all_time": 1383, "hf_id": "PKU-Alignment/beaver-7b-v2.0-reward", "library_name": "safe-rlhf", "likes": 0, "pipeline_tag": "reinforcement-learning", "source": "hub_stats"}'
   review_status: reviewed
@@ -4583,19 +4442,6 @@
   metadata: '{"downloads_all_time": 10474637, "hf_id": "tiiuae/falcon-40b-instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 1177, "pipeline_tag": "text-generation", "source":
     "hub_stats"}'
   review_status: reviewed
-- id: tiiuae/falcon-7b
-  display_name: Falcon 7B
-  org_id: tiiuae
-  release_date: '2023-04-24'
-  tags:
-  - en
-  - license:apache-2.0
-  - safetensors
-  aliases: []
-  metadata: '{"downloads_all_time": 13272169, "hf_id": "tiiuae/falcon-7b", "library_name": "transformers", "license": "apache-2.0", "likes": 1101, "pipeline_tag": "text-generation", "source": "hub_stats"}'
-  review_status: reviewed
-  params_billions: 3.61
-  open_weights: true
 - id: tiiuae/falcon-7b
   display_name: falcon-mamba-7b
   org_id: tiiuae

@@ -36,6 +36,18 @@ class ResolutionResult:
       - `open_weights`: True/False/None. Models only.
       - `release_date`: YYYY-MM or YYYY-MM-DD. Models only.
       - `params_billions`: approximate parameter count. Models only.
+      - `family_key`: canonical_families.id this benchmark belongs to.
+        Defaults to the benchmark's own id for singleton families
+        (when no curated multi-benchmark family covers it). Benchmarks
+        only. See notes/hierarchy-alignment.md §3.
+      - `composite_keys`: canonical_composites.id values where this
+        benchmark appears (via the composite's source_configs ↔ EEE
+        folders chain). Benchmarks only; empty list when none.
+      - `category`: curated single-valued category from the family
+        (general / agentic / reasoning / knowledge / multimodal /
+        tool-use / math / security / factuality / reward-modelling /
+        safety / code / instruction-following / other). Benchmarks
+        only; None when no category curated.
     """
     raw_value: str
     entity_type: EntityType
@@ -53,6 +65,10 @@ class ResolutionResult:
     open_weights: Optional[bool] = None
     release_date: Optional[str] = None
     params_billions: Optional[float] = None
+    # Benchmark-only enrichment (see notes/hierarchy-alignment.md §3).
+    family_key: Optional[str] = None
+    composite_keys: Optional[list[str]] = None
+    category: Optional[str] = None
 
 
 @dataclass

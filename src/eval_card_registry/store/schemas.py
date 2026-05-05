@@ -79,6 +79,66 @@ _SCHEMAS: dict[str, dict] = {
         "created_at": pd.StringDtype(),
         "updated_at": pd.StringDtype(),
     },
+    # Multi-benchmark families — curated groupings where multiple
+    # canonical benchmarks share an object-of-measurement or
+    # methodological lineage (e.g. mmlu family contains mmlu + mmlu-pro).
+    # Singletons default to family.id == benchmark.id at the producer
+    # layer and don't appear here. See
+    # `notes/hierarchy-alignment.md` §3 for the conceptual model.
+    "canonical_families": {
+        "id": pd.StringDtype(),
+        "display_name": pd.StringDtype(),
+        # Single-valued category from a curated enum (general, agentic,
+        # reasoning, knowledge, multimodal, tool-use, math, security,
+        # factuality, reward-modelling, safety, code, instruction-
+        # following, other). Optional; null defaults to "other" downstream.
+        "category": pd.StringDtype(),
+        # JSON-encoded list of canonical benchmark ids that belong to
+        # this family. Validated at seed time: each benchmark may belong
+        # to at most one curated family.
+        "benchmark_ids": pd.StringDtype(),
+        # Optional: the benchmark id whose primary metric is the
+        # family-level rollup (e.g. artificial-analysis →
+        # artificial-analysis-intelligence-index). Null when none is
+        # designated.
+        "primary_benchmark_key": pd.StringDtype(),
+        # JSON-encoded list of EEE folder names (source_config values)
+        # that resolve to this family. Ports the reference script's
+        # EXPLICIT_FAMILY_MAP into the registry. The producer joins on
+        # this when classifying raw EEE folders.
+        "folder_aliases": pd.StringDtype(),
+        # JSON-encoded list of composite slugs nested under this family.
+        # Mirrors composites.yaml's structure from the family side; lets
+        # callers walk family → composites without scanning composites.
+        "composite_keys": pd.StringDtype(),
+        "tags": pd.StringDtype(),     # JSON-encoded list
+        "metadata": pd.StringDtype(), # JSON-encoded dict
+        "review_status": pd.StringDtype(),
+        "created_at": pd.StringDtype(),
+        "updated_at": pd.StringDtype(),
+    },
+    # Composites — named leaderboard surfaces that aggregate one or
+    # more EEE source_configs under a unified presentation (e.g. HELM
+    # Classic, HAL Leaderboard, Open LLM Leaderboard v2). Identity is
+    # the slug; one-to-one mappings (slug == single source_config)
+    # don't strictly require an entry here, but curated entries can
+    # override display name and group multiple configs.
+    "canonical_composites": {
+        "id": pd.StringDtype(),
+        "display_name": pd.StringDtype(),
+        "category": pd.StringDtype(),
+        # JSON-encoded list of EEE source_config values that belong to
+        # this composite.
+        "source_configs": pd.StringDtype(),
+        # Optional: family this composite is nested under in the tree.
+        # Null when the composite IS its own top-level (most cases today).
+        "family_id": pd.StringDtype(),
+        "tags": pd.StringDtype(),     # JSON-encoded list
+        "metadata": pd.StringDtype(), # JSON-encoded dict
+        "review_status": pd.StringDtype(),
+        "created_at": pd.StringDtype(),
+        "updated_at": pd.StringDtype(),
+    },
     "canonical_metrics": {
         "id": pd.StringDtype(),
         "display_name": pd.StringDtype(),

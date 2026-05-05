@@ -32,6 +32,13 @@ _TABLES = {
     "metric": "canonical_metrics",
     "harness": "eval_harnesses",
     "org": "canonical_orgs",
+    # families and composites are first-class registry entities since the
+    # hierarchy-alignment work (notes/hierarchy-alignment.md §3-§4).
+    # Resolution lookups don't query them directly, but the resolver
+    # enrichment for a `benchmark` consults `canonical_families` to
+    # populate `ResolutionResult.family_key` and `category`.
+    "family": "canonical_families",
+    "composite": "canonical_composites",
 }
 
 # The `parent_*` column for each entity type that carries the
@@ -91,6 +98,22 @@ def variant_parent_id(parents: list[dict]) -> Optional[str]:
     return None
 
 
+def _kwarg_for(entity_type: str) -> str:
+    """Map an entity_type to its CanonicalStore constructor kwarg name.
+    Constructor uses canonical English plurals (`models_df`,
+    `benchmarks_df`, `harnesses_df`, `families_df`, `composites_df`),
+    not the simpler `<type>s_df` rule that breaks on `harness`/`family`."""
+    return {
+        "model": "models_df",
+        "benchmark": "benchmarks_df",
+        "metric": "metrics_df",
+        "harness": "harnesses_df",
+        "org": "orgs_df",
+        "family": "families_df",
+        "composite": "composites_df",
+    }[entity_type]
+
+
 # ---------------------------------------------------------------------------
 # CanonicalStore
 # ---------------------------------------------------------------------------
@@ -108,6 +131,8 @@ class CanonicalStore:
         metrics_df: Optional[pd.DataFrame] = None,
         harnesses_df: Optional[pd.DataFrame] = None,
         orgs_df: Optional[pd.DataFrame] = None,
+        families_df: Optional[pd.DataFrame] = None,
+        composites_df: Optional[pd.DataFrame] = None,
     ) -> None:
         self._tables: dict[str, pd.DataFrame] = {
             "model": models_df if models_df is not None else pd.DataFrame(),
@@ -115,9 +140,16 @@ class CanonicalStore:
             "metric": metrics_df if metrics_df is not None else pd.DataFrame(),
             "harness": harnesses_df if harnesses_df is not None else pd.DataFrame(),
             "org": orgs_df if orgs_df is not None else pd.DataFrame(),
+            "family": families_df if families_df is not None else pd.DataFrame(),
+            "composite": composites_df if composites_df is not None else pd.DataFrame(),
         }
         # Per-table id-indexed cache for O(1) lookups
         self._index: dict[str, dict[str, dict]] = {}
+        # Lazy reverse index: benchmark_id → family_id (built from
+        # canonical_families.benchmark_ids on first access). Used by
+        # benchmark-side enrichment to populate ResolutionResult.family_key
+        # without scanning the families table per resolve call.
+        self._benchmark_to_family: Optional[dict[str, str]] = None
 
     # ------------------------------------------------------------------
     # Constructors
@@ -147,7 +179,7 @@ class CanonicalStore:
                     file, type(exc).__name__, exc,
                 )
                 continue
-            kwargs[f"{entity_type}s_df" if entity_type != "harness" else "harnesses_df"] = df
+            kwargs[_kwarg_for(entity_type)] = df
         return cls(**kwargs)
 
     @classmethod
@@ -185,7 +217,7 @@ class CanonicalStore:
                     fname, repo_id, type(exc).__name__, exc,
                 )
                 continue
-            kwargs[f"{entity_type}s_df" if entity_type != "harness" else "harnesses_df"] = df
+            kwargs[_kwarg_for(entity_type)] = df
         return cls(**kwargs)
 
     # ------------------------------------------------------------------
@@ -217,6 +249,109 @@ class CanonicalStore:
     # fields. Pure functions of (entity, optional root entity); no
     # access to any state outside what's passed in.
     # ------------------------------------------------------------------
+
+    def benchmark_family_enrichment(
+        self, benchmark_id: Optional[str]
+    ) -> dict:
+        """For a matched benchmark canonical_id, return the family/category
+        fields that populate the benchmark side of `ResolutionResult`.
+
+        Output shape (dict; consumed by Resolver._enrich):
+          - `family_key`: id of the canonical_families row whose
+            benchmark_ids contains `benchmark_id`. Falls back to
+            `benchmark_id` itself for singleton families (the hierarchy
+            spec §3 default — `family.id == benchmark.id` when no
+            curated family covers it).
+          - `category`: family's curated category, or None.
+          - `composite_keys`: empty list at the resolver layer. The
+            producer's view layer is the right place to compute which
+            composites a benchmark appears in (it has the facts), so the
+            resolver leaves this empty and downstream callers fill it.
+        """
+        if not benchmark_id:
+            return {"family_key": None, "category": None, "composite_keys": []}
+
+        if self._benchmark_to_family is None:
+            self._benchmark_to_family = self._build_benchmark_to_family_index()
+
+        # 1. Curated family directly listing this benchmark id.
+        family_key = self._benchmark_to_family.get(benchmark_id)
+
+        # 2. Slice inherits its parent's family. A benchmark with
+        #    parent_benchmark_id != self is a slice; walk up to find the
+        #    root, then look that root up in the curated families. Cycle-
+        #    safe via visited set; terminates at a root or a missing entry.
+        if family_key is None:
+            visited: set[str] = {benchmark_id}
+            cur = benchmark_id
+            while True:
+                bench_row = self.lookup("benchmark", cur)
+                if bench_row is None:
+                    break
+                parent = _na_to_none(bench_row.get("parent_benchmark_id"))
+                if not parent or parent == cur or parent in visited:
+                    break
+                visited.add(parent)
+                cur = parent
+                fam = self._benchmark_to_family.get(parent)
+                if fam:
+                    family_key = fam
+                    break
+            # When no curated family covers this id or any of its parents,
+            # the family root IS the parent walk's terminus (or the id
+            # itself for true root benchmarks). That's the singleton-family
+            # default per spec §3.
+            if family_key is None:
+                family_key = cur
+
+        family_row = self.lookup("family", family_key)
+        category = (
+            _na_to_none(family_row.get("category"))
+            if family_row is not None
+            else None
+        )
+        return {
+            "family_key": family_key,
+            "category": category,
+            "composite_keys": [],
+        }
+
+    def _build_benchmark_to_family_index(self) -> dict[str, str]:
+        """Walk canonical_families and produce a benchmark_id → family_id
+        index. `benchmark_ids` is JSON-encoded on the parquet column;
+        decode tolerantly. Empty index when no families table is loaded
+        (back-compat with deployments that haven't published the new
+        table yet)."""
+        out: dict[str, str] = {}
+        df = self._tables.get("family")
+        if df is None or df.empty or "id" not in df.columns:
+            return out
+        for _, row in df.iterrows():
+            family_id = row.get("id")
+            if not isinstance(family_id, str):
+                continue
+            raw = row.get("benchmark_ids")
+            if _is_na(raw) or raw is None:
+                continue
+            if isinstance(raw, list):
+                items = raw
+            elif isinstance(raw, str):
+                s = raw.strip()
+                if not s or s in ("[]", "null"):
+                    continue
+                try:
+                    items = json.loads(s)
+                except (ValueError, TypeError):
+                    continue
+            else:
+                continue
+            for bid in items:
+                if isinstance(bid, str):
+                    # Validation has already rejected multi-family
+                    # benchmarks at seed time, so first-write-wins is
+                    # safe (and deterministic by family load order).
+                    out.setdefault(bid, family_id)
+        return out
 
     def parent_canonical_id(
         self, entity_type: str, entity: Optional[dict]

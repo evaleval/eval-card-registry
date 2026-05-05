@@ -187,18 +187,22 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
 
     def _walk(start: str, edge_ok) -> str:
         """Walk parents through edges where `edge_ok(edge)` is True.
-        Returns the deepest reachable id; stops on no-match or cycle."""
+        Returns the deepest reachable id; stops on no-match or cycle.
+
+        When a node has multiple matching edges (e.g. a MergeKit model with
+        several `merge` parents), pick deterministically by min-id rather
+        than first-by-YAML-order, so lineage_origin_org_id doesn't depend on
+        edge insertion order.
+        """
         visited = {start}
         current = start
         while True:
             edges = parents_by_id.get(current, []) or []
-            next_id: Optional[str] = None
-            for p in edges:
-                if not isinstance(p, dict):
-                    continue
-                if edge_ok(p) and p.get("id"):
-                    next_id = p["id"]
-                    break
+            candidate_ids = [
+                p["id"] for p in edges
+                if isinstance(p, dict) and edge_ok(p) and p.get("id")
+            ]
+            next_id = min(candidate_ids) if candidate_ids else None
             if not next_id or next_id in visited or next_id not in parents_by_id:
                 return current
             visited.add(next_id)
@@ -251,9 +255,13 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         # the parent as the same model at the API level — see docstring).
         root = _walk(cid, _is_identity_edge)
         root_updates[cid] = root if root != cid else None
-        # Lineage origin via any non-variant edge; org of deepest ancestor
+        # Lineage origin via any non-variant edge; org of deepest ancestor.
+        # Use explicit None check, not `or` — an upstream lab whose org_id is
+        # an empty string or missing should keep lineage as None, not flip to
+        # self.org_id (which would mis-attribute a finetune as same-org).
         ancestor = _walk(cid, _is_lineage_edge)
-        lineage_updates[cid] = org_by_id.get(ancestor) or org_by_id.get(cid)
+        ancestor_org = org_by_id.get(ancestor)
+        lineage_updates[cid] = ancestor_org if ancestor_org is not None else org_by_id.get(cid)
         # Open weights — explicit self value WINS; only fall back to
         # ancestor inheritance when self has no value set. Never overwrite
         # an explicit True/False with an inherited value.

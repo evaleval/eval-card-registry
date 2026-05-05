@@ -100,11 +100,24 @@ _STRIP_SUFFIXES = [
 # Each pattern must anchor with $ and match only the tail of the string.
 _STRIP_SUFFIX_PATTERNS: list[re.Pattern[str]] = [
     # Thinking-budget suffix: "-thinking-8k", "-thinking-16k", "-thinking-64k"
+    # Strips the WHOLE thinking-budget tail to the bare base, used as a
+    # fallback when the thinking-mode canonical isn't aliased. Paired with
+    # `_THINKING_BUDGET_PRESERVE_RE` below, which produces a "preserve
+    # thinking" candidate that gets tried FIRST so promoted mode-variant
+    # canonicals (e.g. `claude-haiku-4-5-20251001-thinking`) win when they
+    # exist; only when they don't does this strip's drop-thinking behavior
+    # take over.
     re.compile(r"-thinking-\d+k$", re.IGNORECASE),
     # Date version suffix (YYYYMMDD): "-20251101", "-20240315"
     # Only strip dates (8 consecutive digits) to avoid touching version numbers.
     re.compile(r"-\d{8}$"),
 ]
+
+# Strip just the `-Nk` budget tail, leaving `-thinking` intact. Used by
+# fuzzy_match to produce a "preserve thinking" candidate alongside the
+# fallback `prefix` (drop thinking). Anchored to require `-thinking`
+# precedes the budget so non-thinking numeric tails are unaffected.
+_THINKING_BUDGET_PRESERVE_RE = re.compile(r"(.*-thinking)-\d+k$", re.IGNORECASE)
 
 # Known org aliases: {variant_prefix: canonical_prefix}
 # Convention: simplify HF org names (e.g. "deepseek-ai" → "deepseek") to the
@@ -443,7 +456,17 @@ def fuzzy_match(
 
     candidates_to_try: list[str] = []
 
-    # 1. Suffix stripping (may produce multiple stems: strip one, strip two, etc.)
+    # 1a. Thinking-budget "preserve" pass — runs BEFORE the generic
+    # suffix strip so `model-thinking-16k` → `model-thinking` is tried
+    # before `model-thinking-16k` → `model` (the latter drops the
+    # thinking-mode signal). When a thinking-mode canonical exists, the
+    # exact match on the preserved form wins; otherwise the lookup falls
+    # through to the drop-thinking candidate produced by `_strip_suffix`.
+    preserve_match = _THINKING_BUDGET_PRESERVE_RE.match(raw_value)
+    if preserve_match:
+        candidates_to_try.append(preserve_match.group(1))
+
+    # 1b. Suffix stripping (may produce multiple stems: strip one, strip two, etc.)
     stripped = _strip_suffix(raw_value)
     if stripped:
         candidates_to_try.append(stripped)
@@ -503,7 +526,7 @@ def fuzzy_match(
         for peeled in _strip_openai_iso_date(val):
             candidates_to_try.append(peeled)
 
-    # 6. Check each candidate against exact then normalized lookups.
+    # 7. Check each candidate against exact then normalized lookups.
     # Scoped-aware: config-scoped aliases for ``source_config`` count as
     # candidates; unrelated scoped aliases are excluded.
     norm_lookup = alias_store.get_normalized_lookup(entity_type, source_config)

@@ -62,6 +62,17 @@ class ResolveResponse(BaseModel):
     # unknown (closed-API models that don't publish params, or HF entries
     # without safetensors data).
     params_billions: Optional[float] = None
+    # Curated family key from `seed/families.yaml` for benchmark resolves
+    # (e.g. `mmlu` for both `mmlu` and `mmlu-pro`). Falls back to the
+    # benchmark's own id when no curated family covers it. Benchmarks only.
+    family_key: Optional[str] = None
+    # Composites that include this benchmark, derived from `composites.yaml`
+    # / `families.yaml`. Empty list at the resolver layer (composite walk
+    # happens at the producer; reserved here for future expansion). Benchmarks only.
+    composite_keys: Optional[list[str]] = None
+    # Curated category for the resolved benchmark's family (general /
+    # agentic / reasoning / etc.). Benchmarks only.
+    category: Optional[str] = None
 
 
 # --- Entities ---
