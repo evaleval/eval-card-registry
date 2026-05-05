@@ -9,8 +9,11 @@ Responsibilities:
 """
 from __future__ import annotations
 
+import json
 import re
+import threading
 import uuid
+from dataclasses import replace as _dc_replace
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -49,6 +52,32 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _table_with_pending(registry_store: RegistryStore, name: str) -> "pd.DataFrame":
+    """Return a table DataFrame with pending-buffer rows appended.
+
+    `_auto_create_entity` writes drafts with `buffered=True`, so they sit
+    in `store._pending[<table>]` until `flush_pending` runs at the end of
+    a sync. Without overlaying pending here, the resolver's
+    `CanonicalStore` snapshot can't see the just-created row, and
+    `build_result` for an auto-created entity returns null for every
+    metadata field that hub-stats just enriched.
+
+    Concat is safe because `upsert_entity` enforces id-uniqueness across
+    base + pending (existing rows go to in-place update; only genuinely
+    new ids land in pending), so no duplicate keys end up in the
+    CanonicalStore index.
+    """
+    import pandas as pd
+    base_df = registry_store.table(name) if registry_store.has_table(name) else pd.DataFrame()
+    pending = getattr(registry_store, "_pending", {}).get(name, [])
+    if not pending:
+        return base_df
+    pending_df = pd.DataFrame(pending)
+    if base_df.empty:
+        return pending_df
+    return pd.concat([base_df, pending_df], ignore_index=True)
+
+
 def _build_alias_store(registry_store: RegistryStore) -> AliasStore:
     """Build an AliasStore from the registry's in-memory aliases table."""
     aliases_df = registry_store.table("aliases")
@@ -60,13 +89,16 @@ def _build_canonical_store(registry_store: RegistryStore) -> CanonicalStore:
     tables. Lets the bare resolver enrich its results with the same
     metadata fields the HTTP API exposes — including benchmark
     `family_key` / `category` (which need families_df + composites_df
-    to populate; otherwise they fall back to the benchmark's own id)."""
+    to populate; otherwise they fall back to the benchmark's own id).
+
+    Pending-buffer rows are overlaid so the resolver sees auto-created
+    drafts before `flush_pending` runs. See `_table_with_pending`."""
     return CanonicalStore(
-        models_df=registry_store.table("canonical_models"),
-        benchmarks_df=registry_store.table("canonical_benchmarks"),
-        metrics_df=registry_store.table("canonical_metrics"),
-        harnesses_df=registry_store.table("eval_harnesses"),
-        orgs_df=registry_store.table("canonical_orgs") if registry_store.has_table("canonical_orgs") else None,
+        models_df=_table_with_pending(registry_store, "canonical_models"),
+        benchmarks_df=_table_with_pending(registry_store, "canonical_benchmarks"),
+        metrics_df=_table_with_pending(registry_store, "canonical_metrics"),
+        harnesses_df=_table_with_pending(registry_store, "eval_harnesses"),
+        orgs_df=_table_with_pending(registry_store, "canonical_orgs") if registry_store.has_table("canonical_orgs") else None,
         families_df=registry_store.table("canonical_families") if registry_store.has_table("canonical_families") else None,
         composites_df=registry_store.table("canonical_composites") if registry_store.has_table("canonical_composites") else None,
     )
@@ -182,18 +214,36 @@ class ResolutionService:
             return result_dict
 
         # Check if alias already exists (skip resolver on rerun=False).
-        # Build the enriched response via `Resolver.build_result` so we
-        # preserve the original alias's strategy/confidence (audit trail)
-        # while still surfacing the same canonical-collapse / metadata
-        # fields a fresh resolve would produce.
+        # Re-run the strategy chain so the response carries the correct
+        # `resolved_leaf_id` — the alias table only stores the
+        # root-collapsed `canonical_id`, so reconstructing the response
+        # via `build_result(root, ...)` would clobber the leaf to the
+        # root (model_metadata_fields can't recover leaf identity from
+        # a root row alone — there's no back-pointer). The strategy
+        # chain re-derives leaf cleanly; perf cost is one alias-index
+        # lookup since exact-match hits in O(1) for already-aliased
+        # values. Audit fields are overlaid from the alias entry so
+        # callers still see the original strategy/confidence.
         if not rerun:
             existing = queries.get_alias(self.store, raw_value, entity_type, source_config)
             if existing:
                 resolver = self._get_resolver()
-                enriched = resolver.build_result(
-                    raw_value, entity_type, source_config,
-                    existing["canonical_id"], existing["strategy"], existing["confidence"],
-                )
+                fresh = resolver.resolve(raw_value, entity_type, source_config)
+                if fresh.canonical_id == existing["canonical_id"]:
+                    enriched = _dc_replace(
+                        fresh,
+                        strategy=existing["strategy"],
+                        confidence=existing["confidence"],
+                    )
+                else:
+                    # Rare: registry restructure has moved the canonical
+                    # for this raw_value since the alias was written.
+                    # The alias entry is the source of truth for "what
+                    # this raw resolved to" — accept the leaf clobber.
+                    enriched = resolver.build_result(
+                        raw_value, entity_type, source_config,
+                        existing["canonical_id"], existing["strategy"], existing["confidence"],
+                    )
                 result_dict = _result_to_dict(enriched, created_new=False)
                 self._resolve_cache[cache_key] = result_dict
                 return result_dict
@@ -274,17 +324,33 @@ class ResolutionService:
         if created_new:
             self.invalidate_resolver()
 
-        # Build the enriched response via the resolver. For auto-drafts
-        # the freshly-created entity sits in the pending-write buffer and
-        # may NOT be visible to the canonical_store's DataFrame snapshot
-        # yet (`_auto_create_entity` writes with `buffered=True`). When
-        # the lookup misses, the resolver returns review_status=None;
-        # we know auto-drafts land at "draft" by definition, so override.
-        resolver = self._get_resolver()
-        enriched = resolver.build_result(
-            raw_value, entity_type, source_config,
-            canonical_id, strategy_used, result.confidence,
-        )
+        # Build the enriched response. Two cases:
+        #   1. Match found — the original `result` already carries the
+        #      correct canonical_id (root-collapsed), resolved_leaf_id
+        #      (the matched leaf), parents, and metadata. Don't re-run
+        #      `build_result` here: it would call `model_metadata_fields`
+        #      with the ROOT id, which can't recover the leaf and ends
+        #      up returning resolved_leaf_id = canonical_id. The alias
+        #      write earlier doesn't change canonical_models — `result`
+        #      stays accurate.
+        #   2. Auto-create — `result.canonical_id` was None, the new
+        #      `canonical_id` came from `_auto_create_entity`. The new
+        #      canonical IS the leaf (its parents may point at family
+        #      via the inferred version-axis edge), so `build_result`
+        #      with the new id correctly preserves leaf info via
+        #      `model_metadata_fields`. The `invalidate_resolver()`
+        #      above ensures the canonical_store snapshot sees the new
+        #      row, but the entity may still sit in the pending-write
+        #      buffer; on lookup miss the review_status falls back to
+        #      None and we override to 'draft' below.
+        if created_new:
+            resolver = self._get_resolver()
+            enriched = resolver.build_result(
+                raw_value, entity_type, source_config,
+                canonical_id, strategy_used, result.confidence,
+            )
+        else:
+            enriched = result
         result_dict = _result_to_dict(enriched, created_new=created_new)
         if created_new and result_dict.get("review_status") is None:
             result_dict["review_status"] = "draft"
@@ -322,7 +388,7 @@ class ResolutionService:
         # — `enrichment` is `{}` on lookup miss or any error.
         enrichment: dict = {}
         if entity_type == "model" and self._looks_like_hf_id(raw_value):
-            enrichment = self._lookup_hub_stats(raw_value) or {}
+            enrichment = self._lookup_hub_stats(raw_value, target_canonical=candidate_id) or {}
         if entity_type == "model":
             base.update({
                 "developer": None,
@@ -343,6 +409,16 @@ class ResolutionService:
             for k, v in enrichment.items():
                 if v is not None:
                     base[k] = v
+            # Family-version inference fallback: when hub-stats misses
+            # (parquet stale, lookup disabled, rate-limited, or row
+            # absent), the snapshot still has its shape — try to infer a
+            # version-axis parent from just the alias index. The
+            # inference is alias-lookup-only, so it never manufactures
+            # a false parent. Idempotent with the inference inside
+            # enrich_draft_from_row: only fires when no version-axis
+            # edge is already present.
+            if self._looks_like_hf_id(raw_value):
+                self._maybe_infer_family_parent(base, raw_value, candidate_id)
         elif entity_type == "benchmark":
             base.update({"description": None, "dataset_repo": None, "parent_benchmark_id": None, "tags": "[]"})
         elif entity_type == "metric":
@@ -361,6 +437,37 @@ class ResolutionService:
         queries.upsert_entity(self.store, table, base, buffered=True)
         return candidate_id
 
+    def _maybe_infer_family_parent(
+        self, base: dict, raw_value: str, candidate_id: str,
+    ) -> None:
+        """Mutate `base['parents']` to add a `{variant, axis: version}`
+        edge when the raw value's snapshot shape resolves to an existing
+        family canonical via the alias index. Runs independently of
+        hub-stats so brand-new releases not yet in the parquet still
+        get linked into the lineage graph."""
+        try:
+            existing = json.loads(base.get("parents") or "[]")
+        except (ValueError, TypeError):
+            existing = []
+        if any(
+            p.get("relationship") == "variant" and p.get("axis") == "version"
+            for p in existing
+            if isinstance(p, dict)
+        ):
+            return
+        from eval_card_registry.services.hub_stats import infer_family_parent_edge
+        try:
+            aliases_to_canonical, _ = self._build_hub_stats_indices()
+        except Exception:
+            return
+        edge = infer_family_parent_edge(
+            raw_value, aliases_to_canonical, target_canonical=candidate_id,
+        )
+        if edge is None:
+            return
+        existing.append(edge)
+        base["parents"] = json.dumps(existing)
+
     @staticmethod
     def _looks_like_hf_id(raw_value: str) -> bool:
         """HF id heuristic: contains a single `/` with non-empty parts on
@@ -372,12 +479,18 @@ class ResolutionService:
         org, name = raw_value.split("/", 1)
         return bool(org.strip()) and bool(name.strip())
 
-    def _lookup_hub_stats(self, hf_id: str) -> Optional[dict]:
+    def _lookup_hub_stats(
+        self, hf_id: str, target_canonical: Optional[str] = None,
+    ) -> Optional[dict]:
         """Query hub-stats live for `hf_id` and return a partial draft
         dict (release_date, params_billions, parents, lineage_origin_org_id,
         tags, metadata) ready to merge. Returns None on miss or any error.
         Uses the `aliases` table to resolve baseModels parents to our
-        canonical ids, and `canonical_orgs` HF aliases to map authors."""
+        canonical ids, and `canonical_orgs` HF aliases to map authors.
+
+        `target_canonical` is the candidate canonical id of the draft
+        being created — passed through to enrich_draft_from_row so the
+        family-version inference can suppress a self-edge."""
         if not settings.hub_stats_lookup_enabled:
             return None
         try:
@@ -390,7 +503,10 @@ class ResolutionService:
         from eval_card_registry.services import hub_stats as _hs
         try:
             aliases_to_canonical, org_alias_map = self._build_hub_stats_indices()
-            return _hs.enrich_draft_from_row(row, aliases_to_canonical, org_alias_map)
+            return _hs.enrich_draft_from_row(
+                row, aliases_to_canonical, org_alias_map,
+                target_canonical=target_canonical,
+            )
         except Exception:
             return None
 

@@ -11,6 +11,7 @@ def _fresh_store() -> RegistryStore:
     store = RegistryStore()
     from eval_card_registry.store import schemas as s
     store._tables = {name: s.empty(name) for name in [
+        "canonical_orgs",
         "canonical_models", "canonical_benchmarks", "canonical_metrics",
         "eval_harnesses", "aliases", "resolution_log", "eval_results", "sync_runs",
     ]}
@@ -120,3 +121,128 @@ class TestResolutionService:
         result = svc.resolve("", "benchmark", "cfg", None)
         assert result["canonical_id"] is None
         assert result["strategy"] == "no_match"
+
+    def test_resolve_preserves_resolved_leaf_id_for_version_chain(self):
+        """When a model raw value matches a leaf canonical that has a
+        version-axis chain to a family pointer, `svc.resolve` must return
+        BOTH the root-collapsed canonical_id AND the matched leaf in
+        `resolved_leaf_id`. Regression: the previous implementation
+        re-enriched via `build_result(canonical_id=root, ...)` which
+        clobbered `resolved_leaf_id` to equal the root."""
+        from eval_card_registry.store import queries
+        store = _fresh_store()
+        # Seed org so the model FK resolves.
+        queries.upsert_entity(store, "canonical_orgs", {
+            "id": "allenai", "display_name": "Allen AI", "parent_org_id": None,
+            "website": None, "hf_org": "allenai", "kind": "lab",
+            "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+        })
+        # Family pointer with release_date.
+        queries.upsert_entity(store, "canonical_models", {
+            "id": "allenai/olmo-3-32b", "display_name": "OLMo-3 32B",
+            "developer": None, "org_id": "allenai", "family": "olmo-3-32b",
+            "architecture": None, "params_billions": 32.0,
+            "parents": "[]", "root_model_id": None,
+            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "release_date": "2025-11-25", "tags": "[]",
+            "metadata": "{}", "review_status": "reviewed",
+        })
+        # Snapshot canonical with version-axis parent → family.
+        # root_model_id is set explicitly here to match what
+        # derive_model_lineage_fields would produce after seed.
+        queries.upsert_entity(store, "canonical_models", {
+            "id": "allenai/olmo-3-1125-32b", "display_name": "OLMo-3 32B (1125)",
+            "developer": None, "org_id": "allenai", "family": "olmo-3-32b",
+            "architecture": None, "params_billions": 32.0,
+            "parents": json.dumps([{
+                "id": "allenai/olmo-3-32b",
+                "relationship": "variant",
+                "axis": "version",
+            }]),
+            "root_model_id": "allenai/olmo-3-32b",
+            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "release_date": "2025-11-25", "tags": "[]",
+            "metadata": "{}", "review_status": "reviewed",
+        })
+        # Alias on the snapshot.
+        queries.add_alias(store, {
+            "raw_value": "allenai/Olmo-3-1125-32B",
+            "entity_type": "model",
+            "canonical_id": "allenai/olmo-3-1125-32b",
+            "source_config": None, "source_field": None,
+            "status": "confirmed", "strategy": "seed",
+            "confidence": 1.0, "notes": None,
+        })
+
+        svc = ResolutionService(store)
+        # Existing-alias path: get_alias hits the seeded alias above,
+        # then the fix re-runs the strategy chain to recover the leaf
+        # (the alias table only stores root-collapsed canonical_id).
+        r1 = svc.resolve("allenai/Olmo-3-1125-32B", "model", None, None)
+        assert r1["canonical_id"] == "allenai/olmo-3-32b"
+        assert r1["resolved_leaf_id"] == "allenai/olmo-3-1125-32b"
+
+        # _resolve_cache short-circuits the second call to the same
+        # (raw, entity_type, source_config). To exercise the existing-
+        # alias path again under the same fixture we'd need to clear
+        # the cache; the live verification already covers cache-hit
+        # idempotence so we don't re-test it here.
+
+    def test_resolve_preserves_leaf_via_fresh_resolve_path(self):
+        """The fresh-resolve path: no `aliases` row exists for the
+        exact-cased raw value, so the strategy chain runs from scratch
+        and matches via the normalized index (case-insensitive). The
+        fix returns the resolver's `result` directly — the previous
+        implementation called `build_result(canonical_id=root, ...)`
+        which clobbered `resolved_leaf_id` to equal the root."""
+        from eval_card_registry.store import queries
+        store = _fresh_store()
+        queries.upsert_entity(store, "canonical_orgs", {
+            "id": "allenai", "display_name": "Allen AI", "parent_org_id": None,
+            "website": None, "hf_org": "allenai", "kind": "lab",
+            "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+        })
+        queries.upsert_entity(store, "canonical_models", {
+            "id": "allenai/olmo-3-32b", "display_name": "OLMo-3 32B",
+            "developer": None, "org_id": "allenai", "family": "olmo-3-32b",
+            "architecture": None, "params_billions": 32.0,
+            "parents": "[]", "root_model_id": None,
+            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "release_date": "2025-11-25", "tags": "[]",
+            "metadata": "{}", "review_status": "reviewed",
+        })
+        queries.upsert_entity(store, "canonical_models", {
+            "id": "allenai/olmo-3-1125-32b", "display_name": "OLMo-3 32B (1125)",
+            "developer": None, "org_id": "allenai", "family": "olmo-3-32b",
+            "architecture": None, "params_billions": 32.0,
+            "parents": json.dumps([{
+                "id": "allenai/olmo-3-32b",
+                "relationship": "variant",
+                "axis": "version",
+            }]),
+            "root_model_id": "allenai/olmo-3-32b",
+            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "release_date": "2025-11-25", "tags": "[]",
+            "metadata": "{}", "review_status": "reviewed",
+        })
+        # Seed only the LOWERCASE alias on the snapshot. The mixed-case
+        # raw below has NO matching entry in `aliases` (case-sensitive
+        # lookup), so get_alias misses → fresh-resolve path runs.
+        queries.add_alias(store, {
+            "raw_value": "allenai/olmo-3-1125-32b",
+            "entity_type": "model",
+            "canonical_id": "allenai/olmo-3-1125-32b",
+            "source_config": None, "source_field": None,
+            "status": "confirmed", "strategy": "seed",
+            "confidence": 1.0, "notes": None,
+        })
+
+        svc = ResolutionService(store)
+        # Mixed-case input — no exact alias match → falls to the strategy
+        # chain → normalized match hits the snapshot canonical → leaf
+        # is preserved through the fix's `enriched = result` branch.
+        r = svc.resolve("allenai/Olmo-3-1125-32B", "model", None, None)
+        assert r["canonical_id"] == "allenai/olmo-3-32b"
+        assert r["resolved_leaf_id"] == "allenai/olmo-3-1125-32b"
+        assert r["strategy"] == "normalized"
+        assert r["created_new"] is False

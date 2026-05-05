@@ -6909,12 +6909,87 @@ entries:
   family: olmo-3-7b
   params_billions: 7.0
   open_weights: true
+  release_date: '2025-11-25'
+  tags:
+  - open-weight
+  aliases:
+  - allenai/olmo-3-7b
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-7b-think
+  display_name: Olmo 3 7B Think
+  org_id: allenai
+  family: olmo-3-7b
+  params_billions: 7.0
+  open_weights: true
+  parents:
+  - id: allenai/olmo-3-7b
+    relationship: variant
+    axis: mode
   tags:
   - open-weight
   aliases:
   - ai2/olmo-3-7b-think
-  - allenai/olmo-3-7b
   - allenai/olmo-3-7b-think
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-1125-7b
+  display_name: OLMo-3 7B (1125)
+  org_id: allenai
+  family: olmo-3-7b
+  params_billions: 7.0
+  open_weights: true
+  release_date: '2025-11-25'
+  parents:
+  - id: allenai/olmo-3-7b
+    relationship: variant
+    axis: version
+  tags:
+  - open-weight
+  aliases:
+  - allenai/Olmo-3-1125-7B
+  - allenai/olmo-3-1125-7b
+  - ai2/olmo-3-1125-7b
+  - allenai/Olmo-3-1125-7B-Base
+  - allenai/olmo-3-1125-7b-base
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-1125-7b-instruct
+  display_name: OLMo-3 7B Instruct (1125)
+  org_id: allenai
+  family: olmo-3-7b
+  params_billions: 7.0
+  open_weights: true
+  release_date: '2025-11-25'
+  parents:
+  - id: allenai/olmo-3-7b-instruct
+    relationship: variant
+    axis: version
+  tags:
+  - open-weight
+  aliases:
+  - allenai/Olmo-3-1125-7B-Instruct
+  - allenai/olmo-3-1125-7b-instruct
+  - ai2/olmo-3-1125-7b-instruct
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-1125-7b-think
+  display_name: OLMo-3 7B Think (1125)
+  org_id: allenai
+  family: olmo-3-7b
+  params_billions: 7.0
+  open_weights: true
+  release_date: '2025-11-25'
+  parents:
+  - id: allenai/olmo-3-7b-think
+    relationship: variant
+    axis: version
+  tags:
+  - open-weight
+  aliases:
+  - allenai/Olmo-3-1125-7B-Think
+  - allenai/olmo-3-1125-7b-think
+  - ai2/olmo-3-1125-7b-think
   metadata: '{}'
   review_status: reviewed
 - id: allenai/olmo-3-32b
@@ -6923,15 +6998,105 @@ entries:
   family: olmo-3-32b
   params_billions: 32.0
   open_weights: true
+  release_date: '2025-11-25'
+  tags:
+  - open-weight
+  aliases:
+  - allenai/olmo-3-32b
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-32b-instruct
+  display_name: Olmo 3 32B Instruct
+  org_id: allenai
+  family: olmo-3-32b
+  params_billions: 32.0
+  open_weights: true
+  parents:
+  - id: allenai/olmo-3-32b
+    relationship: variant
+    axis: mode
+  tags:
+  - open-weight
+  aliases:
+  - ai2/olmo-3-1-32b-instruct
+  - allenai/olmo-3-1-32b-instruct
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-32b-think
+  display_name: Olmo 3 32B Think
+  org_id: allenai
+  family: olmo-3-32b
+  params_billions: 32.0
+  open_weights: true
+  parents:
+  - id: allenai/olmo-3-32b
+    relationship: variant
+    axis: mode
   tags:
   - open-weight
   aliases:
   - ai2/olmo-3-32b-think
   - ai2/olmo-3-1-32b-think
-  - ai2/olmo-3-1-32b-instruct
-  - allenai/olmo-3-32b
   - allenai/olmo-3-1-32b-think
-  - allenai/olmo-3-1-32b-instruct
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-1125-32b
+  display_name: OLMo-3 32B (1125)
+  org_id: allenai
+  family: olmo-3-32b
+  params_billions: 32.0
+  open_weights: true
+  release_date: '2025-11-25'
+  parents:
+  - id: allenai/olmo-3-32b
+    relationship: variant
+    axis: version
+  tags:
+  - open-weight
+  aliases:
+  - allenai/Olmo-3-1125-32B
+  - allenai/olmo-3-1125-32b
+  - ai2/olmo-3-1125-32b
+  - allenai/Olmo-3-1125-32B-Base
+  - allenai/olmo-3-1125-32b-base
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-1125-32b-instruct
+  display_name: OLMo-3 32B Instruct (1125)
+  org_id: allenai
+  family: olmo-3-32b
+  params_billions: 32.0
+  open_weights: true
+  release_date: '2025-11-25'
+  parents:
+  - id: allenai/olmo-3-32b-instruct
+    relationship: variant
+    axis: version
+  tags:
+  - open-weight
+  aliases:
+  - allenai/Olmo-3-1125-32B-Instruct
+  - allenai/olmo-3-1125-32b-instruct
+  - ai2/olmo-3-1125-32b-instruct
+  metadata: '{}'
+  review_status: reviewed
+- id: allenai/olmo-3-1125-32b-think
+  display_name: OLMo-3 32B Think (1125)
+  org_id: allenai
+  family: olmo-3-32b
+  params_billions: 32.0
+  open_weights: true
+  release_date: '2025-11-25'
+  parents:
+  - id: allenai/olmo-3-32b-think
+    relationship: variant
+    axis: version
+  tags:
+  - open-weight
+  aliases:
+  - allenai/Olmo-3-1125-32B-Think
+  - allenai/olmo-3-1125-32b-think
+  - ai2/olmo-3-1125-32b-think
   metadata: '{}'
   review_status: reviewed
 - id: allenai/molmo-7b-d

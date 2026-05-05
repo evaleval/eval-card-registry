@@ -151,6 +151,158 @@ def filter_useful_tags(raw_tags) -> list[str]:
     return sorted(set(keep))
 
 
+# ---------------------------------------------------------------------------
+# Family-version parent inference
+# ---------------------------------------------------------------------------
+#
+# Hub-stats `baseModels` records *upstream* lineage (finetune / quantized /
+# merge / adapter), never the family-version relationship between a dated
+# snapshot and its moving pointer canonical (`Olmo-3-1125-32B` ↔ our
+# `allenai/olmo-3-32b`). The pointer isn't an HF id — it only exists in our
+# registry — so HF can't surface that edge. Without inference here, dated
+# snapshots auto-create as orphaned canonicals: `release_date` lands fine
+# but `parents`/`root_model_id` stay empty, root-collapse never fires, and
+# the snapshot shows up as a separate model in consumers.
+
+_INTERNAL_DATE_RE = re.compile(r"^(.+?)-(\d{4})-([^-].*)$")
+_TRAILING_4DIGIT_RE = re.compile(r"^(.+)-(\d{4})$")
+_TRAILING_6DIGIT_RE = re.compile(r"^(.+)-(\d{6})$")
+_TRAILING_8DIGIT_RE = re.compile(r"^(.+)-(\d{8})$")
+# ISO date patterns (anchored, full-string). Strict component widths
+# stop us from peeling tokens that aren't dates (a 5-digit numeric tail
+# won't match `\d{4}-\d{2}`).
+_ISO_FULL_DATE_RE = re.compile(r"^(.+)-(\d{4})-(\d{2})-(\d{2})$")
+_ISO_MONTH_DATE_RE = re.compile(r"^(.+)-(\d{4})-(\d{2})$")
+_ISO_YEAR_DATE_RE = re.compile(r"^(.+)-(\d{4})$")
+
+
+def _looks_like_mmdd(token: str) -> bool:
+    """4-digit MMDD where MM ∈ [01,12] and DD ∈ [01,31]. Used to gate
+    snapshot-token stripping on shapes that actually look like dates,
+    avoiding false-positives on numeric size/version tokens like `8000`."""
+    if len(token) != 4 or not token.isdigit():
+        return False
+    mm, dd = int(token[:2]), int(token[2:])
+    return 1 <= mm <= 12 and 1 <= dd <= 31
+
+
+def _looks_like_yyyymm(token: str) -> bool:
+    """6-digit YYYYMM (year+month). Stepfun and several Chinese-lab
+    release tags use this convention, e.g. `step-2-16k-202411`."""
+    if len(token) != 6 or not token.isdigit():
+        return False
+    yyyy, mm = int(token[:4]), int(token[4:])
+    return 2015 <= yyyy <= 2035 and 1 <= mm <= 12
+
+
+def _looks_like_yyyymmdd(token: str) -> bool:
+    if len(token) != 8 or not token.isdigit():
+        return False
+    yyyy, mm, dd = int(token[:4]), int(token[4:6]), int(token[6:])
+    return 2015 <= yyyy <= 2035 and 1 <= mm <= 12 and 1 <= dd <= 31
+
+
+def _looks_like_release_year(token: str) -> bool:
+    if len(token) != 4 or not token.isdigit():
+        return False
+    return 2015 <= int(token) <= 2035
+
+
+def infer_family_parent_edge(
+    hf_id: str,
+    aliases_to_canonical: dict[str, str],
+    target_canonical: Optional[str] = None,
+) -> Optional[dict]:
+    """Detect snapshot-shape ids whose stripped form matches an existing
+    canonical, and return a `{id, relationship: variant, axis: version}`
+    edge pointing at it. Returns None when the id has no snapshot shape
+    or the stripped form doesn't match any known canonical/alias.
+
+    Patterns recognized (single-pass strip — does NOT compose with
+    mode/quant suffix stripping):
+      - internal MMDD token: `Olmo-3-1125-32B` → `Olmo-3-32B`
+        also `Olmo-3-1125-7B-Instruct` → `Olmo-3-7B-Instruct`
+      - trailing MMDD token: `kimi-k2-0905` → `kimi-k2`
+      - trailing YYYYMM token: `step-2-16k-202411` → `step-2-16k`
+      - trailing YYYYMMDD: `claude-haiku-4-5-20251001` → `claude-haiku-4-5`
+      - trailing ISO date ladder: `gpt-5-2025-08-07` →
+        `gpt-5-2025-08` → `gpt-5-2025` → `gpt-5`
+
+    Only fires when the candidate stripped form resolves through the
+    alias index — no false matches manufactured by stripping alone.
+    For compound mode+date inputs (`claude-4-5-thinking-20251001`), the
+    strip resolves to the mode-promoted canonical iff one exists; if
+    not, returns None (the snapshot still gets `release_date` from
+    hub-stats but lands without a parent edge).
+
+    `target_canonical` is the canonical id the inferred edge will be
+    attached to. When provided, suppresses self-edges (matters in the
+    bulk-refresh path where an HF id may be aliased directly to its
+    family pointer rather than a separate snapshot canonical — without
+    this guard the family pointer gains a parent edge to itself,
+    breaking the lineage walker). Live auto-create can also pass the
+    proposed draft id; it just makes the guard tighter.
+    """
+    candidates: list[str] = []
+
+    # Internal MMDD: `Olmo-3-1125-32B` shape. Tries first because
+    # internal-token strips give a more specific lookup target than
+    # trailing-token strips.
+    m = _INTERNAL_DATE_RE.match(hf_id)
+    if m and _looks_like_mmdd(m.group(2)):
+        prefix, _, suffix = m.groups()
+        candidates.append(f"{prefix}-{suffix}")
+
+    # ISO ladder (full → month → year). The three regexes match
+    # mutually exclusive tail shapes (`-YYYY-MM-DD` vs `-YYYY-MM` vs
+    # `-YYYY`), so each input fires at most one branch.
+    m = _ISO_FULL_DATE_RE.match(hf_id)
+    if m:
+        prefix, y, mo, d = m.groups()
+        if (_looks_like_release_year(y) and 1 <= int(mo) <= 12
+                and 1 <= int(d) <= 31):
+            candidates.append(f"{prefix}-{y}-{mo}")
+            candidates.append(f"{prefix}-{y}")
+            candidates.append(prefix)
+    else:
+        m = _ISO_MONTH_DATE_RE.match(hf_id)
+        if m:
+            prefix, y, mo = m.groups()
+            if _looks_like_release_year(y) and 1 <= int(mo) <= 12:
+                candidates.append(f"{prefix}-{y}")
+                candidates.append(prefix)
+        else:
+            m = _ISO_YEAR_DATE_RE.match(hf_id)
+            if m:
+                prefix, y = m.groups()
+                if _looks_like_release_year(y):
+                    candidates.append(prefix)
+
+    # Trailing YYYYMMDD (Anthropic/xAI/Tencent style).
+    m = _TRAILING_8DIGIT_RE.match(hf_id)
+    if m and _looks_like_yyyymmdd(m.group(2)):
+        candidates.append(m.group(1))
+
+    # Trailing YYYYMM (Stepfun and several Chinese-lab release tags).
+    m = _TRAILING_6DIGIT_RE.match(hf_id)
+    if m and _looks_like_yyyymm(m.group(2)):
+        candidates.append(m.group(1))
+
+    # Trailing 4-digit MMDD (Moonshot/Kimi, Google -exp tags).
+    m = _TRAILING_4DIGIT_RE.match(hf_id)
+    if m and _looks_like_mmdd(m.group(2)):
+        candidates.append(m.group(1))
+
+    for cand in candidates:
+        canonical = aliases_to_canonical.get(normalize(cand))
+        if not canonical:
+            continue
+        if target_canonical is not None and canonical == target_canonical:
+            continue
+        return {"id": canonical, "relationship": "variant", "axis": "version"}
+    return None
+
+
 def extract_base_models(base_models) -> list[dict]:
     """Decode the `baseModels` struct into a list of typed parent edges.
     Returns `[{id, relationship}, ...]` — caller resolves each id to our
@@ -295,14 +447,21 @@ class HubStatsClient:
         try:
             con = self._ensure_con()
             use_local = self._ensure_local_table(con)
-            escaped = hf_id.replace("'", "''")
+            # Case-insensitive match — HF stores ids with the upstream
+            # author's original casing (`allenai/Olmo-3-1125-32B`); EEE
+            # surfaces values in mixed conventions (some leaderboards
+            # lowercase, some preserve). An exact-case `=` filter
+            # silently misses any casing mismatch and the draft lands
+            # without enrichment metadata. LOWER() forces a match
+            # regardless of the surface form.
+            escaped = hf_id.lower().replace("'", "''")
             if use_local:
-                sql = f"SELECT * FROM hub_stats WHERE id = '{escaped}' LIMIT 1"
+                sql = f"SELECT * FROM hub_stats WHERE LOWER(id) = '{escaped}' LIMIT 1"
             else:
                 sql = (
                     f"SELECT {QUERY_COLUMNS} "
                     f"FROM read_parquet('{self.parquet_url}') "
-                    f"WHERE id = '{escaped}' LIMIT 1"
+                    f"WHERE LOWER(id) = '{escaped}' LIMIT 1"
                 )
             cursor = con.execute(sql)
             cols = [d[0] for d in cursor.description]
@@ -330,6 +489,7 @@ def enrich_draft_from_row(
     row: dict,
     aliases_to_canonical: dict[str, str],
     org_alias_map: dict[str, str],
+    target_canonical: Optional[str] = None,
 ) -> dict:
     """Convert one hub-stats row into a partial canonical_models dict
     suitable for merging into an auto-created draft. Computes:
@@ -383,6 +543,24 @@ def enrich_draft_from_row(
             if lineage_origin_org_id is None and edge["relationship"] != "variant":
                 if "/" in parent_canonical:
                     lineage_origin_org_id = parent_canonical.split("/", 1)[0]
+
+    # Family-version inference: hub-stats `baseModels` only records
+    # upstream-lineage edges (finetune/quantized/merge/adapter), never
+    # the dated-snapshot ↔ moving-pointer relationship that lives only
+    # in our registry. Without this, snapshots like `Olmo-3-1125-32B`
+    # auto-create as orphan canonicals — release_date lands but parents
+    # stays empty and root-collapse never fires.
+    hf_id = row.get("id")
+    if isinstance(hf_id, str) and not any(
+        p.get("relationship") == "variant" and p.get("axis") == "version"
+        for p in parents
+    ):
+        version_edge = infer_family_parent_edge(
+            hf_id, aliases_to_canonical, target_canonical=target_canonical,
+        )
+        if version_edge is not None:
+            parents.append(version_edge)
+
     if parents:
         out["parents"] = json.dumps(parents)
     if lineage_origin_org_id:
