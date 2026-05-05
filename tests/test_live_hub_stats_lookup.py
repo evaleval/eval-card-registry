@@ -183,6 +183,54 @@ def test_auto_create_falls_back_when_lookup_raises(fresh_store, enable_lookup):
     assert new_row["parents"] == "[]"
 
 
+def test_auto_create_infers_family_parent_when_hub_stats_misses(fresh_store, enable_lookup):
+    """The family-version inference fallback: even when hub-stats returns
+    None (parquet stale, brand-new model on release day), if a snapshot
+    HF id strips to an existing canonical via the alias index, the draft
+    still gets a `{variant, axis: version}` parent edge. Without this,
+    same-day releases would orphan until the next hub-stats refresh."""
+    _seed_org(fresh_store, "allenai")
+    _seed_model(fresh_store, "allenai/olmo-3-32b", "allenai")
+    svc = ResolutionService(fresh_store)
+    with patch.object(_hs.HubStatsClient, "lookup", return_value=None):
+        cid = svc._auto_create_entity("model", "allenai/Olmo-3-1125-32B")
+
+    queries.flush_pending(fresh_store)
+    df = fresh_store.table("canonical_models")
+    new_row = df[df["id"] == cid].iloc[0]
+    parents = json.loads(new_row["parents"])
+    assert {
+        "id": "allenai/olmo-3-32b",
+        "relationship": "variant",
+        "axis": "version",
+    } in parents
+    assert new_row["review_status"] == "draft"
+
+
+def test_auto_create_handles_anthropic_yyyymmdd_snapshot(fresh_store, enable_lookup):
+    """End-to-end for the Anthropic shape: resolver fuzzy USED to strip
+    `-20251101` and silently match the family pointer. Now: that path
+    returns no_match → auto-create runs. With the family pointer aliased
+    AND hub-stats returning None (parquet stale), the family-version
+    inference fallback in _auto_create_entity still attaches the edge.
+    Snapshot canonical lands with a proper version-axis parent."""
+    _seed_org(fresh_store, "anthropic")
+    _seed_model(fresh_store, "anthropic/claude-opus-4-5", "anthropic")
+    svc = ResolutionService(fresh_store)
+    with patch.object(_hs.HubStatsClient, "lookup", return_value=None):
+        cid = svc._auto_create_entity("model", "anthropic/claude-opus-4-5-20251101")
+
+    queries.flush_pending(fresh_store)
+    df = fresh_store.table("canonical_models")
+    new_row = df[df["id"] == cid].iloc[0]
+    parents = json.loads(new_row["parents"])
+    assert {
+        "id": "anthropic/claude-opus-4-5",
+        "relationship": "variant",
+        "axis": "version",
+    } in parents
+
+
 def test_auto_create_skips_lookup_for_non_hf_shaped_value(fresh_store, enable_lookup):
     """Raw values that don't look like an HF id (no slash, multiple
     slashes) must NOT trigger a hub-stats lookup — saves a network call
@@ -269,6 +317,232 @@ def test_enrich_draft_drops_unresolved_base_edges():
     out = _hs.enrich_draft_from_row(row, {}, {})
     assert "parents" not in out
     assert "lineage_origin_org_id" not in out
+
+
+# ---------- Family-version parent inference ----------
+
+def test_infer_family_parent_internal_yymm():
+    """`Olmo-3-1125-32B`-shape: strip the internal `1125-` MMDD token,
+    look up the family in the alias index, return a version-axis edge.
+    Without this, dated AllenAI snapshots auto-create as orphans."""
+    aliases = {"allenai-olmo-3-32b": "allenai/olmo-3-32b"}
+    edge = _hs.infer_family_parent_edge("allenai/Olmo-3-1125-32B", aliases)
+    assert edge == {
+        "id": "allenai/olmo-3-32b",
+        "relationship": "variant",
+        "axis": "version",
+    }
+
+
+def test_infer_family_parent_internal_yymm_with_mode_suffix():
+    """The strip preserves the mode/size suffix so an `-Instruct` snapshot
+    points at the corresponding mode-family pointer when one exists."""
+    aliases = {"allenai-olmo-3-7b-instruct": "allenai/olmo-3-7b-instruct"}
+    edge = _hs.infer_family_parent_edge(
+        "allenai/Olmo-3-1125-7B-Instruct", aliases
+    )
+    assert edge["id"] == "allenai/olmo-3-7b-instruct"
+    assert edge["axis"] == "version"
+
+
+def test_infer_family_parent_trailing_mmdd():
+    """`kimi-k2-0905`-shape (Moonshot/Kimi): trailing 4-digit MMDD."""
+    aliases = {"moonshotai-kimi-k2": "moonshotai/kimi-k2"}
+    edge = _hs.infer_family_parent_edge("moonshotai/kimi-k2-0905", aliases)
+    assert edge["id"] == "moonshotai/kimi-k2"
+
+
+def test_infer_family_parent_trailing_yyyymmdd():
+    """Anthropic-style YYYYMMDD: `claude-haiku-4-5-20251001` → family."""
+    aliases = {"anthropic-claude-haiku-4-5": "anthropic/claude-haiku-4-5"}
+    edge = _hs.infer_family_parent_edge(
+        "anthropic/claude-haiku-4-5-20251001", aliases
+    )
+    assert edge["id"] == "anthropic/claude-haiku-4-5"
+
+
+def test_infer_family_parent_trailing_yyyymm():
+    """`stepfun/step-2-16k-202411`-shape: trailing 6-digit YYYYMM
+    (year+month, no day). Used by Stepfun and several Chinese-lab
+    release tags."""
+    aliases = {"stepfun-step-2-16k": "stepfun/step-2-16k"}
+    edge = _hs.infer_family_parent_edge("stepfun/step-2-16k-202411", aliases)
+    assert edge["id"] == "stepfun/step-2-16k"
+
+
+def test_infer_family_parent_trailing_yyyymm_rejects_invalid_month():
+    """`-202413` has an invalid month — must NOT strip."""
+    aliases = {"foo-bar": "foo/bar"}
+    assert _hs.infer_family_parent_edge("foo/bar-202413", aliases) is None
+
+
+def test_infer_family_parent_iso_full_date():
+    """OpenAI-style `gpt-5-2025-08-07` — ISO ladder strips through
+    `-2025-08` and `-2025` to bare. With the family aliased, the bare
+    candidate hits."""
+    aliases = {"openai-gpt-5": "openai/gpt-5"}
+    edge = _hs.infer_family_parent_edge("openai/gpt-5-2025-08-07", aliases)
+    assert edge["id"] == "openai/gpt-5"
+
+
+def test_infer_family_parent_iso_full_date_prefers_intermediate_snapshot():
+    """When an intermediate snapshot canonical (`gpt-5-2025-08`) is
+    aliased, version-axis edge points at it rather than the family
+    root. Preserves snapshot-of-snapshot lineage instead of over-
+    collapsing to the topmost family."""
+    aliases = {
+        "openai-gpt-5": "openai/gpt-5",
+        "openai-gpt-5-2025-08": "openai/gpt-5-2025-08",
+    }
+    edge = _hs.infer_family_parent_edge("openai/gpt-5-2025-08-07", aliases)
+    assert edge["id"] == "openai/gpt-5-2025-08"
+
+
+def test_infer_family_parent_iso_year_only():
+    """`gpt-5-2024` strips to bare family via the year-only branch."""
+    aliases = {"openai-gpt-5": "openai/gpt-5"}
+    edge = _hs.infer_family_parent_edge("openai/gpt-5-2024", aliases)
+    assert edge["id"] == "openai/gpt-5"
+
+
+def test_infer_family_parent_user_examples():
+    """The three examples surfaced during planning. Each has the
+    family-pointer canonical aliased and gets a version-axis edge."""
+    aliases = {
+        "google-gemini-exp": "google/gemini-exp",
+        "stepfun-step-2-16k": "stepfun/step-2-16k",
+        "tencent-hunyuan-turbos": "tencent/hunyuan-turbos",
+    }
+    cases = [
+        ("google/gemini-exp-1114", "google/gemini-exp"),
+        ("stepfun/step-2-16k-202411", "stepfun/step-2-16k"),
+        ("tencent/hunyuan-turbos-20250313", "tencent/hunyuan-turbos"),
+    ]
+    for hf_id, expected_family in cases:
+        edge = _hs.infer_family_parent_edge(hf_id, aliases)
+        assert edge is not None, f"no edge inferred for {hf_id!r}"
+        assert edge["id"] == expected_family
+        assert edge["axis"] == "version"
+
+
+def test_infer_family_parent_returns_none_when_no_match():
+    """No alias hit → no edge manufactured (don't dangle on stripping
+    alone). 4-digit token only triggers when shape matches an MMDD."""
+    aliases = {"meta-llama-3-1-8b": "meta/llama-3.1-8b"}
+    # No `8888` family in aliases
+    assert _hs.infer_family_parent_edge("foo/bar-1125-7b", aliases) is None
+    # `8000` is not a valid MMDD (month 80) → not stripped
+    assert _hs.infer_family_parent_edge("foo/bar-8000-7b", aliases) is None
+
+
+def test_infer_family_parent_ignores_non_date_4digit_token():
+    """Numeric tokens that aren't valid MMDD shouldn't be stripped, even
+    if the stripped form happens to alias something. Guards against
+    e.g. ContextLength-shape `-8000-` or version-shape `-2024` collisions."""
+    aliases = {"foo-bar-7b": "foo/bar-7b"}
+    # 13-something months / 32+ days fail the MMDD shape check
+    assert _hs.infer_family_parent_edge("foo/bar-1399-7b", aliases) is None
+    assert _hs.infer_family_parent_edge("foo/bar-0099-7b", aliases) is None
+
+
+def test_enrich_draft_adds_family_version_edge_when_basemodels_misses_it():
+    """The combined behavior: hub-stats baseModels records a finetune
+    edge to an upstream lab's model, but the snapshot ↔ pointer family
+    edge isn't on HF (the pointer is registry-only). Inference adds the
+    version edge on top of the upstream edge so root-collapse works."""
+    aliases_to_canonical = {
+        "allenai-olmo-3-32b": "allenai/olmo-3-32b",
+    }
+    row = {
+        "id": "allenai/Olmo-3-1125-32B",
+        "createdAt": "2025-11-25T00:00:00",
+        "tags": [],
+        "cardData": None,
+        "safetensors": {"total": 64_000_000_000},
+        "baseModels": None,
+        "downloadsAllTime": None, "likes": None,
+        "library_name": None, "pipeline_tag": None,
+    }
+    out = _hs.enrich_draft_from_row(row, aliases_to_canonical, {})
+    parents = json.loads(out["parents"])
+    assert {
+        "id": "allenai/olmo-3-32b",
+        "relationship": "variant",
+        "axis": "version",
+    } in parents
+    assert out["release_date"] == "2025-11-25"
+
+
+def test_infer_family_parent_suppresses_self_edge():
+    """When the inferred family equals the target canonical (the row is
+    being merged INTO the family pointer rather than a separate snapshot
+    canonical), inference must skip — otherwise the family pointer gains
+    a parent edge to itself, breaking the lineage walker."""
+    aliases = {"allenai-olmo-3-32b": "allenai/olmo-3-32b"}
+    edge = _hs.infer_family_parent_edge(
+        "allenai/Olmo-3-1125-32B",
+        aliases,
+        target_canonical="allenai/olmo-3-32b",
+    )
+    assert edge is None
+
+
+def test_enrich_draft_suppresses_self_edge_via_target_canonical():
+    """End-to-end: the bulk-refresh path passes target_canonical when an
+    HF id maps to a family-pointer canonical. enrich_draft_from_row must
+    not write a self-edge into parents."""
+    aliases_to_canonical = {"allenai-olmo-3-32b": "allenai/olmo-3-32b"}
+    row = {
+        "id": "allenai/Olmo-3-1125-32B",
+        "createdAt": "2025-11-25T00:00:00",
+        "tags": [], "cardData": None, "safetensors": None,
+        "baseModels": None,
+        "downloadsAllTime": None, "likes": None,
+        "library_name": None, "pipeline_tag": None,
+    }
+    out = _hs.enrich_draft_from_row(
+        row, aliases_to_canonical, {},
+        target_canonical="allenai/olmo-3-32b",
+    )
+    # No parents key (the inferred edge would be self; nothing else to add)
+    assert "parents" not in out
+    # Other fields still land
+    assert out.get("release_date") == "2025-11-25"
+
+
+def test_enrich_draft_does_not_double_add_version_edge():
+    """If hub-stats already provided a version-axis edge (rare but
+    possible if HF ever surfaces it), inference should NOT add a second
+    one. Idempotency check."""
+    aliases_to_canonical = {
+        "allenai-olmo-3-32b": "allenai/olmo-3-32b",
+    }
+    # Construct a row where extract_base_models would yield a variant
+    # edge directly (synthetic — HF doesn't currently emit `variant`,
+    # but the shape is what matters here).
+    row = {
+        "id": "allenai/Olmo-3-1125-32B",
+        "createdAt": None, "tags": [], "cardData": None, "safetensors": None,
+        "baseModels": {
+            "relation": "variant",
+            "models": [{"id": "allenai/Olmo-3-32B"}],
+        },
+        "downloadsAllTime": None, "likes": None,
+        "library_name": None, "pipeline_tag": None,
+    }
+    # NB: hub-stats `baseModels.relation == "variant"` arrives without an
+    # axis. The extracted edge has no axis, so inference will still see
+    # "no version-axis edge present" and add one. This documents that
+    # behavior — the safety belt is the alias-existence check, not the
+    # idempotency guard. For the realistic case (relation is a lineage
+    # type), see test_enrich_draft_adds_family_version_edge_above.
+    out = _hs.enrich_draft_from_row(row, aliases_to_canonical, {})
+    parents = json.loads(out["parents"])
+    version_edges = [
+        p for p in parents
+        if p.get("relationship") == "variant" and p.get("axis") == "version"
+    ]
+    assert len(version_edges) == 1
 
 
 # ---------- HubStatsClient cache ----------

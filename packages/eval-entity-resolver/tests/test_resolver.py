@@ -207,25 +207,48 @@ class TestFuzzyStrategy:
         assert result.canonical_id == "anthropic/claude-opus-4-5"
         assert result.strategy == "fuzzy"
 
-    def test_date_version_suffix_stripped(self):
-        """Date suffixes like -20251101 should be stripped (card_backend pattern)."""
+    def test_date_version_suffix_no_longer_strips_to_family(self):
+        """Trailing 8-digit YYYYMMDD must NOT silently collapse to the
+        family pointer — that loses per-snapshot release_date. The
+        resolver returns no_match so the caller's auto-create + hub-stats
+        path produces a properly-linked snapshot canonical with a
+        version-axis parent edge."""
         store = _store_with_aliases(
             ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")
         )
         resolver = Resolver(store)
         result = resolver.resolve("anthropic/claude-opus-4-5-20251101", "model")
-        assert result.canonical_id == "anthropic/claude-opus-4-5"
-        assert result.strategy == "fuzzy"
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
 
-    def test_date_plus_thinking_double_strip(self):
-        """Combined date + thinking suffix should resolve via double-strip."""
+    def test_date_version_resolves_when_snapshot_canonical_exists(self):
+        """When the snapshot canonical IS aliased in the registry,
+        normalized/exact match wins before fuzzy ever tries to strip —
+        the resolver returns the snapshot directly. This is the desired
+        behavior: snapshot canonicals carry their own release_date and
+        the family-version edge is on the canonical itself."""
+        store = _store_with_aliases(
+            ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed"),
+            ("anthropic/claude-opus-4-5-20251101", "model",
+             "anthropic/claude-opus-4-5-20251101", None, "confirmed"),
+        )
+        resolver = Resolver(store)
+        result = resolver.resolve("anthropic/claude-opus-4-5-20251101", "model")
+        assert result.canonical_id == "anthropic/claude-opus-4-5-20251101"
+
+    def test_date_plus_thinking_no_longer_strips_to_family(self):
+        """Compound date+mode (`-20251101-thinking-16k`) used to double-
+        strip down to the family. Now: thinking-budget peel runs first
+        (`...-thinking`); when no aliased mode-promoted snapshot
+        canonical exists, the strip ladder runs out without producing
+        the bare-family candidate. Auto-create owns the rest."""
         store = _store_with_aliases(
             ("anthropic/claude-opus-4-5", "model", "anthropic/claude-opus-4-5", None, "confirmed")
         )
         resolver = Resolver(store)
         result = resolver.resolve("anthropic/claude-opus-4-5-20251101-thinking-16k", "model")
-        assert result.canonical_id == "anthropic/claude-opus-4-5"
-        assert result.strategy == "fuzzy"
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
 
     def test_dot_version_normalizes_to_hyphen(self):
         """claude-opus-4.5 should normalize the same as claude-opus-4-5."""
@@ -258,17 +281,15 @@ class TestFuzzyStrategy:
         result = resolver.resolve("Qwen/Qwen2-VL-7B-Instruct", "model")
         assert result.canonical_id == "alibaba/qwen2-vl-7b-instruct"
 
-    def test_year_only_strips_for_openai_shaped_via_iso_date_peel(self):
-        """`openai/gpt-5-2024` peels the trailing year to `openai/gpt-5`
-        via the OpenAI ISO-date strip. Strict year-range guard
-        (2015–2035) + lookup verification means non-year 4-digit tails
-        (e.g. `-1024`) and non-aliased truncations are unaffected; see
-        the explicit regression tests below."""
+    def test_year_only_no_longer_strips_to_family(self):
+        """`openai/gpt-5-2024` used to peel the trailing year to
+        `openai/gpt-5`. Now: year-only is exclusively a bare-family
+        peel and the auto-create path owns it. Returns no_match."""
         store = _store_with_aliases(("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"))
         resolver = Resolver(store)
         result = resolver.resolve("openai/gpt-5-2024", "model")
-        assert result.canonical_id == "openai/gpt-5"
-        assert result.strategy == "fuzzy"
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
 
     def test_iso_date_strip_does_not_apply_to_non_openai(self):
         """The OpenAI date-peel is org-scoped: `meta/llama-3-2024` must NOT
@@ -290,15 +311,46 @@ class TestFuzzyStrategy:
         assert result.canonical_id is None
         assert result.strategy == "no_match"
 
-    def test_iso_date_strip_full_date_progressive_peel(self):
-        """`openai/gpt-5-2025-08-07` peels in three steps until it hits an
-        existing alias. Lookup-verified: when only the bare family is
-        aliased, that's what wins."""
+    def test_diverse_date_shapes_all_no_match_when_only_family_aliased(self):
+        """Regression coverage for the three real-world snapshot shapes
+        called out during planning. Each should fall through fuzzy
+        without collapsing to its family — the auto-create path then
+        owns producing a snapshot canonical with proper parents.
+
+          - google/gemini-exp-1114        — trailing MMDD (4-digit)
+          - stepfun/step-2-16k-202411     — trailing YYYYMM (6-digit)
+          - tencent/hunyuan-turbos-20250313 — trailing YYYYMMDD (8-digit)
+
+        The 4-digit and 6-digit cases never had a fuzzy strip in the
+        first place; they're tested here together with the 8-digit
+        case so the behavior is documented in one place."""
+        store = _store_with_aliases(
+            ("google/gemini-exp", "model", "google/gemini-exp", None, "confirmed"),
+            ("stepfun/step-2-16k", "model", "stepfun/step-2-16k", None, "confirmed"),
+            ("tencent/hunyuan-turbos", "model", "tencent/hunyuan-turbos", None, "confirmed"),
+        )
+        resolver = Resolver(store)
+        for raw in [
+            "google/gemini-exp-1114",
+            "stepfun/step-2-16k-202411",
+            "tencent/hunyuan-turbos-20250313",
+        ]:
+            result = resolver.resolve(raw, "model")
+            assert result.canonical_id is None, f"{raw!r} unexpectedly matched"
+            assert result.strategy == "no_match"
+
+    def test_iso_full_date_no_longer_collapses_to_family(self):
+        """`openai/gpt-5-2025-08-07` used to peel through `-2025-08`
+        and `-2025` and finally land on `openai/gpt-5` (family). Now:
+        the strip ladder still tries `-2025-08` and `-2025` as
+        intermediate snapshot candidates, but stops short of the bare
+        family. When NO intermediate snapshot canonical is aliased,
+        no_match is returned; auto-create produces the snapshot."""
         store = _store_with_aliases(("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"))
         resolver = Resolver(store)
         result = resolver.resolve("openai/gpt-5-2025-08-07", "model")
-        assert result.canonical_id == "openai/gpt-5"
-        assert result.strategy == "fuzzy"
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
 
     def test_iso_date_strip_prefers_truncated_month_canonical(self):
         """When the registry has both the truncated-month canonical and
@@ -313,19 +365,19 @@ class TestFuzzyStrategy:
         assert result.canonical_id == "openai/gpt-5-2025-08"
         assert result.strategy == "fuzzy"
 
-    def test_iso_date_strip_handles_unknown_host_prefix(self):
-        """`unknown/gpt-5-2025-08-07` (placeholder host prefix) — host
-        strip drops `unknown/`, then ISO-date peel reduces the
-        OpenAI-shaped body. Production registry registers both the
-        bare alias (`gpt-5 → openai/gpt-5`) and the prefixed canonical;
-        the test mirrors that so the host-stripped candidate finds a hit."""
+    def test_iso_date_with_unknown_host_prefix_no_longer_collapses(self):
+        """`unknown/gpt-5-2025-08-07` — host strip drops `unknown/` and
+        the OpenAI ISO-date peel runs. With the bare-family candidate
+        no longer emitted by the peel, no candidate hits when only the
+        family is aliased. Auto-create owns the snapshot."""
         store = _store_with_aliases(
             ("openai/gpt-5", "model", "openai/gpt-5", None, "confirmed"),
             ("gpt-5",        "model", "openai/gpt-5", None, "confirmed"),
         )
         resolver = Resolver(store)
         result = resolver.resolve("unknown/gpt-5-2025-08-07", "model")
-        assert result.canonical_id == "openai/gpt-5"
+        assert result.canonical_id is None
+        assert result.strategy == "no_match"
 
 
 class TestNoMatch:

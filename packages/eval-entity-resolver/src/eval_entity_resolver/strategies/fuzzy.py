@@ -108,9 +108,15 @@ _STRIP_SUFFIX_PATTERNS: list[re.Pattern[str]] = [
     # exist; only when they don't does this strip's drop-thinking behavior
     # take over.
     re.compile(r"-thinking-\d+k$", re.IGNORECASE),
-    # Date version suffix (YYYYMMDD): "-20251101", "-20240315"
-    # Only strip dates (8 consecutive digits) to avoid touching version numbers.
-    re.compile(r"-\d{8}$"),
+    # NB: trailing 8-digit date suffix (`-20251101`) is NOT stripped here.
+    # Stripping a packed YYYYMMDD ALWAYS produces the bare-family form,
+    # which silently aliases dated snapshots into their family pointer
+    # and loses the snapshot's `release_date`. The auto-create +
+    # hub-stats path produces a properly-linked snapshot canonical
+    # instead. See `infer_family_parent_edge` in
+    # services/hub_stats.py for the family-version edge inference.
+    # When a snapshot canonical is already aliased (exact / normalized
+    # match wins before fuzzy), the resolver returns it directly.
 ]
 
 # Strip just the `-Nk` budget tail, leaving `-thinking` intact. Used by
@@ -382,18 +388,28 @@ _ISO_DATE_YEAR_RE = re.compile(r"^(.+)-(\d{4})$")
 
 
 def _strip_openai_iso_date(value: str) -> list[str]:
-    """For OpenAI-shaped values ending in an ISO-format date, return a
-    list of progressively-truncated candidates (day → month → year → bare).
+    """For OpenAI-shaped values ending in an ISO-format date, return
+    progressively-truncated candidates that STILL retain at least one
+    date component. The bare-family candidate (everything stripped) is
+    intentionally omitted: collapsing a dated snapshot all the way to
+    its family pointer drops the per-snapshot identity and silently
+    loses the snapshot's `release_date`. The auto-create + hub-stats
+    path is the right home for that case — it creates a snapshot
+    canonical with a `variant axis=version` parent edge to the family.
 
-    Each candidate gets looked up by the caller; the first hit wins.
-    Lookup is verifying — if no truncated form is aliased in the registry,
-    nothing changes (no false matches manufactured by the strip itself).
+    When an INTERMEDIATE snapshot canonical is aliased in the registry
+    (e.g. `openai/gpt-5-2025-08`), this function still returns it as a
+    candidate so a more-specific raw value (`openai/gpt-5-2025-08-07`)
+    can resolve to the existing snapshot rather than auto-creating a
+    duplicate.
 
-    Examples:
-        openai/gpt-5-2025-08-07 → [openai/gpt-5-2025-08, openai/gpt-5-2025, openai/gpt-5]
-        openai/o3-mini-2025-01-31 → [openai/o3-mini-2025-01, openai/o3-mini-2025, openai/o3-mini]
-        openai/gpt-4o-mini-2024 → [openai/gpt-4o-mini]
-        meta/llama-3-2024-04-18 → []   (not OpenAI-shaped)
+    Examples (registry contents shape what hits — this just emits the
+    candidates that are tried in order):
+        openai/gpt-5-2025-08-07 → [openai/gpt-5-2025-08, openai/gpt-5-2025]
+        openai/o3-mini-2025-01-31 → [openai/o3-mini-2025-01, openai/o3-mini-2025]
+        openai/gpt-4o-mini-2024 → []       (year-only has no intermediate;
+                                            handled via auto-create path)
+        meta/llama-3-2024-04-18 → []       (not OpenAI-shaped)
     """
     if not _is_openai_shaped(value):
         return []
@@ -415,7 +431,6 @@ def _strip_openai_iso_date(value: str) -> list[str]:
         if _is_release_year(y) and 1 <= int(mo) <= 12 and 1 <= int(d) <= 31:
             candidates.append(f"{prefix}-{y}-{mo}")
             candidates.append(f"{prefix}-{y}")
-            candidates.append(prefix)
             return candidates
 
     m = _ISO_DATE_MONTH_RE.match(value)
@@ -423,15 +438,11 @@ def _strip_openai_iso_date(value: str) -> list[str]:
         prefix, y, mo = m.groups()
         if _is_release_year(y) and 1 <= int(mo) <= 12:
             candidates.append(f"{prefix}-{y}")
-            candidates.append(prefix)
             return candidates
 
-    m = _ISO_DATE_YEAR_RE.match(value)
-    if m:
-        prefix, y = m.groups()
-        if _is_release_year(y):
-            candidates.append(prefix)
-
+    # Year-only case (`-YYYY`) intentionally produces no candidates: the
+    # only possible peel is to bare family, which the auto-create path
+    # owns. Returning empty falls through to no_match cleanly.
     return candidates
 
 

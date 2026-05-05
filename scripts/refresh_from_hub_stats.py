@@ -219,7 +219,16 @@ def build_entry(
 
     aliases = sorted({hf_id, _slugify(hf_id)})
 
-    enrichment = enrich_draft_from_row(row, aliases_to_canonical, org_alias_map)
+    # Pass the resolved registry canonical so the family-version
+    # inference inside enrich_draft_from_row can suppress a self-edge
+    # when the HF id is aliased directly to its family pointer (rather
+    # than a separate snapshot canonical). Without target_canonical,
+    # `Olmo-3-1125-32B` aliased to `allenai/olmo-3-32b` would gain a
+    # parent edge to itself and corrupt the lineage walker.
+    enrichment = enrich_draft_from_row(
+        row, aliases_to_canonical, org_alias_map,
+        target_canonical=canonical_id,
+    )
 
     # Decode tags from JSON-encoded string (helper output) back to a YAML
     # list. Loader accepts either form; list-form keeps generated YAML
