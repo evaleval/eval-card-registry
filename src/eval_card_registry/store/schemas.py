@@ -61,6 +61,15 @@ _SCHEMAS: dict[str, dict] = {
         # snapshot. Populated automatically by scripts/refresh_from_modelsdev.py
         # from models.dev. Per-snapshot dates remain in metadata.release_dates.
         "release_date": pd.StringDtype(),
+        # JSON-encoded list of input modality strings (e.g. ["text", "image"]).
+        # NULL when unknown. Populated by scripts/refresh_from_modelsdev.py
+        # from models.dev's `modalities.input` field. Hand-curated core.yaml
+        # entries may set explicitly. Frontend's models_view + the
+        # eval_results_view.model_info.modalities STRUCT both consume this.
+        "input_modalities": pd.StringDtype(),
+        # JSON-encoded list of output modality strings (e.g. ["text"]).
+        # Same population path as input_modalities.
+        "output_modalities": pd.StringDtype(),
         "tags": pd.StringDtype(),     # JSON-encoded list
         "metadata": pd.StringDtype(), # JSON-encoded dict
         "review_status": pd.StringDtype(),

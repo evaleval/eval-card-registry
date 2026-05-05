@@ -294,6 +294,23 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
     release_date = release_dates[0] if release_dates else None
     snapshot_ids = sorted({_slugify(m["id"]) for m in models if m.get("id")})
 
+    # Aggregate modalities across all snapshots in the family (union).
+    # Per-snapshot modalities still flow through to leaf children below;
+    # the family root surfaces the superset so any snapshot's modality is
+    # represented at the parent identity.
+    family_input_modalities: set[str] = set()
+    family_output_modalities: set[str] = set()
+    for m in models:
+        mods = m.get("modalities") or {}
+        for v in (mods.get("input") or []):
+            if isinstance(v, str) and v.strip():
+                family_input_modalities.add(v.strip())
+        for v in (mods.get("output") or []):
+            if isinstance(v, str) and v.strip():
+                family_output_modalities.add(v.strip())
+    family_input_modalities_list = sorted(family_input_modalities) or None
+    family_output_modalities_list = sorted(family_output_modalities) or None
+
     metadata: dict = {"snapshots": snapshot_ids}
     if release_dates:
         metadata["release_dates"] = release_dates
@@ -316,6 +333,8 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
         "parents": [],
         "open_weights": open_weights,
         "release_date": release_date,
+        "input_modalities": family_input_modalities_list,
+        "output_modalities": family_output_modalities_list,
         "tags": ["open-weight"] if open_weights else [],
         "aliases": root_aliases,
         "metadata": json.dumps(metadata, sort_keys=True),
@@ -371,11 +390,19 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
             child_aliases: list[str] = []
             child_release: str | None = None
             child_open_weights = open_weights
+            child_input_modalities: list[str] | None = None
+            child_output_modalities: list[str] | None = None
             if is_leaf:
                 child_aliases = sorted({snap_dashed, f"{org_id}/{snap_dashed}"})
                 if m.get("release_date"):
                     child_release = m["release_date"]
                 child_open_weights = bool(m.get("open_weights")) or open_weights
+                # Per-snapshot modalities — narrower than the family aggregate.
+                mods = m.get("modalities") or {}
+                _ci = sorted({v.strip() for v in (mods.get("input") or []) if isinstance(v, str) and v.strip()})
+                _co = sorted({v.strip() for v in (mods.get("output") or []) if isinstance(v, str) and v.strip()})
+                child_input_modalities = _ci or None
+                child_output_modalities = _co or None
 
             entry = {
                 "id": new_id,
@@ -387,6 +414,8 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
                 "parents": [parent_edge],
                 "open_weights": child_open_weights,
                 "release_date": child_release,
+                "input_modalities": child_input_modalities,
+                "output_modalities": child_output_modalities,
                 "tags": ["open-weight"] if child_open_weights else [],
                 "aliases": child_aliases,
                 "metadata": "{}",

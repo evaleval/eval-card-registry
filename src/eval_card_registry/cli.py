@@ -568,6 +568,7 @@ def seed(
             # list-valued on canonical_composites.
             for col in (
                 "tags", "metadata", "parents",
+                "input_modalities", "output_modalities",
                 "benchmark_ids", "folder_aliases", "composite_keys",
                 "source_configs",
             ):
