@@ -178,11 +178,19 @@ def extract_base_models(base_models) -> list[dict]:
 # ---------------------------------------------------------------------------
 
 class HubStatsClient:
-    """Single-id lookup against the hub-stats parquet via DuckDB. Lazy-
-    initializes the connection + httpfs extension on first use; reuses
-    it across lookups so DuckDB doesn't re-fetch parquet metadata each
-    call. Caches results in-process so duplicate lookups in a single
-    sync are free.
+    """Single-id lookup against the hub-stats parquet via DuckDB.
+
+    Materializes the remote parquet into a local DuckDB table on first
+    use, then serves all subsequent lookups against the local copy.
+    Trade-off: one bulk fetch (large but a single HTTP transaction)
+    instead of N per-id range-fetch queries (small but rate-limit-prone
+    when N is in the thousands — `huggingface.co` 429s aggressively on
+    the parquet API even with auth, and DuckDB's range-fetch pattern
+    counts as multiple HTTP HEAD/GET requests per logical query).
+
+    On bulk-fetch failure, falls back to per-id remote queries (older
+    behaviour) so the client degrades gracefully rather than going
+    silent. Per-id fallback retains the same in-process cache.
 
     Failure mode: any DuckDB error (network down, parquet schema drift,
     etc.) returns None from `lookup()` and is logged. Callers must
@@ -191,6 +199,8 @@ class HubStatsClient:
     def __init__(self, parquet_url: str = PARQUET_URL) -> None:
         self.parquet_url = parquet_url
         self._con = None
+        self._local_table_ready: bool = False
+        self._local_table_failed: bool = False
         self._cache: dict[str, Optional[dict]] = {}
         self._lock = threading.Lock()
 
@@ -218,6 +228,51 @@ class HubStatsClient:
         self._con = con
         return con
 
+    def _ensure_local_table(self, con) -> bool:
+        """Materialize the remote parquet into a local DuckDB table. Returns
+        True when the table is queryable, False when the bulk fetch failed
+        (caller should fall through to per-id remote query). Idempotent.
+
+        Caller must pass an already-prepared connection so this method
+        doesn't double-count `_ensure_con` invocations under tests that
+        patch the latter as a call counter."""
+        if self._local_table_ready:
+            return True
+        if self._local_table_failed:
+            return False
+        try:
+            import logging
+            log = logging.getLogger(__name__)
+            log.info(
+                "hub-stats: bulk-loading remote parquet into local table "
+                "(one-time cost; avoids per-id rate limits)..."
+            )
+            # `id` is included implicitly via QUERY_COLUMNS. Materializing
+            # only the columns we need keeps the local table small enough
+            # to live in memory comfortably.
+            con.execute(
+                f"CREATE TABLE hub_stats AS "
+                f"SELECT {QUERY_COLUMNS} FROM read_parquet('{self.parquet_url}')"
+            )
+            # Indexed lookup — DuckDB handles a single-column equality
+            # filter on a string column efficiently without an explicit
+            # index, but adding one explicitly costs ~ms and makes the
+            # plan unambiguous to anyone reading EXPLAIN later.
+            con.execute("CREATE INDEX hub_stats_id_idx ON hub_stats(id)")
+            row_count = con.execute("SELECT COUNT(*) FROM hub_stats").fetchone()[0]
+            log.info("hub-stats: local table loaded (%d rows)", row_count)
+            self._local_table_ready = True
+            return True
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning(
+                "hub-stats: bulk load failed (%s: %s); falling back to "
+                "per-id remote queries (rate-limit-prone)",
+                type(exc).__name__, exc,
+            )
+            self._local_table_failed = True
+            return False
+
     def close(self) -> None:
         if self._con is not None:
             try:
@@ -225,22 +280,30 @@ class HubStatsClient:
             except Exception:
                 pass
             self._con = None
+            self._local_table_ready = False
+            self._local_table_failed = False
 
     def lookup(self, hf_id: str) -> Optional[dict]:
         """Query hub-stats for one HF id. Returns the row as a dict, or
-        None if not found / on any error. Threadsafe + cached."""
+        None if not found / on any error. Threadsafe + cached.
+
+        Prefers the locally-materialized table (one bulk fetch upfront);
+        falls back to a per-id remote query if the bulk fetch failed."""
         with self._lock:
             if hf_id in self._cache:
                 return self._cache[hf_id]
         try:
             con = self._ensure_con()
-            # Escape single quotes by doubling
+            use_local = self._ensure_local_table(con)
             escaped = hf_id.replace("'", "''")
-            sql = (
-                f"SELECT {QUERY_COLUMNS} "
-                f"FROM read_parquet('{self.parquet_url}') "
-                f"WHERE id = '{escaped}' LIMIT 1"
-            )
+            if use_local:
+                sql = f"SELECT * FROM hub_stats WHERE id = '{escaped}' LIMIT 1"
+            else:
+                sql = (
+                    f"SELECT {QUERY_COLUMNS} "
+                    f"FROM read_parquet('{self.parquet_url}') "
+                    f"WHERE id = '{escaped}' LIMIT 1"
+                )
             cursor = con.execute(sql)
             cols = [d[0] for d in cursor.description]
             row = cursor.fetchone()

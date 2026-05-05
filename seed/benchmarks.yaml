@@ -48,6 +48,8 @@
     - MMLU-PRO
     - mmlu_pro
     - artificial_analysis.mmlu_pro
+    - mmlu_pro_leaderboard_submissions_tiger_lab
+    - mmlu-pro-leaderboard-submissions-tiger-lab
     - "Mmlu pro biology"
     - "Mmlu pro business"
     - "Mmlu pro chemistry"
@@ -426,7 +428,7 @@
 
 - id: la-leaderboard
   display_name: LA Leaderboard
-  aliases: ["la_leaderboard"]
+  aliases: ["la_leaderboard", "la_leaderboard_composite_dataset", "la-leaderboard-composite-dataset"]
   description: LLM evaluation for Spanish varieties and languages of Spain and Latin America.
   dataset_repo: null
   parent_benchmark_id: null
@@ -906,7 +908,7 @@
 
 - id: air-bench-2024
   display_name: AIR-Bench 2024
-  aliases: ["air-bench", "air-bench-2024", "AIR-Bench", "AIR-Bench 2024", "helm_air_bench", "helm-air-bench"]
+  aliases: ["air-bench", "air-bench-2024", "AIR-Bench", "AIR-Bench 2024", "AIRBench 2024", "AIRBench-2024", "airbench-2024", "helm_air_bench", "helm-air-bench"]
   description: AIR-Bench 2024 — AI Risk Benchmark by Stanford CRFM (Zeng et al. 2024, arXiv2407.17436). Safety benchmark aligned with government regulations and company policies; 5694 prompts across a 4-tier taxonomy with 314 risk categories spanning System & Operational, Content Safety, Societal, and Legal & Rights risk domains. Hosted on HELM as helm_air_bench.
   dataset_repo: stanford-crfm/air-bench-2024
   parent_benchmark_id: null
@@ -1296,7 +1298,7 @@
 # --- Leaderboards / aggregators (umbrella entities; their constituent benchmarks resolve to atomic canonicals) ---
 
 - id: hf-open-llm-v2
-  display_name: HF Open LLM Leaderboard v2
+  display_name: HF Open LLM v2
   aliases: ["hfopenllm_v2", "hf-open-llm-v2", "HF Open LLM v2", "HF Open LLM Leaderboard v2", "hf_open_llm_v2"]
   description: Hugging Face Open LLM Leaderboard v2 — aggregated leaderboard reporting model performance on IFEval, BBH, MATH Level 5, GPQA, MUSR, and MMLU-PRO using lm-evaluation-harness. Constituent benchmarks resolve to their own atomic canonicals.
   dataset_repo: null
@@ -1327,7 +1329,7 @@
 
 - id: artificial-analysis-llms
   display_name: Artificial Analysis LLMs
-  aliases: ["artificial-analysis-llms", "artificial_analysis_llms", "Artificial Analysis", "Artificial Analysis LLMs"]
+  aliases: ["artificial-analysis-llms", "artificial_analysis_llms", "Artificial Analysis", "Artificial Analysis LLMs", "artificial_analysis_llm_api", "artificial-analysis-llm-api", "Artificial Analysis LLM API"]
   description: Artificial Analysis — third-party LLM leaderboard at artificialanalysis.ai.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1369,7 +1371,7 @@
 
 - id: cocoabench
   display_name: CocoaBench
-  aliases: ["cocoabench", "CocoaBench"]
+  aliases: ["cocoabench", "CocoaBench", "cocoabench_v1_0", "cocoabench-v1.0", "COCOABENCH"]
   description: CocoaBench benchmark.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1378,7 +1380,7 @@
   review_status: reviewed
 
 - id: multi-swe-bench-leaderboard
-  display_name: Multi-SWE-Bench Leaderboard
+  display_name: Multi-SWE-Bench
   aliases: ["multi-swe-bench-leaderboard", "multi_swe_bench_leaderboard", "Multi-SWE-Bench Leaderboard", "multi-swe-bench"]
   description: Multi-SWE-Bench — multi-language software engineering benchmark extending SWE-bench.
   dataset_repo: null
@@ -1505,6 +1507,8 @@
     - vals_ai_math500_overall
     - llm_stats_math_500
     - "artificial_analysis.math_500"
+    - math_500_overall
+    - math-500-overall
   description: MATH-500 — 500-problem subset of Hendrycks MATH released by OpenAI for evaluating math reasoning. Distinct slug from the full MATH set; some leaderboards report this subset specifically.
   dataset_repo: null
   parent_benchmark_id: math
@@ -1791,11 +1795,146 @@
 
 - id: livebench
   display_name: LiveBench
-  aliases: ["LiveBench", "livebench"]
-  description: LiveBench — continuously refreshed benchmark to avoid contamination, covering math/coding/data-analysis/reasoning/etc.
+  aliases: ["LiveBench", "livebench", "livebench/overall", "live_bench", "live-bench"]
+  description: LiveBench — continuously refreshed benchmark to avoid contamination, covering math/coding/data-analysis/reasoning/language/instruction-following.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["frontier", "multi-task"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# LiveBench per-category bucket benchmarks (siblings in the `livebench`
+# family). Aliased to the bucket-level overall path; further subsets are
+# slices below.
+- id: livebench-coding
+  display_name: LiveBench Coding
+  aliases: ["livebench/coding", "LiveBench Coding"]
+  description: LiveBench Coding bucket — coding sub-category of the LiveBench suite.
+  dataset_repo: livebench/coding
+  parent_benchmark_id: null
+  tags: '["code"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-language
+  display_name: LiveBench Language
+  aliases: ["livebench/language", "LiveBench Language"]
+  description: LiveBench Language bucket — language sub-category of the LiveBench suite.
+  dataset_repo: livebench/language
+  parent_benchmark_id: null
+  tags: '["language"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-instruction-following
+  display_name: LiveBench Instruction Following
+  aliases: ["livebench/instruction_following", "livebench/instruction-following", "LiveBench Instruction Following"]
+  description: LiveBench Instruction Following bucket — instruction-following sub-category of the LiveBench suite.
+  dataset_repo: livebench/instruction_following
+  parent_benchmark_id: null
+  tags: '["instruction-following"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-math
+  display_name: LiveBench Math
+  aliases: ["livebench/math", "LiveBench Math"]
+  description: LiveBench Math bucket — math sub-category of the LiveBench suite.
+  dataset_repo: livebench/math
+  parent_benchmark_id: null
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-reasoning
+  display_name: LiveBench Reasoning
+  aliases: ["livebench/reasoning", "LiveBench Reasoning"]
+  description: LiveBench Reasoning bucket — reasoning sub-category of the LiveBench suite.
+  dataset_repo: livebench/reasoning
+  parent_benchmark_id: null
+  tags: '["reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-data-analysis
+  display_name: LiveBench Data Analysis
+  aliases: ["livebench/data_analysis", "livebench/data-analysis", "LiveBench Data Analysis"]
+  description: LiveBench Data Analysis bucket — data-analysis sub-category of the LiveBench suite.
+  dataset_repo: livebench/data_analysis
+  parent_benchmark_id: null
+  tags: '["data-analysis"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# LiveBench slices — per-bucket subsets, surfaced as slices via
+# parent_benchmark_id pointing to their bucket.
+- id: livebench-coding-lcb-generation
+  display_name: LiveBench Coding — LCB Generation
+  aliases: ["livebench/coding/LCB_generation", "livebench/coding/lcb_generation"]
+  description: LiveBench Coding subset — LCB generation problems.
+  dataset_repo: livebench/coding
+  parent_benchmark_id: livebench-coding
+  tags: '["code"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-coding-coding-completion
+  display_name: LiveBench Coding — Coding Completion
+  aliases: ["livebench/coding/coding_completion", "livebench/coding/coding-completion"]
+  description: LiveBench Coding subset — coding completion problems.
+  dataset_repo: livebench/coding
+  parent_benchmark_id: livebench-coding
+  tags: '["code"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-language-plot-unscrambling
+  display_name: LiveBench Language — Plot Unscrambling
+  aliases: ["livebench/language/plot_unscrambling", "livebench/language/plot-unscrambling"]
+  description: LiveBench Language subset — plot unscrambling.
+  dataset_repo: livebench/language
+  parent_benchmark_id: livebench-language
+  tags: '["language"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-language-typos
+  display_name: LiveBench Language — Typos
+  aliases: ["livebench/language/typos"]
+  description: LiveBench Language subset — typo-correction.
+  dataset_repo: livebench/language
+  parent_benchmark_id: livebench-language
+  tags: '["language"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-language-connections
+  display_name: LiveBench Language — Connections
+  aliases: ["livebench/language/connections"]
+  description: LiveBench Language subset — connections puzzles.
+  dataset_repo: livebench/language
+  parent_benchmark_id: livebench-language
+  tags: '["language"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-instruction-following-paraphrase
+  display_name: LiveBench Instruction Following — Paraphrase
+  aliases: ["livebench/instruction_following/paraphrase", "livebench/instruction-following/paraphrase"]
+  description: LiveBench Instruction Following subset — paraphrase task.
+  dataset_repo: livebench/instruction_following
+  parent_benchmark_id: livebench-instruction-following
+  tags: '["instruction-following"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench-instruction-following-story-generation
+  display_name: LiveBench Instruction Following — Story Generation
+  aliases: ["livebench/instruction_following/story_generation", "livebench/instruction-following/story-generation"]
+  description: LiveBench Instruction Following subset — story generation task.
+  dataset_repo: livebench/instruction_following
+  parent_benchmark_id: livebench-instruction-following
+  tags: '["instruction-following"]'
   metadata: '{}'
   review_status: reviewed
 
@@ -2822,7 +2961,7 @@
     - alm_bench
 
 - id: alpacaeval-2-0
-  display_name: Alpacaeval 2 0
+  display_name: AlpacaEval 2.0
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["general"]'
@@ -2833,6 +2972,10 @@
     - alpacaeval-2-0
     - alpacaeval_2_0
     - llm_stats_alpacaeval_2_0
+    - llm-stats-alpacaeval-2
+    - llm stats alpacaeval-2
+    - alpacaeval-2
+    - alpacaeval 2
 
 - id: alvorada-bench
   display_name: Alvorada-Bench
@@ -8281,6 +8424,9 @@
     - finance-agent
     - finance_agent
     - llm_stats_finance_agent
+    - finance_agent_v1_1
+    - finance-agent-v1.1
+    - Finance Agent Benchmark
   scoped_aliases:
     vals-ai:
       - "Finance agent adjustments"
@@ -20586,6 +20732,11 @@
     - terminal bench
     - terminal-bench
     - terminal_bench
+    - vals_index_terminal_bench_2_0
+    - vals-index-terminal-bench-2.0
+    - terminal-bench-2.0
+    - terminal_bench_2_0
+    - "Terminal-Bench 2.0"
   scoped_aliases:
     vals-ai:
       - "Terminal Bench easy"
@@ -23568,6 +23719,10 @@
     - case_law_v2
     - vals_ai_case_law_v2
     - vals_ai_case_law_v2_overall
+    - caselaw_v2_overall
+    - caselaw-v2-overall
+    - caselaw_v2
+    - caselaw-v2
 
 - id: corp-fin-v2
   display_name: Corp Fin v2
@@ -23590,6 +23745,15 @@
     - vals_ai_corp_fin_v2_max_fitting_context
     - vals_ai_corp_fin_v2_overall
     - vals_ai_corp_fin_v2_shared_max_context
+    - corpfin_overall
+    - corpfin_exact_pages
+    - corpfin_max_fitting_context
+    - corpfin_shared_max_context
+    - corpfin-overall
+    - corpfin-exact-pages
+    - corpfin-max-fitting-context
+    - corpfin-shared-max-context
+    - corpfin
 
 - id: gpqa-diamond
   display_name: GPQA Diamond
@@ -23646,6 +23810,14 @@
     - vals_ai_lcb_hard
     - vals_ai_lcb_medium
     - vals_ai_lcb_overall
+    - easy_problems
+    - medium_problems
+    - hard_problems
+    - easy-problems
+    - medium-problems
+    - hard-problems
+
+- id: medcode
   display_name: MedCode
   description: MedCode — medical coding benchmark.
   dataset_repo: null
@@ -23658,6 +23830,7 @@
     - medcode
     - vals_ai_medcode
     - vals_ai_medcode_overall
+
 - id: medscribe
   display_name: MedScribe
   description: MedScribe — medical transcription benchmark.
@@ -23671,6 +23844,8 @@
     - Medscribe overall
     - vals_ai_medscribe
     - vals_ai_medscribe_overall
+
+- id: mortgage-tax
   display_name: Mortgage Tax
   description: Mortgage tax extraction benchmark.
   dataset_repo: null
@@ -23748,6 +23923,14 @@
     - vals_ai_tax_eval_v2_correctness
     - vals_ai_tax_eval_v2_overall
     - vals_ai_tax_eval_v2_stepwise_reasoning
+    - taxeval_v2_overall
+    - taxeval_v2_correctness
+    - taxeval_v2_stepwise_reasoning
+    - taxeval-v2-overall
+    - taxeval-v2-correctness
+    - taxeval-v2-stepwise-reasoning
+    - taxeval_v2
+    - taxeval-v2
 - id: vals-index
   display_name: Vals Index
   description: Vals.ai composite leaderboard index.
@@ -23819,6 +24002,11 @@
     - vals_ai_vibe_code_overall
     - vibe-code
     - vibe_code
+    - vibe_code_bench_overall
+    - vibe-code-bench-overall
+    - vibe_code_bench
+    - vibe-code-bench
+    - "Vibe Code Bench"
 
 - id: gpqa-overall
   display_name: Gpqa overall
@@ -24140,7 +24328,7 @@
 - id: gaia-level-2
   display_name: GAIA Level 2
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: gaia
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
@@ -24154,7 +24342,7 @@
   display_name: GAIA Level 1
   description: GAIA Level 1 — easiest agent task tier.
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: gaia
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
@@ -24167,7 +24355,7 @@
 - id: gaia-level-3
   display_name: GAIA Level 3
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: gaia
   tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed

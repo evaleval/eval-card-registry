@@ -14,6 +14,7 @@ def _fresh_store() -> RegistryStore:
     store = RegistryStore()
     store._tables = {name: s.empty(name) for name in [
         "canonical_models", "canonical_benchmarks", "canonical_metrics",
+        "canonical_orgs", "canonical_families", "canonical_composites",
         "eval_harnesses", "aliases", "resolution_log", "eval_results", "sync_runs",
     ]}
     store._loaded = True

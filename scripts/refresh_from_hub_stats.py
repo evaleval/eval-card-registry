@@ -369,6 +369,37 @@ def main() -> int:
         if e is not None:
             entries.append(e)
     entries.sort(key=lambda e: e["id"])
+
+    # Dedupe by canonical id: when multiple HF ids collapse to the same
+    # canonical via aliases_to_canonical (e.g. -v0.1/-v0.2/-v0.3 all
+    # mapping to mistralai/mistral-7b-instruct because the resolver's
+    # fuzzy strip removes the version suffix), pick the entry with the
+    # latest release_date as the winner and UNION the alias lists across
+    # all dupes so every HF id stays addressable.
+    by_id: dict[str, dict] = {}
+    collisions = 0
+    for e in entries:
+        eid = e["id"]
+        prev = by_id.get(eid)
+        if prev is None:
+            by_id[eid] = e
+            continue
+        collisions += 1
+        # Pick winner by max release_date (None sorts before any date).
+        prev_date = prev.get("release_date") or ""
+        new_date = e.get("release_date") or ""
+        winner = e if new_date > prev_date else prev
+        loser = prev if winner is e else e
+        merged_aliases = sorted(set(winner.get("aliases", [])) | set(loser.get("aliases", [])))
+        winner["aliases"] = merged_aliases
+        by_id[eid] = winner
+    if collisions:
+        print(
+            f"[refresh] deduped {collisions} collision(s) by canonical id "
+            f"(latest release_date wins; aliases unioned)",
+            file=sys.stderr,
+        )
+    entries = sorted(by_id.values(), key=lambda e: e["id"])
     print(f"[refresh] enrichment entries: {len(entries)}", file=sys.stderr)
 
     if args.dry_run:

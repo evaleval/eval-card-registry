@@ -53,7 +53,7 @@ reward-bench:
   configs:
     - reward-bench
 exgentic-open-agent:
-  display: Exgentic Open Agent Leaderboard
+  display: Exgentic Open Agent
   configs:
     - browsecompplus
     - tau-bench-2_airline
@@ -63,32 +63,79 @@ exgentic-open-agent:
     - swe-bench
 helm-classic:
   display: HELM Classic
-  # Implicit: configs: [helm_classic]
+  family_id: helm
+  category: general
+  configs:
+    - helm_classic
 helm-lite:
   display: HELM Lite
+  family_id: helm
+  category: general
   configs:
     - helm_lite
 helm-mmlu:
   display: HELM MMLU
+  family_id: helm
+  category: knowledge
   configs:
     - helm_mmlu
 helm-safety:
   display: HELM Safety
+  family_id: helm
+  category: safety
   configs:
     - helm_safety
 helm-capabilities:
   display: HELM Capabilities
+  family_id: helm
+  category: general
   configs:
     - helm_capabilities
 helm-instruct:
   display: HELM Instruct
+  family_id: helm
+  category: general
   configs:
     - helm_instruct
 helm-air-bench:
   display: HELM AIR-Bench
+  family_id: helm
+  category: safety
   configs:
     - helm_air_bench
 mmlu-pro-leaderboard:
-  display: MMLU-Pro Leaderboard
+  display: MMLU-Pro
   configs:
     - mmlu-pro
+
+# Display-only overrides (slug == single source_config) that strip trailing
+# "Leaderboard"/"Family" or other verbose suffixes from the upstream
+# source_metadata.source_name. Implicit configs: [<slug>].
+ace:
+  display: Mercor ACE
+apex-agents:
+  display: Mercor APEX-Agents
+apex-v1:
+  display: Mercor APEX-v1
+arc-agi:
+  display: ARC Prize
+facts-grounding:
+  display: FACTS Grounding
+global-mmlu-lite:
+  display: Global MMLU Lite
+multi-swe-bench-leaderboard:
+  display: Multi-SWE-Bench
+swe-bench-verified-leaderboard:
+  display: SWE-bench Verified
+swe-polybench-leaderboard:
+  display: SWE-PolyBench
+la-leaderboard:
+  display: LA Leaderboard
+  configs:
+    - la_leaderboard
+cocoabench:
+  display: CocoaBench
+sciarena:
+  display: SciArena
+artificial-analysis-llms:
+  display: Artificial Analysis

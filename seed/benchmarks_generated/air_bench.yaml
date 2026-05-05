@@ -1,0 +1,4244 @@
+# Auto-generated from scripts/data/air_bench_2024_raw_strings.txt
+# Regenerate with: uv run python scripts/refresh_air_bench_taxonomy.py
+# Do NOT hand-edit; edit the raw strings file or extend the script.
+- id: air-bench-2024-1-1-network-intrusion
+  display_name: Network intrusion
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #1.1: Network intrusion'
+  - 'airbench 2024 - #1.1: network intrusion'
+  - airbench-2024-1-1-network-intrusion
+- id: air-bench-2024-1-2-vulnerability-probing
+  display_name: Vulnerability probing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #1.2: Vulnerability probing'
+  - 'airbench 2024 - #1.2: vulnerability probing'
+  - airbench-2024-1-2-vulnerability-probing
+- id: air-bench-2024-1-3-spoofing
+  display_name: Spoofing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #1.3: Spoofing'
+  - 'airbench 2024 - #1.3: spoofing'
+  - airbench-2024-1-3-spoofing
+- id: air-bench-2024-1-4-spear-phishing
+  display_name: Spear phishing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #1.4: Spear phishing'
+  - 'airbench 2024 - #1.4: spear phishing'
+  - airbench-2024-1-4-spear-phishing
+- id: air-bench-2024-1-5-social-engineering
+  display_name: Social engineering
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #1.5: Social engineering'
+  - 'airbench 2024 - #1.5: social engineering'
+  - airbench-2024-1-5-social-engineering
+- id: air-bench-2024-1-6-unauthorized-network-entry
+  display_name: Unauthorized network entry
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #1.6: Unauthorized network entry'
+  - 'airbench 2024 - #1.6: unauthorized network entry'
+  - airbench-2024-1-6-unauthorized-network-entry
+- id: air-bench-2024-10-12-bodily-destruction
+  display_name: Bodily destruction
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #10.12: Bodily destruction'
+  - 'airbench 2024 - #10.12: bodily destruction'
+  - airbench-2024-10-12-bodily-destruction
+- id: air-bench-2024-10-13-bodily-mutilation
+  display_name: Bodily mutilation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #10.13: Bodily mutilation'
+  - 'airbench 2024 - #10.13: bodily mutilation'
+  - airbench-2024-10-13-bodily-mutilation
+- id: air-bench-2024-10-14-torture-abuse
+  display_name: Torture/abuse
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #10.14: Torture/abuse'
+  - 'airbench 2024 - #10.14: torture/abuse'
+  - airbench-2024-10-14-torture-abuse
+- id: air-bench-2024-10-15-animal-abuse
+  display_name: Animal abuse
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #10.15: Animal abuse'
+  - 'airbench 2024 - #10.15: animal abuse'
+  - airbench-2024-10-15-animal-abuse
+- id: air-bench-2024-10-16-activities-meant-to-kill
+  display_name: Activities meant to kill
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #10.16: Activities meant to kill'
+  - 'airbench 2024 - #10.16: activities meant to kill'
+  - airbench-2024-10-16-activities-meant-to-kill
+- id: air-bench-2024-10-depicting-violence
+  display_name: Depicting Violence
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #10: Depicting Violence'
+  - 'airbench 2024 - #10: depicting violence'
+  - airbench-2024-10-depicting-violence
+- id: air-bench-2024-11-17-guns
+  display_name: Guns
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #11.17: Guns'
+  - 'airbench 2024 - #11.17: guns'
+  - airbench-2024-11-17-guns
+- id: air-bench-2024-11-18-explosives-dangerous-materials
+  display_name: Explosives/Dangerous Materials
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #11.18: Explosives/Dangerous Materials'
+  - 'airbench 2024 - #11.18: explosives/dangerous materials'
+  - airbench-2024-11-18-explosives-dangerous-materials
+- id: air-bench-2024-11-19-bioweapons-viruses-gain-of-function
+  display_name: Bioweapons/Viruses/Gain-of-function
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #11.19: Bioweapons/Viruses/Gain-of-function'
+  - 'airbench 2024 - #11.19: bioweapons/viruses/gain-of-function'
+  - airbench-2024-11-19-bioweapons-viruses-gain-of-function
+- id: air-bench-2024-11-20-nuclear-weapons
+  display_name: Nuclear Weapons
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #11.20: Nuclear Weapons'
+  - 'airbench 2024 - #11.20: nuclear weapons'
+  - airbench-2024-11-20-nuclear-weapons
+- id: air-bench-2024-11-21-chemical-weapons
+  display_name: Chemical Weapons
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #11.21: Chemical Weapons'
+  - 'airbench 2024 - #11.21: chemical weapons'
+  - airbench-2024-11-21-chemical-weapons
+- id: air-bench-2024-11-22-radiological-weapons
+  display_name: Radiological Weapons
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #11.22: Radiological Weapons'
+  - 'airbench 2024 - #11.22: radiological weapons'
+  - airbench-2024-11-22-radiological-weapons
+- id: air-bench-2024-11-weapon-usage-development
+  display_name: Weapon Usage & Development
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #11: Weapon Usage & Development'
+  - 'airbench 2024 - #11: weapon usage & development'
+  - airbench-2024-11-weapon-usage-development
+- id: air-bench-2024-12-23-military
+  display_name: Military
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #12.23: Military'
+  - 'airbench 2024 - #12.23: military'
+  - airbench-2024-12-23-military
+- id: air-bench-2024-12-24-warfare
+  display_name: Warfare
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #12.24: Warfare'
+  - 'airbench 2024 - #12.24: warfare'
+  - airbench-2024-12-24-warfare
+- id: air-bench-2024-12-military-and-warfare
+  display_name: Military and Warfare
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #12: Military and Warfare'
+  - 'airbench 2024 - #12: military and warfare'
+  - airbench-2024-12-military-and-warfare
+- id: air-bench-2024-13-10-doxxing
+  display_name: Doxxing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.10: Doxxing'
+  - 'airbench 2024 - #13.10: doxxing'
+  - airbench-2024-13-10-doxxing
+- id: air-bench-2024-13-11-cursing
+  display_name: Cursing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.11: Cursing'
+  - 'airbench 2024 - #13.11: cursing'
+  - airbench-2024-13-11-cursing
+- id: air-bench-2024-13-1-bullying
+  display_name: Bullying
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.1: Bullying'
+  - 'airbench 2024 - #13.1: bullying'
+  - airbench-2024-13-1-bullying
+- id: air-bench-2024-13-2-threats
+  display_name: Threats
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.2: Threats'
+  - 'airbench 2024 - #13.2: threats'
+  - airbench-2024-13-2-threats
+- id: air-bench-2024-13-3-intimidation
+  display_name: Intimidation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.3: Intimidation'
+  - 'airbench 2024 - #13.3: intimidation'
+  - airbench-2024-13-3-intimidation
+- id: air-bench-2024-13-4-shaming
+  display_name: Shaming
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.4: Shaming'
+  - 'airbench 2024 - #13.4: shaming'
+  - airbench-2024-13-4-shaming
+- id: air-bench-2024-13-5-humiliation
+  display_name: Humiliation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.5: Humiliation'
+  - 'airbench 2024 - #13.5: humiliation'
+  - airbench-2024-13-5-humiliation
+- id: air-bench-2024-13-6-insults-personal-attacks
+  display_name: Insults/Personal attacks
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.6: Insults/Personal attacks'
+  - 'airbench 2024 - #13.6: insults/personal attacks'
+  - airbench-2024-13-6-insults-personal-attacks
+- id: air-bench-2024-13-7-abuse
+  display_name: Abuse
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.7: Abuse'
+  - 'airbench 2024 - #13.7: abuse'
+  - airbench-2024-13-7-abuse
+- id: air-bench-2024-13-8-provoking
+  display_name: Provoking
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.8: Provoking'
+  - 'airbench 2024 - #13.8: provoking'
+  - airbench-2024-13-8-provoking
+- id: air-bench-2024-13-9-trolling
+  display_name: Trolling
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13.9: Trolling'
+  - 'airbench 2024 - #13.9: trolling'
+  - airbench-2024-13-9-trolling
+- id: air-bench-2024-13-harassment
+  display_name: Harassment
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #13: Harassment'
+  - 'airbench 2024 - #13: harassment'
+  - airbench-2024-13-harassment
+- id: air-bench-2024-14-12-race
+  display_name: Race
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.12: Race'
+  - 'airbench 2024 - #14.12: race'
+  - airbench-2024-14-12-race
+- id: air-bench-2024-14-13-ethnicity
+  display_name: Ethnicity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.13: Ethnicity'
+  - 'airbench 2024 - #14.13: ethnicity'
+  - airbench-2024-14-13-ethnicity
+- id: air-bench-2024-14-14-color
+  display_name: Color
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.14: Color'
+  - 'airbench 2024 - #14.14: color'
+  - airbench-2024-14-14-color
+- id: air-bench-2024-14-15-gender
+  display_name: Gender
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.15: Gender'
+  - 'airbench 2024 - #14.15: gender'
+  - airbench-2024-14-15-gender
+- id: air-bench-2024-14-16-sexual-orientation
+  display_name: Sexual orientation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.16: Sexual orientation'
+  - 'airbench 2024 - #14.16: sexual orientation'
+  - airbench-2024-14-16-sexual-orientation
+- id: air-bench-2024-14-17-religion
+  display_name: Religion
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.17: Religion'
+  - 'airbench 2024 - #14.17: religion'
+  - airbench-2024-14-17-religion
+- id: air-bench-2024-14-18-beliefs
+  display_name: Beliefs
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.18: Beliefs'
+  - 'airbench 2024 - #14.18: beliefs'
+  - airbench-2024-14-18-beliefs
+- id: air-bench-2024-14-19-nationality
+  display_name: Nationality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.19: Nationality'
+  - 'airbench 2024 - #14.19: nationality'
+  - airbench-2024-14-19-nationality
+- id: air-bench-2024-14-20-geographic-region
+  display_name: Geographic region
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.20: Geographic region'
+  - 'airbench 2024 - #14.20: geographic region'
+  - airbench-2024-14-20-geographic-region
+- id: air-bench-2024-14-21-caste
+  display_name: Caste
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.21: Caste'
+  - 'airbench 2024 - #14.21: caste'
+  - airbench-2024-14-21-caste
+- id: air-bench-2024-14-22-social-behaviors
+  display_name: Social behaviors
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.22: Social behaviors'
+  - 'airbench 2024 - #14.22: social behaviors'
+  - airbench-2024-14-22-social-behaviors
+- id: air-bench-2024-14-23-physical-characteristics
+  display_name: Physical characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.23: Physical characteristics'
+  - 'airbench 2024 - #14.23: physical characteristics'
+  - airbench-2024-14-23-physical-characteristics
+- id: air-bench-2024-14-24-mental-characteristics
+  display_name: Mental characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.24: Mental characteristics'
+  - 'airbench 2024 - #14.24: mental characteristics'
+  - airbench-2024-14-24-mental-characteristics
+- id: air-bench-2024-14-25-personality
+  display_name: Personality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.25: Personality'
+  - 'airbench 2024 - #14.25: personality'
+  - airbench-2024-14-25-personality
+- id: air-bench-2024-14-26-health-conditions
+  display_name: Health conditions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.26: Health conditions'
+  - 'airbench 2024 - #14.26: health conditions'
+  - airbench-2024-14-26-health-conditions
+- id: air-bench-2024-14-27-disability
+  display_name: Disability
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.27: Disability'
+  - 'airbench 2024 - #14.27: disability'
+  - airbench-2024-14-27-disability
+- id: air-bench-2024-14-28-pregnancy-status
+  display_name: Pregnancy status
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.28: Pregnancy status'
+  - 'airbench 2024 - #14.28: pregnancy status'
+  - airbench-2024-14-28-pregnancy-status
+- id: air-bench-2024-14-29-genetic-information
+  display_name: Genetic information
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.29: Genetic information'
+  - 'airbench 2024 - #14.29: genetic information'
+  - airbench-2024-14-29-genetic-information
+- id: air-bench-2024-14-30-occupation
+  display_name: Occupation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.30: Occupation'
+  - 'airbench 2024 - #14.30: occupation'
+  - airbench-2024-14-30-occupation
+- id: air-bench-2024-14-31-age
+  display_name: Age
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14.31: Age'
+  - 'airbench 2024 - #14.31: age'
+  - airbench-2024-14-31-age
+- id: air-bench-2024-14-hate-speech-inciting-promoting-expressing-hatred
+  display_name: Hate Speech (Inciting/Promoting/Expressing hatred)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #14: Hate Speech (Inciting/Promoting/Expressing hatred)'
+  - 'airbench 2024 - #14: hate speech (inciting/promoting/expressing hatred)'
+  - airbench-2024-14-hate-speech-inciting-promoting-expressing-hatred
+- id: air-bench-2024-15-32-negative-stereotyping-of-any-group
+  display_name: Negative stereotyping of any group
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #15.32: Negative stereotyping of any group'
+  - 'airbench 2024 - #15.32: negative stereotyping of any group'
+  - airbench-2024-15-32-negative-stereotyping-of-any-group
+- id: air-bench-2024-15-33-perpetuating-racism
+  display_name: Perpetuating racism
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #15.33: Perpetuating racism'
+  - 'airbench 2024 - #15.33: perpetuating racism'
+  - airbench-2024-15-33-perpetuating-racism
+- id: air-bench-2024-15-34-perpetuating-sexism
+  display_name: Perpetuating sexism
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #15.34: Perpetuating sexism'
+  - 'airbench 2024 - #15.34: perpetuating sexism'
+  - airbench-2024-15-34-perpetuating-sexism
+- id: air-bench-2024-15-perpetuating-harmful-beliefs
+  display_name: Perpetuating Harmful Beliefs
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #15: Perpetuating Harmful Beliefs'
+  - 'airbench 2024 - #15: perpetuating harmful beliefs'
+  - airbench-2024-15-perpetuating-harmful-beliefs
+- id: air-bench-2024-16-35-vulgarity
+  display_name: Vulgarity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #16.35: Vulgarity'
+  - 'airbench 2024 - #16.35: vulgarity'
+  - airbench-2024-16-35-vulgarity
+- id: air-bench-2024-16-36-derogatory-comments
+  display_name: Derogatory comments
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #16.36: Derogatory comments'
+  - 'airbench 2024 - #16.36: derogatory comments'
+  - airbench-2024-16-36-derogatory-comments
+- id: air-bench-2024-16-offensive-language
+  display_name: Offensive Language
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #16: Offensive Language'
+  - 'airbench 2024 - #16: offensive language'
+  - airbench-2024-16-offensive-language
+- id: air-bench-2024-17-1-obscenity
+  display_name: Obscenity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #17.1: Obscenity'
+  - 'airbench 2024 - #17.1: obscenity'
+  - airbench-2024-17-1-obscenity
+- id: air-bench-2024-17-2-suggestive
+  display_name: Suggestive
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #17.2: Suggestive'
+  - 'airbench 2024 - #17.2: suggestive'
+  - airbench-2024-17-2-suggestive
+- id: air-bench-2024-17-3-sexual-acts
+  display_name: Sexual acts
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #17.3: Sexual acts'
+  - 'airbench 2024 - #17.3: sexual acts'
+  - airbench-2024-17-3-sexual-acts
+- id: air-bench-2024-17-4-sexual-intercourse
+  display_name: Sexual intercourse
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #17.4: Sexual intercourse'
+  - 'airbench 2024 - #17.4: sexual intercourse'
+  - airbench-2024-17-4-sexual-intercourse
+- id: air-bench-2024-17-adult-content
+  display_name: Adult content
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #17: Adult content'
+  - 'airbench 2024 - #17: adult content'
+  - airbench-2024-17-adult-content
+- id: air-bench-2024-18-5-erotic-chats
+  display_name: Erotic chats
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #18.5: Erotic chats'
+  - 'airbench 2024 - #18.5: erotic chats'
+  - airbench-2024-18-5-erotic-chats
+- id: air-bench-2024-18-6-fetishes
+  display_name: Fetishes
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #18.6: Fetishes'
+  - 'airbench 2024 - #18.6: fetishes'
+  - airbench-2024-18-6-fetishes
+- id: air-bench-2024-18-erotic
+  display_name: Erotic
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #18: Erotic'
+  - 'airbench 2024 - #18: erotic'
+  - airbench-2024-18-erotic
+- id: air-bench-2024-19-7-ncii-non-consensual-intimate-image
+  display_name: NCII (Non-consensual Intimate Image)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #19.7: NCII (Non-consensual Intimate Image)'
+  - 'airbench 2024 - #19.7: ncii (non-consensual intimate image)'
+  - airbench-2024-19-7-ncii-non-consensual-intimate-image
+- id: air-bench-2024-19-non-consensual-nudity
+  display_name: Non-Consensual Nudity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #19: Non-Consensual Nudity'
+  - 'airbench 2024 - #19: non-consensual nudity'
+  - airbench-2024-19-non-consensual-nudity
+- id: air-bench-2024-1-confidentiality
+  display_name: Confidentiality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #1: Confidentiality'
+  - 'airbench 2024 - #1: confidentiality'
+  - airbench-2024-1-confidentiality
+- id: air-bench-2024-2-10-control-override-safety-privacy-filters
+  display_name: Control override (safety/privacy filters)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #2.10: Control override (safety/privacy filters)'
+  - 'airbench 2024 - #2.10: control override (safety/privacy filters)'
+  - airbench-2024-2-10-control-override-safety-privacy-filters
+- id: air-bench-2024-2-7-malware
+  display_name: Malware
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #2.7: Malware'
+  - 'airbench 2024 - #2.7: malware'
+  - airbench-2024-2-7-malware
+- id: air-bench-2024-2-8-packet-forgery
+  display_name: Packet forgery
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #2.8: Packet forgery'
+  - 'airbench 2024 - #2.8: packet forgery'
+  - airbench-2024-2-8-packet-forgery
+- id: air-bench-2024-2-9-data-tampering
+  display_name: Data tampering
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #2.9: Data tampering'
+  - 'airbench 2024 - #2.9: data tampering'
+  - airbench-2024-2-9-data-tampering
+- id: air-bench-2024-20-8-pornography
+  display_name: Pornography
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #20.8: Pornography'
+  - 'airbench 2024 - #20.8: pornography'
+  - airbench-2024-20-8-pornography
+- id: air-bench-2024-20-9-promotion-of-sexual-services
+  display_name: Promotion of sexual services
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #20.9: Promotion of sexual services'
+  - 'airbench 2024 - #20.9: promotion of sexual services'
+  - airbench-2024-20-9-promotion-of-sexual-services
+- id: air-bench-2024-20-monetized
+  display_name: Monetized
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #20: Monetized'
+  - 'airbench 2024 - #20: monetized'
+  - airbench-2024-20-monetized
+- id: air-bench-2024-21-1-grooming
+  display_name: Grooming
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #21.1: Grooming'
+  - 'airbench 2024 - #21.1: grooming'
+  - airbench-2024-21-1-grooming
+- id: air-bench-2024-21-2-pedophilia
+  display_name: Pedophilia
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #21.2: Pedophilia'
+  - 'airbench 2024 - #21.2: pedophilia'
+  - airbench-2024-21-2-pedophilia
+- id: air-bench-2024-21-3-exploiting-harming-minors
+  display_name: Exploiting/Harming minors
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #21.3: Exploiting/Harming minors'
+  - 'airbench 2024 - #21.3: exploiting/harming minors'
+  - airbench-2024-21-3-exploiting-harming-minors
+- id: air-bench-2024-21-4-building-services-targeting-minors-failure-to-employ-age-gating
+  display_name: Building services targeting minors/failure to employ age-gating
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #21.4: Building services targeting minors/failure to employ age-gating'
+  - 'airbench 2024 - #21.4: building services targeting minors/failure to employ age-gating'
+  - airbench-2024-21-4-building-services-targeting-minors-failure-to-employ-age-gating
+- id: air-bench-2024-21-5-building-services-to-present-a-persona-of-minor
+  display_name: Building services to present a persona of minor
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #21.5: Building services to present a persona of minor'
+  - 'airbench 2024 - #21.5: building services to present a persona of minor'
+  - airbench-2024-21-5-building-services-to-present-a-persona-of-minor
+- id: air-bench-2024-21-endangerment-harm-or-abuse-of-children
+  display_name: Endangerment, Harm, or Abuse of Children
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #21: Endangerment, Harm, or Abuse of Children'
+  - 'airbench 2024 - #21: endangerment, harm, or abuse of children'
+  - airbench-2024-21-endangerment-harm-or-abuse-of-children
+- id: air-bench-2024-22-6-solicitation
+  display_name: Solicitation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #22.6: Solicitation'
+  - 'airbench 2024 - #22.6: solicitation'
+  - airbench-2024-22-6-solicitation
+- id: air-bench-2024-22-7-csam
+  display_name: CSAM
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #22.7: CSAM'
+  - 'airbench 2024 - #22.7: csam'
+  - airbench-2024-22-7-csam
+- id: air-bench-2024-22-child-sexual-abuse
+  display_name: Child Sexual Abuse
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #22: Child Sexual Abuse'
+  - 'airbench 2024 - #22: child sexual abuse'
+  - airbench-2024-22-child-sexual-abuse
+- id: air-bench-2024-23-1-suicide
+  display_name: Suicide
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #23.1: Suicide'
+  - 'airbench 2024 - #23.1: suicide'
+  - airbench-2024-23-1-suicide
+- id: air-bench-2024-23-2-cutting
+  display_name: Cutting
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #23.2: Cutting'
+  - 'airbench 2024 - #23.2: cutting'
+  - airbench-2024-23-2-cutting
+- id: air-bench-2024-23-3-eating-disorders-anorexia-bulimia
+  display_name: Eating Disorders (anorexia/bulimia)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #23.3: Eating Disorders (anorexia/bulimia)'
+  - 'airbench 2024 - #23.3: eating disorders (anorexia/bulimia)'
+  - airbench-2024-23-3-eating-disorders-anorexia-bulimia
+- id: air-bench-2024-23-suicidal-and-non-suicidal-self-injury
+  display_name: Suicidal and non-suicidal self Injury
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #23: Suicidal and non-suicidal self Injury'
+  - 'airbench 2024 - #23: suicidal and non-suicidal self injury'
+  - airbench-2024-23-suicidal-and-non-suicidal-self-injury
+- id: air-bench-2024-24-1-lobbying
+  display_name: Lobbying
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24.1: Lobbying'
+  - 'airbench 2024 - #24.1: lobbying'
+  - airbench-2024-24-1-lobbying
+- id: air-bench-2024-24-2-generating-high-volume-campaign-materials
+  display_name: Generating high-volume campaign materials
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24.2: Generating high-volume campaign materials'
+  - 'airbench 2024 - #24.2: generating high-volume campaign materials'
+  - airbench-2024-24-2-generating-high-volume-campaign-materials
+- id: air-bench-2024-24-3-personalized-or-targeted-campaign-materials
+  display_name: Personalized or targeted campaign materials
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24.3: Personalized or targeted campaign materials'
+  - 'airbench 2024 - #24.3: personalized or targeted campaign materials'
+  - airbench-2024-24-3-personalized-or-targeted-campaign-materials
+- id: air-bench-2024-24-4-building-systems-for-political-campaigning-or-lobbying
+  display_name: Building systems for political campaigning or lobbying
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24.4: Building systems for political campaigning or lobbying'
+  - 'airbench 2024 - #24.4: building systems for political campaigning or lobbying'
+  - airbench-2024-24-4-building-systems-for-political-campaigning-or-lobbying
+- id: air-bench-2024-24-5-building-products-for-political-campaigning-or-lobbying
+  display_name: Building products for political campaigning or lobbying
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24.5: Building products for political campaigning or lobbying'
+  - 'airbench 2024 - #24.5: building products for political campaigning or lobbying'
+  - airbench-2024-24-5-building-products-for-political-campaigning-or-lobbying
+- id: air-bench-2024-24-6-political-advertisements
+  display_name: Political advertisements
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24.6: Political advertisements'
+  - 'airbench 2024 - #24.6: political advertisements'
+  - airbench-2024-24-6-political-advertisements
+- id: air-bench-2024-24-7-propaganda
+  display_name: Propaganda
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24.7: Propaganda'
+  - 'airbench 2024 - #24.7: propaganda'
+  - airbench-2024-24-7-propaganda
+- id: air-bench-2024-24-political-persuasion
+  display_name: Political Persuasion
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #24: Political Persuasion'
+  - 'airbench 2024 - #24: political persuasion'
+  - airbench-2024-24-political-persuasion
+- id: air-bench-2024-25-8-influence-political-decisions
+  display_name: Influence political decisions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #25.8: Influence political decisions'
+  - 'airbench 2024 - #25.8: influence political decisions'
+  - airbench-2024-25-8-influence-political-decisions
+- id: air-bench-2024-25-9-influence-political-opinions
+  display_name: Influence political opinions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #25.9: Influence political opinions'
+  - 'airbench 2024 - #25.9: influence political opinions'
+  - airbench-2024-25-9-influence-political-opinions
+- id: air-bench-2024-25-influencing-politics
+  display_name: Influencing Politics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #25: Influencing Politics'
+  - 'airbench 2024 - #25: influencing politics'
+  - airbench-2024-25-influencing-politics
+- id: air-bench-2024-26-10-deterring-participation-in-democratic-processes
+  display_name: Deterring participation in democratic processes
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #26.10: Deterring participation in democratic processes'
+  - 'airbench 2024 - #26.10: deterring participation in democratic processes'
+  - airbench-2024-26-10-deterring-participation-in-democratic-processes
+- id: air-bench-2024-26-11-misrepresenting-voting-processes
+  display_name: Misrepresenting voting processes
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #26.11: Misrepresenting voting processes'
+  - 'airbench 2024 - #26.11: misrepresenting voting processes'
+  - airbench-2024-26-11-misrepresenting-voting-processes
+- id: air-bench-2024-26-12-misrepresenting-voting-qualifications
+  display_name: Misrepresenting voting qualifications
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #26.12: Misrepresenting voting qualifications'
+  - 'airbench 2024 - #26.12: misrepresenting voting qualifications'
+  - airbench-2024-26-12-misrepresenting-voting-qualifications
+- id: air-bench-2024-26-13-discouraging-voting
+  display_name: Discouraging voting
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #26.13: Discouraging voting'
+  - 'airbench 2024 - #26.13: discouraging voting'
+  - airbench-2024-26-13-discouraging-voting
+- id: air-bench-2024-26-deterring-democratic-participation
+  display_name: Deterring Democratic Participation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #26: Deterring Democratic Participation'
+  - 'airbench 2024 - #26: deterring democratic participation'
+  - airbench-2024-26-deterring-democratic-participation
+- id: air-bench-2024-27-14-opposing-constitutional-principles
+  display_name: Opposing constitutional principles
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.14: Opposing constitutional principles'
+  - 'airbench 2024 - #27.14: opposing constitutional principles'
+  - airbench-2024-27-14-opposing-constitutional-principles
+- id: air-bench-2024-27-15-subverting-state-power
+  display_name: Subverting state power
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.15: Subverting state power'
+  - 'airbench 2024 - #27.15: subverting state power'
+  - airbench-2024-27-15-subverting-state-power
+- id: air-bench-2024-27-16-undermining-national-unity
+  display_name: Undermining national unity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.16: Undermining national unity'
+  - 'airbench 2024 - #27.16: undermining national unity'
+  - airbench-2024-27-16-undermining-national-unity
+- id: air-bench-2024-27-17-damaging-state-interests
+  display_name: Damaging state interests
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.17: Damaging state interests'
+  - 'airbench 2024 - #27.17: damaging state interests'
+  - airbench-2024-27-17-damaging-state-interests
+- id: air-bench-2024-27-18-damaging-the-state-s-honor
+  display_name: Damaging the state’s honor
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.18: Damaging the state’s honor'
+  - 'airbench 2024 - #27.18: damaging the state’s honor'
+  - airbench-2024-27-18-damaging-the-state-s-honor
+- id: air-bench-2024-27-19-inciting-unlawful-assemblies
+  display_name: Inciting unlawful assemblies
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.19: Inciting unlawful assemblies'
+  - 'airbench 2024 - #27.19: inciting unlawful assemblies'
+  - airbench-2024-27-19-inciting-unlawful-assemblies
+- id: air-bench-2024-27-20-inciting-unlawful-associations
+  display_name: Inciting unlawful associations
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.20: Inciting unlawful associations'
+  - 'airbench 2024 - #27.20: inciting unlawful associations'
+  - airbench-2024-27-20-inciting-unlawful-associations
+- id: air-bench-2024-27-21-inciting-unlawful-processions
+  display_name: Inciting unlawful processions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.21: Inciting unlawful processions'
+  - 'airbench 2024 - #27.21: inciting unlawful processions'
+  - airbench-2024-27-21-inciting-unlawful-processions
+- id: air-bench-2024-27-22-inciting-unlawful-demonstrations
+  display_name: Inciting unlawful demonstrations
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.22: Inciting unlawful demonstrations'
+  - 'airbench 2024 - #27.22: inciting unlawful demonstrations'
+  - airbench-2024-27-22-inciting-unlawful-demonstrations
+- id: air-bench-2024-27-23-undermining-religious-policies
+  display_name: Undermining religious policies
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.23: Undermining religious policies'
+  - 'airbench 2024 - #27.23: undermining religious policies'
+  - airbench-2024-27-23-undermining-religious-policies
+- id: air-bench-2024-27-24-promoting-cults
+  display_name: Promoting cults
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.24: Promoting cults'
+  - 'airbench 2024 - #27.24: promoting cults'
+  - airbench-2024-27-24-promoting-cults
+- id: air-bench-2024-27-25-promoting-feudal-superstitions
+  display_name: Promoting feudal superstitions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27.25: Promoting feudal superstitions'
+  - 'airbench 2024 - #27.25: promoting feudal superstitions'
+  - airbench-2024-27-25-promoting-feudal-superstitions
+- id: air-bench-2024-27-disrupting-social-order-china-unique
+  display_name: Disrupting Social Order (China-unique)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #27: Disrupting Social Order (China-unique)'
+  - 'airbench 2024 - #27: disrupting social order (china-unique)'
+  - airbench-2024-27-disrupting-social-order-china-unique
+- id: air-bench-2024-28-1-gambling-e-g-sports-betting
+  display_name: Gambling (e.g., sports betting)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #28.1: Gambling (e.g., sports betting)'
+  - 'airbench 2024 - #28.1: gambling (e.g., sports betting)'
+  - airbench-2024-28-1-gambling-e-g-sports-betting
+- id: air-bench-2024-28-2-payday-lending
+  display_name: Payday lending
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #28.2: Payday lending'
+  - 'airbench 2024 - #28.2: payday lending'
+  - airbench-2024-28-2-payday-lending
+- id: air-bench-2024-28-high-risk-financial-activities
+  display_name: High-Risk Financial Activities
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #28: High-Risk Financial Activities'
+  - 'airbench 2024 - #28: high-risk financial activities'
+  - airbench-2024-28-high-risk-financial-activities
+- id: air-bench-2024-29-3-exploiting-advantages-for-monopolistic-practices
+  display_name: Exploiting advantages for monopolistic practices
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #29.3: Exploiting advantages for monopolistic practices'
+  - 'airbench 2024 - #29.3: exploiting advantages for monopolistic practices'
+  - airbench-2024-29-3-exploiting-advantages-for-monopolistic-practices
+- id: air-bench-2024-29-4-anticompetitive-practices
+  display_name: Anticompetitive practices
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #29.4: Anticompetitive practices'
+  - 'airbench 2024 - #29.4: anticompetitive practices'
+  - airbench-2024-29-4-anticompetitive-practices
+- id: air-bench-2024-29-unfair-market-practices
+  display_name: Unfair Market Practices
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #29: Unfair Market Practices'
+  - 'airbench 2024 - #29: unfair market practices'
+  - airbench-2024-29-unfair-market-practices
+- id: air-bench-2024-2-integrity
+  display_name: Integrity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #2: Integrity'
+  - 'airbench 2024 - #2: integrity'
+  - airbench-2024-2-integrity
+- id: air-bench-2024-3-11-system-website-impairment
+  display_name: System/Website impairment
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #3.11: System/Website impairment'
+  - 'airbench 2024 - #3.11: system/website impairment'
+  - airbench-2024-3-11-system-website-impairment
+- id: air-bench-2024-3-12-network-disruption
+  display_name: Network disruption
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #3.12: Network disruption'
+  - 'airbench 2024 - #3.12: network disruption'
+  - airbench-2024-3-12-network-disruption
+- id: air-bench-2024-30-5-undermine-workers-rights
+  display_name: Undermine workers' rights
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #30.5: Undermine workers'' rights'
+  - 'airbench 2024 - #30.5: undermine workers'' rights'
+  - airbench-2024-30-5-undermine-workers-rights
+- id: air-bench-2024-30-6-worsen-job-quality
+  display_name: Worsen job quality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #30.6: Worsen job quality'
+  - 'airbench 2024 - #30.6: worsen job quality'
+  - airbench-2024-30-6-worsen-job-quality
+- id: air-bench-2024-30-7-encourage-undue-worker-surveillance
+  display_name: Encourage undue worker surveillance
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #30.7: Encourage undue worker surveillance'
+  - 'airbench 2024 - #30.7: encourage undue worker surveillance'
+  - airbench-2024-30-7-encourage-undue-worker-surveillance
+- id: air-bench-2024-30-8-cause-harmful-labor-force-disruptions
+  display_name: Cause harmful labor-force disruptions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #30.8: Cause harmful labor-force disruptions'
+  - 'airbench 2024 - #30.8: cause harmful labor-force disruptions'
+  - airbench-2024-30-8-cause-harmful-labor-force-disruptions
+- id: air-bench-2024-30-disempowering-workers
+  display_name: Disempowering Workers
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #30: Disempowering Workers'
+  - 'airbench 2024 - #30: disempowering workers'
+  - airbench-2024-30-disempowering-workers
+- id: air-bench-2024-31-10-pyramid-schemes
+  display_name: Pyramid schemes
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #31.10: Pyramid schemes'
+  - 'airbench 2024 - #31.10: pyramid schemes'
+  - airbench-2024-31-10-pyramid-schemes
+- id: air-bench-2024-31-9-multi-level-marketing
+  display_name: Multi-level marketing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #31.9: Multi-level marketing'
+  - 'airbench 2024 - #31.9: multi-level marketing'
+  - airbench-2024-31-9-multi-level-marketing
+- id: air-bench-2024-31-fraudulent-schemes
+  display_name: Fraudulent Schemes
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #31: Fraudulent Schemes'
+  - 'airbench 2024 - #31: fraudulent schemes'
+  - airbench-2024-31-fraudulent-schemes
+- id: air-bench-2024-32-1-spam
+  display_name: Spam
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #32.1: Spam'
+  - 'airbench 2024 - #32.1: spam'
+  - airbench-2024-32-1-spam
+- id: air-bench-2024-32-2-scams
+  display_name: Scams
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #32.2: Scams'
+  - 'airbench 2024 - #32.2: scams'
+  - airbench-2024-32-2-scams
+- id: air-bench-2024-32-3-phishing-catfishing
+  display_name: Phishing/Catfishing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #32.3: Phishing/Catfishing'
+  - 'airbench 2024 - #32.3: phishing/catfishing'
+  - airbench-2024-32-3-phishing-catfishing
+- id: air-bench-2024-32-4-pseudo-pharmaceuticals
+  display_name: Pseudo-pharmaceuticals
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #32.4: Pseudo-pharmaceuticals'
+  - 'airbench 2024 - #32.4: pseudo-pharmaceuticals'
+  - airbench-2024-32-4-pseudo-pharmaceuticals
+- id: air-bench-2024-32-5-impersonating-others
+  display_name: Impersonating others
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #32.5: Impersonating others'
+  - 'airbench 2024 - #32.5: impersonating others'
+  - airbench-2024-32-5-impersonating-others
+- id: air-bench-2024-32-fraud
+  display_name: Fraud
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #32: Fraud'
+  - 'airbench 2024 - #32: fraud'
+  - airbench-2024-32-fraud
+- id: air-bench-2024-33-6-plagiarism
+  display_name: Plagiarism
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #33.6: Plagiarism'
+  - 'airbench 2024 - #33.6: plagiarism'
+  - airbench-2024-33-6-plagiarism
+- id: air-bench-2024-33-7-promoting-academic-dishonesty
+  display_name: Promoting academic dishonesty
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #33.7: Promoting academic dishonesty'
+  - 'airbench 2024 - #33.7: promoting academic dishonesty'
+  - airbench-2024-33-7-promoting-academic-dishonesty
+- id: air-bench-2024-33-academic-dishonesty
+  display_name: Academic dishonesty
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #33: Academic dishonesty'
+  - 'airbench 2024 - #33: academic dishonesty'
+  - airbench-2024-33-academic-dishonesty
+- id: air-bench-2024-34-8-generating-or-promoting-misinformation
+  display_name: Generating or promoting misinformation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #34.8: Generating or promoting misinformation'
+  - 'airbench 2024 - #34.8: generating or promoting misinformation'
+  - airbench-2024-34-8-generating-or-promoting-misinformation
+- id: air-bench-2024-34-9-fake-online-engagement-fake-reviews-fake-grassroots-support
+  display_name: Fake online engagement (fake reviews, fake grassroots support)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #34.9: Fake online engagement (fake reviews, fake grassroots
+    support)'
+  - 'airbench 2024 - #34.9: fake online engagement (fake reviews, fake grassroots
+    support)'
+  - airbench-2024-34-9-fake-online-engagement-fake-reviews-fake-grassroots-support
+- id: air-bench-2024-34-mis-disinformation
+  display_name: Mis/disinformation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #34: Mis/disinformation'
+  - 'airbench 2024 - #34: mis/disinformation'
+  - airbench-2024-34-mis-disinformation
+- id: air-bench-2024-35-1-inducing-internal-conflict
+  display_name: Inducing internal conflict
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #35.1: Inducing internal conflict'
+  - 'airbench 2024 - #35.1: inducing internal conflict'
+  - airbench-2024-35-1-inducing-internal-conflict
+- id: air-bench-2024-35-2-deflecting-scrutiny-from-harmful-actions
+  display_name: Deflecting scrutiny from harmful actions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #35.2: Deflecting scrutiny from harmful actions'
+  - 'airbench 2024 - #35.2: deflecting scrutiny from harmful actions'
+  - airbench-2024-35-2-deflecting-scrutiny-from-harmful-actions
+- id: air-bench-2024-35-sowing-division
+  display_name: Sowing Division
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #35: Sowing Division'
+  - 'airbench 2024 - #35: sowing division'
+  - airbench-2024-35-sowing-division
+- id: air-bench-2024-36-3-automated-social-media-posts
+  display_name: Automated social media posts
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #36.3: Automated social media posts'
+  - 'airbench 2024 - #36.3: automated social media posts'
+  - airbench-2024-36-3-automated-social-media-posts
+- id: air-bench-2024-36-4-not-labeling-content-as-ai-generated-using-chatbots-to-convince-people-they-are-communicating-with-a-human
+  display_name: Not labeling content as AI-generated (Using chatbots to convince people
+    they are communicating with a human)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #36.4: Not labeling content as AI-generated (Using chatbots to
+    convince people they are communicating with a human)'
+  - 'airbench 2024 - #36.4: not labeling content as ai-generated (using chatbots to
+    convince people they are communicating with a human)'
+  - airbench-2024-36-4-not-labeling-content-as-ai-generated-using-chatbots-to-convince-people-they-are-communicating-with-a-human
+- id: air-bench-2024-36-5-impersonating-humans
+  display_name: Impersonating humans
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #36.5: Impersonating humans'
+  - 'airbench 2024 - #36.5: impersonating humans'
+  - airbench-2024-36-5-impersonating-humans
+- id: air-bench-2024-36-misrepresentation
+  display_name: Misrepresentation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #36: Misrepresentation'
+  - 'airbench 2024 - #36: misrepresentation'
+  - airbench-2024-36-misrepresentation
+- id: air-bench-2024-37-1-disparagement
+  display_name: Disparagement
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #37.1: Disparagement'
+  - 'airbench 2024 - #37.1: disparagement'
+  - airbench-2024-37-1-disparagement
+- id: air-bench-2024-37-2-libel
+  display_name: Libel
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #37.2: Libel'
+  - 'airbench 2024 - #37.2: libel'
+  - airbench-2024-37-2-libel
+- id: air-bench-2024-37-3-slander
+  display_name: Slander
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #37.3: Slander'
+  - 'airbench 2024 - #37.3: slander'
+  - airbench-2024-37-3-slander
+- id: air-bench-2024-37-types-of-defamation
+  display_name: Types of Defamation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #37: Types of Defamation'
+  - 'airbench 2024 - #37: types of defamation'
+  - airbench-2024-37-types-of-defamation
+- id: air-bench-2024-38-1-ip-rights-trade-secrets
+  display_name: IP rights/ Trade secrets
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #38.1: IP rights/ Trade secrets'
+  - 'airbench 2024 - #38.1: ip rights/ trade secrets'
+  - airbench-2024-38-1-ip-rights-trade-secrets
+- id: air-bench-2024-38-2-likeness-rights
+  display_name: Likeness rights
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #38.2: Likeness rights'
+  - 'airbench 2024 - #38.2: likeness rights'
+  - airbench-2024-38-2-likeness-rights
+- id: air-bench-2024-38-3-reputation-rights
+  display_name: Reputation rights
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #38.3: Reputation rights'
+  - 'airbench 2024 - #38.3: reputation rights'
+  - airbench-2024-38-3-reputation-rights
+- id: air-bench-2024-38-4-honor
+  display_name: Honor
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #38.4: Honor'
+  - 'airbench 2024 - #38.4: honor'
+  - airbench-2024-38-4-honor
+- id: air-bench-2024-38-5-name-rights
+  display_name: Name rights
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #38.5: Name rights'
+  - 'airbench 2024 - #38.5: name rights'
+  - airbench-2024-38-5-name-rights
+- id: air-bench-2024-38-specific-types-of-rights
+  display_name: Specific Types of Rights
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #38: Specific Types of Rights'
+  - 'airbench 2024 - #38: specific types of rights'
+  - airbench-2024-38-specific-types-of-rights
+- id: air-bench-2024-39-40-10-discrimination-in-employment-benefits-or-services-caste
+  display_name: Discrimination in employment, benefits, or services - Caste
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.10: Discrimination in employment, benefits, or services
+    - Caste'
+  - 'airbench 2024 - #39-40.10: discrimination in employment, benefits, or services
+    - caste'
+  - airbench-2024-39-40-10-discrimination-in-employment-benefits-or-services-caste
+- id: air-bench-2024-39-40-11-discrimination-in-employment-benefits-or-services-social-behaviors
+  display_name: Discrimination in employment, benefits, or services - Social behaviors
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.11: Discrimination in employment, benefits, or services
+    - Social behaviors'
+  - 'airbench 2024 - #39-40.11: discrimination in employment, benefits, or services
+    - social behaviors'
+  - airbench-2024-39-40-11-discrimination-in-employment-benefits-or-services-social-behaviors
+- id: air-bench-2024-39-40-12-discrimination-in-employment-benefits-or-services-physical-characteristics
+  display_name: Discrimination in employment, benefits, or services - Physical Characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.12: Discrimination in employment, benefits, or services
+    - Physical Characteristics'
+  - 'airbench 2024 - #39-40.12: discrimination in employment, benefits, or services
+    - physical characteristics'
+  - airbench-2024-39-40-12-discrimination-in-employment-benefits-or-services-physical-characteristics
+- id: air-bench-2024-39-40-13-discrimination-in-employment-benefits-or-services-mental-characteristics
+  display_name: Discrimination in employment, benefits, or services - Mental Characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.13: Discrimination in employment, benefits, or services
+    - Mental Characteristics'
+  - 'airbench 2024 - #39-40.13: discrimination in employment, benefits, or services
+    - mental characteristics'
+  - airbench-2024-39-40-13-discrimination-in-employment-benefits-or-services-mental-characteristics
+- id: air-bench-2024-39-40-14-discrimination-in-employment-benefits-or-services-predicted-personality
+  display_name: Discrimination in employment, benefits, or services - Predicted Personality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.14: Discrimination in employment, benefits, or services
+    - Predicted Personality'
+  - 'airbench 2024 - #39-40.14: discrimination in employment, benefits, or services
+    - predicted personality'
+  - airbench-2024-39-40-14-discrimination-in-employment-benefits-or-services-predicted-personality
+- id: air-bench-2024-39-40-15-discrimination-in-employment-benefits-or-services-health-conditions
+  display_name: Discrimination in employment, benefits, or services - Health conditions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.15: Discrimination in employment, benefits, or services
+    - Health conditions'
+  - 'airbench 2024 - #39-40.15: discrimination in employment, benefits, or services
+    - health conditions'
+  - airbench-2024-39-40-15-discrimination-in-employment-benefits-or-services-health-conditions
+- id: air-bench-2024-39-40-16-discrimination-in-employment-benefits-or-services-disability
+  display_name: Discrimination in employment, benefits, or services - Disability
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.16: Discrimination in employment, benefits, or services
+    - Disability'
+  - 'airbench 2024 - #39-40.16: discrimination in employment, benefits, or services
+    - disability'
+  - airbench-2024-39-40-16-discrimination-in-employment-benefits-or-services-disability
+- id: air-bench-2024-39-40-17-discrimination-in-employment-benefits-or-services-pregnancy-status
+  display_name: Discrimination in employment, benefits, or services - Pregnancy Status
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.17: Discrimination in employment, benefits, or services
+    - Pregnancy Status'
+  - 'airbench 2024 - #39-40.17: discrimination in employment, benefits, or services
+    - pregnancy status'
+  - airbench-2024-39-40-17-discrimination-in-employment-benefits-or-services-pregnancy-status
+- id: air-bench-2024-39-40-18-discrimination-in-employment-benefits-or-services-genetic-information
+  display_name: Discrimination in employment, benefits, or services - Genetic Information
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.18: Discrimination in employment, benefits, or services
+    - Genetic Information'
+  - 'airbench 2024 - #39-40.18: discrimination in employment, benefits, or services
+    - genetic information'
+  - airbench-2024-39-40-18-discrimination-in-employment-benefits-or-services-genetic-information
+- id: air-bench-2024-39-40-19-discrimination-in-employment-benefits-or-services-occupation
+  display_name: Discrimination in employment, benefits, or services - Occupation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.19: Discrimination in employment, benefits, or services
+    - Occupation'
+  - 'airbench 2024 - #39-40.19: discrimination in employment, benefits, or services
+    - occupation'
+  - airbench-2024-39-40-19-discrimination-in-employment-benefits-or-services-occupation
+- id: air-bench-2024-39-40-1-discrimination-in-employment-benefits-or-services-race
+  display_name: Discrimination in employment, benefits, or services - Race
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.1: Discrimination in employment, benefits, or services
+    - Race'
+  - 'airbench 2024 - #39-40.1: discrimination in employment, benefits, or services
+    - race'
+  - airbench-2024-39-40-1-discrimination-in-employment-benefits-or-services-race
+- id: air-bench-2024-39-40-20-discrimination-in-employment-benefits-or-services-age
+  display_name: Discrimination in employment, benefits, or services - Age
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.20: Discrimination in employment, benefits, or services
+    - Age'
+  - 'airbench 2024 - #39-40.20: discrimination in employment, benefits, or services
+    - age'
+  - airbench-2024-39-40-20-discrimination-in-employment-benefits-or-services-age
+- id: air-bench-2024-39-40-21-characterization-of-identity-race
+  display_name: Characterization of identity - Race
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.21: Characterization of identity - Race'
+  - 'airbench 2024 - #39-40.21: characterization of identity - race'
+  - airbench-2024-39-40-21-characterization-of-identity-race
+- id: air-bench-2024-39-40-22-characterization-of-identity-ethnicity
+  display_name: Characterization of identity - Ethnicity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.22: Characterization of identity - Ethnicity'
+  - 'airbench 2024 - #39-40.22: characterization of identity - ethnicity'
+  - airbench-2024-39-40-22-characterization-of-identity-ethnicity
+- id: air-bench-2024-39-40-23-characterization-of-identity-color
+  display_name: Characterization of identity - Color
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.23: Characterization of identity - Color'
+  - 'airbench 2024 - #39-40.23: characterization of identity - color'
+  - airbench-2024-39-40-23-characterization-of-identity-color
+- id: air-bench-2024-39-40-24-characterization-of-identity-gender
+  display_name: Characterization of identity - Gender
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.24: Characterization of identity - Gender'
+  - 'airbench 2024 - #39-40.24: characterization of identity - gender'
+  - airbench-2024-39-40-24-characterization-of-identity-gender
+- id: air-bench-2024-39-40-25-characterization-of-identity-sexual-orientation
+  display_name: Characterization of identity - Sexual orientation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.25: Characterization of identity - Sexual orientation'
+  - 'airbench 2024 - #39-40.25: characterization of identity - sexual orientation'
+  - airbench-2024-39-40-25-characterization-of-identity-sexual-orientation
+- id: air-bench-2024-39-40-26-characterization-of-identity-religion
+  display_name: Characterization of identity - Religion
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.26: Characterization of identity - Religion'
+  - 'airbench 2024 - #39-40.26: characterization of identity - religion'
+  - airbench-2024-39-40-26-characterization-of-identity-religion
+- id: air-bench-2024-39-40-27-characterization-of-identity-beliefs
+  display_name: Characterization of identity - Beliefs
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.27: Characterization of identity - Beliefs'
+  - 'airbench 2024 - #39-40.27: characterization of identity - beliefs'
+  - airbench-2024-39-40-27-characterization-of-identity-beliefs
+- id: air-bench-2024-39-40-28-characterization-of-identity-nationality
+  display_name: Characterization of identity - Nationality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.28: Characterization of identity - Nationality'
+  - 'airbench 2024 - #39-40.28: characterization of identity - nationality'
+  - airbench-2024-39-40-28-characterization-of-identity-nationality
+- id: air-bench-2024-39-40-29-characterization-of-identity-geographic-region
+  display_name: Characterization of identity - Geographic region
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.29: Characterization of identity - Geographic region'
+  - 'airbench 2024 - #39-40.29: characterization of identity - geographic region'
+  - airbench-2024-39-40-29-characterization-of-identity-geographic-region
+- id: air-bench-2024-39-40-2-discrimination-in-employment-benefits-or-services-ethnicity
+  display_name: Discrimination in employment, benefits, or services - Ethnicity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.2: Discrimination in employment, benefits, or services
+    - Ethnicity'
+  - 'airbench 2024 - #39-40.2: discrimination in employment, benefits, or services
+    - ethnicity'
+  - airbench-2024-39-40-2-discrimination-in-employment-benefits-or-services-ethnicity
+- id: air-bench-2024-39-40-30-characterization-of-identity-caste
+  display_name: Characterization of identity - Caste
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.30: Characterization of identity - Caste'
+  - 'airbench 2024 - #39-40.30: characterization of identity - caste'
+  - airbench-2024-39-40-30-characterization-of-identity-caste
+- id: air-bench-2024-39-40-31-characterization-of-identity-social-behaviors
+  display_name: Characterization of identity - Social behaviors
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.31: Characterization of identity - Social behaviors'
+  - 'airbench 2024 - #39-40.31: characterization of identity - social behaviors'
+  - airbench-2024-39-40-31-characterization-of-identity-social-behaviors
+- id: air-bench-2024-39-40-32-characterization-of-identity-physical-characteristics
+  display_name: Characterization of identity - Physical Characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.32: Characterization of identity - Physical Characteristics'
+  - 'airbench 2024 - #39-40.32: characterization of identity - physical characteristics'
+  - airbench-2024-39-40-32-characterization-of-identity-physical-characteristics
+- id: air-bench-2024-39-40-33-characterization-of-identity-mental-characteristics
+  display_name: Characterization of identity - Mental Characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.33: Characterization of identity - Mental Characteristics'
+  - 'airbench 2024 - #39-40.33: characterization of identity - mental characteristics'
+  - airbench-2024-39-40-33-characterization-of-identity-mental-characteristics
+- id: air-bench-2024-39-40-34-characterization-of-identity-predicted-personality
+  display_name: Characterization of identity - Predicted Personality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.34: Characterization of identity - Predicted Personality'
+  - 'airbench 2024 - #39-40.34: characterization of identity - predicted personality'
+  - airbench-2024-39-40-34-characterization-of-identity-predicted-personality
+- id: air-bench-2024-39-40-35-characterization-of-identity-health-conditions
+  display_name: Characterization of identity - Health conditions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.35: Characterization of identity - Health conditions'
+  - 'airbench 2024 - #39-40.35: characterization of identity - health conditions'
+  - airbench-2024-39-40-35-characterization-of-identity-health-conditions
+- id: air-bench-2024-39-40-36-characterization-of-identity-disability
+  display_name: Characterization of identity - Disability
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.36: Characterization of identity - Disability'
+  - 'airbench 2024 - #39-40.36: characterization of identity - disability'
+  - airbench-2024-39-40-36-characterization-of-identity-disability
+- id: air-bench-2024-39-40-37-characterization-of-identity-pregnancy-status
+  display_name: Characterization of identity - Pregnancy Status
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.37: Characterization of identity - Pregnancy Status'
+  - 'airbench 2024 - #39-40.37: characterization of identity - pregnancy status'
+  - airbench-2024-39-40-37-characterization-of-identity-pregnancy-status
+- id: air-bench-2024-39-40-38-characterization-of-identity-genetic-information
+  display_name: Characterization of identity - Genetic Information
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.38: Characterization of identity - Genetic Information'
+  - 'airbench 2024 - #39-40.38: characterization of identity - genetic information'
+  - airbench-2024-39-40-38-characterization-of-identity-genetic-information
+- id: air-bench-2024-39-40-39-characterization-of-identity-occupation
+  display_name: Characterization of identity - Occupation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.39: Characterization of identity - Occupation'
+  - 'airbench 2024 - #39-40.39: characterization of identity - occupation'
+  - airbench-2024-39-40-39-characterization-of-identity-occupation
+- id: air-bench-2024-39-40-3-discrimination-in-employment-benefits-or-services-color
+  display_name: Discrimination in employment, benefits, or services - Color
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.3: Discrimination in employment, benefits, or services
+    - Color'
+  - 'airbench 2024 - #39-40.3: discrimination in employment, benefits, or services
+    - color'
+  - airbench-2024-39-40-3-discrimination-in-employment-benefits-or-services-color
+- id: air-bench-2024-39-40-40-characterization-of-identity-age
+  display_name: Characterization of identity - Age
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.40: Characterization of identity - Age'
+  - 'airbench 2024 - #39-40.40: characterization of identity - age'
+  - airbench-2024-39-40-40-characterization-of-identity-age
+- id: air-bench-2024-39-40-41-classification-of-individuals-race
+  display_name: Classification of individuals - Race
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.41: Classification of individuals - Race'
+  - 'airbench 2024 - #39-40.41: classification of individuals - race'
+  - airbench-2024-39-40-41-classification-of-individuals-race
+- id: air-bench-2024-39-40-42-classification-of-individuals-ethnicity
+  display_name: Classification of individuals - Ethnicity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.42: Classification of individuals - Ethnicity'
+  - 'airbench 2024 - #39-40.42: classification of individuals - ethnicity'
+  - airbench-2024-39-40-42-classification-of-individuals-ethnicity
+- id: air-bench-2024-39-40-43-classification-of-individuals-color
+  display_name: Classification of individuals - Color
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.43: Classification of individuals - Color'
+  - 'airbench 2024 - #39-40.43: classification of individuals - color'
+  - airbench-2024-39-40-43-classification-of-individuals-color
+- id: air-bench-2024-39-40-44-classification-of-individuals-gender
+  display_name: Classification of individuals - Gender
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.44: Classification of individuals - Gender'
+  - 'airbench 2024 - #39-40.44: classification of individuals - gender'
+  - airbench-2024-39-40-44-classification-of-individuals-gender
+- id: air-bench-2024-39-40-45-classification-of-individuals-sexual-orientation
+  display_name: Classification of individuals - Sexual orientation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.45: Classification of individuals - Sexual orientation'
+  - 'airbench 2024 - #39-40.45: classification of individuals - sexual orientation'
+  - airbench-2024-39-40-45-classification-of-individuals-sexual-orientation
+- id: air-bench-2024-39-40-46-classification-of-individuals-religion
+  display_name: Classification of individuals - Religion
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.46: Classification of individuals - Religion'
+  - 'airbench 2024 - #39-40.46: classification of individuals - religion'
+  - airbench-2024-39-40-46-classification-of-individuals-religion
+- id: air-bench-2024-39-40-47-classification-of-individuals-beliefs
+  display_name: Classification of individuals - Beliefs
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.47: Classification of individuals - Beliefs'
+  - 'airbench 2024 - #39-40.47: classification of individuals - beliefs'
+  - airbench-2024-39-40-47-classification-of-individuals-beliefs
+- id: air-bench-2024-39-40-48-classification-of-individuals-nationality
+  display_name: Classification of individuals - Nationality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.48: Classification of individuals - Nationality'
+  - 'airbench 2024 - #39-40.48: classification of individuals - nationality'
+  - airbench-2024-39-40-48-classification-of-individuals-nationality
+- id: air-bench-2024-39-40-49-classification-of-individuals-geographic-region
+  display_name: Classification of individuals - Geographic region
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.49: Classification of individuals - Geographic region'
+  - 'airbench 2024 - #39-40.49: classification of individuals - geographic region'
+  - airbench-2024-39-40-49-classification-of-individuals-geographic-region
+- id: air-bench-2024-39-40-4-discrimination-in-employment-benefits-or-services-gender
+  display_name: Discrimination in employment, benefits, or services - Gender
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.4: Discrimination in employment, benefits, or services
+    - Gender'
+  - 'airbench 2024 - #39-40.4: discrimination in employment, benefits, or services
+    - gender'
+  - airbench-2024-39-40-4-discrimination-in-employment-benefits-or-services-gender
+- id: air-bench-2024-39-40-50-classification-of-individuals-caste
+  display_name: Classification of individuals - Caste
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.50: Classification of individuals - Caste'
+  - 'airbench 2024 - #39-40.50: classification of individuals - caste'
+  - airbench-2024-39-40-50-classification-of-individuals-caste
+- id: air-bench-2024-39-40-51-classification-of-individuals-social-behaviors
+  display_name: Classification of individuals - Social behaviors
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.51: Classification of individuals - Social behaviors'
+  - 'airbench 2024 - #39-40.51: classification of individuals - social behaviors'
+  - airbench-2024-39-40-51-classification-of-individuals-social-behaviors
+- id: air-bench-2024-39-40-52-classification-of-individuals-physical-characteristics
+  display_name: Classification of individuals - Physical Characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.52: Classification of individuals - Physical Characteristics'
+  - 'airbench 2024 - #39-40.52: classification of individuals - physical characteristics'
+  - airbench-2024-39-40-52-classification-of-individuals-physical-characteristics
+- id: air-bench-2024-39-40-53-classification-of-individuals-mental-characteristics
+  display_name: Classification of individuals - Mental Characteristics
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.53: Classification of individuals - Mental Characteristics'
+  - 'airbench 2024 - #39-40.53: classification of individuals - mental characteristics'
+  - airbench-2024-39-40-53-classification-of-individuals-mental-characteristics
+- id: air-bench-2024-39-40-54-classification-of-individuals-predicted-personality
+  display_name: Classification of individuals - Predicted Personality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.54: Classification of individuals - Predicted Personality'
+  - 'airbench 2024 - #39-40.54: classification of individuals - predicted personality'
+  - airbench-2024-39-40-54-classification-of-individuals-predicted-personality
+- id: air-bench-2024-39-40-55-classification-of-individuals-health-conditions
+  display_name: Classification of individuals - Health conditions
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.55: Classification of individuals - Health conditions'
+  - 'airbench 2024 - #39-40.55: classification of individuals - health conditions'
+  - airbench-2024-39-40-55-classification-of-individuals-health-conditions
+- id: air-bench-2024-39-40-56-classification-of-individuals-disability
+  display_name: Classification of individuals - Disability
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.56: Classification of individuals - Disability'
+  - 'airbench 2024 - #39-40.56: classification of individuals - disability'
+  - airbench-2024-39-40-56-classification-of-individuals-disability
+- id: air-bench-2024-39-40-57-classification-of-individuals-pregnancy-status
+  display_name: Classification of individuals - Pregnancy Status
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.57: Classification of individuals - Pregnancy Status'
+  - 'airbench 2024 - #39-40.57: classification of individuals - pregnancy status'
+  - airbench-2024-39-40-57-classification-of-individuals-pregnancy-status
+- id: air-bench-2024-39-40-58-classification-of-individuals-genetic-information
+  display_name: Classification of individuals - Genetic Information
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.58: Classification of individuals - Genetic Information'
+  - 'airbench 2024 - #39-40.58: classification of individuals - genetic information'
+  - airbench-2024-39-40-58-classification-of-individuals-genetic-information
+- id: air-bench-2024-39-40-59-classification-of-individuals-occupation
+  display_name: Classification of individuals - Occupation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.59: Classification of individuals - Occupation'
+  - 'airbench 2024 - #39-40.59: classification of individuals - occupation'
+  - airbench-2024-39-40-59-classification-of-individuals-occupation
+- id: air-bench-2024-39-40-5-discrimination-in-employment-benefits-or-services-sexual-orientation
+  display_name: Discrimination in employment, benefits, or services - Sexual orientation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.5: Discrimination in employment, benefits, or services
+    - Sexual orientation'
+  - 'airbench 2024 - #39-40.5: discrimination in employment, benefits, or services
+    - sexual orientation'
+  - airbench-2024-39-40-5-discrimination-in-employment-benefits-or-services-sexual-orientation
+- id: air-bench-2024-39-40-60-classification-of-individuals-age
+  display_name: Classification of individuals - Age
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.60: Classification of individuals - Age'
+  - 'airbench 2024 - #39-40.60: classification of individuals - age'
+  - airbench-2024-39-40-60-classification-of-individuals-age
+- id: air-bench-2024-39-40-6-discrimination-in-employment-benefits-or-services-religion
+  display_name: Discrimination in employment, benefits, or services - Religion
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.6: Discrimination in employment, benefits, or services
+    - Religion'
+  - 'airbench 2024 - #39-40.6: discrimination in employment, benefits, or services
+    - religion'
+  - airbench-2024-39-40-6-discrimination-in-employment-benefits-or-services-religion
+- id: air-bench-2024-39-40-7-discrimination-in-employment-benefits-or-services-beliefs
+  display_name: Discrimination in employment, benefits, or services - Beliefs
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.7: Discrimination in employment, benefits, or services
+    - Beliefs'
+  - 'airbench 2024 - #39-40.7: discrimination in employment, benefits, or services
+    - beliefs'
+  - airbench-2024-39-40-7-discrimination-in-employment-benefits-or-services-beliefs
+- id: air-bench-2024-39-40-8-discrimination-in-employment-benefits-or-services-nationality
+  display_name: Discrimination in employment, benefits, or services - Nationality
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.8: Discrimination in employment, benefits, or services
+    - Nationality'
+  - 'airbench 2024 - #39-40.8: discrimination in employment, benefits, or services
+    - nationality'
+  - airbench-2024-39-40-8-discrimination-in-employment-benefits-or-services-nationality
+- id: air-bench-2024-39-40-9-discrimination-in-employment-benefits-or-services-geographic-region
+  display_name: Discrimination in employment, benefits, or services - Geographic region
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40.9: Discrimination in employment, benefits, or services
+    - Geographic region'
+  - 'airbench 2024 - #39-40.9: discrimination in employment, benefits, or services
+    - geographic region'
+  - airbench-2024-39-40-9-discrimination-in-employment-benefits-or-services-geographic-region
+- id: air-bench-2024-39-40-discrimination-protected-characteristics-combinations
+  display_name: Discrimination/Protected Characteristics Combinations
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #39-40: Discrimination/Protected Characteristics Combinations'
+  - 'airbench 2024 - #39-40: discrimination/protected characteristics combinations'
+  - airbench-2024-39-40-discrimination-protected-characteristics-combinations
+- id: air-bench-2024-3-availability
+  display_name: Availability
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #3: Availability'
+  - 'airbench 2024 - #3: availability'
+  - airbench-2024-3-availability
+- id: air-bench-2024-4-10-profiling
+  display_name: Profiling
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.10: Profiling'
+  - 'airbench 2024 - #4.10: profiling'
+  - airbench-2024-4-10-profiling
+- id: air-bench-2024-4-1-financing-eligibility-creditworthiness
+  display_name: Financing eligibility/Creditworthiness
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.1: Financing eligibility/Creditworthiness'
+  - 'airbench 2024 - #4.1: financing eligibility/creditworthiness'
+  - airbench-2024-4-1-financing-eligibility-creditworthiness
+- id: air-bench-2024-4-2-criminal-justice-predictive-policing
+  display_name: Criminal justice/Predictive policing
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.2: Criminal justice/Predictive policing'
+  - 'airbench 2024 - #4.2: criminal justice/predictive policing'
+  - airbench-2024-4-2-criminal-justice-predictive-policing
+- id: air-bench-2024-4-3-adversely-affects-legal-rights
+  display_name: Adversely affects legal rights
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.3: Adversely affects legal rights'
+  - 'airbench 2024 - #4.3: adversely affects legal rights'
+  - airbench-2024-4-3-adversely-affects-legal-rights
+- id: air-bench-2024-4-4-employment
+  display_name: Employment
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.4: Employment'
+  - 'airbench 2024 - #4.4: employment'
+  - airbench-2024-4-4-employment
+- id: air-bench-2024-4-5-social-scoring
+  display_name: Social scoring
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.5: Social scoring'
+  - 'airbench 2024 - #4.5: social scoring'
+  - airbench-2024-4-5-social-scoring
+- id: air-bench-2024-4-6-housing-eligibility
+  display_name: Housing eligibility
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.6: Housing eligibility'
+  - 'airbench 2024 - #4.6: housing eligibility'
+  - airbench-2024-4-6-housing-eligibility
+- id: air-bench-2024-4-7-education-eligibility
+  display_name: Education eligibility
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.7: Education eligibility'
+  - 'airbench 2024 - #4.7: education eligibility'
+  - airbench-2024-4-7-education-eligibility
+- id: air-bench-2024-4-8-migration-eligibility
+  display_name: Migration eligibility
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.8: Migration eligibility'
+  - 'airbench 2024 - #4.8: migration eligibility'
+  - airbench-2024-4-8-migration-eligibility
+- id: air-bench-2024-4-9-insurance-eligibility
+  display_name: Insurance eligibility
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4.9: Insurance eligibility'
+  - 'airbench 2024 - #4.9: insurance eligibility'
+  - airbench-2024-4-9-insurance-eligibility
+- id: air-bench-2024-41-42-10-unauthorized-disclosure-pii-personal-identifiable-information
+  display_name: Unauthorized disclosure - PII (Personal Identifiable Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.10: Unauthorized disclosure - PII (Personal Identifiable
+    Information)'
+  - 'airbench 2024 - #41-42.10: unauthorized disclosure - pii (personal identifiable
+    information)'
+  - airbench-2024-41-42-10-unauthorized-disclosure-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-11-unauthorized-disclosure-health-data
+  display_name: Unauthorized disclosure - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.11: Unauthorized disclosure - Health data'
+  - 'airbench 2024 - #41-42.11: unauthorized disclosure - health data'
+  - airbench-2024-41-42-11-unauthorized-disclosure-health-data
+- id: air-bench-2024-41-42-12-unauthorized-disclosure-location-data
+  display_name: Unauthorized disclosure - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.12: Unauthorized disclosure - Location data'
+  - 'airbench 2024 - #41-42.12: unauthorized disclosure - location data'
+  - airbench-2024-41-42-12-unauthorized-disclosure-location-data
+- id: air-bench-2024-41-42-13-unauthorized-disclosure-demographic-data
+  display_name: Unauthorized disclosure - Demographic data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.13: Unauthorized disclosure - Demographic data'
+  - 'airbench 2024 - #41-42.13: unauthorized disclosure - demographic data'
+  - airbench-2024-41-42-13-unauthorized-disclosure-demographic-data
+- id: air-bench-2024-41-42-14-unauthorized-disclosure-biometric-data-facial-recognition
+  display_name: Unauthorized disclosure - Biometric data (facial recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.14: Unauthorized disclosure - Biometric data (facial recognition)'
+  - 'airbench 2024 - #41-42.14: unauthorized disclosure - biometric data (facial recognition)'
+  - airbench-2024-41-42-14-unauthorized-disclosure-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-15-unauthorized-disclosure-educational-records
+  display_name: Unauthorized disclosure - Educational records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.15: Unauthorized disclosure - Educational records'
+  - 'airbench 2024 - #41-42.15: unauthorized disclosure - educational records'
+  - airbench-2024-41-42-15-unauthorized-disclosure-educational-records
+- id: air-bench-2024-41-42-16-unauthorized-disclosure-financial-records
+  display_name: Unauthorized disclosure - Financial records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.16: Unauthorized disclosure - Financial records'
+  - 'airbench 2024 - #41-42.16: unauthorized disclosure - financial records'
+  - airbench-2024-41-42-16-unauthorized-disclosure-financial-records
+- id: air-bench-2024-41-42-17-unauthorized-disclosure-behavioral-preference-data
+  display_name: Unauthorized disclosure - Behavioral/ Preference data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.17: Unauthorized disclosure - Behavioral/ Preference data'
+  - 'airbench 2024 - #41-42.17: unauthorized disclosure - behavioral/ preference data'
+  - airbench-2024-41-42-17-unauthorized-disclosure-behavioral-preference-data
+- id: air-bench-2024-41-42-18-unauthorized-disclosure-communication-records
+  display_name: Unauthorized disclosure - Communication Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.18: Unauthorized disclosure - Communication Records'
+  - 'airbench 2024 - #41-42.18: unauthorized disclosure - communication records'
+  - airbench-2024-41-42-18-unauthorized-disclosure-communication-records
+- id: air-bench-2024-41-42-19-unauthorized-distribution-pii-personal-identifiable-information
+  display_name: Unauthorized distribution - PII (Personal Identifiable Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.19: Unauthorized distribution - PII (Personal Identifiable
+    Information)'
+  - 'airbench 2024 - #41-42.19: unauthorized distribution - pii (personal identifiable
+    information)'
+  - airbench-2024-41-42-19-unauthorized-distribution-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-1-unauthorized-generation-pii-personal-identifiable-information
+  display_name: Unauthorized generation - PII (Personal Identifiable Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.1: Unauthorized generation - PII (Personal Identifiable
+    Information)'
+  - 'airbench 2024 - #41-42.1: unauthorized generation - pii (personal identifiable
+    information)'
+  - airbench-2024-41-42-1-unauthorized-generation-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-20-unauthorized-distribution-health-data
+  display_name: Unauthorized distribution - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.20: Unauthorized distribution - Health data'
+  - 'airbench 2024 - #41-42.20: unauthorized distribution - health data'
+  - airbench-2024-41-42-20-unauthorized-distribution-health-data
+- id: air-bench-2024-41-42-21-unauthorized-distribution-location-data
+  display_name: Unauthorized distribution - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.21: Unauthorized distribution - Location data'
+  - 'airbench 2024 - #41-42.21: unauthorized distribution - location data'
+  - airbench-2024-41-42-21-unauthorized-distribution-location-data
+- id: air-bench-2024-41-42-22-unauthorized-distribution-demographic-data
+  display_name: Unauthorized distribution - Demographic data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.22: Unauthorized distribution - Demographic data'
+  - 'airbench 2024 - #41-42.22: unauthorized distribution - demographic data'
+  - airbench-2024-41-42-22-unauthorized-distribution-demographic-data
+- id: air-bench-2024-41-42-23-unauthorized-distribution-biometric-data-facial-recognition
+  display_name: Unauthorized distribution - Biometric data (facial recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.23: Unauthorized distribution - Biometric data (facial
+    recognition)'
+  - 'airbench 2024 - #41-42.23: unauthorized distribution - biometric data (facial
+    recognition)'
+  - airbench-2024-41-42-23-unauthorized-distribution-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-24-unauthorized-distribution-educational-records
+  display_name: Unauthorized distribution - Educational records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.24: Unauthorized distribution - Educational records'
+  - 'airbench 2024 - #41-42.24: unauthorized distribution - educational records'
+  - airbench-2024-41-42-24-unauthorized-distribution-educational-records
+- id: air-bench-2024-41-42-25-unauthorized-distribution-financial-records
+  display_name: Unauthorized distribution - Financial records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.25: Unauthorized distribution - Financial records'
+  - 'airbench 2024 - #41-42.25: unauthorized distribution - financial records'
+  - airbench-2024-41-42-25-unauthorized-distribution-financial-records
+- id: air-bench-2024-41-42-26-unauthorized-distribution-behavioral-preference-data
+  display_name: Unauthorized distribution - Behavioral/ Preference data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.26: Unauthorized distribution - Behavioral/ Preference
+    data'
+  - 'airbench 2024 - #41-42.26: unauthorized distribution - behavioral/ preference
+    data'
+  - airbench-2024-41-42-26-unauthorized-distribution-behavioral-preference-data
+- id: air-bench-2024-41-42-27-unauthorized-distribution-communication-records
+  display_name: Unauthorized distribution - Communication Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.27: Unauthorized distribution - Communication Records'
+  - 'airbench 2024 - #41-42.27: unauthorized distribution - communication records'
+  - airbench-2024-41-42-27-unauthorized-distribution-communication-records
+- id: air-bench-2024-41-42-28-unauthorized-collection-gathering-stealing-pii-personal-identifiable-information
+  display_name: Unauthorized collection/gathering/stealing - PII (Personal Identifiable
+    Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.28: Unauthorized collection/gathering/stealing - PII (Personal
+    Identifiable Information)'
+  - 'airbench 2024 - #41-42.28: unauthorized collection/gathering/stealing - pii (personal
+    identifiable information)'
+  - airbench-2024-41-42-28-unauthorized-collection-gathering-stealing-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-29-unauthorized-collection-gathering-stealing-health-data
+  display_name: Unauthorized collection/gathering/stealing - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.29: Unauthorized collection/gathering/stealing - Health
+    data'
+  - 'airbench 2024 - #41-42.29: unauthorized collection/gathering/stealing - health
+    data'
+  - airbench-2024-41-42-29-unauthorized-collection-gathering-stealing-health-data
+- id: air-bench-2024-41-42-2-unauthorized-generation-health-data
+  display_name: Unauthorized generation - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.2: Unauthorized generation - Health data'
+  - 'airbench 2024 - #41-42.2: unauthorized generation - health data'
+  - airbench-2024-41-42-2-unauthorized-generation-health-data
+- id: air-bench-2024-41-42-30-unauthorized-collection-gathering-stealing-location-data
+  display_name: Unauthorized collection/gathering/stealing - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.30: Unauthorized collection/gathering/stealing - Location
+    data'
+  - 'airbench 2024 - #41-42.30: unauthorized collection/gathering/stealing - location
+    data'
+  - airbench-2024-41-42-30-unauthorized-collection-gathering-stealing-location-data
+- id: air-bench-2024-41-42-31-unauthorized-collection-gathering-stealing-demographic-data
+  display_name: Unauthorized collection/gathering/stealing - Demographic data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.31: Unauthorized collection/gathering/stealing - Demographic
+    data'
+  - 'airbench 2024 - #41-42.31: unauthorized collection/gathering/stealing - demographic
+    data'
+  - airbench-2024-41-42-31-unauthorized-collection-gathering-stealing-demographic-data
+- id: air-bench-2024-41-42-32-unauthorized-collection-gathering-stealing-biometric-data-facial-recognition
+  display_name: Unauthorized collection/gathering/stealing - Biometric data (facial
+    recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.32: Unauthorized collection/gathering/stealing - Biometric
+    data (facial recognition)'
+  - 'airbench 2024 - #41-42.32: unauthorized collection/gathering/stealing - biometric
+    data (facial recognition)'
+  - airbench-2024-41-42-32-unauthorized-collection-gathering-stealing-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-33-unauthorized-collection-gathering-stealing-educational-records
+  display_name: Unauthorized collection/gathering/stealing - Educational records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.33: Unauthorized collection/gathering/stealing - Educational
+    records'
+  - 'airbench 2024 - #41-42.33: unauthorized collection/gathering/stealing - educational
+    records'
+  - airbench-2024-41-42-33-unauthorized-collection-gathering-stealing-educational-records
+- id: air-bench-2024-41-42-34-unauthorized-collection-gathering-stealing-financial-records
+  display_name: Unauthorized collection/gathering/stealing - Financial records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.34: Unauthorized collection/gathering/stealing - Financial
+    records'
+  - 'airbench 2024 - #41-42.34: unauthorized collection/gathering/stealing - financial
+    records'
+  - airbench-2024-41-42-34-unauthorized-collection-gathering-stealing-financial-records
+- id: air-bench-2024-41-42-35-unauthorized-collection-gathering-stealing-behavioral-preference-data
+  display_name: Unauthorized collection/gathering/stealing - Behavioral/ Preference
+    data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.35: Unauthorized collection/gathering/stealing - Behavioral/
+    Preference data'
+  - 'airbench 2024 - #41-42.35: unauthorized collection/gathering/stealing - behavioral/
+    preference data'
+  - airbench-2024-41-42-35-unauthorized-collection-gathering-stealing-behavioral-preference-data
+- id: air-bench-2024-41-42-36-unauthorized-collection-gathering-stealing-communication-records
+  display_name: Unauthorized collection/gathering/stealing - Communication Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.36: Unauthorized collection/gathering/stealing - Communication
+    Records'
+  - 'airbench 2024 - #41-42.36: unauthorized collection/gathering/stealing - communication
+    records'
+  - airbench-2024-41-42-36-unauthorized-collection-gathering-stealing-communication-records
+- id: air-bench-2024-41-42-37-unauthorized-processing-pii-personal-identifiable-information
+  display_name: Unauthorized processing - PII (Personal Identifiable Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.37: Unauthorized processing - PII (Personal Identifiable
+    Information)'
+  - 'airbench 2024 - #41-42.37: unauthorized processing - pii (personal identifiable
+    information)'
+  - airbench-2024-41-42-37-unauthorized-processing-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-38-unauthorized-processing-health-data
+  display_name: Unauthorized processing - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.38: Unauthorized processing - Health data'
+  - 'airbench 2024 - #41-42.38: unauthorized processing - health data'
+  - airbench-2024-41-42-38-unauthorized-processing-health-data
+- id: air-bench-2024-41-42-39-unauthorized-processing-location-data
+  display_name: Unauthorized processing - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.39: Unauthorized processing - Location data'
+  - 'airbench 2024 - #41-42.39: unauthorized processing - location data'
+  - airbench-2024-41-42-39-unauthorized-processing-location-data
+- id: air-bench-2024-41-42-3-unauthorized-generation-location-data
+  display_name: Unauthorized generation - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.3: Unauthorized generation - Location data'
+  - 'airbench 2024 - #41-42.3: unauthorized generation - location data'
+  - airbench-2024-41-42-3-unauthorized-generation-location-data
+- id: air-bench-2024-41-42-40-unauthorized-processing-demographic-data
+  display_name: Unauthorized processing - Demographic data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.40: Unauthorized processing - Demographic data'
+  - 'airbench 2024 - #41-42.40: unauthorized processing - demographic data'
+  - airbench-2024-41-42-40-unauthorized-processing-demographic-data
+- id: air-bench-2024-41-42-41-unauthorized-processing-biometric-data-facial-recognition
+  display_name: Unauthorized processing - Biometric data (facial recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.41: Unauthorized processing - Biometric data (facial recognition)'
+  - 'airbench 2024 - #41-42.41: unauthorized processing - biometric data (facial recognition)'
+  - airbench-2024-41-42-41-unauthorized-processing-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-42-unauthorized-processing-educational-records
+  display_name: Unauthorized processing - Educational records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.42: Unauthorized processing - Educational records'
+  - 'airbench 2024 - #41-42.42: unauthorized processing - educational records'
+  - airbench-2024-41-42-42-unauthorized-processing-educational-records
+- id: air-bench-2024-41-42-43-unauthorized-processing-financial-records
+  display_name: Unauthorized processing - Financial records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.43: Unauthorized processing - Financial records'
+  - 'airbench 2024 - #41-42.43: unauthorized processing - financial records'
+  - airbench-2024-41-42-43-unauthorized-processing-financial-records
+- id: air-bench-2024-41-42-44-unauthorized-processing-behavioral-preference-data
+  display_name: Unauthorized processing - Behavioral/ Preference data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.44: Unauthorized processing - Behavioral/ Preference data'
+  - 'airbench 2024 - #41-42.44: unauthorized processing - behavioral/ preference data'
+  - airbench-2024-41-42-44-unauthorized-processing-behavioral-preference-data
+- id: air-bench-2024-41-42-45-unauthorized-processing-communication-records
+  display_name: Unauthorized processing - Communication Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.45: Unauthorized processing - Communication Records'
+  - 'airbench 2024 - #41-42.45: unauthorized processing - communication records'
+  - airbench-2024-41-42-45-unauthorized-processing-communication-records
+- id: air-bench-2024-41-42-46-unauthorized-inference-synthesis-pii-personal-identifiable-information
+  display_name: Unauthorized inference/synthesis - PII (Personal Identifiable Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.46: Unauthorized inference/synthesis - PII (Personal Identifiable
+    Information)'
+  - 'airbench 2024 - #41-42.46: unauthorized inference/synthesis - pii (personal identifiable
+    information)'
+  - airbench-2024-41-42-46-unauthorized-inference-synthesis-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-47-unauthorized-inference-synthesis-health-data
+  display_name: Unauthorized inference/synthesis - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.47: Unauthorized inference/synthesis - Health data'
+  - 'airbench 2024 - #41-42.47: unauthorized inference/synthesis - health data'
+  - airbench-2024-41-42-47-unauthorized-inference-synthesis-health-data
+- id: air-bench-2024-41-42-48-unauthorized-inference-synthesis-location-data
+  display_name: Unauthorized inference/synthesis - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.48: Unauthorized inference/synthesis - Location data'
+  - 'airbench 2024 - #41-42.48: unauthorized inference/synthesis - location data'
+  - airbench-2024-41-42-48-unauthorized-inference-synthesis-location-data
+- id: air-bench-2024-41-42-49-unauthorized-inference-synthesis-demographic-data
+  display_name: Unauthorized inference/synthesis - Demographic data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.49: Unauthorized inference/synthesis - Demographic data'
+  - 'airbench 2024 - #41-42.49: unauthorized inference/synthesis - demographic data'
+  - airbench-2024-41-42-49-unauthorized-inference-synthesis-demographic-data
+- id: air-bench-2024-41-42-4-unauthorized-generation-demographic-data
+  display_name: Unauthorized generation - Demographic data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.4: Unauthorized generation - Demographic data'
+  - 'airbench 2024 - #41-42.4: unauthorized generation - demographic data'
+  - airbench-2024-41-42-4-unauthorized-generation-demographic-data
+- id: air-bench-2024-41-42-50-unauthorized-inference-synthesis-biometric-data-facial-recognition
+  display_name: Unauthorized inference/synthesis - Biometric data (facial recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.50: Unauthorized inference/synthesis - Biometric data
+    (facial recognition)'
+  - 'airbench 2024 - #41-42.50: unauthorized inference/synthesis - biometric data
+    (facial recognition)'
+  - airbench-2024-41-42-50-unauthorized-inference-synthesis-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-51-unauthorized-inference-synthesis-educational-records
+  display_name: Unauthorized inference/synthesis - Educational records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.51: Unauthorized inference/synthesis - Educational records'
+  - 'airbench 2024 - #41-42.51: unauthorized inference/synthesis - educational records'
+  - airbench-2024-41-42-51-unauthorized-inference-synthesis-educational-records
+- id: air-bench-2024-41-42-52-unauthorized-inference-synthesis-financial-records
+  display_name: Unauthorized inference/synthesis - Financial records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.52: Unauthorized inference/synthesis - Financial records'
+  - 'airbench 2024 - #41-42.52: unauthorized inference/synthesis - financial records'
+  - airbench-2024-41-42-52-unauthorized-inference-synthesis-financial-records
+- id: air-bench-2024-41-42-53-unauthorized-inference-synthesis-behavioral-preference-data
+  display_name: Unauthorized inference/synthesis - Behavioral/ Preference data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.53: Unauthorized inference/synthesis - Behavioral/ Preference
+    data'
+  - 'airbench 2024 - #41-42.53: unauthorized inference/synthesis - behavioral/ preference
+    data'
+  - airbench-2024-41-42-53-unauthorized-inference-synthesis-behavioral-preference-data
+- id: air-bench-2024-41-42-54-unauthorized-inference-synthesis-communication-records
+  display_name: Unauthorized inference/synthesis - Communication Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.54: Unauthorized inference/synthesis - Communication Records'
+  - 'airbench 2024 - #41-42.54: unauthorized inference/synthesis - communication records'
+  - airbench-2024-41-42-54-unauthorized-inference-synthesis-communication-records
+- id: air-bench-2024-41-42-55-non-consensual-tracking-monitoring-stalking-spyware-pii-personal-identifiable-information
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - PII (Personal
+    Identifiable Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.55: Non-consensual tracking/monitoring/stalking/spyware
+    - PII (Personal Identifiable Information)'
+  - 'airbench 2024 - #41-42.55: non-consensual tracking/monitoring/stalking/spyware
+    - pii (personal identifiable information)'
+  - airbench-2024-41-42-55-non-consensual-tracking-monitoring-stalking-spyware-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-56-non-consensual-tracking-monitoring-stalking-spyware-health-data
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.56: Non-consensual tracking/monitoring/stalking/spyware
+    - Health data'
+  - 'airbench 2024 - #41-42.56: non-consensual tracking/monitoring/stalking/spyware
+    - health data'
+  - airbench-2024-41-42-56-non-consensual-tracking-monitoring-stalking-spyware-health-data
+- id: air-bench-2024-41-42-57-non-consensual-tracking-monitoring-stalking-spyware-location-data
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.57: Non-consensual tracking/monitoring/stalking/spyware
+    - Location data'
+  - 'airbench 2024 - #41-42.57: non-consensual tracking/monitoring/stalking/spyware
+    - location data'
+  - airbench-2024-41-42-57-non-consensual-tracking-monitoring-stalking-spyware-location-data
+- id: air-bench-2024-41-42-58-non-consensual-tracking-monitoring-stalking-spyware-demographic-data
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Demographic
+    data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.58: Non-consensual tracking/monitoring/stalking/spyware
+    - Demographic data'
+  - 'airbench 2024 - #41-42.58: non-consensual tracking/monitoring/stalking/spyware
+    - demographic data'
+  - airbench-2024-41-42-58-non-consensual-tracking-monitoring-stalking-spyware-demographic-data
+- id: air-bench-2024-41-42-59-non-consensual-tracking-monitoring-stalking-spyware-biometric-data-facial-recognition
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Biometric data
+    (facial recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.59: Non-consensual tracking/monitoring/stalking/spyware
+    - Biometric data (facial recognition)'
+  - 'airbench 2024 - #41-42.59: non-consensual tracking/monitoring/stalking/spyware
+    - biometric data (facial recognition)'
+  - airbench-2024-41-42-59-non-consensual-tracking-monitoring-stalking-spyware-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-5-unauthorized-generation-biometric-data-facial-recognition
+  display_name: Unauthorized generation - Biometric data (facial recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.5: Unauthorized generation - Biometric data (facial recognition)'
+  - 'airbench 2024 - #41-42.5: unauthorized generation - biometric data (facial recognition)'
+  - airbench-2024-41-42-5-unauthorized-generation-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-60-non-consensual-tracking-monitoring-stalking-spyware-educational-records
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Educational
+    records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.60: Non-consensual tracking/monitoring/stalking/spyware
+    - Educational records'
+  - 'airbench 2024 - #41-42.60: non-consensual tracking/monitoring/stalking/spyware
+    - educational records'
+  - airbench-2024-41-42-60-non-consensual-tracking-monitoring-stalking-spyware-educational-records
+- id: air-bench-2024-41-42-61-non-consensual-tracking-monitoring-stalking-spyware-financial-records
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Financial records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.61: Non-consensual tracking/monitoring/stalking/spyware
+    - Financial records'
+  - 'airbench 2024 - #41-42.61: non-consensual tracking/monitoring/stalking/spyware
+    - financial records'
+  - airbench-2024-41-42-61-non-consensual-tracking-monitoring-stalking-spyware-financial-records
+- id: air-bench-2024-41-42-62-non-consensual-tracking-monitoring-stalking-spyware-behavioral-preference-data
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Behavioral/
+    Preference data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.62: Non-consensual tracking/monitoring/stalking/spyware
+    - Behavioral/ Preference data'
+  - 'airbench 2024 - #41-42.62: non-consensual tracking/monitoring/stalking/spyware
+    - behavioral/ preference data'
+  - airbench-2024-41-42-62-non-consensual-tracking-monitoring-stalking-spyware-behavioral-preference-data
+- id: air-bench-2024-41-42-63-non-consensual-tracking-monitoring-stalking-spyware-communication-records
+  display_name: Non-consensual tracking/monitoring/stalking/spyware - Communication
+    Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.63: Non-consensual tracking/monitoring/stalking/spyware
+    - Communication Records'
+  - 'airbench 2024 - #41-42.63: non-consensual tracking/monitoring/stalking/spyware
+    - communication records'
+  - airbench-2024-41-42-63-non-consensual-tracking-monitoring-stalking-spyware-communication-records
+- id: air-bench-2024-41-42-64-model-attacks-membership-inference-model-inversion-pii-personal-identifiable-information
+  display_name: Model Attacks (membership inference, model inversion) - PII (Personal
+    Identifiable Information)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.64: Model Attacks (membership inference, model inversion)
+    - PII (Personal Identifiable Information)'
+  - 'airbench 2024 - #41-42.64: model attacks (membership inference, model inversion)
+    - pii (personal identifiable information)'
+  - airbench-2024-41-42-64-model-attacks-membership-inference-model-inversion-pii-personal-identifiable-information
+- id: air-bench-2024-41-42-65-model-attacks-membership-inference-model-inversion-health-data
+  display_name: Model Attacks (membership inference, model inversion) - Health data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.65: Model Attacks (membership inference, model inversion)
+    - Health data'
+  - 'airbench 2024 - #41-42.65: model attacks (membership inference, model inversion)
+    - health data'
+  - airbench-2024-41-42-65-model-attacks-membership-inference-model-inversion-health-data
+- id: air-bench-2024-41-42-66-model-attacks-membership-inference-model-inversion-location-data
+  display_name: Model Attacks (membership inference, model inversion) - Location data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.66: Model Attacks (membership inference, model inversion)
+    - Location data'
+  - 'airbench 2024 - #41-42.66: model attacks (membership inference, model inversion)
+    - location data'
+  - airbench-2024-41-42-66-model-attacks-membership-inference-model-inversion-location-data
+- id: air-bench-2024-41-42-67-model-attacks-membership-inference-model-inversion-demographic-data
+  display_name: Model Attacks (membership inference, model inversion) - Demographic
+    data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.67: Model Attacks (membership inference, model inversion)
+    - Demographic data'
+  - 'airbench 2024 - #41-42.67: model attacks (membership inference, model inversion)
+    - demographic data'
+  - airbench-2024-41-42-67-model-attacks-membership-inference-model-inversion-demographic-data
+- id: air-bench-2024-41-42-68-model-attacks-membership-inference-model-inversion-biometric-data-facial-recognition
+  display_name: Model Attacks (membership inference, model inversion) - Biometric
+    data (facial recognition)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.68: Model Attacks (membership inference, model inversion)
+    - Biometric data (facial recognition)'
+  - 'airbench 2024 - #41-42.68: model attacks (membership inference, model inversion)
+    - biometric data (facial recognition)'
+  - airbench-2024-41-42-68-model-attacks-membership-inference-model-inversion-biometric-data-facial-recognition
+- id: air-bench-2024-41-42-69-model-attacks-membership-inference-model-inversion-educational-records
+  display_name: Model Attacks (membership inference, model inversion) - Educational
+    records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.69: Model Attacks (membership inference, model inversion)
+    - Educational records'
+  - 'airbench 2024 - #41-42.69: model attacks (membership inference, model inversion)
+    - educational records'
+  - airbench-2024-41-42-69-model-attacks-membership-inference-model-inversion-educational-records
+- id: air-bench-2024-41-42-6-unauthorized-generation-educational-records
+  display_name: Unauthorized generation - Educational records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.6: Unauthorized generation - Educational records'
+  - 'airbench 2024 - #41-42.6: unauthorized generation - educational records'
+  - airbench-2024-41-42-6-unauthorized-generation-educational-records
+- id: air-bench-2024-41-42-70-model-attacks-membership-inference-model-inversion-financial-records
+  display_name: Model Attacks (membership inference, model inversion) - Financial
+    records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.70: Model Attacks (membership inference, model inversion)
+    - Financial records'
+  - 'airbench 2024 - #41-42.70: model attacks (membership inference, model inversion)
+    - financial records'
+  - airbench-2024-41-42-70-model-attacks-membership-inference-model-inversion-financial-records
+- id: air-bench-2024-41-42-71-model-attacks-membership-inference-model-inversion-behavioral-preference-data
+  display_name: Model Attacks (membership inference, model inversion) - Behavioral/
+    Preference data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.71: Model Attacks (membership inference, model inversion)
+    - Behavioral/ Preference data'
+  - 'airbench 2024 - #41-42.71: model attacks (membership inference, model inversion)
+    - behavioral/ preference data'
+  - airbench-2024-41-42-71-model-attacks-membership-inference-model-inversion-behavioral-preference-data
+- id: air-bench-2024-41-42-72-model-attacks-membership-inference-model-inversion-communication-records
+  display_name: Model Attacks (membership inference, model inversion) - Communication
+    Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.72: Model Attacks (membership inference, model inversion)
+    - Communication Records'
+  - 'airbench 2024 - #41-42.72: model attacks (membership inference, model inversion)
+    - communication records'
+  - airbench-2024-41-42-72-model-attacks-membership-inference-model-inversion-communication-records
+- id: air-bench-2024-41-42-7-unauthorized-generation-financial-records
+  display_name: Unauthorized generation - Financial records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.7: Unauthorized generation - Financial records'
+  - 'airbench 2024 - #41-42.7: unauthorized generation - financial records'
+  - airbench-2024-41-42-7-unauthorized-generation-financial-records
+- id: air-bench-2024-41-42-8-unauthorized-generation-behavioral-preference-data
+  display_name: Unauthorized generation - Behavioral/ Preference data
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.8: Unauthorized generation - Behavioral/ Preference data'
+  - 'airbench 2024 - #41-42.8: unauthorized generation - behavioral/ preference data'
+  - airbench-2024-41-42-8-unauthorized-generation-behavioral-preference-data
+- id: air-bench-2024-41-42-9-unauthorized-generation-communication-records
+  display_name: Unauthorized generation - Communication Records
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42.9: Unauthorized generation - Communication Records'
+  - 'airbench 2024 - #41-42.9: unauthorized generation - communication records'
+  - airbench-2024-41-42-9-unauthorized-generation-communication-records
+- id: air-bench-2024-41-42-privacy-violations-sensitive-data-combinations
+  display_name: Privacy Violations/Sensitive Data Combinations
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #41-42: Privacy Violations/Sensitive Data Combinations'
+  - 'airbench 2024 - #41-42: privacy violations/sensitive data combinations'
+  - airbench-2024-41-42-privacy-violations-sensitive-data-combinations
+- id: air-bench-2024-43-1-illegal-drugs
+  display_name: Illegal drugs
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #43.1: Illegal drugs'
+  - 'airbench 2024 - #43.1: illegal drugs'
+  - airbench-2024-43-1-illegal-drugs
+- id: air-bench-2024-43-illegal-regulated-substances-goods
+  display_name: Illegal/Regulated substances/goods
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #43: Illegal/Regulated substances/goods'
+  - 'airbench 2024 - #43: illegal/regulated substances/goods'
+  - airbench-2024-43-illegal-regulated-substances-goods
+- id: air-bench-2024-44-2-human-trafficking
+  display_name: Human trafficking
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #44.2: Human trafficking'
+  - 'airbench 2024 - #44.2: human trafficking'
+  - airbench-2024-44-2-human-trafficking
+- id: air-bench-2024-44-3-sexual-exploitation
+  display_name: Sexual exploitation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #44.3: Sexual exploitation'
+  - 'airbench 2024 - #44.3: sexual exploitation'
+  - airbench-2024-44-3-sexual-exploitation
+- id: air-bench-2024-44-4-prostitution
+  display_name: Prostitution
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #44.4: Prostitution'
+  - 'airbench 2024 - #44.4: prostitution'
+  - airbench-2024-44-4-prostitution
+- id: air-bench-2024-44-illegal-services-exploitation
+  display_name: Illegal services/exploitation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #44: Illegal services/exploitation'
+  - 'airbench 2024 - #44: illegal services/exploitation'
+  - airbench-2024-44-illegal-services-exploitation
+- id: air-bench-2024-45-5-undermining-national-security-or-other-government-interests
+  display_name: Undermining national security or other government interests
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #45.5: Undermining national security or other government interests'
+  - 'airbench 2024 - #45.5: undermining national security or other government interests'
+  - airbench-2024-45-5-undermining-national-security-or-other-government-interests
+- id: air-bench-2024-45-6-undermining-social-stability
+  display_name: Undermining social stability
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #45.6: Undermining social stability'
+  - 'airbench 2024 - #45.6: undermining social stability'
+  - airbench-2024-45-6-undermining-social-stability
+- id: air-bench-2024-45-7-undermining-international-relations
+  display_name: Undermining international relations
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #45.7: Undermining international relations'
+  - 'airbench 2024 - #45.7: undermining international relations'
+  - airbench-2024-45-7-undermining-international-relations
+- id: air-bench-2024-45-8-abetting-furthering-activities-violating-any-applicable-law
+  display_name: Abetting/Furthering activities violating any applicable law
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #45.8: Abetting/Furthering activities violating any applicable
+    law'
+  - 'airbench 2024 - #45.8: abetting/furthering activities violating any applicable
+    law'
+  - airbench-2024-45-8-abetting-furthering-activities-violating-any-applicable-law
+- id: air-bench-2024-45-other-illegal-unlawful-criminal-activities
+  display_name: Other Illegal/Unlawful/Criminal Activities
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #45: Other Illegal/Unlawful/Criminal Activities'
+  - 'airbench 2024 - #45: other illegal/unlawful/criminal activities'
+  - airbench-2024-45-other-illegal-unlawful-criminal-activities
+- id: air-bench-2024-4-automated-decision-making
+  display_name: Automated Decision-Making
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #4: Automated Decision-Making'
+  - 'airbench 2024 - #4: automated decision-making'
+  - airbench-2024-4-automated-decision-making
+- id: air-bench-2024-5-11-heavy-machinery
+  display_name: Heavy machinery
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.11: Heavy machinery'
+  - 'airbench 2024 - #5.11: heavy machinery'
+  - airbench-2024-5-11-heavy-machinery
+- id: air-bench-2024-5-12-transportation
+  display_name: Transportation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.12: Transportation'
+  - 'airbench 2024 - #5.12: transportation'
+  - airbench-2024-5-12-transportation
+- id: air-bench-2024-5-13-energy-electrical-grids
+  display_name: Energy/Electrical grids
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.13: Energy/Electrical grids'
+  - 'airbench 2024 - #5.13: energy/electrical grids'
+  - airbench-2024-5-13-energy-electrical-grids
+- id: air-bench-2024-5-14-nuclear-facilities
+  display_name: Nuclear facilities
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.14: Nuclear facilities'
+  - 'airbench 2024 - #5.14: nuclear facilities'
+  - airbench-2024-5-14-nuclear-facilities
+- id: air-bench-2024-5-15-aircraft-navigation-air-traffic-control
+  display_name: Aircraft navigation/Air traffic control
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.15: Aircraft navigation/Air traffic control'
+  - 'airbench 2024 - #5.15: aircraft navigation/air traffic control'
+  - airbench-2024-5-15-aircraft-navigation-air-traffic-control
+- id: air-bench-2024-5-16-communication-systems
+  display_name: Communication systems
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.16: Communication systems'
+  - 'airbench 2024 - #5.16: communication systems'
+  - airbench-2024-5-16-communication-systems
+- id: air-bench-2024-5-17-water-treatment-facilities
+  display_name: Water treatment facilities
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.17: Water treatment facilities'
+  - 'airbench 2024 - #5.17: water treatment facilities'
+  - airbench-2024-5-17-water-treatment-facilities
+- id: air-bench-2024-5-18-life-support
+  display_name: Life support
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.18: Life support'
+  - 'airbench 2024 - #5.18: life support'
+  - airbench-2024-5-18-life-support
+- id: air-bench-2024-5-19-weapon-systems-battlefield-management
+  display_name: Weapon systems/Battlefield management
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.19: Weapon systems/Battlefield management'
+  - 'airbench 2024 - #5.19: weapon systems/battlefield management'
+  - airbench-2024-5-19-weapon-systems-battlefield-management
+- id: air-bench-2024-5-20-emergency-services
+  display_name: Emergency services
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.20: Emergency services'
+  - 'airbench 2024 - #5.20: emergency services'
+  - airbench-2024-5-20-emergency-services
+- id: air-bench-2024-5-21-other-unauthorized-actions-on-behalf-of-users
+  display_name: Other unauthorized actions on behalf of users
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5.21: Other unauthorized actions on behalf of users'
+  - 'airbench 2024 - #5.21: other unauthorized actions on behalf of users'
+  - airbench-2024-5-21-other-unauthorized-actions-on-behalf-of-users
+- id: air-bench-2024-5-autonomous-unsafe-operation-of-systems
+  display_name: Autonomous Unsafe Operation of Systems
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #5: Autonomous Unsafe Operation of Systems'
+  - 'airbench 2024 - #5: autonomous unsafe operation of systems'
+  - airbench-2024-5-autonomous-unsafe-operation-of-systems
+- id: air-bench-2024-6-22-legal
+  display_name: Legal
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #6.22: Legal'
+  - 'airbench 2024 - #6.22: legal'
+  - airbench-2024-6-22-legal
+- id: air-bench-2024-6-23-medical-pharmaceutical
+  display_name: Medical/Pharmaceutical
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #6.23: Medical/Pharmaceutical'
+  - 'airbench 2024 - #6.23: medical/pharmaceutical'
+  - airbench-2024-6-23-medical-pharmaceutical
+- id: air-bench-2024-6-24-accounting
+  display_name: Accounting
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #6.24: Accounting'
+  - 'airbench 2024 - #6.24: accounting'
+  - airbench-2024-6-24-accounting
+- id: air-bench-2024-6-25-financial
+  display_name: Financial
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #6.25: Financial'
+  - 'airbench 2024 - #6.25: financial'
+  - airbench-2024-6-25-financial
+- id: air-bench-2024-6-26-government-services
+  display_name: Government services
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #6.26: Government services'
+  - 'airbench 2024 - #6.26: government services'
+  - airbench-2024-6-26-government-services
+- id: air-bench-2024-6-advice-in-heavily-regulated-industries
+  display_name: Advice in Heavily Regulated Industries
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #6: Advice in Heavily Regulated Industries'
+  - 'airbench 2024 - #6: advice in heavily regulated industries'
+  - airbench-2024-6-advice-in-heavily-regulated-industries
+- id: air-bench-2024-7-1-extremism
+  display_name: Extremism
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #7.1: Extremism'
+  - 'airbench 2024 - #7.1: extremism'
+  - airbench-2024-7-1-extremism
+- id: air-bench-2024-7-2-terrorism
+  display_name: Terrorism
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #7.2: Terrorism'
+  - 'airbench 2024 - #7.2: terrorism'
+  - airbench-2024-7-2-terrorism
+- id: air-bench-2024-7-3-criminal-organization
+  display_name: Criminal organization
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #7.3: Criminal organization'
+  - 'airbench 2024 - #7.3: criminal organization'
+  - airbench-2024-7-3-criminal-organization
+- id: air-bench-2024-7-supporting-malicious-organized-groups
+  display_name: Supporting Malicious Organized Groups
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #7: Supporting Malicious Organized Groups'
+  - 'airbench 2024 - #7: supporting malicious organized groups'
+  - airbench-2024-7-supporting-malicious-organized-groups
+- id: air-bench-2024-8-4-glorifying-violence-abuse-or-the-suffering-of-others
+  display_name: Glorifying violence, abuse, or the suffering of others
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #8.4: Glorifying violence, abuse, or the suffering of others'
+  - 'airbench 2024 - #8.4: glorifying violence, abuse, or the suffering of others'
+  - airbench-2024-8-4-glorifying-violence-abuse-or-the-suffering-of-others
+- id: air-bench-2024-8-5-belittling-victimhood-or-violent-events
+  display_name: Belittling victimhood or violent events
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #8.5: Belittling victimhood or violent events'
+  - 'airbench 2024 - #8.5: belittling victimhood or violent events'
+  - airbench-2024-8-5-belittling-victimhood-or-violent-events
+- id: air-bench-2024-8-6-denying-or-minimizing-well-documented-major-violent-events-or-the-victimhood-of-such-events-denying-the-deeds-of-martyrdom
+  display_name: Denying or minimizing well-documented, major violent events or the
+    victimhood of such events/Denying the deeds of martyrdom
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #8.6: Denying or minimizing well-documented, major violent events
+    or the victimhood of such events/Denying the deeds of martyrdom'
+  - 'airbench 2024 - #8.6: denying or minimizing well-documented, major violent events
+    or the victimhood of such events/denying the deeds of martyrdom'
+  - airbench-2024-8-6-denying-or-minimizing-well-documented-major-violent-events-or-the-victimhood-of-such-events-denying-the-deeds-of-martyrdom
+- id: air-bench-2024-8-7-beautifying-and-whitewashing-acts-of-war-or-aggression
+  display_name: Beautifying and whitewashing acts of war or aggression
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #8.7: Beautifying and whitewashing acts of war or aggression'
+  - 'airbench 2024 - #8.7: beautifying and whitewashing acts of war or aggression'
+  - airbench-2024-8-7-beautifying-and-whitewashing-acts-of-war-or-aggression
+- id: air-bench-2024-8-celebrating-suffering
+  display_name: Celebrating Suffering
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #8: Celebrating Suffering'
+  - 'airbench 2024 - #8: celebrating suffering'
+  - airbench-2024-8-celebrating-suffering
+- id: air-bench-2024-9-10-property-damage
+  display_name: Property damage
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #9.10: Property damage'
+  - 'airbench 2024 - #9.10: property damage'
+  - airbench-2024-9-10-property-damage
+- id: air-bench-2024-9-11-environmental
+  display_name: Environmental
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #9.11: Environmental'
+  - 'airbench 2024 - #9.11: environmental'
+  - airbench-2024-9-11-environmental
+- id: air-bench-2024-9-8-persons-including-murder
+  display_name: Persons (including murder)
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #9.8: Persons (including murder)'
+  - 'airbench 2024 - #9.8: persons (including murder)'
+  - airbench-2024-9-8-persons-including-murder
+- id: air-bench-2024-9-9-animals
+  display_name: Animals
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #9.9: Animals'
+  - 'airbench 2024 - #9.9: animals'
+  - airbench-2024-9-9-animals
+- id: air-bench-2024-9-violent-acts
+  display_name: Violent acts
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - 'AIRBench 2024 - #9: Violent acts'
+  - 'airbench 2024 - #9: violent acts'
+  - airbench-2024-9-violent-acts
+- id: air-bench-2024-child-harm
+  display_name: Child Harm
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Child Harm
+  - airbench 2024 - child harm
+  - airbench-2024-child-harm
+- id: air-bench-2024-criminal-activities
+  display_name: Criminal Activities
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Criminal Activities
+  - airbench 2024 - criminal activities
+  - airbench-2024-criminal-activities
+- id: air-bench-2024-deception
+  display_name: Deception
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Deception
+  - airbench 2024 - deception
+  - airbench-2024-deception
+- id: air-bench-2024-defamation
+  display_name: Defamation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Defamation
+  - airbench 2024 - defamation
+  - airbench-2024-defamation
+- id: air-bench-2024-discrimination-bias
+  display_name: Discrimination/Bias
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Discrimination/Bias
+  - airbench 2024 - discrimination/bias
+  - airbench-2024-discrimination-bias
+- id: air-bench-2024-economic-harm
+  display_name: Economic Harm
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Economic Harm
+  - airbench 2024 - economic harm
+  - airbench-2024-economic-harm
+- id: air-bench-2024-fundamental-rights
+  display_name: Fundamental Rights
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Fundamental Rights
+  - airbench 2024 - fundamental rights
+  - airbench-2024-fundamental-rights
+- id: air-bench-2024-hate-toxicity
+  display_name: Hate/Toxicity
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Hate/Toxicity
+  - airbench 2024 - hate/toxicity
+  - airbench-2024-hate-toxicity
+- id: air-bench-2024-manipulation
+  display_name: Manipulation
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Manipulation
+  - airbench 2024 - manipulation
+  - airbench-2024-manipulation
+- id: air-bench-2024-operational-misuses
+  display_name: Operational Misuses
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Operational Misuses
+  - airbench 2024 - operational misuses
+  - airbench-2024-operational-misuses
+- id: air-bench-2024-political-usage
+  display_name: Political Usage
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Political Usage
+  - airbench 2024 - political usage
+  - airbench-2024-political-usage
+- id: air-bench-2024-privacy
+  display_name: Privacy
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Privacy
+  - airbench 2024 - privacy
+  - airbench-2024-privacy
+- id: air-bench-2024-security-risks
+  display_name: Security Risks
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Security Risks
+  - airbench 2024 - security risks
+  - airbench-2024-security-risks
+- id: air-bench-2024-self-harm
+  display_name: Self-harm
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Self-harm
+  - airbench 2024 - self-harm
+  - airbench-2024-self-harm
+- id: air-bench-2024-sexual-content
+  display_name: Sexual Content
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Sexual Content
+  - airbench 2024 - sexual content
+  - airbench-2024-sexual-content
+- id: air-bench-2024-violence-extremism
+  display_name: Violence & Extremism
+  dataset_repo: stanford-crfm/air-bench-2024
+  parent_benchmark_id: air-bench-2024
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: auto
+  aliases:
+  - AIRBench 2024 - Violence & Extremism
+  - airbench 2024 - violence & extremism
+  - airbench-2024-violence-extremism

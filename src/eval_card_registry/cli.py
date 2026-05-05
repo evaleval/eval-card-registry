@@ -281,6 +281,166 @@ def seed(
         return list(by_id.values())
 
     # ------------------------------------------------------------------
+    # Benchmarks — two-source load:
+    #   seed/benchmarks.yaml                 → curated canonicals (the
+    #                                          source of truth, hand-edited)
+    #   seed/benchmarks_generated/*.yaml     → bulk auto-generated entries
+    #                                          (e.g. AIR-Bench 2024's 373
+    #                                          categories from
+    #                                          scripts/refresh_air_bench_taxonomy.py)
+    #
+    # Merge order: generated → curated. Field-level merge per id (aliases
+    # union; other scalars prefer non-empty, last-write-wins) so curated
+    # entries can refine an auto-generated row without losing its aliases.
+    # Generator scripts must use stable canonical_ids so refreshes are
+    # idempotent.
+    # ------------------------------------------------------------------
+    def _load_benchmarks_merged() -> list[dict]:
+        curated_path = seed_path / "benchmarks.yaml"
+        generated_dir = seed_path / "benchmarks_generated"
+
+        generated_entries: list[dict] = []
+        if generated_dir.is_dir():
+            for src_path in sorted(generated_dir.glob("*.yaml")):
+                with open(src_path) as f:
+                    loaded = yaml.safe_load(f) or []
+                if not isinstance(loaded, list):
+                    raise typer.BadParameter(f"{src_path} must be a flat list")
+                generated_entries.extend(loaded)
+
+        curated_entries: list[dict] = []
+        if curated_path.exists():
+            with open(curated_path) as f:
+                loaded = yaml.safe_load(f) or []
+            if not isinstance(loaded, list):
+                raise typer.BadParameter(f"{curated_path} must be a flat list")
+            curated_entries = loaded
+
+        def _merge_benchmark(generated: dict, curated: dict) -> dict:
+            """Curated wins on every field it specifies; aliases are
+            unioned (case-insensitive dedup) so generator-emitted aliases
+            survive even when curated narrows the entry."""
+            merged = dict(generated)
+            for k, v in curated.items():
+                if k == "aliases":
+                    continue
+                merged[k] = v
+            existing = list(generated.get("aliases") or [])
+            existing_lc = {a.lower() for a in existing if a}
+            for a in (curated.get("aliases") or []):
+                if a and a.lower() not in existing_lc:
+                    existing.append(a)
+                    existing_lc.add(a.lower())
+            merged["aliases"] = existing
+            return merged
+
+        by_id: dict[str, dict] = {}
+        for entry in generated_entries:
+            if "id" not in entry:
+                raise typer.BadParameter(f"benchmarks generated entry missing id: {entry!r}")
+            by_id[entry["id"]] = entry
+        for entry in curated_entries:
+            if "id" not in entry:
+                raise typer.BadParameter(f"benchmarks seed entry missing id: {entry!r}")
+            if entry["id"] in by_id:
+                by_id[entry["id"]] = _merge_benchmark(by_id[entry["id"]], entry)
+            else:
+                by_id[entry["id"]] = entry
+        return list(by_id.values())
+
+    # ------------------------------------------------------------------
+    # Families — translate seed/families.yaml's nested {slug: {fields}}
+    # shape into flat dicts ready for upsert. The YAML uses the slug as
+    # the mapping key for human friendliness (`mmlu:` reads as a header);
+    # the table needs `id` as a column.
+    #
+    # Output schema mirrors `canonical_families`: list-valued fields
+    # (`benchmark_ids`, `folder_aliases`, `composite_keys`) are
+    # JSON-encoded so they round-trip through the parquet StringDtype
+    # column without losing structure.
+    # ------------------------------------------------------------------
+    def _load_families_seed() -> list[dict]:
+        path = seed_path / "families.yaml"
+        if not path.exists():
+            return []
+        with open(path) as f:
+            raw = yaml.safe_load(f) or {}
+        if not isinstance(raw, dict):
+            raise typer.BadParameter(f"{path} must be a top-level mapping {{slug: {{...}}}}")
+
+        out: list[dict] = []
+        # Validation: each benchmark may only appear in one curated family.
+        seen_benchmarks: dict[str, str] = {}
+        for slug, fields in raw.items():
+            if not isinstance(fields, dict):
+                raise typer.BadParameter(f"family {slug!r} entry must be a mapping, got {type(fields).__name__}")
+            benchmark_ids = list(fields.get("benchmarks") or [])
+            for bid in benchmark_ids:
+                if bid in seen_benchmarks and seen_benchmarks[bid] != slug:
+                    raise typer.BadParameter(
+                        f"benchmark {bid!r} listed in two families: "
+                        f"{seen_benchmarks[bid]!r} and {slug!r}"
+                    )
+                seen_benchmarks[bid] = slug
+            entry = {
+                "id": slug,
+                "display_name": fields.get("display") or slug,
+                "category": fields.get("category"),
+                "benchmark_ids": benchmark_ids,
+                "primary_benchmark_key": fields.get("primary_benchmark_key"),
+                "folder_aliases": list(fields.get("folder_aliases") or []),
+                "composite_keys": list(fields.get("composite_keys") or []),
+                "tags": fields.get("tags") or [],
+                "metadata": fields.get("metadata") or {},
+                "review_status": fields.get("review_status") or "reviewed",
+            }
+            out.append(entry)
+        return out
+
+    # ------------------------------------------------------------------
+    # Composites — same translation as families. YAML shape:
+    #   {slug: {display, configs: [...], category?, family_id?}}
+    # ------------------------------------------------------------------
+    def _load_composites_seed() -> list[dict]:
+        path = seed_path / "composites.yaml"
+        if not path.exists():
+            return []
+        with open(path) as f:
+            raw = yaml.safe_load(f) or {}
+        if not isinstance(raw, dict):
+            raise typer.BadParameter(f"{path} must be a top-level mapping {{slug: {{...}}}}")
+
+        out: list[dict] = []
+        for slug, fields in raw.items():
+            if not isinstance(fields, dict):
+                raise typer.BadParameter(f"composite {slug!r} entry must be a mapping, got {type(fields).__name__}")
+            raw_configs = fields.get("configs")
+            if raw_configs is None:
+                # Display-only override (no explicit `configs:`): implicit
+                # single source_config equal to the slug. Some upstream
+                # EEE folders are kebab (`arc-agi`), others snake
+                # (`helm_classic`); ship both forms so the producer's
+                # composite_config_map JOIN matches whichever the data
+                # uses. De-dup when slug has no `-`.
+                kebab = slug
+                snake = slug.replace("-", "_")
+                source_configs = [kebab] if kebab == snake else [kebab, snake]
+            else:
+                source_configs = [str(c) for c in raw_configs]
+            entry = {
+                "id": slug,
+                "display_name": fields.get("display") or slug,
+                "category": fields.get("category"),
+                "source_configs": source_configs,
+                "family_id": fields.get("family_id"),
+                "tags": fields.get("tags") or [],
+                "metadata": fields.get("metadata") or {},
+                "review_status": fields.get("review_status") or "reviewed",
+            }
+            out.append(entry)
+        return out
+
+    # ------------------------------------------------------------------
     # Orgs — two-file load:
     #   seed/orgs.yaml            → curated first-party labs (the source
     #                               of truth, hand-edited)
@@ -326,9 +486,22 @@ def seed(
     seed_specs = [
         # Orgs: load via merge helper to combine curated + auto-generated.
         ("canonical_orgs", "__merged_orgs__", "orgs", "org"),
-        ("canonical_benchmarks", seed_path / "benchmarks.yaml", "benchmarks", "benchmark"),
+        # Benchmarks: load via merge helper. Curated entries live in
+        # seed/benchmarks.yaml; bulk-generated entries (e.g. AIR-Bench
+        # 2024's 373 categories from the refresh script) live in
+        # seed/benchmarks_generated/*.yaml. Sentinel path triggers the
+        # _load_benchmarks_merged() helper.
+        ("canonical_benchmarks", "__merged_benchmarks__", "benchmarks", "benchmark"),
         ("canonical_metrics", seed_path / "metrics.yaml", "metrics", "metric"),
         ("eval_harnesses", seed_path / "harnesses.yaml", "harnesses", "harness"),
+        # Families & composites are first-class registry entities since
+        # the hierarchy-alignment work (notes/hierarchy-alignment.md
+        # §4 / §7 Step 2). Their YAML uses {slug: {...}} shape, so we
+        # need translation loaders rather than the flat-list path.
+        # entity_type='family'/'composite' aliases are emitted for
+        # consistency but aren't consulted by the resolver today.
+        ("canonical_families", "__nested_families__", "families", "family"),
+        ("canonical_composites", "__nested_composites__", "composites", "composite"),
         # Models: load via the merge helper; pass a sentinel path that
         # signals the loop below to invoke _load_models_merged() instead of
         # reading a single YAML file.
@@ -357,6 +530,21 @@ def seed(
             if not items:
                 typer.echo(f"  [skip] no org entries found in seed/orgs.yaml or seed/orgs.generated.yaml")
                 continue
+        elif yaml_file == "__merged_benchmarks__":
+            items = _load_benchmarks_merged()
+            if not items:
+                typer.echo(f"  [skip] no benchmark entries found in seed/benchmarks.yaml or seed/benchmarks_generated/")
+                continue
+        elif yaml_file == "__nested_families__":
+            items = _load_families_seed()
+            if not items:
+                typer.echo(f"  [skip] no family entries found in seed/families.yaml")
+                continue
+        elif yaml_file == "__nested_composites__":
+            items = _load_composites_seed()
+            if not items:
+                typer.echo(f"  [skip] no composite entries found in seed/composites.yaml")
+                continue
         else:
             if not yaml_file.exists():
                 typer.echo(f"  [skip] {yaml_file} not found")
@@ -375,10 +563,23 @@ def seed(
             # Normalize list/dict columns: YAML may have native lists/dicts,
             # but the canonical_* parquet columns are VARCHAR, so encode if
             # needed. `parents` is a list-of-edges on canonical_models.
-            for col in ("tags", "metadata", "parents"):
+            # `benchmark_ids` / `folder_aliases` / `composite_keys` are
+            # list-valued on canonical_families. `source_configs` is
+            # list-valued on canonical_composites.
+            for col in (
+                "tags", "metadata", "parents",
+                "benchmark_ids", "folder_aliases", "composite_keys",
+                "source_configs",
+            ):
                 if col in item:
                     item[col] = _json_encode_if_needed(item[col])
             entity_item = {k: v for k, v in item.items() if k in table_columns}
+            unknown_keys = sorted(set(item.keys()) - table_columns)
+            if unknown_keys:
+                typer.echo(
+                    f"  [warn] {label} entry {item.get('id', '?')!r} has unknown "
+                    f"key(s) {unknown_keys} — silently dropped. Check for typos."
+                )
             if "id" not in entity_item:
                 raise typer.BadParameter(f"{label} seed entry is missing required id: {original_item!r}")
             queries.upsert_entity(store, table, entity_item, buffered=True)

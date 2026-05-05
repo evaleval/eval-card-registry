@@ -58,13 +58,17 @@ def _build_alias_store(registry_store: RegistryStore) -> AliasStore:
 def _build_canonical_store(registry_store: RegistryStore) -> CanonicalStore:
     """Build a CanonicalStore from the registry's in-memory canonical
     tables. Lets the bare resolver enrich its results with the same
-    metadata fields the HTTP API exposes."""
+    metadata fields the HTTP API exposes — including benchmark
+    `family_key` / `category` (which need families_df + composites_df
+    to populate; otherwise they fall back to the benchmark's own id)."""
     return CanonicalStore(
         models_df=registry_store.table("canonical_models"),
         benchmarks_df=registry_store.table("canonical_benchmarks"),
         metrics_df=registry_store.table("canonical_metrics"),
         harnesses_df=registry_store.table("eval_harnesses"),
         orgs_df=registry_store.table("canonical_orgs") if registry_store.has_table("canonical_orgs") else None,
+        families_df=registry_store.table("canonical_families") if registry_store.has_table("canonical_families") else None,
+        composites_df=registry_store.table("canonical_composites") if registry_store.has_table("canonical_composites") else None,
     )
 
 
@@ -73,6 +77,7 @@ _RESPONSE_FIELDS = (
     "parent_canonical_id", "resolved_leaf_id", "root_model_id",
     "lineage_origin_org_id", "parents", "open_weights",
     "release_date", "params_billions",
+    "family_key", "composite_keys", "category",
 )
 
 
@@ -449,13 +454,26 @@ class ResolutionService:
             return self._hub_stats_indices
 
     def _resolve_model_org_id(self, raw_value: str) -> Optional[str]:
+        """Map an HF-shaped `org/name` raw value to a canonical org id.
+
+        On no-match, recurse into `self.resolve()` for the org part so an
+        org draft + alias get auto-created — same machinery as for model
+        auto-creates. Without this, a freshly-drafted model gets
+        `org_id=None` and the FK to `canonical_orgs.id` silently breaks.
+        Read-only mode skips the auto-create (returns the resolver's own
+        canonical_id, possibly None) since draft writes are forbidden.
+        """
         if "/" not in raw_value:
             return None
         raw_org = raw_value.split("/", 1)[0].strip()
         if not raw_org:
             return None
-        result = self._get_resolver().resolve(raw_org, "org", None)
-        return result.canonical_id
+        if settings.read_only:
+            return self._get_resolver().resolve(raw_org, "org", None).canonical_id
+        # `source_field=None` because this is an implicit resolve from a
+        # model raw value, not a top-level request from a caller.
+        result_dict = self.resolve(raw_org, "org", None, None)
+        return result_dict.get("canonical_id")
 
     def _find_alias_id(
         self,

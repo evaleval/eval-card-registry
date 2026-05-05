@@ -1,0 +1,374 @@
+AIRBench 2024
+AIRBench 2024 - #1.1: Network intrusion
+AIRBench 2024 - #1.2: Vulnerability probing
+AIRBench 2024 - #1.3: Spoofing
+AIRBench 2024 - #1.4: Spear phishing
+AIRBench 2024 - #1.5: Social engineering
+AIRBench 2024 - #1.6: Unauthorized network entry
+AIRBench 2024 - #10.12: Bodily destruction
+AIRBench 2024 - #10.13: Bodily mutilation
+AIRBench 2024 - #10.14: Torture/abuse
+AIRBench 2024 - #10.15: Animal abuse
+AIRBench 2024 - #10.16: Activities meant to kill
+AIRBench 2024 - #10: Depicting Violence
+AIRBench 2024 - #11.17: Guns
+AIRBench 2024 - #11.18: Explosives/Dangerous Materials
+AIRBench 2024 - #11.19: Bioweapons/Viruses/Gain-of-function
+AIRBench 2024 - #11.20: Nuclear Weapons
+AIRBench 2024 - #11.21: Chemical Weapons
+AIRBench 2024 - #11.22: Radiological Weapons
+AIRBench 2024 - #11: Weapon Usage & Development
+AIRBench 2024 - #12.23: Military
+AIRBench 2024 - #12.24: Warfare
+AIRBench 2024 - #12: Military and Warfare
+AIRBench 2024 - #13.10: Doxxing
+AIRBench 2024 - #13.11: Cursing
+AIRBench 2024 - #13.1: Bullying
+AIRBench 2024 - #13.2: Threats
+AIRBench 2024 - #13.3: Intimidation
+AIRBench 2024 - #13.4: Shaming
+AIRBench 2024 - #13.5: Humiliation
+AIRBench 2024 - #13.6: Insults/Personal attacks
+AIRBench 2024 - #13.7: Abuse
+AIRBench 2024 - #13.8: Provoking
+AIRBench 2024 - #13.9: Trolling
+AIRBench 2024 - #13: Harassment
+AIRBench 2024 - #14.12: Race
+AIRBench 2024 - #14.13: Ethnicity
+AIRBench 2024 - #14.14: Color
+AIRBench 2024 - #14.15: Gender
+AIRBench 2024 - #14.16: Sexual orientation
+AIRBench 2024 - #14.17: Religion
+AIRBench 2024 - #14.18: Beliefs
+AIRBench 2024 - #14.19: Nationality
+AIRBench 2024 - #14.20: Geographic region
+AIRBench 2024 - #14.21: Caste
+AIRBench 2024 - #14.22: Social behaviors
+AIRBench 2024 - #14.23: Physical characteristics
+AIRBench 2024 - #14.24: Mental characteristics
+AIRBench 2024 - #14.25: Personality
+AIRBench 2024 - #14.26: Health conditions
+AIRBench 2024 - #14.27: Disability
+AIRBench 2024 - #14.28: Pregnancy status
+AIRBench 2024 - #14.29: Genetic information
+AIRBench 2024 - #14.30: Occupation
+AIRBench 2024 - #14.31: Age
+AIRBench 2024 - #14: Hate Speech (Inciting/Promoting/Expressing hatred)
+AIRBench 2024 - #15.32: Negative stereotyping of any group
+AIRBench 2024 - #15.33: Perpetuating racism
+AIRBench 2024 - #15.34: Perpetuating sexism
+AIRBench 2024 - #15: Perpetuating Harmful Beliefs
+AIRBench 2024 - #16.35: Vulgarity
+AIRBench 2024 - #16.36: Derogatory comments
+AIRBench 2024 - #16: Offensive Language
+AIRBench 2024 - #17.1: Obscenity
+AIRBench 2024 - #17.2: Suggestive
+AIRBench 2024 - #17.3: Sexual acts
+AIRBench 2024 - #17.4: Sexual intercourse
+AIRBench 2024 - #17: Adult content
+AIRBench 2024 - #18.5: Erotic chats
+AIRBench 2024 - #18.6: Fetishes
+AIRBench 2024 - #18: Erotic
+AIRBench 2024 - #19.7: NCII (Non-consensual Intimate Image)
+AIRBench 2024 - #19: Non-Consensual Nudity
+AIRBench 2024 - #1: Confidentiality
+AIRBench 2024 - #2.10: Control override (safety/privacy filters)
+AIRBench 2024 - #2.7: Malware
+AIRBench 2024 - #2.8: Packet forgery
+AIRBench 2024 - #2.9: Data tampering
+AIRBench 2024 - #20.8: Pornography
+AIRBench 2024 - #20.9: Promotion of sexual services
+AIRBench 2024 - #20: Monetized
+AIRBench 2024 - #21.1: Grooming
+AIRBench 2024 - #21.2: Pedophilia
+AIRBench 2024 - #21.3: Exploiting/Harming minors
+AIRBench 2024 - #21.4: Building services targeting minors/failure to employ age-gating
+AIRBench 2024 - #21.5: Building services to present a persona of minor
+AIRBench 2024 - #21: Endangerment, Harm, or Abuse of Children
+AIRBench 2024 - #22.6: Solicitation
+AIRBench 2024 - #22.7: CSAM
+AIRBench 2024 - #22: Child Sexual Abuse
+AIRBench 2024 - #23.1: Suicide
+AIRBench 2024 - #23.2: Cutting
+AIRBench 2024 - #23.3: Eating Disorders (anorexia/bulimia)
+AIRBench 2024 - #23: Suicidal and non-suicidal self Injury
+AIRBench 2024 - #24.1: Lobbying
+AIRBench 2024 - #24.2: Generating high-volume campaign materials
+AIRBench 2024 - #24.3: Personalized or targeted campaign materials
+AIRBench 2024 - #24.4: Building systems for political campaigning or lobbying
+AIRBench 2024 - #24.5: Building products for political campaigning or lobbying
+AIRBench 2024 - #24.6: Political advertisements
+AIRBench 2024 - #24.7: Propaganda
+AIRBench 2024 - #24: Political Persuasion
+AIRBench 2024 - #25.8: Influence political decisions
+AIRBench 2024 - #25.9: Influence political opinions
+AIRBench 2024 - #25: Influencing Politics
+AIRBench 2024 - #26.10: Deterring participation in democratic processes
+AIRBench 2024 - #26.11: Misrepresenting voting processes
+AIRBench 2024 - #26.12: Misrepresenting voting qualifications
+AIRBench 2024 - #26.13: Discouraging voting
+AIRBench 2024 - #26: Deterring Democratic Participation
+AIRBench 2024 - #27.14: Opposing constitutional principles
+AIRBench 2024 - #27.15: Subverting state power
+AIRBench 2024 - #27.16: Undermining national unity
+AIRBench 2024 - #27.17: Damaging state interests
+AIRBench 2024 - #27.18: Damaging the state’s honor
+AIRBench 2024 - #27.19: Inciting unlawful assemblies
+AIRBench 2024 - #27.20: Inciting unlawful associations
+AIRBench 2024 - #27.21: Inciting unlawful processions
+AIRBench 2024 - #27.22: Inciting unlawful demonstrations
+AIRBench 2024 - #27.23: Undermining religious policies
+AIRBench 2024 - #27.24: Promoting cults
+AIRBench 2024 - #27.25: Promoting feudal superstitions
+AIRBench 2024 - #27: Disrupting Social Order (China-unique)
+AIRBench 2024 - #28.1: Gambling (e.g., sports betting)
+AIRBench 2024 - #28.2: Payday lending
+AIRBench 2024 - #28: High-Risk Financial Activities
+AIRBench 2024 - #29.3: Exploiting advantages for monopolistic practices
+AIRBench 2024 - #29.4: Anticompetitive practices
+AIRBench 2024 - #29: Unfair Market Practices
+AIRBench 2024 - #2: Integrity
+AIRBench 2024 - #3.11: System/Website impairment
+AIRBench 2024 - #3.12: Network disruption
+AIRBench 2024 - #30.5: Undermine workers' rights
+AIRBench 2024 - #30.6: Worsen job quality
+AIRBench 2024 - #30.7: Encourage undue worker surveillance
+AIRBench 2024 - #30.8: Cause harmful labor-force disruptions
+AIRBench 2024 - #30: Disempowering Workers
+AIRBench 2024 - #31.10: Pyramid schemes
+AIRBench 2024 - #31.9: Multi-level marketing
+AIRBench 2024 - #31: Fraudulent Schemes
+AIRBench 2024 - #32.1: Spam
+AIRBench 2024 - #32.2: Scams
+AIRBench 2024 - #32.3: Phishing/Catfishing
+AIRBench 2024 - #32.4: Pseudo-pharmaceuticals
+AIRBench 2024 - #32.5: Impersonating others
+AIRBench 2024 - #32: Fraud
+AIRBench 2024 - #33.6: Plagiarism
+AIRBench 2024 - #33.7: Promoting academic dishonesty
+AIRBench 2024 - #33: Academic dishonesty
+AIRBench 2024 - #34.8: Generating or promoting misinformation
+AIRBench 2024 - #34.9: Fake online engagement (fake reviews, fake grassroots support)
+AIRBench 2024 - #34: Mis/disinformation
+AIRBench 2024 - #35.1: Inducing internal conflict
+AIRBench 2024 - #35.2: Deflecting scrutiny from harmful actions
+AIRBench 2024 - #35: Sowing Division
+AIRBench 2024 - #36.3: Automated social media posts
+AIRBench 2024 - #36.4: Not labeling content as AI-generated (Using chatbots to convince people they are communicating with a human)
+AIRBench 2024 - #36.5: Impersonating humans
+AIRBench 2024 - #36: Misrepresentation
+AIRBench 2024 - #37.1: Disparagement
+AIRBench 2024 - #37.2: Libel
+AIRBench 2024 - #37.3: Slander
+AIRBench 2024 - #37: Types of Defamation
+AIRBench 2024 - #38.1: IP rights/ Trade secrets
+AIRBench 2024 - #38.2: Likeness rights
+AIRBench 2024 - #38.3: Reputation rights
+AIRBench 2024 - #38.4: Honor
+AIRBench 2024 - #38.5: Name rights
+AIRBench 2024 - #38: Specific Types of Rights
+AIRBench 2024 - #39-40.10: Discrimination in employment, benefits, or services - Caste
+AIRBench 2024 - #39-40.11: Discrimination in employment, benefits, or services - Social behaviors
+AIRBench 2024 - #39-40.12: Discrimination in employment, benefits, or services - Physical Characteristics
+AIRBench 2024 - #39-40.13: Discrimination in employment, benefits, or services - Mental Characteristics
+AIRBench 2024 - #39-40.14: Discrimination in employment, benefits, or services - Predicted Personality
+AIRBench 2024 - #39-40.15: Discrimination in employment, benefits, or services - Health conditions
+AIRBench 2024 - #39-40.16: Discrimination in employment, benefits, or services - Disability
+AIRBench 2024 - #39-40.17: Discrimination in employment, benefits, or services - Pregnancy Status
+AIRBench 2024 - #39-40.18: Discrimination in employment, benefits, or services - Genetic Information
+AIRBench 2024 - #39-40.19: Discrimination in employment, benefits, or services - Occupation
+AIRBench 2024 - #39-40.1: Discrimination in employment, benefits, or services - Race
+AIRBench 2024 - #39-40.20: Discrimination in employment, benefits, or services - Age
+AIRBench 2024 - #39-40.21: Characterization of identity - Race
+AIRBench 2024 - #39-40.22: Characterization of identity - Ethnicity
+AIRBench 2024 - #39-40.23: Characterization of identity - Color
+AIRBench 2024 - #39-40.24: Characterization of identity - Gender
+AIRBench 2024 - #39-40.25: Characterization of identity - Sexual orientation
+AIRBench 2024 - #39-40.26: Characterization of identity - Religion
+AIRBench 2024 - #39-40.27: Characterization of identity - Beliefs
+AIRBench 2024 - #39-40.28: Characterization of identity - Nationality
+AIRBench 2024 - #39-40.29: Characterization of identity - Geographic region
+AIRBench 2024 - #39-40.2: Discrimination in employment, benefits, or services - Ethnicity
+AIRBench 2024 - #39-40.30: Characterization of identity - Caste
+AIRBench 2024 - #39-40.31: Characterization of identity - Social behaviors
+AIRBench 2024 - #39-40.32: Characterization of identity - Physical Characteristics
+AIRBench 2024 - #39-40.33: Characterization of identity - Mental Characteristics
+AIRBench 2024 - #39-40.34: Characterization of identity - Predicted Personality
+AIRBench 2024 - #39-40.35: Characterization of identity - Health conditions
+AIRBench 2024 - #39-40.36: Characterization of identity - Disability
+AIRBench 2024 - #39-40.37: Characterization of identity - Pregnancy Status
+AIRBench 2024 - #39-40.38: Characterization of identity - Genetic Information
+AIRBench 2024 - #39-40.39: Characterization of identity - Occupation
+AIRBench 2024 - #39-40.3: Discrimination in employment, benefits, or services - Color
+AIRBench 2024 - #39-40.40: Characterization of identity - Age
+AIRBench 2024 - #39-40.41: Classification of individuals - Race
+AIRBench 2024 - #39-40.42: Classification of individuals - Ethnicity
+AIRBench 2024 - #39-40.43: Classification of individuals - Color
+AIRBench 2024 - #39-40.44: Classification of individuals - Gender
+AIRBench 2024 - #39-40.45: Classification of individuals - Sexual orientation
+AIRBench 2024 - #39-40.46: Classification of individuals - Religion
+AIRBench 2024 - #39-40.47: Classification of individuals - Beliefs
+AIRBench 2024 - #39-40.48: Classification of individuals - Nationality
+AIRBench 2024 - #39-40.49: Classification of individuals - Geographic region
+AIRBench 2024 - #39-40.4: Discrimination in employment, benefits, or services - Gender
+AIRBench 2024 - #39-40.50: Classification of individuals - Caste
+AIRBench 2024 - #39-40.51: Classification of individuals - Social behaviors
+AIRBench 2024 - #39-40.52: Classification of individuals - Physical Characteristics
+AIRBench 2024 - #39-40.53: Classification of individuals - Mental Characteristics
+AIRBench 2024 - #39-40.54: Classification of individuals - Predicted Personality
+AIRBench 2024 - #39-40.55: Classification of individuals - Health conditions
+AIRBench 2024 - #39-40.56: Classification of individuals - Disability
+AIRBench 2024 - #39-40.57: Classification of individuals - Pregnancy Status
+AIRBench 2024 - #39-40.58: Classification of individuals - Genetic Information
+AIRBench 2024 - #39-40.59: Classification of individuals - Occupation
+AIRBench 2024 - #39-40.5: Discrimination in employment, benefits, or services - Sexual orientation
+AIRBench 2024 - #39-40.60: Classification of individuals - Age
+AIRBench 2024 - #39-40.6: Discrimination in employment, benefits, or services - Religion
+AIRBench 2024 - #39-40.7: Discrimination in employment, benefits, or services - Beliefs
+AIRBench 2024 - #39-40.8: Discrimination in employment, benefits, or services - Nationality
+AIRBench 2024 - #39-40.9: Discrimination in employment, benefits, or services - Geographic region
+AIRBench 2024 - #39-40: Discrimination/Protected Characteristics Combinations
+AIRBench 2024 - #3: Availability
+AIRBench 2024 - #4.10: Profiling
+AIRBench 2024 - #4.1: Financing eligibility/Creditworthiness
+AIRBench 2024 - #4.2: Criminal justice/Predictive policing
+AIRBench 2024 - #4.3: Adversely affects legal rights
+AIRBench 2024 - #4.4: Employment
+AIRBench 2024 - #4.5: Social scoring
+AIRBench 2024 - #4.6: Housing eligibility
+AIRBench 2024 - #4.7: Education eligibility
+AIRBench 2024 - #4.8: Migration eligibility
+AIRBench 2024 - #4.9: Insurance eligibility
+AIRBench 2024 - #41-42.10: Unauthorized disclosure - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.11: Unauthorized disclosure - Health data
+AIRBench 2024 - #41-42.12: Unauthorized disclosure - Location data
+AIRBench 2024 - #41-42.13: Unauthorized disclosure - Demographic data
+AIRBench 2024 - #41-42.14: Unauthorized disclosure - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.15: Unauthorized disclosure - Educational records
+AIRBench 2024 - #41-42.16: Unauthorized disclosure - Financial records
+AIRBench 2024 - #41-42.17: Unauthorized disclosure - Behavioral/ Preference data
+AIRBench 2024 - #41-42.18: Unauthorized disclosure - Communication Records
+AIRBench 2024 - #41-42.19: Unauthorized distribution - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.1: Unauthorized generation - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.20: Unauthorized distribution - Health data
+AIRBench 2024 - #41-42.21: Unauthorized distribution - Location data
+AIRBench 2024 - #41-42.22: Unauthorized distribution - Demographic data
+AIRBench 2024 - #41-42.23: Unauthorized distribution - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.24: Unauthorized distribution - Educational records
+AIRBench 2024 - #41-42.25: Unauthorized distribution - Financial records
+AIRBench 2024 - #41-42.26: Unauthorized distribution - Behavioral/ Preference data
+AIRBench 2024 - #41-42.27: Unauthorized distribution - Communication Records
+AIRBench 2024 - #41-42.28: Unauthorized collection/gathering/stealing - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.29: Unauthorized collection/gathering/stealing - Health data
+AIRBench 2024 - #41-42.2: Unauthorized generation - Health data
+AIRBench 2024 - #41-42.30: Unauthorized collection/gathering/stealing - Location data
+AIRBench 2024 - #41-42.31: Unauthorized collection/gathering/stealing - Demographic data
+AIRBench 2024 - #41-42.32: Unauthorized collection/gathering/stealing - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.33: Unauthorized collection/gathering/stealing - Educational records
+AIRBench 2024 - #41-42.34: Unauthorized collection/gathering/stealing - Financial records
+AIRBench 2024 - #41-42.35: Unauthorized collection/gathering/stealing - Behavioral/ Preference data
+AIRBench 2024 - #41-42.36: Unauthorized collection/gathering/stealing - Communication Records
+AIRBench 2024 - #41-42.37: Unauthorized processing - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.38: Unauthorized processing - Health data
+AIRBench 2024 - #41-42.39: Unauthorized processing - Location data
+AIRBench 2024 - #41-42.3: Unauthorized generation - Location data
+AIRBench 2024 - #41-42.40: Unauthorized processing - Demographic data
+AIRBench 2024 - #41-42.41: Unauthorized processing - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.42: Unauthorized processing - Educational records
+AIRBench 2024 - #41-42.43: Unauthorized processing - Financial records
+AIRBench 2024 - #41-42.44: Unauthorized processing - Behavioral/ Preference data
+AIRBench 2024 - #41-42.45: Unauthorized processing - Communication Records
+AIRBench 2024 - #41-42.46: Unauthorized inference/synthesis - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.47: Unauthorized inference/synthesis - Health data
+AIRBench 2024 - #41-42.48: Unauthorized inference/synthesis - Location data
+AIRBench 2024 - #41-42.49: Unauthorized inference/synthesis - Demographic data
+AIRBench 2024 - #41-42.4: Unauthorized generation - Demographic data
+AIRBench 2024 - #41-42.50: Unauthorized inference/synthesis - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.51: Unauthorized inference/synthesis - Educational records
+AIRBench 2024 - #41-42.52: Unauthorized inference/synthesis - Financial records
+AIRBench 2024 - #41-42.53: Unauthorized inference/synthesis - Behavioral/ Preference data
+AIRBench 2024 - #41-42.54: Unauthorized inference/synthesis - Communication Records
+AIRBench 2024 - #41-42.55: Non-consensual tracking/monitoring/stalking/spyware - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.56: Non-consensual tracking/monitoring/stalking/spyware - Health data
+AIRBench 2024 - #41-42.57: Non-consensual tracking/monitoring/stalking/spyware - Location data
+AIRBench 2024 - #41-42.58: Non-consensual tracking/monitoring/stalking/spyware - Demographic data
+AIRBench 2024 - #41-42.59: Non-consensual tracking/monitoring/stalking/spyware - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.5: Unauthorized generation - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.60: Non-consensual tracking/monitoring/stalking/spyware - Educational records
+AIRBench 2024 - #41-42.61: Non-consensual tracking/monitoring/stalking/spyware - Financial records
+AIRBench 2024 - #41-42.62: Non-consensual tracking/monitoring/stalking/spyware - Behavioral/ Preference data
+AIRBench 2024 - #41-42.63: Non-consensual tracking/monitoring/stalking/spyware - Communication Records
+AIRBench 2024 - #41-42.64: Model Attacks (membership inference, model inversion) - PII (Personal Identifiable Information)
+AIRBench 2024 - #41-42.65: Model Attacks (membership inference, model inversion) - Health data
+AIRBench 2024 - #41-42.66: Model Attacks (membership inference, model inversion) - Location data
+AIRBench 2024 - #41-42.67: Model Attacks (membership inference, model inversion) - Demographic data
+AIRBench 2024 - #41-42.68: Model Attacks (membership inference, model inversion) - Biometric data (facial recognition)
+AIRBench 2024 - #41-42.69: Model Attacks (membership inference, model inversion) - Educational records
+AIRBench 2024 - #41-42.6: Unauthorized generation - Educational records
+AIRBench 2024 - #41-42.70: Model Attacks (membership inference, model inversion) - Financial records
+AIRBench 2024 - #41-42.71: Model Attacks (membership inference, model inversion) - Behavioral/ Preference data
+AIRBench 2024 - #41-42.72: Model Attacks (membership inference, model inversion) - Communication Records
+AIRBench 2024 - #41-42.7: Unauthorized generation - Financial records
+AIRBench 2024 - #41-42.8: Unauthorized generation - Behavioral/ Preference data
+AIRBench 2024 - #41-42.9: Unauthorized generation - Communication Records
+AIRBench 2024 - #41-42: Privacy Violations/Sensitive Data Combinations
+AIRBench 2024 - #43.1: Illegal drugs
+AIRBench 2024 - #43: Illegal/Regulated substances/goods
+AIRBench 2024 - #44.2: Human trafficking
+AIRBench 2024 - #44.3: Sexual exploitation
+AIRBench 2024 - #44.4: Prostitution
+AIRBench 2024 - #44: Illegal services/exploitation
+AIRBench 2024 - #45.5: Undermining national security or other government interests
+AIRBench 2024 - #45.6: Undermining social stability
+AIRBench 2024 - #45.7: Undermining international relations
+AIRBench 2024 - #45.8: Abetting/Furthering activities violating any applicable law
+AIRBench 2024 - #45: Other Illegal/Unlawful/Criminal Activities
+AIRBench 2024 - #4: Automated Decision-Making
+AIRBench 2024 - #5.11: Heavy machinery
+AIRBench 2024 - #5.12: Transportation
+AIRBench 2024 - #5.13: Energy/Electrical grids
+AIRBench 2024 - #5.14: Nuclear facilities
+AIRBench 2024 - #5.15: Aircraft navigation/Air traffic control
+AIRBench 2024 - #5.16: Communication systems
+AIRBench 2024 - #5.17: Water treatment facilities
+AIRBench 2024 - #5.18: Life support
+AIRBench 2024 - #5.19: Weapon systems/Battlefield management
+AIRBench 2024 - #5.20: Emergency services
+AIRBench 2024 - #5.21: Other unauthorized actions on behalf of users
+AIRBench 2024 - #5: Autonomous Unsafe Operation of Systems
+AIRBench 2024 - #6.22: Legal
+AIRBench 2024 - #6.23: Medical/Pharmaceutical
+AIRBench 2024 - #6.24: Accounting
+AIRBench 2024 - #6.25: Financial
+AIRBench 2024 - #6.26: Government services
+AIRBench 2024 - #6: Advice in Heavily Regulated Industries
+AIRBench 2024 - #7.1: Extremism
+AIRBench 2024 - #7.2: Terrorism
+AIRBench 2024 - #7.3: Criminal organization
+AIRBench 2024 - #7: Supporting Malicious Organized Groups
+AIRBench 2024 - #8.4: Glorifying violence, abuse, or the suffering of others
+AIRBench 2024 - #8.5: Belittling victimhood or violent events
+AIRBench 2024 - #8.6: Denying or minimizing well-documented, major violent events or the victimhood of such events/Denying the deeds of martyrdom
+AIRBench 2024 - #8.7: Beautifying and whitewashing acts of war or aggression
+AIRBench 2024 - #8: Celebrating Suffering
+AIRBench 2024 - #9.10: Property damage
+AIRBench 2024 - #9.11: Environmental
+AIRBench 2024 - #9.8: Persons (including murder)
+AIRBench 2024 - #9.9: Animals
+AIRBench 2024 - #9: Violent acts
+AIRBench 2024 - Child Harm
+AIRBench 2024 - Criminal Activities
+AIRBench 2024 - Deception
+AIRBench 2024 - Defamation
+AIRBench 2024 - Discrimination/Bias
+AIRBench 2024 - Economic Harm
+AIRBench 2024 - Fundamental Rights
+AIRBench 2024 - Hate/Toxicity
+AIRBench 2024 - Manipulation
+AIRBench 2024 - Operational Misuses
+AIRBench 2024 - Political Usage
+AIRBench 2024 - Privacy
+AIRBench 2024 - Security Risks
+AIRBench 2024 - Self-harm
+AIRBench 2024 - Sexual Content
+AIRBench 2024 - Violence & Extremism

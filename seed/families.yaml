@@ -1,22 +1,167 @@
-# Multi-benchmark family registry. Singleton families default to
-# `family.key == benchmark.key` and don't need to appear here.
+# Multi-benchmark / multi-composite family registry. Singleton families
+# default to `family.id == benchmark.id` and don't appear here — the
+# producer / resolver builds them automatically when no curated entry
+# covers a benchmark.
 #
-# Each entry's key is the family slug; `benchmarks` lists the canonical
-# benchmark ids that belong to this family. A benchmark may belong to at
-# most one curated family (validated at load time).
+# Each entry's key is the family slug. Optional fields:
+#   display                — human-readable family name; defaults to slug.
+#   category               — single-valued category (general / agentic /
+#                            reasoning / knowledge / multimodal /
+#                            tool-use / math / security / factuality /
+#                            reward-modelling / safety / code /
+#                            instruction-following / other). Singleton
+#                            families derive category from benchmark tags
+#                            via the producer's categorise_benchmark_udf.
+#   benchmarks             — canonical benchmark ids in this family. A
+#                            benchmark may belong to at most one curated
+#                            family (validated at seed time).
+#   composite_keys         — composites nested under this family. Used
+#                            for multi-composite families (HELM has 7).
+#   primary_benchmark_key  — benchmark whose primary metric is the
+#                            family's headline number. Optional.
+#   folder_aliases         — EEE source_config values that should resolve
+#                            into this family even when their slug
+#                            doesn't naturally suggest it. Replaces the
+#                            reference's EXPLICIT_FAMILY_MAP entries that
+#                            aren't covered by composite curation.
 
 mmlu:
   display: MMLU family
+  category: knowledge
   benchmarks: [mmlu, mmlu-pro]
+
 gpqa:
   display: GPQA family
+  category: knowledge
   benchmarks: [gpqa, gpqa-diamond]
+
 swe-bench:
   display: SWE-bench family
+  category: agentic
   benchmarks: [swe-bench, swe-bench-verified]
+
 bfcl:
   display: BFCL family
+  category: tool-use
   benchmarks: [bfcl-live, bfcl-multi-turn, bfcl-non-live, bfcl-web-search]
+
 judgebench:
   display: JudgeBench family
+  category: other
   benchmarks: [judgebench-coding, judgebench-knowledge]
+
+# HELM is a multi-composite family — 7 sub-leaderboards under one brand.
+# The producer's hierarchy.json builder renders this as families[helm]
+# with composites[] containing helm-classic, helm-lite, etc.
+helm:
+  display: HELM
+  category: general
+  composite_keys:
+    - helm-classic
+    - helm-lite
+    - helm-capabilities
+    - helm-instruct
+    - helm-mmlu
+    - helm-air-bench
+    - helm-safety
+
+# HAL leaderboard groups distinct agentic benchmarks (assistantbench,
+# gaia, scicode, ...) under one publishing surface. Each is its own
+# canonical benchmark; the family is the brand.
+hal:
+  display: HAL Leaderboard
+  category: agentic
+  composite_keys:
+    - hal
+  folder_aliases:
+    - hal-assistantbench
+    - hal-corebench-hard
+    - hal-gaia
+    - hal-online-mind2web
+    - hal-scicode
+    - hal-scienceagentbench
+    - hal-swebench-verified-mini
+    - hal-taubench-airline
+    - hal-usaco
+
+# Reward-bench family — 4 reward-modelling benchmarks (the original
+# RewardBench plus its variants).
+reward-bench:
+  display: RewardBench family
+  category: reward-modelling
+  benchmarks: [rewardbench, rewardbench-2]
+  folder_aliases:
+    - reward-bench
+    - reward-bench-2
+    - rewardbench
+    - rewardbench-2
+
+# Fibble Arena — 6 versioned variants of one canonical benchmark.
+# folder_aliases captures the per-version source_config strings that
+# the resolver wouldn't otherwise collapse.
+fibble-arena:
+  display: Fibble Arena
+  category: reasoning
+  folder_aliases:
+    - fibble_arena
+    - fibble1_arena
+    - fibble2_arena
+    - fibble3_arena
+    - fibble4_arena
+    - fibble5_arena
+
+# Tau-Bench — original + tau2 per-domain variants. folder_aliases
+# folds the per-domain configs into the family.
+tau-bench:
+  display: Tau-Bench
+  category: agentic
+  folder_aliases:
+    - tau-bench
+    - tau-bench-2
+    - tau-bench-2_airline
+    - tau-bench-2_retail
+    - tau-bench-2_telecom
+    - tau-bench-2_banking
+
+# CySE2 — three security sub-benchmarks under one suite.
+cyse2:
+  display: CySE2
+  category: security
+  folder_aliases:
+    - cyse2
+    - cyse2_interpreter_abuse
+    - cyse2_prompt_injection
+    - cyse2_vulnerability_exploit
+
+# MMMU — multimodal-MMU; "MMMU-Multiple-Choice" and "MMMU-Open-Ended"
+# variants in EEE collapse to one canonical via folder_aliases.
+mmmu:
+  display: MMMU
+  category: multimodal
+  folder_aliases:
+    - MMMU-Multiple-Choice
+    - MMMU-Open-Ended
+
+# MT-Bench — naming inconsistency in EEE (mt_bench vs mtbench).
+mt-bench:
+  display: MT-Bench
+  category: other
+  folder_aliases:
+    - mt_bench
+    - mtbench
+
+# LiveBench — multi-task suite with 6 per-category buckets. Each bucket
+# is its own canonical benchmark (siblings in the family); their further
+# subsets are slices via parent_benchmark_id.
+livebench:
+  display: LiveBench
+  category: general
+  benchmarks:
+    - livebench
+    - livebench-coding
+    - livebench-language
+    - livebench-instruction-following
+    - livebench-math
+    - livebench-reasoning
+    - livebench-data-analysis
+  primary_benchmark_key: livebench
