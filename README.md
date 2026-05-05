@@ -21,11 +21,14 @@ curl -X POST https://evaleval-entity-registry.hf.space/api/v1/resolve \
   "confidence": 1.0,
   "created_new": false,
   "review_status": "reviewed",
-  "parent_canonical_id": "math"
+  "parent_canonical_id": "math",
+  "family_key": "math",
+  "composite_keys": [],
+  "category": null
 }
 ```
 
-(Model-only fields like `parents`, `root_model_id`, `lineage_origin_org_id`, `open_weights`, `release_date`, `params_billions` are present too but null for benchmarks/metrics/harnesses — see [API section](#api) for the full response shape.)
+The response always carries the model-only fields (`parents`, `resolved_leaf_id`, `root_model_id`, `lineage_origin_org_id`, `open_weights`, `release_date`, `params_billions`) and benchmark-only fields (`family_key`, `composite_keys`, `category`); they're `null` for entity types they don't apply to. See [API section](#api) for the full response shape.
 
 `entity_type` is one of `benchmark`, `model`, `metric`, `harness`, `org`. See the [API section](#api) for batch resolve, entity browsing, and the full endpoint list.
 
@@ -194,9 +197,17 @@ curl -X POST http://localhost:8000/api/v1/resolve \
   "parents": null,
   "open_weights": null,
   "release_date": null,
-  "params_billions": null
+  "params_billions": null,
+  "family_key": "math",
+  "composite_keys": [],
+  "category": null
 }
 ```
+
+Benchmark-only fields:
+- `family_key` — curated family this benchmark belongs to (from `seed/families.yaml`); falls back to the benchmark's own id when no multi-benchmark family covers it.
+- `composite_keys` — composites that include this benchmark (derived from `composites.yaml` / `families.yaml`). Empty list when none.
+- `category` — curated single-valued category (`general` / `agentic` / `reasoning` / `knowledge` / `multimodal` / `tool-use` / `math` / `security` / `factuality` / `reward-modelling` / `safety` / `code` / `instruction-following` / `other`); `null` when no category curated.
 
 For models, the model-only fields are populated:
 
@@ -217,12 +228,24 @@ curl -X POST http://localhost:8000/api/v1/resolve \
   "resolved_leaf_id": "meta/llama-3.1-8b-instruct-turbo",
   "root_model_id": "meta/llama-3.1-8b-instruct",
   "lineage_origin_org_id": "meta",
-  "parents": [{"id": "meta/llama-3.1-8b-instruct", "relationship": "quantized"}],
+  "parents": [{"id": "meta/llama-3.1-8b-instruct", "relationship": "quantized", "axis": null}],
   "open_weights": true,
   "release_date": "2024-07-18",
-  "params_billions": 8.0
+  "params_billions": 8.0,
+  "family_key": null,
+  "composite_keys": null,
+  "category": null
 }
 ```
+
+Model-only fields:
+- `resolved_leaf_id` — the canonical actually matched, before any root-collapse. Equals `canonical_id` when no quantized chain.
+- `root_model_id` — identity root via the quantized-only walk; `null` when the matched leaf IS the root.
+- `lineage_origin_org_id` — `org_id` of the deepest non-variant ancestor (upstream lab for finetunes / quants of someone else's weights).
+- `parents` — full typed-edge list of the matched leaf (`relationship` ∈ `variant | finetune | quantized | merge | adapter`; optional `axis` for `variant`).
+- `open_weights` — `true` / `false` / `null` (unknown).
+- `release_date` — `YYYY-MM-DD` or `YYYY-MM`; `null` when no source carried release info.
+- `params_billions` — approximate parameter count; `null` for closed-API models or HF entries without safetensors data.
 
 `canonical_id` is the **identity root** — for quantized chains it collapses to the unquantized base; the actual matched leaf is in `resolved_leaf_id`. For finetune/merge/adapter relationships, the leaf IS its own identity (no collapse). All metadata fields (`open_weights`, `release_date`, `params_billions`) come from the canonical_id row, so they describe the same entity the response identifies. See CLAUDE.md "Typed parents on canonical_models" for the full schema.
 
@@ -287,13 +310,21 @@ result = resolver.resolve(
 #   strategy, confidence  — match info
 #   review_status         — "draft" | "reviewed"
 #   parent_canonical_id   — family/variant parent
-#   resolved_leaf_id      — original match before root-collapse (models only)
+#   # Models only:
+#   resolved_leaf_id      — original match before root-collapse
 #   root_model_id         — quantized-chain root (None when self IS the root)
 #   lineage_origin_org_id — upstream lab for finetunes / quants
 #   parents               — full typed-edge list
 #   open_weights          — bool / None
 #   release_date          — YYYY-MM-DD / None
 #   params_billions       — float / None
+#   # Benchmarks only:
+#   family_key            — curated family id (falls back to self id for singletons)
+#   composite_keys        — list of composites containing this benchmark; [] when none
+#   category              — curated category for the family (general / agentic /
+#                           reasoning / knowledge / multimodal / tool-use / math /
+#                           security / factuality / reward-modelling / safety / code /
+#                           instruction-following / other); None when not curated
 ```
 
 For example, resolving `meta/llama-3.1-8b-instruct-turbo` collapses to the unquantized base canonical; the original turbo id is preserved in `resolved_leaf_id`:
