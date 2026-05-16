@@ -5244,251 +5244,6 @@
   - xai/grok-2-vision-latest
   metadata: '{}'
   review_status: reviewed
-- id: xai/grok-3
-  display_name: Grok 3
-  org_id: xai
-  family: grok-3
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3", "grok-3-latest"]}'
-  review_status: reviewed
-- id: xai/grok-3-fast
-  display_name: Grok 3 Fast
-  org_id: xai
-  family: grok-3-fast
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-fast", "grok-3-fast-latest"]}'
-  review_status: reviewed
-- id: xai/grok-3-fast-latest
-  display_name: Grok 3 Fast Latest
-  org_id: xai
-  family: grok-3-fast
-  architecture: null
-  params_billions: null
-  parents:
-  - id: xai/grok-3-fast
-    relationship: variant
-    axis: version
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases:
-  - grok-3-fast-latest
-  - xai/grok-3-fast-latest
-  metadata: '{}'
-  review_status: reviewed
-- id: xai/grok-3-latest
-  display_name: Grok 3 Latest
-  org_id: xai
-  family: grok-3
-  architecture: null
-  params_billions: null
-  parents:
-  - id: xai/grok-3
-    relationship: variant
-    axis: version
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases:
-  - grok-3-latest
-  - xai/grok-3-latest
-  metadata: '{}'
-  review_status: reviewed
-- id: xai/grok-3-mini
-  display_name: Grok 3 Mini
-  org_id: xai
-  family: grok-3-mini
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-mini", "grok-3-mini-latest"]}'
-  review_status: reviewed
-- id: xai/grok-3-mini-fast
-  display_name: Grok 3 Mini Fast
-  org_id: xai
-  family: grok-3-mini-fast
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-mini-fast", "grok-3-mini-fast-latest"]}'
-  review_status: reviewed
-- id: xai/grok-3-mini-fast-latest
-  display_name: Grok 3 Mini Fast Latest
-  org_id: xai
-  family: grok-3-mini-fast
-  architecture: null
-  params_billions: null
-  parents:
-  - id: xai/grok-3-mini-fast
-    relationship: variant
-    axis: version
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases:
-  - grok-3-mini-fast-latest
-  - xai/grok-3-mini-fast-latest
-  metadata: '{}'
-  review_status: reviewed
-- id: xai/grok-3-mini-latest
-  display_name: Grok 3 Mini Latest
-  org_id: xai
-  family: grok-3-mini
-  architecture: null
-  params_billions: null
-  parents:
-  - id: xai/grok-3-mini
-    relationship: variant
-    axis: version
-  open_weights: false
-  release_date: '2025-02-17'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases:
-  - grok-3-mini-latest
-  - xai/grok-3-mini-latest
-  metadata: '{}'
-  review_status: reviewed
-- id: xai/grok-4
-  display_name: Grok 4
-  org_id: xai
-  family: grok-4
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-07-09'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-07-09"], "snapshots": ["grok-4"]}'
-  review_status: reviewed
-- id: xai/grok-4-fast
-  display_name: Grok 4 Fast
-  org_id: xai
-  family: grok-4-fast
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-09-19'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-09-19"], "snapshots": ["grok-4-fast"]}'
-  review_status: reviewed
-- id: xai/grok-4-fast-non-reasoning
-  display_name: Grok 4 Fast (Non-Reasoning)
-  org_id: xai
-  family: grok-4-fast-non-reasoning
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-09-19'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-09-19"], "snapshots": ["grok-4-fast-non-reasoning"]}'
-  review_status: reviewed
-- id: xai/grok-4.1-fast
-  display_name: Grok 4.1 Fast
-  org_id: xai
-  family: grok-4.1-fast
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-11-19'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-11-19"], "snapshots": ["grok-4-1-fast"]}'
-  review_status: reviewed
-- id: xai/grok-4.1-fast-non-reasoning
-  display_name: Grok 4.1 Fast Non Reasoning
-  org_id: xai
-  family: grok-4.1-fast-non-reasoning
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-11-19'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-07"], "release_dates": ["2025-11-19"], "snapshots": ["grok-4-1-fast-non-reasoning"]}'
-  review_status: reviewed
 - id: xai/grok-4.20-multi-agent
   display_name: Grok 4.20 Multi Agent
   org_id: xai
@@ -5578,22 +5333,60 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-11-01"], "snapshots": ["grok-beta"]}'
   review_status: reviewed
-- id: xai/grok-code-fast-1
-  display_name: Grok Code Fast 1
+- id: xai/grok-imagine-image
+  display_name: Grok Imagine Image
   org_id: xai
-  family: grok-code-fast-1
+  family: grok-imagine-image
   architecture: null
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2025-08-28'
+  release_date: 2026-03
   input_modalities:
+  - image
   - text
   output_modalities:
-  - text
+  - image
   tags: []
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2023-10"], "release_dates": ["2025-08-28"], "snapshots": ["grok-code-fast-1"]}'
+  metadata: '{"release_dates": ["2026-03"], "snapshots": ["grok-imagine-image"]}'
+  review_status: reviewed
+- id: xai/grok-imagine-image-quality
+  display_name: Grok Imagine Image Quality
+  org_id: xai
+  family: grok-imagine-image-quality
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: 2026-04
+  input_modalities:
+  - image
+  - text
+  output_modalities:
+  - image
+  tags: []
+  aliases: []
+  metadata: '{"release_dates": ["2026-04"], "snapshots": ["grok-imagine-image-quality"]}'
+  review_status: reviewed
+- id: xai/grok-imagine-video
+  display_name: Grok Imagine Video
+  org_id: xai
+  family: grok-imagine-video
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: 2026-03
+  input_modalities:
+  - image
+  - text
+  - video
+  output_modalities:
+  - video
+  tags: []
+  aliases: []
+  metadata: '{"release_dates": ["2026-03"], "snapshots": ["grok-imagine-video"]}'
   review_status: reviewed
 - id: xai/grok-vision-beta
   display_name: Grok Vision Beta
