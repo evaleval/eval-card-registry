@@ -2472,6 +2472,27 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-02-19"], "snapshots": ["gemini-3.1-pro-preview-customtools"]}'
   review_status: reviewed
+- id: google/gemini-3.5-flash
+  display_name: Gemini 3.5 Flash
+  org_id: google
+  family: gemini-3.5-flash
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-05-19'
+  input_modalities:
+  - audio
+  - image
+  - pdf
+  - text
+  - video
+  output_modalities:
+  - text
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-05-19"], "snapshots": ["gemini-3.5-flash"]}'
+  review_status: reviewed
 - id: google/gemini-embedding-001
   display_name: Gemini Embedding 001
   org_id: google
