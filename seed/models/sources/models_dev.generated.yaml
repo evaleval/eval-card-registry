@@ -2076,66 +2076,6 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-05"], "release_dates": ["2026-04-24"], "snapshots": ["deepseek-v4-pro"]}'
   review_status: reviewed
-- id: google/gemini-1.5-flash
-  display_name: Gemini 1.5 Flash
-  org_id: google
-  family: gemini-1.5-flash
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-05-14'
-  input_modalities:
-  - audio
-  - image
-  - text
-  - video
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-05-14"], "snapshots": ["gemini-1.5-flash"]}'
-  review_status: reviewed
-- id: google/gemini-1.5-flash-8b
-  display_name: Gemini 1.5 Flash-8B
-  org_id: google
-  family: gemini-1.5-flash-8b
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-10-03'
-  input_modalities:
-  - audio
-  - image
-  - text
-  - video
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-10-03"], "snapshots": ["gemini-1.5-flash-8b"]}'
-  review_status: reviewed
-- id: google/gemini-1.5-pro
-  display_name: Gemini 1.5 Pro
-  org_id: google
-  family: gemini-1.5-pro
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-02-15'
-  input_modalities:
-  - audio
-  - image
-  - text
-  - video
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-04"], "release_dates": ["2024-02-15"], "snapshots": ["gemini-1.5-pro"]}'
-  review_status: reviewed
 - id: google/gemini-2.0-flash
   display_name: Gemini 2.0 Flash
   org_id: google
@@ -2158,7 +2098,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-06"], "release_dates": ["2024-12-11"], "snapshots": ["gemini-2.0-flash"]}'
   review_status: reviewed
 - id: google/gemini-2.0-flash-lite
-  display_name: Gemini 2.0 Flash Lite
+  display_name: Gemini 2.0 Flash-Lite
   org_id: google
   family: gemini-2.0-flash-lite
   architecture: null
@@ -2197,30 +2137,10 @@
   - text
   tags: []
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-03-20", "2025-04-17", "2025-05-20", "2025-09-25"], "snapshots": ["gemini-2.5-flash", "gemini-2.5-flash-preview-04-17", "gemini-2.5-flash-preview-05-20",
-    "gemini-2.5-flash-preview-09-2025"]}'
-  review_status: reviewed
-- id: google/gemini-2.5-flash-image
-  display_name: Gemini 2.5 Flash Image
-  org_id: google
-  family: gemini-2.5-flash-image
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-08-26'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - image
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-08-26"], "snapshots": ["gemini-2.5-flash-image", "gemini-2.5-flash-image-preview"]}'
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-03-20"], "snapshots": ["gemini-2.5-flash"]}'
   review_status: reviewed
 - id: google/gemini-2.5-flash-lite
-  display_name: Gemini 2.5 Flash Lite
+  display_name: Gemini 2.5 Flash-Lite
   org_id: google
   family: gemini-2.5-flash-lite
   architecture: null
@@ -2238,7 +2158,7 @@
   - text
   tags: []
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-06-17", "2025-09-25"], "snapshots": ["gemini-2.5-flash-lite", "gemini-2.5-flash-lite-preview-06-17", "gemini-2.5-flash-lite-preview-09-2025"]}'
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-06-17"], "snapshots": ["gemini-2.5-flash-lite"]}'
   review_status: reviewed
 - id: google/gemini-2.5-flash-preview-tts
   display_name: Gemini 2.5 Flash Preview TTS
@@ -2276,7 +2196,7 @@
   - text
   tags: []
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-03-20", "2025-05-06", "2025-06-05"], "snapshots": ["gemini-2.5-pro", "gemini-2.5-pro-preview-05-06", "gemini-2.5-pro-preview-06-05"]}'
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-03-20"], "snapshots": ["gemini-2.5-pro"]}'
   review_status: reviewed
 - id: google/gemini-2.5-pro-preview-tts
   display_name: Gemini 2.5 Pro Preview TTS
@@ -2388,26 +2308,6 @@
   - gemini-3-pro-preview
   - google/gemini-3-pro-preview
   metadata: '{}'
-  review_status: reviewed
-- id: google/gemini-3.1-flash-image
-  display_name: Gemini 3.1 Flash Image
-  org_id: google
-  family: gemini-3.1-flash-image
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2026-02-26'
-  input_modalities:
-  - image
-  - pdf
-  - text
-  output_modalities:
-  - image
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-02-26"], "snapshots": ["gemini-3.1-flash-image-preview"]}'
   review_status: reviewed
 - id: google/gemini-3.1-flash-lite
   display_name: Gemini 3.1 Flash Lite
@@ -2604,216 +2504,10 @@
   - google/gemini-flash-lite-latest
   metadata: '{}'
   review_status: reviewed
-- id: google/gemini-live-2.5-flash
-  display_name: Gemini Live 2.5 Flash
+- id: google/gemma-4-26b-a4b
+  display_name: Gemma 4 26B A4B
   org_id: google
-  family: gemini-live-2.5-flash
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-09-01'
-  input_modalities:
-  - audio
-  - image
-  - text
-  - video
-  output_modalities:
-  - audio
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-09-01"], "snapshots": ["gemini-live-2.5-flash"]}'
-  review_status: reviewed
-- id: google/gemini-live-2.5-flash-preview-native-audio
-  display_name: Gemini Live 2.5 Flash Preview Native Audio
-  org_id: google
-  family: gemini-live-2.5-flash-preview-native-audio
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-06-17'
-  input_modalities:
-  - audio
-  - text
-  - video
-  output_modalities:
-  - audio
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2025-06-17"], "snapshots": ["gemini-live-2.5-flash-preview-native-audio"]}'
-  review_status: reviewed
-- id: google/gemma-3-12b
-  display_name: Gemma 3 12B
-  org_id: google
-  family: gemma-3-12b
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: true
-  release_date: '2025-03-13'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-03-13"], "snapshots": ["gemma-3-12b-it"]}'
-  review_status: reviewed
-- id: google/gemma-3-12b-it
-  display_name: Gemma 3 12B
-  org_id: google
-  family: gemma-3-12b
-  architecture: null
-  params_billions: null
-  parents:
-  - id: google/gemma-3-12b
-    relationship: variant
-    axis: mode
-  open_weights: true
-  release_date: '2025-03-13'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases:
-  - gemma-3-12b-it
-  - google/gemma-3-12b-it
-  metadata: '{}'
-  review_status: reviewed
-- id: google/gemma-3-27b
-  display_name: Gemma 3 27B
-  org_id: google
-  family: gemma-3-27b
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: true
-  release_date: '2025-03-12'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-03-12"], "snapshots": ["gemma-3-27b-it"]}'
-  review_status: reviewed
-- id: google/gemma-3-27b-it
-  display_name: Gemma 3 27B
-  org_id: google
-  family: gemma-3-27b
-  architecture: null
-  params_billions: null
-  parents:
-  - id: google/gemma-3-27b
-    relationship: variant
-    axis: mode
-  open_weights: true
-  release_date: '2025-03-12'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases:
-  - gemma-3-27b-it
-  - google/gemma-3-27b-it
-  metadata: '{}'
-  review_status: reviewed
-- id: google/gemma-3-4b
-  display_name: Gemma 3 4B
-  org_id: google
-  family: gemma-3-4b
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: true
-  release_date: '2025-03-13'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-03-13"], "snapshots": ["gemma-3-4b-it"]}'
-  review_status: reviewed
-- id: google/gemma-3-4b-it
-  display_name: Gemma 3 4B
-  org_id: google
-  family: gemma-3-4b
-  architecture: null
-  params_billions: null
-  parents:
-  - id: google/gemma-3-4b
-    relationship: variant
-    axis: mode
-  open_weights: true
-  release_date: '2025-03-13'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases:
-  - gemma-3-4b-it
-  - google/gemma-3-4b-it
-  metadata: '{}'
-  review_status: reviewed
-- id: google/gemma-3n-2b
-  display_name: Gemma 3n 2B
-  org_id: google
-  family: gemma-3n-2b
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: true
-  release_date: '2025-07-09'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-07-09"], "snapshots": ["gemma-3n-e2b-it"]}'
-  review_status: reviewed
-- id: google/gemma-3n-4b
-  display_name: Gemma 3n 4B
-  org_id: google
-  family: gemma-3n-4b
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: true
-  release_date: '2025-05-20'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags:
-  - open-weight
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-05-20"], "snapshots": ["gemma-3n-e4b-it"]}'
-  review_status: reviewed
-- id: google/gemma-4-26b
-  display_name: Gemma 4 26B
-  org_id: google
-  family: gemma-4-26b
+  family: gemma-4-26b-a4b
   architecture: null
   params_billions: null
   parents: []
@@ -2829,29 +2523,10 @@
   aliases: []
   metadata: '{"release_dates": ["2026-04-02"], "snapshots": ["gemma-4-26b-a4b-it"]}'
   review_status: reviewed
-- id: google/gemma-4-26b-a4b
-  display_name: Gemma 4 26B A4B
-  org_id: google
-  family: gemma-4-26b
-  architecture: null
-  params_billions: null
-  parents:
-  - id: google/gemma-4-26b
-    relationship: variant
-    axis: size
-  open_weights: true
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags:
-  - open-weight
-  aliases: []
-  metadata: '{}'
-  review_status: reviewed
 - id: google/gemma-4-26b-a4b-it
-  display_name: Gemma 4 26B
+  display_name: Gemma 4 26B A4B IT
   org_id: google
-  family: gemma-4-26b
+  family: gemma-4-26b-a4b
   architecture: null
   params_billions: null
   parents:
@@ -2892,7 +2567,7 @@
   metadata: '{"release_dates": ["2026-04-02"], "snapshots": ["gemma-4-31b-it"]}'
   review_status: reviewed
 - id: google/gemma-4-31b-it
-  display_name: Gemma 4 31B
+  display_name: Gemma 4 31B IT
   org_id: google
   family: gemma-4-31b
   architecture: null
@@ -2914,6 +2589,45 @@
   - gemma-4-31b-it
   - google/gemma-4-31b-it
   metadata: '{}'
+  review_status: reviewed
+- id: google/nano-banana
+  display_name: Nano Banana
+  org_id: google
+  family: nano-banana
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2025-08-26'
+  input_modalities:
+  - image
+  - text
+  output_modalities:
+  - image
+  - text
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-08-26"], "snapshots": ["gemini-2.5-flash-image"]}'
+  review_status: reviewed
+- id: google/nano-banana-2
+  display_name: Nano Banana 2
+  org_id: google
+  family: nano-banana-2
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-02-26'
+  input_modalities:
+  - image
+  - pdf
+  - text
+  output_modalities:
+  - image
+  - text
+  tags: []
+  aliases: []
+  metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-02-26"], "snapshots": ["gemini-3.1-flash-image-preview"]}'
   review_status: reviewed
 - id: inception/mercury-2
   display_name: Mercury 2
@@ -5150,121 +4864,6 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-03"], "release_dates": ["2026-01"], "snapshots": ["solar-pro3"]}'
   review_status: reviewed
-- id: xai/grok-2
-  display_name: Grok 2
-  org_id: xai
-  family: grok-2
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-08-20'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-08-20"], "snapshots": ["grok-2", "grok-2-latest"]}'
-  review_status: reviewed
-- id: xai/grok-2-1212
-  display_name: Grok 2 (1212)
-  org_id: xai
-  family: grok-2-1212
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-12-12'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-12-12"], "snapshots": ["grok-2-1212"]}'
-  review_status: reviewed
-- id: xai/grok-2-latest
-  display_name: Grok 2 Latest
-  org_id: xai
-  family: grok-2
-  architecture: null
-  params_billions: null
-  parents:
-  - id: xai/grok-2
-    relationship: variant
-    axis: version
-  open_weights: false
-  release_date: '2024-08-20'
-  input_modalities:
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases:
-  - grok-2-latest
-  - xai/grok-2-latest
-  metadata: '{}'
-  review_status: reviewed
-- id: xai/grok-2-vision
-  display_name: Grok 2 Vision
-  org_id: xai
-  family: grok-2-vision
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-08-20'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-08-20"], "snapshots": ["grok-2-vision", "grok-2-vision-latest"]}'
-  review_status: reviewed
-- id: xai/grok-2-vision-1212
-  display_name: Grok 2 Vision (1212)
-  org_id: xai
-  family: grok-2-vision-1212
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-08-20'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-08-20"], "snapshots": ["grok-2-vision-1212"]}'
-  review_status: reviewed
-- id: xai/grok-2-vision-latest
-  display_name: Grok 2 Vision Latest
-  org_id: xai
-  family: grok-2-vision
-  architecture: null
-  params_billions: null
-  parents:
-  - id: xai/grok-2-vision
-    relationship: variant
-    axis: version
-  open_weights: false
-  release_date: '2024-08-20'
-  input_modalities:
-  - image
-  - text
-  output_modalities:
-  - text
-  tags: []
-  aliases:
-  - grok-2-vision-latest
-  - xai/grok-2-vision-latest
-  metadata: '{}'
-  review_status: reviewed
 - id: xai/grok-4.20-multi-agent
   display_name: Grok 4.20 Multi Agent
   org_id: xai
@@ -5276,6 +4875,7 @@
   release_date: '2026-03-09'
   input_modalities:
   - image
+  - pdf
   - text
   output_modalities:
   - text
@@ -5294,6 +4894,7 @@
   release_date: '2026-03-09'
   input_modalities:
   - image
+  - pdf
   - text
   output_modalities:
   - text
@@ -5312,6 +4913,7 @@
   release_date: '2026-03-09'
   input_modalities:
   - image
+  - pdf
   - text
   output_modalities:
   - text
@@ -5327,32 +4929,35 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2026-05-01'
+  release_date: '2026-04-17'
   input_modalities:
   - image
+  - pdf
   - text
   output_modalities:
   - text
   tags: []
   aliases: []
-  metadata: '{"release_dates": ["2026-05-01"], "snapshots": ["grok-4.3"]}'
+  metadata: '{"release_dates": ["2026-04-17"], "snapshots": ["grok-4.3"]}'
   review_status: reviewed
-- id: xai/grok-beta
-  display_name: Grok Beta
+- id: xai/grok-build-0.1
+  display_name: Grok Build 0.1
   org_id: xai
-  family: grok-beta
+  family: grok-build-0.1
   architecture: null
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2024-11-01'
+  release_date: '2026-05-20'
   input_modalities:
+  - image
+  - pdf
   - text
   output_modalities:
   - text
   tags: []
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-11-01"], "snapshots": ["grok-beta"]}'
+  metadata: '{"release_dates": ["2026-05-20"], "snapshots": ["grok-build-0.1"]}'
   review_status: reviewed
 - id: xai/grok-imagine-image
   display_name: Grok Imagine Image
@@ -5362,7 +4967,7 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: 2026-03
+  release_date: '2026-01-28'
   input_modalities:
   - image
   - text
@@ -5370,7 +4975,7 @@
   - image
   tags: []
   aliases: []
-  metadata: '{"release_dates": ["2026-03"], "snapshots": ["grok-imagine-image"]}'
+  metadata: '{"release_dates": ["2026-01-28"], "snapshots": ["grok-imagine-image"]}'
   review_status: reviewed
 - id: xai/grok-imagine-image-quality
   display_name: Grok Imagine Image Quality
@@ -5380,7 +4985,7 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: 2026-04
+  release_date: '2026-04-03'
   input_modalities:
   - image
   - text
@@ -5388,7 +4993,7 @@
   - image
   tags: []
   aliases: []
-  metadata: '{"release_dates": ["2026-04"], "snapshots": ["grok-imagine-image-quality"]}'
+  metadata: '{"release_dates": ["2026-04-03"], "snapshots": ["grok-imagine-image-quality"]}'
   review_status: reviewed
 - id: xai/grok-imagine-video
   display_name: Grok Imagine Video
@@ -5398,34 +5003,15 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: 2026-03
-  input_modalities:
-  - image
-  - text
-  - video
-  output_modalities:
-  - video
-  tags: []
-  aliases: []
-  metadata: '{"release_dates": ["2026-03"], "snapshots": ["grok-imagine-video"]}'
-  review_status: reviewed
-- id: xai/grok-vision-beta
-  display_name: Grok Vision Beta
-  org_id: xai
-  family: grok-vision-beta
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-11-01'
+  release_date: '2026-01-28'
   input_modalities:
   - image
   - text
   output_modalities:
-  - text
+  - video
   tags: []
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-08"], "release_dates": ["2024-11-01"], "snapshots": ["grok-vision-beta"]}'
+  metadata: '{"release_dates": ["2026-01-28"], "snapshots": ["grok-imagine-video"]}'
   review_status: reviewed
 - id: zai/glm-4.5
   display_name: GLM-4.5
