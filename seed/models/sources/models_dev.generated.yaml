@@ -1106,6 +1106,23 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2026-04-02"], "snapshots": ["qwen3.6-plus"]}'
   review_status: reviewed
+- id: alibaba/qwen3.7-max
+  display_name: Qwen3.7 Max
+  org_id: alibaba
+  family: qwen3.7-max
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-05-21'
+  input_modalities:
+  - text
+  output_modalities:
+  - text
+  tags: []
+  aliases: []
+  metadata: '{"release_dates": ["2026-05-21"], "snapshots": ["qwen3.7-max"]}'
+  review_status: reviewed
 - id: alibaba/qwq-plus
   display_name: QwQ Plus
   org_id: alibaba
@@ -4948,7 +4965,7 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2026-05-20'
+  release_date: '2026-04-16'
   input_modalities:
   - image
   - pdf
@@ -4957,7 +4974,7 @@
   - text
   tags: []
   aliases: []
-  metadata: '{"release_dates": ["2026-05-20"], "snapshots": ["grok-build-0.1"]}'
+  metadata: '{"release_dates": ["2026-04-16"], "snapshots": ["grok-build-0.1"]}'
   review_status: reviewed
 - id: xai/grok-imagine-image
   display_name: Grok Imagine Image
@@ -4970,9 +4987,11 @@
   release_date: '2026-01-28'
   input_modalities:
   - image
+  - pdf
   - text
   output_modalities:
   - image
+  - pdf
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2026-01-28"], "snapshots": ["grok-imagine-image"]}'
@@ -4988,9 +5007,11 @@
   release_date: '2026-04-03'
   input_modalities:
   - image
+  - pdf
   - text
   output_modalities:
   - image
+  - pdf
   tags: []
   aliases: []
   metadata: '{"release_dates": ["2026-04-03"], "snapshots": ["grok-imagine-image-quality"]}'
@@ -5006,6 +5027,7 @@
   release_date: '2026-01-28'
   input_modalities:
   - image
+  - pdf
   - text
   output_modalities:
   - video
