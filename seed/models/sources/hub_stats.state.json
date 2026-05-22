@@ -1,5 +1,5 @@
 {
-  "parquet_etag": "f92799d330f30f0f3d6396b42005a48fe6219ef410bebfc49f5d40948b28bdd5",
+  "parquet_etag": "2c699814b85f151a94d27d9d154dfa4e44892af0296b23bcad5e2e41eaf1649e",
   "rows_checked_at_etag": [
     "01-ai/Yi-1.5-34B",
     "01-ai/Yi-1.5-34B-Chat",
@@ -515,6 +515,7 @@
     "alibaba/qwen3.6-35b-a3b",
     "alibaba/qwen3.6-max",
     "alibaba/qwen3.6-plus",
+    "alibaba/qwen3.7-max",
     "alibaba/qwq-32b",
     "alibaba/qwq-32b-preview",
     "alibaba/qwq-plus",
