@@ -1070,6 +1070,25 @@
   aliases: []
   metadata: '{"release_dates": ["2026-04-17"], "snapshots": ["qwen3.6-35b-a3b"]}'
   review_status: reviewed
+- id: alibaba/qwen3.6-flash
+  display_name: Qwen3.6 Flash
+  org_id: alibaba
+  family: qwen3.6-flash
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-04-27'
+  input_modalities:
+  - image
+  - text
+  - video
+  output_modalities:
+  - text
+  tags: []
+  aliases: []
+  metadata: '{"release_dates": ["2026-04-27"], "snapshots": ["qwen3.6-flash"]}'
+  review_status: reviewed
 - id: alibaba/qwen3.6-max
   display_name: Qwen3.6 Max
   org_id: alibaba
