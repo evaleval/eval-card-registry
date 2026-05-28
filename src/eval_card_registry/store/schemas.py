@@ -92,8 +92,7 @@ _SCHEMAS: dict[str, dict] = {
     # canonical benchmarks share an object-of-measurement or
     # methodological lineage (e.g. mmlu family contains mmlu + mmlu-pro).
     # Singletons default to family.id == benchmark.id at the producer
-    # layer and don't appear here. See
-    # `notes/hierarchy-alignment.md` §3 for the conceptual model.
+    # layer and don't appear here.
     "canonical_families": {
         "id": pd.StringDtype(),
         "display_name": pd.StringDtype(),

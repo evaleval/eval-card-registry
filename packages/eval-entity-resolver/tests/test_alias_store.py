@@ -3,7 +3,7 @@
 These tests pin the logging behavior added when we replaced the bare
 `except Exception` in `AliasStore.from_hf` (and the silent missing-file
 branch in `from_parquet`) with specific exception handlers + structured
-log lines. Same silent-failure pattern as cli.py:261 (Phase 3.2).
+log lines.
 """
 
 from __future__ import annotations

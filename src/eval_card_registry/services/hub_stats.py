@@ -7,7 +7,7 @@ Used by:
   - `scripts/refresh_from_hub_stats.py` — bulk backfill of existing
     canonicals' metadata
   - `services/resolution_service.py` — on-demand enrichment of model
-    drafts at auto-create time (Phase 2)
+    drafts at auto-create time
 
 Both paths share the same row-shape parsing so behavior stays consistent
 between the bulk pre-load and the live lookup.

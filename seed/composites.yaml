@@ -52,6 +52,7 @@ reward-bench:
   display: RewardBench
   configs:
     - reward-bench
+    - reward-bench-2
 exgentic-open-agent:
   display: Exgentic Open Agent
   configs:
@@ -139,3 +140,36 @@ sciarena:
   display: SciArena
 artificial-analysis-llms:
   display: Artificial Analysis
+
+fibble-arena:
+  display: Fibble Arena
+  configs:
+    - fibble_arena
+    - fibble1_arena
+    - fibble2_arena
+    - fibble3_arena
+    - fibble4_arena
+    - fibble5_arena
+
+cyse2:
+  display: CySE2
+  configs:
+    - cyse2
+    - cyse2_interpreter_abuse
+    - cyse2_prompt_injection
+    - cyse2_vulnerability_exploit
+
+gsm-mc:
+  display: GSM-MC
+  configs:
+    - gsm-mc
+
+math-mc:
+  display: MATH-MC
+  configs:
+    - math-mc
+
+hf-open-llm-v2:
+  display: HF Open LLM v2
+  configs:
+    - hfopenllm_v2

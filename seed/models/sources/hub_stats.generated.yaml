@@ -10,8 +10,8 @@
 # core.yaml take precedence on conflict).
 #
 # Lineage descendant pre-load (community quants/finetunes of our covered
-# models) is deferred — see deferred task. EEE drafts get on-demand
-# enrichment via the live hub-stats lookup at draft creation (Phase 2).
+# models) is not done here. EEE drafts get on-demand enrichment via the
+# live hub-stats lookup at draft creation.
 
 - id: 01-ai/yi-1.5-34b
   display_name: Yi-1.5-34B

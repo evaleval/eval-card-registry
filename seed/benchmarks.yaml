@@ -24,7 +24,7 @@
 
 - id: gpqa
   display_name: GPQA
-  aliases: ["artificial_analysis.gpqa"]
+  aliases: ["artificial_analysis.gpqa", "vals ai gpqa"]
   description: Graduate-Level Google-Proof Q&A — expert-level science questions.
   dataset_repo: Idavidrein/gpqa
   parent_benchmark_id: null
@@ -310,7 +310,7 @@
   aliases: ["Safety"]
   description: RewardBench sub-category — safety-focused prompts.
   dataset_repo: allenai/reward-bench
-  parent_benchmark_id: rewardbench
+  parent_benchmark_id: null
   tags: '["reward-model", "safety"]'
   metadata: '{}'
   review_status: reviewed
@@ -320,7 +320,7 @@
   aliases: ["Reasoning"]
   description: RewardBench sub-category — reasoning prompts.
   dataset_repo: allenai/reward-bench
-  parent_benchmark_id: rewardbench
+  parent_benchmark_id: null
   tags: '["reward-model", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
@@ -331,6 +331,10 @@
   display_name: SWE-bench
   aliases:
     - swe-bench
+    - "vals_ai.swebench.<15 min fix"
+    - "vals_ai.swebench.15 min - 1 hour"
+    - "vals_ai.swebench.1-4 hours"
+    - "vals_ai.swebench.>4 hours"
     - "Swebench 1 4 hours"
     - "Swebench 15 min   1 hour"
     - "Swebench <15 min fix"
@@ -355,7 +359,7 @@
   aliases: ["appworld/test_normal"]
   description: AppWorld benchmark — tests LLM agents on realistic app-based tasks (normal subset).
   dataset_repo: null
-  parent_benchmark_id: appworld
+  parent_benchmark_id: null
   tags: '["agent", "tool-use"]'
   metadata: '{}'
   review_status: reviewed
@@ -394,6 +398,9 @@
   tags: '["function-calling", "tool-use"]'
   metadata: '{}'
   review_status: reviewed
+  scoped_aliases:
+    bfcl:
+      - overall
 
 # --- Multilingual ---
 
@@ -515,7 +522,7 @@
   aliases: ["math_level_5", "MATH-Level-5"]
   description: MATH Level 5 — the hardest subset of MATH competition problems used in hfopenllm_v2.
   dataset_repo: DigitalLearningGmbH/MATH-lighteval
-  parent_benchmark_id: math
+  parent_benchmark_id: null
   tags: '["math", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
@@ -530,7 +537,7 @@
     - reward_bench_2
   description: Second iteration of RewardBench evaluating reward models across factuality, focus, math, precise IF, safety, and ties.
   dataset_repo: allenai/reward-bench-2-results
-  parent_benchmark_id: rewardbench
+  parent_benchmark_id: null
   tags: '["reward-model", "alignment"]'
   metadata: '{}'
   review_status: reviewed
@@ -609,6 +616,8 @@
 
 - id: bfcl-memory
   display_name: BFCL Memory
+  scoped_aliases:
+    bfcl: ["memory"]
   description: BFCL Memory — function calling with persistent memory across turns.
   dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
   parent_benchmark_id: bfcl
@@ -647,6 +656,8 @@
 
 - id: bfcl-relevance
   display_name: BFCL Relevance
+  scoped_aliases:
+    bfcl: ["relevance"]
   description: BFCL relevance/irrelevance detection subset.
   dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
   parent_benchmark_id: bfcl
@@ -854,9 +865,7 @@
   review_status: reviewed
 
 # =====================================================================
-# 2026-04-29 additions — HELM/HAL/SWE-Verified/NQ/ToM seed pass.
-# See specs/entity-modeling.md sections (a)–(e) for the principles
-# that govern this batch.
+# HELM / HAL / SWE-Verified / NQ / ToM benchmarks
 # =====================================================================
 
 # --- HELM family (sub-suites that are HELM-curated; not transitive aliases) ---
@@ -1023,7 +1032,7 @@
   aliases: ["core-bench-hard", "core_bench_hard", "corebench-hard", "CORE-Bench Hard", "hal-corebench-hard"]
   description: CORE-Bench Hard — hardest of the three CORE-Bench difficulty tiers; agent receives only the README and must figure out env setup, run code, and answer questions. HAL is the official leaderboard for the Hard tier.
   dataset_repo: siegelz/core-bench
-  parent_benchmark_id: core-bench
+  parent_benchmark_id: null
   tags: '["agent", "reproducibility"]'
   metadata: '{}'
   review_status: reviewed
@@ -1035,14 +1044,14 @@
   aliases: ["SWE-bench Verified", "swe-bench-verified", "swe-bench-verified-leaderboard", "swe_bench_verified"]
   description: 500-task human-filtered subset of SWE-bench, created jointly with OpenAI to ensure problem descriptions are clear, test patches are correct, and tasks are solvable. Note that OpenAI's later audit found contamination in frontier models — Verified scores have caveats.
   dataset_repo: princeton-nlp/SWE-bench_Verified
-  parent_benchmark_id: swe-bench
+  parent_benchmark_id: null
   tags: '["coding", "software-engineering"]'
   metadata: '{}'
   review_status: reviewed
 
 - id: swe-bench-verified-mini-hal
   display_name: SWE-bench Verified (Mini)
-  # HAL / Princeton's curated 50-task subset. Renamed on 2026-04-30
+  # HAL / Princeton's curated 50-task subset. Renamed
   # from ``swe-bench-verified-mini`` because the bare canonical id is
   # implicitly aliased back to itself by the seed loader, which
   # collided with MariusHobbhahn's separately-maintained variant
@@ -1064,7 +1073,7 @@
     - "hal-swebench-verified-mini"
   description: HAL's 50-task random subset of SWE-bench Verified for cheap evaluation; hosted at hal.cs.princeton.edu/swebench_verified_mini. Distinct from MariusHobbhahn's ``swe-bench-verified-mini`` HF dataset (a different 50-task subset).
   dataset_repo: null
-  parent_benchmark_id: swe-bench-verified
+  parent_benchmark_id: null
   tags: '["coding", "software-engineering"]'
   metadata: '{}'
   review_status: reviewed
@@ -1086,7 +1095,7 @@
     - "SWEBench-verified-mini"
   description: MariusHobbhahn's 50-task random subset of SWE-bench Verified, distributed via the HF dataset ``MariusHobbhahn/swe-bench-verified-mini``. Distinct curated set from HAL's variant; both share parent benchmark SWE-bench Verified.
   dataset_repo: MariusHobbhahn/swe-bench-verified-mini
-  parent_benchmark_id: swe-bench-verified
+  parent_benchmark_id: null
   tags: '["coding", "software-engineering"]'
   metadata: '{}'
   review_status: reviewed
@@ -1362,6 +1371,8 @@
 - id: bfcl-format-sensitivity
   display_name: BFCL Format Sensitivity
   aliases: ["bfcl_format_sensitivity", "BFCL Format Sensitivity"]
+  scoped_aliases:
+    bfcl: ["format_sensitivity"]
   description: BFCL subset evaluating sensitivity to function-call format variations.
   dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
   parent_benchmark_id: bfcl
@@ -1391,22 +1402,12 @@
 
 - id: swe-polybench-leaderboard
   display_name: SWE-PolyBench
-  # The EEE corpus emits a "Verified" curated subset alongside the
-  # unqualified full set, each split across four language subtasks
-  # (Java, JavaScript, Python, TypeScript). Both the "SWE-PolyBench
-  # Verified" parent name and the unqualified parent name are added
-  # here so the pipeline's paren-form leaf ("SWE-PolyBench Verified")
-  # resolves to this canonical id; per-language splits land as
-  # subtasks of those leaves on the pipeline side, not as separate
-  # canonicals. Future split into per-language child canonicals stays
-  # an option if signal work demands it.
   aliases:
     - "swe-polybench-leaderboard"
     - "swe_polybench_leaderboard"
     - "SWE-PolyBench"
     - "swe-polybench"
-    - "SWE-PolyBench Verified"
-  description: SWE-PolyBench — multilingual software engineering benchmark/leaderboard. Splits cover Java, JavaScript, Python, and TypeScript, each available as a Verified curated subset and an unqualified full set. The two parents currently fold into this canonical id.
+  description: SWE-PolyBench — multilingual software engineering benchmark/leaderboard. Splits cover Java, JavaScript, Python, and TypeScript, each available as a Verified curated subset and an unqualified full set.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["coding", "software-engineering"]'
@@ -1450,7 +1451,7 @@
   review_status: reviewed
 
 # ============================================================
-# AA additions (2026-05-01) — new canonicals for benchmarks AA reports.
+# AA additions — new canonicals for benchmarks AA reports.
 # Most are AA-rebroadcasts of popular benchmarks; aliases on existing entries
 # above (gpqa, mmlu-pro, math, scicode, livecodebench, tau-bench-2). The
 # entries below are NEW canonicals that didn't have a registry entry yet.
@@ -1458,7 +1459,13 @@
 
 - id: hle
   display_name: Humanity's Last Exam
-  aliases: ["HLE", "Hle", "humanitys-last-exam", "artificial_analysis.hle"]
+  aliases:
+    - HLE
+    - Hle
+    - humanitys-last-exam
+    - artificial_analysis.hle
+    - "Humanity's Last Exam (accuracy)"
+    - "Humanity's Last Exam (calibration error)"
   description: Humanity's Last Exam — broad-coverage frontier evaluation curated as an "exam-of-last-resort" for top models.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1511,7 +1518,7 @@
     - math-500-overall
   description: MATH-500 — 500-problem subset of Hendrycks MATH released by OpenAI for evaluating math reasoning. Distinct slug from the full MATH set; some leaderboards report this subset specifically.
   dataset_repo: null
-  parent_benchmark_id: math
+  parent_benchmark_id: null
   tags: '["math", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
@@ -1531,7 +1538,7 @@
   aliases: ["TerminalBench-Hard", "Terminalbench Hard", "terminal-bench-hard", "terminalbench_hard", "artificial_analysis.terminalbench_hard"]
   description: TerminalBench Hard — the hard split of TerminalBench. Distinct from terminal-bench-2 (which is a different benchmark).
   dataset_repo: null
-  parent_benchmark_id: terminal-bench
+  parent_benchmark_id: null
   tags: '["agentic", "coding"]'
   metadata: '{}'
   review_status: reviewed
@@ -1567,8 +1574,7 @@
   review_status: reviewed
 
 # ============================================================
-# Session 5e additions — comprehensive benchmark coverage (2026-05-01)
-# Top ~40 unresolved benchmarks from corpus survey. Each had a stable
+# Comprehensive benchmark coverage — benchmarks that had a stable
 # eval_summary_id and real benchmark identity but no canonical.
 # Per "registry should have higher coverage" policy.
 # ============================================================
@@ -1591,9 +1597,29 @@
   metadata: '{}'
   review_status: reviewed
 
+- id: mmmu-multiple-choice
+  display_name: MMMU (Multiple Choice)
+  aliases: ["MMMU-Multiple-Choice"]
+  description: MMMU evaluated in multiple-choice answer format. Sibling benchmark of MMMU in the MMMU family.
+  dataset_repo: MMMU/MMMU
+  parent_benchmark_id: null
+  tags: '["multimodal", "knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mmmu-open-ended
+  display_name: MMMU (Open-Ended)
+  aliases: ["MMMU-Open-Ended"]
+  description: MMMU evaluated in open-ended answer format. Sibling benchmark of MMMU in the MMMU family.
+  dataset_repo: MMMU/MMMU
+  parent_benchmark_id: null
+  tags: '["multimodal", "knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+
 - id: mmbench
   display_name: MMBench
-  aliases: ["MMBench", "mmbench", "MM-Bench", "mm-bench", "mm bench", "mm_bench"]
+  aliases: ["MMBench", "mmbench", "MM-Bench", "mm-bench", "mm bench", "mm_bench", "llm stats mmbench-v1"]
   description: Multimodal benchmark covering perception, reasoning, OCR, math across many sub-tasks.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1763,7 +1789,7 @@
 
 - id: omnidocbench
   display_name: OmniDocBench
-  aliases: ["OmniDocBench", "omnidocbench"]
+  aliases: ["OmniDocBench", "omnidocbench", "llm stats omnidocbench-1"]
   description: Comprehensive document understanding benchmark.
   dataset_repo: null
   parent_benchmark_id: null
@@ -2164,8 +2190,7 @@
 
 
 # ============================================================
-# Session 5f additions — CRITICAL missing benchmarks (2026-05-01)
-# Audit caught these absent from registry entirely.
+# Benchmarks that were absent from the registry entirely.
 # ============================================================
 
 - id: humaneval
@@ -5593,6 +5618,7 @@
   review_status: reviewed
   aliases:
     - Commonsenseqa
+    - commonsense_qa
     - llm_stats_commonsenseqa
 
 - id: comparebench
@@ -8421,6 +8447,7 @@
   review_status: reviewed
   aliases:
     - finance agent
+    - vals ai finance agent
     - finance-agent
     - finance_agent
     - llm_stats_finance_agent
@@ -11562,6 +11589,7 @@
   review_status: reviewed
   aliases:
     - Livecodebench v5
+    - llm stats livecodebench-v5-24 12-25
     - livecodebench-v5
     - livecodebench_v5
     - llm_stats_livecodebench_v5
@@ -13263,6 +13291,7 @@
   review_status: reviewed
   aliases:
     - llm_stats_mgsm
+    - vals ai mgsm
     - mgsm
   scoped_aliases:
     vals-ai:
@@ -14106,6 +14135,7 @@
   review_status: reviewed
   aliases:
     - Mmlu Redux
+    - llm stats mmlu-redux-2
     - llm_stats_mmlu_redux
     - mmlu-redux
     - mmlu_redux
@@ -14760,7 +14790,7 @@
     - MT2IE
 
 - id: mt-bench
-  display_name: Mt Bench
+  display_name: MT-Bench
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["general"]'
@@ -14768,6 +14798,7 @@
   review_status: reviewed
   aliases:
     - Mt Bench
+    - MT-Bench
     - llm_stats_mt_bench
     - mt-bench
     - mt_bench
@@ -24236,10 +24267,32 @@
     helm_instruct:
       - "Instruct"
 
+- id: helm-mmlu-leaderboard
+  display_name: HELM MMLU
+  description: HELM MMLU tier — composite-overall leaderboard.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["evaluation"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - helm-mmlu-leaderboard
+
+- id: helm-safety-leaderboard
+  display_name: HELM Safety
+  description: HELM Safety tier — composite-overall leaderboard.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["evaluation", "safety"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - helm-safety-leaderboard
+
 - id: caparena-caption-length
   display_name: CapArena Average Caption Length
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: caparena-auto
   tags: '["multimodal"]'
   metadata: '{}'
   review_status: reviewed
@@ -24252,7 +24305,7 @@
 - id: caparena-vs-cogvlm-19b
   display_name: CapArena-Auto Score (vs CogVLM-19B)
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: caparena-auto
   tags: '["multimodal"]'
   metadata: '{}'
   review_status: reviewed
@@ -24264,7 +24317,7 @@
 - id: caparena-vs-minicpm-8b
   display_name: CapArena-Auto Score (vs MiniCPM-8B)
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: caparena-auto
   tags: '["multimodal"]'
   metadata: '{}'
   review_status: reviewed
@@ -24276,7 +24329,7 @@
 - id: caparena-vs-gpt-4o
   display_name: CapArena-Auto Score (vs GPT-4o)
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: caparena-auto
   tags: '["multimodal"]'
   metadata: '{}'
   review_status: reviewed
@@ -24288,7 +24341,7 @@
 - id: caparena-auto-avg
   display_name: CapArena-Auto Score (avg)
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: caparena-auto
   tags: '["multimodal"]'
   metadata: '{}'
   review_status: reviewed
@@ -24366,7 +24419,7 @@
     - hal_gaia_gaia_gaia_level_3
 
 # ----------------------------------------------------------------------------
-# HumanEval / MBPP family splits (2026-05-01)
+# HumanEval / MBPP family splits
 # Previously these all collapsed onto bare `humaneval` / `mbpp`. Each variant
 # is a distinct benchmark (different problems, languages, modalities, or test
 # suites) and gets its own canonical so cross-suite identity is correct.
@@ -24527,7 +24580,7 @@
   display_name: MBPP+
   description: MBPP+ — EvalPlus's enhanced-test-suite version of MBPP (more rigorous correctness tests).
   dataset_repo: evalplus/evalplus
-  parent_benchmark_id: evalplus
+  parent_benchmark_id: null
   tags: '["coding"]'
   metadata: '{}'
   review_status: reviewed
@@ -24541,75 +24594,501 @@
     - llm_stats_mbpp_evalplus
     - llm_stats_mbpp_plus
 
+# AIME is canonicalised by year (aime-2024 / aime-2025 / aime-2026), with
+# bare 'aime' kept as the cross-year parent for year-unspecified mentions.
+# Bare 'core' is a display alias of CoRe; the 'core-bench' family is separate.
+
 # ============================================================
-# Phase 1.5 (Session 5h) — AIME year-split + generic alias removal (2026-05-01)
+# New benchmark entries for correct parent/child nesting in hierarchy.json.
 # ============================================================
-#
-# Two fixes this round; all changes are direct edits to source blocks
-# (NOT merge appends), because removals are required and merges union.
-#
-# 1) AIME-by-year canonicalization
-#    --------------------------------
-#    Problem: AIME-2025 rows were split between two canonicals.
-#      - vals_ai_aime_aime_2024 / vals_ai_aime_aime_2025 → bare 'aime'
-#      - artificial_analysis_llms_artificial_analysis_aime_25 → 'aime-25'
-#      - llm_stats_aime_2025 → 'aime-25'
-#      - llm_stats_aime_2024 → 'aime-2024'
-#    Same year, two canonicals — cross-suite identity broken.
-#
-#    Decision: year-explicit canonicals. AIME-2024 → 'aime-2024';
-#    AIME-2025 → 'aime-2025' (renamed from 'aime-25'); AIME-2026 →
-#    'aime-2026'. Bare 'aime' kept as a parent / cross-year canonical
-#    for cases where the year is not specified (vals.ai overall,
-#    artificial_analysis.aime cross-year leaderboard rows, generic
-#    "AIME" mentions). Year-specific aliases removed from bare 'aime'.
-#
-#    Edits made:
-#      - 'aime-25' canonical RENAMED to 'aime-2025' (line ~1374) with
-#        comprehensive aliases: aime-25, aime_25, AIME 2025, aime-2025,
-#        aime_2025, aime 2025, artificial_analysis.aime_25,
-#        artificial_analysis_aime_25, Aime aime 2025,
-#        vals_ai_aime_aime_2025, llm_stats_aime_2025.
-#      - 'aime-2024' aliases EXTENDED (line ~2582) to include AIME-24
-#        short forms, vals.ai forms, and 'Aime aime 2024'.
-#      - 'aime-2026' aliases EXTENDED (line ~2595) to include AIME-26
-#        short forms.
-#      - vals.ai 'aime' merge block (line ~23463) TRIMMED to remove
-#        year-specific aliases (vals_ai_aime_aime_2024,
-#        vals_ai_aime_aime_2025, "Aime aime 2024", "Aime aime 2025"),
-#        leaving only true cross-year identifiers
-#        (vals.ai/aime, vals_ai_aime, vals_ai_aime_overall, Aime overall).
-#      - parent_benchmark_id linkages: each year canonical points to
-#        bare 'aime'. (aime-2024 was previously parent_benchmark_id:
-#        null; now parent_benchmark_id: aime, matching aime-2025 and
-#        aime-2026.)
-#
-#    Deploy note (per evalcard-registry/CLAUDE.md): renaming
-#    'aime-25' → 'aime-2025' triggers the seed loader's
-#    rename-collision branch — the first seed run does stale-removal,
-#    the second adds the freed raw_values under the new canonical.
-#    Re-run seed twice on push, then restart the Space.
-#
-# 2) Bare 'core' alias removal
-#    --------------------------
-#    Problem: 'core' canonical (display_name: CoRe) had a bare 'core'
-#    alias that swallowed any future benchmark or subset literally
-#    named "core". 120 corpus rows currently resolve here from
-#    eval_summary_id 'core' (alphaxiv source); the underlying
-#    benchmark identity is GraCoRe with a leaf_key of 'core', so the
-#    resolution was incidental, not intentional.
-#
-#    Edit made: bare 'core' alias REPLACED with 'CoRe' (display-name
-#    form). Slug-form 'core-bench' family is unaffected (separate
-#    canonical at line ~908).
-#
-#    Consequence: those 120 alphaxiv rows lose their 'core' canonical
-#    resolution and revert to canonical_benchmark_id: null. The right
-#    long-term fix is to wire alphaxiv's GraCoRe records to the
-#    existing 'gracore' canonical (line ~9219); that requires a
-#    pipeline-side or scoped-alias change, not a registry edit.
-#
-# Skipped this round (raised separately):
-#   - vals-index / vals-multimodal-index / helm-instruct composite
-#     canonicals absorbing sub-tasks. That's a policy decision worth
-#     its own task.
+
+# --- CapArena: parent for 5 variants ---
+
+- id: caparena-auto
+  display_name: CapArena-Auto
+  description: CapArena automatic evaluation — aggregates across vs-reference and caption-length metrics.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["multimodal"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- AgentHarm: root + 8 category children ---
+
+- id: agentharm
+  display_name: AgentHarm
+  scoped_aliases:
+    agentharm: ["agentharm"]
+  description: AgentHarm — evaluates LLM susceptibility to harmful agent instructions across 8 risk categories.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["safety", "agent"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-copyright
+  display_name: AgentHarm Copyright
+  scoped_aliases:
+    agentharm: ["Copyright"]
+  description: AgentHarm sub-category — copyright-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-cybercrime
+  display_name: AgentHarm Cybercrime
+  scoped_aliases:
+    agentharm: ["Cybercrime"]
+  description: AgentHarm sub-category — cybercrime-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-disinformation
+  display_name: AgentHarm Disinformation
+  scoped_aliases:
+    agentharm: ["Disinformation", "disinformation"]
+  description: AgentHarm sub-category — disinformation-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-drugs
+  display_name: AgentHarm Drugs
+  scoped_aliases:
+    agentharm: ["Drugs"]
+  description: AgentHarm sub-category — drug-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-fraud
+  display_name: AgentHarm Fraud
+  scoped_aliases:
+    agentharm: ["Fraud"]
+  description: AgentHarm sub-category — fraud-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-harassment
+  display_name: AgentHarm Harassment
+  scoped_aliases:
+    agentharm: ["Harassment"]
+  description: AgentHarm sub-category — harassment-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-hate
+  display_name: AgentHarm Hate
+  scoped_aliases:
+    agentharm: ["Hate"]
+  description: AgentHarm sub-category — hate-speech-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: agentharm-sexual
+  display_name: AgentHarm Sexual
+  scoped_aliases:
+    agentharm: ["Sexual"]
+  description: AgentHarm sub-category — sexual-content-related harmful instructions.
+  dataset_repo: null
+  parent_benchmark_id: agentharm
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- MATH-MC: root + 5 difficulty levels ---
+
+- id: math-mc
+  display_name: MATH-MC
+  description: MATH-MC — multiple-choice adaptation of MATH problems, 5 difficulty levels.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: math-mc-level-1
+  display_name: MATH-MC Level 1
+  scoped_aliases:
+    math-mc: ["Level 1"]
+  description: MATH-MC Level 1 — easiest subset.
+  dataset_repo: null
+  parent_benchmark_id: math-mc
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: math-mc-level-2
+  display_name: MATH-MC Level 2
+  scoped_aliases:
+    math-mc: ["Level 2"]
+  description: MATH-MC Level 2.
+  dataset_repo: null
+  parent_benchmark_id: math-mc
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: math-mc-level-3
+  display_name: MATH-MC Level 3
+  scoped_aliases:
+    math-mc: ["Level 3"]
+  description: MATH-MC Level 3.
+  dataset_repo: null
+  parent_benchmark_id: math-mc
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: math-mc-level-4
+  display_name: MATH-MC Level 4
+  scoped_aliases:
+    math-mc: ["Level 4"]
+  description: MATH-MC Level 4.
+  dataset_repo: null
+  parent_benchmark_id: math-mc
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: math-mc-level-5
+  display_name: MATH-MC Level 5
+  scoped_aliases:
+    math-mc: ["Level 5"]
+  description: MATH-MC Level 5 — hardest subset.
+  dataset_repo: null
+  parent_benchmark_id: math-mc
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- GSM-MC: standalone ---
+
+- id: gsm-mc
+  display_name: GSM-MC
+  aliases: ["GSM-MC", "gsm_mc"]
+  description: GSM-MC — multiple-choice adaptation of GSM8K grade-school math problems.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- MT-Bench: 3 children of existing mt-bench ---
+
+- id: mt-bench-overall
+  display_name: MT-Bench (overall)
+  aliases: ["MT-Bench (overall)"]
+  description: MT-Bench overall score across all categories.
+  dataset_repo: null
+  parent_benchmark_id: mt-bench
+  tags: '["general"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mt-bench-turn-1
+  display_name: MT-Bench (turn 1)
+  aliases: ["MT-Bench (turn 1)"]
+  description: MT-Bench turn 1 scores.
+  dataset_repo: null
+  parent_benchmark_id: mt-bench
+  tags: '["general"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mt-bench-turn-2
+  display_name: MT-Bench (turn 2)
+  aliases: ["MT-Bench (turn 2)"]
+  description: MT-Bench turn 2 scores.
+  dataset_repo: null
+  parent_benchmark_id: mt-bench
+  tags: '["general"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- SWE-PolyBench: 2 parents × 4 language children ---
+
+- id: swe-polybench
+  display_name: SWE-PolyBench
+  description: SWE-PolyBench — multilingual SWE-bench across Java, JavaScript, Python, TypeScript.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-verified
+  display_name: SWE-PolyBench Verified
+  aliases: ["SWE-PolyBench Verified"]
+  description: SWE-PolyBench Verified — curated subset across 4 languages.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-java
+  display_name: SWE-PolyBench (Java)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench (Java)"]
+  description: SWE-PolyBench Java language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-javascript
+  display_name: SWE-PolyBench (JavaScript)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench (JavaScript)"]
+  description: SWE-PolyBench JavaScript language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-python
+  display_name: SWE-PolyBench (Python)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench (Python)"]
+  description: SWE-PolyBench Python language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-typescript
+  display_name: SWE-PolyBench (TypeScript)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench (TypeScript)"]
+  description: SWE-PolyBench TypeScript language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-verified-java
+  display_name: SWE-PolyBench Verified (Java)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench Verified (Java)"]
+  description: SWE-PolyBench Verified Java language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench-verified
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-verified-javascript
+  display_name: SWE-PolyBench Verified (JavaScript)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench Verified (JavaScript)"]
+  description: SWE-PolyBench Verified JavaScript language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench-verified
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-verified-python
+  display_name: SWE-PolyBench Verified (Python)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench Verified (Python)"]
+  description: SWE-PolyBench Verified Python language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench-verified
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-polybench-verified-typescript
+  display_name: SWE-PolyBench Verified (TypeScript)
+  scoped_aliases:
+    swe-polybench-leaderboard: ["SWE-PolyBench Verified (TypeScript)"]
+  description: SWE-PolyBench Verified TypeScript language split.
+  dataset_repo: null
+  parent_benchmark_id: swe-polybench-verified
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Multi-SWE-Bench: 7 language children ---
+
+- id: multi-swe-bench-c
+  display_name: Multi-SWE-Bench (c)
+  scoped_aliases:
+    multi-swe-bench-leaderboard: ["Multi-SWE-Bench (c)"]
+  description: Multi-SWE-Bench C language split.
+  dataset_repo: null
+  parent_benchmark_id: multi-swe-bench-leaderboard
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: multi-swe-bench-cpp
+  display_name: Multi-SWE-Bench (c++)
+  scoped_aliases:
+    multi-swe-bench-leaderboard: ["Multi-SWE-Bench (c++)"]
+  description: Multi-SWE-Bench C++ language split.
+  dataset_repo: null
+  parent_benchmark_id: multi-swe-bench-leaderboard
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: multi-swe-bench-go
+  display_name: Multi-SWE-Bench (go)
+  scoped_aliases:
+    multi-swe-bench-leaderboard: ["Multi-SWE-Bench (go)"]
+  description: Multi-SWE-Bench Go language split.
+  dataset_repo: null
+  parent_benchmark_id: multi-swe-bench-leaderboard
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: multi-swe-bench-java
+  display_name: Multi-SWE-Bench (java)
+  scoped_aliases:
+    multi-swe-bench-leaderboard: ["Multi-SWE-Bench (java)"]
+  description: Multi-SWE-Bench Java language split.
+  dataset_repo: null
+  parent_benchmark_id: multi-swe-bench-leaderboard
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: multi-swe-bench-javascript
+  display_name: Multi-SWE-Bench (javascript)
+  scoped_aliases:
+    multi-swe-bench-leaderboard: ["Multi-SWE-Bench (javascript)"]
+  description: Multi-SWE-Bench JavaScript language split.
+  dataset_repo: null
+  parent_benchmark_id: multi-swe-bench-leaderboard
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: multi-swe-bench-rust
+  display_name: Multi-SWE-Bench (rust)
+  scoped_aliases:
+    multi-swe-bench-leaderboard: ["Multi-SWE-Bench (rust)"]
+  description: Multi-SWE-Bench Rust language split.
+  dataset_repo: null
+  parent_benchmark_id: multi-swe-bench-leaderboard
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: multi-swe-bench-typescript
+  display_name: Multi-SWE-Bench (typescript)
+  scoped_aliases:
+    multi-swe-bench-leaderboard: ["Multi-SWE-Bench (typescript)"]
+  description: Multi-SWE-Bench TypeScript language split.
+  dataset_repo: null
+  parent_benchmark_id: multi-swe-bench-leaderboard
+  tags: '["coding", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
+# --- CySE2: root + 3 category children ---
+
+- id: cyse2
+  display_name: CySE2
+  description: CySE2 — cybersecurity evaluation suite with 3 attack categories.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["security"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cyse2-interpreter-abuse
+  display_name: CySE2 Interpreter Abuse
+  aliases: ["cyse2_interpreter_abuse"]
+  description: CySE2 sub-category — interpreter abuse attacks.
+  dataset_repo: null
+  parent_benchmark_id: cyse2
+  tags: '["security"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cyse2-prompt-injection
+  display_name: CySE2 Prompt Injection
+  aliases: ["cyse2_prompt_injection"]
+  description: CySE2 sub-category — prompt injection attacks.
+  dataset_repo: null
+  parent_benchmark_id: cyse2
+  tags: '["security"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cyse2-vulnerability-exploit
+  display_name: CySE2 Vulnerability Exploit
+  aliases: ["cyse2_vulnerability_exploit"]
+  description: CySE2 sub-category — vulnerability exploitation attacks.
+  dataset_repo: null
+  parent_benchmark_id: cyse2
+  tags: '["security"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cvebench
+  display_name: CVE-Bench
+  aliases: ["cvebench"]
+  description: Benchmark evaluating models on real-world CVE (Common Vulnerabilities and Exposures) exploitation tasks.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["security"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: intercode-ctf
+  display_name: InterCode-CTF
+  aliases: ["gdm_intercode_ctf", "gdm-intercode-ctf"]
+  description: Capture-the-flag security tasks from the InterCode benchmark (GDM dangerous-capabilities suite).
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["security", "agentic"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: infinitebench
+  display_name: InfiniteBench
+  aliases: ["llm stats infinitebench-en"]
+  description: Long-context benchmark testing comprehension and reasoning over inputs exceeding 100K tokens.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["long-context"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: codegolf
+  display_name: Code Golf
+  aliases: ["llm stats codegolf-v2"]
+  description: Benchmark scoring models on producing the shortest correct program for a given task.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["coding"]'
+  metadata: '{}'
+  review_status: reviewed

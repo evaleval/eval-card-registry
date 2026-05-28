@@ -32,8 +32,7 @@ _TABLES = {
     "metric": "canonical_metrics",
     "harness": "eval_harnesses",
     "org": "canonical_orgs",
-    # families and composites are first-class registry entities since the
-    # hierarchy-alignment work (notes/hierarchy-alignment.md §3-§4).
+    # families and composites are first-class registry entities.
     # Resolution lookups don't query them directly, but the resolver
     # enrichment for a `benchmark` consults `canonical_families` to
     # populate `ResolutionResult.family_key` and `category`.
@@ -259,9 +258,8 @@ class CanonicalStore:
         Output shape (dict; consumed by Resolver._enrich):
           - `family_key`: id of the canonical_families row whose
             benchmark_ids contains `benchmark_id`. Falls back to
-            `benchmark_id` itself for singleton families (the hierarchy
-            spec §3 default — `family.id == benchmark.id` when no
-            curated family covers it).
+            `benchmark_id` itself for singleton families (`family.id ==
+            benchmark.id` when no curated family covers it).
           - `category`: family's curated category, or None.
           - `composite_keys`: empty list at the resolver layer. The
             producer's view layer is the right place to compute which
@@ -300,7 +298,7 @@ class CanonicalStore:
             # When no curated family covers this id or any of its parents,
             # the family root IS the parent walk's terminus (or the id
             # itself for true root benchmarks). That's the singleton-family
-            # default per spec §3.
+            # default.
             if family_key is None:
                 family_key = cur
 
