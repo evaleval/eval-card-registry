@@ -512,6 +512,17 @@ def seed(
     # Alias key: (raw_value, entity_type, canonical_id, source_config)
     seed_snapshot: list[tuple[str, str, set[str], set[tuple[str, str, str, Optional[str]]]]] = []
 
+    # Detect same-run alias collisions: two DIFFERENT canonicals declaring the
+    # same (raw_value, entity_type, source_config) within ONE seed pass. The
+    # add_alias/repoint path below silently last-write-wins on these, so the
+    # owner is seed-order-dependent (nondeterministic) — a real data bug. We
+    # record them here and raise after the loop so dirty seed data can't ship
+    # silently. NOTE: a legitimate YAML *rename* (the persisted store had the
+    # alias on a canonical that no longer claims it) is NOT a collision — only
+    # same-pass double-claims are, which is why this is keyed on this run only.
+    run_alias_owners: dict[tuple[str, str, Optional[str]], str] = {}
+    alias_collisions: list[tuple[str, str, Optional[str], str, str]] = []
+
     # Build the alias index once so add_alias collision checks are O(1) instead
     # of O(N) DataFrame mask scans. Combined with buffered=True below, this
     # avoids the O(N²) pd.concat-per-row cost on ~1k entities + ~13k aliases.
@@ -604,6 +615,17 @@ def seed(
             for raw_value, source_cfg in alias_specs:
                 # Index stale-removal by (raw_value, entity_type, canonical_id, source_config)
                 yaml_alias_keys.add((raw_value, entity_type, canonical_id, source_cfg))
+                # Same-run collision check (see run_alias_owners above): if a
+                # different canonical already claimed this exact alias in this
+                # pass, the owner would be nondeterministic — record it.
+                _claim_key = (raw_value, entity_type, queries._source_config_key(source_cfg))
+                _prev_owner = run_alias_owners.get(_claim_key)
+                if _prev_owner is None:
+                    run_alias_owners[_claim_key] = canonical_id
+                elif _prev_owner != canonical_id:
+                    alias_collisions.append(
+                        (raw_value, entity_type, _claim_key[2], _prev_owner, canonical_id)
+                    )
                 try:
                     queries.add_alias(store, {
                         "raw_value": raw_value,
@@ -682,6 +704,25 @@ def seed(
 
         seed_snapshot.append((table, entity_type, yaml_ids, yaml_alias_keys))
         typer.echo(f"  {label}: {len(items)}")
+
+    # Fail fast on same-run alias collisions (nondeterministic owner). Don't
+    # flush — dirty data must not persist. Each line names the contended alias
+    # and the two canonicals; fix by removing the duplicate declaration from
+    # the non-owning entity (per project rule: the later/more-specific entity
+    # owns the name).
+    if alias_collisions:
+        deduped = sorted(set(alias_collisions))
+        lines = "\n".join(
+            f"    {rv!r} ({et}{', cfg=' + ck if ck else ''}): "
+            f"declared by both {a!r} and {b!r}"
+            for (rv, et, ck, a, b) in deduped
+        )
+        raise typer.BadParameter(
+            f"{len(deduped)} alias collision(s) — the same alias is declared by "
+            "more than one canonical in this seed pass, so the owner would be "
+            "seed-order-dependent (nondeterministic). Each alias must belong to "
+            "exactly one canonical:\n" + lines
+        )
 
     # Flush all buffered upserts (entities + aliases) into their tables in a
     # single pd.concat per table. prune_stale below reads store.table(...)
