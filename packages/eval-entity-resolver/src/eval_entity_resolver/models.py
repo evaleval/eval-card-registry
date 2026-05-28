@@ -39,7 +39,7 @@ class ResolutionResult:
       - `family_key`: canonical_families.id this benchmark belongs to.
         Defaults to the benchmark's own id for singleton families
         (when no curated multi-benchmark family covers it). Benchmarks
-        only. See notes/hierarchy-alignment.md §3.
+        only.
       - `composite_keys`: canonical_composites.id values where this
         benchmark appears (via the composite's source_configs ↔ EEE
         folders chain). Benchmarks only; empty list when none.
@@ -65,7 +65,7 @@ class ResolutionResult:
     open_weights: Optional[bool] = None
     release_date: Optional[str] = None
     params_billions: Optional[float] = None
-    # Benchmark-only enrichment (see notes/hierarchy-alignment.md §3).
+    # Benchmark-only enrichment.
     family_key: Optional[str] = None
     composite_keys: Optional[list[str]] = None
     category: Optional[str] = None

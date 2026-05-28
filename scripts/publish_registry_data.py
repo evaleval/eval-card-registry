@@ -1,8 +1,7 @@
 """Publish the registry's canonical_* parquets to evaleval/entity-registry-data.
 
-Per `notes/hierarchy-alignment.md` §7 Step 2 — replaces the inline
-Python in `.github/workflows/seed.yml` with a dedicated, testable
-publish path:
+Replaces the inline Python in `.github/workflows/seed.yml` with a
+dedicated, testable publish path:
 
   1. Run the seed CLI end-to-end against `seed/`, materialising every
      canonical_* table to `fixtures/`.

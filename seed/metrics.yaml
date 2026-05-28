@@ -221,3 +221,64 @@
   max_score: null
   metadata: '{}'
   review_status: reviewed
+
+# A refusal rate is one consistent metric concept; only its direction is
+# context-dependent (refusing harmful prompts = higher-better; over-refusing
+# benign prompts = lower-better). So: one global canonical, but lower_is_better
+# is left unset so the per-row source (eee_record) drives direction per
+# benchmark (metric_meta_hotfix chain registry -> eee_record -> default).
+- id: refusal-rate
+  display_name: Refusal Rate
+  aliases: ["Refusal Rate"]
+  score_type: continuous
+  lower_is_better: null
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+
+# Namespaced placeholders for vague/malformed metric labels the source emits
+# ("mean" — benchmark-specific meaning; codegolf's metric field holds a junk
+# benchmark string). Assigned by resolution_hotfixes.fix_vague_metric_labels;
+# TODO(upstream): fix the source so these carry real metric names, then drop.
+# lower_is_better/min/max left unset so direction/scale stay per-row (eee_record).
+# display_name is set to the namespaced id itself (NOT a bare "Mean"/"Score"):
+# the seed auto-aliases display_name, and a bare "Mean"/"Score" alias would
+# normalize-match the raw "mean"/"score" and hijack resolution. The dotted form
+# can't collide. Each id must equal <benchmark_id>.<suffix> exactly (the hotfix
+# builds it as benchmark_id || '.mean').
+- id: cvebench.mean
+  display_name: cvebench.mean
+  score_type: continuous
+  lower_is_better: null
+  min_score: null
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cyse2-vulnerability-exploit.mean
+  display_name: cyse2-vulnerability-exploit.mean
+  score_type: continuous
+  lower_is_better: null
+  min_score: null
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swebench-verified-mini-mariushobbhahn.mean
+  display_name: swebench-verified-mini-mariushobbhahn.mean
+  score_type: continuous
+  lower_is_better: null
+  min_score: null
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
+- id: codegolf.score
+  display_name: codegolf.score
+  score_type: continuous
+  lower_is_better: null
+  min_score: null
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed

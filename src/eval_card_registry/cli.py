@@ -494,10 +494,9 @@ def seed(
         ("canonical_benchmarks", "__merged_benchmarks__", "benchmarks", "benchmark"),
         ("canonical_metrics", seed_path / "metrics.yaml", "metrics", "metric"),
         ("eval_harnesses", seed_path / "harnesses.yaml", "harnesses", "harness"),
-        # Families & composites are first-class registry entities since
-        # the hierarchy-alignment work (notes/hierarchy-alignment.md
-        # §4 / §7 Step 2). Their YAML uses {slug: {...}} shape, so we
-        # need translation loaders rather than the flat-list path.
+        # Families & composites are first-class registry entities. Their
+        # YAML uses {slug: {...}} shape, so we need translation loaders
+        # rather than the flat-list path.
         # entity_type='family'/'composite' aliases are emitted for
         # consistency but aren't consulted by the resolver today.
         ("canonical_families", "__nested_families__", "families", "family"),

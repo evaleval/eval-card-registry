@@ -1,0 +1,150 @@
+# Benchmark relationships that are NOT hierarchy nesting.
+# parent_benchmark_id controls hierarchy rendering (slice nesting).
+# This table captures lineage, derivation, and other connections.
+#
+# relationship_type values:
+#   subset_of     — curated/filtered subset
+#   version_of    — same benchmark, new version
+#   extended_from — shares lineage, independently defined
+#   split_of      — category/slice within a parent
+
+relationships:
+
+  # --- Lineage relationships (moved FROM parent_benchmark_id) ---
+
+  - entity_a: big-bench-hard
+    entity_b: big-bench
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: mbpp-plus
+    entity_b: evalplus
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: livecodebench-pro
+    entity_b: livecodebench
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: core-bench-hard
+    entity_b: core-bench
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: terminalbench-hard
+    entity_b: terminal-bench
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: appworld-test-normal
+    entity_b: appworld
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: global-mmlu-lite
+    entity_b: global-mmlu
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: mathverse-mini
+    entity_b: mathverse
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: swe-bench-pro
+    entity_b: swe-bench
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: swe-bench-verified
+    entity_b: swe-bench
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: swe-bench-verified-mini-hal
+    entity_b: swe-bench-verified
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: swebench-verified-mini-mariushobbhahn
+    entity_b: swe-bench-verified
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: arena-hard-v2
+    entity_b: arena-hard
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: math-500
+    entity_b: math
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: math-level-5
+    entity_b: math
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: rewardbench-2
+    entity_b: rewardbench
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: rewardbench-safety
+    entity_b: rewardbench
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: rewardbench-reasoning
+    entity_b: rewardbench
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: gpqa-diamond
+    entity_b: gpqa
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: mmlu-pro
+    entity_b: mmlu
+    relationship_type: extended_from
+    is_confirmed: true
+
+  # --- Nesting relationships (also in parent_benchmark_id) ---
+
+  - entity_a: bfcl-live
+    entity_b: bfcl
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: bfcl-multi-turn
+    entity_b: bfcl
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: bfcl-non-live
+    entity_b: bfcl
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: bfcl-web-search
+    entity_b: bfcl
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: bfcl-memory
+    entity_b: bfcl
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: bfcl-relevance
+    entity_b: bfcl
+    relationship_type: split_of
+    is_confirmed: true
+
+  - entity_a: bfcl-format-sensitivity
+    entity_b: bfcl
+    relationship_type: split_of
+    is_confirmed: true

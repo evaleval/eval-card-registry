@@ -43,7 +43,7 @@ swe-bench:
 bfcl:
   display: BFCL family
   category: tool-use
-  benchmarks: [bfcl-live, bfcl-multi-turn, bfcl-non-live, bfcl-web-search]
+  benchmarks: [bfcl]
 
 judgebench:
   display: JudgeBench family
@@ -89,7 +89,7 @@ hal:
 reward-bench:
   display: RewardBench family
   category: reward-modelling
-  benchmarks: [rewardbench, rewardbench-2]
+  benchmarks: [rewardbench, rewardbench-2, rewardbench-safety]
   folder_aliases:
     - reward-bench
     - reward-bench-2
@@ -133,11 +133,13 @@ cyse2:
     - cyse2_prompt_injection
     - cyse2_vulnerability_exploit
 
-# MMMU — multimodal-MMU; "MMMU-Multiple-Choice" and "MMMU-Open-Ended"
-# variants in EEE collapse to one canonical via folder_aliases.
+# MMMU — multimodal-MMU. "MMMU-Multiple-Choice" and "MMMU-Open-Ended"
+# are distinct answer-format benchmarks (siblings in the family), each
+# its own canonical; folder_aliases routes their source_configs here.
 mmmu:
   display: MMMU
   category: multimodal
+  benchmarks: [mmmu, mmmu-multiple-choice, mmmu-open-ended]
   folder_aliases:
     - MMMU-Multiple-Choice
     - MMMU-Open-Ended
@@ -165,3 +167,38 @@ livebench:
     - livebench-reasoning
     - livebench-data-analysis
   primary_benchmark_key: livebench
+
+caparena:
+  display: CapArena
+  category: multimodal
+  benchmarks: [caparena-auto]
+
+agentharm:
+  display: AgentHarm
+  category: safety
+  benchmarks: [agentharm]
+
+math-mc:
+  display: MATH-MC
+  category: math
+  benchmarks: [math-mc]
+
+gsm-mc:
+  display: GSM-MC
+  category: math
+  benchmarks: [gsm-mc]
+
+swe-polybench-leaderboard:
+  display: SWE-PolyBench
+  category: code
+  benchmarks: [swe-polybench, swe-polybench-verified]
+
+multi-swe-bench-leaderboard:
+  display: Multi-SWE-Bench
+  category: code
+  benchmarks: [multi-swe-bench-leaderboard]
+
+hf-open-llm-v2:
+  display: HF Open LLM v2
+  category: general
+  composite_keys: [hf-open-llm-v2]

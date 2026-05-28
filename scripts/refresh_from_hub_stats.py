@@ -282,8 +282,8 @@ _HEADER = """# Generated from cfahlgren1/hub-stats — DO NOT EDIT BY HAND.
 # core.yaml take precedence on conflict).
 #
 # Lineage descendant pre-load (community quants/finetunes of our covered
-# models) is deferred — see deferred task. EEE drafts get on-demand
-# enrichment via the live hub-stats lookup at draft creation (Phase 2).
+# models) is not done here. EEE drafts get on-demand enrichment via the
+# live hub-stats lookup at draft creation.
 """
 
 

@@ -1,7 +1,7 @@
 """Tests for the seed CLI — particularly its rename-collision handling.
 
-Regression coverage for a real bug we hit during Phase 1.6: when seed YAML
-moves an alias from canonical-A to canonical-B, the seed CLI used to
+Regression coverage for a real bug: when seed YAML moves an alias from
+canonical-A to canonical-B, the seed CLI used to
 silently swallow the resulting uniqueness ValueError from add_alias() and
 let stale-removal at the end of seeding delete the row entirely. The
 correct behavior is to repoint the existing alias row at the new canonical
