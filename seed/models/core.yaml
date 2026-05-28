@@ -591,7 +591,6 @@ entries:
   - mistralai/Mistral-Large
   - mistral/mistral-large
   - unknown/mistral-large
-  - mistralai/mistral-large-latest
   - mistral/mistral-large-latest
   metadata: '{}'
   review_status: reviewed
@@ -2286,8 +2285,6 @@ entries:
   - google/gemini-3-pro
   - google/Gemini 3 Pro
   - gemini-3.1-pro
-  - google/gemini-3-pro-preview
-  - gemini-3-pro-preview
   - google/gemini-3-deep-think-preview
   - google/gemini-3-pro-deep-think
   - gemini-3-deep-think-preview
@@ -2304,8 +2301,6 @@ entries:
   - gemini-3-flash
   - google/gemini-3-flash
   - google/Gemini 3 Flash
-  - google/gemini-3-flash-preview
-  - gemini-3-flash-preview
   metadata: '{}'
   review_status: reviewed
 - id: google/gemini-1.5-flash
@@ -2458,8 +2453,6 @@ entries:
   params_billions: null
   tags: []
   aliases:
-  - claude-sonnet-4-0
-  - anthropic/claude-sonnet-4-0
   - claude-4-sonnet
   - anthropic/claude-4-sonnet
   - claude-sonnet-4
@@ -2614,8 +2607,6 @@ entries:
   params_billions: null
   tags: []
   aliases:
-  - grok-3-latest
-  - xai/grok-3-latest
   - unknown/grok-3
   - grok-3
   metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3", "grok-3-latest"]}'
@@ -2628,8 +2619,6 @@ entries:
   params_billions: null
   tags: []
   aliases:
-  - grok-3-mini-latest
-  - xai/grok-3-mini-latest
   - grok-3-mini
   metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2025-02-17"], "snapshots": ["grok-3-mini", "grok-3-mini-latest"]}'
   review_status: reviewed
@@ -2643,8 +2632,6 @@ entries:
   tags:
   - open-weight
   aliases:
-  - ministral-8b-latest
-  - mistralai/ministral-8b-latest
   - allknowingroger/ministral-8b-slerp
   - mistral/ministral-8b-latest
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2024-10-01"], "snapshots": ["ministral-8b-latest"]}'
@@ -3757,10 +3744,8 @@ entries:
   aliases:
   - openai/o1
   - o1
-  - openai/o1-preview
   - unknown/o1
   - unknown/o1-preview
-  - o1-preview
   - openai-o1
   - unknown/openai-o1
   - unknown/gpt-o1
@@ -5112,12 +5097,10 @@ entries:
   - gemini-embedding-001
 - id: google/gemini-flash
   display_name: Gemini Flash
-  aliases:
-  - gemini-flash-latest
+  aliases: []
 - id: google/gemini-flash-lite
   display_name: Gemini Flash Lite
-  aliases:
-  - gemini-flash-lite-latest
+  aliases: []
 - id: google/gemma-3n-2b
   display_name: Gemma 3n 2B
   aliases:
@@ -5256,7 +5239,6 @@ entries:
   - proprietary
   - multimodal
   aliases:
-  - pixtral-large-latest
   - mistral/pixtral-large
   - unknown/pixtral-124b
   - pixtral-124b
@@ -5269,7 +5251,6 @@ entries:
     axis: version
   aliases:
   - kimi-k2-0711
-  - kimi-k2-0711-preview
 - id: moonshotai/kimi-k2-0905
   display_name: Kimi K2 (0905)
   parents:
@@ -5279,7 +5260,6 @@ entries:
   tags: []
   aliases:
   - kimi-k2-0905
-  - kimi-k2-0905-preview
   - kimi/kimi-k2-0905
   - moonshotai/kimi-k2-instruct-0905
   - unknown/kimi-k2-instruct-0905
@@ -5305,8 +5285,13 @@ entries:
   - kimi-k2-thinking-0905
 - id: moonshotai/kimi-k2-turbo
   display_name: Kimi K2 Turbo
-  aliases:
-  - kimi-k2-turbo-preview
+  aliases: []
+- id: moonshotai/kimi-k2-turbo-preview
+  display_name: Kimi K2 Turbo Preview
+- id: cohere/command-a-translate-08-2025
+  display_name: Command A Translate (2025-08)
+- id: cohere/command-a-vision-07-2025
+  display_name: Command A Vision (2025-07)
 - id: openai/gpt-5-codex
   display_name: GPT-5 Codex
   aliases:
@@ -6317,7 +6302,7 @@ entries:
   metadata: '{}'
   review_status: reviewed
 - id: nvidia/llama-3.1-nemotron-70b
-  display_name: Llama 3.1 Nemotron 70B Instruct
+  display_name: Llama 3.1 Nemotron 70B
   org_id: nvidia
   family: llama-3.1-nemotron-70b
   params_billions: 70.0
@@ -7432,8 +7417,6 @@ entries:
   tags:
   - open-weight
   aliases:
-  - Qwen/Qwen1.5-1.8B-Chat
-  - qwen/qwen1.5-1.8b-chat
   - qwen1.5-1.8b
   metadata: '{}'
   review_status: reviewed
@@ -7734,7 +7717,6 @@ entries:
   aliases:
   - unknown/deepseek-7b
   - deepseek-ai/deepseek-llm-7b-base
-  - deepseek-ai/deepseek-llm-7b-chat
   - deepseek-7b
   metadata: '{}'
   review_status: reviewed
@@ -8033,19 +8015,6 @@ entries:
   - unknown/baichuan2-vanilla
   - unknown/baichuan2-sft
   - baichuan2-7b
-  metadata: '{}'
-  review_status: reviewed
-- id: baichuan-inc/baichuan2-13b
-  display_name: Baichuan2 13B
-  org_id: baichuan-inc
-  family: baichuan2-13b
-  params_billions: 13.0
-  open_weights: true
-  tags:
-  - open-weight
-  - regional
-  aliases:
-  - baichuan2-13b
   metadata: '{}'
   review_status: reviewed
 - id: baidu/ernie-4.5
@@ -9819,8 +9788,6 @@ entries:
   - gpt-5-chat
   - openai-gpt-5-chat
   - unknown/gpt-5-chat
-  - gpt-5-chat-latest
-  - openai/gpt-5-chat-latest
   metadata: '{}'
   review_status: reviewed
 - id: openai/gpt-oss-safeguard-20b
@@ -14557,7 +14524,6 @@ entries:
     axis: mode
   aliases:
   - Qwen3-30B-Instruct
-  - Qwen/Qwen3-Coder-30B-A3B-Instruct
   review_status: reviewed
 - id: alibaba/qwen3-30b-a3b
   display_name: Qwen3 30B A3B
@@ -16315,17 +16281,6 @@ entries:
   - unknown/gemini-2-5-flash-max-thinking-2025-06-05
   - google/gemini-2-5-flash-preview-09-2025-reasoning
   review_status: reviewed
-- id: google/gemini-2.5-flash-04-2025
-  display_name: Gemini 2.5 Flash (2025-04)
-  org_id: google
-  parents:
-  - id: google/gemini-2.5-flash
-    relationship: variant
-    axis: version
-  aliases:
-  - google/gemini-2-5-flash-04-2025
-  - gemini-2.5-flash-04-2025
-  review_status: reviewed
 - id: google/gemini-2.5-flash-reasoning
   display_name: Gemini 2.5 Flash Reasoning
   org_id: google
@@ -16355,6 +16310,8 @@ entries:
     axis: version
   aliases:
   - gemini-2.5-flash-2025-04
+  - google/gemini-2-5-flash-04-2025
+  - gemini-2.5-flash-04-2025
   review_status: reviewed
 - id: xai/grok-3-beta
   display_name: Grok 3 Beta
@@ -18466,33 +18423,6 @@ entries:
   - unknown/baichuan2-7b-base
   - baichuan-inc/Baichuan2-7B-Base
   - unknown/baichuan-7b-base
-  review_status: reviewed
-- id: baichuan-inc/baichuan2-13b-base
-  display_name: Baichuan2 13B Base
-  org_id: baichuan-inc
-  params_billions: 13.0
-  parents:
-  - id: baichuan-inc/baichuan2-13b
-    relationship: variant
-    axis: mode
-  aliases:
-  - unknown/baichuan2-13b-base
-  - baichuan-inc/Baichuan2-13B-Base
-  - unknown/baichuan-13b-base
-  review_status: reviewed
-- id: baichuan-inc/baichuan2-13b-chat
-  display_name: Baichuan2 13B Chat
-  org_id: baichuan-inc
-  params_billions: 13.0
-  parents:
-  - id: baichuan-inc/baichuan2-13b
-    relationship: variant
-    axis: mode
-  aliases:
-  - baichuan-inc/Baichuan2-13B-Chat
-  - unknown/baichuan-2-13b-chat
-  - unknown/baichuan2-chat-13b
-  - unknown/baichuan-chat-13b
   review_status: reviewed
 - id: bytedance-seed/seed-oss-36b-instruct
   display_name: Seed Oss 36B Instruct

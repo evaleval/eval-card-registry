@@ -103,7 +103,7 @@
 
 - id: mmlu
   display_name: MMLU
-  aliases: ["MMLU All Subjects", "helm_mmlu", "HELM MMLU"]
+  aliases: ["MMLU All Subjects"]
   scoped_aliases:
     helm_mmlu:
       - "helm_mmlu"
@@ -848,7 +848,7 @@
 
 - id: helm-instruct
   display_name: HELM Instruct
-  aliases: ["helm_instruct"]
+  aliases: ["HELM Instruct", "helm-instruct-leaderboard", "helm_instruct"]
   scoped_aliases:
     helm_instruct:
       - "Anthropic RLHF dataset"
@@ -857,6 +857,7 @@
       - "Open Assistant"
       - "Self Instruct"
       - "Vicuna"
+      - "Instruct"
   description: HELM-Instruct evaluation across multiple instruction-following prompt datasets (Anthropic RLHF, Koala, Open Assistant, Self Instruct, Vicuna, Best ChatGPT Prompts). The per-dataset splits currently fold into this parent canonical.
   dataset_repo: null
   parent_benchmark_id: null
@@ -872,7 +873,7 @@
 
 - id: helm
   display_name: HELM
-  aliases: ["helm", "HELM", "helm_classic", "HELM Classic", "Holistic Evaluation of Language Models"]
+  aliases: ["helm", "HELM", "Holistic Evaluation of Language Models"]
   description: Holistic Evaluation of Language Models — Stanford CRFM's umbrella project for LLM evaluation. Encompasses the original HELM (now called HELM Classic) plus newer sub-suites including HELM Lite, HELM Capabilities, HELM Instruct, HELM Safety, HELM AIR-Bench, and HELM MMLU.
   dataset_repo: null
   parent_benchmark_id: null
@@ -882,7 +883,10 @@
 
 - id: helm-capabilities
   display_name: HELM Capabilities
-  aliases: ["helm_capabilities", "helm-capabilities"]
+  aliases: ["helm-capabilities", "HELM Capabilities", "helm-capabilities-leaderboard", "helm_capabilities"]
+  scoped_aliases:
+    helm_capabilities:
+      - "Capabilities"
   description: HELM Capabilities — HELM-curated aggregation reporting model performance on MMLU-Pro, GPQA, IFEval, WildBench, and Omni-MATH, plus a Mean Score aggregate.
   dataset_repo: null
   parent_benchmark_id: null
@@ -892,7 +896,10 @@
 
 - id: helm-lite
   display_name: HELM Lite
-  aliases: ["helm_lite", "helm-lite"]
+  aliases: ["helm-lite", "HELM Lite", "helm-lite-leaderboard", "helm_lite"]
+  scoped_aliases:
+    helm_lite:
+      - "Lite"
   description: HELM Lite — HELM-curated aggregation reporting NarrativeQA, NaturalQuestions (closed-book), OpenbookQA, MMLU, MATH, GSM8K, LegalBench, MedQA, and WMT 2014, plus a Mean Win Rate aggregate.
   dataset_repo: null
   parent_benchmark_id: null
@@ -902,7 +909,7 @@
 
 - id: helm-safety
   display_name: HELM Safety
-  aliases: ["helm_safety", "helm-safety"]
+  aliases: ["helm-safety", "helm-safety-leaderboard"]
   description: HELM Safety — HELM-curated safety aggregation across BBQ, SimpleSafetyTests, HarmBench, XSTest, AnthropicRedTeam (five external safety benchmarks bundled into one HELM sub-leaderboard). Covers risk categories like violence, fraud, discrimination, sexual content, harassment, and deception.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1394,20 +1401,6 @@
   display_name: Multi-SWE-Bench
   aliases: ["multi-swe-bench-leaderboard", "multi_swe_bench_leaderboard", "Multi-SWE-Bench Leaderboard", "multi-swe-bench"]
   description: Multi-SWE-Bench — multi-language software engineering benchmark extending SWE-bench.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["coding", "software-engineering"]'
-  metadata: '{}'
-  review_status: reviewed
-
-- id: swe-polybench-leaderboard
-  display_name: SWE-PolyBench
-  aliases:
-    - "swe-polybench-leaderboard"
-    - "swe_polybench_leaderboard"
-    - "SWE-PolyBench"
-    - "swe-polybench"
-  description: SWE-PolyBench — multilingual software engineering benchmark/leaderboard. Splits cover Java, JavaScript, Python, and TypeScript, each available as a Verified curated subset and an unqualified full set.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["coding", "software-engineering"]'
@@ -20765,9 +20758,6 @@
     - terminal_bench
     - vals_index_terminal_bench_2_0
     - vals-index-terminal-bench-2.0
-    - terminal-bench-2.0
-    - terminal_bench_2_0
-    - "Terminal-Bench 2.0"
   scoped_aliases:
     vals-ai:
       - "Terminal Bench easy"
@@ -24203,38 +24193,6 @@
     - harmbench
     - helm_safety_harmbench
 
-- id: helm-lite-leaderboard
-  display_name: HELM Lite
-  description: HELM Lite tier — capability leaderboard.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["evaluation"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - HELM Lite
-    - helm-lite-leaderboard
-    - helm_lite
-  scoped_aliases:
-    helm_lite:
-      - "Lite"
-
-- id: helm-capabilities-leaderboard
-  display_name: HELM Capabilities
-  description: HELM Capabilities — capability-oriented HELM tier.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["evaluation"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - HELM Capabilities
-    - helm-capabilities-leaderboard
-    - helm_capabilities
-  scoped_aliases:
-    helm_capabilities:
-      - "Capabilities"
-
 - id: helm-classic-leaderboard
   display_name: HELM Classic
   description: HELM Classic tier.
@@ -24251,22 +24209,6 @@
     helm_classic:
       - "Classic"
 
-- id: helm-instruct-leaderboard
-  display_name: HELM Instruct
-  description: HELM Instruct tier.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["evaluation"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - HELM Instruct
-    - helm-instruct-leaderboard
-    - helm_instruct
-  scoped_aliases:
-    helm_instruct:
-      - "Instruct"
-
 - id: helm-mmlu-leaderboard
   display_name: HELM MMLU
   description: HELM MMLU tier — composite-overall leaderboard.
@@ -24277,17 +24219,6 @@
   review_status: reviewed
   aliases:
     - helm-mmlu-leaderboard
-
-- id: helm-safety-leaderboard
-  display_name: HELM Safety
-  description: HELM Safety tier — composite-overall leaderboard.
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["evaluation", "safety"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - helm-safety-leaderboard
 
 - id: caparena-caption-length
   display_name: CapArena Average Caption Length
@@ -24828,6 +24759,9 @@
 
 - id: swe-polybench
   display_name: SWE-PolyBench
+  aliases:
+    - "swe-polybench-leaderboard"
+    - "swe_polybench_leaderboard"
   description: SWE-PolyBench — multilingual SWE-bench across Java, JavaScript, Python, TypeScript.
   dataset_repo: null
   parent_benchmark_id: null
