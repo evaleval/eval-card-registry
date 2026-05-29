@@ -172,21 +172,6 @@
   review_status: reviewed
   params_billions: 4.7
   open_weights: true
-- id: alibaba/qwen1.5-1.8b-chat
-  display_name: Qwen1.5 1.8B Chat
-  org_id: alibaba
-  release_date: '2024-01-30'
-  tags:
-  - en
-  - license:other
-  - safetensors
-  aliases:
-  - Qwen/Qwen1.5-1.8B-Chat
-  - qwen/qwen1.5-1.8b-chat
-  metadata: '{"downloads_all_time": 1041760, "hf_id": "Qwen/Qwen1.5-1.8B-Chat", "library_name": "transformers", "license": "other", "likes": 74, "pipeline_tag": "text-generation", "source": "hub_stats"}'
-  review_status: reviewed
-  params_billions: 0.92
-  open_weights: true
 - id: alibaba/qwen1.5-110b
   display_name: Qwen1.5 110B
   org_id: alibaba
@@ -789,21 +774,6 @@
   - id: alibaba/qwen3-8b-base
     relationship: finetune
   lineage_origin_org_id: alibaba
-- id: alibaba/qwen3-coder-30b-a3b-instruct
-  display_name: Qwen3 Coder 30B A3B Instruct
-  org_id: alibaba
-  release_date: '2025-07-31'
-  tags:
-  - license:apache-2.0
-  - safetensors
-  aliases:
-  - Qwen/Qwen3-Coder-30B-A3B-Instruct
-  - qwen/qwen3-coder-30b-a3b-instruct
-  metadata: '{"downloads_all_time": 9875608, "hf_id": "Qwen/Qwen3-Coder-30B-A3B-Instruct", "library_name": "transformers", "license": "apache-2.0", "likes": 1072, "pipeline_tag": "text-generation", "source":
-    "hub_stats"}'
-  review_status: reviewed
-  params_billions: 15.27
-  open_weights: true
 - id: alibaba/qwen3.5-122b-a10b
   display_name: Qwen3.5 122B A10B
   org_id: alibaba
@@ -1686,16 +1656,6 @@
   aliases:
   - deepseek-ai/deepseek-llm-67b-chat
   metadata: '{"downloads_all_time": 145045, "hf_id": "deepseek-ai/deepseek-llm-67b-chat", "library_name": "transformers", "license": "other", "likes": 206, "pipeline_tag": "text-generation", "source": "hub_stats"}'
-  review_status: reviewed
-- id: deepseek/deepseek-llm-7b-chat
-  display_name: DeepSeek LLM 7B Chat
-  org_id: deepseek
-  release_date: '2023-11-29'
-  tags:
-  - license:other
-  aliases:
-  - deepseek-ai/deepseek-llm-7b-chat
-  metadata: '{"downloads_all_time": 1977994, "hf_id": "deepseek-ai/deepseek-llm-7b-chat", "library_name": "transformers", "license": "other", "likes": 222, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
 - id: deepseek/deepseek-r1
   display_name: DeepSeek R1
