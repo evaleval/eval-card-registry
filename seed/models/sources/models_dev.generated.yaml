@@ -1450,6 +1450,25 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2026-01-31"], "release_dates": ["2026-04-16"], "snapshots": ["claude-opus-4-7"]}'
   review_status: reviewed
+- id: anthropic/claude-opus-4.8
+  display_name: Claude Opus 4.8
+  org_id: anthropic
+  family: claude-opus-4.8
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-05-28'
+  input_modalities:
+  - image
+  - pdf
+  - text
+  output_modalities:
+  - text
+  tags: []
+  aliases: []
+  metadata: '{"release_dates": ["2026-05-28"], "snapshots": ["claude-opus-4-8"]}'
+  review_status: reviewed
 - id: anthropic/claude-sonnet-3
   display_name: Claude Sonnet 3
   org_id: anthropic
