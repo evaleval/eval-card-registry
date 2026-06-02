@@ -2826,6 +2826,26 @@
   aliases: []
   metadata: '{"release_dates": ["2026-03-18"], "snapshots": ["minimax-m2.7-highspeed"]}'
   review_status: reviewed
+- id: minimax/minimax-m3
+  display_name: MiniMax-M3
+  org_id: minimax
+  family: minimax-m3
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-06-01'
+  input_modalities:
+  - image
+  - text
+  - video
+  output_modalities:
+  - text
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"release_dates": ["2026-06-01"], "snapshots": ["minimax-m3"]}'
+  review_status: reviewed
 - id: mistralai/codestral
   display_name: Codestral
   org_id: mistralai
