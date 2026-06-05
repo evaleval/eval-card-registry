@@ -56,6 +56,13 @@ FIXTURES_DIR = REPO_ROOT / "fixtures"
 MANIFEST_PATH = FIXTURES_DIR / "manifest.json"
 HF_DATASET_REPO = "evaleval/entity-registry-data"
 
+# Cron-owned artifacts that must NEVER ride this flat publish — they are
+# produced + published by their own dedicated cron (e.g. hub_stats_index by
+# refresh-hub-stats-index). CI seeds into empty fixtures so they are absent
+# here anyway, but a dev who ran the build script locally would otherwise leak
+# a stray copy into the producer layout. (Mirrors hf_store._CRON_OWNED_TABLES.)
+_CRON_OWNED_PARQUETS = {"hub_stats_index.parquet"}
+
 # YAML overrides that ship alongside the parquets. The producer reads
 # these when present in the registry data cache (slice_overrides drives
 # slice→benchmark promotion; display_overrides feeds the display name
@@ -92,7 +99,7 @@ def _content_hash(fixtures_dir: Path) -> str:
     """
     h = hashlib.sha256()
     files = sorted(
-        list(fixtures_dir.glob("*.parquet"))
+        [p for p in fixtures_dir.glob("*.parquet") if p.name not in _CRON_OWNED_PARQUETS]
         + [p for p in fixtures_dir.glob("*.yaml") if p.name != "manifest.json"]
     )
     for p in files:
@@ -111,6 +118,8 @@ def _row_counts(fixtures_dir: Path) -> dict[str, int]:
 
     out: dict[str, int] = {}
     for p in sorted(fixtures_dir.glob("*.parquet")):
+        if p.name in _CRON_OWNED_PARQUETS:
+            continue
         try:
             md = pq.read_metadata(p)
             out[p.stem] = md.num_rows
@@ -239,6 +248,8 @@ def _push(fixtures_dir: Path, manifest: dict) -> None:
         # display_overrides.yaml). Excluding everything else keeps
         # the dataset small and the artifact list reviewable.
         allow_patterns=["*.parquet", "manifest.json", "*.yaml"],
+        # Cron-owned artifacts are published by their own cron, never here.
+        ignore_patterns=sorted(_CRON_OWNED_PARQUETS),
     )
 
 

@@ -55,28 +55,51 @@ from eval_entity_resolver.display import humanize_model_slug
 
 
 def _humanized_display(entry: dict) -> str:
-    """Presentation display_name for a model, humanized at load time for the rows
-    that ship without a real label.
+    """Presentation display_name for a model, humanized at load time.
 
     This shapes ONLY the stored display column — NOT alias promotion — so display
     coverage stays fully DECOUPLED from resolution: the seed loop promotes the
     ORIGINAL display_name (pre-humanize) as an alias exactly as before, leaving
     every raw's resolved canonical unchanged.
 
-    - tier-3 `resolution_source == inferred` rows carry the verbatim raw EEE
-      string as their display (e.g. `EVA-UNIT-01/eva-qwen2-5-32b-v0-2`); humanize
-      that.
-    - an empty display, or a placeholder equal to the id itself
-      (`meta-llama/Llama-3.1-8B-Instruct` is an id, not a label): humanize the id.
-    - otherwise keep the curated / generator-supplied name as-is.
+    Rule: a display is a label if it contains a SPACE; otherwise it is a slug.
+    - Empty display: humanize the id.
+    - Slug display (no spaces — a raw id, a bare leaf like `miqu-1-70b-sf`, an
+      org-qualified id like `meta-llama/Llama-3.1-8B-Instruct`, or a tier-3 raw
+      `EVA-UNIT-01/eva-qwen2-5-32b-v0-2`): humanize it. In a slug every hyphen is
+      a separator, so this is safe.
+    - Label display (has spaces — curated/generator human names like
+      `Jamba Large 1.6` or `Lingma Agent + Lingma SWE-GPT 72b (v0918)`): keep
+      as-is. Humanizing here would mangle proper-noun hyphens (`SWE-GPT` ->
+      `SWE GPT`).
+
+    A leading `unknown/` placeholder-org prefix is dropped from the rendered
+    label (`unknown` is the "real org not known" sentinel, never a display org).
+
+    KNOWN LIMITATION: `humanize_model_slug` is a heuristic, so a handful of
+    slug displays with intentional casing lose it (`QwQ-32B` -> `QWQ 32B`,
+    `...-128E-Instruct` -> `...128e...`). These stay readable; fixing them means
+    extending the shared humanizer, which also ripples into generator-output
+    confluence, so it is deferred.
     """
     cid = str(entry.get("id") or "")
     dn = str(entry.get("display_name") or "").strip()
-    if str(entry.get("resolution_source") or "") == "inferred" and dn:
-        return humanize_model_slug(dn)
-    if cid and (not dn or dn == cid):
-        return humanize_model_slug(cid)
-    return dn
+    name = cid.split("/", 1)[1] if "/" in cid else cid  # org-stripped id
+    if not dn or dn == cid:
+        # No real label — derive from the id. An org-stripped name that already
+        # reads as a label (has spaces, e.g. `Amazon Q Developer Agent (...)`)
+        # is used verbatim; a slug name is humanized.
+        out = name if " " in name else humanize_model_slug(cid)
+    elif " " not in dn:
+        out = humanize_model_slug(dn)
+    else:
+        out = dn
+    # Drop a leading `unknown/` placeholder-org prefix. The slug/id branches
+    # already strip it via the org split; this catches the space-containing
+    # curated labels (e.g. `unknown/Lingma Agent + ...`).
+    if out.startswith("unknown/"):
+        out = out[len("unknown/"):]
+    return out
 
 app = typer.Typer(help="eval-card-registry CLI")
 

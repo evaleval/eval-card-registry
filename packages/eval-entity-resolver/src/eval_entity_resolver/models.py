@@ -115,7 +115,9 @@ class ResolutionResult:
     # canonical_families.composite_keys / canonical_composites.family_id).
     ancestry: Optional[list[dict]] = None
     # `resolution_detail`: typed sub-object keyed by entity_type.
-    #   model     -> {"granularity": variant|group|family}
+    #   model     -> {"granularity": variant|group|family,
+    #                 "hf_repo_id": HF repo id when runtime-attested (oracle/
+    #                 hub-stats), else None — null is "not attested", not "not on HF"}
     #   benchmark -> {"level": composite|family|benchmark|slice,
     #                 "matched_subset": str|None}
     #   composite|family|metric|harness|org -> {} (reserved)

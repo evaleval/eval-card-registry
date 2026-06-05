@@ -46,9 +46,13 @@ jobs:
         run: LOCAL_MODE=true uv run pytest -q
 
       # Hand off to the real publish (flat-layout HF Dataset upload + live
-      # Space restart). Best-effort dispatch; manual workflow_dispatch on
-      # publish-registry-data.yml is always available as fallback.
+      # Space restart). A failed dispatch here leaves a freshly-seeded warehouse
+      # unpublished — fail RED with a manual-fallback hint rather than swallow it.
       - name: Trigger publish-registry-data
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh workflow run publish-registry-data.yml --ref "${GITHUB_REF_NAME}" || echo "::warning::publish-registry-data dispatch failed; trigger manually"
+        run: |
+          gh workflow run publish-registry-data.yml --ref "${GITHUB_REF_NAME}" || {
+            echo "::error::publish-registry-data dispatch failed after seeding — publish manually: gh workflow run publish-registry-data.yml --ref ${GITHUB_REF_NAME}"
+            exit 1
+          }

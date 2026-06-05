@@ -33,6 +33,8 @@ import pandas as pd
 import pytest
 import yaml
 
+from eval_card_registry.lib.seed_io import resolve_oracle_path
+
 from eval_entity_resolver.resolver import Resolver
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 
@@ -45,10 +47,9 @@ FIXTURES_DIR = REGISTRY_ROOT / "fixtures"
 ORGS_YAML = REGISTRY_ROOT / "seed" / "orgs.yaml"
 # The frozen live-HF oracle. Tracked IN-REPO (curation/) so the oracle gates
 # actually run in CI (the evaleval workspace root is not part of the registry
-# checkout); fall back to the workspace-root copy for local dev where it is the
-# shared source of truth.
-_TRACKED_ORACLE = REGISTRY_ROOT / "curation" / "hf_model_id_resolution.json"
-ORACLE_PATH = _TRACKED_ORACLE if _TRACKED_ORACLE.exists() else REGISTRY_ROOT.parent / "hf_model_id_resolution.json"
+# checkout); the shared helper falls back to the workspace-root copy for local
+# dev. Single-sourced so the gate and the generator scripts resolve it identically.
+ORACLE_PATH = resolve_oracle_path()
 
 # Gate floor numbers (the registry's measured baseline).
 EXPECTED_TOTAL = 6720   # total EEE ids in the frozen hf_model_id_resolution.json oracle

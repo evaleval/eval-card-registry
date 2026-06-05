@@ -66,6 +66,22 @@ def hier_store(monkeypatch):
              display_name="Widget 7B Instruct", org_id="acme",
              model_group_id="acme/widget-7b", model_family_id="acme/widget",
              resolution_granularity="variant", parents="[]"),
+        # HF-backed (sourced from the HF oracle): hf_repo_id == its own id.
+        _row("canonical_models", id="meta-llama/Llama-3.1-8B",
+             display_name="Llama 3.1 8B", org_id="meta",
+             resolution_source="hf", parents="[]"),
+        # HF-backed via hub-stats metadata (resolution_source != hf, but
+        # metadata.hf_id == its own id): hf_repo_id == its own id.
+        _row("canonical_models", id="mistralai/Mistral-7B-v0.1",
+             display_name="Mistral 7B v0.1", org_id="mistral",
+             resolution_source="models_dev",
+             metadata={"hf_id": "mistralai/Mistral-7B-v0.1"}, parents="[]"),
+        # Shadow slug: metadata.hf_id points at a DIFFERENT real repo, so its
+        # OWN id is not a real HF repo -> hf_repo_id is None.
+        _row("canonical_models", id="kimi/kimi-x",
+             display_name="Kimi X", org_id="moonshotai",
+             resolution_source="inferred",
+             metadata={"hf_id": "moonshotai/Kimi-X"}, parents="[]"),
     ])
     tables["canonical_benchmarks"] = pd.DataFrame([
         _row("canonical_benchmarks", id="bench-pro", display_name="Bench Pro"),
@@ -84,6 +100,9 @@ def hier_store(monkeypatch):
     ])
     tables["aliases"] = pd.DataFrame([
         _alias("acme/widget-7b-instruct", "model", "acme/widget-7b-instruct"),
+        _alias("meta-llama/Llama-3.1-8B", "model", "meta-llama/Llama-3.1-8B"),
+        _alias("mistralai/Mistral-7B-v0.1", "model", "mistralai/Mistral-7B-v0.1"),
+        _alias("kimi/kimi-x", "model", "kimi/kimi-x"),
         _alias("bench-pro", "benchmark", "bench-pro"),
         _alias("bench-sub", "benchmark", "bench-sub"),
         _alias("mmlu", "benchmark", "mmlu"),
@@ -150,7 +169,37 @@ class TestResolutionDetail:
     def test_model_detail_granularity(self, client):
         r = client.post("/api/v1/resolve", json={
             "raw_value": "acme/widget-7b-instruct", "entity_type": "model"})
-        assert r.json()["resolution_detail"] == {"granularity": "variant"}
+        # Off-HF model: granularity carried, hf_repo_id None.
+        assert r.json()["resolution_detail"] == {
+            "granularity": "variant", "hf_repo_id": None}
+
+    def test_model_detail_hf_repo_id_oracle_backed(self, client):
+        # resolution_source == "hf" -> the match is a real HF repo id.
+        r = client.post("/api/v1/resolve", json={
+            "raw_value": "meta-llama/Llama-3.1-8B", "entity_type": "model"})
+        assert r.json()["resolution_detail"]["hf_repo_id"] == "meta-llama/Llama-3.1-8B"
+
+    def test_model_detail_hf_repo_id_metadata_confirmed(self, client):
+        # resolution_source != hf, but metadata.hf_id == own id -> HF-backed.
+        r = client.post("/api/v1/resolve", json={
+            "raw_value": "mistralai/Mistral-7B-v0.1", "entity_type": "model"})
+        assert r.json()["resolution_detail"]["hf_repo_id"] == "mistralai/Mistral-7B-v0.1"
+
+    def test_model_detail_hf_repo_id_shadow_slug_is_none(self, client):
+        # metadata.hf_id points at a DIFFERENT repo -> own id is NOT a real HF
+        # repo, so hf_repo_id is None (the shadow slug must not claim it).
+        r = client.post("/api/v1/resolve", json={
+            "raw_value": "kimi/kimi-x", "entity_type": "model"})
+        assert r.json()["resolution_detail"]["hf_repo_id"] is None
+
+    def test_model_detail_hf_repo_id_normalized_match(self, client):
+        # A casing/separator-variant input still resolves and surfaces the
+        # HF-true repo id (the value of matching a HF id loosely).
+        r = client.post("/api/v1/resolve", json={
+            "raw_value": "meta-llama/llama-3.1-8b", "entity_type": "model"})
+        d = r.json()
+        assert d["canonical_id"] == "meta-llama/Llama-3.1-8B"
+        assert d["resolution_detail"]["hf_repo_id"] == "meta-llama/Llama-3.1-8B"
 
     def test_benchmark_detail_plain(self, client):
         r = client.post("/api/v1/resolve", json={

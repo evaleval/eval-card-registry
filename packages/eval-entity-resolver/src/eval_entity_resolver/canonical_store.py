@@ -74,6 +74,34 @@ def _safe_json_load(s: str, default: Any = None) -> Any:
         return default
 
 
+def _hf_repo_id_of(ent: Optional[dict], canonical_id: Optional[str]) -> Optional[str]:
+    """The matched model's Hugging Face repo id when the registry can ATTEST it
+    at runtime, else None.
+
+    Attested = sourced from the HF oracle (`resolution_source == "hf"`) OR
+    hub-stats confirmed that exact id (`metadata.hf_id == canonical_id`) — the
+    runtime-available half of the gate's `has_real_hf_id` predicate. A shadow slug
+    (e.g. a `kimi/...` slug whose `metadata.hf_id` points at a DIFFERENT
+    `moonshotai/...` repo) is correctly excluded — its own id is not the real repo.
+
+    None is CONSERVATIVE: it means "not runtime-attested", NOT "not on HF". A
+    genuine HF repo whose provenance isn't verifiable at runtime (a models.dev-only
+    or name-inferred entry carrying no `hf_id`) also returns None. So a non-null
+    value is reliable; a null is the absence of attestation, not a negative claim."""
+    if not ent or not canonical_id:
+        return None
+    if _na_to_none(ent.get("resolution_source")) == "hf":
+        return canonical_id
+    md = _na_to_none(ent.get("metadata"))
+    if isinstance(md, str) and md.strip():
+        # metadata is free-form JSON — guard against a value that parses to a
+        # non-dict (list/str/number) so `.get` can't raise and 500 the resolve.
+        md_obj = _safe_json_load(md, {})
+        if isinstance(md_obj, dict) and md_obj.get("hf_id") == canonical_id:
+            return canonical_id
+    return None
+
+
 def decode_parents(value) -> list[dict]:
     """Decode `canonical_models.parents` (JSON-encoded list-of-edges) to a
     Python list. Tolerant of NA/NaN, None, empty strings, and pre-decoded
@@ -441,7 +469,7 @@ class CanonicalStore:
         if entity_type == "model":
             ent = matched_entity if matched_entity is not None else self.lookup("model", canonical_id)
             gran = _na_to_none((ent or {}).get("resolution_granularity")) if ent else None
-            return {"granularity": gran}
+            return {"granularity": gran, "hf_repo_id": _hf_repo_id_of(ent, canonical_id)}
         if entity_type == "benchmark":
             ent = matched_entity if matched_entity is not None else self.lookup("benchmark", canonical_id)
             level = "benchmark"

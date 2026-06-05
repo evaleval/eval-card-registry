@@ -4,7 +4,7 @@
 # rebuilt from committed snapshots, so a clean checkout reproduces them exactly.
 #
 # Inputs (all committed / frozen, so this is reproducible):
-#   - ../hf_model_id_resolution.json        (frozen HF oracle; hf_oracle + tier3)
+#   - curation/hf_model_id_resolution.json  (frozen HF oracle; hf_oracle + tier3)
 #   - tests/fixtures/modelsdev_api.snapshot.json  (pinned models.dev pull; models_dev)
 #   - curation/hub_stats_frozen.parquet     (frozen hub-stats subset; hub_stats)
 #

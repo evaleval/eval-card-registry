@@ -40,6 +40,10 @@ TABLE_NAMES = [
     "resolution_log",
     "eval_results",
     "sync_runs",
+    # Read-only HF id confirmation index — loaded so push_to_hub() round-trips
+    # it intact (a non-local seed load() reads then re-writes every table; an
+    # empty default here would clobber the cron-published index).
+    "hub_stats_index",
 ]
 
 
@@ -98,7 +102,19 @@ QUERY_TABLE_NAMES = [
     "eval_harnesses",
     "canonical_inference_platforms",
     "aliases",
+    # Read-only HF id confirmation index — consulted by the resolve path so
+    # the deployed READ_ONLY Space loads it via the {table}/part-0.parquet reader.
+    "hub_stats_index",
 ]
+
+# Tables that are READ but never WRITTEN by seed/sync: their sole writer is a
+# dedicated cron that publishes the subdir file directly. They are in
+# TABLE_NAMES/QUERY_TABLE_NAMES so load() and the Space pick them up, but
+# push_to_hub()/_flush_to_fixtures() must SKIP them — otherwise a seed/sync run
+# (whose best-effort load substitutes an empty table on any download hiccup)
+# would clobber the cron-published data with 0 rows, and the CI flat publish
+# would emit a spurious empty file.
+_CRON_OWNED_TABLES = frozenset({"hub_stats_index"})
 
 
 class RegistryStore:
@@ -161,6 +177,9 @@ class RegistryStore:
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp = Path(tmpdir)
             for table, df in self._tables.items():
+                if table in _CRON_OWNED_TABLES:
+                    continue  # cron owns the subdir file; a seed/sync push must
+                              # not clobber it with an empty/best-effort table
                 p = tmp / f"{table}.parquet"
                 df.to_parquet(p, index=False)
                 api.upload_file(
@@ -174,6 +193,8 @@ class RegistryStore:
     def _flush_to_fixtures(self, path: Path) -> None:
         path.mkdir(parents=True, exist_ok=True)
         for table, df in self._tables.items():
+            if table in _CRON_OWNED_TABLES:
+                continue  # cron owns this file; never overwrite it from a seed
             df.to_parquet(path / f"{table}.parquet", index=False)
 
     # ------------------------------------------------------------------

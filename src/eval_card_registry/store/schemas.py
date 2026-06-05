@@ -266,6 +266,25 @@ _SCHEMAS: dict[str, dict] = {
         "aliases_updated": "Int64",
         "errors": pd.StringDtype(),  # JSON-encoded list
     },
+    # Periodically-refreshed local index of HF model ids (from
+    # cfahlgren1/hub-stats, filtered to repos with downloadable weights).
+    # Consulted by the read-only resolve path to CONFIRM an exact HF model
+    # id that was never minted into the registry — a confirmation, not an
+    # entity. Built by scripts/build_hub_stats_index.py + refreshed by the
+    # refresh-hub-stats-index cron; never written by seed/sync.
+    "hub_stats_index": {
+        # HF-true repo id (e.g. `meta-llama/Llama-3.1-8B`).
+        "id": pd.StringDtype(),
+        # Normalized form (lower + separator-collapse) — mirrors
+        # services.hub_stats.normalize so case/separator-variant inputs hit.
+        "id_norm": pd.StringDtype(),
+        "release_date": pd.StringDtype(),
+        "pipeline_tag": pd.StringDtype(),
+        "params_billions": "float64",
+        "downloads": "Int64",
+        # Always True in the index (it's filtered to safetensors/gguf repos).
+        "open_weights": pd.BooleanDtype(),
+    },
 }
 
 
