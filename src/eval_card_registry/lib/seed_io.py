@@ -14,6 +14,20 @@ from pathlib import Path
 import yaml
 
 
+def resolve_oracle_path(name: str = "hf_model_id_resolution.json") -> Path:
+    """Absolute path to a frozen curation input (the HF oracle JSON by default).
+
+    Prefers the in-repo committed copy under ``curation/`` so the generators and
+    the gate find it in a single-repo CI checkout (where the evaleval workspace
+    root is not part of the registry checkout); falls back to the workspace-parent
+    location for local dev where that copy is the shared source of truth. This is
+    the single source of the resolution order — the gate suite and the generator
+    scripts both call it (so they cannot drift apart)."""
+    repo_root = Path(__file__).resolve().parents[3]
+    tracked = repo_root / "curation" / name
+    return tracked if tracked.exists() else repo_root.parent / name
+
+
 def load_entries_from_yaml(path: Path) -> list[dict]:
     """Entry list from a seed-model YAML file. Handles both shapes — a flat
     list, or a ``{skip_ids, skip_source_ids, entries}`` dict (core.yaml).

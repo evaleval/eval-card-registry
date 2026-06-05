@@ -51,6 +51,14 @@ class AncestryEntry(BaseModel):
 class ModelResolutionDetail(BaseModel):
     """Type-specific resolution detail for a model match."""
     granularity: Optional[str] = None  # variant | group | family
+    # The matched canonical's Hugging Face repo id when the registry can ATTEST
+    # it at runtime — sourced from the HF oracle (resolution_source == "hf") or
+    # hub-stats-confirmed (metadata.hf_id == canonical_id). Lets a caller see a
+    # confirmed HF match (and which id) without an N+1 fetch to the entity GET.
+    # null is CONSERVATIVE: off-HF / closed models, but ALSO genuine HF repos
+    # whose provenance isn't runtime-verifiable (models.dev-only / name-inferred
+    # entries). So non-null is reliable; null means "not attested", not "not on HF".
+    hf_repo_id: Optional[str] = None
 
 
 class BenchmarkResolutionDetail(BaseModel):

@@ -45,7 +45,10 @@ from typing import Optional
 
 import yaml
 
-from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
+from eval_card_registry.lib.seed_io import (
+    build_hf_to_dev_from_orgs_yaml,
+    resolve_oracle_path,
+)
 
 from eval_entity_resolver.normalization import normalize as nz
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
@@ -62,8 +65,7 @@ from eval_entity_resolver.fold import (  # noqa: F401
 )
 
 REGISTRY_ROOT = Path(__file__).resolve().parents[1]
-EVALEVAL_ROOT = REGISTRY_ROOT.parent
-ORACLE = EVALEVAL_ROOT / "hf_model_id_resolution.json"
+ORACLE = resolve_oracle_path()
 CORE_YAML = REGISTRY_ROOT / "seed" / "models" / "core.yaml"
 ORGS_YAML = REGISTRY_ROOT / "seed" / "orgs.yaml"
 

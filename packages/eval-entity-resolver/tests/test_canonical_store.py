@@ -284,7 +284,37 @@ def test_model_ancestry_and_detail():
         {"canonical_id": "acme/w-7b", "level": "group"},
         {"canonical_id": "acme/w", "level": "family"},
     ]
-    assert r.resolution_detail == {"granularity": "variant"}
+    # Off-HF model (no resolution_source / metadata): hf_repo_id is None.
+    assert r.resolution_detail == {"granularity": "variant", "hf_repo_id": None}
+
+
+def test_model_detail_hf_repo_id():
+    """resolution_detail.hf_repo_id surfaces the real HF repo id for an
+    HF-backed canonical (resolution_source==hf OR metadata.hf_id==id), and
+    None for an off-HF slug whose metadata.hf_id points elsewhere (shadow)."""
+    aliases = _alias_store(
+        ("meta/llama", "model", "meta/llama", None, "confirmed"),
+        ("acme/mistral", "model", "acme/mistral", None, "confirmed"),
+        ("kimi/slug", "model", "kimi/slug", None, "confirmed"),
+        ("junk/meta", "model", "junk/meta", None, "confirmed"),
+    )
+    df = _models_df(
+        {"id": "meta/llama", "org_id": "meta", "parents": "[]"},
+        {"id": "acme/mistral", "org_id": "acme", "parents": "[]",
+         "metadata": '{"hf_id": "acme/mistral"}'},
+        {"id": "kimi/slug", "org_id": "moonshotai", "parents": "[]",
+         "metadata": '{"hf_id": "moonshotai/Real-Kimi"}'},
+        # metadata that parses to a NON-dict JSON value must not crash the resolve.
+        {"id": "junk/meta", "org_id": "junk", "parents": "[]",
+         "metadata": "[1, 2, 3]"},
+    )
+    df["resolution_source"] = ["hf", "models_dev", "inferred", "inferred"]
+    cs = CanonicalStore(models_df=df)
+    res = lambda raw: Resolver(aliases, canonical_store=cs).resolve(raw, "model")
+    assert res("meta/llama").resolution_detail["hf_repo_id"] == "meta/llama"       # source==hf
+    assert res("acme/mistral").resolution_detail["hf_repo_id"] == "acme/mistral"   # metadata.hf_id==id
+    assert res("kimi/slug").resolution_detail["hf_repo_id"] is None                # shadow: hf_id != id
+    assert res("junk/meta").resolution_detail["hf_repo_id"] is None                # non-dict metadata: no crash
 
 
 def test_benchmark_full_chain_ancestry():

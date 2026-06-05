@@ -178,6 +178,12 @@ class ResolutionService:
         self._hub_stats_client = None
         self._hub_stats_indices: Optional[tuple[dict[str, str], dict[str, str]]] = None
         self._hub_stats_indices_lock = threading.Lock()
+        # Read-only HF id confirmation index: normalized HF id -> HF-true id,
+        # built lazily from the `hub_stats_index` table. Lets the read-only
+        # resolve path confirm an exact HF model id that was never minted into
+        # the registry (no minting / persistence). Invalidated alongside the
+        # hub-stats indices.
+        self._hf_id_index: Optional[dict[str, str]] = None
 
     def _get_resolver(self) -> Resolver:
         if self._resolver is None:
@@ -201,6 +207,7 @@ class ResolutionService:
         self._resolver = None
         with self._hub_stats_indices_lock:
             self._hub_stats_indices = None
+            self._hf_id_index = None
 
     def resolve(
         self,
@@ -232,10 +239,26 @@ class ResolutionService:
         if settings.read_only:
             resolver = self._get_resolver()
             result: ResolutionResult = resolver.resolve(raw_value, entity_type, source_config)
-            if result.canonical_id is not None:
-                result_dict = _result_to_dict(result, created_new=False)
+            registry_dict = (
+                _result_to_dict(result, created_new=False)
+                if result.canonical_id is not None else None
+            )
+            # Precedence: an EXACT/normalized registry match is authoritative.
+            # But a bare no_match OR only a FUZZY registry match for a model is
+            # overridable by an EXACT HF-id confirmation from the local hub-stats
+            # index — an exact HF repo id beats a fuzzy registry stem-guess, and
+            # otherwise a real-but-unminted HF id would be shadowed by a slug
+            # canonical it happens to fuzzy-collide with. No minting/persistence.
+            if registry_dict is not None and result.strategy in ("exact", "normalized"):
+                result_dict = registry_dict
+            elif entity_type == "model":
+                result_dict = (
+                    self._confirm_hf_index(raw_value)
+                    or registry_dict           # keep the fuzzy registry match if no index hit
+                    or _no_match_result()
+                )
             else:
-                result_dict = _no_match_result()
+                result_dict = registry_dict or _no_match_result()
             self._resolve_cache[cache_key] = result_dict
             return result_dict
 
@@ -748,6 +771,79 @@ class ResolutionService:
 
             self._hub_stats_indices = (a2c, org_map)
             return self._hub_stats_indices
+
+    def _build_hf_id_index(self) -> dict[str, str]:
+        """Cache + return `normalized HF id -> HF-true id` built from the
+        `hub_stats_index` table. Lets the read-only resolve path confirm an
+        exact HF model id that never landed in the registry. Returns `{}` when
+        the table is absent or empty. Lock-guarded double-checked lazy build
+        (mirrors `_build_hub_stats_indices`); cleared by `invalidate_resolver`."""
+        cached = self._hf_id_index
+        if cached is not None:
+            return cached
+        with self._hub_stats_indices_lock:
+            if self._hf_id_index is not None:
+                return self._hf_id_index
+            from eval_card_registry.services.hub_stats import normalize as _hsnorm
+
+            index: dict[str, str] = {}
+            if not self.store.has_table("hub_stats_index"):
+                self._hf_id_index = index
+                return index
+            df = self.store.table("hub_stats_index")
+            if df is None or df.empty:
+                self._hf_id_index = index
+                return index
+            has_norm = "id_norm" in df.columns
+            for _, row in df.iterrows():
+                hf_id = row.get("id")
+                if not isinstance(hf_id, str) or not hf_id.strip():
+                    continue
+                key = row.get("id_norm") if has_norm else None
+                if not isinstance(key, str) or not key:
+                    key = _hsnorm(hf_id)
+                # First-loaded wins — keeps the build deterministic on dup norms.
+                index.setdefault(key, hf_id)
+            self._hf_id_index = index
+            return index
+
+    def _confirm_hf_index(self, raw_value: str) -> Optional[dict]:
+        """Confirm an exact HF model id against the local hub-stats index.
+
+        Returns a response dict (the lean ResolveResponse shape, type-agnostic
+        core + ancestry/resolution_detail) when `raw_value` is HF-shaped and its
+        normalized form is present in the index; otherwise None. NO minting, NO
+        persistence — this is an HF-confirmation, not a registry entity, so
+        `review_status` is None and `resolution_source` is `hub_stats_index`.
+
+        Built as a plain dict override on `_no_match_result()` — NOT routed
+        through `resolver.build_result` (an id absent from canonical_models
+        yields `hf_repo_id=None` via the all-None matched_entity branch)."""
+        if not self._looks_like_hf_id(raw_value):
+            return None
+        from eval_card_registry.services.hub_stats import normalize as _hsnorm
+
+        index = self._build_hf_id_index()
+        hit = index.get(_hsnorm(raw_value))
+        if not hit:
+            return None
+        # Honest strategy label: only a byte-for-byte id match is "exact"; a
+        # case/separator variant that matched via the normalized key is
+        # "normalized" (conf 0.95) — mirrors the registry resolver's own
+        # exact-vs-normalized distinction rather than overclaiming "exact".
+        exact = raw_value == hit
+        result_dict = _no_match_result()
+        result_dict.update({
+            "canonical_id": hit,
+            "strategy": "exact" if exact else "normalized",
+            "confidence": 1.0 if exact else 0.95,
+            "review_status": None,
+            "resolution_source": "hub_stats_index",
+            "ancestry": [],
+            "resolution_detail": {"granularity": None, "hf_repo_id": hit},
+            "created_new": False,
+        })
+        return result_dict
 
     def _build_hf_to_dev(self) -> dict[str, str]:
         """Two-tier org map (HF-org-lowercase -> developer/community slug) for live

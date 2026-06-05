@@ -66,6 +66,8 @@ class UnionFind:
     def union(self, a: str, b: str) -> None:
         self._parent[self.find(a)] = self.find(b)
 
+from eval_card_registry.lib.seed_io import resolve_oracle_path
+
 # Resolver lives in the workspace package; this script runs from the repo
 # root via `uv run`, so the import resolves through pyproject's path dep.
 from eval_entity_resolver.display import humanize_model_slug
@@ -1129,8 +1131,8 @@ def _attach_provider_aliases(
 # name-only match across different developers. Default to MINT when unsure.
 # ---------------------------------------------------------------------------
 
-# evaleval/hf_model_id_resolution.json (one level above the registry repo root).
-HF_ORACLE_JSON = REPO_ROOT.parent / "hf_model_id_resolution.json"
+# The frozen HF oracle — in-repo at curation/ (CI), workspace-parent fallback (dev).
+HF_ORACLE_JSON = resolve_oracle_path()
 
 _HF_AUTHORITY: dict[str, dict[str, str]] | None = None
 

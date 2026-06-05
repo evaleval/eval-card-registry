@@ -56,14 +56,16 @@ from typing import Optional
 
 import yaml
 
-from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
+from eval_card_registry.lib.seed_io import (
+    build_hf_to_dev_from_orgs_yaml,
+    resolve_oracle_path,
+)
 
 from eval_entity_resolver.resolver import Resolver
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 
 REGISTRY_ROOT = Path(__file__).resolve().parents[1]            # eval-card-registry/
-EVALEVAL_ROOT = REGISTRY_ROOT.parent                           # evaleval/
-ORACLE = EVALEVAL_ROOT / "hf_model_id_resolution.json"
+ORACLE = resolve_oracle_path()
 
 SEED = REGISTRY_ROOT / "seed"
 FIXTURES = REGISTRY_ROOT / "fixtures"

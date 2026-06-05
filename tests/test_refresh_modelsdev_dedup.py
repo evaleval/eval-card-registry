@@ -27,6 +27,8 @@ import yaml
 
 from conftest import load_script_module
 
+from eval_card_registry.lib.seed_io import resolve_oracle_path
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SPEC_DIR = REPO_ROOT  / "curation"
 API_CACHE = REPO_ROOT / "tests" / "fixtures" / "modelsdev_api.snapshot.json"
@@ -444,7 +446,7 @@ def test_full_generation_seeds_closed_api_and_rehosts(mod, api):
 # ---------------------------------------------------------------------------
 # 7. Mint-decision rule: defer HF-resolvable groups, mint off-HF ones.
 # ---------------------------------------------------------------------------
-HF_ORACLE_JSON = REPO_ROOT.parent / "hf_model_id_resolution.json"
+HF_ORACLE_JSON = resolve_oracle_path()
 
 
 def test_mint_decision_defers_on_hf_group_and_mints_off_hf(mod):
@@ -761,7 +763,7 @@ def test_rehost_mint_never_uses_base_vendor_prefix(mod, api):
     # casing). Some repoint entries predate a model becoming a real repo (e.g.
     # MiniMaxAI/MiniMax-M2.1 was closed-API when curated, is now on HF). Such a
     # defer is correct, not a base-vendor mint, so exclude oracle-real junk ids.
-    HF_ORACLE_JSON = REPO_ROOT.parent / "hf_model_id_resolution.json"
+    HF_ORACLE_JSON = resolve_oracle_path()
     oracle_real: set[str] = set()
     if HF_ORACLE_JSON.exists():
         for _r, _m in json.loads(HF_ORACLE_JSON.read_text()).get("resolutions", {}).items():
