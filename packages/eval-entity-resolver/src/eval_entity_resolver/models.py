@@ -6,7 +6,7 @@ ResolutionStrategy = Literal["exact", "normalized", "fuzzy", "no_match"]
 # `composite` and `family` are first-class resolvable entity types
 # (they resolve against canonical_composites / canonical_families).
 # `slice`/subset is deliberately NOT a type — it stays a parent-only
-# alias-fold (see specs/entity-modeling.md); a slice match is surfaced
+# alias-fold onto its parent benchmark; a slice match is surfaced
 # as resolution detail, not as its own entity.
 EntityType = Literal[
     "model", "benchmark", "metric", "harness", "org", "composite", "family"

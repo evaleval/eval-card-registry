@@ -1,0 +1,11 @@
+# Org ids that are GENUINELY DISTINCT HuggingFace uploaders even though they fold
+# to the same separator/case-insensitive key. Each is a verified, separate real
+# Hub namespace — merging them would assert an unverified same-uploader identity
+# (the generators deliberately refuse such claims). The test_no_separator_split_orgs
+# gate exempts a folded group only when ALL its members are listed here.
+#
+# To add a pair: confirm BOTH namespaces exist as distinct real uploaders on the
+# Hub (different owners/models), then list both ids. If they are in fact the same
+# uploader, do NOT add here — leave them out so the universal org-reconcile's
+# community-casing fold merges them to one org (collapsing the separator/case twin).
+[]

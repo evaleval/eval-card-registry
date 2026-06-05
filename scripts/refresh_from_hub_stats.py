@@ -27,10 +27,18 @@ Output:
     that merge into existing canonicals at seed time.
     seed/models/sources/hub_stats.state.json     — etag watermark.
 
+Reproducibility: by DEFAULT this reads the committed offline cache
+`curation/hub_stats_frozen.parquet` (the candidate subset of the upstream
+parquet incl. the `baseModels` lineage column), so a clean regen reproduces
+lineage WITHOUT flaky live HF (spec model-resolution-rework, "fix enrichment
+first"). Refresh that cache with `scripts/freeze_hub_stats_cache.py` (live);
+pass `--live` here to bypass the cache and query HF directly.
+
 Usage:
-    python scripts/refresh_from_hub_stats.py             # full run
+    python scripts/refresh_from_hub_stats.py             # offline cache (reproducible)
+    python scripts/refresh_from_hub_stats.py --live      # query live HF directly
     python scripts/refresh_from_hub_stats.py --dry-run   # preview only
-    python scripts/refresh_from_hub_stats.py --force     # ignore etag
+    python scripts/refresh_from_hub_stats.py --force     # ignore etag (live only)
 """
 from __future__ import annotations
 
@@ -49,6 +57,7 @@ import yaml
 # (live lookup at draft creation) and this bulk refresh script stay
 # consistent on row-shape parsing.
 from eval_card_registry.services.hub_stats import (
+    HUB_STATS_LOCAL_PARQUET_ENV,
     PARQUET_URL,
     QUERY_COLUMNS,
     approx_params_billions as _approx_params_billions,
@@ -77,6 +86,13 @@ MODELS_DEV_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "models_dev.g
 HF_ORACLE_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "hf_oracle.generated.yaml"
 MODELS_DEV_CATALOG_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "models_dev_catalog.generated.yaml"
 
+# Durable OFFLINE enrichment cache: the candidate subset of cfahlgren1/hub-stats
+# (incl. the `baseModels` lineage column) frozen by scripts/freeze_hub_stats_cache.py.
+# Reading it makes a regen REPRODUCIBLE without flaky live HF (spec
+# model-resolution-rework, "fix enrichment first"). The default below points
+# HUB_STATS_LOCAL_PARQUET at it unless overridden or --live is passed.
+FROZEN_CACHE_PATH = REPO_ROOT / "curation" / "hub_stats_frozen.parquet"
+
 # Every model source whose canonicals/aliases can be enriched from hub-stats.
 # hf_oracle (the HF-present mints) and the models.dev catalog are included so a
 # refresh backfills their params/release_date/open_weights/baseModels parents.
@@ -89,21 +105,17 @@ _MODEL_SOURCES = (
 
 
 def build_hf_to_dev() -> dict[str, str]:
-    """Two-tier org map: HF-org-lowercase -> developer/community slug.
-    Single-sourced from `strategies/fuzzy.py:_ORG_ALIASES` + `seed/orgs.yaml`
-    `hf_org` (authored seed wins on conflict). Mirrors
-    `generate_hf_oracle_seed.build_hf_to_dev` and the live-sync
-    `_build_hf_to_dev` so a refresh produces the SAME HF-cased ids the
-    HF-oracle mints + live auto-create use — never a lowercase duplicate."""
-    hf_to_dev: dict[str, str] = {k.lower(): v for k, v in _ORG_ALIASES.items()}
+    """HF-org-lowercase -> developer/community slug, via the shared
+    `fold.build_curated_org_map` (the SAME builder the resolver + the other
+    generators use): `_ORG_ALIASES` UNION every curated org's id / `hf_org` /
+    `aliases`. Reading the ALIAS tier (not just `hf_org`) is what lets a refresh
+    honour a curated same-uploader merge (e.g. `EnnoAi` -> `Enno-Ai`) instead of
+    re-emitting the community-twin spelling the org-fold already merged."""
+    from eval_entity_resolver.fold import build_curated_org_map
+
     with open(ORGS_PATH) as f:
         orgs = yaml.safe_load(f) or []
-    for o in orgs:
-        hf_org = o.get("hf_org")
-        oid = o.get("id")
-        if isinstance(hf_org, str) and hf_org.strip() and isinstance(oid, str):
-            hf_to_dev[hf_org.lower()] = oid
-    return hf_to_dev
+    return build_curated_org_map(orgs)
 
 
 # ---------------------------------------------------------------------------
@@ -471,7 +483,31 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--dry-run", action="store_true", help="print summary; don't write files")
     p.add_argument("--force", action="store_true", help="ignore the etag watermark; re-fetch unconditionally")
+    p.add_argument(
+        "--live",
+        action="store_true",
+        help="query live cfahlgren1/hub-stats directly instead of the committed "
+        "offline cache (curation/hub_stats_frozen.parquet). Use to refresh; the "
+        "default is the reproducible offline cache. Refresh the cache itself with "
+        "scripts/freeze_hub_stats_cache.py.",
+    )
     args = p.parse_args()
+
+    # Reproducible-by-default: read the committed offline cache unless the caller
+    # passed --live or set HUB_STATS_LOCAL_PARQUET explicitly. This decouples
+    # "fetch from HF" (the freeze tool / --live) from "derive enrichment" (this
+    # script), so a clean regen reproduces lineage without flaky live HF.
+    if (
+        not args.live
+        and not os.environ.get(HUB_STATS_LOCAL_PARQUET_ENV)
+        and FROZEN_CACHE_PATH.exists()
+    ):
+        os.environ[HUB_STATS_LOCAL_PARQUET_ENV] = str(FROZEN_CACHE_PATH)
+        print(
+            f"[refresh] reading frozen offline cache {FROZEN_CACHE_PATH} "
+            f"(pass --live to query HF directly)",
+            file=sys.stderr,
+        )
 
     org_alias_map = load_org_alias_to_canonical()
     aliases_to_canonical = load_existing_canonical_aliases()

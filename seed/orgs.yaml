@@ -121,7 +121,7 @@
   display_name: Alibaba
   website: https://qwen.ai
   hf_org: qwen
-  aliases: ["Alibaba Cloud", "Qwen", "qwen", "Qwen Team", "Alibaba DAMO Academy"]
+  aliases: ["Alibaba Cloud", "Qwen", "qwen", "Qwen Team", "Alibaba DAMO Academy", "Alibaba-NLP"]
   tags: '["lab", "open-weight"]'
   kind: lab
   metadata: '{}'
@@ -230,7 +230,7 @@
   display_name: MiniMax
   website: https://www.minimax.io
   hf_org: minimax
-  aliases: ["MiniMax-AI", "Minimax"]
+  aliases: ["MiniMax-AI", "Minimax", "minimaxai"]
   tags: '["lab"]'
   kind: lab
   metadata: '{}'
@@ -429,5 +429,32 @@
   aliases: ["TheDrummer 2", "thedrummer", "the-drummer"]
   tags: '["community", "finetune"]'
   kind: individual
+  metadata: '{}'
+  review_status: reviewed
+
+- id: Enno-Ai
+  display_name: Enno-Ai
+  hf_org: Enno-Ai
+  aliases: ["EnnoAi"]
+  tags: '["community"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: AlephAlpha
+  display_name: Aleph Alpha
+  website: https://aleph-alpha.com
+  hf_org: AlephAlpha
+  aliases: ["aleph-alpha", "Aleph Alpha"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+- id: xiaomi
+  display_name: Xiaomi
+  hf_org: xiaomi
+  aliases: ["XiaomiMiMo"]
+  tags: '["lab"]'
+  kind: lab
   metadata: '{}'
   review_status: reviewed

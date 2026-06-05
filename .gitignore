@@ -15,6 +15,12 @@ output/
 
 # Parquet files (fixtures are generated via `eval-card-registry seed --local`)
 *.parquet
+# ...except the tracked resolution oracle snapshot (the generator-layer
+# re-architecture's Phase-4 diff target — see specs/model-resolution-rework).
+!curation/oracle_snapshot/*.parquet
+# ...and the durable offline hub-stats enrichment cache (reproducible lineage
+# regen without live HF — refreshed by scripts/freeze_hub_stats_cache.py).
+!curation/hub_stats_frozen.parquet
 
 # Claude Code
 CLAUDE.md

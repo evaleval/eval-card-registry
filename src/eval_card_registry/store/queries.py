@@ -233,13 +233,20 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     #   - NEVER invents an org for a BARE id (no `/` -> left unresolved): if the
     #     source doesn't carry the developer namespace, we don't guess it from
     #     the model name.
-    from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
+    # Single source: the shared store-backed dev-org map (canonical_orgs id/hf_org
+    # + the org ALIAS rows — canonical_orgs has no aliases column — so the curated
+    # alias tier reaches lineage derivation the same way it reaches the resolver).
+    from eval_entity_resolver.fold import build_org_dev_map_from_store
 
-    hf_to_dev = {k.lower(): v for k, v in _ORG_ALIASES.items()}
-    for _, orow in store.table("canonical_orgs").iterrows():
-        ho, oi = orow.get("hf_org"), orow.get("id")
-        if isinstance(ho, str) and ho.strip() and isinstance(oi, str):
-            hf_to_dev[ho.lower()] = oi
+    _adf = store.table("aliases")
+    _org_alias_pairs = (
+        zip(_adf[_adf["entity_type"] == "org"]["raw_value"],
+            _adf[_adf["entity_type"] == "org"]["canonical_id"])
+        if _adf is not None and not _adf.empty else []
+    )
+    hf_to_dev = build_org_dev_map_from_store(
+        store.table("canonical_orgs").to_dict("records"), _org_alias_pairs
+    )
     org_prefix_updates: dict[str, str] = {}
     for cid in parents_by_id:
         if org_by_id.get(cid) is None and isinstance(cid, str) and "/" in cid:
@@ -249,7 +256,7 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
                 org_by_id[cid] = dev  # feed the lineage_origin_org walk below
                 org_prefix_updates[cid] = dev
 
-    def _walk(start: str, edge_ok) -> str:
+    def _walk(start: str, edge_ok, org_conditional: bool = False) -> str:
         """Walk parents through edges where `edge_ok(edge)` is True.
         Returns the deepest reachable id; stops on no-match or cycle.
 
@@ -261,11 +268,18 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         visited = {start}
         current = start
         while True:
+            cur_org = org_by_id.get(current)
             edges = parents_by_id.get(current, []) or []
             candidate_ids = [
                 p["id"] for p in edges
                 if isinstance(p, dict) and edge_ok(p) and p.get("id")
+                # org-conditional walks (family) only fold a same-developer edge,
+                # mirroring _walk_group: a third-party quant keeps its own
+                # family, with the link preserved via lineage_origin.
+                and (not org_conditional or (cur_org is not None and org_by_id.get(p["id"]) == cur_org))
             ]
+            # min-id tie-break: deterministic when a node has >1 foldable parent
+            # (independent of YAML edge order).
             next_id = min(candidate_ids) if candidate_ids else None
             if not next_id or next_id in visited or next_id not in parents_by_id:
                 return current
@@ -337,13 +351,13 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         current = start
         while True:
             edges = parents_by_id.get(current, []) or []
-            next_id: Optional[str] = None
-            for p in edges:
-                if not isinstance(p, dict):
-                    continue
-                if p.get("relationship") in {"variant", "quantized"} and p.get("id"):
-                    next_id = p["id"]
-                    break
+            # min-id (not first-by-insertion) so the walk is deterministic
+            # regardless of YAML edge order, matching _walk / _walk_group.
+            cands = [
+                p["id"] for p in edges
+                if isinstance(p, dict) and p.get("relationship") in {"variant", "quantized"} and p.get("id")
+            ]
+            next_id = min(cands) if cands else None
             if not next_id or next_id in visited or next_id not in parents_by_id:
                 return None
             visited.add(next_id)
@@ -373,7 +387,9 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         # when there is no identity-preserving ancestor, which IS the group id).
         group_updates[cid] = group
         # Family root via the versioned-release-line fold.
-        family = _walk(cid, _is_family_fold_edge)
+        # org-conditional like the group walk: a third-party quant keeps its own
+        # family (its link to the base survives via lineage_origin).
+        family = _walk(cid, _is_family_fold_edge, org_conditional=True)
         # FAMILY MEMBERSHIP is likewise a total partition — ALWAYS set (self at
         # the family root). NOT null-at-root.
         family_updates[cid] = family

@@ -243,6 +243,38 @@ class CanonicalStore:
             return None
         return self._ensure_index(entity_type).get(canonical_id)
 
+    @property
+    def org_dev_map(self) -> dict[str, str]:
+        """The curated HF-namespace -> developer-org map built from the LOADED
+        `canonical_orgs` table (its `id` / `hf_org` / `aliases`), unioned with
+        the hardcoded `_ORG_ALIASES`. This is how the resolver gets the orgs.yaml
+        ALIAS tier (e.g. `AlephAlpha`->`aleph-alpha`, `MiniMaxAI`->`minimax`,
+        `kimi`->`moonshotai`) that the bare `_ORG_ALIASES` lacks — without the
+        resolver needing to read orgs.yaml. Threaded into the fuzzy org-agreement
+        guard so a fuzzy stem match folds org-equivalent namespaces correctly.
+        Cached after first build."""
+        cached = getattr(self, "_org_dev_map", None)
+        if cached is not None:
+            return cached
+        from eval_entity_resolver.fold import build_curated_org_map
+
+        df = self._tables.get("org")
+        records: list[dict] = []
+        if df is not None and not df.empty:
+            for rec in df.to_dict("records"):
+                rec = {k: _na_to_none(v) for k, v in rec.items()}
+                # `aliases` is VARCHAR (JSON-encoded list) in the parquet tables;
+                # build_curated_org_map expects a list, so decode it.
+                al = rec.get("aliases")
+                if isinstance(al, str):
+                    try:
+                        rec["aliases"] = json.loads(al)
+                    except (ValueError, TypeError):
+                        rec["aliases"] = []
+                records.append(rec)
+        self._org_dev_map = build_curated_org_map(records)
+        return self._org_dev_map
+
     # ------------------------------------------------------------------
     # Enrichment — used by `Resolver` to populate the rich response
     # fields. Pure functions of (entity, optional root entity); no
@@ -418,8 +450,8 @@ class CanonicalStore:
                 parent = _na_to_none(ent.get("parent_benchmark_id"))
                 if parent and parent != canonical_id:
                     # The matched canonical is itself a decomposed slice of a
-                    # parent benchmark (parent-only alias-fold per
-                    # entity-modeling.md): surface as a slice match.
+                    # parent benchmark (a parent-only alias-fold, not its own
+                    # entity): surface as a slice match.
                     level = "slice"
             # A subset/alias-fold match (e.g. "Anatomy" -> mmlu) is surfaced
             # via `matched_subset` when the raw value differs from the

@@ -47,6 +47,17 @@ import yaml
 
 from eval_entity_resolver.normalization import normalize as nz
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
+# Org-aware fold decision now lives in the resolver package (single source of
+# truth shared with scripts/refresh_from_modelsdev.py and the gate). Re-exported
+# below so existing importers (tests/test_gate_invariants.py) keep working.
+from eval_entity_resolver.fold import (  # noqa: F401
+    brand_tokens_for,
+    build_hf_index,
+    decide_fold,
+    dev_org_of_prefix,
+    name_norm,
+    strip_brand_prefix,
+)
 
 REGISTRY_ROOT = Path(__file__).resolve().parents[1]
 EVALEVAL_ROOT = REGISTRY_ROOT.parent
@@ -66,211 +77,33 @@ def load_core() -> tuple[dict, list[dict]]:
 
 
 def build_hf_to_dev() -> dict[str, str]:
-    """HF-org-lowercase -> curated developer slug (single-sourced, same rule the
-    generators use). Curated seed/orgs.yaml hf_org wins on conflict."""
-    hf_to_dev = {k.lower(): v for k, v in _ORG_ALIASES.items()}
-    if ORGS_YAML.exists():
-        for e in yaml.safe_load(ORGS_YAML.read_text()) or []:
-            if isinstance(e, dict) and isinstance(e.get("hf_org"), str) and isinstance(e.get("id"), str):
-                if e["hf_org"].strip():
-                    hf_to_dev[e["hf_org"].lower()] = e["id"]
-    return hf_to_dev
+    """HF-org-lowercase -> curated developer slug via the SINGLE shared builder
+    `fold.build_curated_org_map` (`_ORG_ALIASES` UNION every curated org's id /
+    hf_org / ALIASES). Reading the alias tier (not just hf_org) is what folds
+    minimaxai->minimax, EnnoAi->Enno-Ai, etc. — so the dedup/shadow predicate
+    here agrees with the generators + resolver + gate (no divergent weaker map)."""
+    from eval_entity_resolver.fold import build_curated_org_map
 
-
-def dev_org_of_prefix(prefix: str, hf_to_dev: dict[str, str]) -> str:
-    return hf_to_dev.get(prefix.lower(), prefix)
+    orgs = yaml.safe_load(ORGS_YAML.read_text()) or [] if ORGS_YAML.exists() else []
+    return build_curated_org_map(orgs)
 
 
 # ---------------------------------------------------------------------------
-# Name normalization helpers (brand-prefix stripping for the fuzzy tier)
-# ---------------------------------------------------------------------------
-def brand_tokens_for(dev_org: str, hf_to_dev: dict[str, str]) -> set[str]:
-    """Brand tokens that a models.dev key may glue onto a model name for this
-    developer. Includes the dev slug itself plus every HF alias that maps TO it
-    (e.g. dev `alibaba` -> {alibaba, qwen, alibaba-nlp, ...}; dev `meta` ->
-    {meta, meta-llama, facebook}). Normalized to single tokens (no separators)."""
-    toks: set[str] = set()
-    d = dev_org.lower()
-    toks.add(nz(d).replace(" ", ""))
-    for hf_alias, dev in hf_to_dev.items():
-        if dev.lower() == d:
-            toks.add(nz(hf_alias).replace(" ", ""))
-    # common brand spelling variants not in the org map
-    extra = {
-        "alibaba": {"qwen"},
-        "meta": {"llama"},
-        "minimax": {"minimax"},
-        "google": {"gemini", "gemma"},
-        "deepseek": {"deepseek"},
-    }
-    toks |= extra.get(d, set())
-    return {t for t in toks if t}
-
-
-def name_norm(name: str) -> str:
-    """Normalized name with separators collapsed AND removed (one token)."""
-    return nz(name).replace(" ", "")
-
-
-def strip_brand_prefix(norm_name_tok: str, brands: set[str]) -> set[str]:
-    """Return candidate name tokens with a leading brand token removed.
-    Always includes the original. Strips repeatedly (qwen-qwen-... defensive)."""
-    out = {norm_name_tok}
-    changed = True
-    cur = norm_name_tok
-    while changed:
-        changed = False
-        for b in sorted(brands, key=len, reverse=True):
-            if b and cur.startswith(b) and len(cur) > len(b):
-                cur = cur[len(b):]
-                out.add(cur)
-                changed = True
-                break
-    return out
-
-
-# ---------------------------------------------------------------------------
-# Build HF target authority
+# Build HF target authority (thin wrapper: read the frozen oracle's fixed ids,
+# delegate to the shared eval_entity_resolver.fold.build_hf_index).
 # ---------------------------------------------------------------------------
 def build_hf_targets(entries: list[dict], hf_to_dev: dict[str, str]):
-    """Returns:
-      - hf_ids: set of all real-HF canonical ids (entries that are hf-source or
-        oracle-fixed) — used for exact id match.
-      - alias_to_hf: every alias/display/id string declared on an HF entry ->
-        that HF id (for the 'alias' tier).
-      - by_org_name: (dev_org, name_token) -> hf_id  for normalized matching.
-      - hf_entry_by_id: id -> entry dict (so --apply can merge onto it).
-    """
+    """Returns (hf_ids, alias_to_hf, by_org_name, hf_entry_by_id) — see
+    eval_entity_resolver.fold.build_hf_index. Adds the frozen oracle's
+    fixed_exact/near_miss HF ids as extra real-HF targets."""
     oracle = json.loads(ORACLE.read_text())["resolutions"]
-    fixed_ids: set[str] = set()
-    for v in oracle.values():
-        if v.get("resolution_status") in ("fixed_exact", "fixed_near_miss"):
-            fx = v.get("fixed_hf_model_id")
-            if isinstance(fx, str) and "/" in fx:
-                fixed_ids.add(fx)
-
-    hf_entry_by_id: dict[str, dict] = {}
-    hf_ids: set[str] = set(fixed_ids)
-    for e in entries:
-        if not isinstance(e, dict):
-            continue
-        cid = e.get("id")
-        if not isinstance(cid, str):
-            continue
-        is_hf = e.get("resolution_source") == "hf" or cid in fixed_ids
-        if is_hf:
-            hf_ids.add(cid)
-            hf_entry_by_id[cid] = e
-
-    alias_to_hf: dict[str, str] = {}
-    by_org_name: dict[tuple[str, str], str] = {}
-
-    def index_target(cid: str, entry: Optional[dict]):
-        if "/" not in cid:
-            return
-        org, name = cid.split("/", 1)
-        dev = dev_org_of_prefix(org, hf_to_dev)
-        by_org_name.setdefault((dev, name_norm(name)), cid)
-        # alias strings (exact, case-sensitive registry linkage)
-        alias_to_hf.setdefault(cid, cid)
-        if entry is not None:
-            dn = entry.get("display_name")
-            if isinstance(dn, str):
-                alias_to_hf.setdefault(dn, cid)
-            for a in entry.get("aliases") or []:
-                if isinstance(a, str):
-                    alias_to_hf.setdefault(a, cid)
-
-    # entries first (so a present entry's aliases are indexed), then bare oracle ids
-    for cid, e in hf_entry_by_id.items():
-        index_target(cid, e)
-    for cid in fixed_ids:
-        if cid not in hf_entry_by_id:
-            index_target(cid, None)
-
-    return hf_ids, alias_to_hf, by_org_name, hf_entry_by_id
-
-
-# ---------------------------------------------------------------------------
-# Match decision for one mint
-# ---------------------------------------------------------------------------
-def decide_fold(mint: dict, hf_ids, alias_to_hf, by_org_name, hf_to_dev):
-    """Return a fold dict or None. Confident-match tiers only."""
-    cid = mint.get("id")
-    if not isinstance(cid, str):
-        return None
-    mint_org = mint.get("org_id")
-    mint_org = mint_org if isinstance(mint_org, str) and mint_org else None
-    # org from the id prefix, remapped, as a fallback when org_id is unset
-    prefix_org = None
-    if "/" in cid:
-        prefix_org = dev_org_of_prefix(cid.split("/", 1)[0], hf_to_dev)
-    eff_org = mint_org or prefix_org
-
-    mint_strings = [cid]
-    dn = mint.get("display_name")
-    if isinstance(dn, str):
-        mint_strings.append(dn)
-    for a in mint.get("aliases") or []:
-        if isinstance(a, str):
-            mint_strings.append(a)
-
-    # --- tier: exact id equality (mint id or alias == an HF id) -------------
-    for s in mint_strings:
-        if s in hf_ids and s != cid:
-            return _mk(mint, s, "exact", eff_org, hf_to_dev,
-                       f"mint string {s!r} is itself a real HF id")
-
-    # --- tier: alias linkage (mint string already an alias of an HF entry) --
-    for s in mint_strings:
-        tgt = alias_to_hf.get(s)
-        if tgt and tgt != cid and tgt in hf_ids:
-            return _mk(mint, tgt, "alias", eff_org, hf_to_dev,
-                       f"mint string {s!r} already declared on HF target {tgt!r}")
-
-    if eff_org is None:
-        return None  # cannot establish org agreement -> never fold (no false merge)
-
-    # candidate names from the mint id + aliases (name part only)
-    cand_names: set[str] = set()
-    for s in mint_strings:
-        nm = s.split("/", 1)[1] if "/" in s else s
-        cand_names.add(name_norm(nm))
-
-    # --- tier: normalized-name equality + ORG AGREEMENT --------------------
-    for nm in cand_names:
-        tgt = by_org_name.get((eff_org, nm))
-        if tgt and tgt != cid:
-            return _mk(mint, tgt, "normalized", eff_org, hf_to_dev,
-                       f"org={eff_org} + normalized name {nm!r} == HF target {tgt!r}")
-
-    # --- tier: fuzzy (brand-prefix-stripped) + ORG AGREEMENT ---------------
-    brands = brand_tokens_for(eff_org, hf_to_dev)
-    stripped: set[str] = set()
-    for nm in cand_names:
-        stripped |= strip_brand_prefix(nm, brands)
-    stripped -= cand_names  # only the genuinely-stripped variants
-    for nm in stripped:
-        tgt = by_org_name.get((eff_org, nm))
-        if tgt and tgt != cid:
-            return _mk(mint, tgt, "fuzzy", eff_org, hf_to_dev,
-                       f"org={eff_org} + brand-stripped name {nm!r} == HF target {tgt!r}")
-
-    return None
-
-
-def _mk(mint, hf_target, match_type, mint_dev_org, hf_to_dev, evidence):
-    hf_org = (hf_to_dev.get(hf_target.split("/", 1)[0].lower(), hf_target.split("/", 1)[0])
-              if "/" in hf_target else hf_target)
-    return {
-        "mint_id": mint["id"],
-        "hf_target": hf_target,
-        "match_type": match_type,
-        "mint_org": mint_dev_org or "",
-        "hf_org": hf_org,
-        "org_agreement": (mint_dev_org or "").lower() == (hf_org or "").lower(),
-        "evidence": evidence,
-    }
+    fixed_ids = frozenset(
+        v["fixed_hf_model_id"]
+        for v in oracle.values()
+        if v.get("resolution_status") in ("fixed_exact", "fixed_near_miss")
+        and isinstance(v.get("fixed_hf_model_id"), str) and "/" in v["fixed_hf_model_id"]
+    )
+    return build_hf_index(entries, hf_to_dev, fixed_ids)
 
 
 # ---------------------------------------------------------------------------

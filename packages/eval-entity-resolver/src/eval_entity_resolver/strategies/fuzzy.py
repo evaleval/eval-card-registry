@@ -145,55 +145,59 @@ _THINKING_BUDGET_PRESERVE_RE = re.compile(r"(.*-thinking)-\d+k$", re.IGNORECASE)
 # non-Qwen entry (`alibaba__mineru2-pipeline`) which would be wrongly
 # rewritten. Qwen models under `alibaba/` are handled via explicit
 # overrides instead.
-_ORG_ALIASES: dict[str, str] = {
-    "deepseek-ai": "deepseek",
-    "cohereforai": "cohere",
-    "cohere-labs": "cohere",
-    # HF renamed the Cohere org `CohereForAI` -> `CohereLabs` (no hyphen);
-    # both are the same lab, canonical `cohere`.
-    "coherelabs": "cohere",
-    # HF's SmolLM team `HuggingFaceTB` is part of Hugging Face.
-    "huggingfacetb": "huggingface",
-    # Baichuan is a curated lab; its HF namespace `baichuan-inc` folds into it.
-    "baichuan-inc": "baichuan",
-    # HF `MiniMaxAI` / `SarvamAI` namespaces -> the lab slug we already use.
-    "minimaxai": "minimax",
-    "sarvamai": "sarvam",
-    "tii-uae": "tiiuae",
-    "meta-llama": "meta",
-    "mistral-ai": "mistralai",
-    "nvidia-nemo": "nvidia",
-    # Zhipu/Z.ai → zai. `THUDM` is the legacy HF org for the GLM/ChatGLM
-    # family (Tsinghua/Zhipu); HF now publishes under `zai-org`.
-    "zhipu": "zai",
-    "zhipu-ai": "zai",
-    "z-ai": "zai",
-    "zai-org": "zai",
-    "thudm": "zai",
-    # Moonshot → moonshotai
-    "moonshot": "moonshotai",
-    "moonshot-ai": "moonshotai",
-    # Qwen models live under canonical org `alibaba` (Alibaba Cloud).
-    # HF uploads use the `Qwen/` namespace (e.g. Qwen/Qwen2-VL-7B-Instruct).
-    # The reverse mapping (alibaba → qwen) was rejected because
-    # `alibaba__mineru2-pipeline` is a non-Qwen entry; this direction has
-    # no analogous collision since every `qwen/<X>` upstream id we've seen
-    # corresponds to an Alibaba/Qwen-family model.
-    "qwen": "alibaba",
-    # Alternate HF namespaces of a known developer fold to the one parent org
-    # (org_id only — the canonical_id keeps the real HF repo prefix). These
-    # consolidate the developer in downstream listings.
-    "facebook": "meta",        # Meta's pre-Llama HF org (OPT, BART, ...)
-    "mistral": "mistralai",
-    "mosaicml": "databricks",  # MosaicML (MPT) acquired by Databricks
-    "databricks-mosaic-research": "databricks",
-    "alibaba-aidc": "alibaba",
-    "alibaba-nlp": "alibaba",
-    "aws-prototyping": "amazon",
-    "ibm-research": "ibm",
-    "ibm-granite": "ibm",      # Granite folded into IBM (curation decision)
-    "bytedance-seed": "bytedance",
-}
+# _ORG_ALIASES now lives in eval_entity_resolver.fold (single owner, shared
+# with the seed generators). Imported below.
+from eval_entity_resolver.fold import _ORG_ALIASES, _norm_org_key, dev_org_of_prefix  # noqa: E402,F401
+
+
+def _canon_org(prefix: str, org_map: dict) -> str:
+    """The canonical developer org for an id-prefix: curated id / alias (by
+    lowercase, then separator-stripped key), else the prefix itself."""
+    return org_map.get(prefix.lower()) or org_map.get(_norm_org_key(prefix)) or prefix
+
+
+def _orgs_agree(
+    raw_value: str,
+    matched_id: str,
+    org_map: Optional[dict] = None,
+    known_orgs: Optional[frozenset] = None,
+) -> bool:
+    """True unless `raw_value` and `matched_id` carry org prefixes that fold to
+    DIFFERENT developers (after the curated remap + case/separator fold).
+
+    The org-agreement contract every other dedup surface (fold.decide_fold,
+    the generators' _hf_defer_target / by_org_name buckets) already enforces —
+    applied here so the resolver's FUZZY stem match never merges across genuinely
+    different developers (e.g. `DevQuasar/...` must not match `DevQuasar-3/...`).
+    Same-developer alternate namespaces (meta-llama vs facebook, THUDM vs zai-org)
+    fold equal and still match; org-less / single-token candidates have no org to
+    disagree on and are unaffected.
+
+    `org_map` is the full HF-namespace -> developer-org map the resolver builds
+    from BOTH stores (canonical_orgs id/hf_org + the org ALIAS rows in the
+    aliases table incl. the orgs.yaml tier `AI2`->`allenai`, `ai21labs`->`ai21`)
+    unioned with `_ORG_ALIASES`. When None, falls back to the hardcoded
+    `_ORG_ALIASES`.
+
+    `known_orgs` is the set of canonical_orgs ids. Two prefixes that resolve to
+    DIFFERENT registered orgs are NEVER separator-strip-merged — this honours the
+    distinct-uploader contract (seed/orgs_distinct_allowlist.yaml) directly from
+    the data: a genuinely-distinct uploader survives as its own org row, so
+    `Enno-Ai` vs `EnnoAi` (both real rows) stay distinct. The case/separator fold
+    only fires for the UNREGISTERED tail (e.g. an `aleph-alpha` spelling whose only
+    registered twin is `AlephAlpha`)."""
+    if "/" not in raw_value or "/" not in matched_id:
+        return True
+    m = org_map if org_map is not None else _ORG_ALIASES
+    ca = _canon_org(raw_value.split("/", 1)[0], m)
+    cm = _canon_org(matched_id.split("/", 1)[0], m)
+    if ca == cm:
+        return True
+    # Two DISTINCT registered developers must never be strip-merged.
+    if known_orgs is not None and ca in known_orgs and cm in known_orgs:
+        return False
+    # Unregistered tail: fold case + separator (aleph-alpha == AlephAlpha).
+    return _norm_org_key(ca) == _norm_org_key(cm)
 
 # Host / gateway / placeholder prefixes that should be DROPPED entirely
 # (not rewritten to a canonical org). These are not model authors —
@@ -536,6 +540,8 @@ def fuzzy_match(
     threshold: float,  # kept for API compat; not used by stem matching
     alias_store,
     source_config: Optional[str] = None,
+    org_dev_map: Optional[dict] = None,
+    known_orgs: Optional[frozenset] = None,
 ) -> tuple[Optional[str], float, Optional[str]]:
     """
     Attempt targeted fuzzy resolution.
@@ -658,13 +664,17 @@ def fuzzy_match(
     norm_lookup = alias_store.get_normalized_lookup(entity_type, source_config)
 
     for candidate in candidates_to_try:
+        # Org-agree against the CANDIDATE (host/account scaffolding already
+        # stripped), NOT raw_value — a hosted raw like `together/meta-llama/
+        # Llama-3-8B` carries the HOST as its prefix, which is not the model's
+        # developer. The candidate's prefix is the real model org.
         exact_id = alias_store.lookup(candidate, entity_type, source_config)
-        if exact_id is not None:
+        if exact_id is not None and _orgs_agree(candidate, exact_id, org_dev_map, known_orgs):
             return exact_id, _STEM_CONFIDENCE, captured_platform
 
         norm = normalize(candidate)
         canonical_id = norm_lookup.get(norm)
-        if canonical_id is not None:
+        if canonical_id is not None and _orgs_agree(candidate, canonical_id, org_dev_map, known_orgs):
             return canonical_id, _STEM_CONFIDENCE, captured_platform
 
     return None, 0.0, None

@@ -1,6 +1,7 @@
-# Auto-generated from scripts/data/air_bench_2024_raw_strings.txt
-# Regenerate with: uv run python scripts/refresh_air_bench_taxonomy.py
-# Do NOT hand-edit; edit the raw strings file or extend the script.
+# Derived from the AIR-Bench 2024 safety taxonomy; source strings in
+# scripts/data/air_bench_2024_raw_strings.txt. The original taxonomy-refresh
+# generator is not in the tree (git history only); to update, edit the raw
+# strings file and re-derive (or restore the generator). See NOTICES.md.
 - id: air-bench-2024-1-1-network-intrusion
   display_name: Network intrusion
   dataset_repo: stanford-crfm/air-bench-2024

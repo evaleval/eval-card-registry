@@ -87,9 +87,13 @@ class Resolver:
                     canonical_id, "normalized", _NORMALIZED_CONFIDENCE,
                 )
 
-        # 3. Fuzzy
+        # 3. Fuzzy — thread the store-backed curated org map (incl. orgs.yaml
+        # alias tier) into the org-agreement guard so org-equivalent namespaces
+        # (AlephAlpha/aleph-alpha, MiniMaxAI/minimax, Alibaba-NLP/alibaba) fold
+        # and match.
         canonical_id, confidence, inferred_platform = fuzzy_match(
-            raw_value, entity_type, self.config.threshold, self.store, source_config
+            raw_value, entity_type, self.config.threshold, self.store, source_config,
+            org_dev_map=self._org_fold_map(), known_orgs=self._known_orgs(),
         )
         if canonical_id is not None:
             result = self._enrich(
@@ -115,6 +119,46 @@ class Resolver:
             strategy="no_match",
             confidence=0.0,
         )
+
+    def _org_fold_map(self) -> dict:
+        """The org-fold map threaded into the fuzzy org-agreement guard, built
+        ONCE from BOTH stores and cached:
+          - canonical_store.org_dev_map: `_ORG_ALIASES` ∪ every canonical_orgs
+            `id`/`hf_org` (lowercased -> curated id);
+          - the org ALIAS rows in the alias table (`iter_alias_pairs("org")`),
+            which carry the curated orgs.yaml alias tier (`AI2`->`allenai`,
+            `ai21labs`->`ai21`) that is NOT a canonical_orgs column.
+        Alias rows win on key collision (they ARE the curated seed). Keyed
+        lowercase; `_fold_org` separator-strips on lookup so case/separator
+        variants fold too."""
+        cached = getattr(self, "_org_fold_map_cache", None)
+        if cached is not None:
+            return cached
+        from eval_entity_resolver.fold import _ORG_ALIASES
+
+        m: dict = dict(self.canonical_store.org_dev_map) if self.canonical_store else dict(_ORG_ALIASES)
+        if self.store is not None:
+            for raw, cid in self.store.iter_alias_pairs("org"):
+                m[raw.lower()] = cid
+        self._org_fold_map_cache = m
+        return m
+
+    def _known_orgs(self) -> frozenset:
+        """The set of canonical_orgs ids (a developer that has a real row). The
+        fuzzy org-agreement guard never separator-strip-merges two prefixes that
+        resolve to DIFFERENT ids in this set — so distinct uploaders kept apart in
+        canonical_orgs (the orgs_distinct_allowlist contract) stay apart at resolve
+        time too. Cached; empty when no canonical_store is attached."""
+        cached = getattr(self, "_known_orgs_cache", None)
+        if cached is not None:
+            return cached
+        ids: set[str] = set()
+        if self.canonical_store is not None:
+            df = self.canonical_store._tables.get("org")
+            if df is not None and not df.empty and "id" in df.columns:
+                ids = {str(i) for i in df["id"] if isinstance(i, str)}
+        self._known_orgs_cache = frozenset(ids)
+        return self._known_orgs_cache
 
     # ------------------------------------------------------------------
     # Enrichment (no-op when no canonical_store is attached)

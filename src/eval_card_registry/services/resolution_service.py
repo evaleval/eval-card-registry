@@ -715,7 +715,18 @@ class ResolutionService:
             orgs_df = self.store.table("canonical_orgs")
 
             a2c: dict[str, str] = {}
-            # Aliases: only model-typed and HF-shaped (containing `/`)
+            # PASS 1 — canonical ids FIRST. A canonical's own id is a STRONGER
+            # claim on its normalized form than being another canonical's alias,
+            # so ids win on collision. This MUST match the generator's order
+            # (refresh_from_hub_stats.load_existing_canonical_aliases, ids-first);
+            # building aliases-first here made the live auto-create path resolve an
+            # identical baseModels edge to a DIFFERENT parent than the generator
+            # (a wrong-id, not dangling, divergence).
+            for _, row in models_df.iterrows():
+                cid = row.get("id")
+                if isinstance(cid, str):
+                    a2c.setdefault(_hsnorm(cid), cid)
+            # PASS 2 — aliases fill in only forms no canonical id already claimed.
             for _, row in aliases_df.iterrows():
                 if row.get("entity_type") != "model":
                     continue
@@ -723,11 +734,6 @@ class ResolutionService:
                 cid = row.get("canonical_id")
                 if isinstance(raw, str) and "/" in raw and isinstance(cid, str):
                     a2c.setdefault(_hsnorm(raw), cid)
-            # Canonical ids themselves
-            for _, row in models_df.iterrows():
-                cid = row.get("id")
-                if isinstance(cid, str):
-                    a2c.setdefault(_hsnorm(cid), cid)
 
             org_map: dict[str, str] = {}
             for _, row in orgs_df.iterrows():
@@ -743,23 +749,22 @@ class ResolutionService:
             return self._hub_stats_indices
 
     def _build_hf_to_dev(self) -> dict[str, str]:
-        """Two-tier org map (HF-org-lowercase -> developer/community slug),
-        single-sourced from `strategies/fuzzy.py:_ORG_ALIASES` AND
-        `canonical_orgs.hf_org` — mirrors `scripts/generate_hf_oracle_seed.py`
-        so live auto-create casing matches the seeded HF-cased canonicals.
-        `canonical_orgs.hf_org` wins on conflict (it is the authored seed)."""
-        from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
+        """Two-tier org map (HF-org-lowercase -> developer/community slug) for live
+        auto-create casing. Single source: the shared store-backed dev-org map
+        (`canonical_orgs` id/hf_org + the org ALIAS rows — canonical_orgs has no
+        aliases column — so the curated alias tier reaches the live path the same
+        way it reaches the generators + resolver). Matches the seeded HF casing."""
+        from eval_entity_resolver.fold import build_org_dev_map_from_store
 
-        hf_to_dev: dict[str, str] = {
-            k.lower(): v for k, v in _ORG_ALIASES.items()
-        }
-        orgs_df = self.store.table("canonical_orgs")
-        for _, row in orgs_df.iterrows():
-            hf_org = row.get("hf_org")
-            org_id = row.get("id")
-            if isinstance(hf_org, str) and hf_org.strip() and isinstance(org_id, str):
-                hf_to_dev[hf_org.lower()] = org_id
-        return hf_to_dev
+        adf = self.store.table("aliases")
+        org_alias_pairs = (
+            zip(adf[adf["entity_type"] == "org"]["raw_value"],
+                adf[adf["entity_type"] == "org"]["canonical_id"])
+            if adf is not None and not adf.empty else []
+        )
+        return build_org_dev_map_from_store(
+            self.store.table("canonical_orgs").to_dict("records"), org_alias_pairs
+        )
 
     def _ensure_hf_org(self, org_id: Optional[str]) -> None:
         """Create a community `canonical_orgs` row for an HF-derived org id

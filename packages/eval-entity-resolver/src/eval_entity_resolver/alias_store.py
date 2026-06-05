@@ -154,6 +154,17 @@ class AliasStore:
     # Lookup
     # ------------------------------------------------------------------
 
+    def iter_alias_pairs(self, entity_type: str):
+        """Yield (raw_value, canonical_id) for every non-rejected alias of
+        `entity_type`. Used to build the resolver's org-fold map from the org
+        ALIAS rows (the curated orgs.yaml alias tier lives here, NOT as a
+        canonical_orgs column)."""
+        df = self._df
+        sub = df[(df["entity_type"] == entity_type) & (df["status"] != "rejected")]
+        for raw, cid in zip(sub["raw_value"], sub["canonical_id"]):
+            if isinstance(raw, str) and isinstance(cid, str):
+                yield raw, cid
+
     def lookup(
         self,
         raw_value: str,

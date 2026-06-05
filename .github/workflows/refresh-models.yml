@@ -2,9 +2,14 @@ name: Refresh models.dev source
 
 on:
   schedule:
-    # Daily at 09:00 UTC. The seed/orgs.yaml + core.yaml curated layers
-    # take precedence at load time, so daily refresh of the auto-generated
-    # source is safe — no curated content is at risk of being overwritten.
+    # Daily at 09:00 UTC. Runs the full models.dev refresh: the non-catalog
+    # re-cased rewrite of models_dev.generated.yaml followed by the additive
+    # catalog split. Both are CORE-AWARE (they suppress/repoint mints colliding
+    # with an existing canonical incl. core.yaml, so they only ADD coverage) and
+    # the generator is deterministic across runs. Both are gated by the invariant
+    # suite below — a regen that regresses a Phase-0 outcome / re-mints a shadow /
+    # re-splits an org ABORTS before commit, so a bad upstream day skips rather
+    # than corrupts.
     - cron: "0 9 * * *"
   workflow_dispatch: {}
 
@@ -41,26 +46,35 @@ jobs:
       - name: Sync dependencies
         run: uv sync
 
-      - name: Refresh models.dev generated source
+      # Step 1 — full re-cased rewrite of models_dev.generated.yaml. Core-aware:
+      # suppresses/repoints any mint whose id collides (normalized or org-aware)
+      # with an existing canonical (incl. core.yaml + the catalog), so it is
+      # ADDITIVE and never clobbers curated ids. Fetches + caches the models.dev
+      # snapshot for step 2 to reuse (so both run against the SAME pull).
+      - name: Refresh models.dev source (full re-cased, core-aware)
         run: uv run python scripts/refresh_from_modelsdev.py
 
-      # De-orphan: regenerate the M4-aware full-catalog split (HF wins
-      # collisions; mint only models.dev-only) + reconcile HF-derived
-      # community orgs. Folded in from the formerly-orphaned one-shot
-      # integrate_modelsdev_catalog.py (RECONCILE.md MUST-FIX). Runs as a
-      # second step so it splits against the just-written re-cased source.
-      - name: Refresh models.dev catalog (de-orphan split)
-        run: uv run python scripts/refresh_from_modelsdev.py --catalog
+      # Step 2 — additive catalog split, reusing step 1's cached snapshot
+      # (--no-fetch): existing canonical universe incl. core.yaml + the freshly
+      # rewritten models_dev wins; mint only models.dev-only entries; reconcile
+      # HF-derived community orgs.
+      - name: Refresh models.dev catalog (additive, core-deduped)
+        run: uv run python scripts/refresh_from_modelsdev.py --catalog --no-fetch
 
       # Sanity check: the regenerated YAML must parse and the seed loader
       # must succeed. If either fails we abort without committing — better
       # to skip a day's refresh than to break the seed.yml pipeline that
       # runs on every push to main.
-      - name: Validate generated YAML loads
+      - name: Validate generated YAML loads + gate invariants
         run: |
           uv run python -c "import yaml; yaml.safe_load(open('$GENERATED_PATH'))"
           uv run python -c "import yaml; yaml.safe_load(open('$CATALOG_PATH'))"
-          uv run eval-card-registry seed --local
+          LOCAL_MODE=true uv run eval-card-registry seed --local
+          # Gate the refresh on the invariant suite over the freshly-seeded
+          # fixtures: a regen that re-mints a shadow, re-splits an org, or
+          # regresses a Phase-0 oracle outcome ABORTS here — better to skip a
+          # day than commit a regression.
+          LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py -q
 
       - name: Detect changes
         id: diff

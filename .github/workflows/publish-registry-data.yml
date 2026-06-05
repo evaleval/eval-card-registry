@@ -62,8 +62,16 @@ jobs:
       - name: Sync dependencies
         run: uv sync
 
-      - name: Run pytest
-        run: uv run pytest
+      # Seed the parquet fixtures FROM the YAML under review first — fixtures
+      # are gitignored (generated), so without this the gate suite
+      # (tests/test_gate_invariants.py) reads no fixtures and cannot validate
+      # the seed under change. Seeding here makes the PR check actually exercise
+      # the gates against the diff. Mirrors seed.yml.
+      - name: Seed fixtures from the YAML under review
+        run: LOCAL_MODE=true uv run eval-card-registry seed --local
+
+      - name: Run pytest (gates validate the seeded fixtures)
+        run: LOCAL_MODE=true uv run pytest
 
       - name: Publish registry data (--dry-run)
         run: uv run python scripts/publish_registry_data.py --dry-run

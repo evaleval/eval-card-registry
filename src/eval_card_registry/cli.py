@@ -101,7 +101,7 @@ def seed(
         models_dir = seed_path / "models"
         sources_dir = models_dir / "sources"
         core_file = models_dir / "core.yaml"
-        enrichments_file = models_dir / "enrichments" / "aliases.yaml"
+        enrichments_dir = models_dir / "enrichments"
 
         source_entries: list[dict] = []
         core_entries: list[dict] = []
@@ -134,12 +134,18 @@ def seed(
             else:
                 raise typer.BadParameter(f"{core_file} unexpected shape {type(loaded)}")
 
-        if enrichments_file.exists():
-            with open(enrichments_file) as f:
-                loaded = yaml.safe_load(f) or []
-            if not isinstance(loaded, list):
-                raise typer.BadParameter(f"{enrichments_file} must be a flat list")
-            enrichment_entries = loaded
+        # Enrichment overlays: every enrichments/*.yaml (flat list of {id, ...}),
+        # field-merged onto the matching canonical (aliases + parents UNION; see
+        # _merge_into). Separate files keep concerns apart — aliases.yaml carries
+        # alias bridges, parents.yaml the curated typed-edge graph the generators
+        # can't reproduce (the Phase-0 oracle lineage).
+        if enrichments_dir.is_dir():
+            for enr_path in sorted(enrichments_dir.glob("*.yaml")):
+                with open(enr_path) as f:
+                    loaded = yaml.safe_load(f) or []
+                if not isinstance(loaded, list):
+                    raise typer.BadParameter(f"{enr_path} must be a flat list")
+                enrichment_entries.extend(loaded)
 
         def _merge_into(target: dict, src: dict) -> dict:
             """Merge two entries with the same canonical_id.
@@ -287,8 +293,8 @@ def seed(
     #                                          source of truth, hand-edited)
     #   seed/benchmarks_generated/*.yaml     → bulk auto-generated entries
     #                                          (e.g. AIR-Bench 2024's 373
-    #                                          categories from
-    #                                          scripts/refresh_air_bench_taxonomy.py)
+    #                                          categories, derived from
+    #                                          scripts/data/air_bench_2024_raw_strings.txt)
     #
     # Merge order: generated → curated. Field-level merge per id (aliases
     # union; other scalars prefer non-empty, last-write-wins) so curated

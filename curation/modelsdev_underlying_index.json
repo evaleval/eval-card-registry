@@ -891,9 +891,9 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "claude-3-5-haiku-latest",
-   "anthropic": "claude-3-5-haiku-latest",
-   "cloudflare-ai-gateway": "anthropic/claude-3.5-haiku",
+   "302ai": "claude-3-5-haiku-20241022",
+   "anthropic": "claude-3-5-haiku-20241022",
+   "cloudflare-ai-gateway": "anthropic/claude-3-5-haiku",
    "digitalocean": "anthropic-claude-3.5-haiku",
    "google-vertex": "claude-3-5-haiku@20241022",
    "google-vertex-anthropic": "claude-3-5-haiku@20241022",
@@ -930,18 +930,18 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "anthropic": "claude-3-5-sonnet-20240620",
+   "anthropic": "claude-3-5-sonnet-20241022",
    "cloudflare-ai-gateway": "anthropic/claude-3.5-sonnet",
    "digitalocean": "anthropic-claude-3.5-sonnet",
    "google-vertex": "claude-3-5-sonnet@20241022",
    "google-vertex-anthropic": "claude-3-5-sonnet@20241022",
    "helicone": "claude-3.5-sonnet-v2",
    "llmgateway": "claude-3-5-sonnet-20241022",
-   "nano-gpt": "claude-3-5-sonnet-20240620",
+   "nano-gpt": "claude-3-5-sonnet-20241022",
    "poe": "anthropic/claude-sonnet-3.5",
    "qiniu-ai": "claude-3.5-sonnet",
    "sap-ai-core": "anthropic--claude-3.5-sonnet",
-   "vercel": "anthropic/claude-3.5-sonnet-20240620"
+   "vercel": "anthropic/claude-3.5-sonnet"
   },
   "release_date": "2024-06-05"
  },
@@ -975,8 +975,8 @@
    "google-vertex": "claude-3-7-sonnet@20250219",
    "google-vertex-anthropic": "claude-3-7-sonnet@20250219",
    "helicone": "claude-3.7-sonnet",
-   "llmgateway": "claude-3-7-sonnet",
-   "nano-gpt": "claude-3-7-sonnet-thinking:8192",
+   "llmgateway": "claude-3-7-sonnet-20250219",
+   "nano-gpt": "claude-3-7-sonnet-thinking",
    "poe": "anthropic/claude-sonnet-3.7",
    "qiniu-ai": "claude-3.7-sonnet",
    "requesty": "anthropic/claude-3-7-sonnet",
@@ -1090,7 +1090,6 @@
    "abacus",
    "amazon-bedrock",
    "anthropic",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -1123,25 +1122,24 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "claude-haiku-4-5-20251001",
+   "302ai": "claude-haiku-4-5",
    "abacus": "claude-haiku-4-5-20251001",
-   "amazon-bedrock": "eu.anthropic.claude-haiku-4-5-20251001-v1:0",
-   "anthropic": "claude-haiku-4-5-20251001",
-   "anyapi": "anthropic/claude-haiku-4-5",
+   "amazon-bedrock": "au.anthropic.claude-haiku-4-5-20251001-v1:0",
+   "anthropic": "claude-haiku-4-5",
    "azure": "claude-haiku-4-5",
    "azure-cognitive-services": "claude-haiku-4-5",
    "cloudflare-ai-gateway": "anthropic/claude-haiku-4-5",
    "cortecs": "claude-haiku-4-5",
    "databricks": "databricks-claude-haiku-4-5",
-   "digitalocean": "anthropic-claude-haiku-4.5",
+   "digitalocean": "anthropic-claude-4.5-haiku",
    "frogbot": "claude-haiku-4-5",
    "github-copilot": "claude-haiku-4.5",
    "google-vertex": "claude-haiku-4-5@20251001",
    "google-vertex-anthropic": "claude-haiku-4-5@20251001",
-   "helicone": "claude-haiku-4-5-20251001",
+   "helicone": "claude-4.5-haiku",
    "jiekou": "claude-haiku-4-5-20251001",
    "kilo": "anthropic/claude-haiku-4.5",
-   "llmgateway": "claude-haiku-4-5-20251001",
+   "llmgateway": "claude-haiku-4-5",
    "merge-gateway": "anthropic/claude-haiku-4-5-20251001",
    "nano-gpt": "claude-haiku-4-5-20251001",
    "nearai": "anthropic/claude-haiku-4-5",
@@ -1217,7 +1215,7 @@
    "kilo": "anthropic/claude-opus-4",
    "llmgateway": "claude-opus-4-20250514",
    "merge-gateway": "anthropic/claude-opus-4-20250514",
-   "nano-gpt": "claude-opus-4-thinking:32768",
+   "nano-gpt": "claude-opus-4-thinking",
    "openrouter": "anthropic/claude-opus-4",
    "orcarouter": "anthropic/claude-opus-4",
    "poe": "anthropic/claude-opus-4",
@@ -1277,10 +1275,10 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "claude-opus-4-1-20250805-thinking",
+   "302ai": "claude-opus-4-1-20250805",
    "abacus": "claude-opus-4-1-20250805",
-   "amazon-bedrock": "us.anthropic.claude-opus-4-1-20250805-v1:0",
-   "anthropic": "claude-opus-4-1",
+   "amazon-bedrock": "anthropic.claude-opus-4-1-20250805-v1:0",
+   "anthropic": "claude-opus-4-1-20250805",
    "azure": "claude-opus-4-1",
    "azure-cognitive-services": "claude-opus-4-1",
    "cloudflare-ai-gateway": "anthropic/claude-opus-4-1",
@@ -1289,12 +1287,12 @@
    "fastrouter": "anthropic/claude-opus-4.1",
    "google-vertex": "claude-opus-4-1@20250805",
    "google-vertex-anthropic": "claude-opus-4-1@20250805",
-   "helicone": "claude-opus-4-1",
+   "helicone": "claude-opus-4-1-20250805",
    "jiekou": "claude-opus-4-1-20250805",
    "kilo": "anthropic/claude-opus-4.1",
    "llmgateway": "claude-opus-4-1-20250805",
    "merge-gateway": "anthropic/claude-opus-4-1-20250805",
-   "nano-gpt": "claude-opus-4-1-thinking:32000",
+   "nano-gpt": "claude-opus-4-1-thinking:8192",
    "opencode": "claude-opus-4-1",
    "openrouter": "anthropic/claude-opus-4.1",
    "orcarouter": "anthropic/claude-opus-4.1",
@@ -1344,10 +1342,10 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "claude-opus-4-5",
+   "302ai": "claude-opus-4-5-20251101",
    "abacus": "claude-opus-4-5-20251101",
-   "amazon-bedrock": "global.anthropic.claude-opus-4-5-20251101-v1:0",
-   "anthropic": "claude-opus-4-5",
+   "amazon-bedrock": "anthropic.claude-opus-4-5-20251101-v1:0",
+   "anthropic": "claude-opus-4-5-20251101",
    "azure": "claude-opus-4-5",
    "azure-cognitive-services": "claude-opus-4-5",
    "cloudflare-ai-gateway": "anthropic/claude-opus-4-5",
@@ -1361,7 +1359,7 @@
    "kilo": "anthropic/claude-opus-4.5",
    "llmgateway": "claude-opus-4-5-20251101",
    "merge-gateway": "anthropic/claude-opus-4-5-20251101",
-   "nano-gpt": "claude-opus-4-5-20251101",
+   "nano-gpt": "claude-opus-4-5-20251101:thinking",
    "opencode": "claude-opus-4-5",
    "openrouter": "anthropic/claude-opus-4.5",
    "orcarouter": "anthropic/claude-opus-4.5",
@@ -1387,7 +1385,6 @@
    "aihubmix",
    "amazon-bedrock",
    "anthropic",
-   "anyapi",
    "auriko",
    "azure",
    "azure-cognitive-services",
@@ -1418,12 +1415,11 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "claude-opus-4-6",
+   "302ai": "claude-opus-4-6-thinking",
    "abacus": "claude-opus-4-6",
-   "aihubmix": "claude-opus-4-6-think",
-   "amazon-bedrock": "au.anthropic.claude-opus-4-6-v1",
+   "aihubmix": "claude-opus-4-6",
+   "amazon-bedrock": "anthropic.claude-opus-4-6-v1",
    "anthropic": "claude-opus-4-6",
-   "anyapi": "anthropic/claude-opus-4-6",
    "auriko": "claude-opus-4-6",
    "azure": "claude-opus-4-6",
    "azure-cognitive-services": "claude-opus-4-6",
@@ -1436,19 +1432,19 @@
    "google-vertex": "claude-opus-4-6@default",
    "google-vertex-anthropic": "claude-opus-4-6@default",
    "jiekou": "claude-opus-4-6",
-   "kilo": "anthropic/claude-opus-4.6-fast",
+   "kilo": "stealth/claude-opus-4.6",
    "llmgateway": "claude-opus-4-6",
    "merge-gateway": "anthropic/claude-opus-4-6",
-   "nano-gpt": "anthropic/claude-opus-4.6:thinking",
+   "nano-gpt": "anthropic/claude-opus-4.6:thinking:medium",
    "nearai": "anthropic/claude-opus-4-6",
    "opencode": "claude-opus-4-6",
-   "openrouter": "anthropic/claude-opus-4.6-fast",
+   "openrouter": "anthropic/claude-opus-4.6",
    "orcarouter": "anthropic/claude-opus-4.6",
    "perplexity-agent": "anthropic/claude-opus-4-6",
    "poe": "anthropic/claude-opus-4.6",
    "requesty": "anthropic/claude-opus-4-6",
    "sap-ai-core": "anthropic--claude-4.6-opus",
-   "venice": "claude-opus-4-6-fast",
+   "venice": "claude-opus-4-6",
    "vercel": "anthropic/claude-opus-4.6",
    "zenmux": "anthropic/claude-opus-4.6"
   },
@@ -1463,7 +1459,6 @@
    "aihubmix",
    "amazon-bedrock",
    "anthropic",
-   "anyapi",
    "auriko",
    "cloudflare-ai-gateway",
    "databricks",
@@ -1491,10 +1486,9 @@
   "open_weights": false,
   "provider_spellings": {
    "302ai": "claude-opus-4-7",
-   "aihubmix": "claude-opus-4-7-think",
-   "amazon-bedrock": "global.anthropic.claude-opus-4-7",
+   "aihubmix": "claude-opus-4-7",
+   "amazon-bedrock": "jp.anthropic.claude-opus-4-7",
    "anthropic": "claude-opus-4-7",
-   "anyapi": "anthropic/claude-opus-4-7",
    "auriko": "claude-opus-4-7",
    "cloudflare-ai-gateway": "anthropic/claude-opus-4-7",
    "databricks": "databricks-claude-opus-4-7",
@@ -1504,18 +1498,18 @@
    "gmicloud": "anthropic/claude-opus-4.7",
    "google-vertex": "claude-opus-4-7@default",
    "google-vertex-anthropic": "claude-opus-4-7@default",
-   "kilo": "anthropic/claude-opus-4.7",
+   "kilo": "stealth/claude-opus-4.7",
    "llmgateway": "claude-opus-4-7",
    "merge-gateway": "anthropic/claude-opus-4-7",
    "nearai": "anthropic/claude-opus-4-7",
    "opencode": "claude-opus-4-7",
-   "openrouter": "anthropic/claude-opus-4.7-fast",
+   "openrouter": "anthropic/claude-opus-4.7",
    "orcarouter": "anthropic/claude-opus-4.7",
    "perplexity-agent": "anthropic/claude-opus-4-7",
    "poe": "anthropic/claude-opus-4.7",
    "sap-ai-core": "anthropic--claude-4.7-opus",
    "snowflake-cortex": "claude-opus-4-7",
-   "venice": "claude-opus-4-7-fast",
+   "venice": "claude-opus-4-7",
    "vercel": "anthropic/claude-opus-4.7",
    "zenmux": "anthropic/claude-opus-4.7"
   },
@@ -1542,7 +1536,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "amazon-bedrock": "jp.anthropic.claude-opus-4-8",
+   "amazon-bedrock": "anthropic.claude-opus-4-8",
    "anthropic": "claude-opus-4-8",
    "cloudflare-ai-gateway": "anthropic/claude-opus-4-8",
    "digitalocean": "anthropic-claude-opus-4.8",
@@ -1551,9 +1545,9 @@
    "google-vertex-anthropic": "claude-opus-4-8@default",
    "llmgateway": "claude-opus-4-8",
    "opencode": "claude-opus-4-8",
-   "openrouter": "anthropic/claude-opus-4.8-fast",
+   "openrouter": "anthropic/claude-opus-4.8",
    "poe": "anthropic/claude-opus-4.8",
-   "venice": "claude-opus-4-8-fast",
+   "venice": "claude-opus-4-8",
    "vercel": "anthropic/claude-opus-4.8"
   },
   "release_date": "2026-05-27"
@@ -1674,7 +1668,7 @@
    "kilo": "anthropic/claude-sonnet-4",
    "llmgateway": "claude-sonnet-4-20250514",
    "merge-gateway": "anthropic/claude-sonnet-4-20250514",
-   "nano-gpt": "claude-sonnet-4-thinking:8192",
+   "nano-gpt": "claude-sonnet-4-thinking:32768",
    "opencode": "claude-sonnet-4",
    "openrouter": "anthropic/claude-sonnet-4",
    "orcarouter": "anthropic/claude-sonnet-4",
@@ -1710,7 +1704,6 @@
    "abacus",
    "amazon-bedrock",
    "anthropic",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -1743,11 +1736,10 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "claude-sonnet-4-5-20250929",
+   "302ai": "claude-sonnet-4-5-20250929-thinking",
    "abacus": "claude-sonnet-4-5-20250929",
-   "amazon-bedrock": "anthropic.claude-sonnet-4-5-20250929-v1:0",
-   "anthropic": "claude-sonnet-4-5-20250929",
-   "anyapi": "anthropic/claude-sonnet-4-5",
+   "amazon-bedrock": "au.anthropic.claude-sonnet-4-5-20250929-v1:0",
+   "anthropic": "claude-sonnet-4-5",
    "azure": "claude-sonnet-4-5",
    "azure-cognitive-services": "claude-sonnet-4-5",
    "cloudflare-ai-gateway": "anthropic/claude-sonnet-4-5",
@@ -1757,12 +1749,12 @@
    "github-copilot": "claude-sonnet-4.5",
    "google-vertex": "claude-sonnet-4-5@20250929",
    "google-vertex-anthropic": "claude-sonnet-4-5@20250929",
-   "helicone": "claude-sonnet-4-5-20250929",
+   "helicone": "claude-4.5-sonnet",
    "jiekou": "claude-sonnet-4-5-20250929",
    "kilo": "anthropic/claude-sonnet-4.5",
-   "llmgateway": "claude-sonnet-4-5-20250929",
+   "llmgateway": "claude-sonnet-4-5",
    "merge-gateway": "anthropic/claude-sonnet-4-5-20250929",
-   "nano-gpt": "claude-sonnet-4-5-20250929",
+   "nano-gpt": "claude-sonnet-4-5-20250929-thinking",
    "nearai": "anthropic/claude-sonnet-4-5",
    "opencode": "claude-sonnet-4-5",
    "openrouter": "anthropic/claude-sonnet-4.5",
@@ -1790,7 +1782,6 @@
    "aihubmix",
    "amazon-bedrock",
    "anthropic",
-   "anyapi",
    "auriko",
    "azure",
    "cloudflare-ai-gateway",
@@ -1821,12 +1812,11 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "claude-sonnet-4-6",
+   "302ai": "claude-sonnet-4-6-thinking",
    "abacus": "claude-sonnet-4-6",
-   "aihubmix": "claude-sonnet-4-6",
-   "amazon-bedrock": "au.anthropic.claude-sonnet-4-6",
+   "aihubmix": "claude-sonnet-4-6-think",
+   "amazon-bedrock": "us.anthropic.claude-sonnet-4-6",
    "anthropic": "claude-sonnet-4-6",
-   "anyapi": "anthropic/claude-sonnet-4-6",
    "auriko": "claude-sonnet-4-6",
    "azure": "claude-sonnet-4-6",
    "cloudflare-ai-gateway": "anthropic/claude-sonnet-4-6",
@@ -1838,10 +1828,10 @@
    "gmicloud": "anthropic/claude-sonnet-4.6",
    "google-vertex": "claude-sonnet-4-6@default",
    "google-vertex-anthropic": "claude-sonnet-4-6@default",
-   "kilo": "anthropic/claude-sonnet-4.6",
+   "kilo": "stealth/claude-sonnet-4.6",
    "llmgateway": "claude-sonnet-4-6",
    "merge-gateway": "anthropic/claude-sonnet-4-6",
-   "nano-gpt": "anthropic/claude-sonnet-4.6",
+   "nano-gpt": "anthropic/claude-sonnet-4.6:thinking",
    "nearai": "anthropic/claude-sonnet-4-6",
    "opencode": "claude-sonnet-4-6",
    "openrouter": "anthropic/claude-sonnet-4.6",
@@ -2044,7 +2034,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "aihubmix": "coding-glm-5.1-free"
+   "aihubmix": "coding-glm-5.1"
   },
   "release_date": "2026-04-11"
  },
@@ -2057,7 +2047,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "aihubmix": "coding-minimax-m2.7"
+   "aihubmix": "coding-minimax-m2.7-free"
   },
   "release_date": "2026-03-18"
  },
@@ -2100,7 +2090,7 @@
   },
   "release_date": "2026-04-22"
  },
- "cogito-2-1": {
+ "cogito-2-1-671b": {
   "author_org": "deepcogito",
   "display_name": "cogito-2.1:671b",
   "has_author_lab_entry": false,
@@ -2375,7 +2365,6 @@
   "display_name": "Command R+",
   "has_author_lab_entry": true,
   "inference_platforms": [
-   "anyapi",
    "cohere",
    "kilo",
    "merge-gateway",
@@ -2384,7 +2373,6 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "anyapi": "cohere/command-r-plus-08-2024",
    "cohere": "command-r-plus-08-2024",
    "kilo": "cohere/command-r-plus-08-2024",
    "merge-gateway": "cohere/command-r-plus-08-2024",
@@ -2512,7 +2500,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "nano-gpt": "TheDrummer 2/Cydonia-24B-v4"
+   "nano-gpt": "TheDrummer 2/Cydonia-24B-v2"
   },
   "release_date": "2025-02-17"
  },
@@ -2614,7 +2602,7 @@
   "release_date": "2025-05-10"
  },
  "deepseek": {
-  "author_org": "deepseek",
+  "author_org": "deepseek-ai",
   "display_name": "DeepSeek Reasoner",
   "has_author_lab_entry": true,
   "inference_platforms": [
@@ -2642,14 +2630,14 @@
    "deepseek": "deepseek-reasoner",
    "digitalocean": "deepseek-v3",
    "drun": "public/deepseek-v3",
-   "helicone": "deepseek-reasoner",
+   "helicone": "deepseek-v3",
    "iflowcn": "deepseek-v3",
    "nano-gpt": "deepseek-reasoner",
    "novita-ai": "deepseek/deepseek-v3-turbo",
    "orcarouter": "deepseek/deepseek-reasoner",
    "qiniu-ai": "deepseek-v3",
    "siliconflow": "deepseek-ai/DeepSeek-V3",
-   "siliconflow-cn": "deepseek-ai/DeepSeek-V3",
+   "siliconflow-cn": "Pro/deepseek-ai/DeepSeek-V3",
    "synthetic": "hf:deepseek-ai/DeepSeek-V3",
    "togetherai": "deepseek-ai/DeepSeek-V3",
    "vercel": "deepseek/deepseek-v3"
@@ -2688,7 +2676,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "302ai",
-   "anyapi",
    "deepseek",
    "kilo",
    "nano-gpt",
@@ -2699,7 +2686,6 @@
   "open_weights": true,
   "provider_spellings": {
    "302ai": "deepseek-chat",
-   "anyapi": "deepseek/deepseek-chat",
    "deepseek": "deepseek-chat",
    "kilo": "deepseek/deepseek-chat",
    "nano-gpt": "deepseek-chat",
@@ -2819,7 +2805,6 @@
   "inference_platforms": [
    "abacus",
    "alibaba-cn",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "drun",
@@ -2840,7 +2825,6 @@
   "provider_spellings": {
    "abacus": "deepseek-ai/DeepSeek-R1",
    "alibaba-cn": "deepseek-r1",
-   "anyapi": "deepseek/deepseek-r1",
    "azure": "deepseek-r1",
    "azure-cognitive-services": "deepseek-r1",
    "drun": "public/deepseek-r1",
@@ -2852,7 +2836,7 @@
    "openrouter": "deepseek/deepseek-r1",
    "qiniu-ai": "deepseek-r1",
    "siliconflow": "deepseek-ai/DeepSeek-R1",
-   "siliconflow-cn": "deepseek-ai/DeepSeek-R1",
+   "siliconflow-cn": "Pro/deepseek-ai/DeepSeek-R1",
    "synthetic": "hf:deepseek-ai/DeepSeek-R1",
    "togetherai": "deepseek-ai/DeepSeek-R1",
    "vercel": "deepseek/deepseek-r1"
@@ -2886,7 +2870,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "alibaba-cn": "deepseek-r1-0528",
+   "alibaba-cn": "siliconflow/deepseek-r1-0528",
    "azure": "deepseek-r1-0528",
    "azure-cognitive-services": "deepseek-r1-0528",
    "chutes": "deepseek-ai/DeepSeek-R1-0528-TEE",
@@ -2899,7 +2883,7 @@
    "kilo": "deepseek/deepseek-r1-0528",
    "llmgateway": "deepseek-r1-0528",
    "meganova": "deepseek-ai/DeepSeek-R1-0528",
-   "nano-gpt": "deepseek-ai/DeepSeek-R1-0528",
+   "nano-gpt": "TEE/deepseek-r1-0528",
    "novita-ai": "deepseek/deepseek-r1-0528",
    "openrouter": "deepseek/deepseek-r1-0528",
    "qiniu-ai": "deepseek-r1-0528",
@@ -3154,12 +3138,12 @@
    "azure-cognitive-services",
    "baseten",
    "chutes",
+   "google-vertex",
    "jiekou",
    "llmgateway",
    "meganova",
    "nano-gpt",
    "novita-ai",
-   "ollama-cloud",
    "qiniu-ai",
    "siliconflow",
    "submodel",
@@ -3176,12 +3160,12 @@
    "azure-cognitive-services": "deepseek-v3.1",
    "baseten": "deepseek-ai/DeepSeek-V3.1",
    "chutes": "deepseek-ai/DeepSeek-V3.1-TEE",
+   "google-vertex": "deepseek-ai/deepseek-v3.1-maas",
    "jiekou": "deepseek/deepseek-v3.1",
    "llmgateway": "deepseek-v3.1",
    "meganova": "deepseek-ai/DeepSeek-V3.1",
-   "nano-gpt": "deepseek-ai/DeepSeek-V3.1",
+   "nano-gpt": "TEE/deepseek-v3.1",
    "novita-ai": "deepseek/deepseek-v3.1",
-   "ollama-cloud": "deepseek-v3.1:671b",
    "qiniu-ai": "deepseek-v3.1",
    "siliconflow": "deepseek-ai/DeepSeek-V3.1",
    "submodel": "deepseek-ai/DeepSeek-V3.1",
@@ -3192,18 +3176,18 @@
   },
   "release_date": "2025-01-01"
  },
- "deepseek-v3-1-maas": {
+ "deepseek-v3-1-671b": {
   "author_org": "deepseek-ai",
-  "display_name": "DeepSeek V3.1",
+  "display_name": "deepseek-v3.1:671b",
   "has_author_lab_entry": false,
   "inference_platforms": [
-   "google-vertex"
+   "ollama-cloud"
   ],
   "open_weights": true,
   "provider_spellings": {
-   "google-vertex": "deepseek-ai/deepseek-v3.1-maas"
+   "ollama-cloud": "deepseek-v3.1:671b"
   },
-  "release_date": "2025-08-28"
+  "release_date": "2025-08-21"
  },
  "deepseek-v3-1-nex-n1": {
   "author_org": "nex-agi",
@@ -3249,13 +3233,13 @@
    "alibaba-cn": "siliconflow/deepseek-v3.1-terminus",
    "helicone": "deepseek-v3.1-terminus",
    "kilo": "deepseek/deepseek-v3.1-terminus",
-   "nano-gpt": "deepseek-ai/DeepSeek-V3.1-Terminus",
+   "nano-gpt": "deepseek-ai/DeepSeek-V3.1-Terminus:thinking",
    "novita-ai": "deepseek/deepseek-v3.1-terminus",
    "nvidia": "deepseek-ai/deepseek-v3.1-terminus",
    "openrouter": "deepseek/deepseek-v3.1-terminus",
-   "qiniu-ai": "deepseek/deepseek-v3.1-terminus",
+   "qiniu-ai": "deepseek/deepseek-v3.1-terminus-thinking",
    "siliconflow": "deepseek-ai/DeepSeek-V3.1-Terminus",
-   "siliconflow-cn": "deepseek-ai/DeepSeek-V3.1-Terminus",
+   "siliconflow-cn": "Pro/deepseek-ai/DeepSeek-V3.1-Terminus",
    "synthetic": "hf:deepseek-ai/DeepSeek-V3.1-Terminus",
    "vercel": "deepseek/deepseek-v3.1-terminus"
   },
@@ -3269,7 +3253,6 @@
    "302ai",
    "abacus",
    "alibaba-cn",
-   "alibaba-token-plan",
    "azure",
    "azure-cognitive-services",
    "baseten",
@@ -3277,6 +3260,7 @@
    "cortecs",
    "crof",
    "deepinfra",
+   "google-vertex",
    "helicone",
    "huggingface",
    "iflowcn",
@@ -3302,10 +3286,9 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "302ai": "deepseek-v3.2",
+   "302ai": "deepseek-v3.2-thinking",
    "abacus": "deepseek-ai/DeepSeek-V3.2",
    "alibaba-cn": "siliconflow/deepseek-v3.2",
-   "alibaba-token-plan": "deepseek-v3.2",
    "azure": "deepseek-v3.2",
    "azure-cognitive-services": "deepseek-v3.2",
    "baseten": "deepseek-ai/DeepSeek-V3.2",
@@ -3313,14 +3296,15 @@
    "cortecs": "deepseek-v3.2",
    "crof": "deepseek-v3.2",
    "deepinfra": "deepseek-ai/DeepSeek-V3.2",
+   "google-vertex": "deepseek-ai/deepseek-v3.2-maas",
    "helicone": "deepseek-v3.2",
    "huggingface": "deepseek-ai/DeepSeek-V3.2",
    "iflowcn": "deepseek-v3.2",
    "kilo": "deepseek/deepseek-v3.2",
    "llmgateway": "deepseek-v3.2",
    "meganova": "deepseek-ai/DeepSeek-V3.2",
-   "nano-gpt": "deepseek/deepseek-v3.2:thinking",
-   "nebius": "deepseek-ai/DeepSeek-V3.2",
+   "nano-gpt": "TEE/deepseek-v3.2",
+   "nebius": "deepseek-ai/DeepSeek-V3.2-fast",
    "novita-ai": "deepseek/deepseek-v3.2",
    "nvidia": "deepseek-ai/deepseek-v3.2",
    "ollama-cloud": "deepseek-v3.2",
@@ -3329,10 +3313,10 @@
    "qiniu-ai": "deepseek/deepseek-v3.2-251201",
    "routing-run": "route/deepseek-v3.2",
    "siliconflow": "deepseek-ai/DeepSeek-V3.2",
-   "siliconflow-cn": "deepseek-ai/DeepSeek-V3.2",
+   "siliconflow-cn": "Pro/deepseek-ai/DeepSeek-V3.2",
    "synthetic": "hf:deepseek-ai/DeepSeek-V3.2",
    "venice": "deepseek-v3.2",
-   "vercel": "deepseek/deepseek-v3.2",
+   "vercel": "deepseek/deepseek-v3.2-thinking",
    "vivgrid": "deepseek-v3.2",
    "zenmux": "deepseek/deepseek-v3.2"
   },
@@ -3359,28 +3343,15 @@
    "alibaba-cn": "deepseek-v3-2-exp",
    "kilo": "deepseek/deepseek-v3.2-exp",
    "meganova": "deepseek-ai/DeepSeek-V3.2-Exp",
-   "nano-gpt": "deepseek-ai/deepseek-v3.2-exp-thinking",
+   "nano-gpt": "deepseek-ai/deepseek-v3.2-exp",
    "novita-ai": "deepseek/deepseek-v3.2-exp",
    "openrouter": "deepseek/deepseek-v3.2-exp",
-   "qiniu-ai": "deepseek/deepseek-v3.2-exp-thinking",
+   "qiniu-ai": "deepseek/deepseek-v3.2-exp",
    "siliconflow": "deepseek-ai/DeepSeek-V3.2-Exp",
    "vercel": "deepseek/deepseek-v3.2-exp",
    "zenmux": "deepseek/deepseek-v3.2-exp"
   },
   "release_date": "2025-01-01"
- },
- "deepseek-v3-2-maas": {
-  "author_org": "deepseek-ai",
-  "display_name": "DeepSeek V3.2",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "deepseek-ai/deepseek-v3.2-maas"
-  },
-  "release_date": "2025-12-17"
  },
  "deepseek-v3-2-nvfp4": {
   "author_org": "nvidia",
@@ -3420,8 +3391,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "alibaba-cn",
-   "alibaba-token-plan",
-   "anyapi",
    "auriko",
    "cortecs",
    "crof",
@@ -3449,8 +3418,6 @@
   "open_weights": true,
   "provider_spellings": {
    "alibaba-cn": "deepseek-v4-flash",
-   "alibaba-token-plan": "deepseek-v4-flash",
-   "anyapi": "deepseek/deepseek-v4-flash",
    "auriko": "deepseek-v4-flash",
    "cortecs": "deepseek-v4-flash",
    "crof": "deepseek-v4-flash",
@@ -3464,7 +3431,7 @@
    "novita-ai": "deepseek/deepseek-v4-flash",
    "nvidia": "deepseek-ai/deepseek-v4-flash",
    "ollama-cloud": "deepseek-v4-flash",
-   "opencode": "deepseek-v4-flash-free",
+   "opencode": "deepseek-v4-flash",
    "opencode-go": "deepseek-v4-flash",
    "openrouter": "deepseek/deepseek-v4-flash",
    "orcarouter": "deepseek/deepseek-v4-flash",
@@ -3509,8 +3476,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "alibaba-cn",
-   "alibaba-token-plan",
-   "anyapi",
    "auriko",
    "baseten",
    "cortecs",
@@ -3545,8 +3510,6 @@
   "open_weights": true,
   "provider_spellings": {
    "alibaba-cn": "deepseek-v4-pro",
-   "alibaba-token-plan": "deepseek-v4-pro",
-   "anyapi": "deepseek/deepseek-v4-pro",
    "auriko": "deepseek-v4-pro",
    "baseten": "deepseek-ai/DeepSeek-V4-Pro",
    "cortecs": "deepseek-v4-pro",
@@ -3636,31 +3599,31 @@
  },
  "devstral-2": {
   "author_org": "mistral",
-  "display_name": "devstral-2:123b",
+  "display_name": "Devstral 2",
   "has_author_lab_entry": false,
   "inference_platforms": [
-   "ollama-cloud",
    "vercel"
   ],
-  "open_weights": true,
+  "open_weights": false,
   "provider_spellings": {
-   "ollama-cloud": "devstral-2:123b",
    "vercel": "mistral/devstral-2"
   },
   "release_date": "2025-12-09"
  },
  "devstral-2-123b": {
   "author_org": "mistralai",
-  "display_name": "Devstral 2 123B",
+  "display_name": "devstral-2:123b",
   "has_author_lab_entry": false,
   "inference_platforms": [
-   "amazon-bedrock"
+   "amazon-bedrock",
+   "ollama-cloud"
   ],
   "open_weights": true,
   "provider_spellings": {
-   "amazon-bedrock": "mistral.devstral-2-123b"
+   "amazon-bedrock": "mistral.devstral-2-123b",
+   "ollama-cloud": "devstral-2:123b"
   },
-  "release_date": "2026-02-17"
+  "release_date": "2025-12-09"
  },
  "devstral-2-123b-instruct-2512": {
   "author_org": "mistralai",
@@ -3684,7 +3647,6 @@
   "display_name": "Devstral 2",
   "has_author_lab_entry": true,
   "inference_platforms": [
-   "anyapi",
    "cortecs",
    "kilo",
    "llmgateway",
@@ -3694,7 +3656,6 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "anyapi": "mistralai/devstral-2512",
    "cortecs": "devstral-2512",
    "kilo": "mistralai/devstral-2512",
    "llmgateway": "devstral-2512",
@@ -3753,18 +3714,29 @@
  },
  "devstral-small-2": {
   "author_org": "mistral",
-  "display_name": "devstral-small-2:24b",
+  "display_name": "Devstral Small 2",
   "has_author_lab_entry": false,
   "inference_platforms": [
-   "ollama-cloud",
    "vercel"
   ],
-  "open_weights": true,
+  "open_weights": false,
   "provider_spellings": {
-   "ollama-cloud": "devstral-small-2:24b",
    "vercel": "mistral/devstral-small-2"
   },
   "release_date": "2025-05-07"
+ },
+ "devstral-small-2-24b": {
+  "author_org": "mistralai",
+  "display_name": "devstral-small-2:24b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "devstral-small-2:24b"
+  },
+  "release_date": "2025-12-09"
  },
  "devstral-small-2-24b-instruct-2512": {
   "author_org": "mistralai",
@@ -3958,7 +3930,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "nano-gpt": "doubao-1-5-thinking-vision-pro-250428"
+   "nano-gpt": "doubao-1-5-thinking-pro-vision-250415"
   },
   "release_date": "2025-04-15"
  },
@@ -3999,7 +3971,7 @@
   "open_weights": false,
   "provider_spellings": {
    "nano-gpt": "doubao-seed-1-6-250615",
-   "qiniu-ai": "doubao-seed-1.6-thinking"
+   "qiniu-ai": "doubao-seed-1.6"
   },
   "release_date": "2025-06-15"
  },
@@ -4515,8 +4487,8 @@
   "open_weights": true,
   "provider_spellings": {
    "helicone": "ernie-4.5-21b-a3b-thinking",
-   "kilo": "baidu/ernie-4.5-21b-a3b-thinking",
-   "novita-ai": "baidu/ernie-4.5-21B-a3b"
+   "kilo": "baidu/ernie-4.5-21b-a3b",
+   "novita-ai": "baidu/ernie-4.5-21B-a3b-thinking"
   },
   "release_date": "2025-03-16"
  },
@@ -4607,7 +4579,7 @@
   "provider_spellings": {
    "kilo": "baidu/ernie-4.5-vl-28b-a3b",
    "nano-gpt": "baidu/ernie-4.5-vl-28b-a3b",
-   "novita-ai": "baidu/ernie-4.5-vl-28b-a3b",
+   "novita-ai": "baidu/ernie-4.5-vl-28b-a3b-thinking",
    "openrouter": "baidu/ernie-4.5-vl-28b-a3b"
   },
   "release_date": "2025-06-30"
@@ -4981,7 +4953,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "kilo": "openrouter/free",
+   "kilo": "kilo-auto/free",
    "openrouter": "openrouter/free"
   },
   "release_date": "2026-02-01"
@@ -5163,7 +5135,6 @@
    "302ai",
    "abacus",
    "aihubmix",
-   "anyapi",
    "auriko",
    "databricks",
    "fastrouter",
@@ -5193,7 +5164,6 @@
    "302ai": "gemini-2.5-flash",
    "abacus": "gemini-2.5-flash",
    "aihubmix": "gemini-2.5-flash",
-   "anyapi": "google/gemini-2.5-flash",
    "auriko": "gemini-2.5-flash",
    "databricks": "databricks-gemini-2-5-flash",
    "fastrouter": "google/gemini-2.5-flash",
@@ -5261,7 +5231,6 @@
   "display_name": "Gemini 2.5 Flash-Lite",
   "has_author_lab_entry": true,
   "inference_platforms": [
-   "anyapi",
    "google",
    "google-vertex",
    "helicone",
@@ -5281,7 +5250,6 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "anyapi": "google/gemini-2.5-flash-lite",
    "google": "gemini-2.5-flash-lite",
    "google-vertex": "gemini-2.5-flash-lite",
    "helicone": "gemini-2.5-flash-lite",
@@ -5335,7 +5303,7 @@
    "302ai": "gemini-2.5-flash-lite-preview-09-2025",
    "jiekou": "gemini-2.5-flash-lite-preview-09-2025",
    "kilo": "google/gemini-2.5-flash-lite-preview-09-2025",
-   "nano-gpt": "gemini-2.5-flash-lite-preview-09-2025-thinking",
+   "nano-gpt": "gemini-2.5-flash-lite-preview-09-2025",
    "openrouter": "google/gemini-2.5-flash-lite-preview-09-2025",
    "vercel": "google/gemini-2.5-flash-lite-preview-09-2025"
   },
@@ -5378,7 +5346,7 @@
   "open_weights": false,
   "provider_spellings": {
    "jiekou": "gemini-2.5-flash-preview-05-20",
-   "nano-gpt": "gemini-2.5-flash-preview-04-17:thinking"
+   "nano-gpt": "gemini-2.5-flash-preview-05-20:thinking"
   },
   "release_date": "2025-04-17"
  },
@@ -5396,7 +5364,7 @@
   "provider_spellings": {
    "302ai": "gemini-2.5-flash-preview-09-2025",
    "google-vertex": "gemini-2.5-flash-preview-09-2025",
-   "nano-gpt": "gemini-2.5-flash-preview-09-2025-thinking",
+   "nano-gpt": "gemini-2.5-flash-preview-09-2025",
    "vercel": "google/gemini-2.5-flash-preview-09-2025"
   },
   "release_date": "2025-09-25"
@@ -5422,7 +5390,6 @@
    "302ai",
    "abacus",
    "aihubmix",
-   "anyapi",
    "auriko",
    "cortecs",
    "databricks",
@@ -5453,7 +5420,6 @@
    "302ai": "gemini-2.5-pro",
    "abacus": "gemini-2.5-pro",
    "aihubmix": "gemini-2.5-pro",
-   "anyapi": "google/gemini-2.5-pro",
    "auriko": "gemini-2.5-pro",
    "cortecs": "gemini-2.5-pro",
    "databricks": "databricks-gemini-2-5-pro",
@@ -5507,9 +5473,9 @@
   "open_weights": false,
   "provider_spellings": {
    "jiekou": "gemini-2.5-pro-preview-06-05",
-   "kilo": "google/gemini-2.5-pro-preview",
-   "nano-gpt": "gemini-2.5-pro-preview-06-05",
-   "openrouter": "google/gemini-2.5-pro-preview"
+   "kilo": "google/gemini-2.5-pro-preview-05-06",
+   "nano-gpt": "gemini-2.5-pro-preview-03-25",
+   "openrouter": "google/gemini-2.5-pro-preview-05-06"
   },
   "release_date": "2025-03-25"
  },
@@ -5801,7 +5767,6 @@
    "302ai",
    "abacus",
    "aihubmix",
-   "anyapi",
    "frogbot",
    "github-copilot",
    "google",
@@ -5825,7 +5790,6 @@
    "302ai": "gemini-3-flash-preview",
    "abacus": "gemini-3-flash-preview",
    "aihubmix": "gemini-3-flash-preview",
-   "anyapi": "google/gemini-3-flash-preview",
    "frogbot": "gemini-3-flash-preview",
    "github-copilot": "gemini-3-flash-preview",
    "google": "gemini-3-flash-preview",
@@ -5834,7 +5798,7 @@
    "kilo": "google/gemini-3-flash-preview",
    "llmgateway": "gemini-3-flash-preview",
    "merge-gateway": "google/gemini-3-flash-preview",
-   "nano-gpt": "google/gemini-3-flash-preview",
+   "nano-gpt": "google/gemini-3-flash-preview-thinking",
    "ollama-cloud": "gemini-3-flash-preview",
    "openrouter": "google/gemini-3-flash-preview",
    "orcarouter": "google/gemini-3-flash-preview",
@@ -5903,7 +5867,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "302ai",
-   "anyapi",
    "google",
    "google-vertex",
    "helicone",
@@ -5918,13 +5881,12 @@
   "open_weights": false,
   "provider_spellings": {
    "302ai": "gemini-3-pro-preview",
-   "anyapi": "google/gemini-3-pro-preview",
    "google": "gemini-3-pro-preview",
    "google-vertex": "gemini-3-pro-preview",
    "helicone": "gemini-3-pro-preview",
    "jiekou": "gemini-3-pro-preview",
    "merge-gateway": "google/gemini-3-pro-preview",
-   "nano-gpt": "gemini-3-pro-preview-thinking",
+   "nano-gpt": "gemini-3-pro-preview",
    "orcarouter": "google/gemini-3-pro-preview",
    "qihang-ai": "gemini-3-pro-preview",
    "requesty": "google/gemini-3-pro-preview",
@@ -6246,7 +6208,7 @@
    "amazon-bedrock": "google.gemma-3-27b-it",
    "chutes": "unsloth/gemma-3-27b-it",
    "kilo": "google/gemma-3-27b-it",
-   "nano-gpt": "Gemma-3-27B-it",
+   "nano-gpt": "unsloth/gemma-3-27b-it",
    "nebius": "google/gemma-3-27b-it",
    "novita-ai": "google/gemma-3-27b-it",
    "nvidia": "google/gemma-3-27b-it",
@@ -6357,7 +6319,7 @@
    "kilo": "google/gemma-4-26b-a4b-it",
    "merge-gateway": "google/gemma-4-26b-a4b-it",
    "novita-ai": "google/gemma-4-26b-a4b-it",
-   "openrouter": "google/gemma-4-26b-a4b-it:free",
+   "openrouter": "google/gemma-4-26b-a4b-it",
    "orcarouter": "google/gemma-4-26b-a4b-it",
    "scaleway": "gemma-4-26b-a4b-it",
    "vercel": "google/gemma-4-26b-a4b-it"
@@ -6414,7 +6376,7 @@
    "nearai": "google/gemma-4-31B-it",
    "novita-ai": "google/gemma-4-31b-it",
    "nvidia": "google/gemma-4-31b-it",
-   "openrouter": "google/gemma-4-31b-it:free",
+   "openrouter": "google/gemma-4-31b-it",
    "orcarouter": "google/gemma-4-31b-it",
    "routing-run": "route/gemma-4-31b-it",
    "togetherai": "google/gemma-4-31B-it",
@@ -6491,7 +6453,20 @@
   },
   "release_date": "2024-06-25"
  },
- "gemma3": {
+ "gemma3-12b": {
+  "author_org": "google",
+  "display_name": "gemma3:12b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "gemma3:12b"
+  },
+  "release_date": "2024-12-01"
+ },
+ "gemma3-27b": {
   "author_org": "google",
   "display_name": "gemma3:27b",
   "has_author_lab_entry": false,
@@ -6502,9 +6477,22 @@
   "provider_spellings": {
    "ollama-cloud": "gemma3:27b"
   },
+  "release_date": "2025-07-27"
+ },
+ "gemma3-4b": {
+  "author_org": "google",
+  "display_name": "gemma3:4b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "gemma3:4b"
+  },
   "release_date": "2024-12-01"
  },
- "gemma4": {
+ "gemma4-31b": {
   "author_org": "google",
   "display_name": "gemma4:31b",
   "has_author_lab_entry": false,
@@ -6695,7 +6683,7 @@
    "llmgateway": "glm-4.5-air",
    "merge-gateway": "zai/glm-4.5-air",
    "novita-ai": "zai-org/glm-4.5-air",
-   "openrouter": "z-ai/glm-4.5-air:free",
+   "openrouter": "z-ai/glm-4.5-air",
    "orcarouter": "z-ai/glm-4.5-air",
    "qiniu-ai": "glm-4.5-air",
    "siliconflow": "zai-org/GLM-4.5-Air",
@@ -6732,7 +6720,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "nano-gpt": "GLM-4.5-Air-Derestricted-Iceblink-v2"
+   "nano-gpt": "GLM-4.5-Air-Derestricted-Iceblink"
   },
   "release_date": "2025-07-28"
  },
@@ -6859,7 +6847,7 @@
    "jiekou": "zai-org/glm-4.5v",
    "kilo": "z-ai/glm-4.5v",
    "llmgateway": "glm-4.5v",
-   "nano-gpt": "z-ai/glm-4.5v",
+   "nano-gpt": "z-ai/glm-4.5v:thinking",
    "novita-ai": "zai-org/glm-4.5v",
    "openrouter": "z-ai/glm-4.5v",
    "siliconflow": "zai-org/GLM-4.5V",
@@ -6917,7 +6905,7 @@
    "meganova": "zai-org/GLM-4.6",
    "merge-gateway": "zai/glm-4.6",
    "modelscope": "ZhipuAI/GLM-4.6",
-   "nano-gpt": "z-ai/glm-4.6:thinking",
+   "nano-gpt": "TEE/glm-4.6",
    "novita-ai": "zai-org/glm-4.6",
    "ollama-cloud": "glm-4.6",
    "opencode": "glm-4.6",
@@ -7002,7 +6990,7 @@
   "provider_spellings": {
    "llmgateway": "glm-4.6v-flash",
    "vercel": "zai/glm-4.6v-flash",
-   "zenmux": "z-ai/glm-4.6v-flash"
+   "zenmux": "z-ai/glm-4.6v-flash-free"
   },
   "release_date": "2025-09-30"
  },
@@ -7035,6 +7023,7 @@
    "crof",
    "deepinfra",
    "dinference",
+   "google-vertex",
    "huggingface",
    "jiekou",
    "kilo",
@@ -7069,11 +7058,12 @@
    "alibaba-coding-plan-cn": "glm-4.7",
    "baseten": "zai-org/GLM-4.7",
    "berget": "zai-org/GLM-4.7",
-   "chutes": "zai-org/GLM-4.7-FP8",
+   "chutes": "zai-org/GLM-4.7-TEE",
    "cortecs": "glm-4.7",
    "crof": "glm-4.7",
    "deepinfra": "zai-org/GLM-4.7",
    "dinference": "glm-4.7",
+   "google-vertex": "zai-org/glm-4.7-maas",
    "huggingface": "zai-org/GLM-4.7",
    "jiekou": "zai-org/glm-4.7",
    "kilo": "z-ai/glm-4.7",
@@ -7082,10 +7072,10 @@
    "meganova": "zai-org/GLM-4.7",
    "merge-gateway": "zai/glm-4.7",
    "moark": "GLM-4.7",
-   "nano-gpt": "zai-org/glm-4.7",
+   "nano-gpt": "TEE/glm-4.7",
    "novita-ai": "zai-org/glm-4.7",
    "ollama-cloud": "glm-4.7",
-   "opencode": "glm-4.7",
+   "opencode": "glm-4.7-free",
    "openrouter": "z-ai/glm-4.7",
    "orcarouter": "z-ai/glm-4.7",
    "poe": "novita/glm-4.7",
@@ -7137,7 +7127,7 @@
    "jiekou": "zai-org/glm-4.7-flash",
    "kilo": "z-ai/glm-4.7-flash",
    "llmgateway": "glm-4.7-flash",
-   "nano-gpt": "zai-org/glm-4.7-flash",
+   "nano-gpt": "TEE/glm-4.7-flash",
    "novita-ai": "zai-org/glm-4.7-flash",
    "openrouter": "z-ai/glm-4.7-flash",
    "poe": "novita/glm-4.7-flash",
@@ -7173,19 +7163,6 @@
    "zhipuai": "glm-4.7-flashx"
   },
   "release_date": "2025-01"
- },
- "glm-4-7-maas": {
-  "author_org": "zai-org",
-  "display_name": "GLM-4.7",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "zai-org/glm-4.7-maas"
-  },
-  "release_date": "2026-01-06"
  },
  "glm-4-7-n": {
   "author_org": "novita",
@@ -7318,7 +7295,6 @@
    "alibaba-cn",
    "alibaba-coding-plan",
    "alibaba-coding-plan-cn",
-   "alibaba-token-plan",
    "baseten",
    "chutes",
    "cortecs",
@@ -7329,6 +7305,7 @@
    "fastrouter",
    "friendli",
    "gmicloud",
+   "google-vertex",
    "huggingface",
    "kilo",
    "llmgateway",
@@ -7359,14 +7336,13 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "302ai": "glm-5",
+   "302ai": "glm-5-turbo",
    "abacus": "zai-org/glm-5",
    "alibaba-cn": "glm-5",
    "alibaba-coding-plan": "glm-5",
    "alibaba-coding-plan-cn": "glm-5",
-   "alibaba-token-plan": "glm-5",
    "baseten": "zai-org/GLM-5",
-   "chutes": "zai-org/GLM-5-TEE",
+   "chutes": "zai-org/GLM-5-Turbo",
    "cortecs": "glm-5",
    "crof": "glm-5",
    "deepinfra": "zai-org/GLM-5",
@@ -7375,19 +7351,20 @@
    "fastrouter": "z-ai/glm-5",
    "friendli": "zai-org/GLM-5",
    "gmicloud": "zai-org/GLM-5-FP8",
+   "google-vertex": "zai-org/glm-5-maas",
    "huggingface": "zai-org/GLM-5",
-   "kilo": "z-ai/glm-5",
+   "kilo": "z-ai/glm-5-turbo",
    "llmgateway": "glm-5",
    "meganova": "zai-org/GLM-5",
-   "merge-gateway": "zai/glm-5",
-   "nano-gpt": "zai-org/glm-5:thinking",
+   "merge-gateway": "zai/glm-5-turbo",
+   "nano-gpt": "TEE/glm-5",
    "nebius": "zai-org/GLM-5",
    "neuralwatt": "glm-5-fast",
    "novita-ai": "zai-org/glm-5",
    "ollama-cloud": "glm-5",
-   "opencode": "glm-5",
+   "opencode": "glm-5-free",
    "opencode-go": "glm-5",
-   "openrouter": "z-ai/glm-5",
+   "openrouter": "z-ai/glm-5-turbo",
    "orcarouter": "z-ai/glm-5",
    "poe": "novita/glm-5",
    "qiniu-ai": "z-ai/glm-5",
@@ -7395,11 +7372,11 @@
    "siliconflow-cn": "Pro/zai-org/GLM-5",
    "synthetic": "hf:zai-org/GLM-5",
    "tencent-coding-plan": "glm-5",
-   "vercel": "zai/glm-5",
+   "vercel": "zai/glm-5-turbo",
    "wandb": "zai-org/GLM-5-FP8",
-   "zai": "glm-5",
+   "zai": "glm-5-turbo",
    "zai-coding-plan": "glm-5-turbo",
-   "zenmux": "z-ai/glm-5",
+   "zenmux": "z-ai/glm-5-turbo",
    "zhipuai": "glm-5",
    "zhipuai-coding-plan": "glm-5-turbo"
   },
@@ -7412,7 +7389,6 @@
   "inference_platforms": [
    "302ai",
    "alibaba-cn",
-   "alibaba-token-plan",
    "ambient",
    "auriko",
    "chutes",
@@ -7458,7 +7434,6 @@
   "provider_spellings": {
    "302ai": "glm-5.1",
    "alibaba-cn": "glm-5.1",
-   "alibaba-token-plan": "glm-5.1",
    "ambient": "zai-org/GLM-5.1-FP8",
    "auriko": "glm-5.1",
    "chutes": "zai-org/GLM-5.1-TEE",
@@ -7475,9 +7450,9 @@
    "lilac": "zai-org/glm-5.1",
    "llmgateway": "glm-5.1",
    "merge-gateway": "zai/glm-5.1",
-   "nano-gpt": "zai-org/glm-5.1:thinking",
+   "nano-gpt": "zai-org/glm-5.1",
    "nearai": "zai-org/GLM-5.1-FP8",
-   "neuralwatt": "glm-5.1-fast",
+   "neuralwatt": "zai-org/GLM-5.1-FP8",
    "novita-ai": "zai-org/glm-5.1",
    "nvidia": "z-ai/glm-5.1",
    "ollama-cloud": "glm-5.1",
@@ -7515,19 +7490,6 @@
   },
   "release_date": "2026-03-27"
  },
- "glm-5-maas": {
-  "author_org": "zai-org",
-  "display_name": "GLM-5",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "zai-org/glm-5-maas"
-  },
-  "release_date": "2026-02-11"
- },
  "glm-5p1": {
   "author_org": "zai-org",
   "display_name": "GLM 5.1",
@@ -7537,7 +7499,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "fireworks-ai": "accounts/fireworks/models/glm-5p1"
+   "fireworks-ai": "accounts/fireworks/routers/glm-5p1-fast"
   },
   "release_date": "2026-04-01"
  },
@@ -7916,15 +7878,15 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "azure": "gpt-4",
-   "azure-cognitive-services": "gpt-4",
-   "cloudflare-ai-gateway": "openai/gpt-4-turbo",
-   "kilo": "openai/gpt-4-turbo",
-   "llmgateway": "gpt-4-turbo",
-   "nano-gpt": "azure-gpt-4-turbo",
-   "openai": "gpt-4-turbo",
-   "openrouter": "openai/gpt-4-turbo",
-   "orcarouter": "openai/gpt-4-turbo",
+   "azure": "gpt-4-turbo",
+   "azure-cognitive-services": "gpt-4-turbo",
+   "cloudflare-ai-gateway": "openai/gpt-4",
+   "kilo": "openai/gpt-4",
+   "llmgateway": "gpt-4",
+   "nano-gpt": "openai/gpt-4-turbo",
+   "openai": "gpt-4",
+   "openrouter": "openai/gpt-4",
+   "orcarouter": "openai/gpt-4",
    "poe": "openai/gpt-4-turbo",
    "vercel": "openai/gpt-4-turbo"
   },
@@ -7952,7 +7914,6 @@
   "inference_platforms": [
    "302ai",
    "abacus",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cortecs",
@@ -7979,7 +7940,6 @@
   "provider_spellings": {
    "302ai": "gpt-4.1",
    "abacus": "gpt-4.1",
-   "anyapi": "openai/gpt-4.1",
    "azure": "gpt-4.1",
    "azure-cognitive-services": "gpt-4.1",
    "cortecs": "gpt-4.1",
@@ -8011,7 +7971,6 @@
   "inference_platforms": [
    "302ai",
    "abacus",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "github-models",
@@ -8033,11 +7992,10 @@
   "provider_spellings": {
    "302ai": "gpt-4.1-mini",
    "abacus": "gpt-4.1-mini",
-   "anyapi": "openai/gpt-4.1-mini",
    "azure": "gpt-4.1-mini",
    "azure-cognitive-services": "gpt-4.1-mini",
    "github-models": "openai/gpt-4.1-mini",
-   "helicone": "gpt-4.1-mini",
+   "helicone": "gpt-4.1-mini-2025-04-14",
    "kilo": "openai/gpt-4.1-mini",
    "llmgateway": "gpt-4.1-mini",
    "merge-gateway": "openai/gpt-4.1-mini",
@@ -8220,13 +8178,13 @@
    "frogbot": "gpt-4o",
    "github-models": "openai/gpt-4o",
    "helicone": "gpt-4o",
-   "kilo": "openai/gpt-4o-2024-08-06",
+   "kilo": "openai/gpt-4o-2024-05-13",
    "llmgateway": "gpt-4o",
-   "merge-gateway": "openai/gpt-4o-2024-08-06",
-   "nano-gpt": "azure-gpt-4o",
-   "openai": "gpt-4o-2024-08-06",
-   "openrouter": "openai/gpt-4o-2024-08-06",
-   "orcarouter": "openai/gpt-4o-2024-08-06",
+   "merge-gateway": "openai/gpt-4o-2024-05-13",
+   "nano-gpt": "openai/gpt-4o-2024-11-20",
+   "openai": "gpt-4o-2024-05-13",
+   "openrouter": "openai/gpt-4o-2024-05-13",
+   "orcarouter": "openai/gpt-4o-2024-05-13",
    "poe": "openai/gpt-4o",
    "venice": "openai-gpt-4o-2024-11-20",
    "vercel": "openai/gpt-4o"
@@ -8292,12 +8250,12 @@
    "digitalocean": "openai-gpt-4o-mini",
    "github-models": "openai/gpt-4o-mini",
    "helicone": "gpt-4o-mini",
-   "kilo": "openai/gpt-4o-mini-2024-07-18",
+   "kilo": "openai/gpt-4o-mini",
    "llmgateway": "gpt-4o-mini",
    "merge-gateway": "openai/gpt-4o-mini",
-   "nano-gpt": "azure-gpt-4o-mini",
+   "nano-gpt": "openai/gpt-4o-mini",
    "openai": "gpt-4o-mini",
-   "openrouter": "openai/gpt-4o-mini-2024-07-18",
+   "openrouter": "openai/gpt-4o-mini",
    "orcarouter": "openai/gpt-4o-mini",
    "poe": "openai/gpt-4o-mini",
    "requesty": "openai/gpt-4o-mini",
@@ -8379,7 +8337,6 @@
   "inference_platforms": [
    "302ai",
    "abacus",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "databricks",
@@ -8405,9 +8362,8 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "gpt-5",
+   "302ai": "gpt-5-thinking",
    "abacus": "gpt-5",
-   "anyapi": "openai/gpt-5",
    "azure": "gpt-5",
    "azure-cognitive-services": "gpt-5",
    "databricks": "databricks-gpt-5",
@@ -8441,7 +8397,6 @@
    "302ai",
    "abacus",
    "aihubmix",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -8469,7 +8424,6 @@
    "302ai": "gpt-5.1",
    "abacus": "gpt-5.1",
    "aihubmix": "gpt-5.1",
-   "anyapi": "openai/gpt-5.1",
    "azure": "gpt-5.1",
    "azure-cognitive-services": "gpt-5.1",
    "cloudflare-ai-gateway": "openai/gpt-5.1",
@@ -8479,7 +8433,7 @@
    "kilo": "openai/gpt-5.1",
    "llmgateway": "gpt-5.1",
    "merge-gateway": "openai/gpt-5.1",
-   "nano-gpt": "openai/gpt-5.1",
+   "nano-gpt": "openai/gpt-5.1-2025-11-13",
    "nearai": "openai/gpt-5.1",
    "openai": "gpt-5.1",
    "opencode": "gpt-5.1",
@@ -8522,7 +8476,7 @@
    "helicone": "gpt-5.1-chat-latest",
    "kilo": "openai/gpt-5.1-chat",
    "merge-gateway": "openai/gpt-5.1-chat-latest",
-   "nano-gpt": "openai/gpt-5.1-chat",
+   "nano-gpt": "openai/gpt-5.1-chat-latest",
    "openai": "gpt-5.1-chat-latest",
    "openrouter": "openai/gpt-5.1-chat",
    "orcarouter": "openai/gpt-5.1-chat-latest",
@@ -8685,7 +8639,6 @@
    "302ai",
    "abacus",
    "aihubmix",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -8716,7 +8669,6 @@
    "302ai": "gpt-5.2",
    "abacus": "gpt-5.2",
    "aihubmix": "gpt-5.2",
-   "anyapi": "openai/gpt-5.2",
    "azure": "gpt-5.2",
    "azure-cognitive-services": "gpt-5.2",
    "cloudflare-ai-gateway": "openai/gpt-5.2",
@@ -9011,7 +8963,6 @@
    "302ai",
    "abacus",
    "aihubmix",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -9040,7 +8991,6 @@
    "302ai": "gpt-5.4",
    "abacus": "gpt-5.4",
    "aihubmix": "gpt-5.4",
-   "anyapi": "openai/gpt-5.4",
    "azure": "gpt-5.4",
    "azure-cognitive-services": "gpt-5.4",
    "cloudflare-ai-gateway": "openai/gpt-5.4",
@@ -9109,7 +9059,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "gpt-5.4-mini-2026-03-17",
+   "302ai": "gpt-5.4-mini",
    "aihubmix": "gpt-5.4-mini",
    "azure": "gpt-5.4-mini",
    "azure-cognitive-services": "gpt-5.4-mini",
@@ -9159,7 +9109,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "gpt-5.4-nano",
+   "302ai": "gpt-5.4-nano-2026-03-17",
    "azure": "gpt-5.4-nano",
    "azure-cognitive-services": "gpt-5.4-nano",
    "databricks": "databricks-gpt-5-4-nano",
@@ -9421,7 +9371,6 @@
   "inference_platforms": [
    "302ai",
    "abacus",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "databricks",
@@ -9451,7 +9400,6 @@
   "provider_spellings": {
    "302ai": "gpt-5-mini",
    "abacus": "gpt-5-mini",
-   "anyapi": "openai/gpt-5-mini",
    "azure": "gpt-5-mini",
    "azure-cognitive-services": "gpt-5-mini",
    "databricks": "databricks-gpt-5-mini",
@@ -9801,19 +9749,6 @@
   },
   "release_date": "2026-04-27"
  },
- "gpt-oss": {
-  "author_org": "openai",
-  "display_name": "gpt-oss:20b",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "ollama-cloud"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "ollama-cloud": "gpt-oss:20b"
-  },
-  "release_date": "2025-08-05"
- },
  "gpt-oss-120b": {
   "author_org": "openai",
   "display_name": "GPT OSS 120B",
@@ -9836,6 +9771,7 @@
    "fastrouter",
    "fireworks-ai",
    "frogbot",
+   "google-vertex",
    "groq",
    "helicone",
    "io-net",
@@ -9846,6 +9782,7 @@
    "nebius",
    "novita-ai",
    "nvidia",
+   "ollama-cloud",
    "openrouter",
    "ovhcloud",
    "privatemode-ai",
@@ -9880,17 +9817,19 @@
    "fastrouter": "openai/gpt-oss-120b",
    "fireworks-ai": "accounts/fireworks/models/gpt-oss-120b",
    "frogbot": "gpt-oss-120b",
+   "google-vertex": "openai/gpt-oss-120b-maas",
    "groq": "openai/gpt-oss-120b",
    "helicone": "gpt-oss-120b",
    "io-net": "openai/gpt-oss-120b",
    "kilo": "openai/gpt-oss-120b",
    "llmgateway": "gpt-oss-120b",
-   "nano-gpt": "TEE/gpt-oss-120b",
+   "nano-gpt": "openai/gpt-oss-120b",
    "nearai": "openai/gpt-oss-120b",
-   "nebius": "openai/gpt-oss-120b-fast",
+   "nebius": "openai/gpt-oss-120b",
    "novita-ai": "openai/gpt-oss-120b",
    "nvidia": "openai/gpt-oss-120b",
-   "openrouter": "openai/gpt-oss-120b",
+   "ollama-cloud": "gpt-oss:120b",
+   "openrouter": "openai/gpt-oss-120b:free",
    "ovhcloud": "gpt-oss-120b",
    "privatemode-ai": "gpt-oss-120b",
    "qiniu-ai": "gpt-oss-120b",
@@ -9933,19 +9872,6 @@
   },
   "release_date": "2025-08-05"
  },
- "gpt-oss-120b-maas": {
-  "author_org": "openai",
-  "display_name": "GPT OSS 120B",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "openai/gpt-oss-120b-maas"
-  },
-  "release_date": "2025-08-05"
- },
  "gpt-oss-20b": {
   "author_org": "openai",
   "display_name": "GPT OSS 20B",
@@ -9960,6 +9886,7 @@
    "fastrouter",
    "fireworks-ai",
    "frogbot",
+   "google-vertex",
    "groq",
    "helicone",
    "io-net",
@@ -9970,6 +9897,7 @@
    "neuralwatt",
    "novita-ai",
    "nvidia",
+   "ollama-cloud",
    "openrouter",
    "ovhcloud",
    "qiniu-ai",
@@ -9989,17 +9917,19 @@
    "fastrouter": "openai/gpt-oss-20b",
    "fireworks-ai": "accounts/fireworks/models/gpt-oss-20b",
    "frogbot": "gpt-oss-20b",
+   "google-vertex": "openai/gpt-oss-20b-maas",
    "groq": "openai/gpt-oss-20b",
    "helicone": "gpt-oss-20b",
    "io-net": "openai/gpt-oss-20b",
    "kilo": "openai/gpt-oss-20b",
    "llmgateway": "gpt-oss-20b",
    "lmstudio": "openai/gpt-oss-20b",
-   "nano-gpt": "TEE/gpt-oss-20b",
+   "nano-gpt": "openai/gpt-oss-20b",
    "neuralwatt": "openai/gpt-oss-20b",
    "novita-ai": "openai/gpt-oss-20b",
    "nvidia": "openai/gpt-oss-20b",
-   "openrouter": "openai/gpt-oss-20b:free",
+   "ollama-cloud": "gpt-oss:20b",
+   "openrouter": "openai/gpt-oss-20b",
    "ovhcloud": "gpt-oss-20b",
    "qiniu-ai": "gpt-oss-20b",
    "regolo-ai": "gpt-oss-20b",
@@ -10008,19 +9938,6 @@
    "wandb": "openai/gpt-oss-20b"
   },
   "release_date": "1970-01-01"
- },
- "gpt-oss-20b-maas": {
-  "author_org": "openai",
-  "display_name": "GPT OSS 20B",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "openai/gpt-oss-20b-maas"
-  },
-  "release_date": "2025-08-05"
  },
  "gpt-oss-safeguard-20b": {
   "author_org": "openai",
@@ -10253,15 +10170,15 @@
    "azure": "grok-4-fast-reasoning",
    "azure-cognitive-services": "grok-4-fast-reasoning",
    "fastrouter": "x-ai/grok-4",
-   "helicone": "grok-4-fast-reasoning",
+   "helicone": "grok-4",
    "jiekou": "grok-4-fast-reasoning",
    "llmgateway": "grok-4-fast-reasoning",
-   "nano-gpt": "x-ai/grok-4-07-09",
-   "poe": "xai/grok-4-fast-reasoning",
-   "qiniu-ai": "x-ai/grok-4-fast-reasoning",
-   "requesty": "xai/grok-4",
+   "nano-gpt": "x-ai/grok-4-fast",
+   "poe": "xai/grok-4",
+   "qiniu-ai": "x-ai/grok-4-fast",
+   "requesty": "xai/grok-4-fast",
    "vercel": "xai/grok-4-fast-reasoning",
-   "zenmux": "x-ai/grok-4"
+   "zenmux": "x-ai/grok-4-fast"
   },
   "release_date": "2024-07-09"
  },
@@ -10301,15 +10218,15 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "302ai": "grok-4.1",
+   "302ai": "grok-4-1-fast-reasoning",
    "azure": "grok-4-1-fast-reasoning",
    "frogbot": "grok-4-1-fast-reasoning",
    "helicone": "grok-4-1-fast-reasoning",
    "jiekou": "grok-4-1-fast-reasoning",
    "llmgateway": "grok-4-1-fast-reasoning",
-   "nano-gpt": "x-ai/grok-4.1-fast-reasoning",
+   "nano-gpt": "x-ai/grok-4.1-fast",
    "poe": "xai/grok-4.1-fast-reasoning",
-   "qiniu-ai": "x-ai/grok-4.1-fast-reasoning",
+   "qiniu-ai": "x-ai/grok-4.1-fast",
    "vercel": "xai/grok-4.1-fast-reasoning",
    "zenmux": "x-ai/grok-4.1-fast"
   },
@@ -10564,7 +10481,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "aihubmix",
-   "anyapi",
    "auriko",
    "frogbot",
    "kilo",
@@ -10579,7 +10495,6 @@
   "open_weights": false,
   "provider_spellings": {
    "aihubmix": "grok-4.3",
-   "anyapi": "xai/grok-4.3",
    "auriko": "grok-4.3",
    "frogbot": "grok-4-3",
    "kilo": "x-ai/grok-4.3",
@@ -10792,7 +10707,7 @@
   "open_weights": true,
   "provider_spellings": {
    "kilo": "nousresearch/hermes-3-llama-3.1-405b",
-   "openrouter": "nousresearch/hermes-3-llama-3.1-405b",
+   "openrouter": "nousresearch/hermes-3-llama-3.1-405b:free",
    "venice": "hermes-3-llama-3.1-405b"
   },
   "release_date": "2024-08-16"
@@ -10840,7 +10755,7 @@
   "open_weights": true,
   "provider_spellings": {
    "kilo": "nousresearch/hermes-4-405b",
-   "nano-gpt": "NousResearch 2/hermes-4-405b",
+   "nano-gpt": "NousResearch 2/hermes-4-405b:thinking",
    "nebius": "NousResearch/Hermes-4-405B",
    "openrouter": "nousresearch/hermes-4-405b"
   },
@@ -10861,7 +10776,7 @@
   "provider_spellings": {
    "cortecs": "hermes-4-70b",
    "kilo": "nousresearch/hermes-4-70b",
-   "nano-gpt": "NousResearch 2/hermes-4-70b",
+   "nano-gpt": "NousResearch 2/Hermes-4-70B:thinking",
    "nebius": "NousResearch/Hermes-4-70B",
    "openrouter": "nousresearch/hermes-4-70b"
   },
@@ -11002,7 +10917,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "poe": "ideogramai/ideogram"
+   "poe": "ideogramai/ideogram-v2"
   },
   "release_date": "2024-04-03"
  },
@@ -11015,7 +10930,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "poe": "ideogramai/ideogram-v2a"
+   "poe": "ideogramai/ideogram-v2a-turbo"
   },
   "release_date": "2025-02-27"
  },
@@ -11028,7 +10943,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "poe": "google/imagen-3-fast"
+   "poe": "google/imagen-3"
   },
   "release_date": "2024-10-15"
  },
@@ -11041,7 +10956,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "poe": "google/imagen-4"
+   "poe": "google/imagen-4-fast"
   },
   "release_date": "2025-05-22"
  },
@@ -11356,7 +11271,7 @@
    "nano-gpt": "KAT-Coder-Pro-V1",
    "novita-ai": "kwaipilot/kat-coder-pro",
    "openrouter": "kwaipilot/kat-coder-pro-v2",
-   "vercel": "kwaipilot/kat-coder-pro-v2",
+   "vercel": "kwaipilot/kat-coder-pro-v1",
    "zenmux": "kuaishou/kat-coder-pro-v2"
   },
   "release_date": "2025-10-24"
@@ -11428,6 +11343,7 @@
    "cortecs",
    "deepinfra",
    "fastrouter",
+   "google-vertex",
    "helicone",
    "huggingface",
    "iflowcn",
@@ -11454,7 +11370,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "302ai": "kimi-k2-thinking-turbo",
+   "302ai": "kimi-k2-thinking",
    "alibaba-cn": "kimi-k2-thinking",
    "azure": "kimi-k2-thinking",
    "azure-cognitive-services": "kimi-k2-thinking",
@@ -11462,29 +11378,30 @@
    "cortecs": "kimi-k2-thinking",
    "deepinfra": "moonshotai/Kimi-K2-Thinking",
    "fastrouter": "moonshotai/kimi-k2",
+   "google-vertex": "moonshotai/kimi-k2-thinking-maas",
    "helicone": "kimi-k2-thinking",
    "huggingface": "moonshotai/Kimi-K2-Thinking",
    "iflowcn": "kimi-k2",
    "io-net": "moonshotai/Kimi-K2-Thinking",
-   "kilo": "moonshotai/kimi-k2-thinking",
+   "kilo": "moonshotai/kimi-k2",
    "kimi-for-coding": "kimi-k2-thinking",
-   "llmgateway": "kimi-k2",
+   "llmgateway": "kimi-k2-thinking",
    "meganova": "moonshotai/Kimi-K2-Thinking",
-   "moonshotai": "kimi-k2-thinking-turbo",
-   "moonshotai-cn": "kimi-k2-thinking",
-   "nano-gpt": "moonshotai/kimi-k2-thinking",
+   "moonshotai": "kimi-k2-thinking",
+   "moonshotai-cn": "kimi-k2-thinking-turbo",
+   "nano-gpt": "TEE/kimi-k2-thinking",
    "novita-ai": "moonshotai/kimi-k2-thinking",
    "nvidia": "moonshotai/kimi-k2-thinking",
-   "ollama-cloud": "kimi-k2:1t",
-   "opencode": "kimi-k2-thinking",
-   "openrouter": "moonshotai/kimi-k2",
+   "ollama-cloud": "kimi-k2-thinking",
+   "opencode": "kimi-k2",
+   "openrouter": "moonshotai/kimi-k2-thinking",
    "poe": "novita/kimi-k2-thinking",
-   "qiniu-ai": "kimi-k2",
+   "qiniu-ai": "moonshotai/kimi-k2-thinking",
    "siliconflow": "moonshotai/Kimi-K2-Thinking",
-   "siliconflow-cn": "moonshotai/Kimi-K2-Thinking",
+   "siliconflow-cn": "Pro/moonshotai/Kimi-K2-Thinking",
    "synthetic": "hf:moonshotai/Kimi-K2-Thinking",
-   "vercel": "moonshotai/kimi-k2-thinking-turbo",
-   "zenmux": "moonshotai/kimi-k2-thinking-turbo"
+   "vercel": "moonshotai/kimi-k2",
+   "zenmux": "moonshotai/kimi-k2-thinking"
   },
   "release_date": "2024-11-01"
  },
@@ -11562,6 +11479,19 @@
   },
   "release_date": "2025-09-05"
  },
+ "kimi-k2-1t": {
+  "author_org": "moonshotai",
+  "display_name": "kimi-k2:1t",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "kimi-k2:1t"
+  },
+  "release_date": "2025-07-11"
+ },
  "kimi-k2-5": {
   "author_org": "moonshotai",
   "display_name": "Kimi K2.5",
@@ -11572,7 +11502,6 @@
    "alibaba-cn",
    "alibaba-coding-plan",
    "alibaba-coding-plan-cn",
-   "alibaba-token-plan",
    "auriko",
    "azure",
    "azure-cognitive-services",
@@ -11619,10 +11548,9 @@
   "provider_spellings": {
    "abacus": "kimi-k2.5",
    "aihubmix": "kimi-k2.5",
-   "alibaba-cn": "kimi-k2.5",
+   "alibaba-cn": "kimi/kimi-k2.5",
    "alibaba-coding-plan": "kimi-k2.5",
    "alibaba-coding-plan-cn": "kimi-k2.5",
-   "alibaba-token-plan": "kimi-k2.5",
    "auriko": "kimi-k2.5",
    "azure": "kimi-k2.5",
    "azure-cognitive-services": "kimi-k2.5",
@@ -11643,12 +11571,12 @@
    "meganova": "moonshotai/Kimi-K2.5",
    "moonshotai": "kimi-k2.5",
    "moonshotai-cn": "kimi-k2.5",
-   "nano-gpt": "moonshotai/kimi-k2.5:thinking",
-   "nebius": "moonshotai/Kimi-K2.5",
-   "neuralwatt": "kimi-k2.5-fast",
+   "nano-gpt": "TEE/kimi-k2.5",
+   "nebius": "moonshotai/Kimi-K2.5-fast",
+   "neuralwatt": "moonshotai/Kimi-K2.5",
    "novita-ai": "moonshotai/kimi-k2.5",
    "ollama-cloud": "kimi-k2.5",
-   "opencode": "kimi-k2.5-free",
+   "opencode": "kimi-k2.5",
    "opencode-go": "kimi-k2.5",
    "openrouter": "moonshotai/kimi-k2.5",
    "orcarouter": "kimi/kimi-k2.5",
@@ -11694,7 +11622,7 @@
   "release_date": "2026-02-06"
  },
  "kimi-k2-5-nvfp4": {
-  "author_org": "hf:nvidia",
+  "author_org": "nvidia",
   "display_name": "Kimi K2.5 (NVFP4)",
   "has_author_lab_entry": false,
   "inference_platforms": [
@@ -11713,7 +11641,6 @@
   "inference_platforms": [
    "aihubmix",
    "alibaba-cn",
-   "alibaba-token-plan",
    "ambient",
    "auriko",
    "azure",
@@ -11762,7 +11689,6 @@
   "provider_spellings": {
    "aihubmix": "kimi-k2.6",
    "alibaba-cn": "kimi-k2.6",
-   "alibaba-token-plan": "kimi-k2.6",
    "ambient": "moonshotai/kimi-k2.6",
    "auriko": "kimi-k2.6",
    "azure": "kimi-k2.6",
@@ -11786,14 +11712,14 @@
    "llmgateway": "kimi-k2.6",
    "moonshotai": "kimi-k2.6",
    "moonshotai-cn": "kimi-k2.6",
-   "nano-gpt": "moonshotai/kimi-k2.6",
-   "neuralwatt": "kimi-k2.6-fast",
+   "nano-gpt": "moonshotai/kimi-k2.6:thinking",
+   "neuralwatt": "moonshotai/Kimi-K2.6",
    "novita-ai": "moonshotai/kimi-k2.6",
    "nvidia": "moonshotai/kimi-k2.6",
    "ollama-cloud": "kimi-k2.6",
    "opencode": "kimi-k2.6",
    "opencode-go": "kimi-k2.6",
-   "openrouter": "moonshotai/kimi-k2.6",
+   "openrouter": "moonshotai/kimi-k2.6:free",
    "orcarouter": "kimi/kimi-k2.6",
    "poe": "novita/kimi-k2.6",
    "routing-run": "route/kimi-k2.6",
@@ -11844,7 +11770,7 @@
    "groq": "moonshotai/kimi-k2-instruct",
    "huggingface": "moonshotai/Kimi-K2-Instruct",
    "jiekou": "moonshotai/kimi-k2-instruct",
-   "nano-gpt": "kimi-k2-instruct-fast",
+   "nano-gpt": "moonshotai/kimi-k2-instruct",
    "novita-ai": "moonshotai/kimi-k2-instruct",
    "nvidia": "moonshotai/kimi-k2-instruct",
    "siliconflow": "moonshotai/Kimi-K2-Instruct"
@@ -11890,7 +11816,7 @@
    "nano-gpt": "moonshotai/Kimi-K2-Instruct-0905",
    "nvidia": "moonshotai/kimi-k2-instruct-0905",
    "siliconflow": "moonshotai/Kimi-K2-Instruct-0905",
-   "siliconflow-cn": "moonshotai/Kimi-K2-Instruct-0905",
+   "siliconflow-cn": "Pro/moonshotai/Kimi-K2-Instruct-0905",
    "synthetic": "hf:moonshotai/Kimi-K2-Instruct-0905"
   },
   "release_date": "2024-09-05"
@@ -11907,19 +11833,6 @@
    "nano-gpt": "baseten/Kimi-K2-Instruct-FP4"
   },
   "release_date": "2025-07-11"
- },
- "kimi-k2-thinking-maas": {
-  "author_org": "moonshotai",
-  "display_name": "Kimi K2 Thinking",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "moonshotai/kimi-k2-thinking-maas"
-  },
-  "release_date": "2025-11-13"
  },
  "kimi-k2-thinking-original": {
   "author_org": "moonshotai",
@@ -11988,7 +11901,7 @@
   "open_weights": true,
   "provider_spellings": {
    "firepass": "accounts/fireworks/routers/kimi-k2p6-turbo",
-   "fireworks-ai": "accounts/fireworks/models/kimi-k2p6"
+   "fireworks-ai": "accounts/fireworks/routers/kimi-k2p6-turbo"
   },
   "release_date": "2026-04-17"
  },
@@ -12490,7 +12403,7 @@
   "release_date": "2024-12-01"
  },
  "llama-3-1-405b-instruct": {
-  "author_org": "hf:meta-llama",
+  "author_org": "meta-llama",
   "display_name": "Llama 3.1 405B Instruct",
   "has_author_lab_entry": false,
   "inference_platforms": [
@@ -12532,7 +12445,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "deepinfra": "meta-llama/Llama-3.1-70B-Instruct",
+   "deepinfra": "meta-llama/Llama-3.1-70B-Instruct-Turbo",
    "kilo": "meta-llama/llama-3.1-70b-instruct",
    "llmgateway": "llama-3.1-70b-instruct",
    "nvidia": "meta/llama-3.1-70b-instruct",
@@ -12607,11 +12520,11 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "cloudflare-ai-gateway": "workers-ai/@cf/meta/llama-3.1-8b-instruct-awq",
+   "cloudflare-ai-gateway": "workers-ai/@cf/meta/llama-3.1-8b-instruct",
    "cloudflare-workers-ai": "@cf/meta/llama-3.1-8b-instruct-fp8",
-   "deepinfra": "meta-llama/Llama-3.1-8B-Instruct-Turbo",
+   "deepinfra": "meta-llama/Llama-3.1-8B-Instruct",
    "friendli": "meta-llama/Llama-3.1-8B-Instruct",
-   "helicone": "llama-3.1-8b-instruct-turbo",
+   "helicone": "llama-3.1-8b-instruct",
    "inference": "meta/llama-3.1-8b-instruct",
    "kilo": "meta-llama/llama-3.1-8b-instruct",
    "llmgateway": "llama-3.1-8b-instruct",
@@ -12819,7 +12732,7 @@
    "nano-gpt": "meta-llama/llama-3.2-3b-instruct",
    "novita-ai": "meta-llama/llama-3.2-3b-instruct",
    "nvidia": "meta/llama-3.2-3b-instruct",
-   "openrouter": "meta-llama/llama-3.2-3b-instruct:free"
+   "openrouter": "meta-llama/llama-3.2-3b-instruct"
   },
   "release_date": "2024-09-18"
  },
@@ -12881,7 +12794,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "nano-gpt": "Llama-3.3+(3.1v3.3)-70B-Hanami-x1"
+   "nano-gpt": "Llama-3.3+(3v3.3)-70B-TenyxChat-DaybreakStorywriter"
   },
   "release_date": "2024-12-06"
  },
@@ -12935,7 +12848,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "nano-gpt": "Llama-3.3-70B-ArliAI-RPMax-v2"
+   "nano-gpt": "Llama-3.3-70B-ArliAI-RPMax-v3"
   },
   "release_date": "2024-12-06"
  },
@@ -13189,6 +13102,7 @@
    "evroc",
    "friendli",
    "github-models",
+   "google-vertex",
    "helicone",
    "inceptron",
    "io-net",
@@ -13220,6 +13134,7 @@
    "evroc": "nvidia/Llama-3.3-70B-Instruct-FP8",
    "friendli": "meta-llama/Llama-3.3-70B-Instruct",
    "github-models": "meta/llama-3.3-70b-instruct",
+   "google-vertex": "meta/llama-3.3-70b-instruct-maas",
    "helicone": "llama-3.3-70b-instruct",
    "inceptron": "nvidia/llama-3.3-70b-instruct-fp8",
    "io-net": "meta-llama/Llama-3.3-70B-Instruct",
@@ -13231,7 +13146,7 @@
    "nebius": "meta-llama/Llama-3.3-70B-Instruct",
    "novita-ai": "meta-llama/llama-3.3-70b-instruct",
    "nvidia": "meta/llama-3.3-70b-instruct",
-   "openrouter": "meta-llama/llama-3.3-70b-instruct:free",
+   "openrouter": "meta-llama/llama-3.3-70b-instruct",
    "regolo-ai": "llama-3.3-70b-instruct",
    "scaleway": "llama-3.3-70b-instruct",
    "synthetic": "hf:meta-llama/Llama-3.3-70B-Instruct",
@@ -13265,19 +13180,6 @@
    "stackit": "cortecs/Llama-3.3-70B-Instruct-FP8-Dynamic"
   },
   "release_date": "2024-12-05"
- },
- "llama-3-3-70b-instruct-maas": {
-  "author_org": "meta",
-  "display_name": "Llama 3.3 70B Instruct",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "meta/llama-3.3-70b-instruct-maas"
-  },
-  "release_date": "2025-04-29"
  },
  "llama-3-3-70b-legion-v2-1": {
   "author_org": "meta-llama",
@@ -13622,7 +13524,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "cloudflare-ai-gateway": "workers-ai/@cf/meta/llama-3-8b-instruct",
+   "cloudflare-ai-gateway": "workers-ai/@cf/meta/llama-3-8b-instruct-awq",
    "kilo": "meta-llama/llama-3-8b-instruct",
    "llmgateway": "llama-3-8b-instruct",
    "novita-ai": "meta-llama/llama-3-8b-instruct",
@@ -13676,6 +13578,7 @@
    "azure-cognitive-services",
    "deepinfra",
    "github-models",
+   "google-vertex",
    "groq",
    "io-net",
    "llama",
@@ -13690,6 +13593,7 @@
    "azure-cognitive-services": "llama-4-maverick-17b-128e-instruct-fp8",
    "deepinfra": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
    "github-models": "meta/llama-4-maverick-17b-128e-instruct-fp8",
+   "google-vertex": "meta/llama-4-maverick-17b-128e-instruct-maas",
    "groq": "meta-llama/llama-4-maverick-17b-128e-instruct",
    "io-net": "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8",
    "llama": "llama-4-maverick-17b-128e-instruct-fp8",
@@ -13698,19 +13602,6 @@
    "synthetic": "hf:meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"
   },
   "release_date": "2025-01-15"
- },
- "llama-4-maverick-17b-128e-instruct-maas": {
-  "author_org": "meta",
-  "display_name": "Llama 4 Maverick 17B 128E Instruct",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "meta/llama-4-maverick-17b-128e-instruct-maas"
-  },
-  "release_date": "2025-04-29"
  },
  "llama-4-maverick-17b-instruct": {
   "author_org": "meta-llama",
@@ -14031,7 +13922,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "amazon-bedrock": "meta.llama4-maverick-17b-instruct-v1:0"
+   "amazon-bedrock": "us.meta.llama4-maverick-17b-instruct-v1:0"
   },
   "release_date": "2025-04-05"
  },
@@ -14044,7 +13935,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "amazon-bedrock": "meta.llama4-scout-17b-instruct-v1:0"
+   "amazon-bedrock": "us.meta.llama4-scout-17b-instruct-v1:0"
   },
   "release_date": "2025-04-05"
  },
@@ -14758,11 +14649,11 @@
    "kilo": "xiaomi/mimo-v2-flash",
    "llmgateway": "mimo-v2-flash",
    "meganova": "XiaomiMiMo/MiMo-V2-Flash",
-   "nano-gpt": "xiaomi/mimo-v2-flash-thinking",
+   "nano-gpt": "xiaomi/mimo-v2-flash",
    "novita-ai": "xiaomimimo/mimo-v2-flash",
    "opencode": "mimo-v2-flash-free",
    "openrouter": "xiaomi/mimo-v2-flash",
-   "qiniu-ai": "mimo-v2-flash",
+   "qiniu-ai": "xiaomi/mimo-v2-flash",
    "vercel": "xiaomi/mimo-v2-flash",
    "xiaomi": "mimo-v2-flash",
    "zenmux": "xiaomi/mimo-v2-flash"
@@ -15024,10 +14915,10 @@
    "minimax-cn-coding-plan": "MiniMax-M2.1",
    "minimax-coding-plan": "MiniMax-M2.1",
    "moark": "MiniMax-M2.1",
-   "nano-gpt": "TEE/minimax-m2.1",
+   "nano-gpt": "minimax/minimax-m2.1",
    "novita-ai": "minimax/minimax-m2.1",
    "ollama-cloud": "minimax-m2.1",
-   "opencode": "minimax-m2.1",
+   "opencode": "minimax-m2.1-free",
    "openrouter": "minimax/minimax-m2.1",
    "poe": "novita/minimax-m2.1",
    "qiniu-ai": "minimax/minimax-m2.1",
@@ -15062,7 +14953,6 @@
    "alibaba-cn",
    "alibaba-coding-plan",
    "alibaba-coding-plan-cn",
-   "alibaba-token-plan",
    "baseten",
    "chutes",
    "cloudferro-sherlock",
@@ -15111,7 +15001,6 @@
    "alibaba-cn": "MiniMax-M2.5",
    "alibaba-coding-plan": "MiniMax-M2.5",
    "alibaba-coding-plan-cn": "MiniMax-M2.5",
-   "alibaba-token-plan": "MiniMax-M2.5",
    "baseten": "MiniMaxAI/MiniMax-M2.5",
    "chutes": "MiniMaxAI/MiniMax-M2.5-TEE",
    "cloudferro-sherlock": "MiniMaxAI/MiniMax-M2.5",
@@ -15134,12 +15023,12 @@
    "minimax-cn-coding-plan": "MiniMax-M2.5",
    "minimax-coding-plan": "MiniMax-M2.5",
    "nano-gpt": "minimax/minimax-m2.5",
-   "nebius": "MiniMaxAI/MiniMax-M2.5",
+   "nebius": "MiniMaxAI/MiniMax-M2.5-fast",
    "neuralwatt": "MiniMaxAI/MiniMax-M2.5",
    "novita-ai": "minimax/minimax-m2.5",
    "nvidia": "minimaxai/minimax-m2.5",
    "ollama-cloud": "minimax-m2.5",
-   "opencode": "minimax-m2.5",
+   "opencode": "minimax-m2.5-free",
    "opencode-go": "minimax-m2.5",
    "openrouter": "minimax/minimax-m2.5",
    "orcarouter": "minimax/minimax-m2.5",
@@ -15519,7 +15408,7 @@
   },
   "release_date": "2025-12-02"
  },
- "ministral-3": {
+ "ministral-3-14b": {
   "author_org": "mistralai",
   "display_name": "ministral-3:14b",
   "has_author_lab_entry": false,
@@ -15530,7 +15419,7 @@
   "provider_spellings": {
    "ollama-cloud": "ministral-3:14b"
   },
-  "release_date": "2024-10-22"
+  "release_date": "2024-12-01"
  },
  "ministral-3-14b-instruct": {
   "author_org": "mistralai",
@@ -15558,6 +15447,19 @@
   },
   "release_date": "2025-12-01"
  },
+ "ministral-3-3b": {
+  "author_org": "mistralai",
+  "display_name": "ministral-3:3b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "ministral-3:3b"
+  },
+  "release_date": "2024-10-22"
+ },
  "ministral-3-3b-instruct": {
   "author_org": "mistralai",
   "display_name": "Ministral 3 3B",
@@ -15583,6 +15485,19 @@
    "clarifai": "mistralai/completion/models/Ministral-3-3B-Reasoning-2512"
   },
   "release_date": "2025-12"
+ },
+ "ministral-3-8b": {
+  "author_org": "mistralai",
+  "display_name": "ministral-3:8b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "ministral-3:8b"
+  },
+  "release_date": "2024-12-01"
  },
  "ministral-3-8b-instruct": {
   "author_org": "mistralai",
@@ -15839,7 +15754,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "302ai",
-   "anyapi",
    "cortecs",
    "kilo",
    "llmgateway",
@@ -15850,7 +15764,6 @@
   "open_weights": true,
   "provider_spellings": {
    "302ai": "mistral-large-2512",
-   "anyapi": "mistralai/mistral-large-2512",
    "cortecs": "mistral-large-2512",
    "kilo": "mistralai/mistral-large-2512",
    "llmgateway": "mistral-large-2512",
@@ -15865,17 +15778,28 @@
   "display_name": "Mistral Large 3",
   "has_author_lab_entry": false,
   "inference_platforms": [
-   "ollama-cloud",
    "routing-run",
    "vercel"
   ],
   "open_weights": true,
   "provider_spellings": {
-   "ollama-cloud": "mistral-large-3:675b",
    "routing-run": "route/mistral-large-3",
    "vercel": "mistral/mistral-large-3"
   },
   "release_date": "2024-11-01"
+ },
+ "mistral-large-3-675b": {
+  "author_org": "mistralai",
+  "display_name": "mistral-large-3:675b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "mistral-large-3:675b"
+  },
+  "release_date": "2025-12-02"
  },
  "mistral-large-3-675b-instruct": {
   "author_org": "mistralai",
@@ -16789,29 +16713,18 @@
   },
   "release_date": "2026-04-16"
  },
- "nemotron-3-nano": {
+ "nemotron-3-nano-30b": {
   "author_org": "nvidia",
   "display_name": "nemotron-3-nano:30b",
   "has_author_lab_entry": false,
   "inference_platforms": [
+   "digitalocean",
    "ollama-cloud"
   ],
   "open_weights": true,
   "provider_spellings": {
+   "digitalocean": "nemotron-3-nano-30b",
    "ollama-cloud": "nemotron-3-nano:30b"
-  },
-  "release_date": "2025-12-15"
- },
- "nemotron-3-nano-30b": {
-  "author_org": "nvidia",
-  "display_name": "Nemotron 3 Nano 30B A3B",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "digitalocean"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "digitalocean": "nemotron-3-nano-30b"
   },
   "release_date": "2025-04-14"
  },
@@ -16831,7 +16744,7 @@
    "kilo": "nvidia/nemotron-3-nano-30b-a3b",
    "nano-gpt": "nvidia/nemotron-3-nano-30b-a3b",
    "nvidia": "nvidia/nemotron-3-nano-30b-a3b",
-   "openrouter": "nvidia/nemotron-3-nano-30b-a3b",
+   "openrouter": "nvidia/nemotron-3-nano-30b-a3b:free",
    "vercel": "nvidia/nemotron-3-nano-30b-a3b"
   },
   "release_date": "2024-12"
@@ -16901,10 +16814,10 @@
   "open_weights": true,
   "provider_spellings": {
    "cortecs": "nemotron-3-super-120b-a12b",
-   "kilo": "nvidia/nemotron-3-super-120b-a12b:free",
+   "kilo": "nvidia/nemotron-3-super-120b-a12b",
    "nebius": "nvidia/nemotron-3-super-120b-a12b",
    "nvidia": "nvidia/nemotron-3-super-120b-a12b",
-   "openrouter": "nvidia/nemotron-3-super-120b-a12b:free",
+   "openrouter": "nvidia/nemotron-3-super-120b-a12b",
    "perplexity-agent": "nvidia/nemotron-3-super-120b-a12b",
    "vercel": "nvidia/nemotron-3-super-120b-a12b"
   },
@@ -16978,7 +16891,7 @@
   "open_weights": true,
   "provider_spellings": {
    "kilo": "nvidia/nemotron-nano-9b-v2",
-   "openrouter": "nvidia/nemotron-nano-9b-v2",
+   "openrouter": "nvidia/nemotron-nano-9b-v2:free",
    "vercel": "nvidia/nemotron-nano-9b-v2"
   },
   "release_date": "2025-08-18"
@@ -17206,7 +17119,7 @@
   "release_date": "2026-03-11"
  },
  "nvidia-nemotron-3-super-120b-a12b-nvfp4": {
-  "author_org": "hf:nvidia",
+  "author_org": "nvidia",
   "display_name": "Nemotron 3 Super 120B",
   "has_author_lab_entry": false,
   "inference_platforms": [
@@ -17329,7 +17242,7 @@
    "kilo": "openai/o1",
    "llmgateway": "o1",
    "merge-gateway": "openai/o1",
-   "nano-gpt": "azure-o1",
+   "nano-gpt": "openai/o1",
    "openai": "o1",
    "openrouter": "openai/o1",
    "poe": "openai/o1",
@@ -17406,7 +17319,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "abacus",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -17427,7 +17339,6 @@
   "open_weights": false,
   "provider_spellings": {
    "abacus": "o3",
-   "anyapi": "openai/o3",
    "azure": "o3",
    "azure-cognitive-services": "o3",
    "cloudflare-ai-gateway": "openai/o3",
@@ -17476,7 +17387,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "abacus",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -17497,7 +17407,6 @@
   "open_weights": false,
   "provider_spellings": {
    "abacus": "o3-mini",
-   "anyapi": "openai/o3-mini",
    "azure": "o3-mini",
    "azure-cognitive-services": "o3-mini",
    "cloudflare-ai-gateway": "openai/o3-mini",
@@ -17508,7 +17417,7 @@
    "kilo": "openai/o3-mini",
    "llmgateway": "o3-mini",
    "merge-gateway": "openai/o3-mini",
-   "nano-gpt": "azure-o3-mini",
+   "nano-gpt": "openai/o3-mini",
    "nearai": "openai/o3-mini",
    "openai": "o3-mini",
    "openrouter": "openai/o3-mini",
@@ -17584,7 +17493,6 @@
   "has_author_lab_entry": true,
   "inference_platforms": [
    "abacus",
-   "anyapi",
    "azure",
    "azure-cognitive-services",
    "cloudflare-ai-gateway",
@@ -17605,7 +17513,6 @@
   "open_weights": false,
   "provider_spellings": {
    "abacus": "o4-mini",
-   "anyapi": "openai/o4-mini",
    "azure": "o4-mini",
    "azure-cognitive-services": "o4-mini",
    "cloudflare-ai-gateway": "openai/o4-mini",
@@ -18125,9 +18032,9 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "azure": "phi-4-reasoning",
-   "azure-cognitive-services": "phi-4",
-   "github-models": "microsoft/phi-4-reasoning",
+   "azure": "phi-4",
+   "azure-cognitive-services": "phi-4-reasoning",
+   "github-models": "microsoft/phi-4",
    "kilo": "microsoft/phi-4",
    "openrouter": "microsoft/phi-4"
   },
@@ -18144,8 +18051,8 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "azure": "phi-4-mini",
-   "azure-cognitive-services": "phi-4-mini-reasoning",
+   "azure": "phi-4-mini-reasoning",
+   "azure-cognitive-services": "phi-4-mini",
    "github-models": "microsoft/phi-4-mini-reasoning"
   },
   "release_date": "2024-12-11"
@@ -18623,26 +18530,18 @@
   "author_org": "qwen",
   "display_name": "Qwen Image 2.0",
   "has_author_lab_entry": false,
-  "inference_platforms": [
-   "alibaba-token-plan"
-  ],
+  "inference_platforms": [],
   "open_weights": false,
-  "provider_spellings": {
-   "alibaba-token-plan": "qwen-image-2.0"
-  },
+  "provider_spellings": {},
   "release_date": "2026-03-03"
  },
  "qwen-image-2-0-pro": {
   "author_org": "qwen",
   "display_name": "Qwen Image 2.0 Pro",
   "has_author_lab_entry": false,
-  "inference_platforms": [
-   "alibaba-token-plan"
-  ],
+  "inference_platforms": [],
   "open_weights": false,
-  "provider_spellings": {
-   "alibaba-token-plan": "qwen-image-2.0-pro"
-  },
+  "provider_spellings": {},
   "release_date": "2026-03-03"
  },
  "qwen-image-edit": {
@@ -18716,7 +18615,7 @@
    "302ai": "qwen-max-latest",
    "alibaba": "qwen-max",
    "alibaba-cn": "qwen-max",
-   "llmgateway": "qwen-max-latest",
+   "llmgateway": "qwen-max",
    "nano-gpt": "qwen-max",
    "qiniu-ai": "qwen-max-2025-01-25"
   },
@@ -18804,10 +18703,10 @@
    "302ai": "qwen-plus",
    "alibaba": "qwen-plus",
    "alibaba-cn": "qwen-plus",
-   "kilo": "qwen/qwen-plus-2025-07-28",
-   "llmgateway": "qwen-plus-latest",
+   "kilo": "qwen/qwen-plus",
+   "llmgateway": "qwen-plus",
    "nano-gpt": "qwen-plus",
-   "openrouter": "qwen/qwen-plus-2025-07-28"
+   "openrouter": "qwen/qwen-plus"
   },
   "release_date": "2024-01-25"
  },
@@ -18929,7 +18828,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "nano-gpt": "Qwen2.5-32B-EVA-v0.2"
+   "nano-gpt": "EVA-UNIT-01/EVA-Qwen2.5-32B-v0.2"
   },
   "release_date": "2024-09-01"
  },
@@ -19358,6 +19257,7 @@
    "chutes",
    "cortecs",
    "friendli",
+   "google-vertex",
    "jiekou",
    "llmgateway",
    "meganova",
@@ -19380,6 +19280,7 @@
    "chutes": "Qwen/Qwen3-235B-A22B-Instruct-2507-TEE",
    "cortecs": "qwen3-235b-a22b-instruct-2507",
    "friendli": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+   "google-vertex": "qwen/qwen3-235b-a22b-instruct-2507-maas",
    "jiekou": "qwen/qwen3-235b-a22b-instruct-2507",
    "llmgateway": "qwen3-235b-a22b-instruct-2507",
    "meganova": "Qwen/Qwen3-235B-A22B-Instruct-2507",
@@ -19396,19 +19297,6 @@
    "wandb": "Qwen/Qwen3-235B-A22B-Instruct-2507"
   },
   "release_date": "2025-04-28"
- },
- "qwen3-235b-a22b-instruct-2507-maas": {
-  "author_org": "qwen",
-  "display_name": "Qwen3 235B A22B Instruct",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "google-vertex"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "google-vertex": "qwen/qwen3-235b-a22b-instruct-2507-maas"
-  },
-  "release_date": "2025-08-13"
  },
  "qwen3-235b-a22b-instruct-2507-tput": {
   "author_org": "Qwen",
@@ -19542,7 +19430,7 @@
    "kilo": "qwen/qwen3-30b-a3b-instruct-2507",
    "llmgateway": "qwen3-30b-a3b-instruct-2507",
    "modelscope": "Qwen/Qwen3-30B-A3B-Instruct-2507",
-   "nano-gpt": "qwen3-30b-a3b-instruct-2507",
+   "nano-gpt": "TEE/qwen3-30b-a3b-instruct-2507",
    "nearai": "Qwen/Qwen3-30B-A3B-Instruct-2507",
    "nebius": "Qwen/Qwen3-30B-A3B-Instruct-2507",
    "openrouter": "qwen/qwen3-30b-a3b-instruct-2507",
@@ -19618,7 +19506,7 @@
    "iflowcn": "qwen3-32b",
    "jiekou": "qwen/qwen3-32b-fp8",
    "kilo": "qwen/qwen3-32b",
-   "llmgateway": "qwen3-32b-fp8",
+   "llmgateway": "qwen3-32b",
    "nebius": "Qwen/Qwen3-32B",
    "novita-ai": "qwen/qwen3-32b-fp8",
    "openrouter": "qwen/qwen3-32b",
@@ -19656,19 +19544,6 @@
    "novita-ai": "qwen/qwen3-4b-fp8"
   },
   "release_date": "2025-04-28"
- },
- "qwen3-5": {
-  "author_org": "qwen",
-  "display_name": "qwen3.5:397b",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
-   "ollama-cloud"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "ollama-cloud": "qwen3.5:397b"
-  },
-  "release_date": "2026-02-15"
  },
  "qwen3-5-122b": {
   "author_org": "qwen",
@@ -19770,14 +19645,16 @@
  },
  "qwen3-5-397b": {
   "author_org": "qwen",
-  "display_name": "Qwen3.5 397B Fast",
+  "display_name": "qwen3.5:397b",
   "has_author_lab_entry": false,
   "inference_platforms": [
-   "neuralwatt"
+   "neuralwatt",
+   "ollama-cloud"
   ],
   "open_weights": true,
   "provider_spellings": {
-   "neuralwatt": "qwen3.5-397b-fast"
+   "neuralwatt": "qwen3.5-397b-fast",
+   "ollama-cloud": "qwen3.5:397b"
   },
   "release_date": "2026-02-01"
  },
@@ -19824,8 +19701,8 @@
    "huggingface": "Qwen/Qwen3.5-397B-A17B",
    "kilo": "qwen/qwen3.5-397b-a17b",
    "mixlayer": "qwen/qwen3.5-397b-a17b",
-   "nano-gpt": "qwen/qwen3.5-397b-a17b",
-   "nebius": "Qwen/Qwen3.5-397B-A17B",
+   "nano-gpt": "TEE/qwen3.5-397b-a17b",
+   "nebius": "Qwen/Qwen3.5-397B-A17B-fast",
    "neuralwatt": "Qwen/Qwen3.5-397B-A17B-FP8",
    "novita-ai": "qwen/qwen3.5-397b-a17b",
    "nvidia": "qwen/qwen3.5-397b-a17b",
@@ -19953,11 +19830,11 @@
    "alibaba-cn": "qwen3.5-plus",
    "alibaba-coding-plan": "qwen3.5-plus",
    "alibaba-coding-plan-cn": "qwen3.5-plus",
-   "kilo": "qwen/qwen3.5-plus-02-15",
+   "kilo": "qwen/qwen3.5-plus-20260420",
    "meganova": "Qwen/Qwen3.5-Plus",
    "opencode": "qwen3.5-plus",
    "opencode-go": "qwen3.5-plus",
-   "openrouter": "qwen/qwen3.5-plus-02-15",
+   "openrouter": "qwen/qwen3.5-plus-20260420",
    "orcarouter": "qwen/qwen3.5-plus",
    "vercel": "alibaba/qwen3.5-plus",
    "zenmux": "qwen/qwen3.5-plus"
@@ -20043,7 +19920,7 @@
    "deepinfra": "Qwen/Qwen3.6-35B-A3B",
    "kilo": "qwen/qwen3.6-35b-a3b",
    "llmgateway": "qwen3.6-35b-a3b",
-   "nano-gpt": "qwen/Qwen3.6-35B-A3B",
+   "nano-gpt": "qwen/Qwen3.6-35B-A3B:thinking",
    "nearai": "Qwen/Qwen3.6-35B-A3B-FP8",
    "neuralwatt": "Qwen/Qwen3.6-35B-A3B",
    "openrouter": "qwen/qwen3.6-35b-a3b",
@@ -20064,7 +19941,6 @@
    "alibaba-cn",
    "alibaba-coding-plan",
    "alibaba-coding-plan-cn",
-   "alibaba-token-plan",
    "kilo",
    "nano-gpt",
    "openrouter"
@@ -20076,7 +19952,6 @@
    "alibaba-cn": "qwen3.6-flash",
    "alibaba-coding-plan": "qwen3.6-flash",
    "alibaba-coding-plan-cn": "qwen3.6-flash",
-   "alibaba-token-plan": "qwen3.6-flash",
    "kilo": "qwen/qwen3.6-flash",
    "nano-gpt": "alibaba/qwen3.6-flash",
    "openrouter": "qwen/qwen3.6-flash"
@@ -20118,7 +19993,6 @@
    "alibaba-cn",
    "alibaba-coding-plan",
    "alibaba-coding-plan-cn",
-   "alibaba-token-plan",
    "kilo",
    "llmgateway",
    "opencode",
@@ -20136,10 +20010,9 @@
    "alibaba-cn": "qwen3.6-plus",
    "alibaba-coding-plan": "qwen3.6-plus",
    "alibaba-coding-plan-cn": "qwen3.6-plus",
-   "alibaba-token-plan": "qwen3.6-plus",
    "kilo": "qwen/qwen3.6-plus",
    "llmgateway": "qwen3.6-plus",
-   "opencode": "qwen3.6-plus",
+   "opencode": "qwen3.6-plus-free",
    "opencode-go": "qwen3.6-plus",
    "openrouter": "qwen/qwen3.6-plus",
    "orcarouter": "qwen/qwen3.6-plus",
@@ -20158,7 +20031,6 @@
    "alibaba-cn",
    "alibaba-coding-plan",
    "alibaba-coding-plan-cn",
-   "alibaba-token-plan",
    "kilo",
    "llmgateway",
    "novita-ai",
@@ -20174,7 +20046,6 @@
    "alibaba-cn": "qwen3.7-max",
    "alibaba-coding-plan": "qwen3.7-max",
    "alibaba-coding-plan-cn": "qwen3.7-max",
-   "alibaba-token-plan": "qwen3.7-max",
    "kilo": "qwen/qwen3.7-max",
    "llmgateway": "qwen3.7-max",
    "novita-ai": "qwen/qwen3.7-max",
@@ -20235,7 +20106,6 @@
    "helicone",
    "kilo",
    "nano-gpt",
-   "ollama-cloud",
    "opencode",
    "openrouter",
    "vercel"
@@ -20246,9 +20116,8 @@
    "helicone": "qwen3-coder",
    "kilo": "qwen/qwen3-coder",
    "nano-gpt": "TEE/qwen3-coder",
-   "ollama-cloud": "qwen3-coder:480b",
    "opencode": "qwen3-coder",
-   "openrouter": "qwen/qwen3-coder:free",
+   "openrouter": "qwen/qwen3-coder",
    "vercel": "alibaba/qwen3-coder"
   },
   "release_date": "2025-04"
@@ -20324,6 +20193,19 @@
   },
   "release_date": "2025-04"
  },
+ "qwen3-coder-480b": {
+  "author_org": "qwen",
+  "display_name": "qwen3-coder:480b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "qwen3-coder:480b"
+  },
+  "release_date": "2025-07-22"
+ },
  "qwen3-coder-480b-a35b": {
   "author_org": "qwen",
   "display_name": "Qwen3 Coder 480B A35B Instruct",
@@ -20369,7 +20251,7 @@
    "alibaba": "qwen3-coder-480b-a35b-instruct",
    "alibaba-cn": "qwen3-coder-480b-a35b-instruct",
    "cortecs": "qwen3-coder-480b-a35b-instruct",
-   "deepinfra": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+   "deepinfra": "Qwen/Qwen3-Coder-480B-A35B-Instruct-Turbo",
    "huggingface": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
    "jiekou": "qwen/qwen3-coder-480b-a35b-instruct",
    "llmgateway": "qwen3-coder-480b-a35b-instruct",
@@ -20599,14 +20481,14 @@
    "alibaba-coding-plan": "qwen3-max-2026-01-23",
    "alibaba-coding-plan-cn": "qwen3-max-2026-01-23",
    "iflowcn": "qwen3-max",
-   "kilo": "qwen/qwen3-max",
-   "llmgateway": "qwen3-max-2026-01-23",
+   "kilo": "qwen/qwen3-max-thinking",
+   "llmgateway": "qwen3-max",
    "nano-gpt": "qwen3-max-2026-01-23",
    "novita-ai": "qwen/qwen3-max",
-   "openrouter": "qwen/qwen3-max",
+   "openrouter": "qwen/qwen3-max-thinking",
    "orcarouter": "qwen/qwen3-max",
    "qiniu-ai": "qwen3-max",
-   "vercel": "alibaba/qwen3-max",
+   "vercel": "alibaba/qwen3-max-thinking",
    "zenmux": "qwen/qwen3-max"
   },
   "release_date": "2025-01"
@@ -20628,28 +20510,17 @@
   },
   "release_date": "2025-01-01"
  },
- "qwen3-next": {
+ "qwen3-next-80b": {
   "author_org": "qwen",
   "display_name": "qwen3-next:80b",
   "has_author_lab_entry": false,
   "inference_platforms": [
-   "ollama-cloud"
-  ],
-  "open_weights": true,
-  "provider_spellings": {
-   "ollama-cloud": "qwen3-next:80b"
-  },
-  "release_date": "2025-09-15"
- },
- "qwen3-next-80b": {
-  "author_org": "qwen",
-  "display_name": "Qwen 3 Next 80b",
-  "has_author_lab_entry": false,
-  "inference_platforms": [
+   "ollama-cloud",
    "venice"
   ],
   "open_weights": true,
   "provider_spellings": {
+   "ollama-cloud": "qwen3-next:80b",
    "venice": "qwen3-next-80b"
   },
   "release_date": "2025-04-29"
@@ -20686,7 +20557,7 @@
    "jiekou": "qwen/qwen3-next-80b-a3b-thinking",
    "kilo": "qwen/qwen3-next-80b-a3b-thinking",
    "llmgateway": "qwen3-next-80b-a3b-thinking",
-   "nebius": "Qwen/Qwen3-Next-80B-A3B-Thinking-fast",
+   "nebius": "Qwen/Qwen3-Next-80B-A3B-Thinking",
    "novita-ai": "qwen/qwen3-next-80b-a3b-thinking",
    "nvidia": "qwen/qwen3-next-80b-a3b-thinking",
    "openrouter": "qwen/qwen3-next-80b-a3b-thinking",
@@ -20732,7 +20603,7 @@
    "llmgateway": "qwen3-next-80b-a3b-instruct",
    "novita-ai": "qwen/qwen3-next-80b-a3b-instruct",
    "nvidia": "qwen/qwen3-next-80b-a3b-instruct",
-   "openrouter": "qwen/qwen3-next-80b-a3b-instruct:free",
+   "openrouter": "qwen/qwen3-next-80b-a3b-instruct",
    "qiniu-ai": "qwen3-next-80b-a3b-instruct",
    "siliconflow": "Qwen/Qwen3-Next-80B-A3B-Instruct",
    "siliconflow-cn": "Qwen/Qwen3-Next-80B-A3B-Instruct",
@@ -20870,6 +20741,19 @@
   "provider_spellings": {
    "ollama-cloud": "qwen3-vl:235b-instruct",
    "vercel": "alibaba/qwen3-vl-thinking"
+  },
+  "release_date": "2025-09-22"
+ },
+ "qwen3-vl-235b": {
+  "author_org": "qwen",
+  "display_name": "qwen3-vl:235b",
+  "has_author_lab_entry": false,
+  "inference_platforms": [
+   "ollama-cloud"
+  ],
+  "open_weights": true,
+  "provider_spellings": {
+   "ollama-cloud": "qwen3-vl:235b"
   },
   "release_date": "2025-09-22"
  },
@@ -21282,7 +21166,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "amazon-bedrock": "deepseek.r1-v1:0"
+   "amazon-bedrock": "us.deepseek.r1-v1:0"
   },
   "release_date": "2025-01-20"
  },
@@ -21321,7 +21205,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "vercel": "recraft/recraft-v2"
+   "vercel": "recraft/recraft-v3"
   },
   "release_date": "2024-03"
  },
@@ -21477,7 +21361,7 @@
   },
   "release_date": "2025-12-12"
  },
- "rnj-1": {
+ "rnj-1-8b": {
   "author_org": null,
   "display_name": "rnj-1:8b",
   "has_author_lab_entry": false,
@@ -21669,7 +21553,7 @@
   "open_weights": true,
   "provider_spellings": {
    "kilo": "bytedance-seed/seed-1.6",
-   "llmgateway": "seed-1-6-250915",
+   "llmgateway": "seed-1-6-250615",
    "openrouter": "bytedance-seed/seed-1.6",
    "vercel": "bytedance/seed-1.6"
   },
@@ -21907,7 +21791,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "helicone": "sonar",
+   "helicone": "sonar-reasoning",
    "kilo": "perplexity/sonar",
    "llmgateway": "sonar",
    "nano-gpt": "sonar",
@@ -21915,7 +21799,7 @@
    "perplexity": "sonar",
    "perplexity-agent": "perplexity/sonar",
    "sap-ai-core": "sonar",
-   "vercel": "perplexity/sonar"
+   "vercel": "perplexity/sonar-reasoning"
   },
   "release_date": "2024-01-01"
  },
@@ -21947,7 +21831,6 @@
   "display_name": "Sonar Pro",
   "has_author_lab_entry": true,
   "inference_platforms": [
-   "anyapi",
    "helicone",
    "kilo",
    "llmgateway",
@@ -21959,7 +21842,6 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "anyapi": "perplexity/sonar-pro",
    "helicone": "sonar-pro",
    "kilo": "perplexity/sonar-pro",
    "llmgateway": "sonar-pro",
@@ -21991,7 +21873,6 @@
   "display_name": "Sonar Reasoning Pro",
   "has_author_lab_entry": true,
   "inference_platforms": [
-   "anyapi",
    "helicone",
    "kilo",
    "llmgateway",
@@ -22002,7 +21883,6 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "anyapi": "perplexity/sonar-reasoning-pro",
    "helicone": "sonar-reasoning-pro",
    "kilo": "perplexity/sonar-reasoning-pro",
    "llmgateway": "sonar-reasoning-pro",
@@ -22206,7 +22086,7 @@
   "open_weights": true,
   "provider_spellings": {
    "kilo": "stepfun/step-3.5-flash",
-   "nano-gpt": "stepfun-ai/step-3.5-flash:thinking",
+   "nano-gpt": "stepfun-ai/step-3.5-flash",
    "nvidia": "stepfun-ai/step-3.5-flash",
    "openrouter": "stepfun/step-3.5-flash",
    "qiniu-ai": "stepfun/step-3.5-flash",
@@ -22215,7 +22095,7 @@
    "siliconflow-cn": "stepfun-ai/Step-3.5-Flash",
    "stepfun": "step-3.5-flash",
    "stepfun-ai": "step-3.5-flash",
-   "zenmux": "stepfun/step-3.5-flash"
+   "zenmux": "stepfun/step-3.5-flash-free"
   },
   "release_date": "2026-01-29"
  },
@@ -22854,7 +22734,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "nano-gpt": "venice-uncensored"
+   "nano-gpt": "venice-uncensored:web"
   },
   "release_date": "2024-05-01"
  },
@@ -22906,7 +22786,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "poe": "google/veo-3"
+   "poe": "google/veo-3-fast"
   },
   "release_date": "2025-05-21"
  },
@@ -22919,7 +22799,7 @@
   ],
   "open_weights": false,
   "provider_spellings": {
-   "poe": "google/veo-3.1-fast"
+   "poe": "google/veo-3.1"
   },
   "release_date": "2025-10-15"
  },
@@ -23119,26 +22999,18 @@
   "author_org": null,
   "display_name": "Wan2.7 Image",
   "has_author_lab_entry": false,
-  "inference_platforms": [
-   "alibaba-token-plan"
-  ],
+  "inference_platforms": [],
   "open_weights": false,
-  "provider_spellings": {
-   "alibaba-token-plan": "wan2.7-image"
-  },
+  "provider_spellings": {},
   "release_date": "2026-05-29"
  },
  "wan2-7-image-pro": {
   "author_org": null,
   "display_name": "Wan2.7 Image Pro",
   "has_author_lab_entry": false,
-  "inference_platforms": [
-   "alibaba-token-plan"
-  ],
+  "inference_platforms": [],
   "open_weights": false,
-  "provider_spellings": {
-   "alibaba-token-plan": "wan2.7-image-pro"
-  },
+  "provider_spellings": {},
   "release_date": "2026-05-29"
  },
  "wayfarer-large-70b-llama-3-3": {
@@ -23184,7 +23056,7 @@
   "open_weights": true,
   "provider_spellings": {
    "evroc": "openai/whisper-large-v3",
-   "groq": "whisper-large-v3-turbo",
+   "groq": "whisper-large-v3",
    "nearai": "openai/whisper-large-v3",
    "nvidia": "openai/whisper-large-v3",
    "privatemode-ai": "whisper-large-v3",
@@ -23246,7 +23118,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "aihubmix": "xiaomi-mimo-v2.5"
+   "aihubmix": "xiaomi-mimo-v2.5-free"
   },
   "release_date": "2026-04-22"
  },
@@ -23259,7 +23131,7 @@
   ],
   "open_weights": true,
   "provider_spellings": {
-   "aihubmix": "xiaomi-mimo-v2.5-pro"
+   "aihubmix": "xiaomi-mimo-v2.5-pro-free"
   },
   "release_date": "2026-04-22"
  },

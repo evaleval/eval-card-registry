@@ -111,18 +111,13 @@ def _load_curated_orgs() -> list[dict]:
 
 
 def build_hf_to_dev(curated_orgs: list[dict]) -> dict[str, str]:
-    """Two-tier org map: HF-org-lowercase -> curated developer slug.
-    Single-sourced from `strategies/fuzzy.py:_ORG_ALIASES` + `seed/orgs.yaml`
-    `hf_org`. Authored `seed/orgs.yaml` takes precedence on conflict."""
-    hf_to_dev: dict[str, str] = {}
-    for hf_alias, dev in _ORG_ALIASES.items():
-        hf_to_dev[hf_alias.lower()] = dev
-    for row in curated_orgs:
-        hf_org = row.get("hf_org")
-        org_id = row.get("id")
-        if isinstance(hf_org, str) and hf_org.strip() and isinstance(org_id, str):
-            hf_to_dev[hf_org.lower()] = org_id
-    return hf_to_dev
+    """HF-org-lowercase -> curated developer slug. The SINGLE shared builder
+    (eval_entity_resolver.fold.build_curated_org_map): `_ORG_ALIASES` UNION every
+    curated org's id + hf_org + `aliases`. Reading `aliases` (which the old local
+    builder omitted) is what lets ai2->allenai / aws->amazon / kimi->moonshotai /
+    prime-intellect->PrimeIntellect resolve instead of dangling."""
+    from eval_entity_resolver.fold import build_curated_org_map
+    return build_curated_org_map(curated_orgs)
 
 
 def canon_id(hf_model_id: str, hf_to_dev: dict[str, str]) -> tuple[str, str]:
@@ -161,10 +156,25 @@ def _load_audit_bad_nearmiss() -> frozenset[str]:
 _AUDIT_BAD_NEARMISS = _load_audit_bad_nearmiss()
 
 
+def _fold_org(org: str, hf_to_dev: dict[str, str]) -> str:
+    """Developer identity of an HF org spelling: apply the curated two-tier remap
+    THEN collapse separators + case to one token. So a pure separator/case rename
+    of the SAME uploader folds equal (`DeepAutoAI` == `DeepAuto-AI`), while a
+    genuine cross-uploader move stays distinct (`ai4free` != `helpingai`)."""
+    return re.sub(r"[^a-z0-9]", "", hf_to_dev.get(org.lower(), org.lower()))
+
+
 def nearmiss_changes_identity(raw: str, fixed: str, hf_to_dev: dict[str, str]) -> str | None:
     """Reason a fixed_near_miss raw->fixed redirect must NOT be aliased (changes
     model identity), else None. Signals: audit denylist; genuine size change;
-    cross-developer org (excluding the org-less `unknown/` placeholder)."""
+    cross-developer org.
+
+    The org check is SEPARATOR/CASE aware (via `_fold_org`): an owner RENAME of
+    the same uploader (`DeepAutoAI/X` -> `DeepAuto-AI/X`, same model name) is the
+    same developer and SHOULD be aliased onto the HF-true canonical, so it is NOT
+    flagged. A genuine cross-uploader migration (`AI4free/X` -> `HelpingAI/X`) is
+    a different developer and stays flagged (handled via audit_bad_nearmiss so it
+    resolves to its own canonical, never mis-aliased cross-developer)."""
     if raw in _AUDIT_BAD_NEARMISS:
         return "audit-confirmed wrong redirect"
     rn, fn = raw.split("/", 1)[-1], fixed.split("/", 1)[-1]
@@ -174,11 +184,33 @@ def nearmiss_changes_identity(raw: str, fixed: str, hf_to_dev: dict[str, str]) -
     if "/" in raw and "/" in fixed:
         ro = raw.split("/", 1)[0]
         if ro.lower() != "unknown":
-            rd = hf_to_dev.get(ro.lower(), ro.lower())
-            fd = hf_to_dev.get(fixed.split("/", 1)[0].lower(), fixed.split("/", 1)[0].lower())
+            rd = _fold_org(ro, hf_to_dev)
+            fd = _fold_org(fixed.split("/", 1)[0], hf_to_dev)
             if rd != fd:
                 return f"cross-dev-org {rd}!={fd}"
     return None
+
+
+# --- authoritative-repo marker (Guardrail §5) ------------------------------
+# Every hf_oracle mint id IS the real HF repo id (canon_id returns it verbatim),
+# so the mint is AUTHORITATIVE: it must WIN id+casing over any colliding curated
+# slug, never be suppressed in favor of one. We record `metadata.hf_id == id` so
+# §5 consumers (and the seed loader's merge) recognise it must not be rewritten.
+#
+# NOTE: a prior Phase-1 `reconcile_mints_against_core` SUPPRESSED such mints when
+# they normalized-collided with a curated-core canonical under a different id —
+# exactly backwards (it could drop the authoritative HF repo to keep a transient
+# dev-org slug, and its §5 guard was dead code because mints carried metadata
+# '{}'). It was removed: the authoritative mint always wins; the dual-id
+# (slug vs real-repo) dedup is handled at un-consolidation, where the slug
+# canonicals are removed rather than the HF repo being suppressed.
+
+
+def authoritative_metadata(hf_repo_id: str) -> str:
+    """metadata JSON marking a mint as the authoritative real HF repo
+    (`hf_id == id`). Guardrail §5: an id whose metadata.hf_id equals itself must
+    never be rewritten/suppressed in favor of a different (e.g. dev-org-slug) id."""
+    return json.dumps({"hf_id": hf_repo_id}, sort_keys=True)
 
 
 def main() -> None:
@@ -545,7 +577,9 @@ def main() -> None:
             "org_id": org_id,
             "resolution_source": "hf",
             "review_status": "reviewed",
-            "metadata": "{}",
+            # tgt IS the real HF repo id -> mark it authoritative (§5): never to
+            # be rewritten/suppressed in favor of a colliding dev-org slug.
+            "metadata": authoritative_metadata(tgt),
         }
         if aliases:
             entry["aliases"] = aliases

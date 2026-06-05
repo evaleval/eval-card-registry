@@ -43,8 +43,12 @@ from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 REGISTRY_ROOT = Path(__file__).resolve().parents[1]
 FIXTURES_DIR = REGISTRY_ROOT / "fixtures"
 ORGS_YAML = REGISTRY_ROOT / "seed" / "orgs.yaml"
-# The frozen live-HF oracle lives at the evaleval workspace root.
-ORACLE_PATH = REGISTRY_ROOT.parent / "hf_model_id_resolution.json"
+# The frozen live-HF oracle. Tracked IN-REPO (curation/) so the oracle gates
+# actually run in CI (the evaleval workspace root is not part of the registry
+# checkout); fall back to the workspace-root copy for local dev where it is the
+# shared source of truth.
+_TRACKED_ORACLE = REGISTRY_ROOT / "curation" / "hf_model_id_resolution.json"
+ORACLE_PATH = _TRACKED_ORACLE if _TRACKED_ORACLE.exists() else REGISTRY_ROOT.parent / "hf_model_id_resolution.json"
 
 # Gate floor numbers (the registry's measured baseline).
 EXPECTED_TOTAL = 6720
@@ -79,14 +83,12 @@ def oracle() -> dict[str, dict]:
 
 @pytest.fixture(scope="module")
 def hf_to_dev() -> dict[str, str]:
-    """The two-tier HF-namespace → developer-org map: the static curated
-    `_ORG_ALIASES` plus any `hf_org` aliases declared on curated orgs. Used
-    for the ORG-AWARE oracle comparison (meta-llama ↔ meta etc.)."""
-    mapping = {k.lower(): v for k, v in _ORG_ALIASES.items()}
-    for entry in yaml.safe_load(ORGS_YAML.read_text()) or []:
-        if isinstance(entry, dict) and isinstance(entry.get("hf_org"), str) and isinstance(entry.get("id"), str):
-            mapping[entry["hf_org"].lower()] = entry["id"]
-    return mapping
+    """The HF-namespace → developer-org map for the ORG-AWARE oracle comparison.
+    Single source: the shared `build_curated_org_map` (incl. the orgs.yaml ALIAS
+    tier), so the gate folds orgs the SAME way the resolver does — a stricter
+    hf_org-only map here would make the gate diverge from real resolution."""
+    from eval_entity_resolver.fold import build_curated_org_map
+    return build_curated_org_map(yaml.safe_load(ORGS_YAML.read_text()) or [])
 
 
 # --------------------------------------------------------------------------
@@ -184,16 +186,25 @@ def test_oracle_org_aware_match(resolver, oracle, hf_to_dev):
         if meta.get("resolution_status") in ("fixed_exact", "fixed_near_miss")
     }
 
-    # Raws whose oracle `fixed_near_miss` redirect points at a DIFFERENT model
-    # (a wrong HF "did-you-mean"). They resolve to their own/corrected canonical,
-    # so each is checked against THAT (must resolve away from the bad redirect)
-    # rather than against the redirect.
-    # Loaded from the sidecar the generator guard (generate_hf_oracle_seed) also
-    # reads, so the same list drives prevention and this exemption.
-    AUDIT_CORRECTED = frozenset(json.loads(
-        (REGISTRY_ROOT  / "curation"
-         / "audit_bad_nearmiss.json").read_text()
-    ).get("raws", []))
+    # Raws whose oracle `fixed_near_miss` redirect must NOT be followed (a wrong
+    # HF "did-you-mean": a genuine size change or a cross-uploader migration).
+    # They resolve to their own/corrected canonical, so each is checked against
+    # THAT (must resolve away from the bad redirect) rather than against it.
+    #
+    # SINGLE SOURCE OF TRUTH: the exemption set is derived from the SAME
+    # `nearmiss_changes_identity` rule the generator (generate_hf_oracle_seed)
+    # uses to decide which near-miss redirects to refuse — so the gate and the
+    # generator can never disagree about which redirects are "bad", and there is
+    # no hand-maintained list to drift. The curated `audit_bad_nearmiss.json` is
+    # one INPUT to that rule (audit-confirmed specific cases), not a parallel list.
+    _nearmiss_changes_identity, _hf_oracle_hf_to_dev = _import_nearmiss_rule()
+    nm_hf_to_dev = _hf_oracle_hf_to_dev()
+    AUDIT_CORRECTED = frozenset(
+        raw for raw, meta in fixed.items()
+        if meta.get("resolution_status") == "fixed_near_miss"
+        and isinstance(meta.get("fixed_hf_model_id"), str)
+        and _nearmiss_changes_identity(raw, meta["fixed_hf_model_id"], nm_hf_to_dev)
+    )
 
     def org_aware_equal(resolved_org: str, hf_org: str) -> bool:
         # The resolved canonical's id-prefix is the REAL HF org (not a folded
@@ -508,12 +519,20 @@ def test_old_folded_form_resolves_to_real_hf_id(resolver, models_df):
 def test_no_separator_split_orgs(orgs_df):
     """No two org ids differ ONLY by a separator/case (`prime-intellect` vs
     `PrimeIntellect`) — the plain case-insensitive check misses these, but they
-    still fragment one developer into two rows downstream."""
+    still fragment one developer into two rows downstream.
+
+    EXCEPTION: a curated allowlist (seed/orgs_distinct_allowlist.yaml) of pairs
+    verified to be GENUINELY DISTINCT real HF uploaders — merging those would be a
+    false same-uploader assertion the generators refuse. (A pair that IS the same
+    uploader is instead merged via a curated orgs.yaml alias, not allowlisted.)"""
+    import yaml as _yaml
+    allow_path = REGISTRY_ROOT / "seed" / "orgs_distinct_allowlist.yaml"
+    allow = set(_yaml.safe_load(allow_path.read_text()) or []) if allow_path.exists() else set()
     norm = lambda x: re.sub(r"[^a-z0-9]", "", str(x).lower())
     by: dict = defaultdict(list)
     for oid in orgs_df["id"]:
         by[norm(oid)].append(str(oid))
-    split = {k: v for k, v in by.items() if len(v) > 1}
+    split = {k: v for k, v in by.items() if len(v) > 1 and not set(v) <= allow}
     assert split == {}, f"{len(split)} separator/case-split org group(s): {list(split.values())[:8]}"
 
 
@@ -528,10 +547,8 @@ def test_no_real_hf_id_duplicated_by_slug(models_df):
         fx = v.get("fixed_hf_model_id")
         if isinstance(fx, str) and "/" in fx:
             fixed.add(fx)
-    hf_to_dev = {k.lower(): val for k, val in _ORG_ALIASES.items()}
-    for e in yaml.safe_load(ORGS_YAML.read_text()) or []:
-        if isinstance(e, dict) and isinstance(e.get("hf_org"), str) and isinstance(e.get("id"), str):
-            hf_to_dev[e["hf_org"].lower()] = e["id"]
+    from eval_entity_resolver.fold import build_curated_org_map
+    hf_to_dev = build_curated_org_map(yaml.safe_load(ORGS_YAML.read_text()) or [])
 
     def fold(org):
         return hf_to_dev.get(org.lower(), org)
@@ -592,6 +609,21 @@ def test_no_real_hf_id_duplicated_by_slug(models_df):
 # fold predicate defers via the resolver's brand-prefix stripping + org
 # agreement, so re-running it as the gate closes that exact blind spot.
 # --------------------------------------------------------------------------
+def _import_nearmiss_rule():
+    """The generator's near-miss block rule + its hf_to_dev builder — so the gate
+    derives its AUDIT_CORRECTED exemption from the SAME rule the generator uses
+    (no parallel hand-maintained list)."""
+    scripts_dir = REGISTRY_ROOT / "scripts"
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    import generate_hf_oracle_seed as gho  # noqa: E402
+
+    def _hf_to_dev():
+        return gho.build_hf_to_dev(gho._load_curated_orgs())
+
+    return gho.nearmiss_changes_identity, _hf_to_dev
+
+
 def _import_fold_module():
     scripts_dir = REGISTRY_ROOT / "scripts"
     if str(scripts_dir) not in sys.path:
@@ -626,15 +658,13 @@ def _model_aliases_by_canonical() -> dict[str, list[str]]:
 # gate allowlists them so a legitimately-not-folded state stays green while any
 # NEW confident mint-dupe still fails. Keep this list tight — every entry is a
 # reviewed exception, not a blanket waiver.
-_KNOWN_NON_DUPE_MINTS = frozenset({
-    "alibaba/qwen-3-235b",                          # base vs ...-A22B-Instruct-2507 leaf
-    "alibaba/qwen-3-30b",                           # base vs Qwen3-30B-A3B specific variant
-    "alibaba/qwen3-235b-a22b-instruct-2507-tput",   # provider throughput tag vs ...-FP8 quant
-    "google/gemma4",                                # family placeholder, not a real repo
-    "olmo-3-1-32b",                                 # base vs Olmo-3.1-32B-Think leaf
-    "openai/gpt-oss",                               # family pointer vs gpt-oss-120b leaf
-    "zai/z-ai-glm-5",                               # near-spelling of zai-org/GLM-5, deferred
-})
+# Escape hatch for a genuine models_dev mint that decide_fold flags but is NOT a
+# real-HF dupe (a coarse base vs a more-specific variant leaf). Currently EMPTY:
+# the org-canonicalization + shared decide_fold (model-resolution-rework) resolved
+# every prior waiver (alibaba/qwen-3-235b, alibaba/qwen-3-30b, google/gemma4,
+# zai/z-ai-glm-5 now fold/canonicalize correctly). The gate asserts this stays
+# tight — a dead waiver fails it.
+_KNOWN_NON_DUPE_MINTS: frozenset[str] = frozenset()
 
 
 def test_no_minted_modelsdev_canonical_shadows_real_hf_id(models_df):
@@ -683,6 +713,20 @@ def test_no_minted_modelsdev_canonical_shadows_real_hf_id(models_df):
         f"a real HF id (mint-dupe shadow not folded): {leftover[:12]}"
     )
 
+    # Self-policing: every allowlist entry must still be a live, flagged mint —
+    # an entry that no longer matches the predicate (renamed/removed/refolded) is
+    # a DEAD waiver and must be removed, so the list can't silently rot.
+    by_mint = {e["id"]: e for e in mints}
+    dead = [
+        a for a in _KNOWN_NON_DUPE_MINTS
+        if a not in by_mint
+        or fold.decide_fold(by_mint[a], hf_ids, alias_to_hf, by_org_name, hf_to_dev) is None
+    ]
+    assert dead == [], (
+        f"{len(dead)} dead _KNOWN_NON_DUPE_MINTS waiver(s) (no longer a flagged "
+        f"models_dev mint-dupe) — remove them to keep the allowlist tight: {sorted(dead)}"
+    )
+
 
 # --------------------------------------------------------------------------
 # org-conditional quant grouping: model_group_id never crosses a developer
@@ -717,4 +761,301 @@ def test_model_group_id_does_not_cross_developer_org(models_df):
         f"{len(bad)} model(s) whose model_group_id root is a DIFFERENT developer "
         f"org (cross-org identity grouping is forbidden; a community quant must "
         f"keep its own group). First few: {bad[:10]}"
+    )
+
+
+# --------------------------------------------------------------------------
+# PHASE-0 BEHAVIORAL ORACLE — the restore must not regress already-seen
+# resolution. The HF-id oracle gates above only police the ~4074 HF-resolvable
+# ids in hf_model_id_resolution.json; they are BLIND to the closed-API,
+# NA-source, and reviewed curated canonicals the curated floor exists to
+# preserve. This gate guards the FULL Phase-0 snapshot (curation/oracle_snapshot/
+# canonical_models.parquet + aliases.parquet, 7196 canonicals / 28900 aliases):
+# every oracle canonical id (and every oracle alias raw) must still resolve to a
+# NON-NULL canonical whose developer is ORG-AWARE-equal to the oracle's. Names
+# are NOT required equal — the un-consolidation intentionally re-spells ids
+# (meta/llama-3-70b -> meta-llama/Meta-Llama-3-70B); the invariant is "same
+# developer, still resolves". Deliberately-changed outcomes are enumerated in
+# the exemption sets (kept tight + justified) so drift stays visible.
+# --------------------------------------------------------------------------
+ORACLE_SNAPSHOT_DIR = REGISTRY_ROOT / "curation" / "oracle_snapshot"
+
+# Oracle canonical ids whose resolution the team DELIBERATELY changed to a
+# different developer in a way the same-model leaf rule below can't auto-detect
+# (the oracle id was MALFORMED — an embedded org or a placeholder host — so the
+# corrected leaf legitimately differs). Each is a reviewed exception.
+_ORACLE_CANON_EXEMPT: frozenset = frozenset({
+    "openai/aion-labs-aion-2-0",           # oracle embedded the org in the leaf -> aion-labs/aion-2-0
+    "unknown/perplexity-sonar-reasoning",  # `unknown/` placeholder host -> perplexity/sonar-reasoning
+    # ai21 == ai21-labs (same developer; HF org is ai21-labs). The leaf also
+    # gains an `ai21-` brand prefix in the real repo so the same-model-leaf rule
+    # can't auto-detect it; resolving to ai21-labs/ai21-jamba-* is correct.
+    "ai21/jamba-1.5-large",
+    "ai21/jamba-1.5-mini",
+})
+
+# Oracle aliases deliberately NOT resolved any more — the oracle attribution was
+# itself wrong and the un-consolidation corrected it. Reviewed exceptions only.
+# Keyed either by bare raw_value or by (entity_type, raw_value).
+_ORACLE_ALIAS_EXEMPT: frozenset = frozenset({
+    # `vercel` is an inference platform / AI gateway (seed/inference_platforms.yaml
+    # + the resolver host-prefix strip list), NOT a model developer. The oracle's
+    # `vercel` org (3 models mis-attributed to the host) was a host-mislabel the
+    # un-consolidation correctly fixed by stripping the host — so resolving
+    # `vercel` as a developer org is correctly no_match now.
+    ("org", "vercel"),
+})
+
+
+def _org_aware_equal(resolved_org: str, oracle_org: str, hf_to_dev: dict) -> bool:
+    if resolved_org.lower() == oracle_org.lower():
+        return True
+    fold = lambda x: hf_to_dev.get(x.lower(), x.lower())
+    return fold(resolved_org) == fold(oracle_org)
+
+
+def _leaf_norm(cid: str) -> str:
+    from eval_entity_resolver.normalization import normalize
+    return normalize(cid.split("/", 1)[1] if "/" in cid else cid).replace(" ", "")
+
+
+@pytest.mark.slow
+def test_phase0_oracle_canonicals_preserved(resolver, hf_to_dev):
+    """GATE: every Phase-0 oracle canonical id still resolves NON-NULL to an
+    org-aware-equal developer (no curated/closed-API/NA entity silently orphaned
+    to no_match or re-attributed to a different developer).
+
+    A resolution to a DIFFERENT developer is permitted ONLY when the model leaf
+    is identical (same model, corrected org) — that is the rework's explicit
+    purpose: fixing the oracle's wrong developer attributions (the models.dev
+    provider mislabels `meta/aion-1-0` -> real `aion-labs/aion-1-0`,
+    `amazon/manta-*` -> `meganova-ai/manta-*`, `meta/l3-euryale` -> `sao10k/...`).
+    A different-developer resolution with a DIFFERENT leaf is a genuine
+    re-attribution and fails (unless explicitly exempted as a malformed oracle id)."""
+    import pandas as pd
+    oc = pd.read_parquet(ORACLE_SNAPSHOT_DIR / "canonical_models.parquet")
+    no_match, wrong_dev = [], []
+    for row in oc.itertuples():
+        oid = str(row.id)
+        if oid in _ORACLE_CANON_EXEMPT:
+            continue
+        cid = resolver.resolve(oid, "model").canonical_id
+        if cid is None:
+            no_match.append(oid)
+        elif ("/" in oid and "/" in cid
+              and not _org_aware_equal(_org_of(cid), _org_of(oid), hf_to_dev)
+              and _leaf_norm(cid) != _leaf_norm(oid)):  # not a same-model org correction
+            wrong_dev.append((oid, cid))
+    assert not no_match, (
+        f"{len(no_match)} Phase-0 oracle canonical(s) now resolve to no_match "
+        f"(already-seen resolution regressed). First few: {sorted(no_match)[:15]}"
+    )
+    assert not wrong_dev, (
+        f"{len(wrong_dev)} Phase-0 oracle canonical(s) now resolve to a DIFFERENT "
+        f"developer AND a different model leaf (silent re-attribution). First few: {wrong_dev[:15]}"
+    )
+
+
+@pytest.mark.slow
+def test_phase0_oracle_aliases_preserved(resolver):
+    """GATE: every Phase-0 oracle alias raw still resolves NON-NULL — for ITS OWN
+    entity_type (model / benchmark / org / metric / harness / composite / family),
+    with the alias's source_config — so no already-seen resolution regresses for
+    ANY entity type, not just models. The coverage backstop the HF-id coverage
+    gate cannot provide for non-EEE / non-model aliases."""
+    import pandas as pd
+    apath = ORACLE_SNAPSHOT_DIR / "aliases.parquet"
+    adf = pd.read_parquet(apath)
+    adf = adf[adf["status"] != "rejected"]
+    no_match = set()
+    for row in adf.itertuples():
+        rv = getattr(row, "raw_value", None)
+        et = getattr(row, "entity_type", None)
+        if not isinstance(rv, str) or not rv or not isinstance(et, str):
+            continue
+        if rv in _ORACLE_ALIAS_EXEMPT or (et, rv) in _ORACLE_ALIAS_EXEMPT:
+            continue
+        sc = getattr(row, "source_config", None)
+        sc = sc if isinstance(sc, str) and sc else None
+        if resolver.resolve(rv, et, sc).canonical_id is None:
+            no_match.add((et, rv))
+    assert not no_match, (
+        f"{len(no_match)} Phase-0 oracle alias(es) now resolve to no_match for their "
+        f"entity_type (already-seen resolution regressed). By type: "
+        f"{ {t: sum(1 for tt, _ in no_match if tt == t) for t in sorted({tt for tt, _ in no_match})} }. "
+        f"First few: {sorted(no_match)[:15]}"
+    )
+
+
+# Oracle (oracle_id, parent_id) edges that cannot land until a tracked followup.
+# Each is an enumerated, justified exception — any OTHER lost edge fails the gate.
+_ORACLE_EDGE_EXEMPT: frozenset = frozenset()
+
+
+@pytest.mark.slow
+def test_phase0_oracle_edges_preserved(resolver, models_df):
+    """GATE: every Phase-0 oracle TYPED parent edge (relationship + axis:
+    variant/finetune/quantized/merge/adapter, all axes incl. training_stage) on
+    a surviving canonical is preserved — repointed to the parent's surviving
+    canonical. Guards the full typed lineage GRAPH, not just the derived
+    group/family/lineage_origin fields. Edges whose parent model is genuinely
+    absent from the registry (no surviving canonical to link to) are allowed."""
+    import json as _json
+    oc = pd.read_parquet(ORACLE_SNAPSHOT_DIR / "canonical_models.parquet")
+
+    def _edges(v):
+        if isinstance(v, str):
+            try:
+                return _json.loads(v) or []
+            except Exception:
+                return []
+        return v if isinstance(v, list) else []
+
+    cur: dict[str, set] = {}
+    for r in models_df.itertuples():
+        cur[str(r.id)] = {
+            (e.get("id"), e.get("relationship"), e.get("axis"))
+            for e in _edges(getattr(r, "parents", None)) if isinstance(e, dict)
+        }
+
+    home: dict[str, str] = {}
+
+    def _home(i: str):
+        if i not in home:
+            home[i] = resolver.resolve(i, "model").canonical_id
+        return home[i]
+
+    missing, parent_gone = [], 0
+    for row in oc.itertuples():
+        oes = _edges(getattr(row, "parents", None))
+        if not oes:
+            continue
+        t = _home(str(row.id))
+        if t is None:
+            continue  # canonical gone -> guarded by test_phase0_oracle_canonicals_preserved
+        tedges = cur.get(t, set())
+        for e in oes:
+            if not isinstance(e, dict) or not e.get("id"):
+                continue
+            tp = _home(str(e["id"]))
+            if tp is None:
+                parent_gone += 1
+                continue
+            if tp == t:
+                continue
+            key = (tp, e.get("relationship"), e.get("axis"))
+            if (str(row.id), str(e["id"])) in _ORACLE_EDGE_EXEMPT:
+                continue
+            if key not in tedges:
+                missing.append((str(row.id), t, str(e["id"]), tp, e.get("relationship"), e.get("axis")))
+    assert not missing, (
+        f"{len(missing)} Phase-0 oracle typed parent edge(s) lost on the surviving "
+        f"canonical (relationship/axis link not preserved). First few: {missing[:15]}"
+    )
+
+
+@pytest.mark.slow
+def test_resolve_surfaces_typed_edges_and_ancestry(resolver, models_df):
+    """GATE: the typed edge graph is queryable AT RESOLVE TIME, not merely stored.
+    For every model canonical with stored parents, resolve(id) surfaces a
+    non-empty `parents` list; and when the model belongs to a group/family (root
+    != id), resolve(id) surfaces a non-empty `ancestry` chain. Guards that edge
+    preservation (the parents-enrichment) actually flows through resolution +
+    ancestry computation — not just sits in the fixtures."""
+    missing_parents, missing_ancestry = [], []
+    for r in models_df.itertuples():
+        cid = str(r.id)
+        if not _parse_parents(getattr(r, "parents", None)):
+            continue
+        res = resolver.resolve(cid, "model")
+        if not res.parents:
+            missing_parents.append(cid)
+        roots = {
+            x for x in (getattr(r, "model_family_id", None), getattr(r, "model_group_id", None))
+            if isinstance(x, str) and x != cid
+        }
+        if roots and not res.ancestry:
+            missing_ancestry.append(cid)
+    assert not missing_parents, (
+        f"{len(missing_parents)} model(s) with stored parents whose resolve() surfaces "
+        f"NO typed edges. First few: {missing_parents[:15]}"
+    )
+    assert not missing_ancestry, (
+        f"{len(missing_ancestry)} grouped/family model(s) whose resolve() surfaces NO "
+        f"ancestry chain. First few: {missing_ancestry[:15]}"
+    )
+
+
+# Oracle (field, id) lineage memberships that cannot be preserved: the group/
+# family ROOT model is not a distinct canonical in the registry (its base was
+# coarsened into a variant or is absent), so the variant has no root to group
+# under. Enumerated, justified; followup = keep group/family ROOT models distinct.
+_ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
+    ("model_group_id", "Qwen/Qwen3-235B-A22B-Instruct-2507"),
+    ("model_group_id", "Qwen/Qwen3-VL-32B-Thinking"),
+    ("model_group_id", "Qwen/Qwen3-VL-8B-Thinking"),
+    ("model_group_id", "microsoft/Phi-4-mini-reasoning"),
+    ("model_family_id", "Qwen/Qwen3-30B-A3B"),
+    ("model_family_id", "Qwen/Qwen3-VL-32B-Thinking"),
+    ("model_family_id", "Qwen/Qwen3-VL-8B-Thinking"),
+    ("model_family_id", "microsoft/Phi-4-mini-reasoning"),
+    ("model_family_id", "xiaomi/mimo-v2-flash"),
+    # The models.dev SLUG `nvidia/nemotron-3-super-120b-a12b` folds into the real
+    # HF canonical nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16 (curated, recent
+    # model absent from the frozen HF oracle). The oracle's non-trivial family
+    # root for the slug was an artifact of the slug arrangement (a size edge to a
+    # non-existent `…-120b` base; A12B is the MoE active-param notation, not a
+    # separate size); the real canonical is correctly a singleton root.
+    ("model_family_id", "nvidia/nemotron-3-super-120b-a12b"),
+})
+
+
+@pytest.mark.slow
+def test_phase0_oracle_lineage_no_loss(resolver, models_df):
+    """GATE: no oracle canonical LOSES its lineage. For every surviving oracle
+    canonical that had a non-trivial model_group_id / model_family_id /
+    lineage_origin_model_id (root != self, or non-null lineage origin), the
+    canonical it now resolves to must ALSO have that field non-trivial.
+
+    Checks PRESENCE, not exact value: the union of oracle + generator edges walks
+    to a deeper/truer origin (an ENRICHMENT, not a regression). The exact raw
+    edges are guarded by test_phase0_oracle_edges_preserved; this guards the
+    DERIVED lineage fields against being dropped (so e.g. a change to the org-map
+    or lineage-derivation can't silently un-group a model)."""
+    oc = pd.read_parquet(ORACLE_SNAPSHOT_DIR / "canonical_models.parquet")
+    cur = {str(x.id): x for x in models_df.itertuples()}
+    home: dict = {}
+
+    def _home(i: str):
+        if not isinstance(i, str):
+            return None
+        if i not in home:
+            home[i] = resolver.resolve(i, "model").canonical_id
+        return home[i]
+
+    def _v(x, f):
+        v = getattr(x, f, None)
+        return v if isinstance(v, str) and v else None
+
+    lost = []
+    for ob in oc.itertuples():
+        oid = str(ob.id)
+        t = _home(oid)
+        if t is None or t not in cur:
+            continue  # canonical gone -> guarded elsewhere
+        T = cur[t]
+        for f in ("model_group_id", "model_family_id", "lineage_origin_model_id"):
+            ov = _v(ob, f)
+            nontrivial = ov is not None and (f == "lineage_origin_model_id" or ov != oid)
+            if not nontrivial or (f, oid) in _ORACLE_LINEAGE_EXEMPT:
+                continue
+            tv = _v(T, f)
+            t_nontrivial = tv is not None and (f == "lineage_origin_model_id" or tv != t)
+            if not t_nontrivial:
+                lost.append((f, oid, t))
+    assert not lost, (
+        f"{len(lost)} oracle canonical(s) LOST a lineage field (group/family/origin "
+        f"dropped to trivial/null). By field: "
+        f"{ {f: sum(1 for ff, _, _ in lost if ff == f) for f in sorted({ff for ff, _, _ in lost})} }. "
+        f"First few: {lost[:12]}"
     )

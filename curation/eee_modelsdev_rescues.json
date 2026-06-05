@@ -2134,13 +2134,6 @@
   "open_weights": true,
   "underlying_model_id": "gemma-3-27b"
  },
- "google/gemma3-latest": {
-  "author_org": "google",
-  "candidate_inference_platform": "ollama-cloud",
-  "match_method": "exact",
-  "open_weights": true,
-  "underlying_model_id": "gemma3"
- },
  "google/learnlm-1.5-pro-experimental": {
   "author_org": null,
   "candidate_inference_platform": "nano-gpt",

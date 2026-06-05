@@ -129,15 +129,100 @@ def _load_curated_orgs() -> list[dict]:
 
 
 def build_hf_to_dev(curated_orgs: list[dict]) -> dict[str, str]:
-    """Two-tier org map: HF-org-lowercase -> curated developer slug.
-    Single-sourced from `_ORG_ALIASES` + `seed/orgs.yaml:hf_org`."""
-    hf_to_dev: dict[str, str] = {k.lower(): v for k, v in _ORG_ALIASES.items()}
-    for row in curated_orgs:
-        hf_org = row.get("hf_org")
-        org_id = row.get("id")
-        if isinstance(hf_org, str) and hf_org.strip() and isinstance(org_id, str):
-            hf_to_dev[hf_org.lower()] = org_id
-    return hf_to_dev
+    """HF-org-lowercase -> curated developer slug. The SINGLE shared builder
+    (eval_entity_resolver.fold.build_curated_org_map): `_ORG_ALIASES` UNION every
+    curated org's id + hf_org + `aliases` (reading `aliases` is what folds
+    ai2->allenai / aws->amazon / kimi->moonshotai / prime-intellect->PrimeIntellect)."""
+    from eval_entity_resolver.fold import build_curated_org_map
+    return build_curated_org_map(curated_orgs)
+
+
+def _core_entries(core_doc) -> list[dict]:
+    """Normalize the two `core.yaml` shapes (flat list OR
+    `{skip_ids, skip_source_ids, entries}` dict) to a list of entry dicts."""
+    if isinstance(core_doc, dict):
+        items = core_doc.get("entries") or []
+    elif isinstance(core_doc, list):
+        items = core_doc
+    else:
+        items = []
+    return [e for e in items if isinstance(e, dict)]
+
+
+def build_core_norm_index(core_doc) -> dict[str, str]:
+    """{normalized surface form -> owning curated-core canonical id} over every
+    id / display_name / alias of `core.yaml`'s curated entries.
+
+    Mirrors `refresh_from_modelsdev._build_existing_index`: uses the resolver's
+    `normalize` (case + ALL separators incl. `/` collapsed) so a lowercase /
+    re-separated twin of a curated id maps to the curated owner. First writer
+    wins (setdefault). Reads the source YAML DIRECTLY rather than relying on the
+    fixtures-loaded resolver, so a curated core entry that has not yet been
+    re-seeded into fixtures still wins — the spec's core-aware dedup guarantee
+    must not depend on a stale build artifact."""
+    from eval_entity_resolver.normalization import normalize as _rnz
+
+    idx: dict[str, str] = {}
+
+    def _add(form, cid: str) -> None:
+        if isinstance(form, str) and form.strip():
+            idx.setdefault(_rnz(form), cid)
+
+    for e in _core_entries(core_doc):
+        cid = e.get("id")
+        if not isinstance(cid, str) or not cid:
+            continue
+        _add(cid, cid)
+        _add(e.get("display_name"), cid)
+        for a in (e.get("aliases") or []):
+            _add(a, cid)
+    return idx
+
+
+def core_steals(cid: str, core_norm_index: dict[str, str]) -> bool:
+    """True iff `cid` normalized-collides with a curated core canonical under a
+    DIFFERENT id. The steal-guard predicate, identical in form to
+    `refresh_from_modelsdev._make_steal_guard`'s `_steals` (normalized arm).
+
+    A minted tier-3 id that `core_steals` is the SAME model as a curated core
+    canonical (the stale fixtures-resolver missed it); the row must be SKIPPED
+    (not minted) so the raw resolves to the curated canonical via normalized
+    match — never minted as a `-inferred` twin (§5: merge, never dup)."""
+    from eval_entity_resolver.normalization import normalize as _rnz
+
+    owner = core_norm_index.get(_rnz(cid))
+    return owner is not None and owner != cid
+
+
+def mint_collision_decision(
+    cid: str,
+    core_skip_ids: set[str],
+    core_norm_index: dict[str, str],
+    resolver_hit: bool,
+) -> str:
+    """Decide what to do with a residual tier-3 mint id `cid`. Returns one of:
+
+    - 'skip'     — `cid` normalized-collides with a CURATED CORE canonical under
+                   a different id (`core_steals`): it is the SAME model already
+                   curated in core (the stale fixtures resolver just missed it).
+                   Do NOT mint — drop the row so the raw resolves to the curated
+                   canonical via normalized match. Minting `{cid}-inferred` here
+                   would split one model into two canonicals and SHADOW the
+                   curated entry (§5: merge, never dup).
+    - 'inferred' — `cid` clashes with a core `skip_ids` entry (would be silently
+                   dropped by the loader) or with a DIFFERENT existing canonical
+                   the resolver already owns (a genuine cross-ENTITY clash, two
+                   unrelated models sharing a slug). Suffix-disambiguate so we
+                   never name-only-merge onto an unrelated entity or vanish.
+    - 'mint'     — no collision; mint `cid` as-is.
+
+    `resolver_hit` is `resolver.resolve(cid, "model").canonical_id is not None`
+    (passed in so this policy is unit-testable without a live resolver)."""
+    if core_steals(cid, core_norm_index):
+        return "skip"
+    if cid in core_skip_ids or resolver_hit:
+        return "inferred"
+    return "mint"
 
 
 def canon_id_for_org_present(raw: str, hf_to_dev: dict[str, str]) -> tuple[str, str]:
@@ -193,6 +278,13 @@ def main() -> None:
     if isinstance(core_doc, dict):
         core_skip_ids = set(core_doc.get("skip_ids") or [])
 
+    # Direct core-aware steal-guard: read core.yaml's curated canonicals and
+    # index their normalized surface forms, so a mint can never be emitted as a
+    # normalized-colliding twin under a DIFFERENT id than a curated core entry.
+    # Reads the SOURCE YAML (not the fixtures-loaded resolver), matching the
+    # generator-layer rule that fixes live in the rules, not the build artifact.
+    core_norm_index = build_core_norm_index(core_doc)
+
     # Build a resolver from fixtures but with this generator's OWN prior output
     # (resolution_source == "inferred") filtered out, so a re-run sees the same
     # residual as a clean (Tier-1/2 + curation only) build. Without this, stale
@@ -200,6 +292,44 @@ def main() -> None:
     # residual collapses to ~0 (non-deterministic, non-re-runnable). Follows the
     # "read the source of truth, not the build artifact" rule.
     r = _clean_resolver()
+
+    # Real-HF fold authority (org-aware). A residual whose minted id refers to the
+    # SAME model as a real HF repo under a dev-org-decoupled id (`cohere/c4ai...`
+    # vs `CohereLabs/c4ai...`, `alibaba/qwq-32b-preview` vs `Qwen/QwQ-32B-Preview`)
+    # must DEFER to that HF id — attach the raw as an alias of the real canonical
+    # rather than mint a shadow slug. Uses the SAME decide_fold the models_dev /
+    # catalog paths + the gate use (eval_entity_resolver.fold), so all four
+    # generators agree. Strictly additive: a raw that would have minted a useless
+    # dup now resolves to the true repo (org agreement required — no cross-vendor
+    # merge).
+    from eval_entity_resolver.fold import build_hf_index as _build_hf_index, decide_fold as _decide_fold
+
+    def _hf_source_entries() -> list[dict]:
+        out: list[dict] = []
+        for n in ("hf_oracle", "models_dev", "hub_stats", "models_dev_catalog"):
+            p = SOURCES_DIR / f"{n}.generated.yaml"
+            if not p.exists():
+                continue
+            d = yaml.safe_load(p.read_text())
+            out.extend((d.get("entries") if isinstance(d, dict) else d) or [])
+        return [e for e in out if isinstance(e, dict)]
+
+    _oracle_fixed = frozenset(
+        v["fixed_hf_model_id"] for v in oracle.values()
+        if v.get("resolution_status") in ("fixed_exact", "fixed_near_miss")
+        and isinstance(v.get("fixed_hf_model_id"), str) and "/" in v["fixed_hf_model_id"]
+    )
+    _hf_ids, _alias_to_hf, _by_org_name, _ = _build_hf_index(_hf_source_entries(), hf_to_dev, _oracle_fixed)
+
+    def fold_to_real_hf(cid: str, org_id: Optional[str], raw: str) -> Optional[str]:
+        """Real HF id this residual folds onto (same model, org agreement), or None."""
+        mint = {"id": cid, "org_id": org_id, "display_name": raw, "aliases": [raw]}
+        f = _decide_fold(mint, _hf_ids, _alias_to_hf, _by_org_name, hf_to_dev)
+        return f["hf_target"] if f and f["hf_target"] != cid else None
+
+    # Enrich records {real_hf_id -> set(raw aliases)} for folded residuals — emitted
+    # so the seed loader unions the raw onto the existing HF canonical.
+    fold_enrich: dict[str, set[str]] = {}
 
     # --- alias-confirmation index: normalized base candidate -> canonical id.
     # Built from the resolver's own alias/canonical universe so an inferred base
@@ -302,6 +432,16 @@ def main() -> None:
             org_id = None
             bucket = "org-less"
 
+        # --- DEFER to a real HF repo (org-aware fold) ----------------------
+        # If this residual is the SAME model as an existing real HF canonical
+        # under a dev-org-decoupled id, do NOT mint a shadow slug — alias the raw
+        # onto the real HF id (emitted as an enrich record below).
+        fold_hf = fold_to_real_hf(cid, org_id, raw)
+        if fold_hf is not None:
+            fold_enrich.setdefault(fold_hf, set()).add(raw)
+            buckets["folded-to-hf"] += 1
+            continue
+
         # id-collision guard (CASE-INSENSITIVE). Two distinct raw ids can mint to
         # the SAME canonical (modulo case) only when they are the same model
         # under different casing — `Dracarys2-72B-Instruct` vs
@@ -321,11 +461,21 @@ def main() -> None:
 
         if _fold_dup(cid):
             continue
-        # If the id collides with an existing canonical in the registry (a
-        # genuine cross-entity clash), or with a core `skip_ids` entry (would be
-        # silently dropped by the seed loader), suffix-disambiguate so we never
-        # name-only-merge onto an unrelated entity or vanish.
-        if cid in core_skip_ids or r.resolve(cid, "model").canonical_id is not None:
+        # Collision policy (see mint_collision_decision): a mint that is the SAME
+        # model as a curated core canonical (normalized-collides under a different
+        # id) is SKIPPED so the raw resolves to the curated entry — NOT minted as
+        # a `{cid}-inferred` twin (which would split one model in two and shadow
+        # the curated fix, §5). A genuine cross-entity clash (core skip_ids, or a
+        # DIFFERENT existing canonical) is suffix-disambiguated as before.
+        decision = mint_collision_decision(
+            cid,
+            core_skip_ids,
+            core_norm_index,
+            resolver_hit=r.resolve(cid, "model").canonical_id is not None,
+        )
+        if decision == "skip":
+            continue
+        if decision == "inferred":
             cid = f"{cid}-inferred"
             if _fold_dup(cid):
                 continue
@@ -384,10 +534,19 @@ def main() -> None:
         "# edges); org-less ids carry org_id=None + tags:[org-unknown] and are\n"
         "# surfaced to org_unknown_review.json (never auto-guessed).\n"
     )
+    # Enrich records for residuals that folded onto a real HF repo: {id: hf,
+    # aliases: [raw...]} — the seed loader unions these onto the existing HF
+    # canonical so the raw resolves to the real repo (no shadow slug minted).
+    enrich_records = [
+        {"id": hf, "aliases": sorted(raws)}
+        for hf, raws in sorted(fold_enrich.items())
+        if raws
+    ]
     minted.sort(key=lambda e: e["id"])
+    out_records = minted + enrich_records
     with open(TIER3_YAML, "w") as f:
         f.write(header)
-        yaml.safe_dump(minted, f, sort_keys=False, allow_unicode=True, default_flow_style=False)
+        yaml.safe_dump(out_records, f, sort_keys=False, allow_unicode=True, default_flow_style=False)
 
     REVIEW_JSON.write_text(json.dumps(
         {
@@ -404,6 +563,7 @@ def main() -> None:
 
     print("Tier-3 residual (current no_match over 6,720):", len(residual))
     print("minted:", len(minted))
+    print(f"folded-to-HF (enrich records): {len(enrich_records)}")
     print("buckets:", dict(buckets))
     print("org-less review entries:", len(review))
     print("wrote", TIER3_YAML.relative_to(REGISTRY_ROOT))

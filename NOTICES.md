@@ -67,3 +67,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## HuggingFace Hub (model-id oracle)
+
+`seed/models/sources/hf_oracle.generated.yaml` (Tier-1 canonical models) and the
+resolution oracle `hf_model_id_resolution.json` are derived from public model
+metadata on the HuggingFace Hub.
+
+- **Source:** https://huggingface.co/ (Hub model repositories + metadata)
+- **Use:** only repository ids / metadata are referenced; each model remains
+  under its own repository license.
+
+## AIR-Bench 2024 (safety taxonomy)
+
+`seed/benchmarks_generated/air_bench.yaml` encodes the AIR-Bench 2024 AI-risk
+taxonomy (category names/ids).
+
+- **Source:** AIR-Bench 2024 — Stanford CRFM (`stanford-crfm/air-bench-2024`)
+- **Use:** taxonomy category labels only; refer to the upstream project for its
+  license terms.

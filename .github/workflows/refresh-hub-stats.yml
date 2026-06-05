@@ -45,16 +45,25 @@ jobs:
           # requests; without auth a single cycle can brush the limit
           # and another cron firing in the same window will trip it.
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: uv run python scripts/refresh_from_hub_stats.py
+        # --live: the cron's job is FRESHNESS, so it queries HF directly rather
+        # than the committed offline cache (the script's new reproducible
+        # default). The freeze-then-generate redesign (refresh the cache live,
+        # then derive offline) lands with the un-consolidation / Phase 5.
+        run: uv run python scripts/refresh_from_hub_stats.py --live
 
       # Sanity: the YAML must parse and the seed loader must succeed
       # before we commit. The seed merge has narrow contracts (parents
       # union by id, kind enum on orgs) — any malformed entry would
       # break the seed.yml pipeline that runs on every push to main.
-      - name: Validate generated YAML loads
+      - name: Validate generated YAML loads + gate invariants
         run: |
           uv run python -c "import yaml; yaml.safe_load(open('$GENERATED_PATH'))"
-          uv run eval-card-registry seed --local
+          LOCAL_MODE=true uv run eval-card-registry seed --local
+          # Gate the refresh on the invariant suite over the freshly-seeded
+          # fixtures: a regen that re-mints a shadow, re-splits an org (e.g.
+          # reverts a same-uploader merge), or regresses a Phase-0 oracle
+          # outcome ABORTS here — better to skip a day than commit a regression.
+          LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py -q
 
       - name: Detect changes
         id: diff

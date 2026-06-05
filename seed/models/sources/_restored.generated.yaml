@@ -1,2 +1,3 @@
-# emptied — entries relocated to core.yaml (authoritative; sources get re-cased, core does not)
+# Consolidation staging (now empty): machine rows from the other generated
+# sources were relocated into seed/models/core.yaml, the authoritative source.
 []

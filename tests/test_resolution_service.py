@@ -46,6 +46,37 @@ def _seed_benchmark(store: RegistryStore, id: str, display_name: str):
     })
 
 
+class TestHubStatsIndexPriority:
+    """Re-review #6: the live hub-stats alias index must register canonical IDS
+    FIRST (ids beat aliases on a normalized-form collision), matching the
+    generator's order. Building aliases-first made an identical baseModels edge
+    resolve to a DIFFERENT parent live vs at generate time (a wrong-id bug)."""
+
+    def test_canonical_id_wins_over_a_colliding_alias(self):
+        import pandas as pd
+
+        store = _fresh_store()
+        # Model A's id == the normalized form that Model B also lists as an alias.
+        store._tables["canonical_models"] = pd.DataFrame(
+            [{"id": "deepseek-ai/DeepSeek-V3.1"}, {"id": "deepseek-ai/deepseek-v3.1-collapsed"}]
+        )
+        store._tables["aliases"] = pd.DataFrame(
+            [{
+                "entity_type": "model",
+                "raw_value": "deepseek-ai/DeepSeek-V3.1",   # B claims A's id as an alias
+                "canonical_id": "deepseek-ai/deepseek-v3.1-collapsed",
+            }]
+        )
+        svc = ResolutionService(store)
+        a2c, _ = svc._build_hub_stats_indices()
+        from eval_card_registry.services.hub_stats import normalize as _hsnorm
+
+        # ids-first: the contested form resolves to the ID owner (A), not the
+        # alias owner (B) — a baseModels edge to DeepSeek-V3.1 points at the real
+        # repo, identical to what the generator produces.
+        assert a2c[_hsnorm("deepseek-ai/DeepSeek-V3.1")] == "deepseek-ai/DeepSeek-V3.1"
+
+
 class TestResolutionService:
     def test_resolves_known_entity(self):
         store = _fresh_store()

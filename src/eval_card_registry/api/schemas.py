@@ -57,7 +57,7 @@ class BenchmarkResolutionDetail(BaseModel):
     """Type-specific resolution detail for a benchmark match. `level=slice`
     + `matched_subset` is how a subset / alias-fold match (e.g. an MMLU
     subject folded onto the `mmlu` parent) is surfaced without minting a
-    slice entity (see specs/entity-modeling.md)."""
+    slice entity — a subset is a parent-only alias-fold, never its own canonical."""
     level: Optional[str] = None  # composite | family | benchmark | slice
     matched_subset: Optional[str] = None
 

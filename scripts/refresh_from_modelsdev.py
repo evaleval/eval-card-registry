@@ -49,6 +49,7 @@ import yaml
 # Resolver lives in the workspace package; this script runs from the repo
 # root via `uv run`, so the import resolves through pyproject's path dep.
 from eval_entity_resolver.display import humanize_model_slug
+from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 
 # Strip trailing date suffixes and `-latest` to collapse a model down to its
 # major-version family slug. Mirrors the resolver's fuzzy stem so per-snapshot
@@ -225,25 +226,15 @@ _ORG_SLUG_OVERRIDES: dict[str, str] = {
 
 
 def _build_org_alias_index() -> dict[str, str]:
-    """{lowercased org id / hf_org / alias -> curated org id} from seed/orgs.yaml.
+    """{lowercased org id / hf_org / alias / _ORG_ALIASES key -> curated org id}.
 
-    Includes `hf_org` so a model id's HF namespace prefix (`Qwen/`→alibaba,
-    `meta-llama/`→meta) is recognised as a KNOWN curated org straight from the
-    catalog."""
-    if not ORGS_SEED_PATH.exists():
-        return {}
-    data = yaml.safe_load(ORGS_SEED_PATH.read_text()) or []
-    out: dict[str, str] = {}
-    for e in data:
-        oid = e.get("id")
-        if not oid:
-            continue
-        out[oid.lower()] = oid
-        if e.get("hf_org"):
-            out.setdefault(str(e["hf_org"]).lower(), oid)
-        for a in (e.get("aliases") or []):
-            out.setdefault(str(a).lower(), oid)
-    return out
+    The SINGLE shared curated map (eval_entity_resolver.fold.build_curated_org_map):
+    `_ORG_ALIASES` UNION every curated org's id + hf_org + `aliases`. Previously
+    this read only orgs.yaml (omitting `_ORG_ALIASES`, so e.g. `minimaxai`->minimax
+    was missed); now both consumers share one builder (no drift)."""
+    from eval_entity_resolver.fold import build_curated_org_map
+    data = yaml.safe_load(ORGS_SEED_PATH.read_text()) if ORGS_SEED_PATH.exists() else []
+    return build_curated_org_map(data or [])
 
 
 _DEV_ALIAS_INDEX: dict[str, str] | None = None
@@ -341,7 +332,11 @@ def _derive_group_org(recs: list[dict], alias_index: dict[str, str]):
     prefix_orgs: list[str] = []
     name_orgs: list[str] = []
     for r in recs:
-        raw = (r.get("raw") or "").lstrip("~")
+        # Strip provider prefixes the same way normalize_modelsdev_id does BEFORE
+        # taking the org, so an id like `hf:nvidia/...` yields org `nvidia`, not
+        # `hf:nvidia` (which would mint a malformed `hf:nvidia/...` canonical + a
+        # dangling org FK). Mirrors the `^hf:` strip on the normalize path.
+        raw = re.sub(r"^hf:", "", (r.get("raw") or "").lstrip("~"))
         if "/" in raw and raw.split("/")[0].lower() not in _SERVING_HOSTS:
             prefix_orgs.append(raw.split("/")[0])          # uploader OR curated (raw spelling)
         else:                                              # bare or serving-hosted
@@ -373,10 +368,16 @@ _DATE6_RE = re.compile(r"^\d{6}$")
 _NUM_TOKEN_RE = re.compile(r"^\d+[a-z]?$")
 
 
-def normalize_modelsdev_id(raw: str) -> str:
+def normalize_modelsdev_id(raw: str, strip_variants: bool = True) -> str:
     """Normalize a models.dev model id to an underlying-model spelling — strips
-    provider/host/region scaffolding, drops serving variants, unifies
-    separators."""
+    provider/host/region scaffolding, unifies separators.
+
+    `strip_variants` (default True): also collapse IDENTITY variant suffixes
+    (-turbo/-thinking/-reasoner/-fp8/...) so a variant groups with its base for
+    routing/dedup (build_underlying_groups). Pass False for ALIAS derivation so
+    a variant keeps its own identity and never emits the base id as an alias
+    (the §5 alias-collision bug). Serving TAGS (`:free`, `-fast`, ...) are
+    stripped regardless — they are scaffolding, not a distinct model."""
     s = raw.strip()
     s = s.lstrip("~")  # openrouter '~' latest marker
     s = re.sub(r"^accounts/[^/]+/models/", "", s)
@@ -402,10 +403,18 @@ def normalize_modelsdev_id(raw: str) -> str:
     s = re.sub(r"@(\d{8})$", r"-\1", s)
     s = re.sub(r"@.*$", "", s)
     s = _BEDROCK_VER_RE.sub("", s)
+    # A trailing `:NNN<unit>` is a SIZE spec (e.g. `gpt-oss:120b`), not a serving
+    # tag — convert to `-NNN<unit>` so it survives the `:.*$` tag strip and keeps
+    # distinct sizes in distinct groups (gpt-oss:20b vs gpt-oss:120b). The size
+    # UNIT (b/m/k/t) is REQUIRED so a bare `:1024` / `:1.0` (thinking budget /
+    # version serving param) is still stripped as a tag, not kept as a size.
+    s = re.sub(r":(\d+(?:\.\d+)?[bmkt])$", r"-\1", s)
     prev = None
     while prev != s:
         prev = s
-        s = _VARIANT_SUFFIX_RE.sub("", s)
+        s = _TAG_SUFFIX_RE.sub("", s)           # scaffolding tags: always
+        if strip_variants:
+            s = _IDENTITY_VARIANT_RE.sub("", s)  # identity variants: routing/dedup only
     s = re.sub(r"(\d)\.(\d)", r"\1-\2", s)
     s = re.sub(r"[_\s]+", "-", s)
     s = re.sub(r"\(.*$", "", s)
@@ -416,12 +425,26 @@ def normalize_modelsdev_id(raw: str) -> str:
 _HOST_PREFIXES = ["amazon.", "anthropic.", "qwen.", "meta.", "google.", "cohere.",
                   "ai21.", "deepseek.", "mistral."]
 _REGION_PREFIXES = ["us.", "eu.", "jp.", "au.", "apac.", "global."]
-_VARIANT_SUFFIX_RE = re.compile(
-    r"(:.*$)"
-    r"|(-thinking$)|(-think$)|(-reasoner$)|(-reasoning$)"
+# Serving/routing TAGS — pure scaffolding (a hosting tier / serving mode /
+# provider routing marker, NOT a distinct model). Always stripped, even for alias
+# derivation: `gpt-4o:free` and `gpt-4o` are the SAME canonical served at
+# different tiers. `-tee` (trusted-execution serving) and `-maas` (model-as-a-
+# service tier) are serving modes, not distinct models. NOTE: a trailing `:NNNb`
+# is a SIZE spec (gpt-oss:120b), NOT a tag — it is converted to `-NNNb` in
+# normalize_modelsdev_id BEFORE the `:.*$` strip fires, so it survives as a size.
+_TAG_SUFFIX_RE = re.compile(r"(:.*$)|(-fast$)|(-precision$)|(-free$)|(-maas$)|(-tee$)")
+# IDENTITY variants — a genuinely DIFFERENT canonical (a decoding mode, a quant).
+# Stripped ONLY for routing/dedup grouping (strip_variants=True), NEVER for alias
+# derivation: collapsing `gpt-4-turbo`->`gpt-4` would emit the BASE id as one of
+# the VARIANT's aliases and steal the base canonical's id (the §5 dup bug).
+_IDENTITY_VARIANT_RE = re.compile(
+    r"(-thinking$)|(-think$)|(-reasoner$)|(-reasoning$)"
     r"|(-turbo$)"
-    r"|(-tee$)|(-fp8$)|(-bf16$)|(-int8$)|(-awq$)|(-gptq$)"
-    r"|(-fast$)|(-precision$)|(-free$)"
+    r"|(-fp8$)|(-bf16$)|(-int8$)|(-awq$)|(-gptq$)"
+)
+# Back-compat union (some external callers/tests referenced the old name).
+_VARIANT_SUFFIX_RE = re.compile(
+    _TAG_SUFFIX_RE.pattern + "|" + _IDENTITY_VARIANT_RE.pattern
 )
 _BEDROCK_VER_RE = re.compile(r"-v\d+:\d+$")
 
@@ -976,8 +999,12 @@ def _provider_alias_forms(raw: str, org_id: str | None) -> list[str]:
         slug_raw = _slugify(raw)
         if slug_raw:
             forms.add(slug_raw)
-    # Always emit the normalized form + its org-prefixed variant.
-    norm = normalize_modelsdev_id(raw)
+    # Always emit the normalized form + its org-prefixed variant. Use
+    # strip_variants=False: alias forms must PRESERVE a variant's identity
+    # (-turbo/-thinking/-reasoner/-fp8/...). Stripping them here would emit the
+    # BASE model's id as one of the variant's aliases (e.g. `gpt-4-turbo` -> alias
+    # `gpt-4`), which steals the base canonical's id and aborts the seed (§5).
+    norm = normalize_modelsdev_id(raw, strip_variants=False)
     slug = _slugify(norm)
     if slug:
         leaf = slug.rsplit("/", 1)[-1]
@@ -985,6 +1012,15 @@ def _provider_alias_forms(raw: str, org_id: str | None) -> list[str]:
         if org_id:
             forms.add(f"{org_id}/{leaf}")
     return sorted(f for f in forms if f and f.count("/") <= 1)
+
+
+def _variant_identity(s: str) -> str:
+    """Variant-PRESERVING identity of a spelling (serving tags stripped, but
+    size/mode/quant/training-stage/version variants KEPT), leaf only. Two
+    spellings with the same identity are the same canonical; a different identity
+    means a different model. Shared by _attach_provider_aliases AND the reconcile
+    merge so neither attaches an `-instruct`/`-fp8`/`-120b` form onto a base/sibling."""
+    return _slugify(normalize_modelsdev_id(s, strip_variants=False)).rsplit("/", 1)[-1]
 
 
 def _attach_provider_aliases(
@@ -1011,6 +1047,7 @@ def _attach_provider_aliases(
     # Fallback target: the family-root entry (parents == []), else the first.
     root = next((e for e in entries if not e.get("parents")), entries[0] if entries else None)
 
+    _identity = _variant_identity  # module-level (shared with reconcile's merge)
     for r in group_recs:
         platform = PROVIDER_TO_INFERENCE_PLATFORM.get(r["provider"])
         raw = r["raw"]
@@ -1026,9 +1063,25 @@ def _attach_provider_aliases(
         )
         if target is None:
             continue
+        # IDENTITY GUARD: only attach a provider spelling to a target whose
+        # variant-preserving identity MATCHES the raw's. A `-fp8`/`-120b`/`-instruct`
+        # /`-v0.3` record routed (via tag/variant collapse) onto a base or sibling
+        # target would otherwise contaminate it with the variant's id as an alias
+        # and abort the seed (the gate's mint-shadow class). Serving tags are
+        # already stripped by _identity, so legit `:free`/`-maas`/`-tee` spellings
+        # still match their target and attach.
+        if _identity(raw) != _identity(target["id"]):
+            continue
         ap = target.setdefault("alias_platforms", {})
         for form in _provider_alias_forms(raw, org_id):
             if form == target["id"]:
+                continue
+            # Intra-group steal-guard (§5: merge, never dup): never attach a form
+            # that is already the id/alias of a DIFFERENT entry in this family
+            # group — that would make two canonicals claim the same alias and
+            # abort the seed (e.g. a `-turbo` record's form landing on the base).
+            owner = by_form.get(form)
+            if owner is not None and owner is not target:
                 continue
             # Record the platform provenance; a form seen from multiple
             # providers keeps the first non-null platform.
@@ -1049,6 +1102,42 @@ def _attach_provider_aliases(
 HF_ORACLE_JSON = REPO_ROOT.parent / "hf_model_id_resolution.json"
 
 _HF_AUTHORITY: dict[str, dict[str, str]] | None = None
+
+# --- shared org-aware fold inputs (used by reconcile_generated_against_existing) ---
+_HF_TO_DEV: dict[str, str] | None = None
+
+
+def _hf_to_dev() -> dict[str, str]:
+    """HF-org-lowercase -> curated developer slug. The SINGLE shared curated map
+    (eval_entity_resolver.fold.build_curated_org_map): `_ORG_ALIASES` UNION every
+    curated org's id + hf_org + `aliases`. Same map every generator + the resolver
+    use, so the org-aware fold here agrees with them."""
+    global _HF_TO_DEV
+    if _HF_TO_DEV is None:
+        from eval_entity_resolver.fold import build_curated_org_map
+        data = yaml.safe_load(ORGS_SEED_PATH.read_text()) if ORGS_SEED_PATH.exists() else []
+        _HF_TO_DEV = build_curated_org_map(data or [])
+    return _HF_TO_DEV
+
+
+_ORACLE_FIXED_IDS_CACHE: frozenset[str] | None = None
+
+
+def _oracle_fixed_ids() -> frozenset[str]:
+    """Real HF repo ids from the frozen oracle (fixed_exact/near_miss), so the
+    fold index recognises HF repos even before they're written to a source."""
+    global _ORACLE_FIXED_IDS_CACHE
+    if _ORACLE_FIXED_IDS_CACHE is None:
+        ids: set[str] = set()
+        if HF_ORACLE_JSON.exists():
+            oracle = json.loads(HF_ORACLE_JSON.read_text()).get("resolutions", {})
+            for v in oracle.values():
+                if v.get("resolution_status") in ("fixed_exact", "fixed_near_miss"):
+                    fx = v.get("fixed_hf_model_id")
+                    if isinstance(fx, str) and "/" in fx:
+                        ids.add(fx)
+        _ORACLE_FIXED_IDS_CACHE = frozenset(ids)
+    return _ORACLE_FIXED_IDS_CACHE
 
 
 def _build_hf_authority(
@@ -1145,7 +1234,17 @@ def _hf_defer_target(
     forms = list(spellings)
     if candidate_id:
         forms.append(candidate_id)
-    for name_norm in _candidate_name_norms(forms, org_id, alias_index):
+    # _candidate_name_norms returns a SET, so iterate it in a deterministic
+    # total order — otherwise the chosen HF target depends on Python's
+    # string-hash randomization (PYTHONHASHSEED) and the cron churns the file.
+    # Prefer the SHORTEST norm (fewest tokens), alpha tiebreak: the shortest
+    # norm is the group's base identity, so a stray decorated spelling (e.g. a
+    # models.dev `name` of "Llama 3.2 1B Instruct" on a base `llama-3.2-1b`
+    # record) never pulls a base group onto a variant repo.
+    for name_norm in sorted(
+        _candidate_name_norms(forms, org_id, alias_index),
+        key=lambda n: (n.count(" "), len(n), n),
+    ):
         hit = bucket.get(name_norm)
         if hit is not None:
             return hit
@@ -1369,7 +1468,222 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
         )
     # Dedup entries by id (a model that appears in two dedup groups, e.g. via
     # different snapshots, would otherwise emit twice). Merge aliases on collide.
-    return _dedup_entries(out), skipped_no_org
+    # Then the intra-output §5 reconciliation: merge same-model dups (org-aware)
+    # and strip alias-steals so no emitted alias claims another canonical's id.
+    return _reconcile_intra_output(_dedup_entries(out)), skipped_no_org
+
+
+def _pick_winner(group: list[dict]) -> dict:
+    """Pick the authoritative entry among same-model dups: prefer an HF-deferred
+    real repo, then an HF-true-cased id (has uppercase — e.g. `Qwen/...`), then a
+    reviewed entry, then the shortest id (drops doubled-brand mints like
+    `cohere/cohere-command-a` in favour of `cohere/command-a`), then alphabetical
+    for determinism."""
+    def _deferred(e: dict) -> bool:
+        try:
+            return json.loads(e.get("metadata") or "{}").get("hf_deferred") is True
+        except (ValueError, TypeError):
+            return False
+
+    def key(e: dict):
+        cid = e.get("id") or ""
+        return (
+            0 if _deferred(e) else 1,
+            0 if "/" in cid else 1,            # org-qualified beats bare org-less
+            0 if any(c.isupper() for c in cid) else 1,  # HF-true casing
+            0 if e.get("review_status") == "reviewed" else 1,
+            len(cid),
+            cid,
+        )
+
+    return sorted(group, key=key)[0]
+
+
+def _reconcile_intra_output(entries: list[dict]) -> list[dict]:
+    """Final §5 reconciliation WITHIN one generation's output (after id-dedup):
+
+    1. MERGE same-model dups — two entries are the same model iff they share an
+       org_id AND their org/brand-aware name norms intersect (reusing
+       `_candidate_name_norms`, the same brand-strip the HF-defer uses). This
+       collapses a dev-org-slug mint into the HF-deferred real repo
+       (`alibaba/qwen3-32b` -> `Qwen/Qwen3-32B`), a doubled-brand mint into its
+       clean sibling (`cohere/cohere-command-a` -> `cohere/command-a`), and a
+       dot/case spelling twin (`moonshotai/kimi-k2.6` <-> `…/Kimi-K2.6`). The
+       authoritative entry (`_pick_winner`) keeps id+casing; losers' aliases are
+       merged on, their ids added as aliases, and parent edges repointed.
+    2. STRIP alias-steals — a variant that wrongly carries a DIFFERENT model's id
+       as an alias (`…-thinking` aliasing its base; a deferred base aliasing its
+       `-it` variant) has that alias removed (the canonical id always wins). This
+       is NOT a merge — the two are genuinely different models.
+
+    The result: no emitted alias equals (exact or resolver-normalized) another
+    canonical's id, so the seed never aborts on a double-claim."""
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    alias_index = _dev_alias_index()
+
+    # ---- pass 1: org-aware same-model union-find ----
+    pj: dict[str, str] = {}
+
+    def find(x: str) -> str:
+        pj.setdefault(x, x)
+        while pj[x] != x:
+            pj[x] = pj[pj[x]]
+            x = pj[x]
+        return x
+
+    def union(a: str, b: str) -> None:
+        pj[find(a)] = find(b)
+
+    for e in entries:
+        find(e["id"])
+
+    # (a) Two canonicals with the SAME normalized id collide at seed time no
+    # matter what, so they MUST merge (regardless of org) — catches a bare
+    # org-less mint vs its org-qualified twin (`xiaomi-mimo-v2-5` vs
+    # `xiaomi/mimo-v2-5`) and dot/case spelling variants.
+    norm_id_bucket: dict[str, list[str]] = defaultdict(list)
+    for e in entries:
+        norm_id_bucket[_norm(e["id"])].append(e["id"])
+    for ids in norm_id_bucket.values():
+        for other in ids[1:]:
+            union(other, ids[0])
+
+    # (b) Org-aware same-model union: same org_id AND intersecting org/brand-aware
+    # name norms (reusing the HF-defer brand-strip). Merges a dev-org-slug mint
+    # into the HF-deferred real repo and a doubled-brand mint into its sibling.
+    bucket: dict[tuple, list[str]] = defaultdict(list)
+    for e in entries:
+        org = e.get("org_id")
+        if not org:
+            continue  # org-less tail only auto-merges via the normalized-id rule above
+        for nm in _candidate_name_norms([e["id"]], org, alias_index):
+            bucket[(org, nm)].append(e["id"])
+    for ids in bucket.values():
+        for other in ids[1:]:
+            union(other, ids[0])
+
+    groups: dict[str, list[dict]] = defaultdict(list)
+    for e in entries:
+        groups[find(e["id"])].append(e)
+
+    merged: list[dict] = []
+    loser_to_winner: dict[str, str] = {}
+    for grp in groups.values():
+        if len(grp) == 1:
+            merged.append(grp[0])
+            continue
+        winner = _pick_winner(grp)
+        walias = set(winner.get("aliases") or [])
+        wap = winner.setdefault("alias_platforms", {})
+        # Scalar fields to fill from a loser when the winner's value is empty
+        # (the winner is often an hf_deferred entry with family/params/modalities
+        # None and parents []). Mirrors _dedup_entries / loader _merge_into so a
+        # merge is identity-correct WITHOUT discarding the richer loser's metadata.
+        _PREFER_NONEMPTY = (
+            "params_billions", "family", "architecture",
+            "input_modalities", "output_modalities",
+        )
+        wparents = {edge.get("id"): edge for edge in (winner.get("parents") or []) if isinstance(edge, dict)}
+        for e in grp:
+            if e is winner:
+                continue
+            loser_to_winner[e["id"]] = winner["id"]
+            walias.update(e.get("aliases") or [])
+            if e["id"] != winner["id"]:
+                walias.add(e["id"])
+            for k, v in (e.get("alias_platforms") or {}).items():
+                if k not in wap or (wap.get(k) is None and v):
+                    wap[k] = v
+            winner["open_weights"] = bool(winner.get("open_weights")) or bool(e.get("open_weights"))
+            if e.get("review_status") == "reviewed":
+                winner["review_status"] = "reviewed"
+            # Prefer-non-empty scalar fill from the loser.
+            for f in _PREFER_NONEMPTY:
+                if not winner.get(f) and e.get(f):
+                    winner[f] = e[f]
+            # Earliest release_date wins (matches _dedup_entries).
+            rds = [d for d in (winner.get("release_date"), e.get("release_date")) if d]
+            if rds:
+                winner["release_date"] = min(rds)
+            # Union parent edges by id (don't drop the loser's lineage).
+            for edge in (e.get("parents") or []):
+                if isinstance(edge, dict) and edge.get("id") not in wparents:
+                    wparents[edge["id"]] = edge
+        if wparents:
+            winner["parents"] = list(wparents.values())
+        winner["aliases"] = sorted(walias)
+        merged.append(winner)
+
+    # Repoint parent edges that referenced a merged-away loser.
+    for e in merged:
+        for edge in (e.get("parents") or []):
+            if isinstance(edge, dict) and edge.get("id") in loser_to_winner:
+                edge["id"] = loser_to_winner[edge["id"]]
+
+    # ---- pass 2: strip alias-steals (alias == a DIFFERENT canonical's id) ----
+    # Clean BOTH `aliases` and the working `alias_platforms` map (the latter is
+    # flattened back into aliases by _finalize_entries, so a stolen form left
+    # there would reappear).
+    ids = {e["id"] for e in merged}
+    id_norm: dict[str, str] = {}
+    for cid in ids:
+        id_norm.setdefault(_norm(cid), cid)
+
+    def _steals_id(form: str, cid: str) -> bool:
+        if not form or form == cid:
+            return False
+        if form in ids:  # exact: another canonical's id
+            return True
+        owner = id_norm.get(_norm(form))
+        return owner is not None and owner != cid  # normalized: another canonical's id
+
+    for e in merged:
+        cid = e["id"]
+        e["aliases"] = sorted({a for a in (e.get("aliases") or []) if not _steals_id(a, cid)})
+        ap = e.get("alias_platforms")
+        if isinstance(ap, dict):
+            e["alias_platforms"] = {k: v for k, v in ap.items() if not _steals_id(k, cid)}
+
+    # ---- pass 3: ambiguous claims (alias OR display_name claimed by 2+ DISTINCT
+    # surviving canonicals) abort the seed (the loader promotes display_name to a
+    # global alias). Keep each contested form on ONE canonical — the "natural"
+    # owner whose id-name normalizes to it, else the first by id — and drop it
+    # from the others (cross-org bare names like `gemma-3-1b-it`, shared display
+    # names like `Claude Opus 4.5`).
+    claimers: dict[str, set[str]] = defaultdict(set)
+    for e in merged:
+        cid = e["id"]
+        for a in e.get("aliases") or []:
+            claimers[a].add(cid)
+        for k in (e.get("alias_platforms") or {}):
+            claimers[k].add(cid)
+        dn = e.get("display_name")
+        if isinstance(dn, str) and dn:
+            claimers[dn].add(cid)
+
+    keeper: dict[str, str] = {}
+    for form, owners in claimers.items():
+        if len(owners) < 2:
+            continue
+        natural = sorted(c for c in owners if _norm(c.split("/", 1)[-1]) == _norm(form))
+        keeper[form] = (natural or sorted(owners))[0]
+
+    if keeper:
+        for e in merged:
+            cid = e["id"]
+            e["aliases"] = sorted(
+                a for a in (e.get("aliases") or []) if a not in keeper or keeper[a] == cid
+            )
+            ap = e.get("alias_platforms")
+            if isinstance(ap, dict):
+                e["alias_platforms"] = {k: v for k, v in ap.items() if k not in keeper or keeper[k] == cid}
+            dn = e.get("display_name")
+            if isinstance(dn, str) and dn in keeper and keeper[dn] != cid:
+                # Re-derive a non-colliding display_name from the id tail.
+                e["display_name"] = cid.split("/", 1)[-1]
+
+    return sorted(merged, key=lambda e: e["id"])
 
 
 def _dedup_entries(entries: list[dict]) -> list[dict]:
@@ -1480,6 +1794,270 @@ _CATALOG_EXISTING_SOURCES = (
     HF_ORACLE_PATH, SEED_PATH, HUB_STATS_PATH, CORE_PATH, ENRICH_ALIASES_PATH,
 )
 
+# Existing-sources set the NON-catalog (full re-cased) write path reconciles
+# against. SAME set as the catalog path EXCEPT SEED_PATH itself is dropped —
+# the non-catalog write REWRITES SEED_PATH, so it must not dedup against its own
+# (stale) prior output. CORE_PATH IS included, which is the whole point: a fresh
+# re-cased mint whose normalized form collides with a curated core canonical
+# under a DIFFERENT id is suppressed/repointed instead of clobbering core.
+_NONCATALOG_EXISTING_SOURCES = (
+    HF_ORACLE_PATH, HUB_STATS_PATH, CORE_PATH, ENRICH_ALIASES_PATH,
+)
+
+
+def _build_existing_index(
+    sources: tuple[Path, ...],
+) -> tuple[dict[str, str], dict[str, str]]:
+    """Build (existing_exact, existing_norm) maps {form -> owning canonical id}
+    over every id / display_name / alias surface form in `sources`.
+
+    `existing_exact` keys on the raw form; `existing_norm` keys on the resolver's
+    `normalize` (case + all separators collapsed) — the same form-matching the
+    catalog path and the seed validator's normalized_match steal-guard use.
+    First writer wins on a duplicate form (setdefault), mirroring the catalog
+    path's accumulation order."""
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    existing_exact: dict[str, str] = {}
+    existing_norm: dict[str, str] = {}
+
+    def _add_exact(form: str, cid: str) -> None:
+        if form:
+            existing_exact.setdefault(form, cid)
+            existing_norm.setdefault(_norm(form), cid)
+
+    for path in sources:
+        for e in _catalog_load_list(path):
+            cid = e.get("id")
+            if not cid:
+                continue
+            _add_exact(cid, cid)
+            dn = e.get("display_name")
+            if dn:
+                _add_exact(dn, cid)
+            for a in (e.get("aliases") or []):
+                _add_exact(a, cid)
+    return existing_exact, existing_norm
+
+
+def _make_steal_guard(existing_exact: dict[str, str], existing_norm: dict[str, str]):
+    """Return a `_steals(form, cid)` predicate: True iff `form` (exact OR
+    normalized) is already owned by a DIFFERENT canonical id. Identical
+    semantics to regenerate_catalog's inner `_steals`."""
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    def _steals(form: str, cid: str) -> bool:
+        owner = existing_exact.get(form)
+        if owner is not None and owner != cid:
+            return True
+        nowner = existing_norm.get(_norm(form))
+        return nowner is not None and nowner != cid
+
+    return _steals
+
+
+def reconcile_generated_against_existing(
+    entries: list[dict],
+    sources: tuple[Path, ...] = _NONCATALOG_EXISTING_SOURCES,
+) -> list[dict]:
+    """Core-aware reconciliation for the NON-catalog write path — a true MERGE
+    (spec §5: "alias-collision -> merge, never dup — move aliases, drop the
+    source row, rewrite parent edges").
+
+    For every minted entry whose id (exact OR normalized) collides with an
+    EXISTING canonical (from `sources`, incl. CORE_PATH) under a DIFFERENT id:
+      1. drop the colliding mint (the existing curated/HF id wins id+casing);
+      2. MERGE: emit an enrich record {id: <existing owner>, aliases: [the mint
+         id + its non-stealing aliases]} so those surface forms resolve to the
+         owner (the seed loader unions aliases by id across sources) — mirrors
+         the catalog path's `_enrich_target`. Aliases are NOT silently dropped;
+      3. rewrite every SURVIVING entry's `parents[].id` that pointed at a dropped
+         mint to the owner instead, so no surviving lineage edge dangles.
+
+    Reuses the steal-guard machinery (`_build_existing_index`/`_make_steal_guard`).
+    `sources` is injectable for unit testing. Returns a new id-sorted list of
+    survivors + enrich records.
+    """
+    from eval_entity_resolver.fold import build_hf_index, decide_fold
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    existing_exact, existing_norm = _build_existing_index(sources)
+    _steals = _make_steal_guard(existing_exact, existing_norm)
+
+    def _owner_of(form: str) -> str | None:
+        """The existing canonical id that owns `form` (exact then normalized)."""
+        return existing_exact.get(form) or existing_norm.get(_norm(form))
+
+    # Broader owner index for the MERGE-donation + survivor HYGIENE (NOT the
+    # partition steal-guard, which stays narrow): a form may be owned by an
+    # established canonical in the models_dev_catalog / tier3 sources too. Those
+    # are excluded from `sources` so the partition does not dedup against
+    # derived/own output, but they ARE authoritative for "this form already
+    # belongs to X" — so a base spelling like `meta/llama-3-1-70b` (owned by the
+    # base in the catalog) is not donated onto / kept on the `…-70B-Instruct`
+    # canonical.
+    _hy_exact, _hy_norm = _build_existing_index(sources + (CATALOG_OUT_PATH, TIER3_PATH))
+
+    def _owner_broad(form: str) -> str | None:
+        return _hy_exact.get(form) or _hy_norm.get(_norm(form))
+
+    # ORG-AWARE fold index over the existing sources (+ frozen oracle HF ids): a
+    # mint that refers to the SAME model as a real HF repo under a DIFFERENT id
+    # (the org-decoupled dev-org-slug case the plain-normalize steal-guard misses,
+    # e.g. `alibaba/qwen-2-5-14b-instruct` -> `Qwen/Qwen2.5-14B-Instruct`) must
+    # DEFER to the HF id. Uses the SAME decide_fold the gate verifies (no drift).
+    existing_entries: list[dict] = []
+    for path in sources:
+        existing_entries.extend(_catalog_load_list(path))
+    hf_to_dev = _hf_to_dev()
+    _hf_ids, _alias_to_hf, _by_org_name, _ = build_hf_index(
+        existing_entries, hf_to_dev, _oracle_fixed_ids()
+    )
+
+    def _fold_target(e: dict) -> str | None:
+        f = decide_fold(e, _hf_ids, _alias_to_hf, _by_org_name, hf_to_dev)
+        if f is None:
+            return None
+        tgt = f["hf_target"]
+        return tgt if tgt and tgt != e.get("id") else None
+
+    # First pass: partition into survivors vs suppressed. A mint is suppressed
+    # when its id steals an existing canonical (plain-normalized, different id) OR
+    # it org-aware-folds to a real HF repo. Record each suppressed id -> owner.
+    survivors: list[dict] = []
+    suppressed: list[dict] = []
+    suppressed_owner: dict[str, str] = {}
+    for e in entries:
+        cid = e.get("id")
+        owner: str | None = None
+        if cid and _steals(cid, cid):
+            o = _owner_of(cid)
+            if o and o != cid:
+                owner = o
+        # A mint whose id EXACTLY equals an existing canonical id IS that canonical
+        # (a re-emit, e.g. an HF-present model models.dev also serves). MERGE its
+        # forms onto that existing canonical via an enrich record — do NOT keep it
+        # as a models_dev-source SURVIVOR (that would be a redundant duplicate of
+        # the HF canonical, and any contaminating variant spelling it carries would
+        # then read as a models_dev mint shadowing a real HF id). And NEVER run
+        # decide_fold on it: decide_fold's fuzzy tier strips variant markers
+        # (-instruct/-it/…) and would drag a distinct variant that is itself a real
+        # canonical onto the base (e.g. Llama-3.2-1B-Instruct -> the base ...-3.2-1B).
+        if owner is None and cid and existing_exact.get(cid) == cid:
+            suppressed.append(e)
+            suppressed_owner[cid] = cid   # owner == self: enrich onto the existing id
+            continue
+        if owner is None and cid:
+            owner = _fold_target(e)  # org-aware same-model fold
+        if owner and owner != cid:
+            suppressed.append(e)
+            suppressed_owner[cid] = owner
+            continue
+        survivors.append(e)
+
+    # NOTE: do NOT early-return when `suppressed` is empty — the surviving-mint
+    # cross-source hygiene below must run regardless (a survivor can carry a
+    # foreign alias/display_name even when no mint id collides).
+
+    # MERGE: accumulate enrich records keyed by owner. The dropped mint id plus
+    # its non-stealing aliases (forms not owned by yet another canonical) are
+    # carried onto the owner so resolvable spellings survive.
+    enrich_aliases: dict[str, set[str]] = defaultdict(set)
+    for e in suppressed:
+        cid = e["id"]
+        owner = suppressed_owner[cid]
+        if not _steals(cid, owner) or cid != owner:
+            # The dropped mint id resolves to the owner: keep it as an alias —
+            # UNLESS it normalized-equals the owner's own id form, OR cid is
+            # ITSELF a real canonical owned by a DIFFERENT id (a distinct model
+            # an org-aware fold wrongly dragged here, e.g. the base repo
+            # `google/gemma-2-9b` folded onto the variant `…-9b-it` via a mangled
+            # models.dev key alias). Donating it would double-claim the form and
+            # merge two distinct canonicals. The real owner already supplies it,
+            # so drop it. Same foreign-owner guard the loser's OTHER aliases get
+            # below (L1943) — applied symmetrically to the loser id.
+            cid_owner = _owner_broad(cid)
+            if _norm(cid) != _norm(owner) and not (cid_owner is not None and cid_owner != owner):
+                enrich_aliases[owner].add(cid)
+        # Carry the dropped mint's display_name too (it was a resolvable form: a
+        # raw value can NORMALIZED-match a canonical via its display_name, e.g.
+        # `command-r+` -> the folded `cohere/command-r+` whose display was
+        # `Command R+`). Without donating it, that bare-form resolvability is lost
+        # when the mint folds onto the real HF id. Same foreign-owner guard.
+        for a in [e.get("display_name"), *(e.get("aliases") or [])]:
+            if not a or a == owner:
+                continue
+            # Drop an alias only if it is owned by a DIFFERENT canonical than the
+            # owner we are merging onto (would double-claim); else carry it over.
+            other = _owner_broad(a)
+            if other is not None and other != owner:
+                continue
+            enrich_aliases[owner].add(a)
+
+    # Rewrite surviving parent edges that pointed at a dropped mint -> the owner,
+    # so no surviving lineage edge dangles (spec §5 "rewrite parent edges").
+    for e in survivors:
+        parents = e.get("parents")
+        if not isinstance(parents, list):
+            continue
+        for edge in parents:
+            if isinstance(edge, dict) and edge.get("id") in suppressed_owner:
+                edge["id"] = suppressed_owner[edge["id"]]
+
+    # SURVIVING-mint cross-source + INTRA-BATCH form hygiene: a survivor (its id
+    # does NOT steal) can still carry an ALIAS / DISPLAY_NAME owned by a DIFFERENT
+    # canonical — a double-claim the seed rejects as nondeterministic. The owner
+    # can be either:
+    #   * an EXISTING source canonical (cross-source) — e.g. models_dev
+    #     `mistralai/mixtral-8x7b` keeping the bare alias `mixtral-8x7b` owned by
+    #     hf_oracle's `mistralai/Mixtral-8x7B-Instruct-v0.1`; cross-org
+    #     `unsloth/...` vs `google/...` sharing a bare name; OR
+    #   * a SIBLING SURVIVOR in this same rewrite batch (intra-batch) — the
+    #     non-catalog path REWRITES models_dev.generated.yaml wholesale, so a base
+    #     mint (`meta-llama/Llama-3.1-70B`) aliasing a variant that is ALSO its own
+    #     batch entry (`…-70B-Instruct`) double-claims it. The cross-source check
+    #     alone misses this (neither is in the EXISTING sources).
+    # Resolution (deterministic): an entry's own id always wins; a sibling's id
+    # beats any alias (distinct canonicals — drop the alias, not a merge); a
+    # non-id form shared by >1 survivor goes to the lexicographically-first
+    # claimant. Mirrors the catalog path's fresh_form_owner ownership.
+    sibling_ids = {e["id"] for e in survivors}
+    claimed: dict[str, str] = {}  # non-id form -> first survivor (sorted) that claims it
+    for e in sorted(survivors, key=lambda x: x["id"]):
+        cid = e["id"]
+
+        def _foreign(form: str) -> bool:
+            o = _owner_broad(form)
+            if o is not None and o != cid:
+                return True                       # owned by an established canonical
+            if form in sibling_ids and form != cid:
+                return True                       # is a different sibling's id
+            c = claimed.get(form)
+            return c is not None and c != cid     # already claimed by an earlier sibling
+
+        kept: list[str] = []
+        for a in (e.get("aliases") or []):
+            if not a or a == cid or _foreign(a):
+                continue
+            claimed.setdefault(a, cid)
+            kept.append(a)
+        e["aliases"] = sorted(set(kept))
+        ap = e.get("alias_platforms")
+        if isinstance(ap, dict):
+            e["alias_platforms"] = {k: v for k, v in ap.items() if k != cid and not _foreign(k)}
+        dn = e.get("display_name")
+        if isinstance(dn, str) and _foreign(dn):
+            cand = cid.split("/", 1)[-1]
+            e["display_name"] = cid if _foreign(cand) else cand
+
+    enrich_records = [
+        {"id": owner, "aliases": sorted(aliases)}
+        for owner, aliases in enrich_aliases.items()
+        if aliases
+    ]
+    out = survivors + enrich_records
+    return sorted(out, key=lambda e: e.get("id") or "")
+
 _CATALOG_HEADER = """# AUTO-GENERATED by scripts/refresh_from_modelsdev.py (catalog split) — DO NOT HAND-EDIT.
 # models.dev full-catalog seed. Two record kinds:
 #   * fresh canonical mints: models.dev-only (not-on-HF) models — closed-API
@@ -1547,6 +2125,20 @@ def regenerate_catalog(full: list[dict]) -> None:
         nowner = existing_norm.get(_norm(form))
         return nowner is not None and nowner != cid
 
+    # ORG-AWARE fold index (same decide_fold the non-catalog path + gate use): a
+    # catalog mint that refers to the SAME model as a real HF repo under a
+    # different id (org-decoupled, e.g. `zai/GLM-5` -> `zai-org/GLM-5`) must
+    # enrich onto the HF id, NOT mint a fresh shadow that aborts the seed.
+    from eval_entity_resolver.fold import build_hf_index as _bhi, decide_fold as _df
+
+    _existing_entries = [e for path in _CATALOG_EXISTING_SOURCES for e in _catalog_load_list(path)]
+    _hf_to_dev_map = _hf_to_dev()
+    _chf_ids, _calias, _cby_org, _ = _bhi(_existing_entries, _hf_to_dev_map, _oracle_fixed_ids())
+
+    def _catalog_fold_target(e: dict) -> str | None:
+        f = _df(e, _chf_ids, _calias, _cby_org, _hf_to_dev_map)
+        return f["hf_target"] if f and f["hf_target"] != e.get("id") else None
+
     fresh: list[dict] = []
     enrich: list[dict] = []
     fresh_seen_lc: dict[str, dict] = {}
@@ -1588,6 +2180,10 @@ def regenerate_catalog(full: list[dict]) -> None:
         )
         if owner_exact is not None:
             _enrich_target(owner_exact, [cid] + list(e.get("aliases", [])), ap)
+            continue
+        fold_tgt = _catalog_fold_target(e)
+        if fold_tgt is not None:
+            _enrich_target(fold_tgt, [cid] + list(e.get("aliases", [])), ap)
             continue
         if cid_low in fresh_seen_lc:
             prior = fresh_seen_lc[cid_low]
@@ -1638,6 +2234,22 @@ def regenerate_catalog(full: list[dict]) -> None:
             e["metadata"] = json.dumps(meta, sort_keys=True)
         fresh.append(e)
 
+    # Org-FK canonicalization (Phase C — correct merge of NEW upstream models
+    # against the EXISTING org universe): snap each fresh mint's org_id to the
+    # canonical developer / HF-true community casing BEFORE writing the catalog
+    # and computing `missing`. Without this, a new models.dev model whose org
+    # already exists as a community org under HF-true casing (e.g. `Sao10K`) but
+    # arrives lowercased (`sao10k`) mints a case-variant TWIN org (split
+    # identity) via the case-sensitive set-difference below. Source-local: only
+    # the catalog's own fresh entries + orgs.generated.yaml are written here; the
+    # whole-universe rewrite stays the separate one-shot. Same authority closure
+    # as canonicalize_model_org_ids -> the two never diverge.
+    _canon_org = _build_org_canonicalizer()
+    for e in fresh:
+        for field in ("org_id", "lineage_origin_model_org_id"):
+            if e.get(field):
+                e[field] = _canon_org(e[field])
+
     out_entries = fresh + enrich
     body = yaml.safe_dump(out_entries, sort_keys=False, allow_unicode=True, width=200)
     CATALOG_OUT_PATH.write_text(_CATALOG_HEADER + "\n" + body)
@@ -1673,6 +2285,192 @@ def regenerate_catalog(full: list[dict]) -> None:
     )
 
 
+# All model source files whose org_ids must have a canonical_orgs row.
+TIER3_PATH = REPO_ROOT / "seed" / "models" / "sources" / "tier3_inferred.generated.yaml"
+_ALL_MODEL_SOURCES = (
+    HF_ORACLE_PATH, SEED_PATH, HUB_STATS_PATH, CATALOG_OUT_PATH, TIER3_PATH, CORE_PATH,
+)
+# The real-HF casing authority: org_ids minted from real HF repos (HF-true casing).
+_HF_TRUE_CASING_SOURCES = (HF_ORACLE_PATH, HUB_STATS_PATH)
+ORGS_DISTINCT_ALLOWLIST_PATH = REPO_ROOT / "seed" / "orgs_distinct_allowlist.yaml"
+
+
+def _load_distinct_org_allowlist() -> set[str]:
+    if not ORGS_DISTINCT_ALLOWLIST_PATH.exists():
+        return set()
+    return {x for x in (yaml.safe_load(ORGS_DISTINCT_ALLOWLIST_PATH.read_text()) or []) if isinstance(x, str)}
+
+
+def _write_source_entries(path: Path, entries: list[dict]) -> None:
+    """Rewrite a generated/core source file's entries, preserving its `# header`
+    and the `{skip_ids,...,entries}` dict shape where present."""
+    text = path.read_text() if path.exists() else ""
+    header = "\n".join(ln for ln in text.splitlines() if ln.startswith("#"))
+    doc = yaml.safe_load(text) if text else None
+    if isinstance(doc, dict) and "entries" in doc:
+        out = {**doc, "entries": entries}
+    else:
+        out = entries
+    body = yaml.safe_dump(out, sort_keys=False, allow_unicode=True, width=200)
+    path.write_text((header + "\n" if header else "") + body)
+
+
+def _build_org_canonicalizer():
+    """The single org-canonicalization closure shared by the whole-universe
+    one-shot (`canonicalize_model_org_ids`) and the source-local --catalog cron
+    (`regenerate_catalog`), so the two NEVER diverge on casing (which would
+    oscillate across runs). Folds an HF org spelling to: curated developer id ->
+    authoritative HF-true community casing -> verbatim, honoring the distinct-org
+    allowlist. Authority: PRIMARY from real-HF sources (HF-true), FALLBACK across
+    all model sources + the existing canonical_orgs rows (so a new upstream model
+    snaps to an EXISTING org row even when no model yet references that casing).
+    Returns a `_canon(org_spelling) -> canonical_org_id` callable."""
+    from eval_entity_resolver.fold import build_curated_org_map, build_community_casing, canonicalize_org
+
+    curated_map = build_curated_org_map(_catalog_load_list(ORGS_SEED_PATH))
+    distinct = _load_distinct_org_allowlist()
+
+    primary = build_community_casing([
+        e.get("org_id") for p in _HF_TRUE_CASING_SOURCES for e in _catalog_load_list(p)
+        if isinstance(e.get("org_id"), str)
+    ])
+    fallback = build_community_casing(
+        [e.get("org_id") for p in _ALL_MODEL_SOURCES for e in _catalog_load_list(p)
+         if isinstance(e.get("org_id"), str)]
+        + [e["id"] for p in (ORGS_SEED_PATH, ORGS_GENERATED_PATH)
+           for e in _catalog_load_list(p) if isinstance(e.get("id"), str)]
+    )
+    community = {**fallback, **primary}  # primary (real-HF) wins
+
+    def _canon(org):
+        if not isinstance(org, str) or not org:
+            return org
+        return canonicalize_org(org, curated_map, community, distinct)
+
+    return _canon
+
+
+def canonicalize_model_org_ids() -> int:
+    """Canonicalize EVERY model's org_id + lineage_origin_model_org_id across all
+    sources to ONE spelling per developer, via the single shared
+    eval_entity_resolver.fold.canonicalize_org: curated developer id when the org
+    folds to one, else the authoritative HF-true community casing (from the
+    hf_oracle/hub_stats real-HF org_ids), honoring the distinct-org allowlist.
+
+    This is the single org-canonicalization pass — replaces relying on each
+    generator to emit a consistent casing (they see different raw spellings). A
+    refresh re-runs it deterministically. Returns the number of fields rewritten."""
+    _canon = _build_org_canonicalizer()
+
+    rewritten = 0
+    for path in _ALL_MODEL_SOURCES:
+        entries = _catalog_load_list(path)
+        if not entries:
+            continue
+        changed = False
+        for e in entries:
+            if not isinstance(e, dict):
+                continue
+            for field in ("org_id", "lineage_origin_model_org_id"):
+                old = e.get(field)
+                new = _canon(old)
+                if new != old:
+                    e[field] = new
+                    rewritten += 1
+                    changed = True
+        if changed:
+            _write_source_entries(path, entries)
+    print(f"[refresh] org-canonicalize: rewrote {rewritten} org field(s) to the "
+          f"canonical developer spelling", file=sys.stderr)
+    return rewritten
+
+
+def reconcile_all_orgs() -> None:
+    """Ensure EVERY org_id referenced by ANY model (across all sources + core)
+    has a canonical_orgs row — mint a community org for those that don't.
+
+    The per-generator org reconciliation only covers each generator's OWN mints
+    (hf_oracle its targets; the --catalog split its fresh mints), so org_ids that
+    appear ONLY in the non-catalog models_dev or tier3 mints dangle. This runs as
+    the LAST regen step (after tier3) over the UNION of all sources, so it is the
+    single authoritative org reconciler. Additive-only: never deletes/renames a
+    row, preserves exact HF org spelling (no separator/case collapse, so it can't
+    collapse genuinely-distinct orgs), excludes org_id=None and any org already
+    CLAIMED by a curated org (id / hf_org / alias) so a community row never shadows
+    a curated lab."""
+    # FIRST canonicalize every model's org_id to one spelling per developer
+    # (curated id / HF-true community casing), so the rows minted below are over
+    # canonical org_ids and no case/separator twins are created.
+    canonicalize_model_org_ids()
+
+    # Curated CLAIMS (not just ids) so a referenced org that a curated lab already
+    # owns as an hf_org/alias is remapped, not minted as a community twin.
+    curated_claims: set[str] = set()
+    for e in _catalog_load_list(ORGS_SEED_PATH):
+        for form in (e.get("id"), e.get("hf_org"), *(e.get("aliases") or [])):
+            if isinstance(form, str) and form:
+                curated_claims.add(form.lower())
+    gen_orgs = _catalog_load_list(ORGS_GENERATED_PATH)
+    gen_org_ids = {e["id"] for e in gen_orgs if isinstance(e.get("id"), str)}
+
+    referenced: set[str] = set()
+    for path in _ALL_MODEL_SOURCES:
+        for e in _catalog_load_list(path):
+            oid = e.get("org_id")
+            if isinstance(oid, str) and oid:
+                referenced.add(oid)
+
+    # PRUNE stale case/separator TWINS: a generated org row that NO model
+    # references AND whose case/separator-insensitive key matches a DIFFERENT,
+    # referenced org is a leftover from a prior community casing (e.g. an old
+    # lowercase `madeagents` after canonicalize flipped every model to the
+    # HF-true `MadeAgents`). It would trip test_no_case_split_orgs. Dropping it
+    # is safe — it's unreferenced and a genuine twin (NOT a distinct uploader,
+    # which would still be referenced by its own models). Curated orgs are never
+    # touched (only seed/orgs.generated.yaml rows). Honors the distinct allowlist.
+    from eval_entity_resolver.fold import _norm_org_key
+    distinct = _load_distinct_org_allowlist()
+    ref_keys = {_norm_org_key(o): o for o in referenced}
+    pruned: list[str] = []
+    kept_orgs = []
+    for e in gen_orgs:
+        oid = e.get("id")
+        if (isinstance(oid, str) and oid and oid not in referenced
+                and oid not in distinct
+                and _norm_org_key(oid) in ref_keys
+                and ref_keys[_norm_org_key(oid)] != oid):
+            pruned.append(oid)
+            continue
+        kept_orgs.append(e)
+    gen_orgs = kept_orgs
+    gen_org_ids = {e["id"] for e in gen_orgs if isinstance(e.get("id"), str)}
+
+    missing = sorted(
+        oid for oid in referenced
+        if oid not in gen_org_ids and oid.lower() not in curated_claims
+    )
+    for oid in missing:
+        gen_orgs.append({
+            "id": oid, "display_name": oid, "hf_org": oid,
+            "kind": "community", "tags": "[]", "metadata": "{}",
+            "review_status": "reviewed",
+        })
+    if not missing and not pruned:
+        print("[refresh] org-reconcile: no dangling org_ids", file=sys.stderr)
+        return
+    gen_header = (
+        ORGS_GENERATED_PATH.read_text().split("\n- ", 1)[0].rstrip()
+        if ORGS_GENERATED_PATH.exists() else ""
+    )
+    if not gen_header.startswith("#"):
+        gen_header = "# AUTO-GENERATED — HF-derived community orgs."
+    ORGS_GENERATED_PATH.write_text(
+        gen_header + "\n" + yaml.safe_dump(gen_orgs, sort_keys=False, allow_unicode=True, width=200)
+    )
+    print(f"[refresh] org-reconcile: minted {len(missing)} community org(s), pruned "
+          f"{len(pruned)} stale twin(s) (e.g. mint {missing[:4]}, prune {pruned[:4]})", file=sys.stderr)
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--no-fetch", action="store_true", help="use cached /tmp/modelsdev_api.json")
@@ -1693,7 +2491,20 @@ def main() -> int:
         "the source write so the catalog splits against the settled re-cased "
         "models_dev.",
     )
+    p.add_argument(
+        "--reconcile-orgs",
+        action="store_true",
+        help="ONLY run the universal org reconcile: mint a community canonical_orgs "
+        "row for every org_id referenced by ANY model source (incl. tier3) that "
+        "lacks one. Run as the LAST regen step (after tier3) — does not fetch or "
+        "rewrite model sources.",
+    )
     args = p.parse_args()
+
+    # --reconcile-orgs: standalone, no network / no model-source rewrite.
+    if args.reconcile_orgs:
+        reconcile_all_orgs()
+        return 0
 
     api = _fetch(use_cache=args.no_fetch)
     known_orgs = _load_known_org_ids()
@@ -1726,6 +2537,40 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
+    # Finalize BEFORE reconciliation (same order as the --catalog path, which
+    # dedups `_finalize_entries(generated)`). _finalize_entries flattens the
+    # working `alias_platforms` map into `aliases`; without it the reconcile's
+    # steal/fold/donate logic reads only `aliases` and is BLIND to the provider
+    # spellings still buried in alias_platforms (e.g. a `-Instruct` mint's
+    # `meta/llama-3-1-8b-instruct` provider forms), so those forms leak past the
+    # dedup and only surface — on the wrong canonical — once _write_yaml flattens
+    # them, aborting the seed with a base/variant alias collision. Idempotent, so
+    # _write_yaml's re-finalize below is a no-op.
+    generated = _finalize_entries(generated)
+    # Core-aware reconciliation: suppress/repoint any mint whose normalized id
+    # collides with an existing canonical (incl. core.yaml) under a DIFFERENT id,
+    # so the full re-cased rewrite is ADDITIVE rather than clobbering curated
+    # fixes (spec model-resolution-rework §2.2/§4 Phase 1). Same steal-guard the
+    # --catalog path uses; excludes SEED_PATH (we are rewriting it).
+    before = len(generated)
+    generated = reconcile_generated_against_existing(generated)
+    if len(generated) != before:
+        print(
+            f"[refresh] reconciliation: suppressed {before - len(generated)} "
+            f"mint(s) colliding (normalized) with an existing canonical",
+            file=sys.stderr,
+        )
+    # Org-FK canonicalization (same closure + authority as the --catalog path and
+    # the one-shot): snap each surviving mint's org_id to the existing developer /
+    # HF-true community casing so the full re-cased rewrite never mints a
+    # case-variant TWIN org for a developer that already exists under HF-true
+    # casing. Without it, a model whose org arrives lowercased (`sao10k`) would
+    # split-identity against the existing `Sao10K` row.
+    _canon_org = _build_org_canonicalizer()
+    for e in generated:
+        for field in ("org_id", "lineage_origin_model_org_id"):
+            if e.get(field):
+                e[field] = _canon_org(e[field])
     out_path = args.preview_out or SEED_PATH
     new_text = _write_yaml(generated, out_path)
 

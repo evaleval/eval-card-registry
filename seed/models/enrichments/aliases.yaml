@@ -1,0 +1,3318 @@
+# Alias bridges — forms the curated oracle carried that the generators do
+# NOT, attached to the canonical the entry now resolves to. Gap-filling only
+# (each form was UNCLAIMED by any generator canonical), so these never
+# override or collide. Loader UNIONs these aliases onto the matching
+# canonical. Derived by scripts/oneshots/build_curated_core_floor.py.
+- id: 01-ai/Yi-Coder-9B-Chat
+  aliases:
+  - unknown/yi-coder-chat-9b
+- id: 01-ai/yi-large
+  aliases:
+  - yi-large-preview
+- id: Anthropic/claude-3-5-sonnet-20240620
+  aliases:
+  - Claude 3.5 Sonnet (2024-06-20)
+- id: Anthropic/claude-3-haiku-20240307
+  aliases:
+  - Claude 3 Haiku (2024-03-07)
+- id: Anthropic/claude-3-opus-20240229
+  aliases:
+  - Claude 3 Opus (2024-02-29)
+  - claude-3-opus-20240229
+- id: Anthropic/claude-3-sonnet-20240229
+  aliases:
+  - Claude 3 Sonnet (2024-02-29)
+  - claude-3-sonnet-20240229
+- id: CohereLabs/aya-23-35B
+  aliases:
+  - cohere/aya-23-35B
+- id: CohereLabs/aya-23-8B
+  aliases:
+  - aya-23
+  - cohere/aya-23-8B
+  - unknown/aya-23
+- id: CohereLabs/aya-expanse-32b
+  aliases:
+  - c4ai-aya-expanse-32b
+  - cohere/c4ai-aya-expanse-32b
+- id: CohereLabs/aya-expanse-8b
+  aliases:
+  - c4ai-aya-expanse-8b
+  - cohere/c4ai-aya-expanse-8b
+- id: CohereLabs/c4ai-command-a-03-2025
+  aliases:
+  - cohere/c4ai-command-a-03-2025
+- id: CohereLabs/c4ai-command-r-08-2024
+  aliases:
+  - cohere/c4ai-command-r-08-2024
+- id: CohereLabs/c4ai-command-r-plus
+  aliases:
+  - Cohere Command R+
+  - Cohere Command R+ 08-2024
+  - cohere-command-r-plus
+  - cohere-labs/c4ai-command-r-plus
+  - cohere/c4ai-command-r-plus
+  - cohere/cohere-command-r-plus
+  - command-r-plus
+- id: CohereLabs/c4ai-command-r-plus-08-2024
+  aliases:
+  - cohere/c4ai-command-r-plus-08-2024
+- id: CohereLabs/c4ai-command-r7b-12-2024
+  aliases:
+  - cohere/c4ai-command-r7b-12-2024
+- id: CohereLabs/command-a-reasoning-08-2025
+  aliases:
+  - Command A Reasoning (2025-08)
+- id: CrucibleLab/l3-3-70b-loki-v2-0
+  aliases:
+  - meta/l3-3-70b-loki-v2-0
+- id: Daemontatox/MawaredT1
+  aliases:
+  - MawaredT1
+- id: DeepMount00/Qwen2-1.5B-Ita_v2
+  aliases:
+  - Qwen2-1.5B-Ita_v2
+- id: DeepMount00/Qwen2-1.5B-Ita_v3
+  aliases:
+  - Qwen2-1.5B-Ita_v3
+- id: DeepMount00/Qwen2-1.5B-Ita_v5
+  aliases:
+  - Qwen2-1.5B-Ita_v5
+- id: Doctor-Shotgun/ms3-2-24b-magnum-diamond
+  aliases:
+  - mistralai/ms3-2-24b-magnum-diamond
+- id: DoppelReflEx/MN-12B-FoxFrame2-test
+  aliases:
+  - MN-12B-FoxFrame2-test
+- id: DoppelReflEx/MN-12B-FoxFrame3-test
+  aliases:
+  - MN-12B-FoxFrame3-test
+- id: DoppelReflEx/MiniusLight-24B-v1c-test
+  aliases:
+  - MiniusLight-24B-v1c-test
+- id: DoppelReflEx/MiniusLight-24B-v1d-test
+  aliases:
+  - MiniusLight-24B-v1d-test
+- id: EVA-UNIT-01/EVA-Qwen2.5-72B-v0.2
+  aliases:
+  - alibaba/eva-qwen2-5-72b-v0-2
+- id: EVA-UNIT-01/eva-llama-3-33-70b-v0-0
+  aliases:
+  - meta/eva-llama-3-33-70b-v0-0
+- id: EVA-UNIT-01/eva-llama-3-33-70b-v0-1
+  aliases:
+  - meta/eva-llama-3-33-70b-v0-1
+- id: EVA-UNIT-01/qwen2-5-32b-eva-v0-2
+  aliases:
+  - Qwen2.5-32B-EVA-v0.2
+  - alibaba/eva-qwen2-5-32b-v0-2
+  - alibaba/qwen2-5-32b-eva-v0-2
+  - eva-qwen2-5-32b-v0-2
+  - qwen2-5-32b-eva-v0-2
+- id: EleutherAI/gpt-j-6b
+  aliases:
+  - unknown/gpt-j
+  - unknown/gpt-jt-6b
+- id: EleutherAI/gpt-neox-20b
+  aliases:
+  - unknown/gpt-neox
+- id: Enno-Ai/EnnoAi-Pro-Llama-3.1-8B-v0.9
+  aliases:
+  - EnnoAi-Pro-Llama-3.1-8B-v0.9
+- id: Envoid/llama-3-05-nemotron-tenyxchat-storybreaker-70b
+  aliases:
+  - nvidia/llama-3-05-nemotron-tenyxchat-storybreaker-70b
+- id: Envoid/llama-3-05-nt-storybreaker-ministral-70b
+  aliases:
+  - meta/llama-3-05-nt-storybreaker-ministral-70b
+- id: Etherll/Replete-LLM-V3-Llama-3.1-8b
+  aliases:
+  - Replete-LLM-V3-Llama-3.1-8b
+- id: GalrionSoftworks/MN-LooseCannon-12B-v1
+  aliases:
+  - mistralai/mn-loosecannon-12b-v1
+- id: Gryphe/mythomax-l2-13b
+  aliases:
+  - meta/mythomax-l2-13b
+- id: HuggingFaceH4/starchat2-15b-v0.1
+  aliases:
+  - huggingface/starchat2-15b-v0.1
+- id: HuggingFaceH4/zephyr-7b-alpha
+  aliases:
+  - huggingface/zephyr-7b-alpha
+- id: HuggingFaceH4/zephyr-7b-beta
+  aliases:
+  - huggingface/zephyr-7b-beta
+  - unknown/zephyr
+  - unknown/zephyr-7b
+  - unknown/zephyr-zero-shot
+  - zephyr-7b
+- id: HuggingFaceH4/zephyr-7b-gemma-v0.1
+  aliases:
+  - huggingface/zephyr-7b-gemma-v0.1
+- id: HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1
+  aliases:
+  - huggingface/zephyr-orpo-141b-A35b-v0.1
+- id: HuggingFaceTB/SmolLM-1.7B
+  aliases:
+  - huggingface/SmolLM-1.7B
+- id: HuggingFaceTB/SmolLM-1.7B-Instruct
+  aliases:
+  - huggingface/SmolLM-1.7B-Instruct
+- id: HuggingFaceTB/SmolLM-135M
+  aliases:
+  - huggingface/SmolLM-135M
+- id: HuggingFaceTB/SmolLM-135M-Instruct
+  aliases:
+  - huggingface/SmolLM-135M-Instruct
+- id: HuggingFaceTB/SmolLM-360M
+  aliases:
+  - huggingface/SmolLM-360M
+- id: HuggingFaceTB/SmolLM-360M-Instruct
+  aliases:
+  - huggingface/SmolLM-360M-Instruct
+- id: HuggingFaceTB/SmolLM2-1.7B-Instruct
+  aliases:
+  - huggingface/SmolLM2-1.7B-Instruct
+- id: HuggingFaceTB/SmolLM2-135M-Instruct
+  aliases:
+  - huggingface/SmolLM2-135M-Instruct
+- id: HuggingFaceTB/SmolLM2-360M
+  aliases:
+  - huggingface/SmolLM2-360M
+- id: HuggingFaceTB/SmolLM2-360M-Instruct
+  aliases:
+  - huggingface/smollm2-360m-instruct
+- id: HumanLLMs/Humanish-LLama3-8B-Instruct
+  aliases:
+  - Humanish-LLama3-8B-Instruct
+- id: HumanLLMs/Humanish-Mistral-Nemo-Instruct-2407
+  aliases:
+  - Humanish-Mistral-Nemo-Instruct-2407
+- id: HumanLLMs/Humanish-Qwen2.5-7B-Instruct
+  aliases:
+  - Humanish-Qwen2.5-7B-Instruct
+- id: Infermatic/MN-12B-Inferor-v0.0
+  aliases:
+  - Mistral Nemo Inferor 12B
+  - mistralai/mn-12b-inferor-v0-0
+- id: LatitudeGames/wayfarer-large-70b-llama-3-3
+  aliases:
+  - meta/wayfarer-large-70b-llama-3-3
+- id: MarinaraSpaghetti/nemomix-unleashed-12b
+  aliases:
+  - mistralai/nemomix-unleashed-12b
+- id: Marsouuu/general3Bv2-ECE-PRYMMAL-Martial
+  aliases:
+  - general3Bv2-ECE-PRYMMAL-Martial
+- id: Marsouuu/lareneg1_78B-ECE-PRYMMAL-Martial
+  aliases:
+  - lareneg1_78B-ECE-PRYMMAL-Martial
+- id: MaziyarPanahi/Qwen2-7B-Instruct-v0.1
+  aliases:
+  - Qwen2-7B-Instruct-v0.1
+- id: MaziyarPanahi/Qwen2-7B-Instruct-v0.8
+  aliases:
+  - Qwen2-7B-Instruct-v0.8
+- id: MiniMaxAI/MiniMax-M2.1
+  aliases:
+  - minimax.minimax-m2-1
+  - minimaxai/minimax.minimax-m2-1
+- id: MiniMaxAI/MiniMax-M2.5
+  aliases:
+  - minimax-m2p5
+  - minimax.minimax-m2-5
+  - minimaxai/minimax-m25
+  - minimaxai/minimax-m2p5
+  - minimaxai/minimax.minimax-m2-5
+- id: NbAiLab/nb-llama-3.1-8B-Instruct
+  aliases:
+  - nb-llama-3.1-8B-Instruct
+- id: NeverSleep/llama-3-lumimaid-70b-v0-1
+  aliases:
+  - meta/llama-3-lumimaid-70b-v0-1
+- id: NeverSleep/lumimaid-v0-2-70b
+  aliases:
+  - meta/lumimaid-v0-2-70b
+- id: NousResearch/Hermes-2-Pro-Mistral-7B
+  aliases:
+  - nous-research/Hermes-2-Pro-Mistral-7B
+- id: NousResearch/Hermes-2-Theta-Llama-3-8B
+  aliases:
+  - nous-research/Hermes-2-Theta-Llama-3-8B
+- id: NousResearch/Hermes-3-Llama-3.1-8B
+  aliases:
+  - nous-research/Hermes-3-Llama-3.1-8B
+- id: NousResearch/Hermes-3-Llama-3.2-3B
+  aliases:
+  - nous-research/Hermes-3-Llama-3.2-3B
+- id: NousResearch/Nous-Hermes-13b
+  aliases:
+  - nous-research/Nous-Hermes-13b
+- id: NousResearch/Nous-Hermes-2-Mistral-7B-DPO
+  aliases:
+  - nous-research/Nous-Hermes-2-Mistral-7B-DPO
+- id: NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO
+  aliases:
+  - nous-research/Nous-Hermes-2-Mixtral-8x7B-DPO
+- id: NousResearch/Nous-Hermes-2-Mixtral-8x7B-SFT
+  aliases:
+  - nous-research/Nous-Hermes-2-Mixtral-8x7B-SFT
+- id: NousResearch/Nous-Hermes-2-SOLAR-10.7B
+  aliases:
+  - nous-research/Nous-Hermes-2-SOLAR-10.7B
+- id: NousResearch/Nous-Hermes-llama-2-7b
+  aliases:
+  - nous-research/Nous-Hermes-llama-2-7b
+- id: NousResearch/Yarn-Llama-2-13b-128k
+  aliases:
+  - nous-research/Yarn-Llama-2-13b-128k
+- id: NousResearch/Yarn-Llama-2-7b-128k
+  aliases:
+  - nous-research/Yarn-Llama-2-7b-128k
+- id: NousResearch/Yarn-Llama-2-7b-64k
+  aliases:
+  - nous-research/Yarn-Llama-2-7b-64k
+- id: NousResearch/Yarn-Mistral-7b-128k
+  aliases:
+  - nous-research/Yarn-Mistral-7b-128k
+- id: NousResearch/Yarn-Mistral-7b-64k
+  aliases:
+  - nous-research/Yarn-Mistral-7b-64k
+- id: NousResearch/Yarn-Solar-10b-32k
+  aliases:
+  - nous-research/Yarn-Solar-10b-32k
+- id: NousResearch/Yarn-Solar-10b-64k
+  aliases:
+  - nous-research/Yarn-Solar-10b-64k
+- id: NousResearch/deephermes-3-llama-3.1-8b
+  aliases:
+  - DeepHermes 3 Llama-3.1 8B Preview
+  - nousresearch/deephermes-3-llama-3-1-8b-preview
+- id: OEvortex/HelpingAI-3B-reloaded
+  aliases:
+  - HelpingAI-3B-reloaded
+- id: OpenAssistant/oasst-rm-2.1-pythia-1.4b-epoch-2.5
+  aliases:
+  - unknown/oasst-rm-2-1-pythia-1-4b
+- id: OpenGVLab/InternVL2-26B
+  aliases:
+  - unknown/internvl-chat-v2-0-26b
+  - unknown/internvl2-26b-16f
+  - unknown/internvl2-26b-32f
+- id: OpenGVLab/InternVL2_5-8B
+  aliases:
+  - internvl2.5-8b-mpo
+  - unknown/internvl-2-5-mpo-8b
+  - unknown/internvl-v2-5-8b
+  - unknown/internvl2-5-5b-mpo
+  - unknown/internvl2-5-7b
+  - unknown/internvl2-5-8b-bon-8
+  - unknown/internvl2-5-8b-merged-image
+  - unknown/internvl2-5-8b-mpo
+  - unknown/internvl2-5-8b-mpo-awq
+  - unknown/internvl2-5-8b-sequence
+  - unknown/internvl2-5-mpo
+  - unknown/internvl2-5-ours-dab
+- id: Pinkstack/SuperThoughts-CoT-14B-16k-o1-QwQ
+  aliases:
+  - SuperThoughts-CoT-14B-16k-o1-QwQ
+- id: PrimeIntellect/intellect-3
+  aliases:
+  - zai/intellect-3
+- id: Qwen/QVQ-72B-Preview
+  aliases:
+  - alibaba/qvq-72b-preview
+- id: Qwen/QwQ-32B
+  aliases:
+  - aliyun/qwq-32b
+  - unknown/qwen-32b
+  - unknown/qwen-32b-reasoning
+- id: Qwen/Qwen1.5-0.5B
+  aliases:
+  - Qwen 1.5 0.5B
+  - alibaba/Qwen1.5-0.5B
+  - alibaba/qwen-1.5-0.5b
+- id: Qwen/Qwen1.5-0.5B-Chat
+  aliases:
+  - alibaba/Qwen1.5-0.5B-Chat
+- id: Qwen/Qwen1.5-1.8B
+  aliases:
+  - Qwen 1.5 1.8B
+  - alibaba/Qwen1.5-1.8B
+- id: Qwen/Qwen1.5-1.8B-Chat
+  aliases:
+  - alibaba/Qwen1.5-1.8B-Chat
+- id: Qwen/Qwen1.5-14B
+  aliases:
+  - alibaba/Qwen1.5-14B
+- id: Qwen/Qwen1.5-32B
+  aliases:
+  - alibaba/Qwen1.5-32B
+- id: Qwen/Qwen1.5-32B-Chat
+  aliases:
+  - alibaba/Qwen1.5-32B-Chat
+- id: Qwen/Qwen1.5-4B
+  aliases:
+  - Qwen 1.5 4B
+  - alibaba/Qwen1.5-4B
+- id: Qwen/Qwen1.5-4B-Chat
+  aliases:
+  - alibaba/Qwen1.5-4B-Chat
+- id: Qwen/Qwen1.5-72B
+  aliases:
+  - alibaba/Qwen1.5-72B
+- id: Qwen/Qwen1.5-7B
+  aliases:
+  - alibaba/Qwen1.5-7B
+- id: Qwen/Qwen1.5-MoE-A2.7B
+  aliases:
+  - Qwen 1.5 MoE A2.7B
+  - alibaba/Qwen1.5-MoE-A2.7B
+- id: Qwen/Qwen1.5-MoE-A2.7B-Chat
+  aliases:
+  - alibaba/Qwen1.5-MoE-A2.7B-Chat
+- id: Qwen/Qwen2-57B-A14B
+  aliases:
+  - alibaba/Qwen2-57B-A14B
+- id: Qwen/Qwen2-57B-A14B-Instruct
+  aliases:
+  - alibaba/Qwen2-57B-A14B-Instruct
+- id: Qwen/Qwen2-72B
+  aliases:
+  - alibaba/Qwen2-72B
+- id: Qwen/Qwen2-Math-72B-Instruct
+  aliases:
+  - alibaba/Qwen2-Math-72B-Instruct
+- id: Qwen/Qwen2-Math-7B
+  aliases:
+  - alibaba/Qwen2-Math-7B
+- id: Qwen/Qwen2-VL-2B-Instruct
+  aliases:
+  - alibaba/Qwen2-VL-2B-Instruct
+- id: Qwen/Qwen2-VL-72B
+  aliases:
+  - alibaba/Qwen2-VL-72B
+  - unknown/qwen2vl-72b
+- id: Qwen/Qwen2-VL-72B-Instruct
+  aliases:
+  - alibaba/Qwen2-VL-72B-Instruct
+  - unknown/qwen2-vl-instruct-72b
+- id: Qwen/Qwen2-VL-7B-Instruct
+  aliases:
+  - alibaba/Qwen2-VL-7B-Instruct
+  - unknown/qwen2-vl-instruct-7b
+- id: Qwen/Qwen2.5-0.5B-Instruct
+  aliases:
+  - alibaba/Qwen2.5-0.5B-Instruct
+- id: Qwen/Qwen2.5-1.5B-Instruct
+  aliases:
+  - alibaba/Qwen2.5-1.5B-Instruct
+- id: Qwen/Qwen2.5-14B-Instruct-1M
+  aliases:
+  - alibaba/Qwen2.5-14B-Instruct-1M
+- id: Qwen/Qwen2.5-3B-Instruct
+  aliases:
+  - alibaba/Qwen2.5-3B-Instruct
+- id: Qwen/Qwen2.5-72B
+  aliases:
+  - qwen2-5-72b-inst
+  - qwen2-72b-ins
+  - unknown/qwen2-5-72b-inst
+- id: Qwen/Qwen2.5-72B-Instruct-Turbo
+  aliases:
+  - Qwen2.5 72B Instruct Turbo
+  - alibaba/qwen2.5-72b-instruct-turbo
+- id: Qwen/Qwen2.5-7B-Instruct-1M
+  aliases:
+  - alibaba/Qwen2.5-7B-Instruct-1M
+- id: Qwen/Qwen2.5-7B-Instruct-Turbo
+  aliases:
+  - Qwen2.5 7B Instruct Turbo
+  - alibaba/qwen2.5-7b-instruct-turbo
+- id: Qwen/Qwen2.5-Coder-14B
+  aliases:
+  - alibaba/qwen2.5-coder-14b
+- id: Qwen/Qwen2.5-Coder-14B-Instruct
+  aliases:
+  - alibaba/Qwen2.5-Coder-14B-Instruct
+- id: Qwen/Qwen2.5-Coder-32B
+  aliases:
+  - alibaba/Qwen2.5-Coder-32B
+  - unknown/qwen2-5-coder-32b-inst
+- id: Qwen/Qwen2.5-Coder-32B-Instruct
+  aliases:
+  - qwen-2-5-coder-32b-instruct
+  - unknown/qwen2-5-coder-32b-instruct-cot
+- id: Qwen/Qwen2.5-Coder-7B
+  aliases:
+  - qwen25-coder-7b
+  - unknown/qwen2-5-coder
+  - unknown/qwen2-5-coder-7b-ins
+  - unknown/qwen2-5-coder-7b-inst
+  - unknown/qwen2-5-coder-instr
+- id: Qwen/Qwen2.5-Coder-7B-Instruct
+  aliases:
+  - alibaba/qwen-2.5-coder-7b-instruct
+  - unknown/qwen2-5-coder-instruct-7b
+  - unknown/qwen2-5-coder-instruct-c-7b
+- id: Qwen/Qwen2.5-Math-1.5B-Instruct
+  aliases:
+  - alibaba/Qwen2.5-Math-1.5B-Instruct
+- id: Qwen/Qwen2.5-Math-7B
+  aliases:
+  - alibaba/qwen2.5-math-7b
+- id: Qwen/Qwen2.5-Math-7B-Instruct
+  aliases:
+  - unknown/qwen2-math-7b-instruct
+- id: Qwen/Qwen2.5-Omni-7B
+  aliases:
+  - Qwen 2.5 Omni 7B
+- id: Qwen/Qwen2.5-VL-72B-Instruct
+  aliases:
+  - Qwen25 VL 72b
+  - alibaba/qwen-2.5-vl-72b-instruct
+  - unknown/qwen2-5-vl-instruct-72b
+- id: Qwen/Qwen3-14B
+  aliases:
+  - unknown/qwen3-14b-brief
+  - unknown/qwen3-14b-complex
+  - unknown/qwen3-14b-think
+- id: Qwen/Qwen3-235B-A22B
+  aliases:
+  - qwen3-235b
+  - unknown/qwen3-235b
+  - unknown/qwen3-235b-2507
+  - unknown/qwen3-235b-a22b-10k
+  - unknown/qwen3-235b-a22b-2507-web
+  - unknown/qwen3-235b-a22b-think
+  - unknown/qwen3-235b-high
+  - unknown/qwen3-235b-int8
+  - unknown/qwen3-235b-low
+  - unknown/qwen3-235b-medium
+  - unknown/qwen3-235b-minimal
+  - unknown/qwen3-235ba22b-2507
+- id: Qwen/Qwen3-235B-A22B-Instruct-2507
+  aliases:
+  - Qwen3-235B-A22B-Instruct
+  - alibaba/qwen3-235b-a22b-instruct
+  - alibaba/qwen3-235b-a22b-instruct-2507-maas
+  - qwen/qwen3-235b-a22b-instruct-25-07
+  - qwen/qwen3-235b-a22b-instruct-2507-maas
+  - qwen3-235b-a22b-instruct
+  - qwen3-235b-a22b-instruct-2507-maas
+  - unknown/qwen3-235b-instruct
+- id: Qwen/Qwen3-235B-A22B-Instruct-2507-FP8
+  aliases:
+  - alibaba/Qwen3-235B-A22B-Instruct-2507-FP8
+  - qwen3-235b-a22b-instruct-2507-tput
+- id: Qwen/Qwen3-30B-A3B
+  aliases:
+  - Qwen3 30B
+  - alibaba/qwen3-30b
+  - unknown/qwen3-30b-a3b-think
+- id: Qwen/Qwen3-32B
+  aliases:
+  - qwen3-32b-w/o-think
+  - qwen3-32b-w/think
+  - unknown/2s-llm-qwen3-32b
+  - unknown/alibaba-qwen3-32b-think
+  - unknown/factisr-qwen3-32b
+  - unknown/ga-llm-qwen3-32b
+  - unknown/oa-llm-qwen3-32b
+  - unknown/pm-llm-qwen3-32b
+  - unknown/qwen3-32b-brief
+  - unknown/qwen3-32b-complex
+  - unknown/qwen3-32b-no-think
+  - unknown/qwen3-32b-non-agentic
+  - unknown/qwen3-32b-think
+  - unknown/qwen3-32b-think-mode
+  - unknown/qwen3-32b-zero-shot
+  - unknown/webaggregator-qwen3-32b
+- id: Qwen/Qwen3-8B
+  aliases:
+  - unknown/qwen3-8b-brief
+  - unknown/qwen3-8b-complex
+  - unknown/qwen3-8b-emb
+  - unknown/qwen3-8b-instr
+  - unknown/qwen3-8b-non-agentic
+  - unknown/qwen3-8b-think
+  - unknown/qwen3-8b-zero-shot
+- id: Qwen/Qwen3-Coder-480B-A35B-Instruct
+  aliases:
+  - qwen3-coder-480b-a35b-instruct-turbo
+- id: Qwen/Qwen3-Next-80B-A3B-Instruct
+  aliases:
+  - unknown/qwen3-next-80b-instruct
+- id: Qwen/Qwen3-Next-80B-A3B-Thinking
+  aliases:
+  - qwen.qwen3-next-80b-a3b
+  - unknown/qwen3-next-80b-thinking
+- id: Qwen/Qwen3-VL-235B-A22B-Thinking
+  aliases:
+  - alibaba/Qwen3-VL-235B-A22B-Thinking
+- id: Qwen/Qwen3-VL-235B-A22B-Thinking-FP8
+  aliases:
+  - alibaba/qwen3-vl-235b-a22b-thinking-fp8
+- id: Qwen/Qwen3-VL-30B-A3B-Instruct
+  aliases:
+  - unknown/qwen3-vl-30b-instruct
+- id: Qwen/Qwen3-VL-30B-A3B-Thinking
+  aliases:
+  - alibaba/qwen3-vl-30b-a3b-thinking
+  - unknown/qwen3-vl-30b-thinking
+- id: Qwen/Qwen3-VL-32B-Thinking
+  aliases:
+  - Qwen3 VL 32B
+- id: Qwen/Qwen3-VL-4B-Thinking
+  aliases:
+  - alibaba/qwen3-vl-4b-thinking
+- id: Qwen/Qwen3-VL-8B-Thinking
+  aliases:
+  - Qwen3 VL 8B
+- id: Qwen/Qwen3.5-0.8B
+  aliases:
+  - Qwen 3.5 0.8B
+- id: Qwen/Qwen3.5-2B
+  aliases:
+  - Qwen 3.5 2B
+- id: Qwen/Qwen3.5-397B-A17B
+  aliases:
+  - qwen35-397b-a17b
+- id: Qwen/Qwen3.5-4B
+  aliases:
+  - Qwen 3.5 4B
+- id: Qwen/Qwen3.5-9B
+  aliases:
+  - Qwen 3.5 9B
+- id: Qwen/Qwen3.6-27B
+  aliases:
+  - Qwen 3.6 27B
+- id: Qwen/Qwen3.6-35B-A3B
+  aliases:
+  - umans-qwen3-6-35b-a3b
+- id: Qwen/WorldPM-72B
+  aliases:
+  - alibaba/WorldPM-72B
+- id: ReadyArt/ms3-2-the-omega-directive-24b-unslop-v2-0
+  aliases:
+  - meta/ms3-2-the-omega-directive-24b-unslop-v2-0
+  - ms3-2-the-omega-directive-24b-unslop-v2-0
+- id: ReadyArt/the-omega-abomination-l-70b-v1-0
+  aliases:
+  - meta/the-omega-abomination-l-70b-v1-0
+- id: Salesforce/llama-xlam-2-70b-fc-r
+  aliases:
+  - meta/llama-xlam-2-70b-fc-r
+- id: Sao10K/L3-8B-Stheno-v3.2
+  aliases:
+  - Sao10K Stheno 8b
+  - meta/l3-8b-stheno-v3-2
+- id: Sao10K/l3-1-70b-euryale-v2-2
+  aliases:
+  - meta/l3-1-70b-euryale-v2-2
+- id: Sao10K/l3-1-70b-hanami-x1
+  aliases:
+  - meta/l3-1-70b-hanami-x1
+- id: Sao10K/l3-3-70b-euryale-v2-3
+  aliases:
+  - meta/l3-3-70b-euryale-v2-3
+- id: Sorawiz/Gemma-Creative-9B-Base
+  aliases:
+  - Gemma-Creative-9B-Base
+- id: Spestly/Atlas-Pro-1.5B-Preview
+  aliases:
+  - Atlas-Pro-1.5B-Preview
+- id: Spestly/Atlas-Pro-7B-Preview
+  aliases:
+  - Atlas-Pro-7B-Preview
+- id: Steelskull/L3.3-MS-Nevoria-70b
+  aliases:
+  - Steelskull Nevoria 70b
+  - meta/l3-3-ms-nevoria-70b
+- id: Steelskull/L3.3-Nevoria-R1-70b
+  aliases:
+  - Steelskull Nevoria R1 70b
+  - meta/l3-3-nevoria-r1-70b
+- id: Steelskull/l3-3-cu-mai-r1-70b
+  aliases:
+  - meta/l3-3-cu-mai-r1-70b
+- id: Steelskull/l3-3-electra-r1-70b
+  aliases:
+  - meta/l3-3-electra-r1-70b
+- id: Steelskull/l3-3-ms-evalebis-70b
+  aliases:
+  - l3-3-ms-evalebis-70b
+  - meta/l3-3-ms-evalebis-70b
+- id: Steelskull/l3-3-ms-evayale-70b
+  aliases:
+  - l3-3-ms-evayale-70b
+  - meta/l3-3-ms-evayale-70b
+- id: TheDrummer/anubis-70b-v1
+  aliases:
+  - meta/anubis-70b-v1
+- id: TheDrummer/anubis-70b-v1-1
+  aliases:
+  - Anubis 70B v1.1
+  - anubis-70b-v1-1
+  - meta/anubis-70b-v1-1
+- id: TheDrummer/cydonia-24b-v2
+  aliases:
+  - cydonia-24b-v4
+  - meta/cydonia-24b-v2
+  - meta/cydonia-24b-v4
+- id: TheDrummer/cydonia-24b-v4-1
+  aliases:
+  - cydonia-24b-v4-1
+  - meta/cydonia-24b-v4-1
+- id: TheDrummer/cydonia-24b-v4-3
+  aliases:
+  - meta/cydonia-24b-v4-3
+- id: TheDrummer/magidonia-24b-v4-3
+  aliases:
+  - magidonia-24b-v4-3
+  - meta/magidonia-24b-v4-3
+- id: TheDrummer/rocinante-12b-v1-1
+  aliases:
+  - meta/rocinante-12b-v1-1
+- id: TheDrummer/skyfall-36b-v2
+  aliases:
+  - meta/skyfall-36b-v2
+- id: TheDrummer/unslopnemo-12b-v4-1
+  aliases:
+  - meta/unslopnemo-12b-v4-1
+- id: Tongyi-Zhiwen/qwenlong-l1-32b
+  aliases:
+  - alibaba/qwenlong-l1-32b
+- id: VongolaChouko/starcannon-unleashed-12b-v1-0
+  aliases:
+  - mistralai/starcannon-unleashed-12b-v1-0
+- id: Youlln/2PRYMMAL-Yi1.5-6B-SLERP
+  aliases:
+  - 2PRYMMAL-Yi1.5-6B-SLERP
+- id: Youlln/ECE-MIRAGE-1-12B
+  aliases:
+  - ECE-MIRAGE-1-12B
+- id: abacusai/Dracarys-72B-Instruct
+  aliases:
+  - meta/dracarys-72b-instruct
+- id: abacusai/dracarys-llama-3-1-70b-instruct
+  aliases:
+  - nvidia/dracarys-llama-3-1-70b-instruct
+- id: ai21-labs/ai21-jamba-1-5-large
+  aliases:
+  - Jamba 1.5 Large
+  - ai21labs/AI21-Jamba-1.5-Large
+  - ai21labs/jamba-1-5
+- id: ai21-labs/ai21-jamba-1-5-mini
+  aliases:
+  - Jamba 1.5 Mini
+  - ai21labs/AI21-Jamba-1.5-Mini
+- id: ai21/J1-Grande-v1-17B
+  aliases:
+  - j1-grande-v1-17b
+- id: ai21/J1-Grande-v2-beta-17B
+  aliases:
+  - j1-grande-v2-beta-17b
+- id: ai21/J1-Jumbo-v1-178B
+  aliases:
+  - j1-jumbo-v1-178b
+- id: ai21/jamba-instruct
+  aliases:
+  - Jamba Instruct
+- id: ai21labs/Jamba-v0.1
+  aliases:
+  - ai21/Jamba-v0.1
+- id: aion-labs/aion-1-0
+  aliases:
+  - Aion 1.0
+  - aion-1-0
+  - meta/aion-1-0
+- id: aion-labs/aion-1-0-mini
+  aliases:
+  - aion-1-0-mini
+  - deepseek/aion-1-0-mini
+- id: aion-labs/aion-rp-llama-3-1-8b
+  aliases:
+  - meta/aion-rp-llama-3-1-8b
+- id: aleph-alpha/luminous-base
+  aliases:
+  - alephalpha/luminous-base-13b
+  - luminous-base-13b
+- id: aleph-alpha/luminous-extended
+  aliases:
+  - alephalpha/luminous-extended-30b
+  - luminous-extended-30b
+- id: aleph-alpha/luminous-supreme
+  aliases:
+  - alephalpha/luminous-supreme-70b
+  - luminous-supreme-70b
+- id: alibaba/qwen-14b-chat
+  aliases:
+  - Qwen 14B Chat
+  - unknown/qwen-14b-chat
+- id: alibaba/qwen-7b-chat
+  aliases:
+  - Qwen 7B Chat
+  - unknown/qwen-7b-chat
+- id: alibaba/qwen-doc
+  aliases:
+  - qwen-doc
+- id: alibaba/qwen-math
+  aliases:
+  - qwen-math
+- id: alibaba/qwen-max
+  aliases:
+  - alibaba/qwen-max-latest
+  - qwen-max-latest
+- id: alibaba/qwen-mt-turbo
+  aliases:
+  - alibaba/qwen-mt
+  - qwen-mt
+- id: alibaba/qwen-omni-turbo
+  aliases:
+  - alibaba/qwen-omni
+  - qwen-omni
+- id: alibaba/qwen-plus
+  aliases:
+  - alibaba/qwen-plus-2025-07-28
+  - alibaba/qwen-plus-latest
+  - qwen-plus-2025-07-28
+  - qwen-plus-latest
+- id: alibaba/qwen-plus-character-japanese
+  aliases:
+  - alibaba/qwen-plus-character-ja
+  - qwen-plus-character-ja
+- id: alibaba/qwen-turbo
+  aliases:
+  - alibaba/qwen
+  - qwen
+- id: alibaba/qwen2-5-vl-32b-instruct
+  aliases:
+  - unknown/qwen-2-5-vl-32b-instruct
+  - unknown/qwen2-5-vl-instruct-32b
+- id: alibaba/qwen2.5-vl-72b
+  aliases:
+  - unknown/qwen-2-5-vl-72b
+  - unknown/qwen2-5vl-72b
+- id: alibaba/qwen2.5-vl-7b
+  aliases:
+  - unknown/qwen-2-5-vl-7b
+  - unknown/qwen2-5vl-7b
+- id: alibaba/qwen2.5-vl-7b-instruct
+  aliases:
+  - unknown/qwen2-5-vl-instruct-7b
+- id: alibaba/qwen3-0.6b-instruct
+  aliases:
+  - Qwen3 0.6B Instruct
+- id: alibaba/qwen3-0.6b-instruct-reasoning
+  aliases:
+  - Qwen3 0.6B Instruct Reasoning
+- id: alibaba/qwen3-1.7b-instruct
+  aliases:
+  - Qwen3 1.7B Instruct
+- id: alibaba/qwen3-1.7b-instruct-reasoning
+  aliases:
+  - Qwen3 1.7B Instruct Reasoning
+- id: alibaba/qwen3-14b-instruct-reasoning
+  aliases:
+  - Qwen3 14B Instruct Reasoning
+- id: alibaba/qwen3-235b-a22b-instruct
+  aliases:
+  - alibaba/qwen3-235b-a22b-instruct-2507-maas
+  - qwen/qwen3-235b-a22b-instruct-25-07
+  - qwen/qwen3-235b-a22b-instruct-2507-maas
+  - qwen3-235b-a22b-instruct-2507-maas
+  - unknown/qwen3-235b-instruct
+- id: alibaba/qwen3-235b-a22b-instruct-2507-reasoning
+  aliases:
+  - Qwen3 235B A22B Instruct 2507 Reasoning
+- id: alibaba/qwen3-235b-a22b-instruct-reasoning
+  aliases:
+  - Qwen3 235B A22B Instruct Reasoning
+- id: alibaba/qwen3-30b-a3b-2507-reasoning
+  aliases:
+  - Qwen3 30B A3B 2507 Reasoning
+- id: alibaba/qwen3-30b-a3b-base
+  aliases:
+  - Qwen3 30B A3B Base
+  - unknown/qwen3-30b-a3b-base
+- id: alibaba/qwen3-30b-a3b-instruct
+  aliases:
+  - Qwen3 30B A3B Instruct
+  - unknown/qwen3-30b-a3b-instruct
+- id: alibaba/qwen3-30b-a3b-instruct-reasoning
+  aliases:
+  - Qwen3 30B A3B Instruct Reasoning
+- id: alibaba/qwen3-30b-a3b-thinking
+  aliases:
+  - Qwen3 30B A3B Thinking
+  - unknown/qwen3-30b-a3b-thinking
+- id: alibaba/qwen3-32b-instruct
+  aliases:
+  - Qwen3 32B Instruct
+- id: alibaba/qwen3-32b-instruct-reasoning
+  aliases:
+  - Qwen3 32B Instruct Reasoning
+- id: alibaba/qwen3-4b
+  aliases:
+  - unknown/qwen3-4b-emb
+  - unknown/qwen3-4b-think
+- id: alibaba/qwen3-4b-2507-instruct
+  aliases:
+  - Qwen3 4B 2507 Instruct
+- id: alibaba/qwen3-4b-2507-instruct-reasoning
+  aliases:
+  - Qwen3 4B 2507 Instruct Reasoning
+- id: alibaba/qwen3-4b-instruct-reasoning
+  aliases:
+  - Qwen3 4B Instruct Reasoning
+- id: alibaba/qwen3-5-397b
+  aliases:
+  - Qwen 3.5 397B
+- id: alibaba/qwen3-5-flash
+  aliases:
+  - Qwen 3.5 Flash
+  - alibaba/qwen3-5-flash-02-23
+  - qwen3-5-flash-02-23
+- id: alibaba/qwen3-6-35b
+  aliases:
+  - Qwen 3.6 35B
+- id: alibaba/qwen3-8b-instruct
+  aliases:
+  - Qwen3 8B Instruct
+- id: alibaba/qwen3-8b-instruct-reasoning
+  aliases:
+  - Qwen3 8B Instruct Reasoning
+- id: alibaba/qwen3-coder-30b-a3b
+  aliases:
+  - unknown/qwen3-coder-a3b
+- id: alibaba/qwen3-coder-30b-a3b-instruct
+  aliases:
+  - unknown/qwen3-coder-30b-a3b-instruct-1
+  - unknown/qwen3-coder-30b-a3b-instruct-2
+- id: alibaba/qwen3-coder-480b-a35b
+  aliases:
+  - qwen.qwen3-coder-480b-a35b-v1:0
+- id: alibaba/qwen3-embedding-0-6b
+  aliases:
+  - unknown/qwen3-0-6b-emb
+  - unknown/qwen3-0-6b-emb-a2a
+  - unknown/qwen3-0-6b-emb-f2f
+- id: alibaba/qwen3-max-2026-01-23
+  aliases:
+  - Qwen3 Max (2026-01-23)
+- id: alibaba/qwen3-next-80b
+  aliases:
+  - Qwen 3 Next 80b
+- id: alibaba/qwen3-next-80b-a3b-reasoning
+  aliases:
+  - Qwen3 Next 80B A3B Reasoning
+- id: alibaba/qwen3-omni-30b-a3b
+  aliases:
+  - qwen3-omni-30b-a3b
+- id: alibaba/qwen3-vl-235b-a22b
+  aliases:
+  - unknown/qwen3-vl-235b-a22b-thinkingnew
+- id: alibaba/qwen3-vl-235b-a22b-reasoning
+  aliases:
+  - Qwen3 VL 235B A22B Reasoning
+- id: alibaba/qwen3-vl-30b-a3b-reasoning
+  aliases:
+  - Qwen3 VL 30B A3B Reasoning
+- id: alibaba/qwen3-vl-32b-reasoning
+  aliases:
+  - Qwen3 VL 32B Reasoning
+- id: alibaba/qwen3-vl-4b-reasoning
+  aliases:
+  - Qwen3 VL 4B Reasoning
+- id: alibaba/qwen3-vl-8b-reasoning
+  aliases:
+  - Qwen3 VL 8B Reasoning
+- id: alibaba/qwen3.5-plus
+  aliases:
+  - Qwen 3.5 Plus
+  - alibaba/qwen3-5-plus-02-15
+  - alibaba/qwen3-5-plus-20260420
+  - qwen3-5-plus-02-15
+  - qwen3-5-plus-20260420
+- id: alibaba/qwen3.5-plus-thinking
+  aliases:
+  - Qwen3.5 Plus Thinking
+- id: alibaba/qwen3.6-max
+  aliases:
+  - qwen3.6-max-preview
+- id: allenai/Llama-3.1-Tulu-3-405B
+  aliases:
+  - tulu-3-405b
+  - tulu3-405b
+- id: allenai/OLMo-7B-0424
+  aliases:
+  - OLMo 1.7 7B
+- id: allenai/Olmo-3.1-32B-Think
+  aliases:
+  - olmo-3-1-32b
+- id: allenai/olmo-3-32b
+  aliases:
+  - OLMo-3 32B
+- id: allknowingroger/Ministral-8B-slerp
+  aliases:
+  - ministral-8b-slerp
+- id: amazon/nova-lite
+  aliases:
+  - amazon/nova-lite-v1-0
+  - aws/nova-lite-v1.0
+  - nova-lite-v1-0
+- id: amazon/nova-micro
+  aliases:
+  - amazon/nova-micro-v1.0
+  - aws/nova-micro-v1.0
+  - nova-micro-v1-0
+- id: amazon/nova-premier
+  aliases:
+  - amazon.nova-premier-v1:0
+- id: amazon/nova-pro
+  aliases:
+  - amazon/amazon-nova-pro-v1-0
+  - amazon/nova-pro-v1.0
+  - aws/nova-pro-v1.0
+  - nova-pro-v1-0
+- id: anthracite-org/magnum-v2-72b
+  aliases:
+  - meta/magnum-v2-72b
+- id: anthracite-org/magnum-v4-72b
+  aliases:
+  - meta/magnum-v4-72b
+- id: anthropic/Claude-3.7-Sonnet
+  aliases:
+  - Claude 3.7 Sonnet
+  - anthropic.claude-3-7-sonnet-20250219-v1:0
+  - anthropic/claude-3-7-sonnet-latest
+  - claude-3.7
+  - claude-37-sonnet
+  - unknown/claude-3-7
+  - unknown/claude-3-7-sonnet
+  - unknown/claudesonnet3-7
+- id: anthropic/claude-2.0
+  aliases:
+  - Claude 2.0
+  - claude-2
+- id: anthropic/claude-2.1
+  aliases:
+  - Claude 2.1
+  - claude-21
+- id: anthropic/claude-3-5-haiku
+  aliases:
+  - Claude 3.5 Haiku
+  - anthropic.claude-3-5-haiku-20241022-v1:0
+  - claude-3-5-haiku-latest
+  - claude-35-haiku
+  - unknown/claude-3-5-haiku
+- id: anthropic/claude-3-5-haiku-20241022
+  aliases:
+  - Claude 3.5 Haiku (2024-10-22)
+- id: anthropic/claude-3-5-sonnet-20241022
+  aliases:
+  - Claude 3.5 Sonnet (2024-10-22)
+- id: anthropic/claude-3-7-sonnet-20250219
+  aliases:
+  - Claude 3.7 Sonnet (2025-02-19)
+- id: anthropic/claude-3-haiku
+  aliases:
+  - Claude 3 Haiku
+  - anthropic.claude-3-haiku-20240307-v1:0
+  - claude-haiku
+  - unknown/claude-3-haiku
+  - unknown/claude-haiku
+  - unknown/claude3-haiku
+- id: anthropic/claude-3-opus
+  aliases:
+  - Claude 3 Opus
+  - claude-opus
+  - unknown/claude-3
+  - unknown/claude-opus
+  - unknown/claude3-opus
+- id: anthropic/claude-3-sonnet
+  aliases:
+  - Claude 3 Sonnet
+  - claude-sonnet
+  - unknown/claude-sonnet
+  - unknown/claude3-sonnet
+- id: anthropic/claude-3.5-sonnet
+  aliases:
+  - anthropic/claude-3-5-sonnet-oct
+  - anthropic/claude-35-sonnet
+  - anthropic/claude35-sonnet-june-24
+  - claude35-sonnet-june-24
+- id: anthropic/claude-3.7-sonnet-thinking
+  aliases:
+  - Claude 3.7 Sonnet Thinking
+  - claude-3.7-thinking
+  - unknown/claude-3-7-sonnet-thinking
+  - unknown/claude-3-7-thinking
+- id: anthropic/claude-haiku-4-5-20251001-thinking
+  aliases:
+  - Claude Haiku 4.5 (2025-10-01) Thinking
+  - claude-haiku-4-5-20251001-thinking
+  - unknown/claude-haiku-4-5-20251001-thinking
+- id: anthropic/claude-haiku-4.5
+  aliases:
+  - claude-4-5-haiku
+- id: anthropic/claude-haiku-4.5-20251001
+  aliases:
+  - Claude Haiku 4.5 (2025-10-01)
+- id: anthropic/claude-instant
+  aliases:
+  - Claude Instant
+  - unknown/claude
+  - unknown/claude-instant
+- id: anthropic/claude-instant-1.2
+  aliases:
+  - Claude Instant 1.2
+- id: anthropic/claude-opus-4
+  aliases:
+  - anthropic.claude-opus-4-20250514-v1:0
+  - anthropic/claude-4-0-opus
+  - claude-4-0-opus
+  - claude-4-opus
+  - claude-opus-4-thinking:1024
+  - claude-opus-4-thinking:32000
+  - claude-opus-4-thinking:32768
+  - claude-opus-4-thinking:8192
+  - unknown/claude-4
+  - unknown/claude-4-opus
+- id: anthropic/claude-opus-4-1-20250805-thinking
+  aliases:
+  - claude-opus-4-1-20250805-thinking
+- id: anthropic/claude-opus-4-20250514
+  aliases:
+  - Claude Opus 4 (2025-05-14)
+- id: anthropic/claude-opus-4-5-20251101-thinking
+  aliases:
+  - claude-opus-4-5-20251101-thinking
+- id: anthropic/claude-opus-4-5-thinking
+  aliases:
+  - Claude Opus 4.5 Thinking
+  - claude-4-5-opus-thinking
+- id: anthropic/claude-opus-4-6-thinking
+  aliases:
+  - Claude Opus 4.6 Thinking
+- id: anthropic/claude-opus-4-thinking
+  aliases:
+  - Claude Opus 4 Thinking
+  - claude-4-opus-thinking
+- id: anthropic/claude-opus-4.1
+  aliases:
+  - anthropic/claude-opus-41
+  - claude-4-1-opus
+  - claude-opus-4-1-thinking
+  - claude-opus-4-1-thinking:1024
+  - claude-opus-4-1-thinking:32000
+  - claude-opus-4-1-thinking:32768
+  - claude-opus-4-1-thinking:8192
+  - claude-opus-41
+  - unknown/claude-4-1-opus
+- id: anthropic/claude-opus-4.1-20250805
+  aliases:
+  - Claude Opus 4.1 (2025-08-05)
+- id: anthropic/claude-opus-4.5
+  aliases:
+  - Opus 4.5
+  - anthropic--claude-4.5-opus
+  - claude-4-5-opus
+- id: anthropic/claude-opus-4.5-20251101
+  aliases:
+  - Claude Opus 4.5 (2025-11-01)
+- id: anthropic/claude-opus-4.6
+  aliases:
+  - Opus-4.6
+  - anthropic-claude-4.6-opus
+  - au.anthropic.claude-opus-4-6-v1
+  - claude-4-6-opus
+  - claude-opus-4-6-think
+  - eu.anthropic.claude-opus-4-6-v1
+  - global.anthropic.claude-opus-4-6-v1
+  - us.anthropic.claude-opus-4-6-v1
+- id: anthropic/claude-opus-4.7
+  aliases:
+  - anthropic/claude-4-7-opus
+  - claude-4-7-opus
+  - claude-opus-4-7-think
+- id: anthropic/claude-sonnet-4
+  aliases:
+  - anthropic.claude-sonnet-4-20250514-v1:0
+  - anthropic/claude-4-0-sonnet
+  - claude-4-sonnet
+  - claude-4.0-sonnet
+  - claude-sonnet-4-thinking:1024
+  - claude-sonnet-4-thinking:32768
+  - claude-sonnet-4-thinking:64000
+  - claude-sonnet-4-thinking:8192
+  - unknown/claude-4-sonnet
+- id: anthropic/claude-sonnet-4-20250514
+  aliases:
+  - Claude Sonnet 4 (2025-05-14)
+- id: anthropic/claude-sonnet-4-20250514-thinking
+  aliases:
+  - Claude Sonnet 4 (2025-05-14) Thinking
+  - claude-sonnet-4-20250514-thinking
+  - unknown/claude-sonnet-4-20250514-thinking
+- id: anthropic/claude-sonnet-4-5-20250929-thinking
+  aliases:
+  - claude-sonnet-4-5-20250929-thinking
+- id: anthropic/claude-sonnet-4-thinking
+  aliases:
+  - Claude Sonnet 4 Thinking
+  - claude-4-sonnet-thinking
+  - unknown/claude-4-sonnet-thinking
+  - unknown/claude-sonnet-4-thinking
+- id: anthropic/claude-sonnet-4.5
+  aliases:
+  - claude-4.5-sonnet
+  - sonnet-4
+  - unknown/claudesonnet4
+  - unknown/sonnet-4
+- id: anthropic/claude-sonnet-4.5-20250929
+  aliases:
+  - Claude Sonnet 4.5 (2025-09-29)
+- id: anthropic/claude-sonnet-4.5-thinking
+  aliases:
+  - claude-4-5-sonnet-thinking
+- id: anthropic/claude-sonnet-4.6
+  aliases:
+  - anthropic/claude-4-6-sonnet
+  - claude-4-6-sonnet
+  - claude-sonnet-4-6-think
+  - claude-sonnet-4-6-thinking
+- id: anthropic/claude-v1
+  aliases:
+  - Claude v1
+  - claude-v1.3
+- id: arcee-ai/Trinity-Large-Thinking
+  aliases:
+  - trinity-large
+- id: arcee-ai/maestro
+  aliases:
+  - maestro
+- id: auto
+  aliases:
+  - Auto
+  - morph/auto
+- id: baai/bge-m3
+  aliases:
+  - nvidia/bge-m3
+- id: baai/bge-multilingual-gemma2
+  aliases:
+  - google/bge-multilingual-gemma2
+- id: baebee/mergekit-ties-fnjenli
+  aliases:
+  - mergekit-ties-fnjenli
+- id: baichuan4
+  aliases:
+  - Baichuan4-Turbo
+- id: baidu/ernie-4-5-21b-a3b
+  aliases:
+  - ernie-4.5-21b-a3b-thinking
+- id: baidu/ernie-4.5
+  aliases:
+  - ERNIE 4.5
+  - unknown/ernie-4-5-8k
+- id: baidu/ernie-5.0
+  aliases:
+  - ERNIE 5.0
+- id: baidu/paddleocr-vl
+  aliases:
+  - PaddleOCR-VL
+  - paddleocr-vl
+  - paddlepaddle/paddleocr-vl
+- id: bigcode/starcoder2-15b
+  aliases:
+  - bigcode/starcoder2
+  - unknown/starcoder2-15b-sft
+- id: bigcode/starcoder2-3b
+  aliases:
+  - unknown/starcoder2-3b-dpo
+  - unknown/starcoder2-3b-sft
+- id: bigcode/starcoder2-7b
+  aliases:
+  - unknown/starcoder2
+- id: bigscience/BLOOM-176B
+  aliases:
+  - BLOOM 176B
+  - unknown/bloom
+  - unknown/bloomchat-176b
+- id: bigscience/T0pp
+  aliases:
+  - T0pp 11B
+- id: bigscience/bloom-7b1
+  aliases:
+  - unknown/bloom-7-1b
+  - unknown/bloom-7b
+- id: bittensor/bitagent-bounty-8b
+  aliases:
+  - BitAgent Bounty 8B
+- id: black-forest-labs/flux-1-kontext-dev
+  aliases:
+  - black-forest-labs/FLUX.1-Kontext-dev
+  - flux-1-kontext-dev
+  - nvidia/flux-1-kontext-dev
+- id: black-forest-labs/flux-1-schnell
+  aliases:
+  - black-forest-labs/FLUX.1-schnell
+  - flux-1-schnell
+  - nvidia/flux-1-schnell
+- id: black-forest-labs/flux.1-dev
+  aliases:
+  - blackforestlabs/flux-1-dev
+- id: brgx53/3Bgeneralv2-ECE-PRYMMAL-Martial
+  aliases:
+  - 3Bgeneralv2-ECE-PRYMMAL-Martial
+- id: bytedance/doubao-1-5-thinking-pro
+  aliases:
+  - doubao-1-5-thinking-pro-250415
+  - doubao-1.5-thinking
+  - unknown/doubao-1-5-thinking-pro-m-250415
+  - unknown/doubao1-5-thinking-pro
+- id: bytedance/doubao-1-5-thinking-pro-vision-250415
+  aliases:
+  - doubao-1-5-thinking-vision-pro-250428
+- id: bytedance/doubao-1-5-vision-pro
+  aliases:
+  - unknown/doubao-1-5-vison-pro
+  - unknown/doubao-vision-250115
+  - unknown/doubao1-5-vision-pro
+- id: bytedance/doubao-seed-1-6
+  aliases:
+  - doubao-seed-1-6-250615
+  - unknown/seed-1-6-250615
+- id: bytedance/doubao-seed-1-6-flash
+  aliases:
+  - doubao-seed-1-6-flash-250615
+- id: bytedance/doubao-seed-1.6-thinking
+  aliases:
+  - seed-1.6-thinking
+- id: bytedance/doubao-seed-2-0-code-preview
+  aliases:
+  - bytedance/doubao-seed-2-0-code-preview-260215
+  - doubao-seed-2-0-code-preview-260215
+- id: bytedance/doubao-seed-2-0-lite
+  aliases:
+  - bytedance/doubao-seed-2-0-lite-260215
+  - bytedance/doubao-seed-2-0-lite-260428
+  - doubao-seed-2-0-lite-260215
+  - doubao-seed-2-0-lite-260428
+- id: bytedance/doubao-seed-2-0-mini
+  aliases:
+  - bytedance/doubao-seed-2-0-mini-260215
+  - bytedance/doubao-seed-2-0-mini-260428
+  - doubao-seed-2-0-mini-260215
+  - doubao-seed-2-0-mini-260428
+- id: bytedance/doubao-seed-2-0-pro
+  aliases:
+  - bytedance/doubao-seed-2-0-pro-260215
+  - doubao-seed-2-0-pro-260215
+- id: bytedance/doubao-seed-code-preview-251028
+  aliases:
+  - doubao-seed-code-preview-latest
+- id: bytedance/seed-1-6
+  aliases:
+  - bytedance/seed-1-6-250615
+  - bytedance/seed-1-6-250915
+  - seed-1-6-250615
+  - seed-1-6-250915
+- id: bytedance/seed-1-6-flash
+  aliases:
+  - bytedance/seed-1-6-flash-250715
+  - seed-1-6-flash-250715
+- id: bytedance/seed-1-8
+  aliases:
+  - bytedance/seed-1-8-251228
+- id: coding-glm-5-1
+  aliases:
+  - coding-glm-5-1
+  - coding-glm-5.1
+  - zai/coding-glm-5-1
+- id: coding-minimax-m2-7
+  aliases:
+  - Coding MiniMax M2.7
+  - MiniMaxAI/coding-minimax-m2-7
+  - coding-minimax-m2-7
+  - coding-minimax-m2.7
+  - coding-minimax-m2.7-free
+- id: coding-minimax-m2-7-highspeed
+  aliases:
+  - Coding MiniMax M2.7 Highspeed
+  - MiniMaxAI/coding-minimax-m2-7-highspeed
+  - coding-minimax-m2-7-highspeed
+  - coding-minimax-m2.7-highspeed
+- id: coding-xiaomi-mimo-v2-5
+  aliases:
+  - Coding Xiaomi MiMo-V2.5
+  - coding-xiaomi-mimo-v2-5
+  - coding-xiaomi-mimo-v2.5
+  - xiaomi/coding-xiaomi-mimo-v2-5
+- id: coding-xiaomi-mimo-v2-5-pro
+  aliases:
+  - Coding Xiaomi MiMo-V2.5-Pro
+  - coding-xiaomi-mimo-v2-5-pro
+  - coding-xiaomi-mimo-v2.5-pro
+  - xiaomi/coding-xiaomi-mimo-v2-5-pro
+- id: cognitivecomputations/dolphin-mistral-24b-venice-edition
+  aliases:
+  - dolphin-mistral-24b-venice-edition
+  - dphn/Dolphin-Mistral-24B-Venice-Edition
+  - mistralai/dolphin-mistral-24b-venice-edition
+- id: cohere/aya-vision-32b
+  aliases:
+  - c4ai-aya-vision-32b
+  - cohere/c4ai-aya-vision-32b
+- id: cohere/aya-vision-8b
+  aliases:
+  - c4ai-aya-vision-8b
+  - cohere/c4ai-aya-vision-8b
+- id: cohere/cohere-command-r-plus
+  aliases:
+  - Cohere Command R+ 08-2024
+  - cohere-labs/c4ai-command-r-plus
+  - command-r-plus
+- id: cohere/cohere-large-2022
+  aliases:
+  - cohere-large-v20220720-13-1b
+- id: cohere/cohere-medium-2022
+  aliases:
+  - cohere-medium-v20220720-6-1b
+  - cohere-medium-v20221108-6-1b
+- id: cohere/cohere-small-2022
+  aliases:
+  - cohere-small-v20220720-410m
+- id: cohere/cohere-xlarge-2022
+  aliases:
+  - cohere-xlarge-v20220609-52-4b
+  - cohere-xlarge-v20221108-52-4b
+  - command-xlarge-beta
+- id: cohere/command-a-03-2025
+  aliases:
+  - Command A (2025-03)
+- id: cohere/command-a-translate-08-2025
+  aliases:
+  - Command A Translate (2025-08)
+- id: cohere/command-a-vision-07-2025
+  aliases:
+  - Command A Vision (2025-07)
+- id: cohere/command-beta-52b
+  aliases:
+  - cohere-command-beta-52-4b
+- id: cohere/command-beta-6b
+  aliases:
+  - cohere-command-beta-6-1b
+- id: cohere/command-light
+  aliases:
+  - command-light
+- id: cohere/command-original
+  aliases:
+  - command
+- id: cohere/command-r
+  aliases:
+  - c4ai-command-r
+  - cohereforai/c4ai-command-r
+  - unknown/c4ai-command-r
+- id: cohere/command-r-03-2024
+  aliases:
+  - Command R (2024-03)
+- id: cohere/command-r-08-2024
+  aliases:
+  - Command R (2024-08)
+- id: cohere/command-r-plus-04-2024
+  aliases:
+  - Command R Plus (2024-04)
+- id: cohere/command-r7b-12-2024
+  aliases:
+  - Command R7b (2024-12)
+- id: databricks/dbrx
+  aliases:
+  - DBRX
+- id: databricks/dbrx-base
+  aliases:
+  - Dbrx Base
+- id: databricks/dbrx-instruct
+  aliases:
+  - Dbrx Instruct
+- id: deepcogito/cogito-14b
+  aliases:
+  - Cogito 14B
+- id: deepcogito/cogito-v1-preview-qwen-32b
+  aliases:
+  - alibaba/cogito-v1-preview-qwen-32b
+- id: deepcogito/cogito-v2-1-reasoning
+  aliases:
+  - Cogito V2.1 Reasoning
+- id: deepseek-ai/DeepSeek-R1
+  aliases:
+  - deepseek-r1-671b
+  - deepseek.r1-v1:0
+  - r1
+  - unknown/deepseek-r1-671b
+  - us.deepseek.r1-v1:0
+- id: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+  aliases:
+  - unknown/deepseek-r1-8b
+- id: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+  aliases:
+  - alibaba/deepseek-r1-distill-qwen-1-5b
+  - unknown/deepseek-r1-1-5b
+- id: deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+  aliases:
+  - alibaba/deepseek-r1-distill-qwen-14b
+  - unknown/deepseek-r1-14b
+- id: deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
+  aliases:
+  - alibaba/deepseek-r1-distill-qwen-32b
+  - deepseek-r1-distill-qwen-32b-w/o-thinking
+  - deepseek/deepseek-r1-distill-qwen-32b-w/o-thinking
+  - unknown/r1-distill-qwen-32b
+- id: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
+  aliases:
+  - alibaba/deepseek-r1-distill-qwen-7b
+  - unknown/deepseek-r1-7b
+- id: deepseek-ai/DeepSeek-V2-Lite
+  aliases:
+  - deepseek-v2-16b
+- id: deepseek-ai/DeepSeek-V3
+  aliases:
+  - deepseek-v3-671b
+  - deepseek.v3-v1:0
+  - unknown/deepseek-v3-671b
+- id: deepseek-ai/DeepSeek-V3.2
+  aliases:
+  - deepseek-3.2
+  - deepseek-ai/deepseek-v3.2-maas
+  - deepseek-v3-2-251201
+  - deepseek-v3-2-maas
+  - deepseek-v3.2-thinking
+  - deepseek.v3.2
+  - deepseek/deepseek-v3-2-251201
+  - deepseek/deepseek-v3-2-maas
+  - deepseek/deepseek-v3-2-nvfp4
+  - deepseek/deepseek-v3.2-prompt-thinking
+  - v3-2
+- id: deepseek-ai/DeepSeek-V4-Pro
+  aliases:
+  - deepseek-v4-pro-precision
+- id: deepseek-ai/deepseek-r1-hide-reasoning
+  aliases:
+  - deepseek/deepseek-r1-hide-reasoning
+- id: deepseek/deepseek-coder-v2
+  aliases:
+  - DeepSeek Coder V2
+  - unknown/deepseek-coder-v2
+- id: deepseek/deepseek-coder-v2-instruct
+  aliases:
+  - DeepSeek Coder V2 Instruct
+- id: deepseek/deepseek-coder-v2-lite
+  aliases:
+  - DeepSeek Coder V2 Lite
+  - unknown/deepseek-coder-v2-lite
+- id: deepseek/deepseek-r1-0120
+  aliases:
+  - DeepSeek R1 (0120)
+- id: deepseek/deepseek-v2
+  aliases:
+  - DeepSeek V2
+- id: deepseek/deepseek-v2-chat
+  aliases:
+  - DeepSeek V2 Chat
+- id: deepseek/deepseek-v2.5
+  aliases:
+  - DeepSeek V2.5
+  - unknown/deepseek-v2-5
+- id: deepseek/deepseek-v3-1
+  aliases:
+  - deepseek-ai/deepseek-v3.1-maas
+  - deepseek-v3-1-maas
+  - deepseek/deepseek-v3-1-maas
+  - fireworks-ai/deepseek-v3p1
+- id: deepseek/deepseek-v3-1-reasoning
+  aliases:
+  - DeepSeek V3.1 Reasoning
+- id: deepseek/deepseek-v3-2-0925
+  aliases:
+  - DeepSeek V3.2 (0925)
+- id: deepseek/deepseek-v3-2-reasoning
+  aliases:
+  - DeepSeek V3.2 Reasoning
+- id: deepseek/deepseek-v3-2-reasoning-0925
+  aliases:
+  - DeepSeek V3.2 Reasoning (0925)
+- id: deepseek/deepseek-vl2
+  aliases:
+  - deepseek-vl2-27b
+  - unknown/deepseek-vl2-27b
+- id: deepseek/deepseek-vl2-small
+  aliases:
+  - DeepSeek-VL2 Small
+  - deepseek-vl2-small-16b
+  - unknown/deepseek-vl2-16b
+  - unknown/deepseek-vl2-small
+  - unknown/deepseek-vl2-small-16b
+- id: deepseek/deepseek-vl2-tiny
+  aliases:
+  - DeepSeek-VL2 Tiny
+  - deepseek-vl2-tiny-3b
+  - unknown/deepseek-vl2-3b
+  - unknown/deepseek-vl2-tiny
+  - unknown/deepseek-vl2-tiny-3b
+- id: dmind/dmind-1
+  aliases:
+  - DMind-1
+  - openai/dmind-1
+- id: dmind/dmind-1-mini
+  aliases:
+  - DMind-1-Mini
+  - openai/dmind-1-mini
+- id: duo-chat-gpt-5-1
+  aliases:
+  - duo-chat-gpt-5-1
+  - openai/duo-chat-gpt-5-1
+- id: duo-chat-gpt-5-2
+  aliases:
+  - duo-chat-gpt-5-2
+  - openai/duo-chat-gpt-5-2
+- id: duo-chat-gpt-5-2-codex
+  aliases:
+  - duo-chat-gpt-5-2-codex
+  - openai/duo-chat-gpt-5-2-codex
+- id: duo-chat-gpt-5-3-codex
+  aliases:
+  - duo-chat-gpt-5-3-codex
+  - openai/duo-chat-gpt-5-3-codex
+- id: duo-chat-gpt-5-4
+  aliases:
+  - duo-chat-gpt-5-4
+  - openai/duo-chat-gpt-5-4
+- id: duo-chat-gpt-5-4-mini
+  aliases:
+  - duo-chat-gpt-5-4-mini
+  - openai/duo-chat-gpt-5-4-mini
+- id: duo-chat-gpt-5-4-nano
+  aliases:
+  - duo-chat-gpt-5-4-nano
+  - openai/duo-chat-gpt-5-4-nano
+- id: duo-chat-gpt-5-5
+  aliases:
+  - duo-chat-gpt-5-5
+  - openai/duo-chat-gpt-5-5
+- id: duo-chat-gpt-5-codex
+  aliases:
+  - duo-chat-gpt-5-codex
+  - openai/duo-chat-gpt-5-codex
+- id: duo-chat-gpt-5-mini
+  aliases:
+  - duo-chat-gpt-5-mini
+  - openai/duo-chat-gpt-5-mini
+- id: duo-chat-haiku-4-5
+  aliases:
+  - anthropic/duo-chat-haiku-4-5
+  - duo-chat-haiku-4-5
+- id: duo-chat-opus-4-5
+  aliases:
+  - anthropic/duo-chat-opus-4-5
+  - duo-chat-opus-4-5
+- id: duo-chat-opus-4-6
+  aliases:
+  - anthropic/duo-chat-opus-4-6
+  - duo-chat-opus-4-6
+- id: duo-chat-opus-4-7
+  aliases:
+  - anthropic/duo-chat-opus-4-7
+  - duo-chat-opus-4-7
+- id: duo-chat-opus-4-8
+  aliases:
+  - anthropic/duo-chat-opus-4-8
+  - duo-chat-opus-4-8
+- id: duo-chat-sonnet-4-5
+  aliases:
+  - anthropic/duo-chat-sonnet-4-5
+  - duo-chat-sonnet-4-5
+- id: duo-chat-sonnet-4-6
+  aliases:
+  - anthropic/duo-chat-sonnet-4-6
+  - duo-chat-sonnet-4-6
+- id: duyhv1411/Llama-3.2-3B-en-vi
+  aliases:
+  - Llama-3.2-3B-en-vi
+- id: elevenlabs/elevenlabs-v2-5
+  aliases:
+  - elevenlabs-v2-5
+- id: facebook/opt-1.3b
+  aliases:
+  - unknown/opt-cot-1-3b
+  - unknown/opt-ft-1-3b
+- id: failspy/Meta-Llama-3-70B-Instruct-abliterated-v3.5
+  aliases:
+  - meta/meta-llama-3-70b-instruct-abliterated-v3-5
+- id: fluently-lm/FluentlyLM-Prinum
+  aliases:
+  - FluentlyLM-Prinum
+- id: google/T5-11B
+  aliases:
+  - T5 11B
+  - unknown/flan-t5-11b
+  - unknown/flan-t5-11b-zero-shot
+  - unknown/t5-11b
+- id: google/UL2-20B
+  aliases:
+  - UL2 20B
+  - unknown/flan-ul2-20b
+  - unknown/ul2
+  - unknown/ul2-20b
+- id: google/gemini-1.0-pro
+  aliases:
+  - Gemini 1.0 Pro
+  - unknown/gemini-1-0-pro
+  - unknown/gemini-pro
+- id: google/gemini-1.0-pro-001
+  aliases:
+  - Gemini 1.0 Pro 001
+- id: google/gemini-1.0-pro-002
+  aliases:
+  - Gemini 1.0 Pro 002
+- id: google/gemini-1.5-flash
+  aliases:
+  - unknown/gemini-1-5-flash
+- id: google/gemini-1.5-flash-001
+  aliases:
+  - Gemini 1.5 Flash 001
+- id: google/gemini-1.5-flash-002
+  aliases:
+  - Gemini 1.5 Flash 002
+- id: google/gemini-1.5-pro
+  aliases:
+  - Gemini 1.5 Pro
+  - gemini-pro-1.5
+  - unknown/gemini-1-5
+  - unknown/gemini-1-5-pro
+  - unknown/gemini-pro-1-5
+  - unknown/gemini1-5-pro
+- id: google/gemini-1.5-pro-001
+  aliases:
+  - Gemini 1.5 Pro 001
+- id: google/gemini-1.5-pro-002
+  aliases:
+  - Gemini 1.5 Pro 002
+  - unknown/gemini-1-5-pro-002
+- id: google/gemini-2-0-pro
+  aliases:
+  - Gemini 2.0 Pro
+- id: google/gemini-2-5-flash-lite-reasoning
+  aliases:
+  - Gemini 2.5 Flash Lite Reasoning
+- id: google/gemini-2-5-flash-reasoning
+  aliases:
+  - Gemini 2.5 Flash Reasoning
+- id: google/gemini-2-5-flash-reasoning-04-2025
+  aliases:
+  - Gemini 2.5 Flash Reasoning (2025-04)
+- id: google/gemini-2.0-flash
+  aliases:
+  - gemini-2-0-flash-exp
+  - gemini-2-flash
+  - gemini-2.0
+  - unknown/gemini-2-0
+  - unknown/gemini-2-flash
+- id: google/gemini-2.0-flash-lite
+  aliases:
+  - gemini-2-0-flash-lite-preview-02-05
+- id: google/gemini-2.0-flash-thinking
+  aliases:
+  - Gemini 2.0 Flash Thinking
+  - unknown/gemini-2-0-flash-thinking
+- id: google/gemini-2.5-flash
+  aliases:
+  - gemini-2.5-flash-preview
+  - gemini-2.5-flash-preview-05-20
+  - gemini-2.5-flash-preview-05-20:thinking
+  - gemini-2.5-flash-preview-09-2025-thinking
+  - unknown/gemini-2-5-flash-0417-think
+  - unknown/gemini-2-5-flash-10k
+  - unknown/gemini-2-5-flash-250520
+  - unknown/gemini-2-5-flash-adk
+  - unknown/gemini-2-5-flash-grounding
+  - unknown/gemini-2-5-flash-nano-banana
+  - unknown/gemini-2-5-flash-no-code
+  - unknown/gemini-2-5-flash-no-think
+  - unknown/gemini-2-5-flash-preview
+  - unknown/gemini-2-5-flash-preview-05-20-10k
+  - unknown/gemini-2-5-flash-sep
+  - unknown/gemini-2-5-flash-think
+  - unknown/google-gemini-2-5-flash-preview
+- id: google/gemini-2.5-flash-2025-04
+  aliases:
+  - gemini-2.5-flash-04-2025
+- id: google/gemini-2.5-flash-lite
+  aliases:
+  - gemini-2.5-flash-lite-preview-09-2025-thinking
+- id: google/gemini-2.5-flash-thinking
+  aliases:
+  - Gemini 2.5 Flash Thinking
+  - google/gemini-2-5-flash-max-thinking-2025-09-25
+  - unknown/gemini-2-5-flash-thinking
+  - unknown/gemini-2-5-flash-thinking-05-20
+  - unknown/google-gemini-2-5-flash-preview-thinking
+- id: google/gemini-2.5-pro
+  aliases:
+  - gemini-2-5-pro-preview-03-25
+  - gemini-2-5-pro-preview-05-06
+  - gemini-2.5-pro-deep-research
+  - gemini-2.5-pro-exp
+  - gemini-2.5-pro-grounding
+  - gemini-2.5-pro-preview-06-05
+  - gemini2-5-pro
+  - google/gemini-2-5-pro-experimental
+  - unknown/gemini
+  - unknown/gemini-2-5
+  - unknown/gemini-2-5-pro-03-25
+  - unknown/gemini-2-5-pro-05-06
+  - unknown/gemini-2-5-pro-06-05
+  - unknown/gemini-2-5-pro-10k
+  - unknown/gemini-2-5-pro-250506
+  - unknown/gemini-2-5-pro-30k
+  - unknown/gemini-2-5-pro-40k
+  - unknown/gemini-2-5-pro-deep-research
+  - unknown/gemini-2-5-pro-exp
+  - unknown/gemini-2-5-pro-exp-0325
+  - unknown/gemini-2-5-pro-grounding
+  - unknown/gemini-2-5-pro-grounding-agentic
+  - unknown/gemini-2-5-pro-parametric
+  - unknown/gemini-2-5-pro-preview-03-25
+  - unknown/gemini-2-5-pro-preview-05-06-tool-free
+  - unknown/gemini-2-5-pro-preview-0506
+  - unknown/gemini-2-5-pro-preview-10k
+  - unknown/gemini-2-5-pro-preview-40k
+  - unknown/gemini-2-5-pro-retrieval
+  - unknown/gemini-2-5-pro-t
+  - unknown/gemini-2-5-pro-t-s
+  - unknown/gemini-2-5-pro-think
+  - unknown/gemini-2-5-pro-tool-free
+  - unknown/gemini-2-5-pro-web
+  - unknown/gemini2-5-pro
+- id: google/gemini-3-pro
+  aliases:
+  - gemini-3-deep-think-preview
+  - google/gemini-3-pro-deep-think
+- id: google/gemini-3-pro-preview
+  aliases:
+  - gemini-3-pro-preview-thinking
+- id: google/gemini-3.1-flash-lite
+  aliases:
+  - gemini-3-1-flash-lite-preview
+- id: google/gemini-3.1-pro
+  aliases:
+  - gemini-3-1-pro-preview
+- id: google/gemini-3.1-pro-preview-custom-tools
+  aliases:
+  - gemini-3.1-pro-preview-customtools
+  - google/gemini-3.1-pro-preview-customtools
+- id: google/gemma-2-27b
+  aliases:
+  - unknown/gemma2-27b
+- id: google/gemma-2-27b-it
+  aliases:
+  - gemma-2-27b-it-together
+- id: google/gemma-2-2b
+  aliases:
+  - unknown/gemma-2
+- id: google/gemma-2-2b-it
+  aliases:
+  - nvidia/gemma-2-2b-it
+- id: google/gemma-2-9b
+  aliases:
+  - gemma2-9b-it
+  - unknown/gemma-9b
+  - unknown/gemma2
+  - unknown/gemma2-9b
+- id: google/gemma-3-1b
+  aliases:
+  - Gemma 3 1B
+  - google/gemma3-1b
+- id: google/gemma-3-270m
+  aliases:
+  - unknown/gemma-270m
+- id: google/gemma-3-27b-it
+  aliases:
+  - Google Gemma 3 27B Instruct
+  - google/google-gemma-3-27b-it
+- id: google/gemma-3n-E2B-it
+  aliases:
+  - nvidia/gemma-3n-e2b-it
+- id: google/gemma-3n-E4B-it
+  aliases:
+  - Gemma 3n 4B
+- id: google/gemma-4-26B-A4B-it
+  aliases:
+  - Google Gemma 4 26B A4B Instruct
+  - google/google-gemma-4-26b-a4b-it
+- id: google/gemma-4-26b-a4b-non-reasoning
+  aliases:
+  - Gemma 4 26B A4B Non Reasoning
+- id: google/gemma-4-31B-it
+  aliases:
+  - Google Gemma 4 31B Instruct
+  - google/google-gemma-4-31b-it
+- id: google/gemma-4-31b-non-reasoning
+  aliases:
+  - Gemma 4 31B Non Reasoning
+- id: google/gemma-4-E2B
+  aliases:
+  - gemma4-e2b
+- id: google/gemma-4-E4B
+  aliases:
+  - gemma4-e4b
+- id: google/gemma-4-e2b-non-reasoning
+  aliases:
+  - Gemma 4 E2b Non Reasoning
+- id: google/gemma-4-e4b-non-reasoning
+  aliases:
+  - Gemma 4 E4b Non Reasoning
+- id: google/gemma-7b
+  aliases:
+  - unknown/gemma
+- id: google/gemma3-12b
+  aliases:
+  - Gemma 3 12B
+- id: google/gemma3-4b
+  aliases:
+  - Gemma 3 4B
+- id: google/gemma4-26b
+  aliases:
+  - Gemma 4 26B
+- id: google/google-paligemma
+  aliases:
+  - google-paligemma
+  - nvidia/google-paligemma
+- id: google/nano-banana
+  aliases:
+  - Gemini Nano Banana (image gen)
+- id: google/palm-2
+  aliases:
+  - PaLM 2
+  - unknown/palm-2
+- id: google/text-bison@001
+  aliases:
+  - Text Bison 001
+- id: google/text-unicorn@001
+  aliases:
+  - Text Unicorn 001
+- id: huggingface/smollm3-3b
+  aliases:
+  - SmolLM3 3B
+- id: huggingface/smollm3-3b-nothink
+  aliases:
+  - Smollm3 3B Nothink
+- id: huihui-ai/deepseek-r1-distill-llama-70b-abliterated
+  aliases:
+  - deepseek/deepseek-r1-distill-llama-70b-abliterated
+- id: huihui-ai/deepseek-r1-distill-qwen-32b-abliterated
+  aliases:
+  - alibaba/deepseek-r1-distill-qwen-32b-abliterated
+- id: huihui-ai/llama-3-1-nemotron-70b-instruct-hf-abliterated
+  aliases:
+  - llama-3-1-nemotron-70b-instruct-hf-abliterated
+  - nvidia/llama-3-1-nemotron-70b-instruct-hf-abliterated
+- id: huihui-ai/llama-3-3-70b-instruct-abliterated
+  aliases:
+  - meta/llama-3-3-70b-instruct-abliterated
+- id: huihui-ai/qwen2-5-32b-instruct-abliterated
+  aliases:
+  - alibaba/qwen2-5-32b-instruct-abliterated
+- id: hunyuan-2-0
+  aliases:
+  - hunyuan-2-0
+  - hunyuan-2.0-thinking
+  - tencent/hunyuan-2-0
+- id: hunyuan-2-0-instruct
+  aliases:
+  - hunyuan-2-0-instruct
+  - hunyuan-2.0-instruct
+  - tencent/hunyuan-2-0-instruct
+- id: ibm-granite/granite-3.2-8b-instruct
+  aliases:
+  - ibm/granite-3-2-8b-instruct
+- id: ibm-granite/granite-4.0-h-nano
+  aliases:
+  - Granite 4.0 H Nano 1B
+- id: ibm/granite-3.3-8b-base
+  aliases:
+  - Granite 3.3 8B Base
+- id: ibm/granite-3.3-8b-instruct
+  aliases:
+  - Granite 3.3 8B Instruct
+  - granite-3-3-8b-instruct-with-guardian
+- id: ibm/granite-4-0-350m
+  aliases:
+  - Granite 4.0 350M
+- id: ibm/granite-4.0-h-small
+  aliases:
+  - Granite 4.0 H Small
+- id: icefog72/Ice0.15-02.10-RP
+  aliases:
+  - Ice0.15-02.10-RP
+- id: icefog72/Ice0.40-20.11-RP
+  aliases:
+  - Ice0.40-20.11-RP
+- id: icefog72/Ice0.70-25.01-RP
+  aliases:
+  - Ice0.70-25.01-RP
+- id: icefog72/IceDrinkNameGoesHereRP-7b-Model_Stock
+  aliases:
+  - IceDrinkNameGoesHereRP-7b-Model_Stock
+- id: icefog72/IceDrunkCherryRP-7b
+  aliases:
+  - IceDrunkCherryRP-7b
+- id: icefog72/IceMartiniRP-7b
+  aliases:
+  - IceMartiniRP-7b
+- id: ideogramai/ideogram
+  aliases:
+  - ideogram-v2
+- id: inflatebot/MN-12B-Mag-Mell-R1
+  aliases:
+  - mistralai/mn-12b-mag-mell-r1
+- id: inflection/inflection-3-pi
+  aliases:
+  - Inflection 3 Pi
+  - inflection-3-pi
+  - openai/inflection-3-pi
+- id: inflection/inflection-3-productivity
+  aliases:
+  - Inflection 3 Productivity
+  - inflection-3-productivity
+  - openai/inflection-3-productivity
+- id: intfloat/e5-mistral-7b-instruct
+  aliases:
+  - mistralai/e5-mistral-7b-instruct
+- id: jaspionjader/bh-58
+  aliases:
+  - bh-58
+- id: jaspionjader/bh-59
+  aliases:
+  - bh-59
+- id: jaspionjader/dp-7-8b
+  aliases:
+  - dp-7-8b
+- id: jaspionjader/f-9-8b
+  aliases:
+  - f-9-8b
+- id: jaspionjader/knfp-3-8b
+  aliases:
+  - knfp-3-8b
+- id: jeffmeloy/Qwen-7B-nerd-uncensored-v1.0
+  aliases:
+  - Qwen-7B-nerd-uncensored-v1.0
+- id: katanemo/arch-agent-1-5b
+  aliases:
+  - Arch-Agent 1.5B
+- id: kwaikat/kat-coder-pro
+  aliases:
+  - KAT Coder Pro V1
+  - kat-coder-pro
+  - kwaipilot/kat-coder-pro
+- id: kwaikat/kat-coder-pro-v2
+  aliases:
+  - Kat Coder Pro V2
+- id: lg/exaone-4-0-1-2b
+  aliases:
+  - EXAONE 4.0 1.2B
+  - lgai-exaone/exaone-4-0-1-2b
+- id: lg/exaone-4-0-1-2b-reasoning
+  aliases:
+  - Exaone 4.0 1.2B Reasoning
+- id: lg/exaone-4-0-32b
+  aliases:
+  - EXAONE 4.0 32B
+  - lgai-exaone/exaone-4-0-32b
+  - unknown/exaone-4-0-32b
+- id: lg/exaone-4-0-32b-reasoning
+  aliases:
+  - Exaone 4.0 32B Reasoning
+- id: lg/k-exaone
+  aliases:
+  - K-EXAONE
+- id: lg/k-exaone-non-reasoning
+  aliases:
+  - K Exaone Non Reasoning
+- id: liquid/lfm-2-5-1-2b
+  aliases:
+  - lfm-2-5-1-2b
+- id: liquidai/lfm-40b
+  aliases:
+  - LFM 40B MoE
+  - LFM-40B
+- id: liquidai/lfm2-1-2b
+  aliases:
+  - LFM2 1.2B
+- id: liquidai/lfm2-2-6b
+  aliases:
+  - LFM2 2.6B
+- id: lmsys/vicuna-7b-v1.5
+  aliases:
+  - unknown/vicuna
+  - unknown/vicuna-v1-5-7b
+- id: lucidnova-rf1-100b
+  aliases:
+  - LucidNova RF1 100B
+  - amazon/lucidnova-rf1-100b
+  - lucidnova-rf1-100b
+- id: marcuscedricridia/pre-cursa-o1-v1.2
+  aliases:
+  - pre-cursa-o1-v1.2
+- id: mbzuai/k2-think-v2
+  aliases:
+  - K2 Think V2
+- id: mbzuai/k2-v2
+  aliases:
+  - K2-V2
+  - LLM360/K2-V2
+- id: meganova-ai/manta-flash-1-0
+  aliases:
+  - Manta Flash 1.0
+  - amazon/manta-flash-1-0
+  - manta-flash-1-0
+- id: meganova-ai/manta-mini-1-0
+  aliases:
+  - Manta Mini 1.0
+  - amazon/manta-mini-1-0
+  - manta-mini-1-0
+- id: meganova-ai/manta-pro-1-0
+  aliases:
+  - Manta Pro 1.0
+  - amazon/manta-pro-1-0
+  - manta-pro-1-0
+- id: meituan/longcat-flash-chat
+  aliases:
+  - unknown/longcat-flash
+- id: meituan/longcat-flash-thinking-2601
+  aliases:
+  - unknown/longcat-flash-thinking
+- id: meta-llama/Llama-2-13b-chat-hf
+  aliases:
+  - meta/Llama-2-13b-chat-hf
+- id: meta-llama/Llama-2-70b-chat-hf
+  aliases:
+  - meta/Llama-2-70b-chat-hf
+- id: meta-llama/Llama-2-7b-chat-hf
+  aliases:
+  - meta/Llama-2-7b-chat-hf
+- id: meta-llama/Llama-3.1-70B
+  aliases:
+  - meta-llama/Meta-Llama-3.1-70B
+  - meta-llama/llama3.1-70b
+  - meta/llama3.1-70b
+  - unknown/llama3-1-70b
+- id: meta-llama/Llama-3.1-70B-Instruct
+  aliases:
+  - llama3-1-70b-instruct
+  - meta.llama3-1-70b-instruct-v1:0
+  - unknown/llama3-1-70b-instruct
+- id: meta-llama/Llama-3.1-8B
+  aliases:
+  - llama3.1-8b
+  - unknown/llama3-1-8b
+- id: meta-llama/Llama-3.1-8B-Instruct
+  aliases:
+  - Meta-Llama-3-1-8B-Instruct-FP8
+  - llama3-1-8b-instruct
+  - meta.llama3-1-8b-instruct-v1:0
+  - unknown/llama3-1-8b-instruct
+- id: meta-llama/Llama-3.2-90B-Vision-Instruct
+  aliases:
+  - Llama 3.2 90B
+- id: meta-llama/Llama-3.3-70B-Instruct
+  aliases:
+  - llama-3-3-70b-instruct-maas
+  - meta-llama/Meta-Llama-3.3-70B-Instruct
+  - meta/llama-3.3-70b-instruct-maas
+- id: meta-llama/Llama-4-Maverick-17B-128E
+  aliases:
+  - llama4-maverick
+- id: meta-llama/Llama-4-Scout-17B-16E
+  aliases:
+  - llama4-scout
+- id: meta-llama/Meta-Llama-3-70B
+  aliases:
+  - meta-llama/Llama-3-70B
+  - unknown/llama-3-70b
+  - unknown/llama3-70b
+- id: meta-llama/Meta-Llama-3-70B-Instruct
+  aliases:
+  - llama3-70b-instruct
+  - meta-llama/Llama-3-70B-Instruct
+  - unknown/llama3-70b-instruct
+- id: meta-llama/Meta-Llama-3-8B
+  aliases:
+  - meta-llama/Llama-3-8B
+  - unknown/llama-3-8b
+  - unknown/llama3-8b
+- id: meta-llama/Meta-Llama-3-8B-Instruct
+  aliases:
+  - meta-llama/Llama-3-8B-Instruct
+- id: meta-llama/llama-3
+  aliases:
+  - Llama 3
+- id: meta-llama/llama-3.1
+  aliases:
+  - Llama 3.1
+- id: meta-llama/llama-3.2
+  aliases:
+  - Llama 3.2
+  - llama3-2-3b
+  - unknown/llama3-2-3b
+- id: meta-llama/llama-4
+  aliases:
+  - Llama 4
+- id: meta/LLaMA-30B
+  aliases:
+  - Llama 30B
+- id: meta/Llama-2-13B
+  aliases:
+  - Llama 2 13B
+  - meta/llama2-13b
+  - unknown/llama2-13b
+- id: meta/Llama-2-13b-chat
+  aliases:
+  - Llama 2 13B Chat
+  - llama2-13b-chat
+  - meta/llama2-13b-chat
+  - unknown/llama-2-13b-chat
+  - unknown/llama2-13b-chat
+- id: meta/Llama-2-70B
+  aliases:
+  - Llama 2 70B
+  - meta/llama2-70b
+  - unknown/llama2-70b
+- id: meta/Llama-2-70b-chat
+  aliases:
+  - Llama 2 70B Chat
+  - llama-2-chat-70b
+  - meta/llama2-70b-chat
+  - unknown/llama-2-chat-70b
+  - unknown/llama2-70b-chat
+- id: meta/Llama-2-7B
+  aliases:
+  - Llama 2 7B
+  - meta/llama2-7b
+  - unknown/llama2-7b
+- id: meta/Llama-2-7b-chat
+  aliases:
+  - Llama 2 7B Chat
+  - llama2-7b-chat
+  - llama2-chat-7b
+  - meta/llama2-7b-chat
+  - unknown/llama-2-7b-chat
+  - unknown/llama2-7b-chat
+  - unknown/llama2-chat-7b
+- id: meta/OPT-175B
+  aliases:
+  - OPT 175B
+  - unknown/opt-175b
+- id: meta/OPT-66B
+  aliases:
+  - OPT 66B
+  - unknown/opt-66b
+- id: meta/esm2-650m
+  aliases:
+  - esm2-650m
+  - nvidia/esm2-650m
+- id: meta/esmfold
+  aliases:
+  - esmfold
+  - nvidia/esmfold
+- id: meta/llama-3-1-405b-instruct
+  aliases:
+  - meta-llama/Meta-Llama-3.1-405B-Instruct
+- id: meta/llama-3-3-70b
+  aliases:
+  - meta/llama3-3-70b
+- id: meta/llama-3-3-70b-arliai-rpmax-v2
+  aliases:
+  - llama-3.3-70b-arliai-rpmax-v3
+- id: meta/llama-3-70b-chat
+  aliases:
+  - Llama 3 70B Chat
+- id: meta/llama-3-8b-chat
+  aliases:
+  - Llama 3 8B Chat
+- id: meta/llama-3.1-405b
+  aliases:
+  - Llama 3.1 405B
+  - llama3-1-405b
+  - meta-llama/Meta-Llama-3.1-405B
+  - meta-llama/llama3.1-405b
+  - meta/llama3.1-405b
+  - unknown/llama-3-1-405b
+  - unknown/llama3-1-405b
+- id: meta/llama-3.1-405b-instruct-turbo
+  aliases:
+  - Llama 3.1 405B Instruct Turbo
+- id: meta/llama-3.1-70b-instruct-turbo
+  aliases:
+  - Llama 3.1 70B Instruct Turbo
+- id: meta/llama-3.1-8b-instruct-turbo
+  aliases:
+  - Llama 3.1 8B Instruct Turbo
+- id: meta/llama-3.2-11b-vision-instruct-turbo
+  aliases:
+  - Llama 3.2 11B Vision Instruct Turbo
+- id: meta/llama-3.2-90b-instruct
+  aliases:
+  - Llama 3.2 90B Instruct
+- id: meta/llama-3.2-90b-vision-instruct-turbo
+  aliases:
+  - Llama 3.2 90B Vision Instruct Turbo
+- id: meta/llama-3.3-70b-instruct-turbo
+  aliases:
+  - Llama 3.3 70B Instruct Turbo
+- id: meta/muse-spark
+  aliases:
+  - Muse Spark
+- id: microsoft/Phi-3.5-vision-instruct
+  aliases:
+  - unknown/phi-3-5-vision-instruct-32f
+- id: microsoft/Phi-4-mini-reasoning
+  aliases:
+  - Phi-4 Mini
+- id: microsoft/Phi-4-multimodal-instruct
+  aliases:
+  - unknown/phi-4-vl-instruct
+- id: microsoft/Phi-4-reasoning
+  aliases:
+  - microsoft/phi4-reasoning
+- id: microsoft/TNLG-v2-530B
+  aliases:
+  - TNLG v2 530B
+- id: microsoft/TNLG-v2-6.7B
+  aliases:
+  - TNLG v2 6.7B
+- id: microsoft/phi-3-medium-128k
+  aliases:
+  - microsoft/phi3-medium-128k
+- id: microsoft/phi-3-medium-4k
+  aliases:
+  - microsoft/phi3-medium-4k
+  - phi3-medium-128k
+- id: microsoft/phi-3-mini-128k
+  aliases:
+  - microsoft/phi3-mini-128k
+- id: microsoft/phi-3-mini-4k
+  aliases:
+  - microsoft/phi3-mini-4k
+  - phi-3-mini
+  - phi3-mini-128k
+- id: microsoft/phi-4
+  aliases:
+  - microsoft/phi4
+  - unknown/phi4-14b
+- id: microsoft/phi-4-multimodal
+  aliases:
+  - unknown/phi-4-multimodal-5b
+  - unknown/phi-4-multimodal-inst
+- id: minimax/minimax-m1
+  aliases:
+  - minimax-m1-40k
+- id: minimax/minimax-text-01
+  aliases:
+  - unknown/minimax
+- id: miromind-ai/mirothinker-v1-5-235b
+  aliases:
+  - openai/mirothinker-v1-5-235b
+- id: mistral/magistral-medium-2509
+  aliases:
+  - Magistral Medium (2509)
+- id: mistral/ministral-3-3b-base-2512
+  aliases:
+  - ministral-3-3b-base-2512
+- id: mistral/ministral-3-8b-base-2512
+  aliases:
+  - Ministral 3 8B Base (2512)
+  - mistralai/ministral-3-8b-base-2512
+- id: mistral/mistral-large-2402
+  aliases:
+  - Mistral Large (2402)
+- id: mistral/mistral-large-3-2509
+  aliases:
+  - Mistral Large 3 (2509)
+  - mistralai/mistral-large-3-2509
+- id: mistral/mistral-small-3.1-24b-base-2503
+  aliases:
+  - mistral-small-3-1-24b-base-2503
+- id: mistral/mistral-small-4-non-reasoning
+  aliases:
+  - Mistral Small 4 Non Reasoning
+  - mistralai/mistral-small-4-non-reasoning
+- id: mistralai/Magistral-Small-2506
+  aliases:
+  - nvidia/magistral-small-2506
+- id: mistralai/Mistral-7B-Instruct-v0.3
+  aliases:
+  - Mistral 7B Instruct
+  - mistral-7b-instruct
+  - mistral-7b-instruct-v03
+  - mistralai/mistral-7b-instruct
+  - mistralai/mistral-7b-instruct-v03
+- id: mistralai/Mistral-Small-4-119B-2603
+  aliases:
+  - nvidia/mistral-small-4-119b-2603
+- id: mistralai/codestral
+  aliases:
+  - Codestral-22B
+- id: mistralai/devstral-2
+  aliases:
+  - devstral-2512
+  - devstral-medium-latest
+  - mistralai/devstral-medium-latest
+- id: mistralai/devstral-small
+  aliases:
+  - unknown/devstral-small-1-1-24b
+- id: mistralai/devstral-small-2
+  aliases:
+  - labs-devstral-small-2512
+- id: mistralai/mistral-7b
+  aliases:
+  - mistral-v0.2-7b
+  - mistral-v0.3-7b
+  - mistralai/open-mistral-7b
+  - open-mistral-7b
+  - unknown/mistral-v0-2-7b
+  - unknown/mistral-v0-3
+  - unknown/mistral-v0-3-7b
+- id: mistralai/mistral-7b-instruct
+  aliases:
+  - mistral-7b-instruct-v03
+  - mistralai/mistral-7b-instruct-v03
+- id: mistralai/mistral-large-2407
+  aliases:
+  - Mistral Large 2 (2407)
+  - mistralai/mistral-large-2-2407
+  - unknown/mistral-large-123b
+  - unknown/mistral-large-123b-inst
+  - unknown/mistral-large-2
+  - unknown/mistral-large-instr-2407
+  - unknown/mistral-large-instruct-2407-123b
+- id: mistralai/mistral-large-2411
+  aliases:
+  - Mistral Large 2.1 (2411)
+  - mistral-large-2411
+  - mistralai/mistral-large-2-2411
+  - unknown/mistral-large-24-11
+  - unknown/mistral-large-2411
+  - unknown/mistral-large-november
+- id: mistralai/mistral-large-3
+  aliases:
+  - mistral-large-2512
+- id: mistralai/mistral-medium-2505
+  aliases:
+  - Mistral Medium (2505)
+- id: mistralai/mistral-medium-3
+  aliases:
+  - mistral-medium-2312
+- id: mistralai/mistral-medium-3.1
+  aliases:
+  - mistral-medium-2508
+  - mistralai/mistral-medium-2508
+- id: mistralai/mistral-medium-3.5
+  aliases:
+  - mistral-medium-2604
+  - mistralai/mistral-medium-2604
+- id: mistralai/mistral-nemo
+  aliases:
+  - open-mistral-nemo
+  - open-mistral-nemo-2407
+- id: mistralai/mistral-nemotron
+  aliases:
+  - mistral-nemotron
+  - nvidia/mistral-nemotron
+- id: mistralai/mistral-small
+  aliases:
+  - mistral-24b
+  - mistral-small-24b
+  - mistralai/mistral-24b
+  - mistralai/mistral-small-24b
+  - mistralai/mistral-small-3-24b
+  - unknown/mistral-24b
+- id: mistralai/mistral-small-24b-instruct-2501
+  aliases:
+  - Mistral Small 3 (24B)
+  - Mistral-Small-2501
+  - Mistral-Small-Instruct-2501
+  - mistral/mistral-small-3-1
+  - mistralai/Mistral-Small-Instruct-2501
+  - mistralai/mistral-small-3
+  - unknown/mistral-small-3
+  - unknown/mistral-small-3-1
+  - unknown/mistral-small-3-1-24b
+  - unknown/mistral-small-3-1-24b-2503
+  - unknown/mistral-small-3-1-24b-instruct-2503
+  - unknown/mistral-small-3-2-24b-2506-non-thinking
+- id: mistralai/mistral-small-3-1-24b-instruct
+  aliases:
+  - Mistral-Small-Instruct-2503
+  - mistralai/Mistral-Small-Instruct-2503
+- id: mistralai/mistral-small-3.2
+  aliases:
+  - mistral-small-2506
+  - mistralai/mistral-small-2506
+- id: mistralai/mistral-small-4
+  aliases:
+  - mistral-small-2603
+  - mistralai/mistral-small-2603
+- id: mistralai/mistral-small-instruct
+  aliases:
+  - Mistral Small Instruct
+- id: mistralai/mistral-small-legacy
+  aliases:
+  - Mistral-Small-2402
+  - Mistral-Small-2409
+- id: mistralai/mixtral-8x22b
+  aliases:
+  - open-mixtral-8x22b
+- id: mistralai/mixtral-8x7b
+  aliases:
+  - Mixtral-8x7B-32kseqlen
+  - mixtral-8x7b-inst
+  - open-mixtral-8x7b
+  - unknown/mixtral
+  - unknown/mixtral-8-7b
+  - unknown/mixtral-8x7b-inst
+- id: mistralai/mixtral-8x7b-instruct
+  aliases:
+  - mixtral-8x7b-instruct
+  - nvidia/mixtral-8x7b-instruct
+- id: mistralai/pixtral-12b
+  aliases:
+  - unknown/pixtral
+- id: mistralai/pixtral-large
+  aliases:
+  - pixtral-124b
+  - unknown/pixtral-124b
+- id: mlabonne/NeuralDaredevil-8B-abliterated
+  aliases:
+  - meta/neuraldaredevil-8b-abliterated
+- id: moonshotai/Kimi-K2-Instruct
+  aliases:
+  - moonshot.kimi-k2
+  - moonshotai/k2
+  - moonshotai/moonshotai-kimi-k2-instruct
+- id: moonshotai/Kimi-K2-Thinking
+  aliases:
+  - kimi-k2-thinking-maas
+  - moonshot.kimi-k2-thinking
+  - moonshotai/kimi-k2-thinking-maas
+- id: moonshotai/Kimi-K2.5
+  aliases:
+  - k2p5
+  - kimi-k2-5-cloud
+  - kimi-k2p5
+  - moonshotai.kimi-k2-5
+  - moonshotai/kimi-k2-5-cloud
+- id: moonshotai/Kimi-K2.6
+  aliases:
+  - k2p6
+  - kimi-k2.6-precision
+  - umans-kimi-k2-6
+- id: moonshotai/kimi-k2
+  aliases:
+  - Kimi K2
+  - unknown/kimi-k2
+  - unknown/kimi-k2-0
+  - unknown/kimi-k2-0711-preview-w-reviewed-file
+  - unknown/kimi-k2-web
+- id: moonshotai/kimi-k2-thinking-turbo
+  aliases:
+  - kimi-k2-thinking-0905
+- id: moonshotai/kimi-k2.5-thinking
+  aliases:
+  - Kimi K2.5 Thinking
+- id: moonshotai/kimi-k2.6-thinking
+  aliases:
+  - Kimi K2.6 Thinking
+- id: mosaicml/MPT-30B
+  aliases:
+  - MPT 30B
+- id: mosaicml/mpt-30b-instruct
+  aliases:
+  - Mpt 30B Instruct
+- id: mosaicml/mpt-7b
+  aliases:
+  - MPT-7B
+  - unknown/mpt-7b
+- id: motif-technologies/motif-2-12-7b
+  aliases:
+  - Motif 2 12.7B
+- id: naver/hyperclova-x-seed-think-32b
+  aliases:
+  - HyperCLOVA-X Seed Think 32B
+  - naver/hyperclova-x-seed-think
+- id: nex-agi/deepseek-v3-1-nex-n1
+  aliases:
+  - deepseek/deepseek-v3-1-nex-n1
+- id: nidum/Nidum-Limitless-Gemma-2B
+  aliases:
+  - Nidum-Limitless-Gemma-2B
+- id: nous-research/hermes-4-llama-3-1-405b
+  aliases:
+  - Hermes 4 Llama-3.1 405B
+  - NousResearch/Hermes-4-Llama-3.1-405B
+- id: nous-research/hermes-4-llama-3-1-405b-reasoning
+  aliases:
+  - Hermes 4 Llama 3.1 405B Reasoning
+- id: nous-research/hermes-4-llama-3-1-70b
+  aliases:
+  - Hermes 4 Llama-3.1 70B
+  - nousresearch/hermes-4-llama-3-1-70b
+- id: nous-research/hermes-4-llama-3-1-70b-reasoning
+  aliases:
+  - Hermes 4 Llama 3.1 70B Reasoning
+- id: nova-3
+  aliases:
+  - amazon/nova-3
+  - nova-3
+- id: nvidia.nemotron-nano-12b-v2
+  aliases:
+  - nvidia.nemotron-nano-12b-v2
+  - nvidia/nvidia.nemotron-nano-12b-v2
+- id: nvidia.nemotron-nano-3-30b
+  aliases:
+  - NVIDIA Nemotron Nano 3 30B
+  - nvidia.nemotron-nano-3-30b
+  - nvidia/nvidia.nemotron-nano-3-30b
+- id: nvidia.nemotron-super-3-120b
+  aliases:
+  - nvidia.nemotron-super-3-120b
+  - nvidia/nvidia.nemotron-super-3-120b
+- id: nvidia/NVIDIA-Nemotron-Nano-9B-v2
+  aliases:
+  - nvidia/nvidia.nemotron-nano-9b-v2
+- id: nvidia/kimi-k2-5-nvfp4
+  aliases:
+  - Kimi K2.5 (NVFP4)
+  - kimi-k2-5-nvfp4
+  - moonshotai/kimi-k2-5-nvfp4
+- id: nvidia/llama-3-1-nemotron-nano-4b-reasoning
+  aliases:
+  - Llama 3.1 Nemotron Nano 4B Reasoning
+- id: nvidia/llama-3-1-nemotron-safety-guard-8b-v3
+  aliases:
+  - meta/llama-3-1-nemotron-safety-guard-8b-v3
+- id: nvidia/llama-3-1-nemotron-ultra-253b-v1-reasoning
+  aliases:
+  - Llama 3.1 Nemotron Ultra 253B V1 Reasoning
+- id: nvidia/llama-3-3-nemotron-super-49b
+  aliases:
+  - Llama 3.3 Nemotron Super 49B
+  - unknown/llama-nemotron-super-49b-v1-5
+- id: nvidia/llama-3-3-nemotron-super-49b-reasoning
+  aliases:
+  - Llama 3.3 Nemotron Super 49B Reasoning
+- id: nvidia/llama-3.1-nemotron-ultra-253b-v1
+  aliases:
+  - Llama 3.1 Nemotron Ultra 253B V1
+- id: nvidia/nemotron-3-nano-omni-30b-a3b
+  aliases:
+  - nemotron-3-nano-omni-30b-a3b
+- id: openai/GPT-4o-1120
+  aliases:
+  - GPT-4o (1120)
+  - unknown/gpt-4o-1120
+- id: openai/ada-001
+  aliases:
+  - text-ada-001
+- id: openai/babbage-001
+  aliases:
+  - text-babbage-001
+- id: openai/codex
+  aliases:
+  - Codex
+  - code-davinci-002
+  - unknown/codex-code-davinci-002
+  - unknown/davinci-codex-long-prompt
+  - unknown/davinci-codex-medium-prompt
+- id: openai/codex-mini
+  aliases:
+  - codex-mini-latest
+- id: openai/curie-001
+  aliases:
+  - text-curie-001
+- id: openai/dall-e-3
+  aliases:
+  - DALL·E 3
+- id: openai/davinci-001
+  aliases:
+  - davinci-175b
+- id: openai/deep-research
+  aliases:
+  - unknown/chatgpt-dr
+  - unknown/openai-deep-research
+- id: openai/gpt-3.5-turbo
+  aliases:
+  - chatgpt
+  - chatgpt-3.5
+  - chatgpt-3.5-turbo
+  - gpt-3-5
+  - openai/chatgpt-3.5
+  - openai/gpt-3-5
+  - openai__chatgpt-3.5-turbo
+  - unknown/chatgpt-gpt-3-5-turbo
+  - unknown/gpt-3-5
+  - unknown/rag-chatgpt-3.5
+- id: openai/gpt-4
+  aliases:
+  - azure-gpt-4-turbo
+  - unknown/gpt-4-gpt-4-0613
+  - unknown/gpt4
+- id: openai/gpt-4-0613
+  aliases:
+  - GPT-4 (0613)
+  - unknown/gpt-4-0613
+- id: openai/gpt-4.1-mini-2025-04-14
+  aliases:
+  - GPT-4.1 Mini (2025-04-14)
+- id: openai/gpt-4.5
+  aliases:
+  - GPT-4.5
+  - gpt-4-5-preview
+- id: openai/gpt-4o
+  aliases:
+  - chatgpt-4o
+  - gpt-4o-cot
+  - gpt4o
+  - openai/gpt-4o-cot
+  - openai__chatgpt-4o
+  - unknown/gpt-4o-cot
+  - unknown/gpt4o
+- id: openai/gpt-4o-mini-2024-07-18
+  aliases:
+  - GPT-4o Mini (2024-07-18)
+- id: openai/gpt-5
+  aliases:
+  - gpt-5-thinking
+- id: openai/gpt-5-1-non-reasoning
+  aliases:
+  - GPT-5.1 Non Reasoning
+- id: openai/gpt-5-4-mini-non-reasoning
+  aliases:
+  - GPT-5.4 Mini Non Reasoning
+- id: openai/gpt-5-4-nano-non-reasoning
+  aliases:
+  - GPT-5.4 Nano Non Reasoning
+- id: openai/gpt-5-4-non-reasoning
+  aliases:
+  - GPT-5.4 Non Reasoning
+- id: openai/gpt-5-mini
+  aliases:
+  - unknown/gpt5mini
+- id: openai/gpt-5.1
+  aliases:
+  - gpt-5-1-chat-latest
+  - gpt-5.1-chat
+  - openai/gpt-5-1-chat
+  - openai/gpt-5-1-chat-latest
+  - openai/gpt-5-1-high-2025-11-13
+- id: openai/gpt-5.1-2025-11-13
+  aliases:
+  - GPT-5.1 (2025-11-13)
+- id: openai/gpt-5.1-thinking
+  aliases:
+  - GPT-5.1 Thinking
+  - openai/gpt-5-1-no-thinking
+  - openai/gpt-5-1-thinking-high
+  - unknown/gpt-5-1-thinking-low
+  - unknown/gpt-5-1-thinking-medium
+- id: openai/gpt-5.2
+  aliases:
+  - gpt-5-2-chat
+  - gpt-5.2-chat-latest
+  - openai/gpt-5-2-chat
+  - openai/gpt-5-2-chat-latest
+- id: openai/gpt-5.3
+  aliases:
+  - gpt-5-3-chat
+  - gpt-5-3-chat-latest
+  - openai/gpt-5-3-chat
+- id: openai/gpt-5.4-mini-2026-03-17
+  aliases:
+  - GPT-5.4 Mini (2026-03-17)
+- id: openai/gpt-5.4-nano-2026-03-17
+  aliases:
+  - GPT-5.4 Nano (2026-03-17)
+- id: openai/gpt-image-1
+  aliases:
+  - unknown/gpt-image
+- id: openai/gpt-oss-120b
+  aliases:
+  - gpt-oss-120b-maas
+  - openai.gpt-oss-120b-1
+  - openai.gpt-oss-120b-1:0
+  - openai/gpt-oss-120b-maas
+- id: openai/gpt-oss-20b
+  aliases:
+  - gpt-oss-20b-maas
+  - openai.gpt-oss-20b-1
+  - openai.gpt-oss-20b-1:0
+  - openai/gpt-oss-20b-maas
+- id: openai/o1
+  aliases:
+  - gpt-o1
+  - openai/openai-o1
+  - unknown/gpt-o1
+  - unknown/openai-o1
+- id: openai/o3
+  aliases:
+  - gpt-o3
+  - openai/o3-mini-deep-research-agentic
+  - unknown/gpt-o3
+  - unknown/o3-250416
+  - unknown/o4-mini-deep-research-agentic
+- id: openai/o3-mini
+  aliases:
+  - gpt-o3-mini
+  - openai/openai-o3-mini-high
+  - unknown/gpt-o3-mini
+- id: openai/o4-mini
+  aliases:
+  - gpt-o4-mini
+  - unknown/gpt-o4-mini
+  - unknown/gpt-o4-mini-250416
+- id: openai/text-davinci-002
+  aliases:
+  - gpt-3-text-davinci-002
+  - text-davinci-002
+  - unknown/gpt-3-davinci-002
+  - unknown/gpt-3-text-davinci-002
+  - unknown/instructgpt-davinci-v2
+  - unknown/instructgpt-text-davinci-002
+  - unknown/text-davinci-002
+- id: openai/text-davinci-003
+  aliases:
+  - text-davinci-003
+  - unknown/chatgpt-text-davinci-003-few-shot
+  - unknown/chatgpt-text-davinci-003-zero-shot
+  - unknown/davinci-003
+  - unknown/davinci-text-davinci-003
+  - unknown/gpt-3-davinci-003
+  - unknown/gpt-3-text-davinci-003
+  - unknown/text-davinci-003
+  - unknown/text-davinci-003-0-shot-cot
+  - unknown/text-davinci-003-cot
+  - unknown/text-davinci-003-cot-sc
+  - unknown/text-davinci-003-few-shot
+- id: openai/whisper-large-v3
+  aliases:
+  - nvidia/whisper-large-v3
+- id: openbmb/MiniCPM-V-2_6
+  aliases:
+  - minicpm-llama3-v-2-5
+  - minicpm-v2-6
+  - minicpm-v2-6-8b
+  - unknown/minicpm-v2-6
+  - unknown/minicpm-v2-6-8b
+- id: openchat/openchat_3.5
+  aliases:
+  - openchat-35
+- id: osmosis/osmosis-structure-0-6b
+  aliases:
+  - Osmosis Structure 0.6B
+  - openai/osmosis-structure-0-6b
+  - osmosis-structure-0-6b
+- id: pamanseau/openreasoning-nemotron-32b
+  aliases:
+  - nvidia/openreasoning-nemotron-32b
+- id: pankajmathur/orca_mini_v9_2_14B
+  aliases:
+  - orca_mini_v9_2_14B
+- id: perplexity/perplexity-sonar-deep-research
+  aliases:
+  - sonar-deep-research
+- id: perplexity/sonar-reasoning
+  aliases:
+  - sonar-reasoning
+- id: prithivMLmods/Phi-4-Super
+  aliases:
+  - Phi 4 Super (Prithiv)
+- id: qingy2019/Qwen2.5-Math-14B-Instruct
+  aliases:
+  - Qwen2.5-Math-14B-Instruct
+- id: qingy2024/QwQ-14B-Math-v0.2
+  aliases:
+  - QwQ-14B-Math-v0.2
+- id: qwen/qwen2.5-max
+  aliases:
+  - Qwen2.5 Max
+  - unknown/qwen2.5-max
+- id: qwen/qwen3-4b-instruct
+  aliases:
+  - Qwen3 4B Instruct
+  - unknown/qwen3-4b-instruct
+- id: qwen/qwen3.5-35b
+  aliases:
+  - Qwen 3.5 35B
+  - alibaba/qwen3.5-35b
+- id: qwen/qwen3.5-397b-a13b
+  aliases:
+  - alibaba/qwen3.5-397b-a13b
+- id: qwen/qwen3.5-cloud
+  aliases:
+  - Qwen3.5 Cloud
+  - alibaba/qwen3.5-cloud
+- id: raifle/sorcererlm-8x22b
+  aliases:
+  - SorcererLM 8x22B
+  - mistralai/sorcererlm-8x22b
+  - sorcererlm-8x22b
+- id: recraft/recraft-v2
+  aliases:
+  - recraft-v3
+- id: reka-ai/reka-flash
+  aliases:
+  - Reka Flash
+  - unknown/reka-flash
+- id: route-llm
+  aliases:
+  - Route LLM
+  - openai/route-llm
+  - route-llm
+- id: runwayml/runway-gen-4
+  aliases:
+  - runway-gen-4
+- id: saishshinde15/TethysAI_Base_Reasoning
+  aliases:
+  - TethysAI_Base_Reasoning
+- id: saishshinde15/TethysAI_Vortex_Reasoning
+  aliases:
+  - TethysAI_Vortex_Reasoning
+- id: sao10K/l3-8b-lunaris
+  aliases:
+  - l3-8b-lunaris
+  - l3-lunaris-8b
+  - meta/l3-8b-lunaris
+  - meta/l3-lunaris-8b
+- id: sao10k/l3-1-euryale-70b
+  aliases:
+  - l3-1-euryale-70b
+  - meta/l3-1-euryale-70b
+- id: sao10k/l3-3-euryale-70b
+  aliases:
+  - l3-3-euryale-70b
+  - meta/l3-3-euryale-70b
+- id: sao10k/l3-euryale-70b
+  aliases:
+  - l3-euryale-70b
+  - meta/l3-euryale-70b
+- id: sarvam/sarvam-m
+  aliases:
+  - nvidia/sarvam-m
+- id: sarvam/sarvam-m-reasoning
+  aliases:
+  - Sarvam M Reasoning
+- id: sarvamai/OpenHathi-7B-Hi-v0.1-Base
+  aliases:
+  - sarvam/OpenHathi-7B-Hi-v0.1-Base
+- id: sarvamai/sarvam-105b
+  aliases:
+  - sarvam-ai/sarvam-105b
+- id: sarvamai/sarvam-30b
+  aliases:
+  - sarvam-ai/sarvam-30b
+- id: schnell
+  aliases:
+  - black-forest-labs/schnell
+  - schnell
+- id: shisa-ai/shisa-v2-1-llama3-3-70b
+  aliases:
+  - Shisa V2.1 Llama 3.3 70B
+  - meta/shisa-v2-1-llama3-3-70b
+  - shisa-v2-1-llama3-3-70b
+- id: shisa-ai/shisa-v2-llama3-3-70b
+  aliases:
+  - Shisa V2 Llama 3.3 70B
+  - meta/shisa-v2-llama3-3-70b
+  - shisa-v2-llama3-3-70b
+- id: soob3123/amoral-gemma3-27b-v2
+  aliases:
+  - google/amoral-gemma3-27b-v2
+- id: soob3123/grayline-qwen3-8b
+  aliases:
+  - alibaba/grayline-qwen3-8b
+- id: soob3123/veiled-calla-12b
+  aliases:
+  - meta/veiled-calla-12b
+- id: speakleash/Bielik-11B-v2
+  aliases:
+  - unknown/bielik-0-1
+  - unknown/bielik-2-3
+- id: speakleash/Bielik-11B-v2.3-Instruct
+  aliases:
+  - speakleash-ack-cyfronet-agh/bielik-11b-v2-3-instruct
+- id: stabilityai/stable-diffusion-3.5-large
+  aliases:
+  - Stable Diffusion 3.5 Large
+  - stable-diffusion-3-5-large
+  - stable-diffusion-3.5-large
+- id: stanford/Alpaca-7B
+  aliases:
+  - Alpaca 7B
+  - tatsu-lab/alpaca
+- id: stepfun-ai/Step-3.5-Flash
+  aliases:
+  - nvidia/step-3-5-flash
+- id: stepfun/step-3-7-flash
+  aliases:
+  - nvidia/step-3-7-flash
+  - step-3-7-flash
+  - stepfun-ai/Step-3.7-Flash
+- id: stepfun/step-3-vl-10b
+  aliases:
+  - Step 3 VL 10B
+  - step3-vl-10b
+- id: sthenno-com/miscii-14b-0130
+  aliases:
+  - miscii-14b-0130
+- id: sthenno/tempestissimo-14b-0309
+  aliases:
+  - tempestissimo-14b-0309
+- id: swiss-ai-initiative/apertus-70b-instruct
+  aliases:
+  - Apertus 70B Instruct
+- id: swiss-ai-initiative/apertus-8b-instruct
+  aliases:
+  - Apertus 8B Instruct
+- id: tencent/hunyuan-t1
+  aliases:
+  - hunyuan-t1-latest
+  - tencent/hunyuan-t1-latest
+- id: tencent/hunyuan-turbos
+  aliases:
+  - hunyuan-turbos-20250226
+  - tencent/hunyuan-turbos-20250226
+- id: thomas-yanxin/XinYuan-Qwen2-7B-0917
+  aliases:
+  - XinYuan-Qwen2-7B-0917
+- id: tii-uae/falcon-h1r-7b
+  aliases:
+  - Falcon H1R 7B
+  - tiiuae/falcon-h1r-7b
+- id: tiiuae/falcon-40b-instruct
+  aliases:
+  - unknown/falcon-instruct-40b
+- id: tiiuae/falcon-7b
+  aliases:
+  - unknown/falcon
+- id: tiiuae/falcon-7b-instruct
+  aliases:
+  - unknown/falcon-instruct
+  - unknown/falcon-instruct-7b
+  - unknown/falcon-mamba-7b-instruct
+  - unknown/falcon7b-instruct
+- id: together/redpajama-incite-7b
+  aliases:
+  - redpajama-incite-base-7b
+  - redpajama-incite-instruct-7b
+- id: togethercomputer/RedPajama-INCITE-7B-Instruct
+  aliases:
+  - unknown/redpajama-instruct-7b
+- id: uiuc-oumi/coalm-70b
+  aliases:
+  - CoALM 70B
+  - oumi/coalm-70b
+- id: uiuc-oumi/coalm-8b
+  aliases:
+  - CoALM 8B
+  - oumi/coalm-8b
+- id: umans-coder
+  aliases:
+  - Umans Coder
+  - moonshotai/umans-coder
+  - umans-coder
+- id: umans-flash
+  aliases:
+  - Umans Flash
+  - alibaba/umans-flash
+  - umans-flash
+- id: undi95/remm-slerp-l2-13b
+  aliases:
+  - meta/remm-slerp-l2-13b
+- id: upstage/solar-10-7b-instruct
+  aliases:
+  - nvidia/solar-10-7b-instruct
+  - solar-10-7b-instruct
+  - solar-10.7b-instruct
+- id: upstage/solar-open-100b-reasoning
+  aliases:
+  - Solar Open 100B Reasoning
+- id: upstage/solar-pro2
+  aliases:
+  - solar-pro-241126
+  - upstage/solar-pro
+- id: voxtral-mini-3b-2507
+  aliases:
+  - Voxtral Mini 3B 2507
+  - mistral.voxtral-mini-3b-2507
+  - mistralai/voxtral-mini-3b-2507
+  - voxtral-mini-3b-2507
+- id: voyage/voyage-3-5
+  aliases:
+  - voyage-3-5
+  - voyage-3.5
+  - voyageai/voyage-3-5
+- id: voyage/voyage-3-5-lite
+  aliases:
+  - voyage-3-5-lite
+  - voyage-3.5-lite
+  - voyageai/voyage-3-5-lite
+- id: voyageai/voyage-3-large
+  aliases:
+  - voyage-3-large
+  - voyage/voyage-3-large
+- id: voyageai/voyage-4
+  aliases:
+  - voyage-4
+  - voyage/voyage-4
+- id: voyageai/voyage-4-large
+  aliases:
+  - voyage-4-large
+  - voyage/voyage-4-large
+- id: voyageai/voyage-4-lite
+  aliases:
+  - voyage-4-lite
+  - voyage/voyage-4-lite
+- id: voyageai/voyage-code-2
+  aliases:
+  - voyage-code-2
+  - voyage/voyage-code-2
+- id: voyageai/voyage-code-3
+  aliases:
+  - voyage-code-3
+  - voyage/voyage-code-3
+- id: voyageai/voyage-finance-2
+  aliases:
+  - voyage-finance-2
+  - voyage/voyage-finance-2
+- id: voyageai/voyage-law-2
+  aliases:
+  - voyage-law-2
+  - voyage/voyage-law-2
+- id: weqweasdas/RM-Gemma-2B
+  aliases:
+  - unknown/grm-gemma-2b
+- id: weqweasdas/RM-Gemma-7B-4096
+  aliases:
+  - Rm Gemma 7B (4096)
+- id: wizardlm/wizardlm-13b
+  aliases:
+  - WizardLM 13B
+  - unknown/wizardlm
+  - unknown/wizardlm-13b
+- id: writer/InstructPalmyra-30B
+  aliases:
+  - InstructPalmyra 30B
+- id: writer/palmyra-fin
+  aliases:
+  - Palmyra Fin
+- id: writer/palmyra-med
+  aliases:
+  - Palmyra Med
+- id: writer/palmyra-x-004
+  aliases:
+  - Palmyra X 004
+- id: writer/palmyra-x-v2
+  aliases:
+  - Palmyra X V2
+- id: writer/palmyra-x-v3
+  aliases:
+  - Palmyra X V3
+- id: xai-org/grok-1
+  aliases:
+  - xai/grok-1
+- id: xai/grok-1.5v
+  aliases:
+  - Grok 1.5V
+- id: xai/grok-3-mini-fast
+  aliases:
+  - grok-3-mini-fast-high-reasoning
+  - grok-3-mini-fast-low-reasoning
+- id: xai/grok-3-mini-reasoning
+  aliases:
+  - Grok 3 Mini Reasoning
+  - x-ai/grok-3-mini-reasoning
+- id: xai/grok-4
+  aliases:
+  - grok-4-07-09
+  - grok-4-fast-reasoning
+  - x-ai/grok-4
+  - xai/grok-4-07-09
+- id: xai/grok-4-1-fast
+  aliases:
+  - Grok 4.1 Fast
+- id: xai/grok-4-1-fast-non
+  aliases:
+  - grok-4-1-fast-non
+- id: xai/grok-4-2-fast-non
+  aliases:
+  - grok-4-2-fast-non
+- id: xai/grok-4-20-0309
+  aliases:
+  - Grok 4 20 (0309)
+- id: xai/grok-4-20-beta-0309
+  aliases:
+  - grok-4-20-beta-0309
+- id: xai/grok-4-20-beta-0309-non
+  aliases:
+  - grok-4-20-beta-0309-non
+- id: xai/grok-4-20-non
+  aliases:
+  - grok-4-20-non
+- id: xai/grok-4-fast
+  aliases:
+  - Grok 4 Fast
+- id: xai/grok-4-fast-non-reasoning
+  aliases:
+  - grok-4-fast-non
+- id: xai/grok-4-heavy
+  aliases:
+  - Grok 4 Heavy
+- id: xai/grok-4.20-multi-agent
+  aliases:
+  - grok-4-20-multi-agent-0309
+  - xai/grok-4-20-multi-agent-0309
+- id: xai/grok-4.20-non-reasoning
+  aliases:
+  - grok-4-20-0309-non
+  - grok-4.20-0309-non-reasoning
+  - xai/grok-4-20-0309-non
+- id: xai/grok-4.20-reasoning
+  aliases:
+  - grok-4.20-0309-reasoning
+- id: xiaomi/mimo-v2-0206
+  aliases:
+  - Mimo V2 (0206)
+- id: xiaomi/mimo-v2-5-pro
+  aliases:
+  - mimo-v2.5-pro-precision
+- id: zai-org/GLM-4.5
+  aliases:
+  - unknown/glm-4-5-enable-reasoning
+  - unknown/glm-4-5-enabled-reasoning
+  - z-ai/glm-4-5-air-fp8
+- id: zai-org/GLM-4.5-Air
+  aliases:
+  - unknown/glm-4-5-air-enable-reasoning
+  - unknown/glm-4-5-air-enabled-reasoning
+- id: zai-org/GLM-4.6-FP8
+  aliases:
+  - zai/GLM-4.6-FP8
+- id: zai-org/GLM-4.7
+  aliases:
+  - glm-4-7-maas
+  - glm4-7
+  - zai.glm-4.7
+  - zai/glm-4-7-maas
+- id: zai-org/GLM-4.7-FP8
+  aliases:
+  - zai/GLM-4.7-FP8
+- id: zai-org/GLM-4.7-Flash
+  aliases:
+  - zai.glm-4-7-flash
+- id: zai-org/GLM-5
+  aliases:
+  - glm-5-maas
+  - z-ai-glm-5-turbo
+  - zai.glm-5
+  - zai/glm-5-maas
+  - zhipuai/glm-5
+- id: zai-org/GLM-5-FP8
+  aliases:
+  - zai/GLM-5-FP8
+- id: zai-org/GLM-5.1
+  aliases:
+  - glm-5.1-precision
+  - glm-5p1
+  - umans-glm-5.1
+- id: zai-org/GLM-5.1-FP8
+  aliases:
+  - zai/GLM-5.1-FP8
+- id: zai-org/chatglm-6b
+  aliases:
+  - unknown/chatglm
+  - zai/chatglm-6b
+- id: zai-org/cogvlm2-llama3-chat-19B
+  aliases:
+  - zai/cogvlm2-llama3-chat-19B
+- id: zai-org/glm-4-9b
+  aliases:
+  - glm4-9b
+  - unknown/glm4-9b
+  - zai/glm-4-9b
+- id: zai-org/glm-4-9b-chat
+  aliases:
+  - glm4-9b-chat
+  - unknown/glm4-9b-chat
+  - zai/glm-4-9b-chat
+- id: zai-org/glm-4-9b-chat-1m
+  aliases:
+  - zai/glm-4-9b-chat-1m
+- id: zai-org/glm-4-9b-chat-1m-hf
+  aliases:
+  - zai/glm-4-9b-chat-1m-hf
+- id: zai-org/glm-4-9b-chat-hf
+  aliases:
+  - zai/glm-4-9b-chat-hf
+- id: zai/glm-4
+  aliases:
+  - zhipuai/glm-4
+- id: zai/glm-4-5v-reasoning
+  aliases:
+  - GLM-4.5v Reasoning
+- id: zai/glm-4-6-reasoning
+  aliases:
+  - GLM-4.6 Reasoning
+- id: zai/glm-4-6v-reasoning
+  aliases:
+  - GLM-4.6v Reasoning
+- id: zai/glm-4-7-non-reasoning
+  aliases:
+  - GLM-4.7 Non Reasoning
+- id: zai/glm-4.5v
+  aliases:
+  - unknown/glm-4-5-v-106b
+  - unknown/glm-4-5v-106b
+  - unknown/glm-4-5v-108b
+- id: zai/glm-5-1-non-reasoning
+  aliases:
+  - GLM-5.1 Non Reasoning
+- id: zai/glm-5-non-reasoning
+  aliases:
+  - GLM-5 Non Reasoning
+- id: zai/glm-5-thinking
+  aliases:
+  - GLM-5 Thinking
+- id: zai/glm-5.1-thinking
+  aliases:
+  - GLM-5.1 Thinking
+- id: zai/glm-5v-turbo
+  aliases:
+  - glm-5v
+  - zai/glm-5v
+- id: zai/z-ai-glm-5v
+  aliases:
+  - z-ai-glm-5v
+  - z-ai-glm-5v-turbo
+- id: zhipu-ai/glm-4p5
+  aliases:
+  - zai/glm-4p5
+- id: zhipu-ai/glm-4p5-air
+  aliases:
+  - zai/glm-4p5-air
+- id: zhipu-ai/glm-4v-plus
+  aliases:
+  - zai/glm-4v-plus
+- id: zhipu/glm-4-6-fc-thinking
+  aliases:
+  - zai/glm-4-6-fc-thinking

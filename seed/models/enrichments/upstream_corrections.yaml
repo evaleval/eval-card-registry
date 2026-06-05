@@ -1,0 +1,26 @@
+# UPSTREAM DATA CORRECTIONS — hand-curated, EXPLICIT overrides for KNOWN-WRONG
+# records in the upstream sources (evaleval/EEE_datastore, models.dev). Each is
+# an intentional exception (NOT a generator rule), pending an upstream fix; see
+# curation/UPSTREAM_DATA_ISSUES.md for the flagged tickets. REMOVE an entry once
+# the upstream record is corrected.
+#
+# Loaded as an enrichment overlay (cli.py globs enrichments/*.yaml; aliases UNION
+# onto the canonical, scalars override last-write-wins). Survives the floor
+# restore + the refresh crons (it is not a generated file).
+#
+# (1) GPT-J / GPT-NeoX are EleutherAI models. The EEE datastore records them
+#     ALSO under `openai/` (`openai/GPT-J-6B`, `openai/GPT-NeoX-20B`), which HF
+#     marks unresolved_not_found. tier3 minted those wrong ids verbatim; we
+#     instead map the wrong raw to the real EleutherAI repo and drop the tier3
+#     mints via core.yaml skip_source_ids.
+- id: EleutherAI/gpt-j-6b
+  aliases: ["openai/GPT-J-6B"]
+- id: EleutherAI/gpt-neox-20b
+  aliases: ["openai/GPT-NeoX-20B"]
+
+# (2) models.dev labels the real repo `abacusai/Dracarys-72B-Instruct` (a Qwen2-
+#     72B model) with the display + alias "Llama 3.1 70B Dracarys 2" — a different
+#     model. The hf_oracle entry for this id is correct ("Dracarys-72B-Instruct");
+#     this overrides the models.dev display back to the correct name.
+- id: abacusai/Dracarys-72B-Instruct
+  display_name: Dracarys-72B-Instruct
