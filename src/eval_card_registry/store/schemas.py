@@ -40,16 +40,34 @@ _SCHEMAS: dict[str, dict] = {
         # `merge` relationship) and the rare case of a model that's both a
         # family variant AND a finetune of an external base.
         "parents": pd.StringDtype(),
-        # Identity root: walk `parents` up following only `quantized` edges.
-        # NULL when self has no quantized ancestor (i.e. self IS the identity
-        # root). Resolver default-returns this when set; callers wanting the
-        # leaf get the un-collapsed canonical id in `resolved_leaf_id`.
-        "root_model_id": pd.StringDtype(),
+        # Identity-group root: walk `parents` up following identity-
+        # preserving edges (`quantized` + `variant axis=version`). NULL when
+        # self has no such ancestor (i.e. self IS the group root). Formerly
+        # named `root_model_id`. Resolver
+        # default-returns this when set; callers wanting the leaf get the
+        # un-collapsed canonical id in `resolved_leaf_id`.
+        "model_group_id": pd.StringDtype(),
+        # Family-release root: fold the versioned release line (version,
+        # quantized, mode, training_stage, size, tier), stopping at
+        # finetune/merge and major-version boundaries. NULL when self IS the
+        # family root. Populated by `derive_model_lineage_fields`.
+        "model_family_id": pd.StringDtype(),
+        # Deepest non-`variant` ancestor's id (what this model was built
+        # from). NULL when self IS the origin. Populated by
+        # `derive_model_lineage_fields`.
+        "lineage_origin_model_id": pd.StringDtype(),
         # Denormalized: `org_id` of the deepest non-`variant` ancestor in
         # `parents`. For Meta-originated models = self.org_id. For
         # finetunes/quants of someone else's weights = the upstream lab's
-        # org_id. Recomputed on every refresh; treat as a cache.
-        "lineage_origin_org_id": pd.StringDtype(),
+        # org_id. Recomputed on every refresh; treat as a cache. Formerly
+        # named `lineage_origin_org_id`.
+        "lineage_origin_model_org_id": pd.StringDtype(),
+        # Provenance enum {hf|models_dev|curated|inferred|none} of how this
+        # canonical was minted. Null by default.
+        "resolution_source": pd.StringDtype(),
+        # Granularity enum {variant|group|family} this canonical resolves
+        # at. Null by default.
+        "resolution_granularity": pd.StringDtype(),
         # Open vs closed weights. NULL when unknown. Populated:
         #   - models.dev refresh   → from `open_weights` field directly
         #   - hub-stats refresh    → True iff safetensors/gguf data present
@@ -169,6 +187,24 @@ _SCHEMAS: dict[str, dict] = {
         "created_at": pd.StringDtype(),
         "updated_at": pd.StringDtype(),
     },
+    # Inference platforms — author labs, inference hosts, aggregator
+    # gateways, regional variants, and coding plans. The host-token
+    # spellings (`fireworks/`, `-bedrock`, `azure/`, …) live in the JSON-
+    # encoded `aliases` list and are inverted into the single-sourced
+    # host-token → platform map by lib/inference_platforms_map.py.
+    "canonical_inference_platforms": {
+        "id": pd.StringDtype(),            # PK; = models.dev provider slug where one exists
+        "display_name": pd.StringDtype(),
+        # Closed enum: author_lab | inference_platform |
+        # aggregator_gateway | regional_variant | coding_plan
+        "kind": pd.StringDtype(),
+        "aliases": pd.StringDtype(),       # JSON-encoded list of host-token spellings
+        "canonical_org": pd.StringDtype(), # FK→canonical_orgs.id when kind=author_lab; nullable
+        "variant_of": pd.StringDtype(),    # base platform id for regional_variant/coding_plan; nullable
+        "homepage": pd.StringDtype(),      # provenance (models.dev / provider doc URL); nullable
+        "created_at": pd.StringDtype(),
+        "updated_at": pd.StringDtype(),
+    },
     "aliases": {
         "id": pd.StringDtype(),
         "raw_value": pd.StringDtype(),
@@ -180,6 +216,10 @@ _SCHEMAS: dict[str, dict] = {
         "strategy": pd.StringDtype(),
         "confidence": "float64",
         "notes": pd.StringDtype(),
+        # FK→canonical_inference_platforms.id; provenance of this spelling's
+        # serving platform. Populated from fuzzy host capture / models.dev
+        # provider; null by default.
+        "inference_platform": pd.StringDtype(),
         "created_at": pd.StringDtype(),
         "updated_at": pd.StringDtype(),
     },
@@ -208,6 +248,10 @@ _SCHEMAS: dict[str, dict] = {
         "benchmark_card_id": pd.StringDtype(),  # FK to auto-benchmarkcard output (nullable)
         "score": "float64",
         "score_details": pd.StringDtype(), # JSON-encoded dict
+        # Per-run serving platform (FK→canonical_inference_platforms.id).
+        # Determined per resolution: matched provider spelling, else a raw-id
+        # host token, else null. Null by default.
+        "inference_platform": pd.StringDtype(),
         "created_at": pd.StringDtype(),
         "updated_at": pd.StringDtype(),
     },

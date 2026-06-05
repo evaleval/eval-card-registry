@@ -199,7 +199,7 @@ class TestParentCanonicalId:
             "id": "meta/llama-3", "display_name": "Llama 3",
             "developer": None, "org_id": "meta", "family": "llama-3",
             "architecture": None, "params_billions": None,
-            "parents": "[]", "root_model_id": None, "lineage_origin_org_id": "meta",
+            "parents": "[]", "model_group_id": None, "lineage_origin_model_org_id": "meta",
             "tags": "[]", "metadata": "{}", "review_status": "reviewed",
         })
         # Child with mixed parent types — variant + finetune. Only the
@@ -212,7 +212,7 @@ class TestParentCanonicalId:
                 {"id": "some-finetune-base", "relationship": "finetune"},
                 {"id": "meta/llama-3", "relationship": "variant", "axis": "size"},
             ]),
-            "root_model_id": None, "lineage_origin_org_id": "meta",
+            "model_group_id": None, "lineage_origin_model_org_id": "meta",
             "tags": "[]", "metadata": "{}", "review_status": "reviewed",
         })
         queries.add_alias(fresh_store, {
@@ -237,7 +237,7 @@ class TestParentCanonicalId:
             "parents": json.dumps([
                 {"id": "meta/llama-3-70b", "relationship": "finetune"},
             ]),
-            "root_model_id": None, "lineage_origin_org_id": "meta",
+            "model_group_id": None, "lineage_origin_model_org_id": "meta",
             "tags": "[]", "metadata": "{}", "review_status": "reviewed",
         })
         queries.add_alias(fresh_store, {
@@ -279,8 +279,8 @@ class TestRootCollapseAndLineage:
                 "developer": None, "org_id": "meta", "family": None,
                 "architecture": None, "params_billions": None,
                 "parents": params["parents"],
-                "root_model_id": params.get("root"),
-                "lineage_origin_org_id": params["lineage"],
+                "model_group_id": params.get("root"),
+                "lineage_origin_model_org_id": params["lineage"],
                 "tags": "[]", "metadata": "{}", "review_status": "reviewed",
             })
             queries.add_alias(store, {
@@ -290,14 +290,18 @@ class TestRootCollapseAndLineage:
                 "confidence": 1.0, "notes": None,
             })
 
-    def test_quantized_resolves_to_root_with_leaf_preserved(self, fresh_store):
+    def test_quantized_resolves_to_leaf_with_group_root(self, fresh_store):
         self._seed_chain(fresh_store)
         svc = app.state.resolution_service
         r = svc.resolve("meta/llama-3-8b-instruct-fp8", "model", None, None)
-        # canonical_id collapses to the identity root...
-        assert r["canonical_id"] == "meta/llama-3-8b-instruct"
-        # ...but the leaf id is preserved for callers that want it.
+        # canonical_id is the exact LEAF (the precise quant artifact), not the
+        # identity root.
+        assert r["canonical_id"] == "meta/llama-3-8b-instruct-fp8"
+        # resolved_leaf_id == canonical_id (both the leaf).
         assert r["resolved_leaf_id"] == "meta/llama-3-8b-instruct-fp8"
+        # The group root (what canonical_id used to be) moves to
+        # model_group_id; root_model_id keeps it for rollout compat.
+        assert r["model_group_id"] == "meta/llama-3-8b-instruct"
         assert r["root_model_id"] == "meta/llama-3-8b-instruct"
         assert r["lineage_origin_org_id"] == "meta"
 
@@ -326,8 +330,12 @@ class TestRootCollapseAndLineage:
 
     def test_open_weights_surfaces_on_resolve(self, fresh_store):
         """`open_weights` is exposed in ResolveResponse so callers can
-        filter without a follow-up GET. For quantized chains, the value
-        comes from the root (quants don't change weight identity)."""
+        filter without a follow-up GET. The value comes from the matched LEAF
+        row (the response identifies the leaf). At seed
+        time `derive_model_lineage_fields` inherits open_weights onto the
+        leaf row through variant/quant edges; this unit test upserts rows
+        directly without that pass, so the un-inherited quant leaf carries
+        the value materialised on its own row."""
         import json
         # Open-weight base + its quantized variant
         for cid, params in [
@@ -343,8 +351,8 @@ class TestRootCollapseAndLineage:
                 "org_id": "meta", "family": None, "architecture": None,
                 "params_billions": None,
                 "parents": params["parents"],
-                "root_model_id": params.get("root"),
-                "lineage_origin_org_id": "meta",
+                "model_group_id": params.get("root"),
+                "lineage_origin_model_org_id": "meta",
                 "open_weights": params["open_weights"],
                 "tags": "[]", "metadata": "{}", "review_status": "reviewed",
             })
@@ -354,13 +362,18 @@ class TestRootCollapseAndLineage:
                 "status": "confirmed", "strategy": "seed",
                 "confidence": 1.0, "notes": None,
             })
+        # Run the seed-time derive pass so the quant leaf inherits
+        # open_weights from its open-weight base through the quantized edge
+        # (the production path; the response reads the leaf row).
+        queries.derive_model_lineage_fields(fresh_store)
         svc = app.state.resolution_service
         # Direct resolve of the base canonical
         r = svc.resolve("meta/llama-3-8b", "model", None, None)
         assert r["open_weights"] is True
-        # Resolve of the quantized leaf — root collapse means open_weights
-        # comes from the root canonical (correct: quantization doesn't
-        # change whether weights are downloadable).
+        # Resolve of the quantized leaf — canonical_id is the exact quant leaf;
+        # open_weights is inherited onto the leaf row by
+        # the derive pass (quantization doesn't change downloadability).
         r2 = svc.resolve("meta/llama-3-8b-fp8", "model", None, None)
-        assert r2["canonical_id"] == "meta/llama-3-8b"  # root collapse
-        assert r2["open_weights"] is True  # inherited from root
+        assert r2["canonical_id"] == "meta/llama-3-8b-fp8"  # leaf, not root
+        assert r2["model_group_id"] == "meta/llama-3-8b"  # group root
+        assert r2["open_weights"] is True  # inherited onto the leaf row

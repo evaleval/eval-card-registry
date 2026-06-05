@@ -100,11 +100,19 @@ def test_generate_filters_to_known_providers(mod):
 
 
 def test_generate_skips_mirror_entries(mod):
-    """Multi-segment ids like 'anthropic/claude-opus-4-5' are mirrors -> skip."""
+    """Multi-segment mirror ids like 'anthropic/claude-opus-4-5' never produce a
+    two-slash canonical. After the full-catalog refactor, a re-host/closed-API
+    model with no extractable org (fireworks-ai's `some-model`) IS now minted as
+    a bare org-less slug (flagged `org-unknown`) — only true `org/a/b` mirrors
+    are dropped."""
     out, _missing = mod._generate_models(SYNTHETIC_API, KNOWN_ORGS)
-    # All canonical ids should be of form `org_id/family-slug` (one slash)
     for e in out:
-        assert e["id"].count("/") == 1, f"expected single slash, got {e['id']!r}"
+        assert e["id"].count("/") <= 1, f"expected <=1 slash, got {e['id']!r}"
+    by_id = {e["id"]: e for e in out}
+    # fireworks-ai's some-model is now seeded org-less (full-catalog seed).
+    assert "some-model" in by_id
+    assert by_id["some-model"]["org_id"] is None
+    assert "org-unknown" in by_id["some-model"]["tags"]
 
 
 def test_generate_dated_snapshot_becomes_child_canonical(mod):
@@ -138,9 +146,11 @@ def test_generate_dated_snapshot_becomes_child_canonical(mod):
 
 def test_generate_emits_mode_variants_as_children(mod):
     """A dated -instruct snapshot in models.dev produces a multi-level chain:
-    family root, instruct intermediate (variant/mode), and the dated leaf
-    (variant/version of the instruct intermediate). Mirrors the post-promotion
-    shape of curated core.yaml so the loader's parents-merge agrees on edges."""
+    family root, instruct intermediate (variant/training_stage), and the dated
+    leaf (variant/version of the instruct intermediate). Mirrors the
+    post-promotion shape of curated core.yaml so the loader's parents-merge
+    agrees on edges. `-instruct` is a TRAINING STAGE axis, not a runtime
+    mode."""
     api = {
         "mistral": {
             "id": "mistral", "name": "Mistral", "models": {
@@ -163,7 +173,7 @@ def test_generate_emits_mode_variants_as_children(mod):
     # Edges chain correctly:
     assert by_id["mistralai/mistral-7b"]["parents"] == []
     assert by_id["mistralai/mistral-7b-instruct"]["parents"] == [{
-        "id": "mistralai/mistral-7b", "relationship": "variant", "axis": "mode",
+        "id": "mistralai/mistral-7b", "relationship": "variant", "axis": "training_stage",
     }]
     assert by_id["mistralai/mistral-7b-instruct-v0-3"]["parents"] == [{
         "id": "mistralai/mistral-7b-instruct", "relationship": "variant", "axis": "version",

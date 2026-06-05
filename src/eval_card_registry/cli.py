@@ -729,13 +729,64 @@ def seed(
     # directly, so this must happen before that block.
     queries.flush_pending(store)
 
+    # ------------------------------------------------------------------
+    # Inference platforms — flat dim table. Loaded directly into
+    # canonical_inference_platforms rather than through the seed_specs loop:
+    # its `aliases` column is a stored JSON list of host-token spellings (the
+    # single source for lib/inference_platforms_map.py), NOT alias-table rows.
+    # ------------------------------------------------------------------
+    def _load_inference_platforms_merged() -> list[dict]:
+        path = seed_path / "inference_platforms.yaml"
+        if not path.exists():
+            return []
+        with open(path) as f:
+            loaded = yaml.safe_load(f) or []
+        if not isinstance(loaded, list):
+            raise typer.BadParameter(f"{path} must be a flat list")
+        return loaded
+
+    inf_plat_entries = _load_inference_platforms_merged()
+    if inf_plat_entries:
+        import pandas as pd
+
+        now = queries._now()
+        inf_cols = list(schemas._SCHEMAS["canonical_inference_platforms"].keys())
+        inf_plat_rows = []
+        for e in inf_plat_entries:
+            if "id" not in e or "display_name" not in e or "kind" not in e:
+                raise typer.BadParameter(
+                    f"inference_platforms entry missing required field: {e!r}"
+                )
+            row = {
+                "id": e.get("id"),
+                "display_name": e.get("display_name"),
+                "kind": e.get("kind"),
+                "aliases": _json_encode_if_needed(e.get("aliases")),
+                "canonical_org": e.get("canonical_org"),
+                "variant_of": e.get("variant_of"),
+                "homepage": e.get("homepage"),
+                "created_at": now,
+                "updated_at": now,
+            }
+            inf_plat_rows.append(row)
+        inf_plat_df = pd.DataFrame(inf_plat_rows)
+        # Schema-pad any missing columns and order to match the schema.
+        for col in inf_cols:
+            if col not in inf_plat_df.columns:
+                inf_plat_df[col] = None
+        inf_plat_df = inf_plat_df[inf_cols]
+        store.set_table("canonical_inference_platforms", inf_plat_df)
+        typer.echo(f"  inference_platforms: {len(inf_plat_rows)}")
+
     # Derive denormalized parent-walk caches now that all canonical_models
-    # rows are present. `root_model_id` and `lineage_origin_org_id` are
-    # computed from `parents` and need the full graph to be in place.
+    # rows are present. `model_group_id` and `lineage_origin_model_org_id`
+    # are computed from `parents` and need the full graph to be in place.
     lineage_counts = queries.derive_model_lineage_fields(store)
     typer.echo(
-        f"  derived: root_model_id={lineage_counts['root_set']}, "
-        f"lineage_origin_org_id={lineage_counts['lineage_set']}, "
+        f"  derived: model_group_id={lineage_counts['group_set']}, "
+        f"model_family_id={lineage_counts['family_set']}, "
+        f"lineage_origin_model_id={lineage_counts['lineage_model_set']}, "
+        f"lineage_origin_model_org_id={lineage_counts['lineage_org_set']}, "
         f"open_weights_inherited={lineage_counts['open_weights_inherited']}, "
         f"release_date_from_id={lineage_counts['release_date_derived_from_id']}"
     )

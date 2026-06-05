@@ -16,6 +16,8 @@ from eval_entity_resolver.strategies.fuzzy import (
     _drop_duplicated_org_prefix,
     _drop_host_prefix,
     _normalize_org,
+    _strip_and_capture_platform_suffix,
+    fuzzy_match,
 )
 
 
@@ -195,130 +197,155 @@ class TestDropHostPrefix:
     """Unit coverage for the host/gateway/placeholder prefix stripper.
 
     The helper recognizes 39 known hosting platforms plus placeholders,
-    and accepts both ``host/model`` and ``host.model`` separators. Returns
-    None when the prefix is not in the known set.
+    and accepts both ``host/model`` and ``host.model`` separators. It now
+    returns a ``(bare_suffix, platform_id)`` tuple — the captured
+    ``platform_id`` is the canonical
+    inference_platform id when the host token carries one in the
+    single-source seed map, else None. Returns None (not a tuple) when the
+    prefix is not in the known set.
     """
 
     # ------- slash-form positive cases -------
 
     def test_strips_unknown_slash_prefix(self):
         # `unknown/` is the alphaxiv leaderboard placeholder for missing
-        # developer field — drop it and resolve on the bare suffix.
-        assert _drop_host_prefix("unknown/openai-o1") == "openai-o1"
+        # developer field — drop it and resolve on the bare suffix. The
+        # sentinel carries NO platform.
+        assert _drop_host_prefix("unknown/openai-o1") == ("openai-o1", None)
 
     def test_strips_bedrock_slash_prefix(self):
-        assert _drop_host_prefix("bedrock/anthropic-claude") == "anthropic-claude"
+        assert _drop_host_prefix("bedrock/anthropic-claude")[0] == "anthropic-claude"
 
     def test_strips_amazon_bedrock_slash_prefix(self):
-        assert _drop_host_prefix("amazon-bedrock/claude-3") == "claude-3"
+        assert _drop_host_prefix("amazon-bedrock/claude-3")[0] == "claude-3"
 
     def test_strips_aws_bedrock_slash_prefix(self):
-        assert _drop_host_prefix("aws-bedrock/claude-3") == "claude-3"
+        assert _drop_host_prefix("aws-bedrock/claude-3")[0] == "claude-3"
 
     def test_strips_azure_slash_prefix(self):
-        assert _drop_host_prefix("azure/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("azure/gpt-4")[0] == "gpt-4"
 
     def test_strips_azure_openai_slash_prefix(self):
-        assert _drop_host_prefix("azure-openai/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("azure-openai/gpt-4")[0] == "gpt-4"
 
     def test_strips_azure_cognitive_services_slash_prefix(self):
-        assert _drop_host_prefix("azure-cognitive-services/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("azure-cognitive-services/gpt-4")[0] == "gpt-4"
 
     def test_strips_vertex_slash_prefix(self):
-        assert _drop_host_prefix("vertex/gemini-2.0") == "gemini-2.0"
+        assert _drop_host_prefix("vertex/gemini-2.0")[0] == "gemini-2.0"
 
     def test_strips_google_vertex_slash_prefix(self):
-        assert _drop_host_prefix("google-vertex/gemini-2.0") == "gemini-2.0"
+        assert _drop_host_prefix("google-vertex/gemini-2.0")[0] == "gemini-2.0"
 
     def test_strips_vertex_anthropic_slash_prefix(self):
-        assert _drop_host_prefix("vertex-anthropic/claude-3") == "claude-3"
+        assert _drop_host_prefix("vertex-anthropic/claude-3")[0] == "claude-3"
 
     def test_strips_fireworks_slash_prefix(self):
-        assert _drop_host_prefix("fireworks/llama-3") == "llama-3"
+        assert _drop_host_prefix("fireworks/llama-3")[0] == "llama-3"
 
     def test_strips_fireworks_ai_slash_prefix(self):
-        assert _drop_host_prefix("fireworks-ai/llama-3") == "llama-3"
+        assert _drop_host_prefix("fireworks-ai/llama-3")[0] == "llama-3"
 
     def test_strips_groq_slash_prefix(self):
-        assert _drop_host_prefix("groq/llama-3") == "llama-3"
+        assert _drop_host_prefix("groq/llama-3")[0] == "llama-3"
 
     def test_strips_together_slash_prefix(self):
-        assert _drop_host_prefix("together/llama-3") == "llama-3"
+        assert _drop_host_prefix("together/llama-3")[0] == "llama-3"
 
     def test_strips_togetherai_slash_prefix(self):
-        assert _drop_host_prefix("togetherai/llama-3") == "llama-3"
+        assert _drop_host_prefix("togetherai/llama-3")[0] == "llama-3"
 
     def test_strips_together_ai_slash_prefix(self):
-        assert _drop_host_prefix("together-ai/llama-3") == "llama-3"
+        assert _drop_host_prefix("together-ai/llama-3")[0] == "llama-3"
 
     def test_strips_openrouter_slash_prefix(self):
-        assert _drop_host_prefix("openrouter/anthropic-claude") == "anthropic-claude"
+        assert _drop_host_prefix("openrouter/anthropic-claude")[0] == "anthropic-claude"
 
     def test_strips_perplexity_agent_slash_prefix(self):
-        assert _drop_host_prefix("perplexity-agent/sonar") == "sonar"
+        assert _drop_host_prefix("perplexity-agent/sonar")[0] == "sonar"
 
     def test_strips_deepinfra_slash_prefix(self):
-        assert _drop_host_prefix("deepinfra/llama-3") == "llama-3"
+        assert _drop_host_prefix("deepinfra/llama-3")[0] == "llama-3"
 
     def test_strips_anyscale_slash_prefix(self):
-        assert _drop_host_prefix("anyscale/llama-3") == "llama-3"
+        assert _drop_host_prefix("anyscale/llama-3")[0] == "llama-3"
 
     def test_strips_novita_slash_prefix(self):
-        assert _drop_host_prefix("novita/llama-3") == "llama-3"
+        assert _drop_host_prefix("novita/llama-3")[0] == "llama-3"
 
     def test_strips_novita_ai_slash_prefix(self):
-        assert _drop_host_prefix("novita-ai/llama-3") == "llama-3"
+        assert _drop_host_prefix("novita-ai/llama-3")[0] == "llama-3"
 
     def test_strips_replicate_slash_prefix(self):
-        assert _drop_host_prefix("replicate/llama-3") == "llama-3"
+        assert _drop_host_prefix("replicate/llama-3")[0] == "llama-3"
 
     def test_strips_ollama_slash_prefix(self):
-        assert _drop_host_prefix("ollama/llama-3") == "llama-3"
+        assert _drop_host_prefix("ollama/llama-3")[0] == "llama-3"
 
     def test_strips_ollama_cloud_slash_prefix(self):
-        assert _drop_host_prefix("ollama-cloud/llama-3") == "llama-3"
+        assert _drop_host_prefix("ollama-cloud/llama-3")[0] == "llama-3"
 
     def test_strips_github_models_slash_prefix(self):
-        assert _drop_host_prefix("github-models/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("github-models/gpt-4")[0] == "gpt-4"
 
     def test_strips_github_copilot_slash_prefix(self):
-        assert _drop_host_prefix("github-copilot/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("github-copilot/gpt-4")[0] == "gpt-4"
 
     def test_strips_lambda_slash_prefix(self):
-        assert _drop_host_prefix("lambda/llama-3") == "llama-3"
+        assert _drop_host_prefix("lambda/llama-3")[0] == "llama-3"
 
     def test_strips_baseten_slash_prefix(self):
-        assert _drop_host_prefix("baseten/llama-3") == "llama-3"
+        assert _drop_host_prefix("baseten/llama-3")[0] == "llama-3"
 
     def test_strips_modal_slash_prefix(self):
-        assert _drop_host_prefix("modal/llama-3") == "llama-3"
+        assert _drop_host_prefix("modal/llama-3")[0] == "llama-3"
 
     def test_strips_runpod_slash_prefix(self):
-        assert _drop_host_prefix("runpod/llama-3") == "llama-3"
+        assert _drop_host_prefix("runpod/llama-3")[0] == "llama-3"
 
     def test_strips_cerebras_slash_prefix(self):
-        assert _drop_host_prefix("cerebras/llama-3") == "llama-3"
+        assert _drop_host_prefix("cerebras/llama-3")[0] == "llama-3"
 
     def test_strips_sap_ai_core_slash_prefix(self):
-        assert _drop_host_prefix("sap-ai-core/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("sap-ai-core/gpt-4")[0] == "gpt-4"
 
     def test_strips_cloudflare_ai_gateway_slash_prefix(self):
-        assert _drop_host_prefix("cloudflare-ai-gateway/llama-3") == "llama-3"
+        assert _drop_host_prefix("cloudflare-ai-gateway/llama-3")[0] == "llama-3"
 
     def test_strips_aihubmix_slash_prefix(self):
-        assert _drop_host_prefix("aihubmix/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("aihubmix/gpt-4")[0] == "gpt-4"
 
     def test_strips_kilo_slash_prefix(self):
-        assert _drop_host_prefix("kilo/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("kilo/gpt-4")[0] == "gpt-4"
 
     def test_strips_vercel_slash_prefix(self):
-        assert _drop_host_prefix("vercel/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("vercel/gpt-4")[0] == "gpt-4"
 
     def test_strips_llmgateway_slash_prefix(self):
-        assert _drop_host_prefix("llmgateway/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("llmgateway/gpt-4")[0] == "gpt-4"
 
     def test_strips_poe_slash_prefix(self):
-        assert _drop_host_prefix("poe/gpt-4") == "gpt-4"
+        assert _drop_host_prefix("poe/gpt-4")[0] == "gpt-4"
+
+    # ------- platform-capture cases: tokens in the single-source map -------
+
+    def test_captures_fireworks_platform(self):
+        # `fireworks/` is in the seed map → captures `fireworks-ai`.
+        assert _drop_host_prefix("fireworks/llama-3") == ("llama-3", "fireworks-ai")
+
+    def test_captures_together_platform(self):
+        assert _drop_host_prefix("together/llama-3") == ("llama-3", "togetherai")
+
+    def test_captures_groq_platform(self):
+        assert _drop_host_prefix("groq/llama-3") == ("llama-3", "groq")
+
+    def test_captures_azure_platform(self):
+        assert _drop_host_prefix("azure/gpt-4") == ("gpt-4", "azure")
+
+    def test_unmapped_host_token_captures_none(self):
+        # `vertex` is stripped for matching but has no `vertex/` token in
+        # the single-source seed map yet → platform None.
+        assert _drop_host_prefix("vertex/gemini-2.0") == ("gemini-2.0", None)
 
     # ------- dot-form positive cases -------
 
@@ -327,35 +354,35 @@ class TestDropHostPrefix:
         # helper splits at the first dot only, so the rest can carry its
         # own dotted segments.
         assert (
-            _drop_host_prefix("bedrock.anthropic-claude-3-5")
+            _drop_host_prefix("bedrock.anthropic-claude-3-5")[0]
             == "anthropic-claude-3-5"
         )
 
     def test_strips_vertex_dot_prefix(self):
-        assert _drop_host_prefix("vertex.google-gemini-2.0") == "google-gemini-2.0"
+        assert _drop_host_prefix("vertex.google-gemini-2.0")[0] == "google-gemini-2.0"
 
     def test_dot_form_only_first_dot_consumed(self):
         # `bedrock.anthropic.claude-3-5` → first dot is the separator;
         # anything after it (including subsequent dots) is the rest.
         assert (
-            _drop_host_prefix("bedrock.anthropic.claude-3-5")
+            _drop_host_prefix("bedrock.anthropic.claude-3-5")[0]
             == "anthropic.claude-3-5"
         )
 
     # ------- case-insensitivity -------
 
     def test_uppercase_unknown_slash(self):
-        # The set is lowercased; the helper lowercases the prefix before
+        # The map is lowercased; the helper lowercases the prefix before
         # the membership check.
-        assert _drop_host_prefix("UNKNOWN/openai-o1") == "openai-o1"
+        assert _drop_host_prefix("UNKNOWN/openai-o1")[0] == "openai-o1"
 
     def test_mixed_case_bedrock_slash(self):
-        assert _drop_host_prefix("Bedrock/Claude-3") == "Claude-3"
+        assert _drop_host_prefix("Bedrock/Claude-3")[0] == "Claude-3"
 
     def test_mixed_case_dot_form(self):
-        assert _drop_host_prefix("BEDROCK.claude-3") == "claude-3"
+        assert _drop_host_prefix("BEDROCK.claude-3")[0] == "claude-3"
 
-    # ------- negative cases -------
+    # ------- negative cases (still return None, not a tuple) -------
 
     def test_unknown_org_returns_none(self):
         # `random` is not a hosting platform.
@@ -389,7 +416,7 @@ class TestDropHostPrefix:
         # When both separators exist, slash is checked first. The prefix
         # before the slash (`groq` here) is what's tested against the set.
         assert (
-            _drop_host_prefix("groq/anthropic.claude-3-5")
+            _drop_host_prefix("groq/anthropic.claude-3-5")[0]
             == "anthropic.claude-3-5"
         )
 
@@ -619,3 +646,133 @@ class TestLetterDigitDashCollapse:
         assert resolver.resolve("openai/gpt-4", "model").canonical_id == "openai/gpt4"
         # gpt-4-mini → gpt4-mini (matches gpt4-mini canonical, NOT gpt4)
         assert resolver.resolve("openai/gpt-4-mini", "model").canonical_id == "openai/gpt4-mini"
+
+
+# ---------------------------------------------------------------------------
+# platform-capture suffix + fuzzy_match 3-tuple shape + threading
+# ---------------------------------------------------------------------------
+
+
+class TestStripAndCapturePlatformSuffix:
+    """`_strip_and_capture_platform_suffix` — moved the 3 host suffixes out of
+    the generic `_STRIP_SUFFIXES` so they're CAPTURED, not silently dropped."""
+
+    def test_together_suffix_captures_platform(self):
+        assert _strip_and_capture_platform_suffix("llama-3-8b-together") == (
+            "llama-3-8b",
+            "togetherai",
+        )
+
+    def test_bedrock_suffix_captures_platform(self):
+        assert _strip_and_capture_platform_suffix("claude-3-bedrock") == (
+            "claude-3",
+            "amazon-bedrock",
+        )
+
+    def test_openrouter_suffix_captures_platform(self):
+        assert _strip_and_capture_platform_suffix("gpt-4o-openrouter") == (
+            "gpt-4o",
+            "openrouter",
+        )
+
+    def test_no_platform_suffix_returns_none(self):
+        # `-fp8` is a quant suffix handled by the generic strip, NOT a
+        # platform suffix → this helper returns None.
+        assert _strip_and_capture_platform_suffix("llama-3-8b-fp8") is None
+
+    def test_case_insensitive_suffix(self):
+        stem, platform = _strip_and_capture_platform_suffix("Claude-3-BEDROCK")
+        assert stem == "Claude-3"
+        assert platform == "amazon-bedrock"
+
+
+class TestFuzzyMatchPlatformCapture:
+    """`fuzzy_match` now returns a 3-tuple ``(canonical_id, confidence,
+    inference_platform)``. Capture happens ONCE; suffix beats prefix; the
+    captured platform is a SIDE VALUE — it never changes the resolved id."""
+
+    def test_returns_three_tuple_on_match(self):
+        # Bare `gpt-4o` alias so the suffix-stripped stem (`gpt-4o`) matches.
+        store = _store_with_aliases(
+            ("gpt-4o", "model", "openai/gpt-4o", None, "confirmed")
+        )
+        result = fuzzy_match("gpt-4o-openrouter", "model", 0.85, store)
+        assert len(result) == 3
+        canonical_id, confidence, platform = result
+        assert canonical_id == "openai/gpt-4o"
+        assert platform == "openrouter"
+
+    def test_returns_three_tuple_on_no_match(self):
+        store = _store_with_aliases()
+        assert fuzzy_match("nonexistent-model-xyz", "model", 0.85, store) == (
+            None,
+            0.0,
+            None,
+        )
+
+    def test_non_model_entity_returns_three_tuple(self):
+        store = _store_with_aliases()
+        assert fuzzy_match("anything", "benchmark", 0.85, store) == (None, 0.0, None)
+
+    def test_prefix_host_captured_when_no_suffix(self):
+        store = _store_with_aliases(
+            ("meta/llama-3-8b", "model", "meta/llama-3-8b", None, "confirmed")
+        )
+        canonical_id, _, platform = fuzzy_match(
+            "together/meta/llama-3-8b", "model", 0.85, store
+        )
+        assert canonical_id == "meta/llama-3-8b"
+        assert platform == "togetherai"
+
+    def test_suffix_beats_prefix_capture(self):
+        # Both a `fireworks/` prefix AND a `-bedrock` suffix present: the
+        # SUFFIX wins (explicit model-name host token is stronger).
+        store = _store_with_aliases(
+            ("meta/llama-3-8b", "model", "meta/llama-3-8b", None, "confirmed")
+        )
+        canonical_id, _, platform = fuzzy_match(
+            "fireworks/meta/llama-3-8b-bedrock", "model", 0.85, store
+        )
+        assert canonical_id == "meta/llama-3-8b"
+        assert platform == "amazon-bedrock"
+
+    def test_capture_does_not_change_canonical(self):
+        # The same model with and without a host suffix must resolve to the
+        # SAME canonical_id — capture is a pure side-value. Use the full
+        # resolver chain so the plain id hits the exact-match path (fuzzy
+        # alone never sees the raw value as a candidate).
+        store = _store_with_aliases(
+            ("gpt-4o", "model", "openai/gpt-4o", None, "confirmed")
+        )
+        resolver = Resolver(store)
+        plain = resolver.resolve("gpt-4o", "model").canonical_id
+        hosted = resolver.resolve("gpt-4o-openrouter", "model").canonical_id
+        assert plain == hosted == "openai/gpt-4o"
+
+    def test_no_host_token_captures_none(self):
+        store = _store_with_aliases(
+            ("gpt-4o", "model", "openai/gpt-4o", None, "confirmed")
+        )
+        _, _, platform = fuzzy_match("gpt-4o-fc", "model", 0.85, store)
+        assert platform is None
+
+
+class TestResolverThreadsPlatform:
+    """`Resolver.resolve` threads the fuzzy-captured platform onto the
+    ResolutionResult (the explicit-host-token-in-raw fact that WINS)."""
+
+    def test_resolve_sets_inference_platform_on_host_suffix(self):
+        store = _store_with_aliases(
+            ("gpt-4o", "model", "openai/gpt-4o", None, "confirmed")
+        )
+        result = Resolver(store).resolve("gpt-4o-openrouter", "model")
+        assert result.canonical_id == "openai/gpt-4o"
+        assert result.inference_platform == "openrouter"
+
+    def test_resolve_leaves_platform_none_on_plain_id(self):
+        store = _store_with_aliases(
+            ("openai/gpt-4o", "model", "openai/gpt-4o", None, "confirmed")
+        )
+        # Exact-match path: no fuzzy capture, platform stays None.
+        result = Resolver(store).resolve("openai/gpt-4o", "model")
+        assert result.inference_platform is None

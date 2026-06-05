@@ -52,21 +52,21 @@ def test_reconcile_legacy_parent_model_id_migrates_to_parents():
 
 
 def test_reconcile_adds_missing_columns_with_pd_na():
-    """Schema additions (e.g. `root_model_id`, `lineage_origin_org_id`,
+    """Schema additions (e.g. `model_group_id`, `lineage_origin_model_org_id`,
     `kind`) get NA-filled at the schema's dtype when the loaded parquet
     predates them."""
     minimal = pd.DataFrame({
         "id": ["meta/llama-3-8b"],
         "display_name": ["Llama 3 8B"],
-        # Deliberately omit root_model_id, lineage_origin_org_id, parents, etc.
+        # Deliberately omit model_group_id, lineage_origin_model_org_id, parents, etc.
     })
     out = _reconcile_schema("canonical_models", minimal)
 
     expected_cols = set(schemas._SCHEMAS["canonical_models"].keys())
     assert set(out.columns) == expected_cols
     # New columns are NA, not empty strings
-    assert pd.isna(out.iloc[0]["root_model_id"])
-    assert pd.isna(out.iloc[0]["lineage_origin_org_id"])
+    assert pd.isna(out.iloc[0]["model_group_id"])
+    assert pd.isna(out.iloc[0]["lineage_origin_model_org_id"])
 
 
 def test_reconcile_drops_columns_not_in_schema():

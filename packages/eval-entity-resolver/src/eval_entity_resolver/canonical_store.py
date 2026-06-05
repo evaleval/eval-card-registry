@@ -314,6 +314,122 @@ class CanonicalStore:
             "composite_keys": [],
         }
 
+    # ------------------------------------------------------------------
+    # Hierarchy: ancestry (type-agnostic) + typed resolution_detail.
+    # Pure functions of the loaded tables. `ancestry` lists the matched
+    # entity's immediate parent UP to the root; `resolution_detail` is a
+    # typed sub-object keyed by entity_type.
+    # ------------------------------------------------------------------
+
+    def _family_to_composite(self, family_id: Optional[str]) -> Optional[str]:
+        """Return the composite a family rolls up into (the family's first
+        `composite_keys` entry), or the first composite whose `family_id`
+        points back at this family. None when the family is a root."""
+        if not family_id:
+            return None
+        family_row = self.lookup("family", family_id)
+        if family_row is not None:
+            keys = family_row.get("composite_keys")
+            if isinstance(keys, str):
+                try:
+                    keys = json.loads(keys)
+                except (ValueError, TypeError):
+                    keys = []
+            if isinstance(keys, list):
+                for k in keys:
+                    if isinstance(k, str) and k:
+                        return k
+        # Fall back to the reverse pointer (composite.family_id == family).
+        comp_df = self._tables.get("composite")
+        if comp_df is not None and not comp_df.empty and "family_id" in comp_df.columns:
+            hit = comp_df[comp_df["family_id"] == family_id]
+            if not hit.empty:
+                cid = hit.iloc[0].get("id")
+                if isinstance(cid, str):
+                    return cid
+        return None
+
+    def compute_ancestry(
+        self, entity_type: str, canonical_id: Optional[str],
+        matched_entity: Optional[dict] = None,
+    ) -> list[dict]:
+        """Ordered `[{canonical_id, level}]` from the matched entity's
+        IMMEDIATE PARENT up to the root. `[]` when self is a root.
+
+        - model: group (model_group_id, when it differs from the leaf) then
+          family (model_family_id, when distinct from leaf+group).
+        - benchmark: family (family_key, when != self) then that family's
+          composite.
+        - family: its composite.
+        - composite/metric/harness/org: [] (roots).
+        """
+        if not canonical_id:
+            return []
+        out: list[dict] = []
+        if entity_type == "model":
+            ent = matched_entity if matched_entity is not None else self.lookup("model", canonical_id)
+            if not ent:
+                return []
+            group = _na_to_none(ent.get("model_group_id"))
+            family = _na_to_none(ent.get("model_family_id"))
+            if group and group != canonical_id:
+                out.append({"canonical_id": group, "level": "group"})
+            if family and family != canonical_id and family != group:
+                out.append({"canonical_id": family, "level": "family"})
+            return out
+        if entity_type == "benchmark":
+            fam = self.benchmark_family_enrichment(canonical_id)
+            family_key = fam.get("family_key")
+            if family_key and family_key != canonical_id:
+                out.append({"canonical_id": family_key, "level": "family"})
+            composite = self._family_to_composite(family_key)
+            if composite and composite != canonical_id:
+                out.append({"canonical_id": composite, "level": "composite"})
+            return out
+        if entity_type == "family":
+            composite = self._family_to_composite(canonical_id)
+            if composite and composite != canonical_id:
+                out.append({"canonical_id": composite, "level": "composite"})
+            return out
+        # composite, metric, harness, org are roots in this graph.
+        return out
+
+    def resolution_detail(
+        self, entity_type: str, canonical_id: Optional[str],
+        raw_value: Optional[str] = None,
+        matched_entity: Optional[dict] = None,
+    ) -> dict:
+        """Typed resolution-detail sub-object keyed by entity_type.
+
+        - model:     {"granularity": variant|group|family}
+        - benchmark: {"level": composite|family|benchmark|slice,
+                      "matched_subset": str|None}
+        - others:    {}
+        """
+        if entity_type == "model":
+            ent = matched_entity if matched_entity is not None else self.lookup("model", canonical_id)
+            gran = _na_to_none((ent or {}).get("resolution_granularity")) if ent else None
+            return {"granularity": gran}
+        if entity_type == "benchmark":
+            ent = matched_entity if matched_entity is not None else self.lookup("benchmark", canonical_id)
+            level = "benchmark"
+            matched_subset: Optional[str] = None
+            if ent:
+                parent = _na_to_none(ent.get("parent_benchmark_id"))
+                if parent and parent != canonical_id:
+                    # The matched canonical is itself a decomposed slice of a
+                    # parent benchmark (parent-only alias-fold per
+                    # entity-modeling.md): surface as a slice match.
+                    level = "slice"
+            # A subset/alias-fold match (e.g. "Anatomy" -> mmlu) is surfaced
+            # via `matched_subset` when the raw value differs from the
+            # canonical's own surface forms. We carry the raw value through;
+            # downstream forensics maps it to the folded subset.
+            if raw_value and canonical_id and raw_value.strip().lower() != canonical_id.lower():
+                matched_subset = raw_value
+            return {"level": level, "matched_subset": matched_subset}
+        return {}
+
     def _build_benchmark_to_family_index(self) -> dict[str, str]:
         """Walk canonical_families and produce a benchmark_id → family_id
         index. `benchmark_ids` is JSON-encoded on the parquet column;
@@ -369,51 +485,83 @@ class CanonicalStore:
     def model_metadata_fields(
         self, matched_canonical_id: str, matched_entity: Optional[dict]
     ) -> dict:
-        """Compute the model-specific response fields. When the matched
-        canonical has `root_model_id` set, the returned `canonical_id`
-        is the identity root (= unquantized base for quantization
-        chains); otherwise it's the matched leaf itself.
-        `resolved_leaf_id` always carries the originally-matched id so
-        callers wanting leaf-level data can opt in.
+        """Compute the model-specific response fields.
 
-        All metadata fields (`open_weights`, `release_date`,
-        `params_billions`, etc.) are sourced from the *returned*
-        canonical's row — keeping the response internally consistent.
-        Quantization preserves identity, so root metadata describes the
-        same model the response identifies."""
+        `canonical_id` is the exact matched LEAF (the precise artifact
+        evaluated — snapshot, precision, mode all distinct). `model_group_id`
+        carries the identity-GROUP id, which is GROUP MEMBERSHIP — a total
+        partition, so it is ALWAYS present: it equals the group root for a
+        member of a non-trivial group, and equals the leaf (== canonical_id)
+        for a singleton (a group of one whose id is itself). NOT null at the
+        root. `resolved_leaf_id == canonical_id` (both the leaf), retained
+        for compat. The deprecated `root_model_id` output key keeps its
+        null-at-root semantics: it carries the group root ONLY when the leaf
+        actually collapses into a larger group (`model_group_id != leaf_id`),
+        else None.
+
+        `model_family_id` and `lineage_origin_model_id` are read straight off
+        the matched (leaf) entity row — `derive_model_lineage_fields` already
+        materialised them at seed time. Metadata fields (`open_weights`,
+        `release_date`, `params_billions`) come from the matched LEAF row
+        (post-flip the response identifies the leaf, so its own row is the
+        consistent source)."""
         if not matched_entity:
             return {
                 "canonical_id": matched_canonical_id,
                 "resolved_leaf_id": matched_canonical_id,
                 "root_model_id": None,
                 "lineage_origin_org_id": None,
+                # Extended lineage / provenance fields — None when there is no
+                # matched entity row to read them from.
+                "model_group_id": None,
+                "model_family_id": None,
+                "lineage_origin_model_id": None,
+                "lineage_origin_model_org_id": None,
+                "inference_platform": None,
+                "resolution_source": None,
+                "resolution_granularity": None,
                 "parents": None,
                 "open_weights": None,
                 "release_date": None,
                 "params_billions": None,
             }
 
-        leaf_root = _na_to_none(matched_entity.get("root_model_id"))
+        # `model_group_id` is the identity-GROUP id (GROUP MEMBERSHIP — a
+        # total partition). Post the group-membership change it is ALWAYS set
+        # on the column: equal to the group root for a member of a larger
+        # group, equal to SELF (the leaf) for a singleton. canonical_id stays
+        # the matched LEAF; for a singleton model_group_id == canonical_id.
+        group_id = _na_to_none(matched_entity.get("model_group_id"))
+        leaf_id = matched_canonical_id
         parents_decoded = decode_parents(matched_entity.get("parents")) or None
+        # The three walk fields are read straight off the matched LEAF row —
+        # materialised at seed by derive_model_lineage_fields.
+        leaf_family = _na_to_none(matched_entity.get("model_family_id"))
+        leaf_lineage_model = _na_to_none(matched_entity.get("lineage_origin_model_id"))
+        leaf_lineage_org = _na_to_none(matched_entity.get("lineage_origin_model_org_id"))
 
-        if leaf_root:
-            root_entity = self.lookup("model", leaf_root) or {}
-            return {
-                "canonical_id": leaf_root,
-                "resolved_leaf_id": matched_canonical_id,
-                "root_model_id": leaf_root,
-                "lineage_origin_org_id": _na_to_none(root_entity.get("lineage_origin_org_id")),
-                "parents": parents_decoded,
-                "open_weights": _na_to_none(root_entity.get("open_weights")),
-                "release_date": _na_to_none(root_entity.get("release_date")),
-                "params_billions": _na_to_none(root_entity.get("params_billions")),
-            }
-
+        # The leaf collapses into a LARGER group iff `model_group_id !=
+        # leaf_id`. The deprecated `root_model_id` compat key keeps its
+        # null-at-root semantics — it carries the group only on a real
+        # collapse, else None (a singleton, whose group is itself, reports
+        # root_model_id == None, matching the producer's old null-at-root
+        # contract).
+        collapses = group_id is not None and group_id != leaf_id
         return {
-            "canonical_id": matched_canonical_id,
-            "resolved_leaf_id": matched_canonical_id,
-            "root_model_id": None,
-            "lineage_origin_org_id": _na_to_none(matched_entity.get("lineage_origin_org_id")),
+            "canonical_id": leaf_id,
+            "resolved_leaf_id": leaf_id,
+            "root_model_id": group_id if collapses else None,
+            "lineage_origin_org_id": leaf_lineage_org,
+            # ALWAYS present (self at root) — group membership is total.
+            "model_group_id": group_id,
+            "model_family_id": leaf_family,
+            "lineage_origin_model_id": leaf_lineage_model,
+            "lineage_origin_model_org_id": leaf_lineage_org,
+            "inference_platform": None,
+            # Provenance fields read straight off the matched LEAF row (set at
+            # seed from the YAML, or at live auto-create by resolution_service).
+            "resolution_source": _na_to_none(matched_entity.get("resolution_source")),
+            "resolution_granularity": _na_to_none(matched_entity.get("resolution_granularity")),
             "parents": parents_decoded,
             "open_weights": _na_to_none(matched_entity.get("open_weights")),
             "release_date": _na_to_none(matched_entity.get("release_date")),

@@ -16,21 +16,42 @@ curl -X POST https://evaleval-entity-registry.hf.space/api/v1/resolve \
 
 ```json
 {
+  "raw_value": "MATH Level 5",
+  "entity_type": "benchmark",
   "canonical_id": "math-level-5",
   "strategy": "exact",
   "confidence": 1.0,
   "created_new": false,
+  "resolution_source": null,
   "review_status": "reviewed",
-  "parent_canonical_id": "math",
-  "family_key": "math",
-  "composite_keys": [],
-  "category": null
+  "ancestry": [{"canonical_id": "math", "level": "family"}],
+  "resolution_detail": {"level": "slice", "matched_subset": null}
 }
 ```
 
-The response always carries the model-only fields (`parents`, `resolved_leaf_id`, `root_model_id`, `lineage_origin_org_id`, `open_weights`, `release_date`, `params_billions`) and benchmark-only fields (`family_key`, `composite_keys`, `category`); they're `null` for entity types they don't apply to. See [API section](#api) for the full response shape.
+The resolve response is a **type-agnostic core** — identical shape for every
+entity type — plus two hierarchy fields:
 
-`entity_type` is one of `benchmark`, `model`, `metric`, `harness`, `org`. See the [API section](#api) for batch resolve, entity browsing, and the full endpoint list.
+- `ancestry`: an ordered `[{canonical_id, level}]` chain from the matched
+  entity's immediate parent up to the root (`[]` when self is a root). A model
+  resolves to e.g. `[{group}, {family}]`; a benchmark to e.g.
+  `[{family}, {composite}]`.
+- `resolution_detail`: a typed sub-object keyed by `entity_type` — `model`:
+  `{granularity}`; `benchmark`: `{level, matched_subset}`; others `{}`.
+
+`entity_type` + the `ancestry` levels tell you which entity endpoint(s) to
+follow for the full entity structure (group/family/lineage/params for models;
+`family_key`/`composite_keys`/`category` for benchmarks; members for families
+and composites) — note a benchmark resolve may land on a family or composite,
+so this is a hint, not a guaranteed flat `GET /{entity_type}s/{id}`. The
+type-specific entity fields live ONLY on those GET endpoints, never on
+resolve. (The in-process `eval_entity_resolver.ResolutionResult` stays the
+rich union for the producer path.)
+
+`entity_type` is one of `benchmark`, `model`, `metric`, `harness`, `org`,
+`composite`, `family`. See the [API section](#api) for batch resolve, entity
+browsing (including `GET /families/{id}` and `GET /composites/{id}`), and the
+full endpoint list.
 
 ---
 
@@ -49,7 +70,7 @@ cp .env.example .env          # defaults work for local dev
 uv run eval-card-registry seed --local
 ```
 
-This loads benchmarks, metrics, and harnesses from `seed/*.yaml` into `fixtures/*.parquet`. You should see counts printed for each entity type. Note that these are automatically generated placeholders for internal development and will likely be changed in the future.
+This loads orgs, models, benchmarks, metrics, and harnesses from `seed/` into `fixtures/*.parquet`. You should see counts printed for each entity type. (After any change that renames canonical ids, `rm fixtures/*.parquet` before reseeding — or pass `--prune-stale` — since the seed upserts by id and does not prune renamed-away rows.)
 
 **2. Check what's in the registry:**
 
@@ -60,16 +81,20 @@ uv run eval-card-registry stats --local
 Expected output:
 
 ```
-  models      total=0  draft=0
-  benchmarks  total=61  draft=0
-  metrics     total=22  draft=0
+  models      total=7148  draft=...
+  benchmarks  total=2592  draft=...
+  metrics     total=27  draft=0
   harnesses   total=11  draft=0
 
-  aliases        total=403  uncertain=0
+  aliases        total=29255  uncertain=0
   eval_results   total=0
   resolution_log total=0
   sync_runs      total=0
 ```
+
+(Counts are illustrative — they grow as seed data and refreshes land. Models and
+orgs are seeded from `seed/models/` + `seed/orgs*.yaml`; a fresh checkout seeds a
+populated `canonical_models` table, not an empty one.)
 
 **3. Sync an EEE config — resolve entities and populate the mapping table:**
 
@@ -109,6 +134,15 @@ You should now see `eval_results`, `aliases`, and entity counts populated. Each 
 
 Raw strings from EEE (e.g. `"MATH Level 5"`, `"lm-evaluation-harness"`) are resolved to canonical IDs (`math`, `lm-evaluation-harness`) through a strategy chain: exact alias match → normalized match (collapses case + all separators — spaces, hyphens, underscores, and slashes) → fuzzy stem match (strips known suffixes like `-fc`/`-prompt`, normalizes org prefixes) → auto-create draft. Every resolution is logged with its strategy and confidence score.
 
+**Models** are grounded in a three-tier source-of-truth: HuggingFace (the
+`fixed_hf_model_id` oracle + the hub-stats index) → models.dev catalog →
+name-based inference for the off-HF tail. The canonical id is the real HF repo
+id (HF-true casing); `org_id` resolves through a two-tier org model — the HF org
+spelling is preserved for community uploaders, while curated developer remaps
+fold alternate namespaces into one parent (`meta-llama`/`facebook` → `meta`,
+`qwen`/`THUDM`/`zai-org` → `alibaba`/`zai`, …). Models also carry
+group/family/lineage membership and an optional `inference_platform`.
+
 Canonical entities start as `draft` and can be promoted to `reviewed`. Aliases that fall below the confidence threshold are flagged `uncertain` for human review.
 
 ---
@@ -123,14 +157,19 @@ eval-card-registry/
 │   ├── services/                         # resolution_service, ingestion pipeline
 │   └── store/                            # In-memory store backed by HF Dataset parquet
 ├── seed/                                 # Known canonical entities (YAML)
-│   ├── orgs.yaml                         # Curated orgs (kind: lab)
+│   ├── orgs.yaml                         # Curated orgs (labs + developer remaps)
+│   ├── orgs.generated.yaml               # Community orgs (HF-cased, generated)
+│   ├── inference_platforms.yaml          # Hosting / gateway platforms
 │   ├── benchmarks.yaml / metrics.yaml / harnesses.yaml
 │   ├── composites.yaml / families.yaml    # Backend hierarchy taxonomy hints
 │   ├── slice_overrides.yaml               # Benchmark-vs-slice taxonomy overrides
-│   └── models/                           # Three-layer model seed
-│       ├── core.yaml                     # Hand-curated, source of truth
-│       ├── sources/*.generated.yaml      # Bulk imports (e.g. models.dev)
-│       └── enrichments/aliases.yaml      # Alias-only adds, union onto existing
+│   └── models/                           # Model seed
+│       ├── core.yaml                     # Hand-curated source of truth (+ skip_ids)
+│       └── sources/                      # Generated bulk imports:
+│           ├── hf_oracle.generated.yaml      #   HF source-of-truth (Tier-1)
+│           ├── hub_stats.generated.yaml      #   HF hub-stats index
+│           ├── models_dev*.generated.yaml    #   models.dev catalog
+│           └── tier3_inferred.generated.yaml #   name-based inference (Tier-3)
 ├── scripts/                              # One-shot tools and refresh scripts
 ├── fixtures/                             # Local parquet files for offline dev/tests
 └── tests/
@@ -185,69 +224,74 @@ curl -X POST http://localhost:8000/api/v1/resolve \
 
 ```json
 {
+  "raw_value": "MATH Level 5",
+  "entity_type": "benchmark",
   "canonical_id": "math-level-5",
   "strategy": "exact",
   "confidence": 1.0,
   "created_new": false,
+  "resolution_source": null,
   "review_status": "reviewed",
-  "parent_canonical_id": "math",
-  "resolved_leaf_id": null,
-  "root_model_id": null,
-  "lineage_origin_org_id": null,
-  "parents": null,
-  "open_weights": null,
-  "release_date": null,
-  "params_billions": null,
-  "family_key": "math",
-  "composite_keys": [],
-  "category": null
+  "ancestry": [{"canonical_id": "math", "level": "family"}],
+  "resolution_detail": {"level": "slice", "matched_subset": null}
 }
 ```
 
-Benchmark-only fields:
-- `family_key` — curated family this benchmark belongs to (from `seed/families.yaml`); falls back to the benchmark's own id when no multi-benchmark family covers it.
-- `composite_keys` — composites that include this benchmark (derived from `composites.yaml` / `families.yaml`). Empty list when none.
-- `category` — curated single-valued category (`general` / `agentic` / `reasoning` / `knowledge` / `multimodal` / `tool-use` / `math` / `security` / `factuality` / `reward-modelling` / `safety` / `code` / `instruction-following` / `other`); `null` when no category curated.
+The HTTP resolve response is a **type-agnostic core** (identical shape for every
+entity type) + `ancestry` + a typed `resolution_detail`:
 
-For models, the model-only fields are populated:
+- `raw_value`, `entity_type` — echo of the request.
+- `canonical_id`, `strategy`, `confidence`, `created_new`, `resolution_source`,
+  `review_status` — the match facts.
+- `ancestry` — ordered `[{canonical_id, level}]` from the matched entity's
+  immediate parent up to the root; `[]` when self is a root. A model resolves
+  to e.g. `[{group}, {family}]`; a benchmark to e.g. `[{family}, {composite}]`.
+- `resolution_detail` — typed sub-object keyed by `entity_type`:
+  - `model`: `{ "granularity": variant|group|family }`
+  - `benchmark`: `{ "level": composite|family|benchmark|slice, "matched_subset": str|null }`
+    (`level=slice` + `matched_subset` surfaces a subset / alias-fold match — e.g.
+    an MMLU subject folded onto the `mmlu` parent — without minting a slice entity).
+  - `composite` / `family` / `metric` / `harness` / `org`: `{}` (reserved).
+
+For a model resolve the chain carries group + family membership:
 
 ```bash
 curl -X POST http://localhost:8000/api/v1/resolve \
   -H 'Content-Type: application/json' \
-  -d '{"raw_value": "meta/llama-3.1-8b-instruct-turbo", "entity_type": "model"}'
+  -d '{"raw_value": "meta-llama/Llama-3.1-8B-Instruct", "entity_type": "model"}'
 ```
 
 ```json
 {
-  "canonical_id": "meta/llama-3.1-8b-instruct",
+  "raw_value": "meta-llama/Llama-3.1-8B-Instruct",
+  "entity_type": "model",
+  "canonical_id": "meta-llama/Llama-3.1-8B-Instruct",
   "strategy": "exact",
   "confidence": 1.0,
   "created_new": false,
+  "resolution_source": "hf",
   "review_status": "reviewed",
-  "parent_canonical_id": null,
-  "resolved_leaf_id": "meta/llama-3.1-8b-instruct-turbo",
-  "root_model_id": "meta/llama-3.1-8b-instruct",
-  "lineage_origin_org_id": "meta",
-  "parents": [{"id": "meta/llama-3.1-8b-instruct", "relationship": "quantized", "axis": null}],
-  "open_weights": true,
-  "release_date": "2024-07-18",
-  "params_billions": 8.0,
-  "family_key": null,
-  "composite_keys": null,
-  "category": null
+  "ancestry": [{"canonical_id": "meta-llama/llama-3.1", "level": "family"}],
+  "resolution_detail": {"granularity": null}
 }
 ```
 
-Model-only fields:
-- `resolved_leaf_id` — the canonical actually matched, before any root-collapse. Equals `canonical_id` when no quantized chain.
-- `root_model_id` — identity root via the quantized-only walk; `null` when the matched leaf IS the root.
-- `lineage_origin_org_id` — `org_id` of the deepest non-variant ancestor (upstream lab for finetunes / quants of someone else's weights).
-- `parents` — full typed-edge list of the matched leaf (`relationship` ∈ `variant | finetune | quantized | merge | adapter`; optional `axis` for `variant`).
-- `open_weights` — `true` / `false` / `null` (unknown).
-- `release_date` — `YYYY-MM-DD` or `YYYY-MM`; `null` when no source carried release info.
-- `params_billions` — approximate parameter count; `null` for closed-API models or HF entries without safetensors data.
+A model's `canonical_id` is the **real HF repo id** (e.g.
+`meta-llama/Llama-3.1-8B-Instruct`, `Qwen/Qwen2.5-7B`) — you can build
+`huggingface.co/{canonical_id}`. Developer grouping is carried separately by
+`org_id` (the canonical parent, e.g. `meta`, `alibaba`), which is decoupled from
+the id prefix, so `Qwen/…` and `meta-llama/…` resolve to org `alibaba` / `meta`.
+Models not on HF (proprietary, or API-only) keep a `{org}/{name}` id.
 
-`canonical_id` is the **identity root** — for quantized chains it collapses to the unquantized base; the actual matched leaf is in `resolved_leaf_id`. For finetune/merge/adapter relationships, the leaf IS its own identity (no collapse). All metadata fields (`open_weights`, `release_date`, `params_billions`) come from the canonical_id row, so they describe the same entity the response identifies. See CLAUDE.md "Typed parents on canonical_models" for the full schema.
+The type-specific ENTITY structure (for models: group/family/lineage/`parents`/
+`open_weights`/`release_date`/`params_billions`; for benchmarks: `family_key`/
+`composite_keys`/`category`; for families/composites: their members) lives ONLY
+on the entity GET endpoints — never on resolve. `entity_type` + the `ancestry`
+levels tell you which endpoint(s) to follow; note a benchmark resolve may land
+on a family or composite, so this is a hint, not a guaranteed flat
+`GET /{entity_type}s/{id}`. (The in-process
+`eval_entity_resolver.ResolutionResult` stays the rich union for the producer
+path — see "Using the resolver standalone" below.)
 
 **Batch resolve:**
 
@@ -266,6 +310,15 @@ PATCH  /api/v1/benchmarks/{id}
 ```
 
 Model IDs containing `/` (e.g. `meta-llama/Llama-3.1-8B`) work in path params directly.
+
+**Families and composites** (read-only — these are first-class hierarchy entities a benchmark resolve's `ancestry` points at):
+
+```
+GET    /api/v1/families            # canonical_families
+GET    /api/v1/families/{id}        # benchmark_ids, category, composite_keys
+GET    /api/v1/composites           # canonical_composites
+GET    /api/v1/composites/{id}      # source_configs, family_id
+```
 
 **Aliases:**
 
@@ -287,7 +340,7 @@ Interactive docs at `http://localhost:8000/docs`.
 
 ## Using the resolver standalone
 
-The `eval-entity-resolver` package can be used independently — no service required, and **returns the same rich response shape as the HTTP API** (root-collapse for quantized chains, `parents`, `open_weights`, `release_date`, `params_billions`, etc.):
+The `eval-entity-resolver` package can be used independently — no service required. It returns the **rich** in-process `ResolutionResult` (root-collapse for quantized chains, `parents`, `open_weights`, `release_date`, `params_billions`, the model lineage fields, benchmark `family_key`/`category`, plus `ancestry` and `resolution_detail`). The HTTP `POST /resolve` is a LEAN projection of this — core + `ancestry` + `resolution_detail` only — so the producer (which consumes the dataclass in-process) keeps the full union while external HTTP callers get the stable lean shape:
 
 ```python
 from eval_entity_resolver import Resolver, ResolverConfig
@@ -300,24 +353,29 @@ resolver = Resolver.from_hf("evaleval/entity-registry-data",
 resolver = Resolver.from_parquet("./fixtures/")
 
 result = resolver.resolve(
-    raw_value="meta/llama-3.1-8b-instruct-turbo",
-    entity_type="model",           # one of: model | benchmark | metric | harness | org
+    raw_value="meta-llama/Llama-3.1-8B-Instruct",
+    entity_type="model",           # model | benchmark | metric | harness | org | composite | family
     source_config=None,             # optional; scopes to per-config aliases
 )
-# result is a `ResolutionResult` dataclass mirroring the HTTP API:
+# result is a `ResolutionResult` dataclass — the RICH in-process union (the HTTP
+# POST /resolve is a lean projection of it):
 #   raw_value, entity_type, source_config — echo of inputs
-#   canonical_id          — identity root for quantized chains; None on no_match
+#   canonical_id          — the matched entity = the real HF repo id for models;
+#                           None on no_match
 #   strategy, confidence  — match info
 #   review_status         — "draft" | "reviewed"
-#   parent_canonical_id   — family/variant parent
+#   ancestry              — [{canonical_id, level}] from immediate parent to root
+#   resolution_detail     — typed sub-object keyed by entity_type
 #   # Models only:
-#   resolved_leaf_id      — original match before root-collapse
-#   root_model_id         — quantized-chain root (None when self IS the root)
-#   lineage_origin_org_id — upstream lab for finetunes / quants
+#   org_id                — canonical parent org (decoupled from the id prefix)
+#   model_group_id        — identity-group root (folds version/quantized/mode);
+#                           always set (self for singletons)
+#   model_family_id       — family-release root
+#   lineage_origin_model_id / lineage_origin_model_org_id
+#                         — deepest non-variant (finetune/quant) ancestor + its org;
+#                           None at origin
 #   parents               — full typed-edge list
-#   open_weights          — bool / None
-#   release_date          — YYYY-MM-DD / None
-#   params_billions       — float / None
+#   open_weights / release_date / params_billions / inference_platform
 #   # Benchmarks only:
 #   family_key            — curated family id (falls back to self id for singletons)
 #   composite_keys        — list of composites containing this benchmark; [] when none
@@ -327,12 +385,15 @@ result = resolver.resolve(
 #                           instruction-following / other); None when not curated
 ```
 
-For example, resolving `meta/llama-3.1-8b-instruct-turbo` collapses to the unquantized base canonical; the original turbo id is preserved in `resolved_leaf_id`:
+A model's `canonical_id` is the matched entity itself (the real HF repo id). Its
+place in the identity graph is carried separately: `model_group_id` is the group
+root (a quantized/versioned variant and its base share one group) and
+`model_family_id` is the family-release root.
 
 ```python
->>> r = resolver.resolve("meta/llama-3.1-8b-instruct-turbo", "model")
->>> r.canonical_id, r.resolved_leaf_id, r.open_weights
-('meta/llama-3.1-8b-instruct', 'meta/llama-3.1-8b-instruct-turbo', True)
+>>> r = resolver.resolve("meta-llama/Llama-3.1-8B-Instruct", "model")
+>>> r.canonical_id, r.org_id, r.model_group_id, r.model_family_id
+('meta-llama/Llama-3.1-8B-Instruct', 'meta', 'meta-llama/Llama-3.1-8B-Instruct', 'meta-llama/llama-3.1')
 ```
 
 If you really want the bare matcher (no metadata enrichment), you can construct `Resolver` without a `CanonicalStore`:
@@ -386,7 +447,8 @@ Resolving the same raw string twice returns the same canonical ID. Re-running wi
 
 | Entity | Format | Example |
 |---|---|---|
-| Model | `{org_id}/{model-slug}` | `meta/llama-3.1-8b`, `anthropic/claude-opus-4.5` |
+| Model (on HF) | real HF repo id, HF-true casing | `meta-llama/Llama-3.1-8B-Instruct`, `Qwen/Qwen2.5-7B` |
+| Model (not on HF) | `{org_id}/{model-slug}` | `anthropic/claude-opus-4.5`, `openai/gpt-4o` |
 | Benchmark / Metric / Harness | lowercase slug | `math`, `lm-evaluation-harness` |
 | `eval_results` row ID | `sha256(evaluation_id:result_index)[:16]` | `a3f2b1c9d4e5f678` |
 

@@ -24,7 +24,11 @@ def _get_or_404(store, table, entity_id):
     return entity
 
 
-_JSON_FIELDS = {"tags", "metadata", "parents"}
+_JSON_FIELDS = {
+    "tags", "metadata", "parents",
+    # family / composite list columns (JSON-encoded on parquet).
+    "benchmark_ids", "composite_keys", "source_configs", "folder_aliases",
+}
 
 
 def _encode(data: dict) -> dict:
@@ -137,6 +141,56 @@ def patch_benchmark(benchmark_id: str, body: BenchmarkPatch, store: RegistryStor
     data = {k: v for k, v in body.model_dump().items() if v is not None}
     data["id"] = benchmark_id
     return _decode(queries.upsert_entity(store, "canonical_benchmarks", _encode(data)))
+
+
+# ------------------------------------------------------------------
+# Families  (canonical_families — first-class read entity, no CRUD)
+# ------------------------------------------------------------------
+
+@router.get("/families")
+def list_families(
+    search: Optional[str] = None,
+    review_status: Optional[ReviewStatus] = None,
+    store: RegistryStore = Depends(get_store),
+):
+    return [
+        _decode(e)
+        for e in queries.list_entities(
+            store, "canonical_families", search=search, review_status=review_status
+        )
+    ]
+
+
+@router.get("/families/{family_id}")
+def get_family(family_id: str, store: RegistryStore = Depends(get_store)):
+    """A benchmark family: the member `benchmark_ids`, curated `category`,
+    and the `composite_keys` it rolls up into. Mirrors GET /benchmarks/{id}."""
+    return _decode(_get_or_404(store, "canonical_families", family_id))
+
+
+# ------------------------------------------------------------------
+# Composites  (canonical_composites — first-class read entity, no CRUD)
+# ------------------------------------------------------------------
+
+@router.get("/composites")
+def list_composites(
+    search: Optional[str] = None,
+    review_status: Optional[ReviewStatus] = None,
+    store: RegistryStore = Depends(get_store),
+):
+    return [
+        _decode(e)
+        for e in queries.list_entities(
+            store, "canonical_composites", search=search, review_status=review_status
+        )
+    ]
+
+
+@router.get("/composites/{composite_id}")
+def get_composite(composite_id: str, store: RegistryStore = Depends(get_store)):
+    """A composite (leaderboard / suite): its `source_configs` members and
+    the `family_id` it belongs to. Mirrors GET /benchmarks/{id}."""
+    return _decode(_get_or_404(store, "canonical_composites", composite_id))
 
 
 # ------------------------------------------------------------------

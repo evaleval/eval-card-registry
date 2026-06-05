@@ -3,7 +3,14 @@ from typing import Literal, Optional
 
 
 ResolutionStrategy = Literal["exact", "normalized", "fuzzy", "no_match"]
-EntityType = Literal["model", "benchmark", "metric", "harness", "org"]
+# `composite` and `family` are first-class resolvable entity types
+# (they resolve against canonical_composites / canonical_families).
+# `slice`/subset is deliberately NOT a type — it stays a parent-only
+# alias-fold (see specs/entity-modeling.md); a slice match is surfaced
+# as resolution detail, not as its own entity.
+EntityType = Literal[
+    "model", "benchmark", "metric", "harness", "org", "composite", "family"
+]
 
 
 @dataclass
@@ -29,9 +36,24 @@ class ResolutionResult:
         any root-collapse. Equals `canonical_id` when no quantized
         chain. Models only.
       - `root_model_id`: identity root via quantized-only walk. NULL
-        when the matched leaf IS the root. Models only.
+        when the matched leaf IS the root. Models only. DEPRECATED
+        output alias — equals `model_group_id`; drop once the producer
+        is live.
+      - `model_group_id`: identity-group root (fold {version, quantized,
+        mode}); the rename target of `root_model_id`. Models only.
+      - `model_family_id`: family-release root (fold the versioned
+        release line). Models only.
+      - `lineage_origin_model_id`: deepest non-variant ancestor's id
+        (what it was built from). Models only.
       - `lineage_origin_org_id`: deepest non-variant ancestor's
-        org_id. Models only.
+        org_id. Models only. DEPRECATED output alias — equals
+        `lineage_origin_model_org_id`.
+      - `lineage_origin_model_org_id`: deepest non-variant ancestor's
+        org_id; the rename target of `lineage_origin_org_id`. Models only.
+      - `inference_platform`: serving platform (FK→inference_platforms.id).
+        Models only.
+      - `resolution_source`: enum {hf|models_dev|curated|inferred|none}.
+      - `resolution_granularity`: enum {variant|group|family}.
       - `parents`: full typed-edge list of the matched leaf. Models only.
       - `open_weights`: True/False/None. Models only.
       - `release_date`: YYYY-MM or YYYY-MM-DD. Models only.
@@ -61,6 +83,17 @@ class ResolutionResult:
     resolved_leaf_id: Optional[str] = None
     root_model_id: Optional[str] = None
     lineage_origin_org_id: Optional[str] = None
+    # Extended lineage / provenance fields (all Optional[str]=None).
+    # `model_group_id` / `lineage_origin_model_org_id` are the rename targets
+    # of the deprecated `root_model_id` / `lineage_origin_org_id` (kept above
+    # for compat).
+    model_group_id: Optional[str] = None
+    model_family_id: Optional[str] = None
+    lineage_origin_model_id: Optional[str] = None
+    lineage_origin_model_org_id: Optional[str] = None
+    inference_platform: Optional[str] = None
+    resolution_source: Optional[str] = None
+    resolution_granularity: Optional[str] = None
     parents: Optional[list[dict]] = None
     open_weights: Optional[bool] = None
     release_date: Optional[str] = None
@@ -69,6 +102,24 @@ class ResolutionResult:
     family_key: Optional[str] = None
     composite_keys: Optional[list[str]] = None
     category: Optional[str] = None
+    # --- Hierarchy contract (type-agnostic ancestry + typed detail) ---
+    # `ancestry`: ordered list of `{canonical_id, level}` from the matched
+    # entity's IMMEDIATE PARENT up to the root. `[]` when self is a root.
+    #   model     -> e.g. [{group}, {family}]
+    #   benchmark -> e.g. [{family}, {composite}]
+    #   family    -> e.g. [{composite}]
+    #   composite/metric/harness/org -> [] (roots)
+    # Computed by `CanonicalStore.compute_ancestry` from the existing
+    # graph tables (model group/family walk; benchmark→family via
+    # canonical_families.benchmark_ids; family→composite via
+    # canonical_families.composite_keys / canonical_composites.family_id).
+    ancestry: Optional[list[dict]] = None
+    # `resolution_detail`: typed sub-object keyed by entity_type.
+    #   model     -> {"granularity": variant|group|family}
+    #   benchmark -> {"level": composite|family|benchmark|slice,
+    #                 "matched_subset": str|None}
+    #   composite|family|metric|harness|org -> {} (reserved)
+    resolution_detail: Optional[dict] = None
 
 
 @dataclass

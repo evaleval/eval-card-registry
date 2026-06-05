@@ -28,21 +28,26 @@ curl -X POST https://evaleval-entity-registry.hf.space/api/v1/resolve \
   -d '{"raw_value": "MATH Level 5", "entity_type": "benchmark"}'
 ```
 
-Response:
+Response (a type-agnostic core + `ancestry` + a typed `resolution_detail`):
 
 ```json
 {
+  "raw_value": "MATH Level 5",
+  "entity_type": "benchmark",
   "canonical_id": "math-level-5",
   "strategy": "exact",
   "confidence": 1.0,
   "created_new": false,
-  "review_status": "reviewed"
+  "resolution_source": null,
+  "review_status": "reviewed",
+  "ancestry": [{"canonical_id": "math", "level": "family"}],
+  "resolution_detail": {"level": "slice", "matched_subset": null}
 }
 ```
 
 If nothing matches, `canonical_id` is `null` and `strategy` is `"no_match"`. In read-only mode, no draft entity is created.
 
-`entity_type` is one of: `benchmark`, `model`, `metric`, `harness`. Optional `source_config` scopes the lookup to a specific source.
+`entity_type` is one of: `benchmark`, `model`, `metric`, `harness`, `org`, `composite`, `family`. Optional `source_config` scopes the lookup to a specific source. A model's `canonical_id` is the real HF repo id (e.g. `meta-llama/Llama-3.1-8B-Instruct`); `ancestry` carries its group/family membership.
 
 **Batch resolve:**
 
@@ -63,6 +68,8 @@ GET /api/v1/benchmarks/{id}
 GET /api/v1/models
 GET /api/v1/metrics
 GET /api/v1/harnesses
+GET /api/v1/families/{id}        # canonical_families (a benchmark ancestry target)
+GET /api/v1/composites/{id}      # canonical_composites
 GET /api/v1/aliases?status=uncertain&entity_type=benchmark
 ```
 

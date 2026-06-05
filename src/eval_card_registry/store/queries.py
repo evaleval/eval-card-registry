@@ -139,19 +139,49 @@ def decode_parents(value) -> list[dict]:
 
 def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     """Walk `canonical_models.parents` and populate the denormalized
-    `root_model_id`, `lineage_origin_org_id`, and inherited `open_weights`
-    columns.
+    `model_group_id`, `model_family_id`, `lineage_origin_model_id`,
+    `lineage_origin_model_org_id`, and inherited `open_weights` columns.
 
-    - `root_model_id`: walk parents up through edges that preserve API
-      identity — `quantized` (different precision, same model) and
-      `variant axis=version` (dated snapshot of the same release, e.g.
-      `gpt-4o-2024-05-13` -> `gpt-4o`). NULL when self has no such
-      ancestor — i.e., self IS the identity root. Other variant axes
-      (size, mode, modality, domain) keep separate identity at the leaf.
-    - `lineage_origin_org_id`: walk through any non-`variant` edge
-      (quantized / finetune / merge / adapter) to the deepest ancestor,
-      then read its `org_id`. For Meta-originated models = self.org_id;
-      for finetunes/quants of someone else's weights = upstream lab.
+    Three materialised id-hierarchy walks:
+    - `model_group_id` (renamed from `root_model_id`): walk parents up
+      through edges that preserve API identity — `quantized` (different
+      precision, same model) and `variant axis=version` (dated snapshot of
+      the same release, e.g. `gpt-4o-2024-05-13` -> `gpt-4o`). GROUP
+      MEMBERSHIP is a total partition — ALWAYS set, equal to SELF when self
+      has no such ancestor (self IS the identity-group root; a singleton is a
+      group of one whose id is itself). NOT null at the root.
+      Other variant axes (size, mode, training_stage, tier, modality,
+      domain) keep separate identity at the leaf.
+
+      DEFERRED — mode folding into the GROUP walk: the group ultimately folds
+      `{version, quantized, mode}`. We intentionally do NOT
+      add `mode` here yet. The current generated data MISLABELS chat/instruct
+      variants as `axis=mode` (~307 edges); folding `mode` now would collapse
+      those into their group and balloon the canonical_id flip blast radius.
+      Once the chat/instruct edges are reclassified to `axis=training_stage`
+      (different trained weights, kept separate), it becomes
+      safe to add `mode` to `_is_identity_edge`. Until then the group walk
+      stays `{quantized, variant·version}`, keeping the canonical_id flip
+      blast radius small.
+    - `model_family_id` (NEW): walk up the versioned release line, folding
+      `quantized` + `variant` axes `{version, mode, training_stage, size,
+      tier}`. Does NOT fold `modality`/`domain` (a vision/coder variant is a
+      distinct artifact kept at the leaf/group level). Stops at
+      finetune/merge/adapter. The "full labeled-version boundary" (3.5 ≠ 3.7
+      ≠ 4; 4 ≠ 4o) is respected naturally: there are no cross-version parent
+      edges in the graph — `variant·version` edges are snapshot->pointer
+      within ONE labeled version, so the walk never crosses a version line.
+      FAMILY MEMBERSHIP is a total partition — ALWAYS set, equal to SELF when
+      self is the family root. NOT null at the root.
+    - `lineage_origin_model_id` (NEW): deepest ancestor reached by walking
+      non-`variant` edges (quantized / finetune / merge / adapter); the id of
+      that ancestor. NULL when self is the origin — NO self-fallback (unlike
+      `lineage_origin_model_org_id` below, which keeps its self-fallback).
+    - `lineage_origin_model_org_id` (renamed from `lineage_origin_org_id`):
+      walk through any non-`variant` edge (quantized / finetune / merge /
+      adapter) to the deepest ancestor, then read its `org_id`. For
+      Meta-originated models = self.org_id; for finetunes/quants of someone
+      else's weights = upstream lab. KEEPS its self-fallback.
     - `open_weights`: if the row has an explicit value, keep it. Otherwise
       walk parents through `variant` + `quantized` edges (identity-
       preserving — a mode/size variant or a quant of an open-weight base
@@ -159,14 +189,16 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
       Stops at finetune/merge/adapter edges since those produce new
       releases whose openness is independent of the base.
 
-    All three are caches recomputed on every seed/refresh. Returns counts
+    All are caches recomputed on every seed/refresh. Returns counts
     dict for logging.
     """
     df = store.table("canonical_models")
     if df.empty:
         return {
-            "root_set": 0,
-            "lineage_set": 0,
+            "group_set": 0,
+            "family_set": 0,
+            "lineage_model_set": 0,
+            "lineage_org_set": 0,
             "open_weights_inherited": 0,
             "release_date_derived_from_id": 0,
         }
@@ -177,7 +209,17 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
     release_by_id: dict[str, Optional[str]] = {}
     for _, row in df.iterrows():
         cid = row["id"]
-        parents_by_id[cid] = decode_parents(row.get("parents"))
+        # Defensive: drop self-referencing parent edges (a malformed seed row
+        # can point a model at itself, e.g. a finetune/quant edge id == cid).
+        # A self-edge is never meaningful and would otherwise be a degenerate
+        # cycle in every walk; stripping it here keeps group/family/lineage
+        # walks honest. Genuinely-wrong upstream bases (e.g. tulu-3 pointing at
+        # self instead of its Llama base) are a data fix for curation, not here.
+        parents_by_id[cid] = [
+            p
+            for p in decode_parents(row.get("parents"))
+            if not (isinstance(p, dict) and p.get("id") == cid)
+        ]
         org = row.get("org_id")
         org_by_id[cid] = None if _is_na(org) else org
         ow = row.get("open_weights")
@@ -185,13 +227,41 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         rd = row.get("release_date")
         release_by_id[cid] = None if _is_na(rd) else str(rd)
 
+    # Org-from-prefix RULE (registry-proper — NOT a hotfix). For an HF-shaped
+    # `org/name` id whose org_id was never set, derive the developer the SAME
+    # way the resolver / auto-create does: the curated HF-org map
+    # (canonical_orgs.hf_org + strategies/fuzzy._ORG_ALIASES), exactly like
+    # `hf_id_to_canonical_cased`. So `openai/gpt-5.1`->openai, `xai/grok-2`->xai
+    # fall out of the registry's OWN vendor catalog — no string hardcoding.
+    # Guarantees:
+    #   - NEVER overrides an existing org_id (curated / source values
+    #     win — e.g. a finetune re-attributed to its real maker keeps it);
+    #   - NEVER invents an org for a BARE id (no `/` -> left unresolved): if the
+    #     source doesn't carry the developer namespace, we don't guess it from
+    #     the model name.
+    from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
+
+    hf_to_dev = {k.lower(): v for k, v in _ORG_ALIASES.items()}
+    for _, orow in store.table("canonical_orgs").iterrows():
+        ho, oi = orow.get("hf_org"), orow.get("id")
+        if isinstance(ho, str) and ho.strip() and isinstance(oi, str):
+            hf_to_dev[ho.lower()] = oi
+    org_prefix_updates: dict[str, str] = {}
+    for cid in parents_by_id:
+        if org_by_id.get(cid) is None and isinstance(cid, str) and "/" in cid:
+            prefix = cid.split("/", 1)[0]
+            dev = hf_to_dev.get(prefix.lower(), prefix)
+            if dev:
+                org_by_id[cid] = dev  # feed the lineage_origin_org walk below
+                org_prefix_updates[cid] = dev
+
     def _walk(start: str, edge_ok) -> str:
         """Walk parents through edges where `edge_ok(edge)` is True.
         Returns the deepest reachable id; stops on no-match or cycle.
 
         When a node has multiple matching edges (e.g. a MergeKit model with
         several `merge` parents), pick deterministically by min-id rather
-        than first-by-YAML-order, so lineage_origin_org_id doesn't depend on
+        than first-by-YAML-order, so lineage_origin_model_org_id doesn't depend on
         edge insertion order.
         """
         visited = {start}
@@ -212,12 +282,56 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         rel = p.get("relationship")
         if rel == "quantized":
             return True
-        if rel == "variant" and p.get("axis") == "version":
+        # `version` = dated snapshot of the moving pointer; `mode` = a runtime
+        # reasoning/thinking toggle of the same weights. Both are the same model at
+        # the API level, so both fold into the identity group. (`mode` folds only
+        # because the mislabelled chat/instruct edges were reclassified to
+        # `training_stage`, which stays OUT of the group.)
+        if rel == "variant" and p.get("axis") in ("version", "mode"):
             return True
         return False
 
+    def _walk_group(start: str) -> str:
+        """Identity-group walk. Like `_walk(_is_identity_edge)`, but an identity
+        edge (quantized / variant·version / variant·mode) folds into the parent's
+        group ONLY when child and parent share the SAME developer org
+        (`org_by_id`). A third-party / community quant (e.g. `unsloth/...-bnb-4bit`
+        quantizing `microsoft/phi-4`) therefore keeps its OWN group — its
+        `quantized` edge still feeds `lineage_origin_model_id` (the link is
+        preserved), but its scores never merge into the base lab's model. The same
+        guard drops a spurious cross-org version edge (a snapshot pointer to a
+        different lab). A first-party precision variant (same org) still folds."""
+        visited = {start}
+        current = start
+        while True:
+            cur_org = org_by_id.get(current)
+            edges = parents_by_id.get(current, []) or []
+            candidate_ids = [
+                p["id"] for p in edges
+                if isinstance(p, dict) and _is_identity_edge(p) and p.get("id")
+                and cur_org is not None
+                and org_by_id.get(p["id"]) == cur_org
+            ]
+            next_id = min(candidate_ids) if candidate_ids else None
+            if not next_id or next_id in visited or next_id not in parents_by_id:
+                return current
+            visited.add(next_id)
+            current = next_id
+
     def _is_lineage_edge(p: dict) -> bool:
         return p.get("relationship") in {"quantized", "finetune", "merge", "adapter"}
+
+    def _is_family_fold_edge(p: dict) -> bool:
+        """Family walk: fold the versioned release line. `quantized`
+        plus `variant` axes {version, mode, training_stage, size, tier}.
+        Does NOT fold modality/domain (kept at the leaf — a vision/coder
+        sibling is a distinct artifact). Stops at finetune/merge/adapter."""
+        rel = p.get("relationship")
+        if rel == "quantized":
+            return True
+        if rel == "variant":
+            return p.get("axis") in {"version", "mode", "training_stage", "size", "tier"}
+        return False
 
     def _inherit_open_from_ancestors(start: str) -> Optional[bool]:
         """Walk ONLY ancestors (skip self) through `variant` + `quantized`
@@ -244,22 +358,41 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
             if v is not None:
                 return v
 
-    root_updates: dict[str, Optional[str]] = {}
+    group_updates: dict[str, Optional[str]] = {}
+    family_updates: dict[str, Optional[str]] = {}
+    lineage_model_updates: dict[str, Optional[str]] = {}
     lineage_updates: dict[str, Optional[str]] = {}
     open_updates: dict[str, Optional[bool]] = {}
     release_updates: dict[str, Optional[str]] = {}
     inherited_count = 0
     release_derived_count = 0
     for cid in parents_by_id:
-        # Identity root via quantized + variant-version walk (both treat
-        # the parent as the same model at the API level — see docstring).
-        root = _walk(cid, _is_identity_edge)
-        root_updates[cid] = root if root != cid else None
-        # Lineage origin via any non-variant edge; org of deepest ancestor.
-        # Use explicit None check, not `or` — an upstream lab whose org_id is
-        # an empty string or missing should keep lineage as None, not flip to
-        # self.org_id (which would mis-attribute a finetune as same-org).
+        # Identity-group root via quantized + variant·(version|mode) walk — each
+        # treats the parent as the same model at the API level. Org-conditional:
+        # an identity edge folds into the group ONLY when child and
+        # parent are the same developer org — a third-party quant keeps its own
+        # group (the link survives via lineage_origin).
+        group = _walk_group(cid)
+        # GROUP MEMBERSHIP is a total partition: every model is in exactly one
+        # group, and a singleton is a group of one whose id is itself. So
+        # model_group_id is ALWAYS set (self at the root — _walk returns self
+        # when there is no identity-preserving ancestor, which IS the group id).
+        group_updates[cid] = group
+        # Family root via the versioned-release-line fold (NEW).
+        family = _walk(cid, _is_family_fold_edge)
+        # FAMILY MEMBERSHIP is likewise a total partition — ALWAYS set (self at
+        # the family root). NOT null-at-root.
+        family_updates[cid] = family
+        # Lineage origin via any non-variant edge.
+        # `ancestor` is reused for BOTH the model_id walk (NO self-fallback)
+        # and the org_id walk (KEEPS self-fallback) — easy to confuse, so:
         ancestor = _walk(cid, _is_lineage_edge)
+        # model_id: deepest non-variant ancestor; None when self is the origin.
+        lineage_model_updates[cid] = ancestor if ancestor != cid else None
+        # org_id: org of deepest ancestor, WITH self-fallback. Use explicit
+        # None check, not `or` — an upstream lab whose org_id is an empty
+        # string or missing should keep lineage as None, not flip to
+        # self.org_id (which would mis-attribute a finetune as same-org).
         ancestor_org = org_by_id.get(ancestor)
         lineage_updates[cid] = ancestor_org if ancestor_org is not None else org_by_id.get(cid)
         # Open weights — explicit self value WINS; only fall back to
@@ -289,15 +422,67 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
                 release_derived_count += 1
 
     df = df.copy()
-    df["root_model_id"] = df["id"].map(root_updates).astype(pd.StringDtype())
-    df["lineage_origin_org_id"] = df["id"].map(lineage_updates).astype(pd.StringDtype())
+    # `model_group_id` (formerly `root_model_id`) and
+    # `lineage_origin_model_org_id` (formerly `lineage_origin_org_id`) plus the
+    # family + lineage-model walks are all written here.
+    df["model_group_id"] = df["id"].map(group_updates).astype(pd.StringDtype())
+    df["model_family_id"] = df["id"].map(family_updates).astype(pd.StringDtype())
+    df["lineage_origin_model_id"] = df["id"].map(lineage_model_updates).astype(pd.StringDtype())
+    df["lineage_origin_model_org_id"] = df["id"].map(lineage_updates).astype(pd.StringDtype())
     df["open_weights"] = df["id"].map(open_updates).astype(pd.BooleanDtype())
     df["release_date"] = df["id"].map(release_updates).astype(pd.StringDtype())
+    if org_prefix_updates:
+        df["org_id"] = df.apply(
+            lambda r: org_prefix_updates.get(r["id"], r.get("org_id")), axis=1
+        ).astype(pd.StringDtype())
+
+    # Org-less honesty: a row whose developer is the `unknown` sentinel org has no
+    # extractable developer, so it carries the `org-unknown` tag. The FK and the
+    # tag move together — the org-less bucket is surfaced for review either way.
+    def _add_org_unknown_tag(row) -> Any:
+        raw = row.get("tags")
+        if row.get("org_id") != "unknown":
+            return raw
+        try:
+            cur = json.loads(raw) if isinstance(raw, str) else []
+        except (ValueError, TypeError):
+            cur = []
+        if not isinstance(cur, list):
+            cur = []
+        if "org-unknown" not in cur:
+            cur = [*cur, "org-unknown"]
+        return json.dumps(cur)
+
+    df["tags"] = df.apply(_add_org_unknown_tag, axis=1).astype(pd.StringDtype())
     store.set_table("canonical_models", df)
 
+    # No dangling FK: every org the prefix rule derived must exist in
+    # canonical_orgs. Most are curated (openai, xai, …) and already present;
+    # an uploader prefix not in the catalog gets a community row (mirrors the
+    # resolver's `_ensure_hf_org`).
+    if org_prefix_updates:
+        odf = store.table("canonical_orgs")
+        have = set(odf["id"])
+        missing = sorted({o for o in org_prefix_updates.values() if o not in have})
+        if missing:
+            cols = list(odf.columns)
+            new_rows = []
+            for o in missing:
+                r = {c: None for c in cols}
+                r.update({"id": o, "display_name": o, "hf_org": o, "kind": "community"})
+                for c, v in (("tags", "[]"), ("metadata", "{}"), ("review_status", "reviewed")):
+                    if c in r:
+                        r[c] = v
+                new_rows.append(r)
+            store.set_table(
+                "canonical_orgs", pd.concat([odf, pd.DataFrame(new_rows)], ignore_index=True)
+            )
+
     return {
-        "root_set": int(df["root_model_id"].notna().sum()),
-        "lineage_set": int(df["lineage_origin_org_id"].notna().sum()),
+        "group_set": int(df["model_group_id"].notna().sum()),
+        "family_set": int(df["model_family_id"].notna().sum()),
+        "lineage_model_set": int(df["lineage_origin_model_id"].notna().sum()),
+        "lineage_org_set": int(df["lineage_origin_model_org_id"].notna().sum()),
         "open_weights_inherited": inherited_count,
         "release_date_derived_from_id": release_derived_count,
     }

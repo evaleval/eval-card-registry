@@ -59,7 +59,7 @@
   display_name: xAI
   website: https://x.ai
   hf_org: xai-org
-  aliases: ["X AI", "x.ai", "X.AI"]
+  aliases: ["X AI", "x.ai", "X.AI", "x-ai"]
   tags: '["lab", "closed-source"]'
   kind: lab
   metadata: '{}'
@@ -70,6 +70,16 @@
   website: https://cohere.com
   hf_org: cohereforai
   aliases: ["Cohere Inc.", "CohereForAI", "Cohere For AI", "cohere-labs"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: baichuan
+  display_name: Baichuan
+  website: https://www.baichuan-ai.com
+  hf_org: baichuan-inc
+  aliases: ["Baichuan", "Baichuan Intelligent Technology", "baichuan-inc", "Baichuan-inc"]
   tags: '["lab"]'
   kind: lab
   metadata: '{}'
@@ -157,22 +167,31 @@
   metadata: '{}'
   review_status: reviewed
 
-- id: ibm-granite
-  display_name: IBM Granite
-  parent_org_id: ibm
-  website: https://www.ibm.com/granite
-  hf_org: ibm-granite
-  aliases: ["Granite", "Granite Team"]
+- id: ibm
+  display_name: IBM
+  website: https://www.ibm.com
+  aliases: ["IBM Corp.", "International Business Machines", "IBM Research", "IBM Granite", "Granite", "Granite Team"]
   tags: '["lab", "open-weight"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
 
-- id: ibm
-  display_name: IBM
-  website: https://www.ibm.com
-  aliases: ["IBM Corp.", "International Business Machines", "IBM Research"]
-  tags: '["lab"]'
+- id: bytedance
+  display_name: ByteDance
+  website: https://www.bytedance.com
+  hf_org: ByteDance-Seed
+  aliases: ["ByteDance Seed", "Bytedance", "bytedance-seed", "ByteDance-Seed", "Seed"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: sarvam
+  display_name: Sarvam AI
+  website: https://www.sarvam.ai
+  hf_org: sarvamai
+  aliases: ["Sarvam", "Sarvam AI", "sarvamai", "sarvam-ai"]
+  tags: '["lab", "open-weight"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -221,7 +240,7 @@
   display_name: Z.AI
   website: https://z.ai
   hf_org: zai-org
-  aliases: ["Z AI", "Zhipu", "ZhipuAI", "GLM Team"]
+  aliases: ["Z AI", "z-ai", "z.ai", "Zhipu", "Zhipu AI", "ZhipuAI", "zhipu-ai", "zhipuai", "GLM Team", "GLM", "THUDM", "THUDM-AI", "zai-org"]
   tags: '["lab"]'
   kind: lab
   metadata: '{}'
@@ -361,5 +380,54 @@
   aliases: ["AI21", "AI21labs", "ai21labs"]
   tags: '["lab"]'
   kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: tencent
+  display_name: Tencent
+  website: https://hunyuan.tencent.com
+  hf_org: tencent
+  aliases: ["Tencent", "Tencent Hunyuan", "Hunyuan"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: black-forest-labs
+  display_name: Black Forest Labs
+  website: https://blackforestlabs.ai
+  hf_org: black-forest-labs
+  aliases: ["bfl", "BFL", "Black Forest Labs", "black-forest-labs"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: PrimeIntellect
+  display_name: Prime Intellect
+  website: https://www.primeintellect.ai
+  hf_org: PrimeIntellect
+  aliases: ["prime-intellect", "Prime Intellect", "prime intellect"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: reka-ai
+  display_name: Reka AI
+  website: https://www.reka.ai
+  hf_org: RekaAI
+  aliases: ["rekaai", "RekaAI", "Reka", "Reka AI"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: TheDrummer
+  display_name: TheDrummer
+  hf_org: TheDrummer
+  aliases: ["TheDrummer 2", "thedrummer", "the-drummer"]
+  tags: '["community", "finetune"]'
+  kind: individual
   metadata: '{}'
   review_status: reviewed

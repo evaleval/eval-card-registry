@@ -45,8 +45,6 @@ import duckdb
 import httpx
 import yaml
 
-from eval_entity_resolver.display import humanize_model_slug
-
 # Shared hub-stats helpers live in the package so the runtime resolver
 # (live lookup at draft creation) and this bulk refresh script stay
 # consistent on row-shape parsing.
@@ -58,10 +56,17 @@ from eval_card_registry.services.hub_stats import (
     enrich_draft_from_row,
     extract_license as _extract_license,
     filter_useful_tags as _filter_useful_tags,
-    hf_id_to_canonical,
+    hf_id_to_canonical_cased,
+    is_local_parquet,
     normalize as _normalize,
+    resolve_parquet_source,
     slugify as _slugify,
 )
+
+# Single-sourced two-tier org map (same as `_auto_create_entity._build_hf_to_dev`
+# and `generate_hf_oracle_seed.build_hf_to_dev`): HF-org-lowercase -> developer
+# slug, from `strategies/fuzzy.py:_ORG_ALIASES` + `canonical_orgs.hf_org`.
+from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ORGS_PATH = REPO_ROOT / "seed" / "orgs.yaml"
@@ -69,6 +74,36 @@ MODELS_OUT_PATH = REPO_ROOT / "seed" / "models" / "sources" / "hub_stats.generat
 STATE_PATH = REPO_ROOT / "seed" / "models" / "sources" / "hub_stats.state.json"
 CORE_PATH = REPO_ROOT / "seed" / "models" / "core.yaml"
 MODELS_DEV_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "models_dev.generated.yaml"
+HF_ORACLE_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "hf_oracle.generated.yaml"
+MODELS_DEV_CATALOG_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "models_dev_catalog.generated.yaml"
+
+# Every model source whose canonicals/aliases can be enriched from hub-stats.
+# hf_oracle (the HF-present mints) and the models.dev catalog are included so a
+# refresh backfills their params/release_date/open_weights/baseModels parents.
+_MODEL_SOURCES = (
+    CORE_PATH,
+    MODELS_DEV_GENERATED,
+    HF_ORACLE_GENERATED,
+    MODELS_DEV_CATALOG_GENERATED,
+)
+
+
+def build_hf_to_dev() -> dict[str, str]:
+    """Two-tier org map: HF-org-lowercase -> developer/community slug.
+    Single-sourced from `strategies/fuzzy.py:_ORG_ALIASES` + `seed/orgs.yaml`
+    `hf_org` (authored seed wins on conflict). Mirrors
+    `generate_hf_oracle_seed.build_hf_to_dev` and the live-sync
+    `_build_hf_to_dev` so a refresh produces the SAME HF-cased ids the
+    HF-oracle mints + live auto-create use — never a lowercase duplicate."""
+    hf_to_dev: dict[str, str] = {k.lower(): v for k, v in _ORG_ALIASES.items()}
+    with open(ORGS_PATH) as f:
+        orgs = yaml.safe_load(f) or []
+    for o in orgs:
+        hf_org = o.get("hf_org")
+        oid = o.get("id")
+        if isinstance(hf_org, str) and hf_org.strip() and isinstance(oid, str):
+            hf_to_dev[hf_org.lower()] = oid
+    return hf_to_dev
 
 
 # ---------------------------------------------------------------------------
@@ -152,22 +187,94 @@ def load_existing_canonical_aliases() -> dict[str, str]:
     doesn't matter at lookup time."""
     out: dict[str, str] = {}
 
-    def _ingest(path: Path) -> None:
+    def _entries(path: Path):
         if not path.exists():
-            return
+            return []
+        raw = yaml.safe_load(path.read_text()) or []
+        return (raw.get("entries") if isinstance(raw, dict) else raw) or []
+
+    # PASS 1: register every canonical `id` first, across ALL sources. A
+    # canonical's own id is a STRONGER claim than being listed as another
+    # canonical's alias — so when the same normalized form is both (a known
+    # cross-source inconsistency, e.g. `DeepSeek-V3.1-Terminus` is an alias of
+    # the fuzzy-collapsed `deepseek-v3.1` AND the id of a distinct HF canonical),
+    # the id-claim wins. This stops an enrichment from emitting an alias that the
+    # seed validator would see as double-claimed.
+    for path in _MODEL_SOURCES:
+        for e in _entries(path):
+            cid = e.get("id")
+            if cid:
+                out.setdefault(_normalize(cid), cid)
+    # PASS 2: aliases fill in only forms no canonical id already claimed.
+    for path in _MODEL_SOURCES:
+        for e in _entries(path):
+            cid = e.get("id")
+            if not cid:
+                continue
+            for a in (e.get("aliases") or []):
+                if isinstance(a, str) and "/" in a:
+                    out.setdefault(_normalize(a), cid)
+    return out
+
+
+def load_ambiguous_canonicals() -> set[str]:
+    """Canonical ids whose id/name/alias normalized form is ALSO claimed by a
+    DIFFERENT canonical — a pre-existing near-duplicate pair (e.g.
+    `alibaba/QwQ-32B` carries the core alias `qwen-qwq-32b`, which is the
+    name of the separate canonical `alibaba/qwen-qwq-32b`). For such pairs the
+    resolver's normalized-match tie-break is finely balanced, so merely adding
+    an enrichment row can flip an oracle id. We skip enriching them (a handful)
+    rather than risk a resolution regression; curation should de-dup the pair.
+    Computed once over all sources."""
+    norm_owners: dict[str, set[str]] = {}
+
+    def _claim(form: str, cid: str) -> None:
+        if isinstance(form, str) and form:
+            norm_owners.setdefault(_normalize(form), set()).add(cid)
+
+    for path in _MODEL_SOURCES:
+        if not path.exists():
+            continue
         raw = yaml.safe_load(path.read_text()) or []
         entries = raw.get("entries") if isinstance(raw, dict) else raw
         for e in entries or []:
             cid = e.get("id")
-            if not cid:
+            if not isinstance(cid, str):
+                continue
+            _claim(cid, cid)
+            if "/" in cid:
+                _claim(cid.split("/", 1)[1], cid)
+            for a in (e.get("aliases") or []):
+                _claim(a, cid)
+    ambiguous: set[str] = set()
+    for owners in norm_owners.values():
+        if len(owners) > 1:
+            ambiguous.update(owners)
+    return ambiguous
+
+
+def load_canonical_id_norms() -> dict[str, str]:
+    """Map -> the canonical id for every NORMALIZED claim a distinct canonical
+    makes: its full id AND its bare model-name part. Used to reject an
+    enrichment alias whose normalized form collides with a DIFFERENT
+    canonical's id OR name — that double-claim both trips the seed validator
+    AND lets the resolver's normalized-match intercept another canonical's raw
+    id (the oracle-steal class, e.g. adding `Qwen/QwQ-32B` (norm `qwen-qwq-32b`)
+    as an alias of `alibaba/QwQ-32B` would collide with the distinct
+    `alibaba/qwen-qwq-32b` canonical and flip `qwen/qwq-32b`'s resolution)."""
+    out: dict[str, str] = {}
+    for path in _MODEL_SOURCES:
+        if not path.exists():
+            continue
+        raw = yaml.safe_load(path.read_text()) or []
+        entries = raw.get("entries") if isinstance(raw, dict) else raw
+        for e in entries or []:
+            cid = e.get("id")
+            if not isinstance(cid, str):
                 continue
             out.setdefault(_normalize(cid), cid)
-            for a in (e.get("aliases") or []):
-                if isinstance(a, str) and "/" in a:
-                    out.setdefault(_normalize(a), cid)
-
-    _ingest(CORE_PATH)
-    _ingest(MODELS_DEV_GENERATED)
+            if "/" in cid:
+                out.setdefault(_normalize(cid.split("/", 1)[1]), cid)
     return out
 
 
@@ -180,9 +287,10 @@ def query_hub_stats(
     if not candidate_hf_ids:
         return []
     quoted = ", ".join(f"'{i.replace(chr(39), chr(39)*2)}'" for i in candidate_hf_ids)
+    source = resolve_parquet_source(PARQUET_URL)
     sql = f"""
         SELECT {QUERY_COLUMNS}
-        FROM read_parquet('{PARQUET_URL}')
+        FROM read_parquet('{source}')
         WHERE id IN ({quoted})
     """
     cursor = con.execute(sql)
@@ -195,13 +303,16 @@ def build_entry(
     row: dict,
     org_alias_map: dict[str, str],
     aliases_to_canonical: dict[str, str],
+    hf_to_dev: Optional[dict[str, str]] = None,
+    canonical_id_norms: Optional[dict[str, str]] = None,
+    ambiguous_canonicals: Optional[set[str]] = None,
 ) -> Optional[dict]:
     """Construct a seed entry from a hub-stats row. Returns None when
     the row's HF id isn't in our existing aliases — backfill only
     operates on canonicals we already cover.
 
     All hub-stats-derived data fields (release_date, params_billions,
-    open_weights, tags, metadata, parents, lineage_origin_org_id) come
+    open_weights, tags, metadata, parents, lineage_origin_model_org_id) come
     from `enrich_draft_from_row` so this script and the live-lookup
     path stay byte-identical on extraction. The seed loader's
     `_merge_into` unions parents by id across sources — generated
@@ -209,7 +320,15 @@ def build_entry(
     core.yaml rather than overriding them.
     """
     hf_id = row["id"]
-    canonical_id, org_id = hf_id_to_canonical(hf_id, org_alias_map)
+    # CASING FIX: derive the canonical id with HF casing preserved (two-tier org
+    # rule) instead of the lowercasing `hf_id_to_canonical`. A future cron then
+    # computes the SAME HF-cased ids the HF-oracle mints / live auto-create use
+    # — never a lowercase duplicate. The gate below is on the normalized
+    # (case-insensitive) form, so an HF-cased canonical that exists in the seed
+    # still matches.
+    if hf_to_dev is None:
+        hf_to_dev = build_hf_to_dev()
+    canonical_id, org_id = hf_id_to_canonical_cased(hf_id, hf_to_dev)
     norm_canon = _normalize(canonical_id)
     if norm_canon not in aliases_to_canonical:
         return None
@@ -217,7 +336,53 @@ def build_entry(
     # our slugify of the HF id — e.g., `meta/llama-3.1-8b` vs `meta/llama-3-1-8b`).
     canonical_id = aliases_to_canonical[norm_canon]
 
-    aliases = sorted({hf_id, _slugify(hf_id)})
+    # Ambiguous-pair guard: skip enriching a canonical that shares a normalized
+    # id/name/alias form with a DIFFERENT canonical (a pre-existing
+    # near-duplicate pair, e.g. `alibaba/QwQ-32B` carries the core alias
+    # `qwen-qwq-32b` = the name of the separate `alibaba/qwen-qwq-32b`). For
+    # such pairs the resolver's normalized-match tie-break is finely balanced;
+    # merely adding an enrichment row perturbs it and can flip an oracle id.
+    # Backfilling these few is not worth a resolution regression — curation
+    # should de-duplicate the pair first.
+    if ambiguous_canonicals and canonical_id in ambiguous_canonicals:
+        return None
+
+    # Candidate aliases = the HF repo id + its slug. ONLY keep a candidate when
+    # it isn't already owned (by normalized form) by a DIFFERENT canonical — the
+    # seed validator rejects an alias claimed by two canonicals. Now that the
+    # candidate set spans every source (incl. the hf_oracle mints), a
+    # snapshot HF id can be both an enrichment alias here AND its own separate
+    # canonical (e.g. `…-Chat-3B-v1` is a distinct canonical, not an alias of
+    # the fuzzy-collapsed `redpajama-incite-3b` base). Dropping the steal keeps
+    # the seed valid without weakening resolution — the owning canonical already
+    # resolves the form.
+    cid_norms = canonical_id_norms or {}
+
+    # Candidate aliases: ONLY the raw HF repo id (case-preserved). We do NOT
+    # emit a lowercased `_slugify(hf_id)` form — the resolver's normalized-match
+    # already collapses case/separators, and a fabricated lowercase slug tends
+    # to collide with a DIFFERENT canonical's existing alias (e.g.
+    # `berkeley-nest/starling-lm-7b-alpha` is already a core alias of
+    # `nexusflow/starling-rm`), which the seed validator rejects as a double
+    # claim. Drop the HF id when it equals the canonical (no-op) or when any
+    # other canonical already owns that exact string OR its normalized form.
+    def _alias_ok(a: str) -> bool:
+        if a == canonical_id:
+            return False
+        n = _normalize(a)
+        if aliases_to_canonical.get(n, canonical_id) != canonical_id:
+            return False
+        # Reject if the alias's full-normalized OR bare-name-normalized form is a
+        # distinct canonical's id/name (would steal that canonical's resolution).
+        if cid_norms.get(n, canonical_id) != canonical_id:
+            return False
+        if "/" in a:
+            name_n = _normalize(a.split("/", 1)[1])
+            if cid_norms.get(name_n, canonical_id) != canonical_id:
+                return False
+        return True
+
+    aliases = sorted(a for a in {hf_id} if _alias_ok(a))
 
     # Pass the resolved registry canonical so the family-version
     # inference inside enrich_draft_from_row can suppress a self-edge
@@ -240,11 +405,16 @@ def build_entry(
             pass
 
     # Preserve the existing YAML key order so the diff after this change
-    # is dominated by NEW fields (parents / lineage_origin_org_id) rather
+    # is dominated by NEW fields (parents / lineage_origin_model_org_id) rather
     # than wholesale reformatting.
+    # NO display_name here: this is a backfill enrichment that MERGES onto an
+    # existing canonical (hf_oracle/core/models_dev), which already carries the
+    # authoritative HF-cased display_name. Emitting a humanized, org-stripped
+    # name (e.g. `QwenStock1 14B`) would (a) collide across orgs — the seed
+    # auto-derives display_name as a global alias — and (b) needlessly churn the
+    # diff. The loader's field-merge keeps the existing display_name.
     entry: dict = {
         "id": canonical_id,
-        "display_name": humanize_model_slug(hf_id),
         "org_id": org_id,
     }
     if "release_date" in enrichment:
@@ -261,8 +431,8 @@ def build_entry(
         entry["open_weights"] = enrichment["open_weights"]
     if "parents" in enrichment:
         entry["parents"] = json.loads(enrichment["parents"])
-    if "lineage_origin_org_id" in enrichment:
-        entry["lineage_origin_org_id"] = enrichment["lineage_origin_org_id"]
+    if "lineage_origin_model_org_id" in enrichment:
+        entry["lineage_origin_model_org_id"] = enrichment["lineage_origin_model_org_id"]
     return entry
 
 
@@ -305,6 +475,9 @@ def main() -> int:
 
     org_alias_map = load_org_alias_to_canonical()
     aliases_to_canonical = load_existing_canonical_aliases()
+    canonical_id_norms = load_canonical_id_norms()
+    ambiguous_canonicals = load_ambiguous_canonicals()
+    hf_to_dev = build_hf_to_dev()
     if not org_alias_map:
         print("[refresh] ERROR: seed/orgs.yaml is empty or missing.", file=sys.stderr)
         return 1
@@ -312,11 +485,21 @@ def main() -> int:
         print("[refresh] ERROR: no canonical models found in seed/. Seed first.", file=sys.stderr)
         return 1
 
-    # Initial candidates: every HF-shaped alias on a known canonical.
-    # We pass the original (non-normalized) alias to DuckDB since the
-    # parquet `id` column carries case-sensitive original strings.
+    # Reverse map: developer slug -> the HF org spellings that remap to it
+    # (`meta` -> {`meta-llama`, `facebook`}). Used to reconstruct the true HF
+    # repo id for a big-dev canonical (`meta/Llama-3.1-8B`) whose id is NOT the
+    # HF repo (`meta-llama/Llama-3.1-8B`) — so the parquet lookup finds the row.
+    dev_to_hf_orgs: dict[str, set[str]] = {}
+    for hf_org, dev in hf_to_dev.items():
+        dev_to_hf_orgs.setdefault(dev, set()).add(hf_org)
+
+    # Initial candidates: every HF-shaped alias + canonical id on a known
+    # canonical, across ALL model sources (including the hf_oracle mints
+    # and the models.dev catalog). We pass the original (non-normalized) form to DuckDB
+    # since the parquet `id` column carries case-sensitive original strings. For
+    # big-dev canonicals we also enqueue the reconstructed HF-org repo id.
     initial: set[str] = set()
-    for path in (CORE_PATH, MODELS_DEV_GENERATED):
+    for path in _MODEL_SOURCES:
         if not path.exists():
             continue
         raw = yaml.safe_load(path.read_text()) or []
@@ -328,6 +511,9 @@ def main() -> int:
             cid = e.get("id")
             if isinstance(cid, str) and "/" in cid:
                 initial.add(cid)
+                org_part, name_part = cid.split("/", 1)
+                for hf_org in dev_to_hf_orgs.get(org_part, ()):  # big-dev re-map
+                    initial.add(f"{hf_org}/{name_part}")
     print(f"[refresh] HF-id candidates to look up: {len(initial)}", file=sys.stderr)
 
     # Etag short-circuit: if the parquet hasn't republished AND we've
@@ -338,10 +524,15 @@ def main() -> int:
     # case where someone deleted the YAML but the state file survived;
     # without it we'd silently leave hub-stats enrichment missing from
     # the seed merge.
-    current_etag = fetch_parquet_etag()
+    # The etag watermark HEADs the live parquet URL — irrelevant (and a
+    # needless network call) when reading a LOCAL parquet. In offline mode we
+    # always re-run the local read; it's cheap and has no rate limit.
+    offline = is_local_parquet()
+    current_etag = None if offline else fetch_parquet_etag()
     state = load_state()
     can_short_circuit = (
-        not args.force
+        not offline
+        and not args.force
         and not args.dry_run
         and current_etag is not None
         and state.get("parquet_etag") == current_etag
@@ -357,24 +548,33 @@ def main() -> int:
         return 0
 
     con = duckdb.connect()
-    con.execute("INSTALL httpfs; LOAD httpfs;")
-    # Authenticate parquet fetches when HF_TOKEN is in the environment.
-    # Unauth limit is 500 requests / 5min; one DuckDB read_parquet streams
-    # the file via many range requests and can brush that ceiling on its
-    # own. With auth the limit is ~30k / 5min.
-    hf_token = os.environ.get("HF_TOKEN")
-    if hf_token:
-        escaped = hf_token.replace("'", "''")
-        con.execute(
-            f"CREATE SECRET hf_auth (TYPE HTTP, BEARER_TOKEN '{escaped}', "
-            f"SCOPE 'https://huggingface.co');"
+    if offline:
+        print(
+            f"[refresh] OFFLINE: reading local parquet {resolve_parquet_source(PARQUET_URL)}",
+            file=sys.stderr,
         )
+    else:
+        con.execute("INSTALL httpfs; LOAD httpfs;")
+        # Authenticate parquet fetches when HF_TOKEN is in the environment.
+        # Unauth limit is 500 requests / 5min; one DuckDB read_parquet streams
+        # the file via many range requests and can brush that ceiling on its
+        # own. With auth the limit is ~30k / 5min.
+        hf_token = os.environ.get("HF_TOKEN")
+        if hf_token:
+            escaped = hf_token.replace("'", "''")
+            con.execute(
+                f"CREATE SECRET hf_auth (TYPE HTTP, BEARER_TOKEN '{escaped}', "
+                f"SCOPE 'https://huggingface.co');"
+            )
     rows = query_hub_stats(con, initial)
     print(f"[refresh] hub-stats rows fetched: {len(rows)}", file=sys.stderr)
 
     entries: list[dict] = []
     for row in rows:
-        e = build_entry(row, org_alias_map, aliases_to_canonical)
+        e = build_entry(
+            row, org_alias_map, aliases_to_canonical, hf_to_dev,
+            canonical_id_norms, ambiguous_canonicals,
+        )
         if e is not None:
             entries.append(e)
     entries.sort(key=lambda e: e["id"])

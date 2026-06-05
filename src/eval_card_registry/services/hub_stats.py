@@ -15,6 +15,7 @@ between the bulk pre-load and the live lookup.
 from __future__ import annotations
 
 import json
+import os
 import re
 import threading
 from datetime import datetime, date
@@ -24,11 +25,38 @@ PARQUET_URL = (
     "https://huggingface.co/api/datasets/cfahlgren1/hub-stats/parquet/models/train/0.parquet"
 )
 
+# Offline read path: when HUB_STATS_LOCAL_PARQUET points at a local hub-stats
+# parquet, every
+# hub-stats query (bulk refresh + live HubStatsClient lookup) reads that file
+# instead of streaming the live URL. CI / the deployed Space leave the env unset
+# and keep the live path. The env var is read at call time (not import time) so
+# tests can set/unset it per-test without reimporting the module.
+HUB_STATS_LOCAL_PARQUET_ENV = "HUB_STATS_LOCAL_PARQUET"
+
+
+def resolve_parquet_source(parquet_url: str = PARQUET_URL) -> str:
+    """Return the parquet source DuckDB should `read_parquet()` from.
+
+    Prefers the local file at `$HUB_STATS_LOCAL_PARQUET` when that env var is
+    set and the file exists (offline mode); otherwise the passed-in live URL.
+    A set-but-missing path falls through to the live URL so a stale env var
+    never silently breaks the live path."""
+    local = os.environ.get(HUB_STATS_LOCAL_PARQUET_ENV)
+    if local and os.path.exists(local):
+        return local
+    return parquet_url
+
+
+def is_local_parquet() -> bool:
+    """True when the offline local-parquet read path is active."""
+    local = os.environ.get(HUB_STATS_LOCAL_PARQUET_ENV)
+    return bool(local and os.path.exists(local))
+
 # Columns the queries fetch. Centralized so the bulk and lookup paths
 # parse the same row shape.
 QUERY_COLUMNS = (
     "id, author, createdAt, lastModified, downloads, downloadsAllTime, "
-    "likes, trendingScore, tags, cardData, safetensors, baseModels, "
+    "likes, trendingScore, tags, cardData, safetensors, gguf, baseModels, "
     "pipeline_tag, library_name"
 )
 
@@ -74,6 +102,32 @@ def hf_id_to_canonical(
     return f"{org_id}/{name_slug}", org_id
 
 
+def hf_id_to_canonical_cased(
+    hf_id: str,
+    hf_to_dev: dict[str, str],
+) -> tuple[str, str]:
+    """Canonical id = the real HF repo id verbatim; org_id = the canonical
+    parent. The id and the org are DECOUPLED — the id is the model's true HF
+    identity (a consumer can build `huggingface.co/{id}`), while `org_id`
+    carries developer grouping. The HF org spelling is never folded into the
+    id:
+
+      - id  = `{HF-ORG}/{HF-NAME}` verbatim (e.g. `Qwen/Qwen2-7B-Instruct`);
+      - org_id = the curated parent if the HF org maps to one
+        (meta-llama->meta, qwen->alibaba, facebook->meta, ...), else the
+        HF org itself.
+
+    `hf_to_dev` keys are LOWERCASE HF org spellings (built single-sourced from
+    `canonical_orgs.hf_org` + `_ORG_ALIASES`). Ids without `/` fall back to
+    `unknown/{HF-NAME}`.
+    """
+    if "/" not in hf_id:
+        return f"unknown/{hf_id}", "unknown"
+    org_part, name_part = hf_id.split("/", 1)
+    org_id = hf_to_dev.get(org_part.lower(), org_part)
+    return f"{org_part}/{name_part}", org_id
+
+
 # ---------------------------------------------------------------------------
 # Field extraction from a single hub-stats row
 # ---------------------------------------------------------------------------
@@ -101,10 +155,13 @@ def has_downloadable_weights(row: dict) -> bool:
 
 
 def approx_params_billions(safetensors) -> Optional[float]:
-    """Estimate parameter count (in billions) from safetensors metadata.
-    Total bytes / 2 assumes BF16 (= 2 bytes/param) as the dominant dtype.
-    Approximate; consumers needing per-dtype precision should derive from
-    the safetensors struct directly."""
+    """Parameter count in billions from safetensors metadata.
+
+    hub-stats' `safetensors.total` is the total PARAMETER COUNT (not bytes) —
+    e.g. `meta-llama/Llama-3.1-8B` -> 8_030_261_248, `…-70B` -> 70_553_706_496
+    (verified against the hub-stats parquet). So billions = total / 1e9.
+    (A `/2` bytes-at-BF16 assumption would be wrong for this schema and
+    would produce half the true count.)"""
     if safetensors is None:
         return None
     if isinstance(safetensors, dict):
@@ -113,7 +170,7 @@ def approx_params_billions(safetensors) -> Optional[float]:
         total = getattr(safetensors, "total", None)
     if not total:
         return None
-    return round(total / 2 / 1e9, 2) if total > 0 else None
+    return round(total / 1e9, 2) if total > 0 else None
 
 
 def extract_license(card_data) -> Optional[str]:
@@ -161,7 +218,7 @@ def filter_useful_tags(raw_tags) -> list[str]:
 # `allenai/olmo-3-32b`). The pointer isn't an HF id — it only exists in our
 # registry — so HF can't surface that edge. Without inference here, dated
 # snapshots auto-create as orphaned canonicals: `release_date` lands fine
-# but `parents`/`root_model_id` stay empty, root-collapse never fires, and
+# but `parents`/`model_group_id` stay empty, root-collapse never fires, and
 # the snapshot shows up as a separate model in consumers.
 
 _INTERNAL_DATE_RE = re.compile(r"^(.+?)-(\d{4})-([^-].*)$")
@@ -349,7 +406,11 @@ class HubStatsClient:
     handle None as "no enrichment data available" — never raise."""
 
     def __init__(self, parquet_url: str = PARQUET_URL) -> None:
-        self.parquet_url = parquet_url
+        # Resolve the offline local-parquet path here (at construction) AND
+        # again at query time — the env-aware `resolve_parquet_source` makes the
+        # offline switch transparent to all the `read_parquet('{self.parquet_url}')`
+        # call sites below without touching their SQL.
+        self.parquet_url = resolve_parquet_source(parquet_url)
         self._con = None
         self._local_table_ready: bool = False
         self._local_table_failed: bool = False
@@ -364,6 +425,11 @@ class HubStatsClient:
         import os
         import duckdb
         con = duckdb.connect()
+        # Reading a LOCAL parquet needs no httpfs / HF auth — skip the network
+        # extension install so the offline path works with no connectivity.
+        if is_local_parquet():
+            self._con = con
+            return con
         con.execute("INSTALL httpfs; LOAD httpfs;")
         # Authenticate parquet fetches when HF_TOKEN is in the environment
         # (typical on the deployed Space). Unauth limit is 500 req/5min;
@@ -497,7 +563,7 @@ def enrich_draft_from_row(
       - params_billions (approx from safetensors)
       - tags (filtered list)
       - parents (resolved against our canonical alias index when possible)
-      - lineage_origin_org_id (= upstream lab when a parent edge resolves)
+      - lineage_origin_model_org_id (= upstream lab when a parent edge resolves)
       - metadata (license, downloads, etc.)
 
     Caller decides what to actually write — none of these fields are
@@ -542,7 +608,11 @@ def enrich_draft_from_row(
             # (matches `derive_model_lineage_fields` semantics).
             if lineage_origin_org_id is None and edge["relationship"] != "variant":
                 if "/" in parent_canonical:
-                    lineage_origin_org_id = parent_canonical.split("/", 1)[0]
+                    # The parent canonical id is the real HF repo id, so its
+                    # prefix is the HF org — fold it to the canonical developer
+                    # (meta-llama -> meta) for the lineage-origin ORG field.
+                    _pp = parent_canonical.split("/", 1)[0]
+                    lineage_origin_org_id = org_alias_map.get(_pp.lower(), _pp)
 
     # Family-version inference: hub-stats `baseModels` only records
     # upstream-lineage edges (finetune/quantized/merge/adapter), never
@@ -564,7 +634,9 @@ def enrich_draft_from_row(
     if parents:
         out["parents"] = json.dumps(parents)
     if lineage_origin_org_id:
-        out["lineage_origin_org_id"] = lineage_origin_org_id
+        # Output key matches the renamed canonical_models column so it lands
+        # in the right column when merged into an auto-created draft.
+        out["lineage_origin_model_org_id"] = lineage_origin_org_id
 
     # Stash extra hub-stats context in metadata so consumers can find it
     # without re-querying.
@@ -582,5 +654,13 @@ def enrich_draft_from_row(
         metadata["license"] = license_str
     if len(metadata) > 2:  # has more than just source + hf_id
         out["metadata"] = json.dumps(metadata, sort_keys=True)
+
+    # Promote the HF-true repo id as a first-class key UNCONDITIONALLY
+    # (bypasses the `len(metadata) > 2` guard that otherwise drops it for
+    # sparse rows). `_auto_create_entity` reads this to mint the canonical id
+    # + display_name in HF-true casing instead of a lowercased slug. Without
+    # it, HF-confirmed models land under a stale lowercase id.
+    if isinstance(hf_id, str) and hf_id.strip():
+        out["hf_id"] = hf_id
 
     return out

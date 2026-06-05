@@ -45,8 +45,8 @@ def _models_df(*rows) -> pd.DataFrame:
     reads. Each row is a dict — caller passes only the fields they care
     about; missing fields are None / NA."""
     cols = [
-        "id", "display_name", "org_id", "parents", "root_model_id",
-        "lineage_origin_org_id", "open_weights", "release_date",
+        "id", "display_name", "org_id", "parents", "model_group_id",
+        "lineage_origin_model_org_id", "open_weights", "release_date",
         "params_billions", "tags", "metadata", "review_status",
     ]
     out = []
@@ -85,7 +85,7 @@ def test_enriched_resolver_populates_model_metadata():
         "display_name": "Llama 3.1 8B",
         "org_id": "meta",
         "parents": json.dumps([{"id": "meta/llama-3.1", "relationship": "variant", "axis": "size"}]),
-        "lineage_origin_org_id": "meta",
+        "lineage_origin_model_org_id": "meta",
         "open_weights": True,
         "release_date": "2024-07-18",
         "params_billions": 8.0,
@@ -103,10 +103,14 @@ def test_enriched_resolver_populates_model_metadata():
     assert r.params_billions == 8.0
 
 
-def test_enriched_resolver_collapses_quantized_chain_to_root():
-    """Resolving a quantized leaf returns the identity root as
-    `canonical_id`; the original leaf goes in `resolved_leaf_id`. All
-    metadata comes from the root (quants preserve identity)."""
+def test_enriched_resolver_flips_quantized_chain_to_leaf_with_group_root():
+    """Resolving a quantized leaf returns the LEAF as
+    `canonical_id` (the precise quant artifact); the identity root moves to
+    `model_group_id` (and `root_model_id` for compat). `resolved_leaf_id ==
+    canonical_id`. Metadata now comes from the matched LEAF row — at seed
+    `derive_model_lineage_fields` would inherit open_weights onto the leaf,
+    but this unit fixture sets values only on the root and runs no derive
+    pass, so the leaf's own (unset) metadata is what surfaces."""
     aliases = _alias_store(
         ("meta/llama-3.1-8b-instruct-turbo", "model", "meta/llama-3.1-8b-instruct-turbo", None, "confirmed"),
     )
@@ -116,26 +120,32 @@ def test_enriched_resolver_collapses_quantized_chain_to_root():
             "id": "meta/llama-3.1-8b-instruct",
             "org_id": "meta", "parents": "[]", "open_weights": True,
             "release_date": "2024-07-18", "params_billions": 8.0,
-            "lineage_origin_org_id": "meta", "review_status": "reviewed",
+            "lineage_origin_model_org_id": "meta", "review_status": "reviewed",
         },
-        # Leaf: quantized variant pointing at the root
+        # Leaf: quantized variant pointing at the root. Metadata is set on
+        # the leaf row directly (as the seed-time derive pass would
+        # materialise) so the flipped response is internally consistent.
         {
             "id": "meta/llama-3.1-8b-instruct-turbo",
             "org_id": "meta",
             "parents": json.dumps([{"id": "meta/llama-3.1-8b-instruct", "relationship": "quantized"}]),
-            "root_model_id": "meta/llama-3.1-8b-instruct",
-            "lineage_origin_org_id": "meta",
+            "model_group_id": "meta/llama-3.1-8b-instruct",
+            "lineage_origin_model_org_id": "meta",
+            "open_weights": True, "release_date": "2024-07-18",
+            "params_billions": 8.0,
             "review_status": "reviewed",
         },
     ))
     resolver = Resolver(aliases, canonical_store=canonicals)
     r = resolver.resolve("meta/llama-3.1-8b-instruct-turbo", "model")
-    # canonical_id collapses to the root
-    assert r.canonical_id == "meta/llama-3.1-8b-instruct"
-    # leaf id preserved
+    # canonical_id is now the LEAF
+    assert r.canonical_id == "meta/llama-3.1-8b-instruct-turbo"
+    # resolved_leaf_id == canonical_id
     assert r.resolved_leaf_id == "meta/llama-3.1-8b-instruct-turbo"
+    # the identity root moves to model_group_id (and root_model_id for compat)
+    assert r.model_group_id == "meta/llama-3.1-8b-instruct"
     assert r.root_model_id == "meta/llama-3.1-8b-instruct"
-    # Metadata sourced from the root (so the response is internally consistent)
+    # Metadata sourced from the matched LEAF row
     assert r.open_weights is True
     assert r.release_date == "2024-07-18"
     assert r.params_billions == 8.0
@@ -217,24 +227,124 @@ def test_resolver_positional_two_arg_constructor():
     assert r.parents is None
 
 
-def test_root_collapse_falls_back_when_root_missing_from_store():
-    """If the matched canonical's `root_model_id` points at an id that
+def test_flip_handles_dangling_group_root_fk():
+    """If the matched canonical's `model_group_id` points at an id that
     isn't in the canonical store (e.g. broken FK), enrichment must not
-    crash — partial data is fine, but the response should still be
-    well-formed."""
+    crash. The canonical_id is the matched LEAF (which always
+    exists), so the response is well-formed regardless of the dangling
+    group root; the dangling root is still surfaced in model_group_id, and
+    metadata reads off the present leaf row."""
     aliases = _alias_store(("orphan/leaf", "model", "orphan/leaf", None, "confirmed"))
     canonicals = CanonicalStore(models_df=_models_df({
         "id": "orphan/leaf",
         "org_id": "orphan",
         "parents": json.dumps([{"id": "orphan/missing-root", "relationship": "quantized"}]),
-        "root_model_id": "orphan/missing-root",  # FK to non-existent canonical
+        "model_group_id": "orphan/missing-root",  # FK to non-existent canonical
         "review_status": "draft",
     }))
     resolver = Resolver(aliases, canonical_store=canonicals)
     r = resolver.resolve("orphan/leaf", "model")
-    # Doesn't crash; canonical_id collapses to the dangling root id
-    assert r.canonical_id == "orphan/missing-root"
+    # canonical_id is the LEAF (present); the dangling root only
+    # appears in model_group_id. No crash.
+    assert r.canonical_id == "orphan/leaf"
     assert r.resolved_leaf_id == "orphan/leaf"
-    # Metadata fields fall back to None since root entity wasn't found
+    assert r.model_group_id == "orphan/missing-root"
+    # Metadata reads off the leaf row, which set none → None.
     assert r.open_weights is None
     assert r.release_date is None
+
+
+# ---------- ancestry + typed resolution_detail ----------
+
+def _benchmarks_df(*rows) -> pd.DataFrame:
+    cols = ["id", "display_name", "parent_benchmark_id", "review_status"]
+    return pd.DataFrame([{c: r.get(c) for c in cols} for r in rows])
+
+
+def _families_df(*rows) -> pd.DataFrame:
+    cols = ["id", "display_name", "category", "benchmark_ids",
+            "composite_keys", "review_status"]
+    return pd.DataFrame([{c: r.get(c) for c in cols} for r in rows])
+
+
+def _composites_df(*rows) -> pd.DataFrame:
+    cols = ["id", "display_name", "source_configs", "family_id", "review_status"]
+    return pd.DataFrame([{c: r.get(c) for c in cols} for r in rows])
+
+
+def test_model_ancestry_and_detail():
+    aliases = _alias_store(("acme/w-7b-it", "model", "acme/w-7b-it", None, "confirmed"))
+    df = _models_df({"id": "acme/w-7b-it", "org_id": "acme", "parents": "[]"})
+    df["model_family_id"] = ["acme/w"]
+    df["model_group_id"] = ["acme/w-7b"]
+    df["resolution_granularity"] = ["variant"]
+    cs = CanonicalStore(models_df=df)
+    r = Resolver(aliases, canonical_store=cs).resolve("acme/w-7b-it", "model")
+    assert r.ancestry == [
+        {"canonical_id": "acme/w-7b", "level": "group"},
+        {"canonical_id": "acme/w", "level": "family"},
+    ]
+    assert r.resolution_detail == {"granularity": "variant"}
+
+
+def test_benchmark_full_chain_ancestry():
+    aliases = _alias_store(("bench-pro", "benchmark", "bench-pro", None, "confirmed"))
+    cs = CanonicalStore(
+        benchmarks_df=_benchmarks_df({"id": "bench-pro", "display_name": "BP"}),
+        families_df=_families_df({
+            "id": "fam-x", "benchmark_ids": json.dumps(["bench-pro"]),
+            "composite_keys": json.dumps(["comp-suite"]), "category": "reasoning"}),
+        composites_df=_composites_df({
+            "id": "comp-suite", "family_id": "fam-x",
+            "source_configs": json.dumps(["cfg-a"])}),
+    )
+    r = Resolver(aliases, canonical_store=cs).resolve("bench-pro", "benchmark")
+    assert r.ancestry == [
+        {"canonical_id": "fam-x", "level": "family"},
+        {"canonical_id": "comp-suite", "level": "composite"},
+    ]
+    assert r.resolution_detail == {"level": "benchmark", "matched_subset": None}
+
+
+def test_benchmark_slice_detail():
+    aliases = _alias_store(("bench-sub", "benchmark", "bench-sub", None, "confirmed"))
+    cs = CanonicalStore(benchmarks_df=_benchmarks_df(
+        {"id": "bench-pro", "display_name": "BP"},
+        {"id": "bench-sub", "display_name": "BS", "parent_benchmark_id": "bench-pro"},
+    ))
+    r = Resolver(aliases, canonical_store=cs).resolve("bench-sub", "benchmark")
+    assert r.resolution_detail["level"] == "slice"
+    # bench-sub's family defaults to its parent walk terminus (bench-pro).
+    assert r.ancestry == [{"canonical_id": "bench-pro", "level": "family"}]
+
+
+def test_benchmark_subset_fold_matched_subset():
+    aliases = _alias_store(("Anatomy", "benchmark", "mmlu", None, "confirmed"))
+    cs = CanonicalStore(benchmarks_df=_benchmarks_df(
+        {"id": "mmlu", "display_name": "MMLU"}))
+    r = Resolver(aliases, canonical_store=cs).resolve("Anatomy", "benchmark")
+    assert r.canonical_id == "mmlu"
+    assert r.resolution_detail == {"level": "benchmark", "matched_subset": "Anatomy"}
+
+
+def test_family_resolves_with_composite_ancestry():
+    aliases = _alias_store(("fam-x", "family", "fam-x", None, "confirmed"))
+    cs = CanonicalStore(
+        families_df=_families_df({
+            "id": "fam-x", "composite_keys": json.dumps(["comp-suite"])}),
+        composites_df=_composites_df({"id": "comp-suite", "family_id": "fam-x"}),
+    )
+    r = Resolver(aliases, canonical_store=cs).resolve("fam-x", "family")
+    assert r.canonical_id == "fam-x"
+    assert r.ancestry == [{"canonical_id": "comp-suite", "level": "composite"}]
+    assert r.resolution_detail == {}
+
+
+def test_composite_resolves_as_root():
+    aliases = _alias_store(("comp-suite", "composite", "comp-suite", None, "confirmed"))
+    cs = CanonicalStore(composites_df=_composites_df(
+        {"id": "comp-suite", "family_id": "fam-x"}))
+    r = Resolver(aliases, canonical_store=cs).resolve("comp-suite", "composite")
+    assert r.canonical_id == "comp-suite"
+    assert r.ancestry == []
+    assert r.resolution_detail == {}

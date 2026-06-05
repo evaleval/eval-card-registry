@@ -47,7 +47,7 @@ from typing import Optional
 # Bump when removing/renaming columns in any canonical_* table.
 # Bump minor when ADDING columns (backward-compatible). The producer
 # asserts the major matches what it expects.
-SCHEMA_VERSION = "registry.2.0"
+SCHEMA_VERSION = "registry.3.0"
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SEED_DIR = REPO_ROOT / "seed"

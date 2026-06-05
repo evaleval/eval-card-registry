@@ -25,6 +25,21 @@ from eval_card_registry.store.hf_store import RegistryStore
 from eval_card_registry.store import queries
 
 
+# Tier-3 base-family lexicon (mirrors scripts/generate_tier3_inferred_seed.py).
+# Used only to DETECT an inferable base; an edge is emitted solely when the
+# candidate base alias-confirms to an existing canonical.
+_TIER3_BASE_TOKENS = (
+    "tinyllama", "openhermes", "openchat", "mixtral",
+    "llama", "mistral", "qwen", "gemma", "yi", "phi", "gpt", "claude",
+    "gemini", "falcon", "bloom", "deepseek", "baichuan", "cohere", "command",
+    "neural", "solar", "nous", "zephyr", "orca", "dolphin",
+)
+# `unknown` and bare hosts are placeholder org prefixes — an id like
+# `unknown/foo` has NO extractable org: treat it as org-less, not as org
+# `unknown`.
+_PLACEHOLDER_ORG_PREFIXES = {"unknown", "none", "null", "model", "models", "local"}
+
+
 # Map entity_type to table name
 _ENTITY_TABLE = {
     "model": "canonical_models",
@@ -107,9 +122,19 @@ def _build_canonical_store(registry_store: RegistryStore) -> CanonicalStore:
 _RESPONSE_FIELDS = (
     "canonical_id", "strategy", "confidence", "review_status",
     "parent_canonical_id", "resolved_leaf_id", "root_model_id",
-    "lineage_origin_org_id", "parents", "open_weights",
+    "lineage_origin_org_id",
+    # `model_group_id` / `lineage_origin_model_org_id` are the renames of the
+    # two deprecated names above (kept for compat through the rollout).
+    "model_group_id", "model_family_id", "lineage_origin_model_id",
+    "lineage_origin_model_org_id", "inference_platform",
+    "resolution_source", "resolution_granularity",
+    "parents", "open_weights",
     "release_date", "params_billions",
     "family_key", "composite_keys", "category",
+    # Hierarchy contract — type-agnostic ancestry + typed detail. Carried
+    # on the rich service dict; the HTTP route projects the lean shape from
+    # these (see api/routes_resolve.py::_project_response).
+    "ancestry", "resolution_detail",
 )
 
 
@@ -359,54 +384,111 @@ class ResolutionService:
 
     def _auto_create_entity(self, entity_type: str, raw_value: str) -> str:
         table = _ENTITY_TABLE[entity_type]
-        candidate_id = _slugify(raw_value)
-        # Ensure uniqueness
+
+        # Hub-stats live enrichment: when a model raw value looks like an
+        # HF id, query hub-stats FIRST (before id finalisation) for
+        # release_date / params / parents / lineage_origin_model_org_id and,
+        # crucially, the HF-true repo `hf_id`. Best-effort — `enrichment` is
+        # `{}` on lookup miss or any error.
+        #
+        # HF SOURCE-OF-TRUTH CASING: if hub-stats confirms the repo,
+        # mint the canonical id + display_name from HF-true casing via the
+        # two-tier org rule (do NOT `_slugify`-lowercase an HF-confirmed model
+        # name) and mark `resolution_source="hf"`, `review_status="reviewed"`.
+        # Otherwise fall back to the lowercase slug as before.
+        enrichment: dict = {}
+        if entity_type == "model" and self._looks_like_hf_id(raw_value):
+            # Provisional id only for the hub-stats family-version self-edge
+            # suppression; the real id is finalised from `hf_id` below.
+            enrichment = self._lookup_hub_stats(
+                raw_value, target_canonical=_slugify(raw_value)
+            ) or {}
+
+        hf_confirmed = entity_type == "model" and isinstance(
+            enrichment.get("hf_id"), str
+        ) and enrichment["hf_id"].strip()
+
+        now = _now()
+        if hf_confirmed:
+            from eval_card_registry.services.hub_stats import (
+                hf_id_to_canonical_cased,
+            )
+            hf_id = enrichment["hf_id"]
+            candidate_id, _hf_org_id = hf_id_to_canonical_cased(
+                hf_id, self._build_hf_to_dev()
+            )
+            # Display name = the HF model-name part (HF casing preserved).
+            display = hf_id.split("/", 1)[1] if "/" in hf_id else hf_id
+        else:
+            candidate_id = _slugify(raw_value)
+            # Models get a humanized display name (`gpt-5-2025-08-07` ->
+            # `GPT-5 (2025-08-07)`); other entity types pass `raw_value`
+            # through — benchmark/metric/harness/org names are usually
+            # already in their preferred display form.
+            if entity_type == "model":
+                display = humanize_model_slug(raw_value) or raw_value
+            else:
+                display = raw_value
+
+        # Ensure uniqueness (case-sensitive id collision).
         df = self.store.table(table)
         if (df["id"] == candidate_id).any():
             candidate_id = f"{candidate_id}-{str(uuid.uuid4())[:8]}"
 
-        now = _now()
-        # Models get a humanized display name (`gpt-5-2025-08-07` ->
-        # `GPT-5 (2025-08-07)`); other entity types pass `raw_value`
-        # through — benchmark/metric/harness/org names are usually
-        # already in their preferred display form.
-        if entity_type == "model":
-            display = humanize_model_slug(raw_value) or raw_value
-        else:
-            display = raw_value
         base = {
             "id": candidate_id,
             "display_name": display,
             "metadata": "{}",
-            "review_status": "draft",
+            "review_status": "reviewed" if hf_confirmed else "draft",
             "created_at": now,
             "updated_at": now,
         }
-        # Hub-stats live enrichment: when a model raw value looks like an
-        # HF id, query hub-stats for release_date / params / parents /
-        # lineage_origin_org_id and merge into the base draft. Best-effort
-        # — `enrichment` is `{}` on lookup miss or any error.
-        enrichment: dict = {}
-        if entity_type == "model" and self._looks_like_hf_id(raw_value):
-            enrichment = self._lookup_hub_stats(raw_value, target_canonical=candidate_id) or {}
         if entity_type == "model":
+            # When HF-confirmed, the org_id comes from the two-tier rule on the
+            # HF-true repo (so it matches the seeded HF-cased canonical's org);
+            # otherwise resolve the raw prefix through the org resolver.
+            if hf_confirmed:
+                org_id = _hf_org_id
+                # Materialise the HF org row if it does not exist yet so the FK
+                # holds (community kind, like the seeded orgs.generated.yaml).
+                self._ensure_hf_org(org_id)
+            else:
+                org_id = self._resolve_model_org_id(raw_value)
+            # Tier-3: when NOT HF-confirmed and NOT models.dev-rescued (this
+            # slug-fallback branch), the draft is a name-based INFERENCE. Mark
+            # it `resolution_source="inferred"`,
+            # `resolution_granularity="variant"`. If the raw value carries NO
+            # extractable org (no `/`, or an `unknown`/host placeholder prefix),
+            # do NOT auto-guess one: org_id stays None and we tag `org-unknown`
+            # for the review bucket.
+            tier3 = (entity_type == "model") and not hf_confirmed
+            org_unknown = tier3 and not self._has_extractable_org(raw_value)
+            if org_unknown:
+                org_id = None
             base.update({
                 "developer": None,
-                "org_id": self._resolve_model_org_id(raw_value),
+                "org_id": org_id,
                 "family": None,
                 "architecture": None,
                 "params_billions": None,
                 "parents": "[]",
-                "root_model_id": None,
-                "lineage_origin_org_id": None,
+                "model_group_id": None,
+                "lineage_origin_model_org_id": None,
                 "open_weights": None,
-                "tags": "[]",
+                "tags": '["org-unknown"]' if org_unknown else "[]",
+                "resolution_source": "hf" if hf_confirmed else (
+                    "inferred" if tier3 else None
+                ),
+                "resolution_granularity": "variant" if tier3 else None,
             })
             # Apply hub-stats enrichment last so its non-empty values
             # override the defaults we just set. The enrichment dict
             # only contains keys hub-stats actually had data for; other
-            # defaults (None / "[]") survive.
+            # defaults (None / "[]") survive. `hf_id` is provenance only,
+            # not a column — skip it.
             for k, v in enrichment.items():
+                if k == "hf_id":
+                    continue
                 if v is not None:
                     base[k] = v
             # Family-version inference fallback: when hub-stats misses
@@ -419,6 +501,14 @@ class ResolutionService:
             # edge is already present.
             if self._looks_like_hf_id(raw_value):
                 self._maybe_infer_family_parent(base, raw_value, candidate_id)
+            # Tier-3 base inference: for an inferred draft with no parent yet,
+            # detect a base family token and emit a finetune edge ONLY if the
+            # base alias-confirms to an existing canonical (NEVER an invented
+            # edge). Org-less inferred drafts can still link to a base
+            # (lineage is independent of the missing org); we just don't guess
+            # the org from it.
+            if tier3:
+                self._maybe_infer_tier3_base(base, raw_value, candidate_id)
         elif entity_type == "benchmark":
             base.update({"description": None, "dataset_repo": None, "parent_benchmark_id": None, "tags": "[]"})
         elif entity_type == "metric":
@@ -469,6 +559,89 @@ class ResolutionService:
         base["parents"] = json.dumps(existing)
 
     @staticmethod
+    def _has_extractable_org(raw_value: str) -> bool:
+        """True iff the raw value carries an extractable org prefix: a single
+        `/` with a non-placeholder left side. `unknown/foo`, `foo` (no slash),
+        and free-text labels all return False (org-less)."""
+        if not raw_value or raw_value.count("/") != 1:
+            return False
+        org, name = (p.strip() for p in raw_value.split("/", 1))
+        if not org or not name:
+            return False
+        return org.lower() not in _PLACEHOLDER_ORG_PREFIXES
+
+    def _maybe_infer_tier3_base(
+        self, base: dict, raw_value: str, candidate_id: str,
+    ) -> None:
+        """Add a single `{finetune}` edge to `base['parents']` when the raw
+        value carries a recognized base-family token AND a shorter stem of that
+        name alias-confirms (exact/normalized, NEVER fuzzy) to an existing
+        canonical that is NOT the same identity as `candidate_id`. No-op when a
+        parent already exists (the version-axis inference ran), when no base
+        token is found, or when nothing alias-confirms — NEVER an invented edge.
+        Mirrors scripts/generate_tier3_inferred_seed.py."""
+        try:
+            existing = json.loads(base.get("parents") or "[]")
+        except (ValueError, TypeError):
+            existing = []
+        if existing:  # version-axis or hub-stats edge already present
+            return
+
+        name = raw_value.split("/", 1)[1] if "/" in raw_value else raw_value
+        toks = [t for t in re.split(r"[\s\-_/.:]+", name.lower()) if t]
+        tokset = set(toks)
+        base_tok = None
+        for fam in _TIER3_BASE_TOKENS:
+            if fam in tokset or any(
+                t.startswith(fam) and t[len(fam):][:1].isdigit() for t in toks
+            ):
+                base_tok = fam
+                break
+        if base_tok is None:
+            return
+
+        from eval_card_registry.services.hub_stats import normalize as _nz
+        raw_name_nz = _nz(name)
+        org_prefix = (
+            raw_value.split("/", 1)[0] if self._has_extractable_org(raw_value) else None
+        )
+        try:
+            start = next(
+                i for i, t in enumerate(toks)
+                if t == base_tok or (t.startswith(base_tok) and t[len(base_tok):][:1].isdigit())
+            )
+        except StopIteration:
+            start = 0
+        tail = toks[start:]
+        resolver = self._get_resolver()
+        seen: set[str] = set()
+        for end in range(len(tail), 0, -1):
+            stem = "-".join(tail[:end])
+            candidates = []
+            if org_prefix:
+                hf_to_dev = self._build_hf_to_dev()
+                dev = hf_to_dev.get(org_prefix.lower(), org_prefix)
+                candidates.append(f"{dev}/{stem}")
+            candidates.append(stem)
+            for cand in candidates:
+                if cand in seen or _nz(cand) == _nz(raw_value):
+                    continue
+                seen.add(cand)
+                res = resolver.resolve(cand, "model")
+                hit = res.canonical_id
+                if not hit or res.strategy not in ("exact", "normalized"):
+                    continue
+                hit_name = hit.split("/", 1)[1] if "/" in hit else hit
+                # Reject a "base" that is really the same identity as the draft.
+                if _nz(hit) == _nz(raw_value) or _nz(hit_name) == raw_name_nz:
+                    continue
+                if _nz(hit) == _nz(candidate_id):
+                    continue
+                existing.append({"id": hit, "relationship": "finetune"})
+                base["parents"] = json.dumps(existing)
+                return
+
+    @staticmethod
     def _looks_like_hf_id(raw_value: str) -> bool:
         """HF id heuristic: contains a single `/` with non-empty parts on
         both sides. Conservative — won't trigger hub-stats lookups for
@@ -483,7 +656,7 @@ class ResolutionService:
         self, hf_id: str, target_canonical: Optional[str] = None,
     ) -> Optional[dict]:
         """Query hub-stats live for `hf_id` and return a partial draft
-        dict (release_date, params_billions, parents, lineage_origin_org_id,
+        dict (release_date, params_billions, parents, lineage_origin_model_org_id,
         tags, metadata) ready to merge. Returns None on miss or any error.
         Uses the `aliases` table to resolve baseModels parents to our
         canonical ids, and `canonical_orgs` HF aliases to map authors.
@@ -568,6 +741,56 @@ class ResolutionService:
 
             self._hub_stats_indices = (a2c, org_map)
             return self._hub_stats_indices
+
+    def _build_hf_to_dev(self) -> dict[str, str]:
+        """Two-tier org map (HF-org-lowercase -> developer/community slug),
+        single-sourced from `strategies/fuzzy.py:_ORG_ALIASES` AND
+        `canonical_orgs.hf_org` — mirrors `scripts/generate_hf_oracle_seed.py`
+        so live auto-create casing matches the seeded HF-cased canonicals.
+        `canonical_orgs.hf_org` wins on conflict (it is the authored seed)."""
+        from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
+
+        hf_to_dev: dict[str, str] = {
+            k.lower(): v for k, v in _ORG_ALIASES.items()
+        }
+        orgs_df = self.store.table("canonical_orgs")
+        for _, row in orgs_df.iterrows():
+            hf_org = row.get("hf_org")
+            org_id = row.get("id")
+            if isinstance(hf_org, str) and hf_org.strip() and isinstance(org_id, str):
+                hf_to_dev[hf_org.lower()] = org_id
+        return hf_to_dev
+
+    def _ensure_hf_org(self, org_id: Optional[str]) -> None:
+        """Create a community `canonical_orgs` row for an HF-derived org id
+        if it does not already exist, so a freshly-minted HF-confirmed model's
+        `org_id` FK resolves. No-op in read-only mode or when the row exists.
+        Mirrors the seeded `orgs.generated.yaml` shape (kind community,
+        review_status reviewed, hf_org set)."""
+        if not org_id or settings.read_only:
+            return
+        orgs_df = self.store.table("canonical_orgs")
+        if (orgs_df["id"] == org_id).any():
+            return
+        now = _now()
+        queries.upsert_entity(
+            self.store,
+            "canonical_orgs",
+            {
+                "id": org_id,
+                "display_name": org_id,
+                "parent_org_id": None,
+                "website": None,
+                "hf_org": org_id,
+                "kind": "community",
+                "tags": "[]",
+                "metadata": "{}",
+                "review_status": "reviewed",
+                "created_at": now,
+                "updated_at": now,
+            },
+            buffered=True,
+        )
 
     def _resolve_model_org_id(self, raw_value: str) -> Optional[str]:
         """Map an HF-shaped `org/name` raw value to a canonical org id.

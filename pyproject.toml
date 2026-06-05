@@ -43,3 +43,6 @@ dev = [
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests", "packages/eval-entity-resolver/tests"]
+markers = [
+    "slow: heavy gate sweeps over the full 6,720 EEE ids / 4,074 oracle ids (still CI-runnable; deselect with -m 'not slow')",
+]

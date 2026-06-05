@@ -86,7 +86,7 @@ def _seed_model(store, mid, org_id):
         "id": mid, "display_name": mid, "developer": None,
         "org_id": org_id, "family": None, "architecture": None,
         "params_billions": None, "parents": "[]",
-        "root_model_id": None, "lineage_origin_org_id": org_id,
+        "model_group_id": None, "lineage_origin_model_org_id": org_id,
         "tags": "[]", "metadata": "{}", "review_status": "reviewed",
     })
     queries.add_alias(store, {
@@ -100,7 +100,7 @@ def _seed_model(store, mid, org_id):
 def test_auto_create_enriches_with_hub_stats_metadata(fresh_store, enable_lookup):
     """When an unknown HF-shaped raw value comes through, the auto-create
     path queries hub-stats (mocked here) and pre-populates release_date,
-    params_billions, and lineage_origin_org_id."""
+    params_billions, and lineage_origin_model_org_id."""
     _seed_org(fresh_store, "meta", hf_org="meta-llama")
     _seed_model(fresh_store, "meta/llama-3.1-8b", "meta")
 
@@ -110,7 +110,7 @@ def test_auto_create_enriches_with_hub_stats_metadata(fresh_store, enable_lookup
         "createdAt": datetime(2024, 12, 6),
         "tags": ["safetensors", "license:llama3.1"],
         "cardData": {"license": "llama3.1"},
-        "safetensors": {"total": 16_000_000_000},  # ~8B params
+        "safetensors": {"total": 8_000_000_000},  # total = param count -> 8.0B
         "baseModels": {
             "relation": "quantized",
             "models": [{"id": "meta-llama/Llama-3.1-8B"}],  # in our aliases
@@ -141,13 +141,56 @@ def test_auto_create_enriches_with_hub_stats_metadata(fresh_store, enable_lookup
     assert new_row["params_billions"] == 8.0
     parents = json.loads(new_row["parents"])
     assert parents == [{"id": "meta/llama-3.1-8b", "relationship": "quantized"}]
-    assert new_row["lineage_origin_org_id"] == "meta"
+    assert new_row["lineage_origin_model_org_id"] == "meta"
     # Defaults that hub-stats had no data for stay as defaults
-    assert new_row["root_model_id"] is None or queries._is_na(new_row["root_model_id"])
+    assert new_row["model_group_id"] is None or queries._is_na(new_row["model_group_id"])
     # Metadata carries the source marker
     md = json.loads(new_row["metadata"])
     assert md["source"] == "hub_stats"
     assert md["license"] == "llama3.1"
+
+
+def test_auto_create_mints_hf_cased_id_and_marks_source_hf(fresh_store, enable_lookup):
+    """HF source-of-truth casing: when hub-stats confirms the repo,
+    the auto-create path derives the canonical id + display_name from the HF
+    TRUE casing (via the two-tier org rule: HF-org -> developer slug) instead
+    of a lowercased slug, and
+    stamps `resolution_source='hf'` / `review_status='reviewed'`. The HF
+    model-name casing is preserved; the curated dev namespace remaps the org
+    (meta-llama -> meta) while the curated slug keeps its authored casing."""
+    _seed_org(fresh_store, "meta", hf_org="meta-llama")
+
+    fake_row = {
+        "id": "meta-llama/Llama-3.1-8B-Instruct",   # HF-true casing
+        "author": "meta-llama",
+        "createdAt": datetime(2024, 7, 23),
+        "tags": ["safetensors"],
+        "cardData": {"license": "llama3.1"},
+        "safetensors": {"total": 16_000_000_000},
+        "baseModels": None,
+        "library_name": "transformers",
+        "pipeline_tag": "text-generation",
+        "downloads": 100, "downloadsAllTime": 5000,
+        "likes": 10, "trendingScore": 0, "lastModified": None,
+    }
+
+    svc = ResolutionService(fresh_store)
+    # The raw EEE id arrives lowercased — the lookup matches case-insensitively
+    # and the HF-true id drives the canonical casing.
+    with patch.object(_hs.HubStatsClient, "lookup", return_value=fake_row):
+        cid = svc._auto_create_entity("model", "meta-llama/llama-3.1-8b-instruct")
+
+    # canonical_id is the real HF repo id (org never folded into the id);
+    # only org_id remaps to `meta`.
+    assert cid == "meta-llama/Llama-3.1-8B-Instruct"
+
+    queries.flush_pending(fresh_store)
+    df = fresh_store.table("canonical_models")
+    new_row = df[df["id"] == cid].iloc[0]
+    assert new_row["display_name"] == "Llama-3.1-8B-Instruct"  # HF NAME casing
+    assert new_row["org_id"] == "meta"
+    assert new_row["resolution_source"] == "hf"
+    assert new_row["review_status"] == "reviewed"
 
 
 def test_auto_create_falls_back_when_lookup_returns_none(fresh_store, enable_lookup):
@@ -277,7 +320,7 @@ def test_enrich_draft_resolves_known_base_to_canonical():
     parents = json.loads(out["parents"])
     assert parents == [{"id": "meta/llama-3.1-8b", "relationship": "quantized"}]
     # quantized is non-variant → lineage origin set
-    assert out["lineage_origin_org_id"] == "meta"
+    assert out["lineage_origin_model_org_id"] == "meta"
 
 
 def test_enrich_draft_sets_open_weights_for_hf_artifact_rows():
@@ -301,7 +344,7 @@ def test_enrich_draft_sets_open_weights_for_hf_artifact_rows():
 
 def test_enrich_draft_drops_unresolved_base_edges():
     """If baseModels references something we don't track, drop the edge
-    rather than emit a dangling parent. lineage_origin_org_id stays
+    rather than emit a dangling parent. lineage_origin_model_org_id stays
     empty in that case."""
     row = {
         "id": "x/y",
@@ -316,7 +359,7 @@ def test_enrich_draft_drops_unresolved_base_edges():
     }
     out = _hs.enrich_draft_from_row(row, {}, {})
     assert "parents" not in out
-    assert "lineage_origin_org_id" not in out
+    assert "lineage_origin_model_org_id" not in out
 
 
 # ---------- Family-version parent inference ----------

@@ -48,6 +48,7 @@ import re
 from typing import Optional
 
 from eval_entity_resolver.normalization import normalize
+from eval_entity_resolver.strategies._platform_map import get_host_token_platform
 
 
 # Suffixes stripped only from the *end* of the raw value.  Order matters:
@@ -61,10 +62,12 @@ _STRIP_SUFFIXES = [
     # Evaluation-mode suffixes (BFCL, etc.)
     "-fc",
     "-prompt",
-    # Hosting-provider suffixes
-    "-together",
-    "-bedrock",
-    "-openrouter",
+    # NB: hosting-provider suffixes (`-together`, `-bedrock`, `-openrouter`)
+    # used to live here (strip-and-discard). They moved to
+    # `_SUFFIX_PLATFORM_MAP` below so the platform is CAPTURED as an
+    # `inference_platform` side-value instead of silently dropped. The stem
+    # is still produced and matched identically — only the captured side
+    # value is new, so resolution is unchanged.
     # Reasoning-effort suffixes
     "-high",
     "-medium",
@@ -146,15 +149,27 @@ _ORG_ALIASES: dict[str, str] = {
     "deepseek-ai": "deepseek",
     "cohereforai": "cohere",
     "cohere-labs": "cohere",
+    # HF renamed the Cohere org `CohereForAI` -> `CohereLabs` (no hyphen);
+    # both are the same lab, canonical `cohere`.
+    "coherelabs": "cohere",
+    # HF's SmolLM team `HuggingFaceTB` is part of Hugging Face.
+    "huggingfacetb": "huggingface",
+    # Baichuan is a curated lab; its HF namespace `baichuan-inc` folds into it.
+    "baichuan-inc": "baichuan",
+    # HF `MiniMaxAI` / `SarvamAI` namespaces -> the lab slug we already use.
+    "minimaxai": "minimax",
+    "sarvamai": "sarvam",
     "tii-uae": "tiiuae",
     "meta-llama": "meta",
     "mistral-ai": "mistralai",
     "nvidia-nemo": "nvidia",
-    # Zhipu/Z.ai → zai
+    # Zhipu/Z.ai → zai. `THUDM` is the legacy HF org for the GLM/ChatGLM
+    # family (Tsinghua/Zhipu); HF now publishes under `zai-org`.
     "zhipu": "zai",
     "zhipu-ai": "zai",
     "z-ai": "zai",
     "zai-org": "zai",
+    "thudm": "zai",
     # Moonshot → moonshotai
     "moonshot": "moonshotai",
     "moonshot-ai": "moonshotai",
@@ -165,6 +180,19 @@ _ORG_ALIASES: dict[str, str] = {
     # no analogous collision since every `qwen/<X>` upstream id we've seen
     # corresponds to an Alibaba/Qwen-family model.
     "qwen": "alibaba",
+    # Alternate HF namespaces of a known developer fold to the one parent org
+    # (org_id only — the canonical_id keeps the real HF repo prefix). These
+    # consolidate the developer in downstream listings.
+    "facebook": "meta",        # Meta's pre-Llama HF org (OPT, BART, ...)
+    "mistral": "mistralai",
+    "mosaicml": "databricks",  # MosaicML (MPT) acquired by Databricks
+    "databricks-mosaic-research": "databricks",
+    "alibaba-aidc": "alibaba",
+    "alibaba-nlp": "alibaba",
+    "aws-prototyping": "amazon",
+    "ibm-research": "ibm",
+    "ibm-granite": "ibm",      # Granite folded into IBM (curation decision)
+    "bytedance-seed": "bytedance",
 }
 
 # Host / gateway / placeholder prefixes that should be DROPPED entirely
@@ -176,7 +204,21 @@ _ORG_ALIASES: dict[str, str] = {
 # Identified from corpus surveys: alphaxiv leaderboard uses `unknown/`
 # when developer field is absent; Bedrock/Vertex/Azure/Fireworks/etc.
 # are inference platforms re-hosting other companies' models.
-_HOST_PREFIXES_TO_STRIP: set[str] = {
+# The KEYS here are the matching contract — the host-org spellings that, when
+# they appear as a developer prefix, are dropped so the bare model body is
+# tried for a match. This set is intentionally BROADER than the host tokens
+# carried in the single-source `inference_platforms` seed: stripping a host
+# org for matching is a resolution heuristic, independent of whether we can
+# attribute a canonical platform id to it.
+#
+# The VALUE for each key is the captured `inference_platform` id, looked up
+# from the SINGLE SOURCE (`_platform_map.get_host_token_platform`, which reads
+# `seed/inference_platforms.yaml`) by the token's prefix spelling (`<org>/`).
+# Tokens absent from the seed map (e.g. `vertex`, `deepinfra`) capture `None`
+# — still stripped for matching, just with no platform attribution until the
+# seed grows. Building the values programmatically (never a hand-copied
+# literal) keeps this in lock-step with the inference_platforms seed.
+_HOST_PREFIX_TOKENS: tuple[str, ...] = (
     "unknown",
     "bedrock", "amazon-bedrock", "aws-bedrock",
     "azure", "azure-openai", "azure-cognitive-services",
@@ -192,6 +234,20 @@ _HOST_PREFIXES_TO_STRIP: set[str] = {
     "lambda", "baseten", "modal", "runpod", "cerebras",
     "sap-ai-core", "cloudflare-ai-gateway", "aihubmix",
     "kilo", "vercel", "llmgateway", "poe",
+)
+
+_HOST_PREFIXES_TO_STRIP: dict[str, Optional[str]] = {
+    # `unknown` is the missing-developer sentinel → never a real platform.
+    token: (None if token == "unknown" else get_host_token_platform(f"{token}/"))
+    for token in _HOST_PREFIX_TOKENS
+}
+
+# Suffixes that signal an inference platform (NOT model semantics). These were
+# previously in `_STRIP_SUFFIXES` (strip-and-discard); now they are captured.
+# Maps the literal suffix → platform_id, sourced from the SINGLE source map.
+_SUFFIX_PLATFORM_MAP: dict[str, Optional[str]] = {
+    suffix: get_host_token_platform(suffix)
+    for suffix in ("-together", "-bedrock", "-openrouter")
 }
 
 
@@ -283,15 +339,24 @@ def _drop_duplicated_org_prefix(value: str) -> str | None:
     return None
 
 
-def _drop_host_prefix(value: str) -> str | None:
+def _drop_host_prefix(value: str) -> tuple[str, Optional[str]] | None:
     """If value's developer prefix is a known hosting platform, return the
-    bare suffix portion (everything after the first separator). Otherwise None.
+    bare suffix portion (everything after the first separator) AND the
+    captured ``inference_platform`` id. Otherwise None.
 
-    Handles both `host/model` and `host.model` separators."""
+    Handles both `host/model` and `host.model` separators.
+
+    Returns:
+        ``(rest, platform_id)`` where ``platform_id`` is the canonical
+        inference_platform id (or None when the host token has no platform
+        attribution in the single-source seed map). The casing of the raw
+        value is preserved in ``rest`` (lookup is case-insensitive).
+    """
     if "/" in value:
         org, rest = value.split("/", 1)
-        if org.lower() in _HOST_PREFIXES_TO_STRIP and rest:
-            return rest
+        org_lower = org.lower()
+        if org_lower in _HOST_PREFIXES_TO_STRIP and rest:
+            return (rest, _HOST_PREFIXES_TO_STRIP[org_lower])
     if "." in value:
         # Bedrock-style: "anthropic.claude-3-5-sonnet" → "anthropic.claude-3-5-sonnet"
         # is itself a host format, but the prefix BEFORE the dot is the host.
@@ -299,8 +364,9 @@ def _drop_host_prefix(value: str) -> str | None:
         first_dot = value.index(".")
         org = value[:first_dot]
         rest = value[first_dot + 1:]
-        if org.lower() in _HOST_PREFIXES_TO_STRIP and rest:
-            return rest
+        org_lower = org.lower()
+        if org_lower in _HOST_PREFIXES_TO_STRIP and rest:
+            return (rest, _HOST_PREFIXES_TO_STRIP[org_lower])
     return None
 
 # Confidence assigned to stem-match results.  Below 1.0 (exact) and 0.95
@@ -318,6 +384,24 @@ def _strip_suffix(value: str) -> str | None:
         m = pattern.search(value)
         if m:
             return value[: m.start()]
+    return None
+
+
+def _strip_and_capture_platform_suffix(value: str) -> tuple[str, Optional[str]] | None:
+    """Strip a known platform-capture suffix (`-together` / `-bedrock` /
+    `-openrouter`) from the END, returning ``(stem, platform_id)``.
+
+    Returns None when no platform suffix matched. Run BEFORE the generic
+    `_strip_suffix()` so the host suffix is captured as a platform side-value
+    rather than silently discarded by the generic strip. The stem produced is
+    byte-identical to what the old strip-and-discard path produced, so the
+    candidate that goes to matching is unchanged — only the captured platform
+    is new (a SIDE value, never embedded in the candidate)."""
+    lower = value.lower()
+    for suffix, platform in _SUFFIX_PLATFORM_MAP.items():
+        if lower.endswith(suffix):
+            stem = value[: len(value) - len(suffix)]
+            return (stem, platform)
     return None
 
 
@@ -452,20 +536,30 @@ def fuzzy_match(
     threshold: float,  # kept for API compat; not used by stem matching
     alias_store,
     source_config: Optional[str] = None,
-) -> tuple[Optional[str], float]:
+) -> tuple[Optional[str], float, Optional[str]]:
     """
     Attempt targeted fuzzy resolution.
 
-    Returns ``(canonical_id, confidence)``; canonical_id is None on no match.
+    Returns ``(canonical_id, confidence, inference_platform)``; canonical_id is
+    None on no match. ``inference_platform`` is a captured host token (prefix)
+    or suffix (or None) — it is a SIDE VALUE and is NEVER embedded in the
+    candidate string used for matching, so capture cannot alter the resolved
+    canonical_id. The platform is captured exactly ONCE: a SUFFIX capture
+    (`-bedrock`/`-together`/`-openrouter`) takes priority over a PREFIX capture
+    (`together/`/`fireworks/`/…) because an explicit model-name suffix host
+    token is the stronger per-run signal.
     """
     # The heuristics below are intentionally model-specific: they strip
     # hosting prefixes, org aliases, dated model snapshots, and inference-mode
     # suffixes. Applying them to benchmarks/metrics/harnesses can merge
     # unrelated entities that merely share a host-like prefix or model-ish tail.
     if entity_type != "model":
-        return None, 0.0
+        return None, 0.0, None
 
     candidates_to_try: list[str] = []
+    # The captured inference_platform side-value (first non-None source wins;
+    # suffix wins over prefix because we attempt suffix capture first).
+    captured_platform: Optional[str] = None
 
     # 1a. Thinking-budget "preserve" pass — runs BEFORE the generic
     # suffix strip so `model-thinking-16k` → `model-thinking` is tried
@@ -477,22 +571,43 @@ def fuzzy_match(
     if preserve_match:
         candidates_to_try.append(preserve_match.group(1))
 
+    # 1a-host. Platform-capture suffix — runs BEFORE the generic suffix strip
+    # so `-together`/`-bedrock`/`-openrouter` are CAPTURED (as the platform
+    # side-value) rather than silently discarded. The produced stem is added
+    # as a candidate and itself fed through the generic strip (handles e.g.
+    # `model-fc-together` → capture `together`, then strip `-fc`). Capture has
+    # priority over the prefix capture below.
+    suffix_capture = _strip_and_capture_platform_suffix(raw_value)
+    if suffix_capture:
+        stem, platform = suffix_capture
+        candidates_to_try.append(stem)
+        if platform is not None:
+            captured_platform = platform
+        stem_stripped = _strip_suffix(stem)
+        if stem_stripped:
+            candidates_to_try.append(stem_stripped)
+
     # 1b. Suffix stripping (may produce multiple stems: strip one, strip two, etc.)
     stripped = _strip_suffix(raw_value)
     if stripped:
         candidates_to_try.append(stripped)
-        # Try double-strip (e.g. "model-fc-together" — unlikely but cheap)
+        # Try double-strip (e.g. "model-fc-prompt" — unlikely but cheap)
         double = _strip_suffix(stripped)
         if double:
             candidates_to_try.append(double)
 
     # 2. Host-prefix dropping — if raw_value's developer prefix is a known
     # hosting platform / gateway / placeholder, also try the bare suffix.
-    # Apply on the original AND any suffix-stripped forms.
+    # Apply on the original AND any suffix-stripped forms. The captured
+    # platform is taken ONLY if a suffix capture didn't already set one
+    # (suffix priority).
     for val in [raw_value] + candidates_to_try[:]:
-        bare = _drop_host_prefix(val)
-        if bare:
+        host = _drop_host_prefix(val)
+        if host:
+            bare, platform = host
             candidates_to_try.append(bare)
+            if captured_platform is None and platform is not None:
+                captured_platform = platform
             # The bare form might itself need suffix stripping
             stripped_bare = _strip_suffix(bare)
             if stripped_bare:
@@ -545,11 +660,11 @@ def fuzzy_match(
     for candidate in candidates_to_try:
         exact_id = alias_store.lookup(candidate, entity_type, source_config)
         if exact_id is not None:
-            return exact_id, _STEM_CONFIDENCE
+            return exact_id, _STEM_CONFIDENCE, captured_platform
 
         norm = normalize(candidate)
         canonical_id = norm_lookup.get(norm)
         if canonical_id is not None:
-            return canonical_id, _STEM_CONFIDENCE
+            return canonical_id, _STEM_CONFIDENCE, captured_platform
 
-    return None, 0.0
+    return None, 0.0, None

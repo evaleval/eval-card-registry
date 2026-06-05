@@ -2,7 +2,9 @@ from typing import Any, Literal, Optional
 from pydantic import BaseModel
 
 
-EntityType = Literal["benchmark", "model", "metric", "harness", "org"]
+EntityType = Literal[
+    "benchmark", "model", "metric", "harness", "org", "composite", "family"
+]
 ReviewStatus = Literal["draft", "reviewed"]
 AliasStatus = Literal["auto", "uncertain", "confirmed", "rejected"]
 ParentRelationship = Literal["variant", "finetune", "quantized", "merge", "adapter"]
@@ -25,54 +27,65 @@ class ResolveRequest(BaseModel):
     source_field: Optional[str] = None
 
 
+# --- D1 lean resolve contract (post independent review) ---
+# The HTTP resolve response is a TYPE-AGNOSTIC CORE (identical shape for
+# all entity types) + an ordered `ancestry` chain + a typed
+# `resolution_detail` sub-object. Type-specific ENTITY structure
+# (group/family/lineage/params for models; family_key/composite_keys/
+# category for benchmarks; members for families/composites) lives on the
+# entity GET endpoints — never on resolve. The in-process
+# `ResolutionResult` stays the rich union (producer path-dep); the route
+# projects it down to this lean shape.
+
+AncestryLevel = Literal["group", "family", "composite", "benchmark", "slice"]
+
+
+class AncestryEntry(BaseModel):
+    """One hop in the ancestry chain — a parent canonical and the level it
+    sits at, ordered from the matched entity's immediate parent up to the
+    root."""
+    canonical_id: str
+    level: AncestryLevel
+
+
+class ModelResolutionDetail(BaseModel):
+    """Type-specific resolution detail for a model match."""
+    granularity: Optional[str] = None  # variant | group | family
+
+
+class BenchmarkResolutionDetail(BaseModel):
+    """Type-specific resolution detail for a benchmark match. `level=slice`
+    + `matched_subset` is how a subset / alias-fold match (e.g. an MMLU
+    subject folded onto the `mmlu` parent) is surfaced without minting a
+    slice entity (see specs/entity-modeling.md)."""
+    level: Optional[str] = None  # composite | family | benchmark | slice
+    matched_subset: Optional[str] = None
+
+
 class ResolveResponse(BaseModel):
-    # `canonical_id` is what callers should use by default. For models, this
-    # is the IDENTITY ROOT — the unquantized base — when the matched leaf
-    # has a `root_model_id` set; otherwise it's the matched leaf itself.
-    # The split lets callers reason about same-identity quantizations
-    # without conflating finetunes/merges (those land on their own leaf).
-    canonical_id: Optional[str]
+    # Echo of the raw input.
+    raw_value: Optional[str] = None
+    # Echo of the requested entity type — tells the caller which entity
+    # endpoint(s) to follow for detail.
+    entity_type: Optional[str] = None
+    # The matched canonical id (None on no_match). For models this is the
+    # exact matched leaf; group/family membership is carried in `ancestry`.
+    canonical_id: Optional[str] = None
     strategy: str
     confidence: float
     created_new: bool
-    review_status: Optional[str]
-    # Family / variant parent (the curated hierarchy edge — preserved for
-    # backwards compatibility with callers reading the "family parent" id).
-    parent_canonical_id: Optional[str] = None
-    # The actual canonical that the raw value matched, before any
-    # root-collapsing. Equals `canonical_id` when there's no quantized chain.
-    # Models only.
-    resolved_leaf_id: Optional[str] = None
-    # Identity root for the matched canonical (NULL when self IS the root).
-    # Models only.
-    root_model_id: Optional[str] = None
-    # Org id of the deepest non-variant ancestor — captures upstream lab
-    # for finetunes/quants of someone else's weights. Models only.
-    lineage_origin_org_id: Optional[str] = None
-    # Full parents edge list of the matched leaf. Models only.
-    parents: Optional[list[ParentEdge]] = None
-    # Whether the resolved model has downloadable weights. NULL when
-    # unknown. Lets callers filter "open weights only" without a follow-up
-    # GET. Models only.
-    open_weights: Optional[bool] = None
-    # ISO date (YYYY-MM-DD or YYYY-MM) of the resolved model's family
-    # debut. Models only. NULL when no source carried release info.
-    release_date: Optional[str] = None
-    # Parameter count in billions, approximate. Models only. NULL when
-    # unknown (closed-API models that don't publish params, or HF entries
-    # without safetensors data).
-    params_billions: Optional[float] = None
-    # Curated family key from `seed/families.yaml` for benchmark resolves
-    # (e.g. `mmlu` for both `mmlu` and `mmlu-pro`). Falls back to the
-    # benchmark's own id when no curated family covers it. Benchmarks only.
-    family_key: Optional[str] = None
-    # Composites that include this benchmark, derived from `composites.yaml`
-    # / `families.yaml`. Empty list at the resolver layer (composite walk
-    # happens at the producer; reserved here for future expansion). Benchmarks only.
-    composite_keys: Optional[list[str]] = None
-    # Curated category for the resolved benchmark's family (general /
-    # agentic / reasoning / etc.). Benchmarks only.
-    category: Optional[str] = None
+    resolution_source: Optional[str] = None
+    review_status: Optional[str] = None
+    # Ordered hierarchy chain from the matched entity's IMMEDIATE PARENT up
+    # to the root. `[]` when self is a root. Replaces the single
+    # `parent_canonical_id`: the only genuinely type-agnostic way to carry
+    # a 1-hop model edge AND a multi-level benchmark tree.
+    #   model     -> e.g. [{group}, {family}]
+    #   benchmark -> e.g. [{family}, {composite}]
+    ancestry: list[AncestryEntry] = []
+    # Typed resolution detail, schema selected by `entity_type`. `{}` for
+    # composite / family / metric / harness / org (reserved).
+    resolution_detail: dict[str, Any] = {}
 
 
 # --- Entities ---
@@ -86,8 +99,8 @@ class ModelCreate(BaseModel):
     architecture: Optional[str] = None
     params_billions: Optional[float] = None
     parents: list[ParentEdge] = []
-    root_model_id: Optional[str] = None
-    lineage_origin_org_id: Optional[str] = None
+    model_group_id: Optional[str] = None
+    lineage_origin_model_org_id: Optional[str] = None
     open_weights: Optional[bool] = None
     release_date: Optional[str] = None
     tags: list[str] = []
@@ -103,8 +116,8 @@ class ModelPatch(BaseModel):
     architecture: Optional[str] = None
     params_billions: Optional[float] = None
     parents: Optional[list[ParentEdge]] = None
-    root_model_id: Optional[str] = None
-    lineage_origin_org_id: Optional[str] = None
+    model_group_id: Optional[str] = None
+    lineage_origin_model_org_id: Optional[str] = None
     open_weights: Optional[bool] = None
     release_date: Optional[str] = None
     tags: Optional[list[str]] = None

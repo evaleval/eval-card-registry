@@ -35,6 +35,7 @@ TABLE_NAMES = [
     "canonical_composites",
     "canonical_metrics",
     "eval_harnesses",
+    "canonical_inference_platforms",
     "aliases",
     "resolution_log",
     "eval_results",
@@ -95,6 +96,7 @@ QUERY_TABLE_NAMES = [
     "canonical_composites",
     "canonical_metrics",
     "eval_harnesses",
+    "canonical_inference_platforms",
     "aliases",
 ]
 

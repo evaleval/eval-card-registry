@@ -124,11 +124,12 @@ class TestResolutionService:
 
     def test_resolve_preserves_resolved_leaf_id_for_version_chain(self):
         """When a model raw value matches a leaf canonical that has a
-        version-axis chain to a family pointer, `svc.resolve` must return
-        BOTH the root-collapsed canonical_id AND the matched leaf in
-        `resolved_leaf_id`. Regression: the previous implementation
-        re-enriched via `build_result(canonical_id=root, ...)` which
-        clobbered `resolved_leaf_id` to equal the root."""
+        version-axis chain to a group pointer, `svc.resolve` returns the
+        LEAF as canonical_id with the group root in
+        `model_group_id`. `resolved_leaf_id == canonical_id`.
+        Regression: the previous implementation re-enriched via
+        `build_result(canonical_id=root, ...)` which clobbered the leaf —
+        guard that the leaf still flows through unmodified."""
         from eval_card_registry.store import queries
         store = _fresh_store()
         # Seed org so the model FK resolves.
@@ -142,13 +143,13 @@ class TestResolutionService:
             "id": "allenai/olmo-3-32b", "display_name": "OLMo-3 32B",
             "developer": None, "org_id": "allenai", "family": "olmo-3-32b",
             "architecture": None, "params_billions": 32.0,
-            "parents": "[]", "root_model_id": None,
-            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "parents": "[]", "model_group_id": None,
+            "lineage_origin_model_org_id": "allenai", "open_weights": True,
             "release_date": "2025-11-25", "tags": "[]",
             "metadata": "{}", "review_status": "reviewed",
         })
         # Snapshot canonical with version-axis parent → family.
-        # root_model_id is set explicitly here to match what
+        # model_group_id is set explicitly here to match what
         # derive_model_lineage_fields would produce after seed.
         queries.upsert_entity(store, "canonical_models", {
             "id": "allenai/olmo-3-1125-32b", "display_name": "OLMo-3 32B (1125)",
@@ -159,8 +160,8 @@ class TestResolutionService:
                 "relationship": "variant",
                 "axis": "version",
             }]),
-            "root_model_id": "allenai/olmo-3-32b",
-            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "model_group_id": "allenai/olmo-3-32b",
+            "lineage_origin_model_org_id": "allenai", "open_weights": True,
             "release_date": "2025-11-25", "tags": "[]",
             "metadata": "{}", "review_status": "reviewed",
         })
@@ -179,8 +180,11 @@ class TestResolutionService:
         # then the fix re-runs the strategy chain to recover the leaf
         # (the alias table only stores root-collapsed canonical_id).
         r1 = svc.resolve("allenai/Olmo-3-1125-32B", "model", None, None)
-        assert r1["canonical_id"] == "allenai/olmo-3-32b"
+        # canonical_id is the LEAF snapshot; the group root
+        # moves to model_group_id. resolved_leaf_id == canonical_id.
+        assert r1["canonical_id"] == "allenai/olmo-3-1125-32b"
         assert r1["resolved_leaf_id"] == "allenai/olmo-3-1125-32b"
+        assert r1["model_group_id"] == "allenai/olmo-3-32b"
 
         # _resolve_cache short-circuits the second call to the same
         # (raw, entity_type, source_config). To exercise the existing-
@@ -206,8 +210,8 @@ class TestResolutionService:
             "id": "allenai/olmo-3-32b", "display_name": "OLMo-3 32B",
             "developer": None, "org_id": "allenai", "family": "olmo-3-32b",
             "architecture": None, "params_billions": 32.0,
-            "parents": "[]", "root_model_id": None,
-            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "parents": "[]", "model_group_id": None,
+            "lineage_origin_model_org_id": "allenai", "open_weights": True,
             "release_date": "2025-11-25", "tags": "[]",
             "metadata": "{}", "review_status": "reviewed",
         })
@@ -220,8 +224,8 @@ class TestResolutionService:
                 "relationship": "variant",
                 "axis": "version",
             }]),
-            "root_model_id": "allenai/olmo-3-32b",
-            "lineage_origin_org_id": "allenai", "open_weights": True,
+            "model_group_id": "allenai/olmo-3-32b",
+            "lineage_origin_model_org_id": "allenai", "open_weights": True,
             "release_date": "2025-11-25", "tags": "[]",
             "metadata": "{}", "review_status": "reviewed",
         })
@@ -242,7 +246,117 @@ class TestResolutionService:
         # chain → normalized match hits the snapshot canonical → leaf
         # is preserved through the fix's `enriched = result` branch.
         r = svc.resolve("allenai/Olmo-3-1125-32B", "model", None, None)
-        assert r["canonical_id"] == "allenai/olmo-3-32b"
+        # Leaf snapshot as canonical_id, group root in
+        # model_group_id; resolved_leaf_id == canonical_id.
+        assert r["canonical_id"] == "allenai/olmo-3-1125-32b"
         assert r["resolved_leaf_id"] == "allenai/olmo-3-1125-32b"
+        assert r["model_group_id"] == "allenai/olmo-3-32b"
         assert r["strategy"] == "normalized"
         assert r["created_new"] is False
+
+
+def _seed_org(store, org_id="meta"):
+    from eval_card_registry.store import queries
+    queries.upsert_entity(store, "canonical_orgs", {
+        "id": org_id, "display_name": org_id, "parent_org_id": None,
+        "website": None, "hf_org": org_id, "kind": "lab",
+        "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+    })
+
+
+def _seed_model(store, mid, org_id, *, aliases=None):
+    from eval_card_registry.store import queries
+    queries.upsert_entity(store, "canonical_models", {
+        "id": mid, "display_name": mid,
+        "developer": None, "org_id": org_id, "family": None,
+        "architecture": None, "params_billions": None,
+        "parents": "[]", "model_group_id": None,
+        "lineage_origin_model_org_id": org_id, "open_weights": True,
+        "tags": "[]", "metadata": "{}", "review_status": "reviewed",
+        "resolution_source": "curated", "resolution_granularity": "variant",
+    })
+    for a in [mid] + list(aliases or []):
+        queries.add_alias(store, {
+            "raw_value": a, "entity_type": "model", "canonical_id": mid,
+            "source_config": None, "source_field": None, "status": "confirmed",
+            "strategy": "seed", "confidence": 1.0, "notes": None,
+        })
+
+
+class TestTier3Inference:
+    def test_inferred_source_and_granularity_on_auto_create(self):
+        """A no_match model draft (not HF-confirmed) is flagged
+        resolution_source=inferred, resolution_granularity=variant."""
+        store = _fresh_store()
+        _seed_org(store, "someorg")
+        svc = ResolutionService(store)
+        r = svc.resolve("someorg/Totally-Vanity-Name-3B", "model", None, None)
+        assert r["created_new"] is True
+        assert r["resolution_source"] == "inferred"
+        assert r["resolution_granularity"] == "variant"
+        assert r["review_status"] == "draft"
+
+    def test_org_less_no_slash_flagged_org_unknown(self):
+        """A bare free-text label (no org prefix) mints with org_id=None
+        and tags:[org-unknown] — never an auto-guessed org."""
+        store = _fresh_store()
+        svc = ResolutionService(store)
+        r = svc.resolve("Cohere May 2024", "model", None, None)
+        assert r["created_new"] is True
+        assert r["resolution_source"] == "inferred"
+        from eval_card_registry.services.resolution_service import _table_with_pending
+        mid = r["canonical_id"]
+        row = _table_with_pending(store, "canonical_models")
+        row = row[row["id"] == mid].iloc[0]
+        assert row["org_id"] is None or (isinstance(row["org_id"], float))
+        assert "org-unknown" in json.loads(row["tags"])
+
+    def test_unknown_placeholder_org_is_org_less(self):
+        """`unknown/foo` has a slash but the org part is a placeholder →
+        treated as org-less (org_id None + org-unknown tag), not org 'unknown'."""
+        store = _fresh_store()
+        svc = ResolutionService(store)
+        r = svc.resolve("unknown/iSWE_Agent", "model", None, None)
+        from eval_card_registry.services.resolution_service import _table_with_pending
+        mid = r["canonical_id"]
+        row = _table_with_pending(store, "canonical_models")
+        row = row[row["id"] == mid].iloc[0]
+        assert row["org_id"] is None or isinstance(row["org_id"], float)
+        assert "org-unknown" in json.loads(row["tags"])
+
+    def test_alias_confirmed_base_edge_emitted(self):
+        """A community finetune with a recognizable base that alias-confirms
+        gets a single finetune edge to the confirmed base canonical."""
+        store = _fresh_store()
+        _seed_org(store, "meta")
+        _seed_model(store, "meta/llama-3.1-8b", "meta",
+                    aliases=["meta-llama/Llama-3.1-8B", "llama-3.1-8b"])
+        svc = ResolutionService(store)
+        r = svc.resolve("3rd-Degree-Burn/Llama-3.1-8B-Squareroot", "model", None, None)
+        assert r["created_new"] is True
+        parents = r["parents"] or []
+        assert any(
+            p["id"] == "meta/llama-3.1-8b" and p["relationship"] == "finetune"
+            for p in parents
+        ), parents
+
+    def test_no_invented_edge_for_opaque_name(self):
+        """An opaque vanity name with no alias-confirmable base gets NO
+        parent edge — never an invented edge."""
+        store = _fresh_store()
+        _seed_org(store, "auraindustries")
+        svc = ResolutionService(store)
+        r = svc.resolve("AuraIndustries/Aura-MoE-2x4B", "model", None, None)
+        assert r["created_new"] is True
+        assert (r["parents"] or []) == []
+
+    def test_no_self_edge_when_base_is_same_identity(self):
+        """If the only alias-confirmable 'base' is the same model identity
+        (org-less twin), no edge is emitted (no self-edge)."""
+        store = _fresh_store()
+        _seed_model(store, "yi-lightning", None)  # bare org-less canonical
+        svc = ResolutionService(store)
+        r = svc.resolve("01-ai/yi-lightning", "model", None, None)
+        assert r["created_new"] is True
+        # base candidate `yi-lightning` matches but is the same name → rejected
+        assert (r["parents"] or []) == []

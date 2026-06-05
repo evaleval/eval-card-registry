@@ -88,14 +88,23 @@ class Resolver:
                 )
 
         # 3. Fuzzy
-        canonical_id, confidence = fuzzy_match(
+        canonical_id, confidence, inferred_platform = fuzzy_match(
             raw_value, entity_type, self.config.threshold, self.store, source_config
         )
         if canonical_id is not None:
-            return self._enrich(
+            result = self._enrich(
                 raw_value, entity_type, source_config,
                 canonical_id, "fuzzy", confidence,
             )
+            # Thread the captured inference_platform onto the result. This is
+            # the per-run platform read off an EXPLICIT host token in the raw
+            # id (a `together/`-prefix or `-bedrock`-suffix), which WINS — an
+            # explicit host token in the id is the strongest per-run platform
+            # fact. Only set it when a token was actually present (None
+            # otherwise), so non-host ids leave the field untouched.
+            if inferred_platform is not None:
+                result.inference_platform = inferred_platform
+            return result
 
         # 4. No match
         return ResolutionResult(
@@ -174,10 +183,23 @@ class Resolver:
                 resolved_leaf_id=fields["resolved_leaf_id"],
                 root_model_id=fields["root_model_id"],
                 lineage_origin_org_id=fields["lineage_origin_org_id"],
+                # Extended lineage / provenance fields. None-safe .get so a
+                # store predating these keys still works.
+                model_group_id=fields.get("model_group_id"),
+                model_family_id=fields.get("model_family_id"),
+                lineage_origin_model_id=fields.get("lineage_origin_model_id"),
+                lineage_origin_model_org_id=fields.get("lineage_origin_model_org_id"),
+                inference_platform=fields.get("inference_platform"),
+                resolution_source=fields.get("resolution_source"),
+                resolution_granularity=fields.get("resolution_granularity"),
                 parents=fields["parents"],
                 open_weights=fields["open_weights"],
                 release_date=fields["release_date"],
                 params_billions=fields["params_billions"],
+                ancestry=cs.compute_ancestry("model", fields["canonical_id"], matched_entity),
+                resolution_detail=cs.resolution_detail(
+                    "model", fields["canonical_id"], matched_entity=matched_entity
+                ),
             )
 
         # Benchmark: fill in hierarchy-alignment fields (family_key,
@@ -198,10 +220,16 @@ class Resolver:
                 family_key=fam["family_key"],
                 category=fam["category"],
                 composite_keys=fam["composite_keys"],
+                ancestry=cs.compute_ancestry("benchmark", matched_canonical_id, matched_entity),
+                resolution_detail=cs.resolution_detail(
+                    "benchmark", matched_canonical_id,
+                    raw_value=raw_value, matched_entity=matched_entity,
+                ),
             )
 
-        # Other non-model types (metric, harness, org): only
-        # parent_canonical_id and review_status are meaningful
+        # Other non-model types (metric, harness, org, family, composite):
+        # parent_canonical_id + review_status, plus ancestry/detail (family
+        # carries a composite parent; the rest are roots with empty detail).
         return ResolutionResult(
             raw_value=raw_value,
             entity_type=entity_type,
@@ -211,4 +239,9 @@ class Resolver:
             confidence=confidence,
             review_status=review_status,
             parent_canonical_id=cs.parent_canonical_id(entity_type, matched_entity),
+            ancestry=cs.compute_ancestry(entity_type, matched_canonical_id, matched_entity),
+            resolution_detail=cs.resolution_detail(
+                entity_type, matched_canonical_id,
+                raw_value=raw_value, matched_entity=matched_entity,
+            ),
         )

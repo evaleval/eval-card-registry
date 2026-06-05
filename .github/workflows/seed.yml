@@ -1,0 +1,54 @@
+name: Seed + publish
+
+# The dispatch target the refresh workflows (refresh-models.yml /
+# refresh-hub-stats.yml) trigger after they commit a regenerated source.
+# GITHUB_TOKEN-authored pushes do NOT fire push-triggered workflows, so the
+# refresh jobs `gh workflow run seed.yml` explicitly; this workflow re-seeds,
+# validates the merge, and hands off to publish-registry-data.yml (the real
+# HF Dataset publish + Space restart). Kept thin — the heavy lifting lives in
+# the seed CLI and the publish script.
+#
+# Also runnable on demand (workflow_dispatch) to re-seed + publish after a
+# manual seed edit.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  # Dispatching publish-registry-data.yml requires actions:write.
+  actions: write
+
+concurrency:
+  group: seed
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Sync dependencies
+        run: uv sync
+
+      # Re-seed from the committed YAML and assert the merge succeeds (catches
+      # any alias double-claim / schema breakage a refresh commit introduced
+      # before we publish). LOCAL_MODE keeps it offline + credential-free.
+      - name: Seed (validate merge)
+        run: LOCAL_MODE=true uv run eval-card-registry seed --local
+
+      - name: Run pytest
+        run: LOCAL_MODE=true uv run pytest -q
+
+      # Hand off to the real publish (flat-layout HF Dataset upload + live
+      # Space restart). Best-effort dispatch; manual workflow_dispatch on
+      # publish-registry-data.yml is always available as fallback.
+      - name: Trigger publish-registry-data
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run publish-registry-data.yml --ref "${GITHUB_REF_NAME}" || echo "::warning::publish-registry-data dispatch failed; trigger manually"

@@ -1,6 +1,6 @@
 """Tests for `queries.derive_model_lineage_fields` — the post-seed
 denormalization that walks the `parents` graph to populate
-`root_model_id` and `lineage_origin_org_id`."""
+`model_group_id` and `lineage_origin_model_org_id`."""
 from __future__ import annotations
 
 import json
@@ -29,7 +29,7 @@ def _add_model(store, cid, org_id, parents, release_date=None):
         "org_id": org_id, "family": None, "architecture": None,
         "params_billions": None,
         "parents": json.dumps(parents) if parents else "[]",
-        "root_model_id": None, "lineage_origin_org_id": None,
+        "model_group_id": None, "lineage_origin_model_org_id": None,
         "release_date": release_date,
         "tags": "[]", "metadata": "{}", "review_status": "reviewed",
     })
@@ -45,16 +45,16 @@ def test_derive_handles_cycle_without_infinite_loop(fresh_store):
 
     # Should return cleanly, not hang
     counts = queries.derive_model_lineage_fields(fresh_store)
-    assert counts["root_set"] >= 0  # just verify it returned
+    assert counts["group_set"] >= 0  # just verify it returned
 
     df = fresh_store.table("canonical_models")
-    # Both entries got SOME root_model_id assigned (not relevant which —
+    # Both entries got SOME model_group_id assigned (not relevant which —
     # the important thing is the walk terminated).
     assert len(df) == 2
 
 
 def test_derive_lineage_origin_walks_finetune_and_quantized(fresh_store):
-    """`lineage_origin_org_id` walks through any non-variant relationship
+    """`lineage_origin_model_org_id` walks through any non-variant relationship
     (quantized/finetune/merge/adapter) to the deepest ancestor and copies
     its org_id. Variant edges DO NOT count for this walk — they're
     within-family hierarchy, not lineage."""
@@ -73,30 +73,42 @@ def test_derive_lineage_origin_walks_finetune_and_quantized(fresh_store):
     df = fresh_store.table("canonical_models")
     by_id = {r["id"]: r for _, r in df.iterrows()}
 
-    # Meta original: lineage = self.org_id; no quantized ancestor → root NA
-    assert by_id["meta/llama-3.1-70b"]["lineage_origin_org_id"] == "meta"
-    assert queries._is_na(by_id["meta/llama-3.1-70b"]["root_model_id"])
+    # Meta original: lineage = self.org_id; no quantized ancestor → group is
+    # SELF (group membership is total; a singleton is a group of one).
+    assert by_id["meta/llama-3.1-70b"]["lineage_origin_model_org_id"] == "meta"
+    assert by_id["meta/llama-3.1-70b"]["model_group_id"] == "meta/llama-3.1-70b"
+    # family membership is also total → SELF at the family root.
+    assert by_id["meta/llama-3.1-70b"]["model_family_id"] == "meta/llama-3.1-70b"
+    # lineage_origin_model_id is NULL at origin (NO self-fallback — unlike the
+    # org_id variant which DID self-fall-back to "meta" above).
+    assert pd.isna(by_id["meta/llama-3.1-70b"]["lineage_origin_model_id"])
 
     # Nous finetune: lineage = upstream lab (Meta), via the finetune edge.
-    # No root collapse — finetune isn't identity-preserving.
-    assert by_id["nous/hermes-3-llama-70b"]["lineage_origin_org_id"] == "meta"
-    assert queries._is_na(by_id["nous/hermes-3-llama-70b"]["root_model_id"])
+    # No root collapse — finetune isn't identity-preserving → group is SELF.
+    assert by_id["nous/hermes-3-llama-70b"]["lineage_origin_model_org_id"] == "meta"
+    assert by_id["nous/hermes-3-llama-70b"]["model_group_id"] == "nous/hermes-3-llama-70b"
+    assert by_id["nous/hermes-3-llama-70b"]["model_family_id"] == "nous/hermes-3-llama-70b"
+    # The id of that upstream ancestor is the Meta base (NOT self, NOT null).
+    assert by_id["nous/hermes-3-llama-70b"]["lineage_origin_model_id"] == "meta/llama-3.1-70b"
 
     # Quantized of finetune: lineage walks BOTH edges to Meta
-    assert by_id["nous/hermes-3-llama-70b-fp8"]["lineage_origin_org_id"] == "meta"
+    assert by_id["nous/hermes-3-llama-70b-fp8"]["lineage_origin_model_org_id"] == "meta"
     # Root collapses to the unquantized Hermes (NOT all the way to Llama —
     # the chain only follows `quantized`, stops at the `finetune` edge).
-    assert by_id["nous/hermes-3-llama-70b-fp8"]["root_model_id"] == "nous/hermes-3-llama-70b"
+    assert by_id["nous/hermes-3-llama-70b-fp8"]["model_group_id"] == "nous/hermes-3-llama-70b"
+    # lineage_origin_model_id walks BOTH the quantized + finetune edges to the
+    # deepest non-variant ancestor (Meta's base) — same id as its parent's.
+    assert by_id["nous/hermes-3-llama-70b-fp8"]["lineage_origin_model_id"] == "meta/llama-3.1-70b"
 
 
 def test_derive_lineage_origin_falls_back_to_self_org(fresh_store):
     """When a model has no walkable non-variant edge (a true root), its
-    `lineage_origin_org_id` is its own `org_id`."""
+    `lineage_origin_model_org_id` is its own `org_id`."""
     _add_model(fresh_store, "meta/llama-3", "meta", [])
     queries.derive_model_lineage_fields(fresh_store)
     df = fresh_store.table("canonical_models")
     row = df[df["id"] == "meta/llama-3"].iloc[0]
-    assert row["lineage_origin_org_id"] == "meta"
+    assert row["lineage_origin_model_org_id"] == "meta"
 
 
 def test_open_weights_inherits_from_parent_via_variant_edges(fresh_store):
@@ -194,17 +206,17 @@ def test_root_collapses_through_variant_version_edge(fresh_store):
     df = fresh_store.table("canonical_models")
     by_id = {r["id"]: r for _, r in df.iterrows()}
 
-    # Base: no chain → no root collapse
-    assert queries._is_na(by_id["xai/grok-4"]["root_model_id"])
+    # Base: no chain → group is SELF (singleton group)
+    assert by_id["xai/grok-4"]["model_group_id"] == "xai/grok-4"
     # Snapshot: collapses to base via variant-version
-    assert by_id["xai/grok-4-0709"]["root_model_id"] == "xai/grok-4"
+    assert by_id["xai/grok-4-0709"]["model_group_id"] == "xai/grok-4"
     # Quant of snapshot: walks both edges all the way to base
-    assert by_id["xai/grok-4-0709-fp8"]["root_model_id"] == "xai/grok-4"
+    assert by_id["xai/grok-4-0709-fp8"]["model_group_id"] == "xai/grok-4"
 
 
 def test_root_does_not_collapse_through_non_version_variant(fresh_store):
     """Other variant axes (mode/size/modality/domain) are NOT identity-
-    preserving for root_model_id — `gpt-4o-mini` is a separate model
+    preserving for model_group_id — `gpt-4o-mini` is a separate model
     from `gpt-4o`, with different scores."""
     _add_model(fresh_store, "openai/gpt-4o", "openai", [])
     _add_model(fresh_store, "openai/gpt-4o-mini", "openai", [
@@ -213,8 +225,8 @@ def test_root_does_not_collapse_through_non_version_variant(fresh_store):
     queries.derive_model_lineage_fields(fresh_store)
     df = fresh_store.table("canonical_models")
     by_id = {r["id"]: r for _, r in df.iterrows()}
-    # Size variant: stays at the leaf, no root collapse
-    assert queries._is_na(by_id["openai/gpt-4o-mini"]["root_model_id"])
+    # Size variant: stays at the leaf, no root collapse → group is SELF
+    assert by_id["openai/gpt-4o-mini"]["model_group_id"] == "openai/gpt-4o-mini"
 
 
 def test_derive_variant_edges_do_not_set_lineage_origin_to_parent(fresh_store):
@@ -230,10 +242,17 @@ def test_derive_variant_edges_do_not_set_lineage_origin_to_parent(fresh_store):
     by_id = {r["id"]: r for _, r in df.iterrows()}
     # Same org throughout — variant edge doesn't change this, but the
     # walk must not loop or chain across the variant edge to a sibling.
-    assert by_id["meta/llama-3-8b"]["lineage_origin_org_id"] == "meta"
-    # No quantized chain → root_model_id is NA (== self is identity root)
-    root = by_id["meta/llama-3-8b"]["root_model_id"]
-    assert root is None or queries._is_na(root)
+    assert by_id["meta/llama-3-8b"]["lineage_origin_model_org_id"] == "meta"
+    # No quantized chain → model_group_id is SELF (self is the identity root,
+    # which is a singleton group of one).
+    assert by_id["meta/llama-3-8b"]["model_group_id"] == "meta/llama-3-8b"
+    # But model_family_id FOLDS the size variant up to the family root
+    # (`llama-3`): group keeps size-variant identity, family does not. These two
+    # diverging is the whole point of the group-vs-family split.
+    assert by_id["meta/llama-3-8b"]["model_family_id"] == "meta/llama-3"
+    # Variant edges do NOT count toward lineage origin → null at origin (NOT
+    # self, NOT the variant parent).
+    assert pd.isna(by_id["meta/llama-3-8b"]["lineage_origin_model_id"])
 
 
 # ---------------------------------------------------------------------------

@@ -47,6 +47,24 @@ class TestHealth:
         assert "benchmarks" in data
 
 
+# D1: the lean HTTP ResolveResponse is the type-agnostic CORE + ancestry +
+# resolution_detail. These fields were moved off the response onto the
+# entity GET endpoints (models / benchmarks / families / composites).
+_DROPPED_RESOLVE_FIELDS = {
+    "parent_canonical_id", "resolved_leaf_id", "root_model_id",
+    "lineage_origin_org_id", "model_group_id", "model_family_id",
+    "lineage_origin_model_id", "lineage_origin_model_org_id",
+    "inference_platform", "resolution_granularity", "parents",
+    "open_weights", "release_date", "params_billions",
+    "family_key", "composite_keys", "category",
+}
+_CORE_RESOLVE_FIELDS = {
+    "raw_value", "entity_type", "canonical_id", "strategy", "confidence",
+    "created_new", "resolution_source", "review_status", "ancestry",
+    "resolution_detail",
+}
+
+
 class TestResolve:
     def test_resolve_unknown_creates_draft(self, client):
         r = client.post("/api/v1/resolve", json={
@@ -67,6 +85,21 @@ class TestResolve:
         ])
         assert r.status_code == 200
         assert len(r.json()) == 2
+
+    def test_resolve_response_is_lean_core(self, client):
+        """The HTTP response carries ONLY the type-agnostic core + ancestry
+        + resolution_detail — none of the old type-specific entity fields."""
+        r = client.post("/api/v1/resolve", json={
+            "raw_value": "SomeBench", "entity_type": "benchmark",
+        })
+        assert r.status_code == 200
+        data = r.json()
+        assert set(data) == _CORE_RESOLVE_FIELDS
+        assert _DROPPED_RESOLVE_FIELDS.isdisjoint(data)
+        assert data["raw_value"] == "SomeBench"
+        assert data["entity_type"] == "benchmark"
+        assert isinstance(data["ancestry"], list)
+        assert isinstance(data["resolution_detail"], dict)
 
 
 class TestEntityCRUD:

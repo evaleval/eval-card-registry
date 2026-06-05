@@ -40,32 +40,42 @@ ORG_ALIAS_MAP = {
 # Existing canonicals our script knows about. Keys are *normalized* forms
 # (the `_normalize` helper collapses ./-/_/:/ all to single dashes).
 ALIASES_TO_CANONICAL = {
-    "meta-llama-3-1-70b": "meta/llama-3.1-70b",
-    "meta-llama-llama-3-1-70b": "meta/llama-3.1-70b",
-    "meta-llama-3-1-70b-instruct": "meta/llama-3.1-70b-instruct",
-    "alibaba-qwen2-5-7b": "alibaba/qwen2.5-7b",
-    "qwen-qwen2-5-7b": "alibaba/qwen2.5-7b",
+    # Registry canonicals are the real HF repo ids (org never folded
+    # into the id). Keys are the normalized form of those real ids.
+    "meta-llama-llama-3-1-70b": "meta-llama/Llama-3.1-70B",
+    "meta-llama-llama-3-1-70b-instruct": "meta-llama/Llama-3.1-70B-Instruct",
+    "qwen-qwen2-5-7b": "Qwen/Qwen2.5-7B",
 }
 
 
-def test_hf_id_to_canonical_maps_known_org_alias(mod):
-    """`meta-llama` is the HF org for Meta — should map to canonical `meta`."""
-    cid, org = mod.hf_id_to_canonical("meta-llama/Llama-3.1-70B", ORG_ALIAS_MAP)
-    assert cid == "meta/llama-3.1-70b"
+# Two-tier HF-org -> developer slug map (lowercase keys), mirroring the
+# `hf_to_dev` the refresh script builds from `_ORG_ALIASES` + `orgs.yaml.hf_org`.
+HF_TO_DEV = {
+    "meta-llama": "meta",
+    "qwen": "alibaba",
+}
+
+
+def test_hf_id_to_canonical_cased_maps_known_org_alias(mod):
+    """canonical_id is the real HF repo id verbatim (org never folded
+    into the id); only org_id re-maps to the developer slug `meta`."""
+    cid, org = mod.hf_id_to_canonical_cased("meta-llama/Llama-3.1-70B", HF_TO_DEV)
+    assert cid == "meta-llama/Llama-3.1-70B"
     assert org == "meta"
 
 
-def test_hf_id_to_canonical_unknown_org_keeps_slug(mod):
-    """An author we don't have in seed/orgs.yaml stays as its own org id."""
-    cid, org = mod.hf_id_to_canonical("random-uploader/some-model", ORG_ALIAS_MAP)
-    assert cid == "random-uploader/some-model"
-    assert org == "random-uploader"
+def test_hf_id_to_canonical_cased_unknown_org_keeps_hf_casing(mod):
+    """An author not in the two-tier map stays as its own HF-cased org id —
+    case preserved on BOTH segments (the community default)."""
+    cid, org = mod.hf_id_to_canonical_cased("Random-Uploader/Some-Model", HF_TO_DEV)
+    assert cid == "Random-Uploader/Some-Model"
+    assert org == "Random-Uploader"
 
 
-def test_hf_id_to_canonical_no_slash_uses_unknown_placeholder(mod):
-    """No org prefix in the id → `unknown/...` placeholder."""
-    cid, org = mod.hf_id_to_canonical("standalone-model-name", ORG_ALIAS_MAP)
-    assert cid == "unknown/standalone-model-name"
+def test_hf_id_to_canonical_cased_no_slash_uses_unknown_placeholder(mod):
+    """No org prefix → `unknown/...` placeholder, name casing preserved."""
+    cid, org = mod.hf_id_to_canonical_cased("Standalone-Model-Name", HF_TO_DEV)
+    assert cid == "unknown/Standalone-Model-Name"
     assert org == "unknown"
 
 
@@ -117,7 +127,7 @@ def test_build_entry_job_a_existing_canonical(mod):
         "createdAt": datetime(2024, 7, 14),
         "tags": ["text-generation", "eval-results", "en"],
         "cardData": {"license": "llama3.1", "library_name": "transformers"},
-        "safetensors": {"total": 141_000_000_000},  # ~70.5B params at BF16
+        "safetensors": {"total": 70_500_000_000},  # total = param count
         "baseModels": None,
         "library_name": "transformers",
         "pipeline_tag": "text-generation",
@@ -126,10 +136,10 @@ def test_build_entry_job_a_existing_canonical(mod):
     }
     e = mod.build_entry(row, ORG_ALIAS_MAP, ALIASES_TO_CANONICAL)
     assert e is not None
-    assert e["id"] == "meta/llama-3.1-70b"
+    assert e["id"] == "meta-llama/Llama-3.1-70B"
     assert e["org_id"] == "meta"
     assert e["release_date"] == "2024-07-14"
-    assert e["params_billions"] == 70.5  # bytes / 2 / 1e9
+    assert e["params_billions"] == 70.5  # safetensors.total is the param count
     assert "parents" not in e, "no baseModels in row → no parents in entry"
     assert "eval-results" in e["tags"]
     metadata = json.loads(e["metadata"])
@@ -140,7 +150,7 @@ def test_build_entry_job_a_existing_canonical(mod):
 def test_build_entry_propagates_resolvable_parents(mod):
     """When hub-stats `baseModels` references an HF id that resolves to
     one of our canonicals, the entry carries `parents` and
-    `lineage_origin_org_id`. The seed loader's `_merge_into` unions
+    `lineage_origin_model_org_id`. The seed loader's `_merge_into` unions
     these with any curated parents in core.yaml — see
     test_parents_union_by_id_across_sources for the cross-source merge
     semantics."""
@@ -162,11 +172,11 @@ def test_build_entry_propagates_resolvable_parents(mod):
     }
     e = mod.build_entry(row, ORG_ALIAS_MAP, ALIASES_TO_CANONICAL)
     assert e is not None
-    assert e["id"] == "meta/llama-3.1-70b-instruct"
+    assert e["id"] == "meta-llama/Llama-3.1-70B-Instruct"
     assert e["parents"] == [
-        {"id": "meta/llama-3.1-70b", "relationship": "finetune"}
+        {"id": "meta-llama/Llama-3.1-70B", "relationship": "finetune"}
     ]
-    assert e["lineage_origin_org_id"] == "meta"
+    assert e["lineage_origin_model_org_id"] == "meta"
 
 
 def test_build_entry_drops_unresolvable_parents(mod):
@@ -191,7 +201,7 @@ def test_build_entry_drops_unresolvable_parents(mod):
     e = mod.build_entry(row, ORG_ALIAS_MAP, ALIASES_TO_CANONICAL)
     assert e is not None
     assert "parents" not in e
-    assert "lineage_origin_org_id" not in e
+    assert "lineage_origin_model_org_id" not in e
 
 
 def test_build_entry_skips_unknown_hf_ids(mod):
@@ -232,16 +242,15 @@ def test_build_entry_uses_registry_canonical_id_not_slugified(mod):
     }
     e = mod.build_entry(row, ORG_ALIAS_MAP, ALIASES_TO_CANONICAL)
     assert e is not None
-    # Note: registry canonical uses the dotted form (`qwen2.5-7b`)
-    assert e["id"] == "alibaba/qwen2.5-7b"
+    # Registry canonical = the real HF repo id; build_entry uses the
+    # registry's exact spelling (from aliases_to_canonical), not a re-slugify.
+    assert e["id"] == "Qwen/Qwen2.5-7B"
     assert e["org_id"] == "alibaba"
-    # Original dashed HF id stays as alias for resolver coverage
-    assert "Qwen/Qwen2.5-7B" in e["aliases"]
 
 
 def test_approx_params_billions_from_safetensors_total(mod):
-    """Param count estimated from total bytes / 2 (BF16 default)."""
-    assert mod._approx_params_billions({"total": 16_000_000_000}) == 8.0
+    """safetensors.total IS the parameter count → billions = total / 1e9."""
+    assert mod._approx_params_billions({"total": 8_000_000_000}) == 8.0
     assert mod._approx_params_billions({"total": 0}) is None
     assert mod._approx_params_billions(None) is None
 

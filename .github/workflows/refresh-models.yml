@@ -20,6 +20,8 @@ permissions:
 
 env:
   GENERATED_PATH: seed/models/sources/models_dev.generated.yaml
+  CATALOG_PATH: seed/models/sources/models_dev_catalog.generated.yaml
+  ORGS_GEN_PATH: seed/orgs.generated.yaml
 
 # Don't pile up runs if a previous one is mid-fetch.
 concurrency:
@@ -42,6 +44,14 @@ jobs:
       - name: Refresh models.dev generated source
         run: uv run python scripts/refresh_from_modelsdev.py
 
+      # De-orphan: regenerate the M4-aware full-catalog split (HF wins
+      # collisions; mint only models.dev-only) + reconcile HF-derived
+      # community orgs. Folded in from the formerly-orphaned one-shot
+      # integrate_modelsdev_catalog.py (RECONCILE.md MUST-FIX). Runs as a
+      # second step so it splits against the just-written re-cased source.
+      - name: Refresh models.dev catalog (de-orphan split)
+        run: uv run python scripts/refresh_from_modelsdev.py --catalog
+
       # Sanity check: the regenerated YAML must parse and the seed loader
       # must succeed. If either fails we abort without committing — better
       # to skip a day's refresh than to break the seed.yml pipeline that
@@ -49,17 +59,18 @@ jobs:
       - name: Validate generated YAML loads
         run: |
           uv run python -c "import yaml; yaml.safe_load(open('$GENERATED_PATH'))"
+          uv run python -c "import yaml; yaml.safe_load(open('$CATALOG_PATH'))"
           uv run eval-card-registry seed --local
 
       - name: Detect changes
         id: diff
         run: |
-          if git diff --quiet "$GENERATED_PATH"; then
+          if git diff --quiet "$GENERATED_PATH" "$CATALOG_PATH" "$ORGS_GEN_PATH"; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::$GENERATED_PATH unchanged — nothing to commit."
+            echo "::notice::no generated files changed — nothing to commit."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            git diff --stat "$GENERATED_PATH"
+            git diff --stat "$GENERATED_PATH" "$CATALOG_PATH" "$ORGS_GEN_PATH"
           fi
 
       - name: Commit + push directly
@@ -68,8 +79,8 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$GENERATED_PATH"
-          git commit -m "chore(seed): refresh models.dev source ($(date -u +%Y-%m-%d))"
+          git add "$GENERATED_PATH" "$CATALOG_PATH" "$ORGS_GEN_PATH"
+          git commit -m "chore(seed): refresh models.dev source + catalog ($(date -u +%Y-%m-%d))"
           # If main moved while we were running, rebase rather than fail.
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
