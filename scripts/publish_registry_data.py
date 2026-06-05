@@ -40,9 +40,10 @@ import json
 import os
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional, TypeVar
 
 # Bump when removing/renaming columns in any canonical_* table.
 # Bump minor when ADDING columns (backward-compatible). The producer
@@ -133,6 +134,50 @@ def _run_seed() -> int:
     return proc.returncode
 
 
+_T = TypeVar("_T")
+
+
+def _is_retryable_http(exc: Exception) -> bool:
+    """True for transient HF errors worth a longer wait: rate limits (429)
+    and server errors (5xx). Auth/permission (401/403) and missing-repo (404)
+    won't heal on retry, so we let those propagate immediately."""
+    resp = getattr(exc, "response", None)
+    code = getattr(resp, "status_code", None)
+    return code == 429 or (isinstance(code, int) and 500 <= code < 600)
+
+
+def _with_backoff(
+    fn: Callable[[], _T],
+    *,
+    what: str,
+    attempts: int = 5,
+    base_seconds: float = 15.0,
+    sleep: Callable[[float], None] = time.sleep,
+) -> _T:
+    """Run fn(), retrying transient HF rate-limit / server errors with a long
+    exponential backoff (15s, 30s, 60s, …). huggingface_hub already retries
+    internally, but its backoff caps at 8s and gives up after a few tries —
+    too shallow for a sustained 429 burst (which is what fails the publish
+    when several push runs hit HF at once). This gives HF time to recover."""
+    from huggingface_hub.errors import HfHubHTTPError
+
+    for attempt in range(1, attempts + 1):
+        try:
+            return fn()
+        except HfHubHTTPError as exc:
+            if attempt == attempts or not _is_retryable_http(exc):
+                raise
+            wait = base_seconds * (2 ** (attempt - 1))
+            print(
+                f"  [retry] {what}: {type(exc).__name__} "
+                f"(attempt {attempt}/{attempts}); waiting {wait:.0f}s…",
+                file=sys.stderr,
+            )
+            sleep(wait)
+    # Unreachable: the final attempt either returns or raises above.
+    raise RuntimeError(f"{what}: retry loop exited without a result")
+
+
 def _read_remote_manifest() -> Optional[dict]:
     """Pull the existing manifest.json from HF (if any) so we can
     compare content_hash and skip no-op publishes. Returns None when
@@ -149,10 +194,13 @@ def _read_remote_manifest() -> Optional[dict]:
         return None
 
     try:
-        local = hf_hub_download(
-            repo_id=HF_DATASET_REPO,
-            filename="manifest.json",
-            repo_type="dataset",
+        local = _with_backoff(
+            lambda: hf_hub_download(
+                repo_id=HF_DATASET_REPO,
+                filename="manifest.json",
+                repo_type="dataset",
+            ),
+            what="read remote manifest",
         )
         with open(local) as f:
             return json.load(f)
@@ -164,6 +212,9 @@ def _read_remote_manifest() -> Optional[dict]:
         OSError,
         ValueError,
     ) as exc:
+        # Only reached for a genuine not-found / persistent failure: a
+        # transient 429 or 5xx is retried by _with_backoff first. Failing
+        # open here means we publish rather than skip — safe, just not a no-op.
         print(f"  [info] no remote manifest available ({type(exc).__name__}); will publish",
               file=sys.stderr)
         return None
@@ -251,7 +302,7 @@ def main() -> int:
         return 0
 
     print(f"  pushing to {HF_DATASET_REPO}…", file=sys.stderr)
-    _push(FIXTURES_DIR, manifest)
+    _with_backoff(lambda: _push(FIXTURES_DIR, manifest), what="upload to HF")
     print(f"  done.", file=sys.stderr)
     return 0
 
