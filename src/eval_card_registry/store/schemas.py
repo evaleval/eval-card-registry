@@ -30,7 +30,7 @@ _SCHEMAS: dict[str, dict] = {
         "params_billions": "float64",
         # JSON-encoded list of parent edges:
         #   [{"id": "...", "relationship": "variant|finetune|quantized|merge|adapter",
-        #     "axis": "size|mode|modality|domain|version"}]
+        #     "axis": "size|mode|modality|domain|version|training_stage|tier"}]
         # `relationship: quantized` covers all inference-precision variants
         # (-turbo, -fp8, -int4, -awq, -gguf, etc.) — matches hub-stats's
         # baseModels.relation values and keeps the source/registry encoding
