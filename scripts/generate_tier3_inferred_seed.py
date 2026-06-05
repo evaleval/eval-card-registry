@@ -38,7 +38,7 @@ What it does
 5. Writes `seed/models/sources/tier3_inferred.generated.yaml`
    (`resolution_source: inferred`, `review_status: draft`).
 
-6. Writes `specs/model-resolution-rework/org_unknown_review.json` — the
+6. Writes `curation/org_unknown_review.json` — the
    org-null mints + a *proposed* org (from an inferred base, if any), NOT
    auto-applied.
 
@@ -68,7 +68,7 @@ MODELS_DIR = SEED / "models"
 SOURCES_DIR = MODELS_DIR / "sources"
 TIER3_YAML = SOURCES_DIR / "tier3_inferred.generated.yaml"
 ORGS_YAML = SEED / "orgs.yaml"
-SPEC_DIR = REGISTRY_ROOT / "specs" / "model-resolution-rework"
+SPEC_DIR = REGISTRY_ROOT  / "curation"
 REVIEW_JSON = SPEC_DIR / "org_unknown_review.json"
 
 

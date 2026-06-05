@@ -1,0 +1,4643 @@
+{
+ "01-ai/yi-large": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "yi-large"
+ },
+ "01-ai/yi-lightning": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "yi-lightning"
+ },
+ "Anthropic/claude-3-5-sonnet-20240620": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-sonnet"
+ },
+ "Anthropic/claude-3-haiku-20240307": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-haiku"
+ },
+ "Anthropic/claude-3-opus-20240229": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-opus"
+ },
+ "Anthropic/claude-3-sonnet-20240229": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-sonnet"
+ },
+ "Gemini-3-Flash(12/gemini-3-flash-12-25": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-flash"
+ },
+ "Gemini-3-Pro(11/gemini-3-pro-11-25": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-pro"
+ },
+ "Llama-3.1-Nemotron-70B-Instruct-HF": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "llama-3-1-nemotron-70b-instruct-hf"
+ },
+ "Meta-Llama-3-70B-Instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "meta-llama-3-70b-instruct"
+ },
+ "Meta-Llama-3-8B-Instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "meta-llama-3-8b-instruct"
+ },
+ "Mistral-7B-Instruct-v0.3": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "digitalocean",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-7b-instruct-v0-3"
+ },
+ "Mixtral-8x22B-Instruct-v0.1": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mixtral-8x22b-instruct-v0-1"
+ },
+ "Mixtral-8x7B-Instruct-v0.1": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mixtral-8x7b-instruct-v0-1"
+ },
+ "Phi-3-medium-128k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-medium-128k-instruct"
+ },
+ "Phi-3-medium-4k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-medium-4k-instruct"
+ },
+ "Phi-3-mini-128k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-mini-128k-instruct"
+ },
+ "Phi-3-mini-4k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-mini-4k-instruct"
+ },
+ "Phi-3-small-128k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-small-128k-instruct"
+ },
+ "Phi-3-small-8k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-small-8k-instruct"
+ },
+ "Phi-3.5-MoE-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-5-moe-instruct"
+ },
+ "Phi-3.5-mini-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-5-mini-instruct"
+ },
+ "Qwen/Qwen2.5-72B-Instruct-Turbo": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-72b-instruct"
+ },
+ "Qwen/Qwen2.5-7B-Instruct-Turbo": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-7b-instruct"
+ },
+ "ai2/olmo-3-1-32b-instruct": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "olmo-3-1-32b-instruct"
+ },
+ "ai2/olmo-3-1-32b-think": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "olmo-3-1-32b"
+ },
+ "ai2/olmo-3-32b-think": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "olmo-3-32b"
+ },
+ "ai21-labs/jamba-1-6-large": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "jamba-large-1-6"
+ },
+ "ai21-labs/jamba-1-6-mini": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "jamba-mini-1-6"
+ },
+ "ai21-labs/jamba-1-7-large": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "jamba-large-1-7"
+ },
+ "ai21-labs/jamba-1-7-mini": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "jamba-mini-1-7"
+ },
+ "ai21labs/jamba-large-1.6": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "jamba-large-1-6"
+ },
+ "ai21labs/jamba-large-1.7": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "jamba-large-1-7"
+ },
+ "ai21labs/jamba-mini-1.6": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "jamba-mini-1-6"
+ },
+ "alibaba/Qwen2.5-72B-Instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-72b-instruct"
+ },
+ "alibaba/Qwen2.5-Coder-32B-Instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-coder-32b-instruct"
+ },
+ "alibaba/Qwen3-Coder-30B-A3B-Instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-coder-30b-a3b-instruct"
+ },
+ "alibaba/qwen-2.5-14b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "digitalocean",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen-2-5-14b-instruct"
+ },
+ "alibaba/qwen-2.5-72b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen-2-5-72b-instruct"
+ },
+ "alibaba/qwen-2.5-7b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen-2-5-7b-instruct"
+ },
+ "alibaba/qwen-turbo": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "qwen"
+ },
+ "alibaba/qwen2-5-72b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-72b-instruct"
+ },
+ "alibaba/qwen2-5-coder-32b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-coder-32b-instruct"
+ },
+ "alibaba/qwen2-5-coder-7b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-coder-7b-instruct"
+ },
+ "alibaba/qwen2.5-32b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-32b-instruct"
+ },
+ "alibaba/qwen3-14b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "wandb",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-14b-instruct"
+ },
+ "alibaba/qwen3-14b-instruct-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "wandb",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-14b-instruct"
+ },
+ "alibaba/qwen3-235b-a22b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b"
+ },
+ "alibaba/qwen3-235b-a22b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "iflowcn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b-instruct"
+ },
+ "alibaba/qwen3-235b-a22b-instruct-2507": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b-instruct-2507"
+ },
+ "alibaba/qwen3-235b-a22b-instruct-2507-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b-instruct-2507"
+ },
+ "alibaba/qwen3-235b-a22b-instruct-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "iflowcn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b-instruct"
+ },
+ "alibaba/qwen3-235b-a22b-thinking-2507": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "chutes",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b-thinking-2507"
+ },
+ "alibaba/qwen3-30b-a3b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-30b-a3b"
+ },
+ "alibaba/qwen3-30b-a3b-2507": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "lmstudio",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-30b-a3b-2507"
+ },
+ "alibaba/qwen3-30b-a3b-2507-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "lmstudio",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-30b-a3b-2507"
+ },
+ "alibaba/qwen3-30b-a3b-thinking": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-30b-a3b"
+ },
+ "alibaba/qwen3-30b-a3b-thinking-2507": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "clarifai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-30b-a3b-thinking-2507"
+ },
+ "alibaba/qwen3-5-122b-a10b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-122b-a10b"
+ },
+ "alibaba/qwen3-5-27b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-27b"
+ },
+ "alibaba/qwen3-5-35b-a3b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-35b-a3b"
+ },
+ "alibaba/qwen3-5-397b-a17b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-397b-a17b"
+ },
+ "alibaba/qwen3-5-4b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "siliconflow-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-4b"
+ },
+ "alibaba/qwen3-5-9b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "crof",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-9b"
+ },
+ "alibaba/qwen3-6-plus": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-6-plus"
+ },
+ "alibaba/qwen3-coder-30b-a3b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-coder-30b-a3b-instruct"
+ },
+ "alibaba/qwen3-coder-480b-a35b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-coder-480b-a35b-instruct"
+ },
+ "alibaba/qwen3-coder-next": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-coding-plan",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-coder-next"
+ },
+ "alibaba/qwen3-max": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-max"
+ },
+ "alibaba/qwen3-max-2026-01-23": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-max"
+ },
+ "alibaba/qwen3-max-preview": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "iflowcn",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "qwen3-max-preview"
+ },
+ "alibaba/qwen3-max-thinking": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-max"
+ },
+ "alibaba/qwen3-next-80b-a3b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-next-80b-a3b-instruct"
+ },
+ "alibaba/qwen3-next-80b-a3b-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-next-80b-a3b"
+ },
+ "alibaba/qwen3-next-80b-a3b-thinking": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-next-80b-a3b"
+ },
+ "alibaba/qwen3-omni-30b-a3b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "novita-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-omni-30b-a3b-instruct"
+ },
+ "alibaba/qwen3-omni-30b-a3b-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "novita-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-omni-30b-a3b"
+ },
+ "alibaba/qwen3-vl-235b-a22b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "helicone",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-vl-235b-a22b-instruct"
+ },
+ "alibaba/qwen3-vl-235b-a22b-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-vl-235b-a22b"
+ },
+ "alibaba/qwen3-vl-30b-a3b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "evroc",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-vl-30b-a3b-instruct"
+ },
+ "alibaba/qwen3-vl-30b-a3b-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-vl-30b-a3b"
+ },
+ "alibaba/qwen3-vl-32b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-vl-32b-instruct"
+ },
+ "alibaba/qwen3-vl-32b-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "siliconflow",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "qwen3-vl-32b"
+ },
+ "alibaba/qwen3-vl-8b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-vl-8b-instruct"
+ },
+ "alibaba/qwen3-vl-8b-reasoning": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-vl-8b"
+ },
+ "alibaba/qwen3-vl-plus-2025-09-23": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "qwen3-vl-plus"
+ },
+ "alibaba/qwen3.5-122b-a10b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-122b-a10b"
+ },
+ "alibaba/qwen3.5-27b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-27b"
+ },
+ "alibaba/qwen3.5-35b-a3b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-35b-a3b"
+ },
+ "alibaba/qwen3.5-397b-a17b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-397b-a17b"
+ },
+ "alibaba/qwen3.5-4b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "siliconflow-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-4b"
+ },
+ "alibaba/qwen3.5-9b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "crof",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-9b"
+ },
+ "alibaba/qwen3.5-flash": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-flash"
+ },
+ "alibaba/qwen3.5-plus-thinking": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "qwen3-5-plus"
+ },
+ "alibaba/qwen3.6-max-preview": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "qwen3-6-max-preview"
+ },
+ "alibaba/qwen3.6-plus": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-6-plus"
+ },
+ "alibaba/qwq-32b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwq-32b"
+ },
+ "aliyun/qwen3-next-80b-a3b-thinking": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-next-80b-a3b"
+ },
+ "amazon/amazon.nova-lite-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-lite"
+ },
+ "amazon/amazon.nova-micro-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-micro"
+ },
+ "amazon/amazon.nova-pro-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-pro"
+ },
+ "amazon/nova-lite": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-lite"
+ },
+ "amazon/nova-lite-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-lite"
+ },
+ "amazon/nova-micro": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-micro"
+ },
+ "amazon/nova-micro-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-micro"
+ },
+ "amazon/nova-premier-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-premier"
+ },
+ "amazon/nova-pro": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-pro"
+ },
+ "amazon/nova-pro-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-pro"
+ },
+ "anthropic/Claude-3.5-Sonnet(Oct)": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-sonnet"
+ },
+ "anthropic/Claude-3.7-Sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/Claude-4-Sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/Claude-4.5-Sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "anthropic/anthropic/claude-3-7-sonnet-20250219": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/claude-3-5-haiku": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-haiku"
+ },
+ "anthropic/claude-3-5-haiku-20241022": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-haiku"
+ },
+ "anthropic/claude-3-5-sonnet-20240620": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-sonnet"
+ },
+ "anthropic/claude-3-5-sonnet-20241022": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-sonnet"
+ },
+ "anthropic/claude-3-7-sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/claude-3-7-sonnet-20250219": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/claude-3-7-sonnet-20250219-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/claude-3-7-sonnet-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/claude-3-haiku": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-haiku"
+ },
+ "anthropic/claude-3-haiku-20240307": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-haiku"
+ },
+ "anthropic/claude-3-opus": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-opus"
+ },
+ "anthropic/claude-3-opus-20240229": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-opus"
+ },
+ "anthropic/claude-3-sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-sonnet"
+ },
+ "anthropic/claude-3-sonnet-20240229": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-sonnet"
+ },
+ "anthropic/claude-3.5-sonnet-2024-06-20": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-sonnet"
+ },
+ "anthropic/claude-3.5-sonnet-2024-10-22": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-5-sonnet"
+ },
+ "anthropic/claude-3.7-sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/claude-3.7-sonnet-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-3-7-sonnet"
+ },
+ "anthropic/claude-4-1-opus": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-1"
+ },
+ "anthropic/claude-4-1-opus-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-1"
+ },
+ "anthropic/claude-4-5-haiku": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-haiku-4-5"
+ },
+ "anthropic/claude-4-5-haiku-reasoning": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-haiku-4-5"
+ },
+ "anthropic/claude-4-5-sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "anthropic/claude-4-5-sonnet-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "anthropic/claude-4-opus": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4"
+ },
+ "anthropic/claude-4-opus-20250514": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4"
+ },
+ "anthropic/claude-4-opus-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4"
+ },
+ "anthropic/claude-4-sonnet": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-4-sonnet-20250514": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-4-sonnet-20250522": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-4-sonnet-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-4.1-opus": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-1"
+ },
+ "anthropic/claude-4.5-opus-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-5"
+ },
+ "anthropic/claude-4.5-sonnet-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "anthropic/claude-4.6-opus-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-6"
+ },
+ "anthropic/claude-4.6-sonnet-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-6"
+ },
+ "anthropic/claude-code": {
+  "author_org": null,
+  "candidate_inference_platform": "poe",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-code"
+ },
+ "anthropic/claude-haiku-4-5-20251001": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-haiku-4-5"
+ },
+ "anthropic/claude-haiku-4-5-20251001-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-haiku-4-5"
+ },
+ "anthropic/claude-haiku-4.5": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-haiku-4-5"
+ },
+ "anthropic/claude-opus-4": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4"
+ },
+ "anthropic/claude-opus-4-1": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-1"
+ },
+ "anthropic/claude-opus-4-1-20250805": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-1"
+ },
+ "anthropic/claude-opus-4-1-20250805-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-1"
+ },
+ "anthropic/claude-opus-4-20250514": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4"
+ },
+ "anthropic/claude-opus-4-20250514-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4"
+ },
+ "anthropic/claude-opus-4-5": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-5"
+ },
+ "anthropic/claude-opus-4-5-20251101": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-5"
+ },
+ "anthropic/claude-opus-4-5-20251101-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-5"
+ },
+ "anthropic/claude-opus-4-5-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-5"
+ },
+ "anthropic/claude-opus-4-6": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-6"
+ },
+ "anthropic/claude-opus-4-6-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-6"
+ },
+ "anthropic/claude-opus-4-7": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-7"
+ },
+ "anthropic/claude-opus-4-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4"
+ },
+ "anthropic/claude-opus-4.1": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-1"
+ },
+ "anthropic/claude-opus-4.5": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-5"
+ },
+ "anthropic/claude-opus-4.6": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-6"
+ },
+ "anthropic/claude-sonnet-4": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-sonnet-4-20250514": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-sonnet-4-20250514-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-sonnet-4-5": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "anthropic/claude-sonnet-4-5-20250929": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "anthropic/claude-sonnet-4-5-20250929-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "anthropic/claude-sonnet-4-6": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-6"
+ },
+ "anthropic/claude-sonnet-4-thinking": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4"
+ },
+ "anthropic/claude-sonnet-4.5": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-sonnet-4-5"
+ },
+ "arcee/trinity-large-thinking": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "trinity-large"
+ },
+ "aws/nova-lite": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-lite"
+ },
+ "aws/nova-micro": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-micro"
+ },
+ "aws/nova-premier": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-premier"
+ },
+ "aws/nova-pro": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-pro"
+ },
+ "azure/phi-4": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-4"
+ },
+ "azure/phi-4-mini": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-4-mini"
+ },
+ "azure/phi-4-multimodal": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-4-multimodal"
+ },
+ "baidu/ernie-4-5-300b-a47b": {
+  "author_org": "baidu",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "ernie-4-5-300b-a47b"
+ },
+ "baidu/ernie-5-0-thinking-preview": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "ernie-5-0-thinking-preview"
+ },
+ "bytedance-seed/doubao-seed-code": {
+  "author_org": null,
+  "candidate_inference_platform": "zenmux",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "doubao-seed-code"
+ },
+ "bytedance/doubao-seed-1-6-thinking-250615": {
+  "author_org": null,
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "doubao-seed-1-6-thinking"
+ },
+ "bytedance/seed-2.0-lite": {
+  "author_org": "bytedance",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "seed-2-0-lite"
+ },
+ "claude-opus-4-7": {
+  "author_org": "anthropic",
+  "candidate_inference_platform": "anthropic",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "claude-opus-4-7"
+ },
+ "cohere/command-a": {
+  "author_org": "cohere",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "command-a"
+ },
+ "cohere/command-a-03-2025": {
+  "author_org": "cohere",
+  "candidate_inference_platform": "cohere",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "command-a-03-2025"
+ },
+ "cohere/command-r": {
+  "author_org": "cohere",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "command-r"
+ },
+ "cohere/command-r-08-2024": {
+  "author_org": "cohere",
+  "candidate_inference_platform": "cohere",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "command-r-08-2024"
+ },
+ "cohere/command-r-plus-08-2024": {
+  "author_org": "cohere",
+  "candidate_inference_platform": "cohere",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "command-r-plus-08-2024"
+ },
+ "deepseek-chat": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-chat"
+ },
+ "deepseek-v3": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek"
+ },
+ "deepseek-v3.1": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-1"
+ },
+ "deepseek/DeepSeek-R1": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1"
+ },
+ "deepseek/DeepSeek-R1-0528": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1-0528"
+ },
+ "deepseek/DeepSeek-V3": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek"
+ },
+ "deepseek/DeepSeek-V3-0324": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-0324"
+ },
+ "deepseek/deepseek-chat": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-chat"
+ },
+ "deepseek/deepseek-r1": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1"
+ },
+ "deepseek/deepseek-r1-0528": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1-0528"
+ },
+ "deepseek/deepseek-r1-distill-llama-70b": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1-distill-llama-70b"
+ },
+ "deepseek/deepseek-r1-distill-llama-8b": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "deepseek-r1-distill-llama-8b"
+ },
+ "deepseek/deepseek-r1-distill-qwen-1-5b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "deepseek-r1-distill-qwen-1-5b"
+ },
+ "deepseek/deepseek-r1-distill-qwen-14b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1-distill-qwen-14b"
+ },
+ "deepseek/deepseek-r1-distill-qwen-32b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1-distill-qwen-32b"
+ },
+ "deepseek/deepseek-reasoner": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek"
+ },
+ "deepseek/deepseek-v2": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek"
+ },
+ "deepseek/deepseek-v3": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek"
+ },
+ "deepseek/deepseek-v3-0324": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-0324"
+ },
+ "deepseek/deepseek-v3-1": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-1"
+ },
+ "deepseek/deepseek-v3-1-reasoning": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-1"
+ },
+ "deepseek/deepseek-v3-1-terminus": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-1-terminus"
+ },
+ "deepseek/deepseek-v3-1-terminus-reasoning": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-1-terminus"
+ },
+ "deepseek/deepseek-v3-2": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-2"
+ },
+ "deepseek/deepseek-v3-2-reasoning": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-2"
+ },
+ "deepseek/deepseek-v3-2-speciale": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-2-speciale"
+ },
+ "deepseek/deepseek-v3.1": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-1"
+ },
+ "deepseek/deepseek-v3.1-thinking": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-1"
+ },
+ "deepseek/deepseek-v3.2": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-2"
+ },
+ "deepseek/deepseek-v3.2-exp": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "alibaba-cn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-2-exp"
+ },
+ "deepseek/deepseek-v3.2-speciale": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-2-speciale"
+ },
+ "deepseek/deepseek-v3.2-thinking": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-2"
+ },
+ "deepseek/deepseek-v4-flash-fp8": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v4-flash"
+ },
+ "deepseek/deepseek-v4-pro": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v4-pro"
+ },
+ "deepseek/deepseek-vl2": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "siliconflow",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "deepseek-vl2"
+ },
+ "deepseek/r1": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "r1"
+ },
+ "deepseek/v3.2": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "v3-2"
+ },
+ "fireworks/deepseek-r1": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "fireworks-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-r1"
+ },
+ "fireworks/deepseek-v3": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "deepseek",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek"
+ },
+ "fireworks/deepseek-v3-0324": {
+  "author_org": "deepseek-ai",
+  "candidate_inference_platform": "fireworks-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deepseek-v3-0324"
+ },
+ "fireworks/gpt-oss-120b": {
+  "author_org": "openai",
+  "candidate_inference_platform": "fireworks-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "gpt-oss-120b"
+ },
+ "fireworks/gpt-oss-20b": {
+  "author_org": "openai",
+  "candidate_inference_platform": "fireworks-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "gpt-oss-20b"
+ },
+ "fireworks/kimi-k2-instruct-0905": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "fireworks-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-instruct-0905"
+ },
+ "fireworks/qwen3-235b-a22b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "fireworks-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b"
+ },
+ "gemini-2.5-pro-exp-03-25": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro-exp"
+ },
+ "google/Gemini 2.5 Flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash"
+ },
+ "google/Gemini 2.5 Pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro"
+ },
+ "google/Gemini 3 Flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-flash"
+ },
+ "google/Gemini 3 Pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-pro"
+ },
+ "google/Gemini 3.1 Pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-1-pro"
+ },
+ "google/Gemini-2.5-Pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro"
+ },
+ "google/Gemma-3-27B": {
+  "author_org": "google",
+  "candidate_inference_platform": "llmgateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "gemma-3-27b"
+ },
+ "google/gemini-1-5-flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "gemini-flash-1-5"
+ },
+ "google/gemini-1.5-flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "multiset",
+  "open_weights": false,
+  "underlying_model_id": "gemini-flash-1-5"
+ },
+ "google/gemini-2-0-flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash"
+ },
+ "google/gemini-2-0-flash-lite-001": {
+  "author_org": "google",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash-lite-001"
+ },
+ "google/gemini-2-0-flash-thinking-exp-1219": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash-thinking-exp-1219"
+ },
+ "google/gemini-2-5-flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash"
+ },
+ "google/gemini-2-5-flash-lite": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-lite"
+ },
+ "google/gemini-2-5-flash-lite-preview-09-2025": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-lite-preview-09-2025"
+ },
+ "google/gemini-2-5-flash-lite-preview-09-2025-reasoning": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-lite-preview-09-2025"
+ },
+ "google/gemini-2-5-flash-lite-reasoning": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-lite"
+ },
+ "google/gemini-2-5-flash-preview-05-20": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview"
+ },
+ "google/gemini-2-5-flash-preview-09-2025": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview-09-2025"
+ },
+ "google/gemini-2-5-flash-preview-09-2025-reasoning": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview-09-2025"
+ },
+ "google/gemini-2-5-flash-reasoning": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash"
+ },
+ "google/gemini-2-5-pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro"
+ },
+ "google/gemini-2-5-pro-03-25": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro"
+ },
+ "google/gemini-2-5-pro-05-06": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro"
+ },
+ "google/gemini-2.0-flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash"
+ },
+ "google/gemini-2.0-flash-001": {
+  "author_org": "google",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash-001"
+ },
+ "google/gemini-2.0-flash-lite": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash-lite"
+ },
+ "google/gemini-2.0-flash-lite-001": {
+  "author_org": "google",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash-lite-001"
+ },
+ "google/gemini-2.0-flash-thinking": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash"
+ },
+ "google/gemini-2.0-flash-thinking-exp-01-21": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash-thinking-exp"
+ },
+ "google/gemini-2.0-flash-thinking-exp-1219": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-flash-thinking-exp-1219"
+ },
+ "google/gemini-2.0-pro": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-pro"
+ },
+ "google/gemini-2.0-pro-exp-02-05": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-0-pro-exp"
+ },
+ "google/gemini-2.5-flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash"
+ },
+ "google/gemini-2.5-flash-lite": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-lite"
+ },
+ "google/gemini-2.5-flash-lite-preview-09-2025": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-lite-preview-09-2025"
+ },
+ "google/gemini-2.5-flash-lite-preview-09-2025-thinking": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-lite-preview-09-2025"
+ },
+ "google/gemini-2.5-flash-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview"
+ },
+ "google/gemini-2.5-flash-preview-04-17": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview"
+ },
+ "google/gemini-2.5-flash-preview-04-17-thinking": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview"
+ },
+ "google/gemini-2.5-flash-preview-05-20": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview"
+ },
+ "google/gemini-2.5-flash-preview-09-2025": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview-09-2025"
+ },
+ "google/gemini-2.5-flash-preview-09-2025-thinking": {
+  "author_org": "google",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash-preview-09-2025"
+ },
+ "google/gemini-2.5-flash-thinking": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-flash"
+ },
+ "google/gemini-2.5-pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro"
+ },
+ "google/gemini-2.5-pro-exp-03-25": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro-exp"
+ },
+ "google/gemini-2.5-pro-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro-preview"
+ },
+ "google/gemini-2.5-pro-preview-03-25": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro-preview"
+ },
+ "google/gemini-2.5-pro-preview-05-06": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro-preview"
+ },
+ "google/gemini-2.5-pro-preview-06-05": {
+  "author_org": "google",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-2-5-pro-preview"
+ },
+ "google/gemini-3-1-flash-lite-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-1-flash-lite-preview"
+ },
+ "google/gemini-3-1-pro-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-1-pro-preview"
+ },
+ "google/gemini-3-flash": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-flash"
+ },
+ "google/gemini-3-flash-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "gemini-3-flash-preview"
+ },
+ "google/gemini-3-flash-reasoning": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-flash"
+ },
+ "google/gemini-3-pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-pro"
+ },
+ "google/gemini-3-pro-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-pro-preview"
+ },
+ "google/gemini-3.1-flash-lite-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-1-flash-lite-preview"
+ },
+ "google/gemini-3.1-pro": {
+  "author_org": "google",
+  "candidate_inference_platform": "databricks",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-1-pro"
+ },
+ "google/gemini-3.1-pro-preview": {
+  "author_org": "google",
+  "candidate_inference_platform": "google",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-3-1-pro-preview"
+ },
+ "google/gemini-exp-1206": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gemini-exp-1206"
+ },
+ "google/gemma-3-27b": {
+  "author_org": "google",
+  "candidate_inference_platform": "llmgateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "gemma-3-27b"
+ },
+ "google/gemma3-latest": {
+  "author_org": "google",
+  "candidate_inference_platform": "ollama-cloud",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "gemma3"
+ },
+ "google/learnlm-1.5-pro-experimental": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "learnlm-1-5-pro-experimental"
+ },
+ "gpt-4o": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o"
+ },
+ "gpt-4o-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o-mini"
+ },
+ "gpt-5": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5"
+ },
+ "grok-3": {
+  "author_org": "xai",
+  "candidate_inference_platform": "github-models",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-3"
+ },
+ "hermes-3-llama-3.1-70b": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "hermes-3-llama-3-1-70b"
+ },
+ "inception/mercury-2": {
+  "author_org": "inceptionai",
+  "candidate_inference_platform": "inception",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mercury-2"
+ },
+ "inceptionlabs/mercury-2": {
+  "author_org": "inceptionai",
+  "candidate_inference_platform": "inception",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mercury-2"
+ },
+ "inclusionai/ling-flash-2-0": {
+  "author_org": "inclusionai",
+  "candidate_inference_platform": "siliconflow",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "ling-flash-2-0"
+ },
+ "inclusionai/ling-mini-2-0": {
+  "author_org": "inclusionai",
+  "candidate_inference_platform": "siliconflow",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "ling-mini-2-0"
+ },
+ "inclusionai/ring-flash-2-0": {
+  "author_org": null,
+  "candidate_inference_platform": "siliconflow",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "ring-flash-2-0"
+ },
+ "kimi/kimi-k2": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2"
+ },
+ "kimi/kimi-k2-0905": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "helicone",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-0905"
+ },
+ "kimi/kimi-k2-5": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-5"
+ },
+ "kimi/kimi-k2-thinking": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2"
+ },
+ "kwaikat/kat-coder-pro-v1": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kat-coder-pro"
+ },
+ "kwaikat/kat-coder-pro-v2": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kat-coder-pro"
+ },
+ "llama-3.3-70b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-3-70b-instruct"
+ },
+ "llama-4-maverick-17b-128e-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-4-maverick-17b-128e-instruct"
+ },
+ "longcat/longcat-flash-lite": {
+  "author_org": null,
+  "candidate_inference_platform": "qiniu-ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "longcat-flash-lite"
+ },
+ "mbzuai/k2-v2": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "k2"
+ },
+ "meituan/longcat-flash-chat": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "longcat-flash-chat"
+ },
+ "meituan/longcat-flash-lite": {
+  "author_org": null,
+  "candidate_inference_platform": "qiniu-ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "longcat-flash-lite"
+ },
+ "meituan/longcat-flash-thinking": {
+  "author_org": null,
+  "candidate_inference_platform": "vercel",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "longcat-flash"
+ },
+ "meituan/longcat-flash-thinking-2601": {
+  "author_org": null,
+  "candidate_inference_platform": "vercel",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "longcat-flash-thinking-2601"
+ },
+ "meta-llama-3-70b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "meta-llama-3-70b-instruct"
+ },
+ "meta-llama-3-8b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "meta-llama-3-8b-instruct"
+ },
+ "meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-11b-vision-instruct"
+ },
+ "meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-90b-vision-instruct"
+ },
+ "meta-llama/Llama-3.3-70B-Instruct-Turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-3-70b-instruct"
+ },
+ "meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "meta-llama-3-1-405b-instruct"
+ },
+ "meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "meta-llama-3-1-70b-instruct"
+ },
+ "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "meta-llama-3-1-8b-instruct"
+ },
+ "meta-llama/llama3.1-8b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cerebras",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama3-1-8b"
+ },
+ "meta/Llama-3.1-8B": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "vercel",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "llama-3-1-8b"
+ },
+ "meta/Llama-4-Maverick": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "digitalocean",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-4-maverick"
+ },
+ "meta/llama-3-1-instruct-405b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-405b-instruct"
+ },
+ "meta/llama-3-1-instruct-70b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "deepinfra",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-70b-instruct"
+ },
+ "meta/llama-3-1-instruct-8b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cloudflare-ai-gateway",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-8b-instruct"
+ },
+ "meta/llama-3-2-instruct-11b-vision": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-11b-vision-instruct"
+ },
+ "meta/llama-3-2-instruct-1b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "chutes",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-1b-instruct"
+ },
+ "meta/llama-3-2-instruct-3b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "chutes",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-3b-instruct"
+ },
+ "meta/llama-3-2-instruct-90b-vision": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-90b-vision-instruct"
+ },
+ "meta/llama-3-3-instruct-70b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-3-70b-instruct"
+ },
+ "meta/llama-3-70b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-70b-instruct"
+ },
+ "meta/llama-3-8b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cloudflare-ai-gateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-8b-instruct"
+ },
+ "meta/llama-3-instruct-70b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "kilo",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-70b-instruct"
+ },
+ "meta/llama-3-instruct-8b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cloudflare-ai-gateway",
+  "match_method": "multiset",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-8b-instruct"
+ },
+ "meta/llama-3.1-405b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-405b-instruct"
+ },
+ "meta/llama-3.1-405b-instruct-turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-405b-instruct"
+ },
+ "meta/llama-3.1-70b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "vercel",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "llama-3-1-70b"
+ },
+ "meta/llama-3.1-70b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "deepinfra",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-70b-instruct"
+ },
+ "meta/llama-3.1-70b-instruct-turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "deepinfra",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-70b-instruct"
+ },
+ "meta/llama-3.1-8b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "vercel",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "llama-3-1-8b"
+ },
+ "meta/llama-3.1-8b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cloudflare-ai-gateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-8b-instruct"
+ },
+ "meta/llama-3.1-8b-instruct-turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cloudflare-ai-gateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-8b-instruct"
+ },
+ "meta/llama-3.1-nemotron-70b-instruct-hf": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "llama-3-1-nemotron-70b-instruct-hf"
+ },
+ "meta/llama-3.2-11b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llmgateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-11b-instruct"
+ },
+ "meta/llama-3.2-11b-vision-instruct-turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-11b-vision-instruct"
+ },
+ "meta/llama-3.2-1b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "vercel",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "llama-3-2-1b"
+ },
+ "meta/llama-3.2-3b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "venice",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-3b"
+ },
+ "meta/llama-3.2-3b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "chutes",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-3b-instruct"
+ },
+ "meta/llama-3.2-90b-vision-instruct-turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-2-90b-vision-instruct"
+ },
+ "meta/llama-3.3-70b-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-3-70b-instruct"
+ },
+ "meta/llama-3.3-70b-instruct-turbo": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-3-70b-instruct"
+ },
+ "meta/llama-4-maverick": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "digitalocean",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-4-maverick"
+ },
+ "meta/llama-4-maverick-17b-128e-instruct-fp8": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-4-maverick-17b-128e-instruct"
+ },
+ "meta/llama-4-scout": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "helicone",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-4-scout"
+ },
+ "meta/llama-4-scout-17b-16e-instruct": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "llama",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-4-scout-17b-16e-instruct"
+ },
+ "meta/llama3.1-8b": {
+  "author_org": "meta-llama",
+  "candidate_inference_platform": "cerebras",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama3-1-8b"
+ },
+ "microsoft/phi-4-mini": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-4-mini"
+ },
+ "minimax/MiniMax-M2.1": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-1"
+ },
+ "minimax/MiniMax-M2.5": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-5"
+ },
+ "minimax/MiniMax-M2.5-Lightning": {
+  "author_org": null,
+  "candidate_inference_platform": "zenmux",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "minimax-m2-5-lightning"
+ },
+ "minimax/MiniMax-M2.7": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-7"
+ },
+ "minimax/minimax-m1": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m1"
+ },
+ "minimax/minimax-m1-80k": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "jiekou",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m1-80k"
+ },
+ "minimax/minimax-m2": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2"
+ },
+ "minimax/minimax-m2-1": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-1"
+ },
+ "minimax/minimax-m2-5": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-5"
+ },
+ "minimax/minimax-m2-7": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-7"
+ },
+ "minimax/minimax-m2.1": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-1"
+ },
+ "minimax/minimax-m2.5": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-5"
+ },
+ "minimax/minimax-m2.7": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-7"
+ },
+ "mistral/devstral-2": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "ollama-cloud",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "devstral-2"
+ },
+ "mistral/devstral-medium": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "devstral-medium"
+ },
+ "mistral/devstral-small": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "devstral-small"
+ },
+ "mistral/devstral-small-2": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "ollama-cloud",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "devstral-small-2"
+ },
+ "mistral/devstral-small-2505": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "devstral-small-2505"
+ },
+ "mistral/magistral-medium": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "magistral-medium"
+ },
+ "mistral/magistral-small": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "magistral-small"
+ },
+ "mistral/magistral-small-2509": {
+  "author_org": null,
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "magistral-small-2509"
+ },
+ "mistral/ministral-14b-latest": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "vercel",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "ministral-14b"
+ },
+ "mistral/ministral-3-8b-instruct-2512": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "digitalocean",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "ministral-3-8b-instruct-2512"
+ },
+ "mistral/ministral-8b-latest": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "ministral-8b"
+ },
+ "mistral/mistral-7b-instruct": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-7b-instruct"
+ },
+ "mistral/mistral-large": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large"
+ },
+ "mistral/mistral-large-2407": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large-2407"
+ },
+ "mistral/mistral-large-2411": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large-2411"
+ },
+ "mistral/mistral-large-3": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "ollama-cloud",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large-3"
+ },
+ "mistral/mistral-large-latest": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large"
+ },
+ "mistral/mistral-medium": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-medium"
+ },
+ "mistral/mistral-medium-3": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mistral-medium-3"
+ },
+ "mistral/mistral-medium-3-1": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mistral-medium-3-1"
+ },
+ "mistral/mistral-nemo-instruct-2407": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "chutes",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-nemo-instruct-2407"
+ },
+ "mistral/mistral-saba": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-saba"
+ },
+ "mistral/mistral-small": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-small"
+ },
+ "mistral/mistral-small-24b-instruct-2501": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-small-24b-instruct-2501"
+ },
+ "mistral/mistral-small-2503": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-small-2503"
+ },
+ "mistral/mistral-small-3.2-24b-instruct-2506": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "berget",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-small-3-2-24b-instruct-2506"
+ },
+ "mistral/mistral-small-latest": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-small"
+ },
+ "mistral/mixtral-8x7b-instruct": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mixtral-8x7b-instruct"
+ },
+ "mistral/open-mixtral-8x22b": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "open-mixtral-8x22b"
+ },
+ "mistral/open-mixtral-8x7b": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "open-mixtral-8x7b"
+ },
+ "mistral/pixtral-12b-2409": {
+  "author_org": null,
+  "candidate_inference_platform": "scaleway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "pixtral-12b-2409"
+ },
+ "mistral/pixtral-large": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "pixtral-large"
+ },
+ "mistral/pixtral-large-2411": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "pixtral-large-2411"
+ },
+ "mistralai/Mistral-Medium": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-medium"
+ },
+ "mistralai/codestral-2501": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "codestral-2501"
+ },
+ "mistralai/devstral-2512": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "devstral-2512"
+ },
+ "mistralai/labs-devstral-small-2512": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "labs-devstral-small-2512"
+ },
+ "mistralai/mistral-large-2407": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large-2407"
+ },
+ "mistralai/mistral-large-2411": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large-2411"
+ },
+ "mistralai/mistral-large-2512": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-large-2512"
+ },
+ "mistralai/mistral-medium-2505": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "mistral",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mistral-medium-2505"
+ },
+ "mistralai/mistral-medium-3": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mistral-medium-3"
+ },
+ "mistralai/mistral-small-2503": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mistral-small-2503"
+ },
+ "mixtral-8x22b-instruct-v0.1": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "mixtral-8x22b-instruct-v0-1"
+ },
+ "mixtral-8x7b-instruct-v0.1": {
+  "author_org": "mistralai",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mixtral-8x7b-instruct-v0-1"
+ },
+ "moonshot-ai/kimi-k2-instruct": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-instruct"
+ },
+ "moonshot-ai/kimi-k2-thinking": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "moonshotai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2"
+ },
+ "moonshot-ai/kimi-k2.5": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "moonshotai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-5"
+ },
+ "moonshot/Kimi K2.5": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-5"
+ },
+ "moonshot/kimi-k2-0711-preview": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "moonshotai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-0711-preview"
+ },
+ "moonshot/kimi-k2.5": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-5"
+ },
+ "moonshotai/kimi-k2": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "moonshotai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2"
+ },
+ "moonshotai/kimi-k2-0905": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "helicone",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-0905"
+ },
+ "moonshotai/kimi-k2-0905-preview": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "moonshotai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-0905-preview"
+ },
+ "moonshotai/kimi-k2.5-thinking": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "moonshotai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-5"
+ },
+ "moonshotai/kimi-k2.6-thinking": {
+  "author_org": "moonshotai",
+  "candidate_inference_platform": "moonshotai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "kimi-k2-6"
+ },
+ "nous-research/deephermes-3-mistral-24b-preview": {
+  "author_org": null,
+  "candidate_inference_platform": "chutes",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "deephermes-3-mistral-24b-preview"
+ },
+ "nous-research/hermes-3-llama-3-1-70b": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "hermes-3-llama-3-1-70b"
+ },
+ "nvidia/llama-3-1-nemotron-ultra-253b-v1-reasoning": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "llmgateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-nemotron-ultra-253b"
+ },
+ "nvidia/llama-3-3-nemotron-super-49b": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-3-nemotron-super-49b"
+ },
+ "nvidia/llama-3-3-nemotron-super-49b-reasoning": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-3-nemotron-super-49b"
+ },
+ "nvidia/llama-3.1-nemotron-ultra-253b-v1": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "llmgateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "llama-3-1-nemotron-ultra-253b"
+ },
+ "nvidia/nemotron-3-nano-30b-a3b": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nemotron-3-nano-30b-a3b"
+ },
+ "nvidia/nemotron-3-super-120b-a12b": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nemotron-3-super-120b-a12b"
+ },
+ "nvidia/nvidia-nemotron-3-nano-30b-a3b": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nebius",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nvidia-nemotron-3-nano-30b-a3b"
+ },
+ "nvidia/nvidia-nemotron-3-nano-30b-a3b-reasoning": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nebius",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nvidia-nemotron-3-nano-30b-a3b"
+ },
+ "nvidia/nvidia-nemotron-3-super-120b-a12b": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "wandb",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nvidia-nemotron-3-super-120b-a12b"
+ },
+ "nvidia/nvidia-nemotron-nano-9b-v2-reasoning": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nvidia-nemotron-nano-9b"
+ },
+ "openai/GPT 4o": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o"
+ },
+ "openai/GPT 5": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5"
+ },
+ "openai/GPT 5 Codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-codex"
+ },
+ "openai/GPT 5.1": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1"
+ },
+ "openai/GPT 5.1 Codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-codex"
+ },
+ "openai/GPT 5.2": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2"
+ },
+ "openai/GPT 5.2 Codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2-codex"
+ },
+ "openai/GPT 5.2 Pro": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2-pro"
+ },
+ "openai/GPT 5.3 Codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-3-codex"
+ },
+ "openai/GPT OSS 120B": {
+  "author_org": "openai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "gpt-oss-120b"
+ },
+ "openai/GPT-4.1": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1"
+ },
+ "openai/GPT-5": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5"
+ },
+ "openai/GPT-5.2": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2"
+ },
+ "openai/chatgpt-4o-latest": {
+  "author_org": "openai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "chatgpt-4o"
+ },
+ "openai/codex-mini-latest": {
+  "author_org": "openai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "codex-mini"
+ },
+ "openai/gpt-3-5-turbo-0613": {
+  "author_org": "openai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-3-5-turbo-0613"
+ },
+ "openai/gpt-3.5-turbo": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-3-5"
+ },
+ "openai/gpt-3.5-turbo-0125": {
+  "author_org": "openai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-3-5-turbo-0125"
+ },
+ "openai/gpt-3.5-turbo-0301": {
+  "author_org": "openai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-3-5-turbo-0301"
+ },
+ "openai/gpt-3.5-turbo-0613": {
+  "author_org": "openai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-3-5-turbo-0613"
+ },
+ "openai/gpt-3.5-turbo-1106": {
+  "author_org": "openai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-3-5-turbo-1106"
+ },
+ "openai/gpt-4": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4"
+ },
+ "openai/gpt-4-0314": {
+  "author_org": "openai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-0314"
+ },
+ "openai/gpt-4-1": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1"
+ },
+ "openai/gpt-4-1-2025-04-14": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1"
+ },
+ "openai/gpt-4-1-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1-mini"
+ },
+ "openai/gpt-4-1-mini-2025-04-14": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1-mini"
+ },
+ "openai/gpt-4-1-nano": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1-nano"
+ },
+ "openai/gpt-4-1-nano-2025-04-14": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1-nano"
+ },
+ "openai/gpt-4-1106-preview": {
+  "author_org": "openai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1106-preview"
+ },
+ "openai/gpt-4-turbo": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4"
+ },
+ "openai/gpt-4.1": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1"
+ },
+ "openai/gpt-4.1-2025-04-14": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1"
+ },
+ "openai/gpt-4.1-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1-mini"
+ },
+ "openai/gpt-4.1-mini-2025-04-14": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1-mini"
+ },
+ "openai/gpt-4.1-nano-2025-04-14": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4-1-nano"
+ },
+ "openai/gpt-4o": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o"
+ },
+ "openai/gpt-4o-2024-05-13": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o"
+ },
+ "openai/gpt-4o-2024-08-06": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o"
+ },
+ "openai/gpt-4o-2024-11-20": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o"
+ },
+ "openai/gpt-4o-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o-mini"
+ },
+ "openai/gpt-4o-mini-2024-07-18": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-4o-mini"
+ },
+ "openai/gpt-5": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5"
+ },
+ "openai/gpt-5-1": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1"
+ },
+ "openai/gpt-5-1-codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-codex"
+ },
+ "openai/gpt-5-1-codex-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-codex-mini"
+ },
+ "openai/gpt-5-2": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2"
+ },
+ "openai/gpt-5-2-codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2-codex"
+ },
+ "openai/gpt-5-2025-08-07": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5"
+ },
+ "openai/gpt-5-3-codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-3-codex"
+ },
+ "openai/gpt-5-4": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4"
+ },
+ "openai/gpt-5-4-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-mini"
+ },
+ "openai/gpt-5-4-nano": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-nano"
+ },
+ "openai/gpt-5-4-pro": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-pro"
+ },
+ "openai/gpt-5-codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-codex"
+ },
+ "openai/gpt-5-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-mini"
+ },
+ "openai/gpt-5-mini-2025-08-07": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-mini"
+ },
+ "openai/gpt-5-nano": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-nano"
+ },
+ "openai/gpt-5-nano-2025-08-07": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-nano"
+ },
+ "openai/gpt-5-pro-2025-10-06": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-pro"
+ },
+ "openai/gpt-5.1": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1"
+ },
+ "openai/gpt-5.1-2025-11-13": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1"
+ },
+ "openai/gpt-5.1-codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-codex"
+ },
+ "openai/gpt-5.1-codex-max": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-codex-max"
+ },
+ "openai/gpt-5.1-codex-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-codex-mini"
+ },
+ "openai/gpt-5.1-instant": {
+  "author_org": "openai",
+  "candidate_inference_platform": "poe",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-instant"
+ },
+ "openai/gpt-5.1-instant-2025-11-12": {
+  "author_org": "openai",
+  "candidate_inference_platform": "poe",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1-instant"
+ },
+ "openai/gpt-5.1-thinking": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-1"
+ },
+ "openai/gpt-5.2": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2"
+ },
+ "openai/gpt-5.2-2025-12-11": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2"
+ },
+ "openai/gpt-5.2-codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2-codex"
+ },
+ "openai/gpt-5.2-pro-2025-12-11": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-2-pro"
+ },
+ "openai/gpt-5.3-chat-latest": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-3-chat"
+ },
+ "openai/gpt-5.3-codex": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-3-codex"
+ },
+ "openai/gpt-5.4": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4"
+ },
+ "openai/gpt-5.4-2026-03-05": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4"
+ },
+ "openai/gpt-5.4-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-mini"
+ },
+ "openai/gpt-5.4-mini-2026-03-17": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-mini"
+ },
+ "openai/gpt-5.4-nano": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-nano"
+ },
+ "openai/gpt-5.4-nano-2026-03-17": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-nano"
+ },
+ "openai/gpt-5.4-pro-2026-03-05": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-4-pro"
+ },
+ "openai/gpt-5.5": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-5"
+ },
+ "openai/gpt-5.5-pro": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "gpt-5-5-pro"
+ },
+ "openai/o1": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o1"
+ },
+ "openai/o1-2024-12-17": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o1"
+ },
+ "openai/o1-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o1-mini"
+ },
+ "openai/o1-mini-2024-09-12": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o1-mini"
+ },
+ "openai/o1-preview": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o1-preview"
+ },
+ "openai/o1-preview-2024-09-12": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o1-preview"
+ },
+ "openai/o1-pro": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o1-pro"
+ },
+ "openai/o3": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o3"
+ },
+ "openai/o3 Pro": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o3-pro"
+ },
+ "openai/o3-2025-04-16": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o3"
+ },
+ "openai/o3-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o3-mini"
+ },
+ "openai/o3-mini-2025-01-31": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o3-mini"
+ },
+ "openai/o3-mini-high": {
+  "author_org": "openai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o3-mini-high"
+ },
+ "openai/o3-pro": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o3-pro"
+ },
+ "openai/o4-mini": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o4-mini"
+ },
+ "openai/o4-mini-2025-04-16": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o4-mini"
+ },
+ "perplexity/sonar": {
+  "author_org": "perplexity",
+  "candidate_inference_platform": "perplexity",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "sonar"
+ },
+ "perplexity/sonar-pro": {
+  "author_org": "perplexity",
+  "candidate_inference_platform": "perplexity",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "sonar-pro"
+ },
+ "perplexity/sonar-reasoning": {
+  "author_org": "perplexity",
+  "candidate_inference_platform": "perplexity",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "sonar"
+ },
+ "perplexity/sonar-reasoning-pro": {
+  "author_org": "perplexity",
+  "candidate_inference_platform": "perplexity",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "sonar-reasoning-pro"
+ },
+ "phi-3-medium-4k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-medium-4k-instruct"
+ },
+ "phi-3-mini-128k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-mini-128k-instruct"
+ },
+ "phi-3-mini-4k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-mini-4k-instruct"
+ },
+ "phi-3-small-8k-instruct": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-3-small-8k-instruct"
+ },
+ "phi-4": {
+  "author_org": "microsoft",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "phi-4"
+ },
+ "prime-intellect/intellect-3": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "intellect-3"
+ },
+ "qwen/Qwen3-235B": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "iflowcn",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b"
+ },
+ "qwen/qwen-2.5-14b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "digitalocean",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen-2-5-14b-instruct"
+ },
+ "qwen/qwen-2.5-72b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "cortecs",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen-2-5-72b-instruct"
+ },
+ "qwen/qwen-2.5-7b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen-2-5-7b-instruct"
+ },
+ "qwen/qwen-2.5-coder-32b-instruct": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen-2-5-coder-32b-instruct"
+ },
+ "qwen/qwen2.5-72b-instruct-turbo": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-72b-instruct"
+ },
+ "qwen/qwen2.5-7b-instruct-turbo": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen2-5-7b-instruct"
+ },
+ "qwen/qwen3-235b-a22b-2507": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "amazon-bedrock",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-235b-a22b-2507"
+ },
+ "qwen/qwen3-max": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-max"
+ },
+ "qwen/qwen3.5-122b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "regolo-ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-5-122b"
+ },
+ "qwen/qwen3.6-plus": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "alibaba",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwen3-6-plus"
+ },
+ "reka-ai/reka-flash-3": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "reka-flash-3"
+ },
+ "sarvam/sarvam-105b": {
+  "author_org": "sarvam-ai",
+  "candidate_inference_platform": "sarvam",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "sarvam-105b"
+ },
+ "sarvam/sarvam-30b": {
+  "author_org": "sarvam-ai",
+  "candidate_inference_platform": "sarvam",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "sarvam-30b"
+ },
+ "sarvam/sarvam-m-reasoning": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "sarvam-m"
+ },
+ "stepfun/step-2-16k-202411": {
+  "author_org": "stepfun-ai",
+  "candidate_inference_platform": "stepfun",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "step-2-16k"
+ },
+ "stepfun/step-3-5-flash": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "stepfun",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "step-3-5-flash"
+ },
+ "stepfun/step-3.5-flash": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "stepfun",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "step-3-5-flash"
+ },
+ "tencent/hunyuan-turbos-20250313": {
+  "author_org": "tencent",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "hunyuan-turbos"
+ },
+ "unknown/Doubao-Seed-Code": {
+  "author_org": null,
+  "candidate_inference_platform": "zenmux",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "doubao-seed-code"
+ },
+ "unknown/amazon.nova-premier-v1:0": {
+  "author_org": "amazon",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "nova-premier"
+ },
+ "unknown/ernie-4.5-300b-a47b": {
+  "author_org": "baidu",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "ernie-4-5-300b-a47b"
+ },
+ "unknown/hunyuan-t1": {
+  "author_org": "tencent",
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "hunyuan-t1"
+ },
+ "unknown/longcat-flash-chat": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "longcat-flash-chat"
+ },
+ "unknown/minimax-m1": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m1"
+ },
+ "unknown/minimax-m2": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2"
+ },
+ "unknown/minimax-m2.1": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-1"
+ },
+ "unknown/minimax-m2.5": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "minimax",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-m2-5"
+ },
+ "unknown/minimax-text-01": {
+  "author_org": "minimaxai",
+  "candidate_inference_platform": "llmgateway",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "minimax-text-01"
+ },
+ "unknown/nemotron-3-nano-30b-a3b-bf16": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nemotron-3-nano-30b-a3b"
+ },
+ "unknown/nemotron-3-nano-30b-a3b-fp8": {
+  "author_org": "nvidia",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "nemotron-3-nano-30b-a3b"
+ },
+ "unknown/o4-mini-2025-04-16": {
+  "author_org": "openai",
+  "candidate_inference_platform": "openai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "o4-mini"
+ },
+ "unknown/qwq-32b": {
+  "author_org": "qwen",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "qwq-32b"
+ },
+ "unknown/seed-oss-36b-instruct": {
+  "author_org": "bytedance",
+  "candidate_inference_platform": "nvidia",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "seed-oss-36b-instruct"
+ },
+ "upstage/solar-mini": {
+  "author_org": "upstage",
+  "candidate_inference_platform": "upstage",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "solar-mini"
+ },
+ "upstage/solar-pro-3": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "solar-pro-3"
+ },
+ "wizardlm/wizardlm-2-8x22b": {
+  "author_org": "openai",
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "wizardlm-2-8x22b"
+ },
+ "writer/palmyra-x5": {
+  "author_org": null,
+  "candidate_inference_platform": "kilo",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "palmyra-x5"
+ },
+ "xai/Grok 4": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4"
+ },
+ "xai/grok-3": {
+  "author_org": "xai",
+  "candidate_inference_platform": "github-models",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-3"
+ },
+ "xai/grok-3-beta": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-3-beta"
+ },
+ "xai/grok-3-mini": {
+  "author_org": "xai",
+  "candidate_inference_platform": "github-models",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-3-mini"
+ },
+ "xai/grok-3-mini-beta": {
+  "author_org": null,
+  "candidate_inference_platform": "nano-gpt",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-3-mini-beta"
+ },
+ "xai/grok-3-mini-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "github-models",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-3-mini"
+ },
+ "xai/grok-3-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "github-models",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-3"
+ },
+ "xai/grok-4": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4"
+ },
+ "xai/grok-4-0709": {
+  "author_org": "xai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-0709"
+ },
+ "xai/grok-4-1-fast": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-1"
+ },
+ "xai/grok-4-1-fast-non-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-1-fast-non"
+ },
+ "xai/grok-4-1-fast-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-1"
+ },
+ "xai/grok-4-20": {
+  "author_org": "xai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-20"
+ },
+ "xai/grok-4-20-0309": {
+  "author_org": "xai",
+  "candidate_inference_platform": "xai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-20-0309"
+ },
+ "xai/grok-4-20-0309-non-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "xai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-20-0309-non"
+ },
+ "xai/grok-4-20-beta-0309-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-20-beta-0309"
+ },
+ "xai/grok-4-20-non-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "azure",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-20-non"
+ },
+ "xai/grok-4-fast": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4"
+ },
+ "xai/grok-4-fast-non-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-fast-non"
+ },
+ "xai/grok-4-fast-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4"
+ },
+ "xai/grok-4.1-2025-11-17": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-1"
+ },
+ "xai/grok-4.1-fast-non-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-1-fast-non"
+ },
+ "xai/grok-4.1-fast-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "302ai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-1"
+ },
+ "xai/grok-4.20-0309-reasoning": {
+  "author_org": "xai",
+  "candidate_inference_platform": "xai",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-4-20-0309"
+ },
+ "xai/grok-code-fast-1": {
+  "author_org": "xai",
+  "candidate_inference_platform": "abacus",
+  "match_method": "exact",
+  "open_weights": false,
+  "underlying_model_id": "grok-code-fast-1"
+ },
+ "xiaomi/mimo-v2-flash": {
+  "author_org": "xiaomi",
+  "candidate_inference_platform": "xiaomi",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mimo-v2-flash"
+ },
+ "xiaomi/mimo-v2-flash-reasoning": {
+  "author_org": "xiaomi",
+  "candidate_inference_platform": "xiaomi",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mimo-v2-flash"
+ },
+ "xiaomi/mimo-v2-omni": {
+  "author_org": "xiaomi",
+  "candidate_inference_platform": "xiaomi",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mimo-v2-omni"
+ },
+ "xiaomi/mimo-v2-pro": {
+  "author_org": "xiaomi",
+  "candidate_inference_platform": "xiaomi",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "mimo-v2-pro"
+ },
+ "z-ai/glm-4.5": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5"
+ },
+ "zai-org/glm-5v-turbo": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5v"
+ },
+ "zai/glm-4-5-air": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5-air"
+ },
+ "zai/glm-4-5v": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5v"
+ },
+ "zai/glm-4-5v-reasoning": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5v"
+ },
+ "zai/glm-4-6": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-6"
+ },
+ "zai/glm-4-6-reasoning": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-6"
+ },
+ "zai/glm-4-6v": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-6v"
+ },
+ "zai/glm-4-6v-reasoning": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-6v"
+ },
+ "zai/glm-4-7": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-7"
+ },
+ "zai/glm-4-7-flash": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-7-flash"
+ },
+ "zai/glm-4.5": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5"
+ },
+ "zai/glm-4.6": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-6"
+ },
+ "zai/glm-4.7": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-7"
+ },
+ "zai/glm-5": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5"
+ },
+ "zai/glm-5-1": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5-1"
+ },
+ "zai/glm-5-thinking": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5"
+ },
+ "zai/glm-5-turbo": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5"
+ },
+ "zai/glm-5.1-thinking": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5-1"
+ },
+ "zai/glm-5v-turbo": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5v"
+ },
+ "zhipu-ai/glm-4.5": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zhipuai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5"
+ },
+ "zhipu-ai/glm-4.5-air": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zhipuai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5-air"
+ },
+ "zhipu-ai/glm-4.6": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zhipuai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-6"
+ },
+ "zhipu-ai/glm-4.7": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zhipuai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-7"
+ },
+ "zhipu-ai/glm-5": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zhipuai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5"
+ },
+ "zhipu/GLM 4.6": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-6"
+ },
+ "zhipu/GLM 4.7": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-7"
+ },
+ "zhipu/glm-4.5": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-4-5"
+ },
+ "zhipu/glm-5": {
+  "author_org": "zai-org",
+  "candidate_inference_platform": "zai",
+  "match_method": "exact",
+  "open_weights": true,
+  "underlying_model_id": "glm-5"
+ }
+}

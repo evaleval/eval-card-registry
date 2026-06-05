@@ -36,3 +36,8 @@ specs/
 deprecated_refs/
 AGENTS.md
 dep
+# Resolution curation: inputs (denylist/index/proposed/rescues) are tracked;
+# regenerable outputs (review + analysis artifacts) are not.
+curation/org_unknown_review.json
+curation/suspicious_aliases.json
+curation/alias_sweep_result.json

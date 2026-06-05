@@ -1,0 +1,1909 @@
+{
+  "schema_version": "0.1",
+  "generated_for": "specs/model-resolution-rework \u2014 inference_platform curated list (proposal)",
+  "kind_vocabulary": [
+    "author_lab",
+    "inference_platform",
+    "aggregator_gateway",
+    "regional_variant",
+    "coding_plan"
+  ],
+  "entity_field_schema": {
+    "id": "slug, unique. = models.dev provider id where one exists",
+    "display_name": "human label",
+    "kind": "one of kind_vocabulary",
+    "aliases": "list[str] of spellings/host-token forms that should resolve to this id",
+    "homepage": "optional URL",
+    "api": "optional base API URL (from models.dev)",
+    "models_dev_provider": "models.dev provider key this row was built from (null if EEE-only)",
+    "canonical_org": "for author_lab also present in seed/orgs.yaml: the org id",
+    "variant_of": "for regional_variant/coding_plan: the base platform id it duplicates",
+    "also_author / also_hosts": "flag: provider is BOTH author_lab and an inference host",
+    "alias_of": "this id is a duplicate of another platform id"
+  },
+  "counts_by_kind": {
+    "inference_platform": 69,
+    "aggregator_gateway": 22,
+    "author_lab": 29,
+    "regional_variant": 7,
+    "coding_plan": 10
+  },
+  "total_platforms": 137,
+  "eee_host_tokens": {
+    "fireworks": {
+      "platform": "fireworks-ai",
+      "forms": [
+        "prefix:fireworks/",
+        "suffix:-fireworks"
+      ],
+      "eee_rows": 11,
+      "platform_exists_in_modelsdev": true
+    },
+    "together": {
+      "platform": "togetherai",
+      "forms": [
+        "prefix:together/",
+        "suffix:-together"
+      ],
+      "eee_rows": 16,
+      "note": "prefix together/ on RedPajama-* ids are Together-authored, not re-host; suffix -together is a re-host spelling",
+      "platform_exists_in_modelsdev": true
+    },
+    "openrouter": {
+      "platform": "openrouter",
+      "forms": [
+        "suffix:-openrouter"
+      ],
+      "eee_rows": 3,
+      "platform_exists_in_modelsdev": true
+    },
+    "bedrock": {
+      "platform": "amazon-bedrock",
+      "forms": [
+        "suffix:-bedrock"
+      ],
+      "eee_rows": 2,
+      "platform_exists_in_modelsdev": true
+    },
+    "azure": {
+      "platform": "azure",
+      "forms": [
+        "prefix:azure/"
+      ],
+      "eee_rows": 4,
+      "note": "azure/phi-* = Azure re-hosting Microsoft Phi",
+      "platform_exists_in_modelsdev": true
+    },
+    "groq": {
+      "platform": "groq",
+      "forms": [
+        "prefix:groq/"
+      ],
+      "eee_rows": 1,
+      "note": "Groq/Llama-3-Groq-8B-Tool-Use is a Groq-authored finetune on HF, NOT a re-host",
+      "platform_exists_in_modelsdev": true
+    },
+    "databricks": {
+      "platform": "databricks",
+      "forms": [
+        "prefix:databricks/"
+      ],
+      "eee_rows": 15,
+      "note": "databricks/dbrx,dolly are Databricks-authored (author signal, not re-host)",
+      "platform_exists_in_modelsdev": true
+    },
+    "huggingface": {
+      "platform": "huggingface",
+      "forms": [
+        "prefix:huggingface/"
+      ],
+      "eee_rows": 10,
+      "note": "HuggingFaceH4/HuggingFaceTB orgs are author orgs; not the inference router",
+      "platform_exists_in_modelsdev": true
+    }
+  },
+  "platforms": [
+    {
+      "id": "302ai",
+      "display_name": "302.AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "302.AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "302ai",
+      "n_models_on_modelsdev": 97,
+      "api": "https://api.302.ai/v1",
+      "homepage": "https://doc.302.ai"
+    },
+    {
+      "id": "abacus",
+      "display_name": "Abacus RouteLLM",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Abacus"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "abacus",
+      "n_models_on_modelsdev": 65,
+      "api": "https://routellm.abacus.ai/v1",
+      "homepage": "https://abacus.ai/help/api"
+    },
+    {
+      "id": "abliteration-ai",
+      "display_name": "abliteration.ai",
+      "kind": "inference_platform",
+      "aliases": [
+        "abliteration.ai"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "abliteration-ai",
+      "n_models_on_modelsdev": 1,
+      "api": "https://api.abliteration.ai/v1",
+      "homepage": "https://docs.abliteration.ai/models"
+    },
+    {
+      "id": "aihubmix",
+      "display_name": "AIHubMix",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "AIHubMix"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "aihubmix",
+      "n_models_on_modelsdev": 50,
+      "homepage": "https://docs.aihubmix.com"
+    },
+    {
+      "id": "alibaba",
+      "display_name": "Alibaba (Qwen)",
+      "kind": "author_lab",
+      "aliases": [
+        "Alibaba"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "alibaba",
+      "n_models_on_modelsdev": 50,
+      "api": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+      "homepage": "https://www.alibabacloud.com/help/en/model-studio/models",
+      "canonical_org": "alibaba"
+    },
+    {
+      "id": "alibaba-cn",
+      "display_name": "Alibaba (China)",
+      "kind": "regional_variant",
+      "aliases": [
+        "Alibaba (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "alibaba-cn",
+      "n_models_on_modelsdev": 82,
+      "api": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "homepage": "https://www.alibabacloud.com/help/en/model-studio/models",
+      "variant_of": "alibaba"
+    },
+    {
+      "id": "alibaba-coding-plan",
+      "display_name": "Alibaba Coding Plan",
+      "kind": "coding_plan",
+      "aliases": [
+        "Alibaba Coding Plan"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "alibaba-coding-plan",
+      "n_models_on_modelsdev": 11,
+      "api": "https://coding-intl.dashscope.aliyuncs.com/v1",
+      "homepage": "https://www.alibabacloud.com/help/en/model-studio/coding-plan",
+      "variant_of": "alibaba"
+    },
+    {
+      "id": "alibaba-coding-plan-cn",
+      "display_name": "Alibaba Coding Plan (China)",
+      "kind": "coding_plan",
+      "aliases": [
+        "Alibaba Coding Plan (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "alibaba-coding-plan-cn",
+      "n_models_on_modelsdev": 11,
+      "api": "https://coding.dashscope.aliyuncs.com/v1",
+      "homepage": "https://help.aliyun.com/zh/model-studio/coding-plan",
+      "variant_of": "alibaba"
+    },
+    {
+      "id": "amazon-bedrock",
+      "display_name": "Amazon Bedrock",
+      "kind": "inference_platform",
+      "aliases": [
+        "Amazon Bedrock"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "amazon-bedrock",
+      "n_models_on_modelsdev": 91,
+      "homepage": "https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html"
+    },
+    {
+      "id": "ambient",
+      "display_name": "Ambient",
+      "kind": "inference_platform",
+      "aliases": [
+        "Ambient"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "ambient",
+      "n_models_on_modelsdev": 2,
+      "api": "https://api.ambient.xyz/v1",
+      "homepage": "https://ambient.xyz"
+    },
+    {
+      "id": "anthropic",
+      "display_name": "Anthropic",
+      "kind": "author_lab",
+      "aliases": [
+        "Anthropic"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "anthropic",
+      "n_models_on_modelsdev": 24,
+      "homepage": "https://docs.anthropic.com/en/docs/about-claude/models",
+      "canonical_org": "anthropic"
+    },
+    {
+      "id": "atomic-chat",
+      "display_name": "Atomic Chat (local)",
+      "kind": "inference_platform",
+      "aliases": [
+        "Atomic Chat"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "atomic-chat",
+      "n_models_on_modelsdev": 5,
+      "api": "http://127.0.0.1:1337/v1",
+      "homepage": "https://atomic.chat",
+      "note": "local serving endpoint"
+    },
+    {
+      "id": "auriko",
+      "display_name": "Auriko",
+      "kind": "inference_platform",
+      "aliases": [
+        "Auriko"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "auriko",
+      "n_models_on_modelsdev": 15,
+      "api": "https://api.auriko.ai/v1",
+      "homepage": "https://docs.auriko.ai"
+    },
+    {
+      "id": "azure",
+      "display_name": "Azure AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Azure"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "azure",
+      "n_models_on_modelsdev": 103,
+      "homepage": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models"
+    },
+    {
+      "id": "azure-cognitive-services",
+      "display_name": "Azure Cognitive Services",
+      "kind": "inference_platform",
+      "aliases": [
+        "Azure Cognitive Services"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "azure-cognitive-services",
+      "n_models_on_modelsdev": 96,
+      "homepage": "https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models"
+    },
+    {
+      "id": "bailing",
+      "display_name": "Bailing",
+      "kind": "inference_platform",
+      "aliases": [
+        "Bailing"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "bailing",
+      "n_models_on_modelsdev": 2,
+      "api": "https://api.tbox.cn/api/llm/v1/chat/completions",
+      "homepage": "https://alipaytbox.yuque.com/sxs0ba/ling/intro"
+    },
+    {
+      "id": "baseten",
+      "display_name": "Baseten",
+      "kind": "inference_platform",
+      "aliases": [
+        "Baseten"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "baseten",
+      "n_models_on_modelsdev": 14,
+      "api": "https://inference.baseten.co/v1",
+      "homepage": "https://docs.baseten.co/development/model-apis/overview"
+    },
+    {
+      "id": "berget",
+      "display_name": "Berget.AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Berget.AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "berget",
+      "n_models_on_modelsdev": 7,
+      "api": "https://api.berget.ai/v1",
+      "homepage": "https://api.berget.ai"
+    },
+    {
+      "id": "cerebras",
+      "display_name": "Cerebras",
+      "kind": "inference_platform",
+      "aliases": [
+        "Cerebras"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "cerebras",
+      "n_models_on_modelsdev": 3,
+      "homepage": "https://inference-docs.cerebras.ai/models/overview"
+    },
+    {
+      "id": "chutes",
+      "display_name": "Chutes",
+      "kind": "inference_platform",
+      "aliases": [
+        "Chutes"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "chutes",
+      "n_models_on_modelsdev": 39,
+      "api": "https://llm.chutes.ai/v1",
+      "homepage": "https://llm.chutes.ai/v1/models"
+    },
+    {
+      "id": "clarifai",
+      "display_name": "Clarifai",
+      "kind": "inference_platform",
+      "aliases": [
+        "Clarifai"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "clarifai",
+      "n_models_on_modelsdev": 12,
+      "api": "https://api.clarifai.com/v2/ext/openai/v1",
+      "homepage": "https://docs.clarifai.com/compute/inference/"
+    },
+    {
+      "id": "claudinio",
+      "display_name": "Claudinio",
+      "kind": "inference_platform",
+      "aliases": [
+        "Claudinio"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "claudinio",
+      "n_models_on_modelsdev": 1,
+      "api": "https://api.claudin.io/v1",
+      "homepage": "https://claudin.io"
+    },
+    {
+      "id": "cloudferro-sherlock",
+      "display_name": "CloudFerro Sherlock",
+      "kind": "inference_platform",
+      "aliases": [
+        "CloudFerro Sherlock"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "cloudferro-sherlock",
+      "n_models_on_modelsdev": 5,
+      "api": "https://api-sherlock.cloudferro.com/openai/v1/",
+      "homepage": "https://docs.sherlock.cloudferro.com/"
+    },
+    {
+      "id": "cloudflare-ai-gateway",
+      "display_name": "Cloudflare AI Gateway",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Cloudflare AI Gateway"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "cloudflare-ai-gateway",
+      "n_models_on_modelsdev": 76,
+      "homepage": "https://developers.cloudflare.com/ai-gateway/"
+    },
+    {
+      "id": "cloudflare-workers-ai",
+      "display_name": "Cloudflare Workers AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Cloudflare Workers AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "cloudflare-workers-ai",
+      "n_models_on_modelsdev": 20,
+      "api": "https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/ai/v1",
+      "homepage": "https://developers.cloudflare.com/workers-ai/models/"
+    },
+    {
+      "id": "cohere",
+      "display_name": "Cohere",
+      "kind": "author_lab",
+      "aliases": [
+        "Cohere"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "cohere",
+      "n_models_on_modelsdev": 12,
+      "homepage": "https://docs.cohere.com/docs/models",
+      "canonical_org": "cohere"
+    },
+    {
+      "id": "cortecs",
+      "display_name": "Cortecs",
+      "kind": "inference_platform",
+      "aliases": [
+        "Cortecs"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "cortecs",
+      "n_models_on_modelsdev": 49,
+      "api": "https://api.cortecs.ai/v1",
+      "homepage": "https://api.cortecs.ai/v1/models"
+    },
+    {
+      "id": "crof",
+      "display_name": "CrofAI",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "CrofAI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "crof",
+      "n_models_on_modelsdev": 21,
+      "api": "https://crof.ai/v1",
+      "homepage": "https://crof.ai/docs"
+    },
+    {
+      "id": "databricks",
+      "display_name": "Databricks",
+      "kind": "inference_platform",
+      "aliases": [
+        "Databricks"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "databricks",
+      "n_models_on_modelsdev": 25,
+      "api": "https://${DATABRICKS_HOST}/ai-gateway/mlflow/v1",
+      "homepage": "https://docs.databricks.com/aws/en/machine-learning/foundation-models/",
+      "also_author": true,
+      "note": "hosts third-party + authors DBRX/Dolly"
+    },
+    {
+      "id": "deepinfra",
+      "display_name": "Deep Infra",
+      "kind": "inference_platform",
+      "aliases": [
+        "Deep Infra"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "deepinfra",
+      "n_models_on_modelsdev": 39,
+      "homepage": "https://deepinfra.com/models"
+    },
+    {
+      "id": "deepseek",
+      "display_name": "DeepSeek",
+      "kind": "author_lab",
+      "aliases": [
+        "DeepSeek"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "deepseek",
+      "n_models_on_modelsdev": 4,
+      "api": "https://api.deepseek.com",
+      "homepage": "https://api-docs.deepseek.com/quick_start/pricing",
+      "canonical_org": "deepseek"
+    },
+    {
+      "id": "digitalocean",
+      "display_name": "DigitalOcean Inference",
+      "kind": "inference_platform",
+      "aliases": [
+        "DigitalOcean"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "digitalocean",
+      "n_models_on_modelsdev": 78,
+      "api": "https://inference.do-ai.run/v1",
+      "homepage": "https://docs.digitalocean.com/products/gradient-ai-platform/details/models/"
+    },
+    {
+      "id": "dinference",
+      "display_name": "DInference",
+      "kind": "inference_platform",
+      "aliases": [
+        "DInference"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "dinference",
+      "n_models_on_modelsdev": 5,
+      "api": "https://api.dinference.com/v1",
+      "homepage": "https://dinference.com"
+    },
+    {
+      "id": "drun",
+      "display_name": "D.Run",
+      "kind": "inference_platform",
+      "aliases": [
+        "D.Run (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "drun",
+      "n_models_on_modelsdev": 3,
+      "api": "https://chat.d.run/v1",
+      "homepage": "https://www.d.run"
+    },
+    {
+      "id": "evroc",
+      "display_name": "evroc",
+      "kind": "inference_platform",
+      "aliases": [
+        "evroc"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "evroc",
+      "n_models_on_modelsdev": 13,
+      "api": "https://models.think.evroc.com/v1",
+      "homepage": "https://docs.evroc.com/products/think/overview.html"
+    },
+    {
+      "id": "fastrouter",
+      "display_name": "FastRouter",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "FastRouter"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "fastrouter",
+      "n_models_on_modelsdev": 15,
+      "api": "https://go.fastrouter.ai/api/v1",
+      "homepage": "https://fastrouter.ai/models"
+    },
+    {
+      "id": "firepass",
+      "display_name": "Fireworks (Firepass)",
+      "kind": "inference_platform",
+      "aliases": [
+        "Fireworks (Firepass)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "firepass",
+      "n_models_on_modelsdev": 1,
+      "api": "https://api.fireworks.ai/inference/v1/",
+      "homepage": "https://docs.fireworks.ai/firepass",
+      "alias_of": "fireworks-ai"
+    },
+    {
+      "id": "fireworks-ai",
+      "display_name": "Fireworks AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Fireworks AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "fireworks-ai",
+      "n_models_on_modelsdev": 12,
+      "api": "https://api.fireworks.ai/inference/v1/",
+      "homepage": "https://fireworks.ai/docs/"
+    },
+    {
+      "id": "friendli",
+      "display_name": "Friendli",
+      "kind": "inference_platform",
+      "aliases": [
+        "Friendli"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "friendli",
+      "n_models_on_modelsdev": 6,
+      "api": "https://api.friendli.ai/serverless/v1",
+      "homepage": "https://friendli.ai/docs/guides/serverless_endpoints/introduction"
+    },
+    {
+      "id": "frogbot",
+      "display_name": "FrogBot",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "FrogBot"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "frogbot",
+      "n_models_on_modelsdev": 26,
+      "api": "https://app.frogbot.ai/api/v1",
+      "homepage": "https://docs.frogbot.ai"
+    },
+    {
+      "id": "github-copilot",
+      "display_name": "GitHub Copilot",
+      "kind": "inference_platform",
+      "aliases": [
+        "GitHub Copilot"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "github-copilot",
+      "n_models_on_modelsdev": 29,
+      "api": "https://api.githubcopilot.com",
+      "homepage": "https://docs.github.com/en/copilot"
+    },
+    {
+      "id": "github-models",
+      "display_name": "GitHub Models",
+      "kind": "inference_platform",
+      "aliases": [
+        "GitHub Models"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "github-models",
+      "n_models_on_modelsdev": 55,
+      "api": "https://models.github.ai/inference",
+      "homepage": "https://docs.github.com/en/github-models"
+    },
+    {
+      "id": "gitlab",
+      "display_name": "GitLab Duo",
+      "kind": "inference_platform",
+      "aliases": [
+        "GitLab Duo"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "gitlab",
+      "n_models_on_modelsdev": 17,
+      "homepage": "https://docs.gitlab.com/user/duo_agent_platform/"
+    },
+    {
+      "id": "gmicloud",
+      "display_name": "GMI Cloud",
+      "kind": "inference_platform",
+      "aliases": [
+        "GMI Cloud"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "gmicloud",
+      "n_models_on_modelsdev": 8,
+      "api": "https://api.gmi-serving.com/v1",
+      "homepage": "https://docs.gmicloud.ai/inference-engine/api-reference/llm-api-reference"
+    },
+    {
+      "id": "google",
+      "display_name": "Google",
+      "kind": "author_lab",
+      "aliases": [
+        "Google"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "google",
+      "n_models_on_modelsdev": 21,
+      "homepage": "https://ai.google.dev/gemini-api/docs/models",
+      "canonical_org": "google"
+    },
+    {
+      "id": "google-vertex",
+      "display_name": "Google Vertex AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Vertex"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "google-vertex",
+      "n_models_on_modelsdev": 40,
+      "homepage": "https://cloud.google.com/vertex-ai/generative-ai/docs/models"
+    },
+    {
+      "id": "google-vertex-anthropic",
+      "display_name": "Vertex AI (Anthropic)",
+      "kind": "inference_platform",
+      "aliases": [
+        "Vertex (Anthropic)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "google-vertex-anthropic",
+      "n_models_on_modelsdev": 13,
+      "homepage": "https://cloud.google.com/vertex-ai/generative-ai/docs/partner-models/claude",
+      "note": "Vertex channel for Anthropic models"
+    },
+    {
+      "id": "groq",
+      "display_name": "Groq",
+      "kind": "inference_platform",
+      "aliases": [
+        "Groq"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "groq",
+      "n_models_on_modelsdev": 27,
+      "homepage": "https://console.groq.com/docs/models"
+    },
+    {
+      "id": "helicone",
+      "display_name": "Helicone",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Helicone"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "helicone",
+      "n_models_on_modelsdev": 90,
+      "api": "https://ai-gateway.helicone.ai/v1",
+      "homepage": "https://helicone.ai/models"
+    },
+    {
+      "id": "hpc-ai",
+      "display_name": "HPC-AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "HPC-AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "hpc-ai",
+      "n_models_on_modelsdev": 3,
+      "api": "https://api.hpc-ai.com/inference/v1",
+      "homepage": "https://www.hpc-ai.com/doc/docs/quickstart/"
+    },
+    {
+      "id": "huggingface",
+      "display_name": "Hugging Face Inference Router",
+      "kind": "inference_platform",
+      "aliases": [
+        "Hugging Face"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "huggingface",
+      "n_models_on_modelsdev": 24,
+      "api": "https://router.huggingface.co/v1",
+      "homepage": "https://huggingface.co/docs/inference-providers"
+    },
+    {
+      "id": "iflowcn",
+      "display_name": "iFlow",
+      "kind": "inference_platform",
+      "aliases": [
+        "iFlow"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "iflowcn",
+      "n_models_on_modelsdev": 14,
+      "api": "https://apis.iflow.cn/v1",
+      "homepage": "https://platform.iflow.cn/en/docs"
+    },
+    {
+      "id": "inception",
+      "display_name": "Inception Labs",
+      "kind": "author_lab",
+      "aliases": [
+        "Inception"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "inception",
+      "n_models_on_modelsdev": 2,
+      "api": "https://api.inceptionlabs.ai/v1/",
+      "homepage": "https://platform.inceptionlabs.ai/docs",
+      "canonical_org": "inception"
+    },
+    {
+      "id": "inceptron",
+      "display_name": "Inceptron",
+      "kind": "author_lab",
+      "aliases": [
+        "Inceptron"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "inceptron",
+      "n_models_on_modelsdev": 4,
+      "api": "https://api.inceptron.io/v1",
+      "homepage": "https://docs.inceptron.io"
+    },
+    {
+      "id": "inference",
+      "display_name": "Inference.net",
+      "kind": "inference_platform",
+      "aliases": [
+        "Inference"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "inference",
+      "n_models_on_modelsdev": 9,
+      "api": "https://inference.net/v1",
+      "homepage": "https://inference.net/models"
+    },
+    {
+      "id": "io-net",
+      "display_name": "IO.NET",
+      "kind": "inference_platform",
+      "aliases": [
+        "IO.NET"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "io-net",
+      "n_models_on_modelsdev": 17,
+      "api": "https://api.intelligence.io.solutions/api/v1",
+      "homepage": "https://io.net/docs/guides/intelligence/io-intelligence"
+    },
+    {
+      "id": "jiekou",
+      "display_name": "Jiekou.AI",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Jiekou.AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "jiekou",
+      "n_models_on_modelsdev": 61,
+      "api": "https://api.jiekou.ai/openai",
+      "homepage": "https://docs.jiekou.ai/docs/support/quickstart?utm_source=github_models.dev"
+    },
+    {
+      "id": "kilo",
+      "display_name": "Kilo Gateway",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Kilo Gateway"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "kilo",
+      "n_models_on_modelsdev": 345,
+      "api": "https://api.kilo.ai/api/gateway",
+      "homepage": "https://kilo.ai"
+    },
+    {
+      "id": "kimi-for-coding",
+      "display_name": "Kimi For Coding",
+      "kind": "coding_plan",
+      "aliases": [
+        "Kimi For Coding"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "kimi-for-coding",
+      "n_models_on_modelsdev": 3,
+      "api": "https://api.kimi.com/coding/v1",
+      "homepage": "https://www.kimi.com/coding/docs/en/third-party-agents.html",
+      "variant_of": "moonshotai"
+    },
+    {
+      "id": "kuae-cloud-coding-plan",
+      "display_name": "KUAE Cloud Coding Plan",
+      "kind": "coding_plan",
+      "aliases": [
+        "KUAE Cloud Coding Plan"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "kuae-cloud-coding-plan",
+      "n_models_on_modelsdev": 1,
+      "api": "https://coding-plan-endpoint.kuaecloud.net/v1",
+      "homepage": "https://docs.mthreads.com/kuaecloud/kuaecloud-doc-online/coding_plan/"
+    },
+    {
+      "id": "lilac",
+      "display_name": "Lilac",
+      "kind": "inference_platform",
+      "aliases": [
+        "Lilac"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "lilac",
+      "n_models_on_modelsdev": 4,
+      "api": "https://api.getlilac.com/v1",
+      "homepage": "https://docs.getlilac.com/inference/models"
+    },
+    {
+      "id": "llama",
+      "display_name": "Llama (Meta API)",
+      "kind": "author_lab",
+      "aliases": [
+        "Llama"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "llama",
+      "n_models_on_modelsdev": 7,
+      "api": "https://api.llama.com/compat/v1/",
+      "homepage": "https://llama.developer.meta.com/docs/models",
+      "canonical_org": "meta"
+    },
+    {
+      "id": "llmgateway",
+      "display_name": "LLM Gateway",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "LLM Gateway"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "llmgateway",
+      "n_models_on_modelsdev": 189,
+      "api": "https://api.llmgateway.io/v1",
+      "homepage": "https://llmgateway.io/docs"
+    },
+    {
+      "id": "lmstudio",
+      "display_name": "LM Studio (local)",
+      "kind": "inference_platform",
+      "aliases": [
+        "LMStudio"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "lmstudio",
+      "n_models_on_modelsdev": 3,
+      "api": "http://127.0.0.1:1234/v1",
+      "homepage": "https://lmstudio.ai/models",
+      "note": "local serving endpoint"
+    },
+    {
+      "id": "lucidquery",
+      "display_name": "LucidQuery AI",
+      "kind": "author_lab",
+      "aliases": [
+        "LucidQuery AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "lucidquery",
+      "n_models_on_modelsdev": 2,
+      "api": "https://lucidquery.com/api/v1",
+      "homepage": "https://lucidquery.com/api/docs"
+    },
+    {
+      "id": "meganova",
+      "display_name": "Meganova",
+      "kind": "inference_platform",
+      "aliases": [
+        "Meganova"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "meganova",
+      "n_models_on_modelsdev": 19,
+      "api": "https://api.meganova.ai/v1",
+      "homepage": "https://docs.meganova.ai"
+    },
+    {
+      "id": "merge-gateway",
+      "display_name": "Merge Gateway",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Merge Gateway"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "merge-gateway",
+      "n_models_on_modelsdev": 83,
+      "homepage": "https://docs.merge.dev/merge-gateway"
+    },
+    {
+      "id": "minimax",
+      "display_name": "MiniMax",
+      "kind": "author_lab",
+      "aliases": [
+        "MiniMax (minimax.io)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "minimax",
+      "n_models_on_modelsdev": 6,
+      "api": "https://api.minimax.io/anthropic/v1",
+      "homepage": "https://platform.minimax.io/docs/guides/quickstart",
+      "canonical_org": "minimax"
+    },
+    {
+      "id": "minimax-cn",
+      "display_name": "MiniMax (minimaxi.com / China)",
+      "kind": "regional_variant",
+      "aliases": [
+        "MiniMax (minimaxi.com)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "minimax-cn",
+      "n_models_on_modelsdev": 6,
+      "api": "https://api.minimaxi.com/anthropic/v1",
+      "homepage": "https://platform.minimaxi.com/docs/guides/quickstart",
+      "variant_of": "minimax"
+    },
+    {
+      "id": "minimax-cn-coding-plan",
+      "display_name": "MiniMax Token Plan (minimaxi.com)",
+      "kind": "coding_plan",
+      "aliases": [
+        "MiniMax Token Plan (minimaxi.com)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "minimax-cn-coding-plan",
+      "n_models_on_modelsdev": 6,
+      "api": "https://api.minimaxi.com/anthropic/v1",
+      "homepage": "https://platform.minimaxi.com/docs/token-plan/intro",
+      "variant_of": "minimax"
+    },
+    {
+      "id": "minimax-coding-plan",
+      "display_name": "MiniMax Token Plan (minimax.io)",
+      "kind": "coding_plan",
+      "aliases": [
+        "MiniMax Token Plan (minimax.io)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "minimax-coding-plan",
+      "n_models_on_modelsdev": 6,
+      "api": "https://api.minimax.io/anthropic/v1",
+      "homepage": "https://platform.minimax.io/docs/token-plan/intro",
+      "variant_of": "minimax"
+    },
+    {
+      "id": "mistral",
+      "display_name": "Mistral",
+      "kind": "author_lab",
+      "aliases": [
+        "Mistral"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "mistral",
+      "n_models_on_modelsdev": 28,
+      "homepage": "https://docs.mistral.ai/getting-started/models/",
+      "canonical_org": "mistralai"
+    },
+    {
+      "id": "mixlayer",
+      "display_name": "Mixlayer",
+      "kind": "inference_platform",
+      "aliases": [
+        "Mixlayer"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "mixlayer",
+      "n_models_on_modelsdev": 5,
+      "api": "https://models.mixlayer.ai/v1",
+      "homepage": "https://docs.mixlayer.com"
+    },
+    {
+      "id": "moark",
+      "display_name": "Moark",
+      "kind": "inference_platform",
+      "aliases": [
+        "Moark"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "moark",
+      "n_models_on_modelsdev": 2,
+      "api": "https://moark.com/v1",
+      "homepage": "https://moark.com/docs/openapi/v1#tag/%E6%96%87%E6%9C%AC%E7%94%9F%E6%88%90"
+    },
+    {
+      "id": "modelscope",
+      "display_name": "ModelScope",
+      "kind": "inference_platform",
+      "aliases": [
+        "ModelScope"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "modelscope",
+      "n_models_on_modelsdev": 7,
+      "api": "https://api-inference.modelscope.cn/v1",
+      "homepage": "https://modelscope.cn/docs/model-service/API-Inference/intro"
+    },
+    {
+      "id": "moonshotai",
+      "display_name": "Moonshot AI",
+      "kind": "author_lab",
+      "aliases": [
+        "Moonshot AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "moonshotai",
+      "n_models_on_modelsdev": 7,
+      "api": "https://api.moonshot.ai/v1",
+      "homepage": "https://platform.moonshot.ai/docs/api/chat",
+      "canonical_org": "moonshotai"
+    },
+    {
+      "id": "moonshotai-cn",
+      "display_name": "Moonshot AI (China)",
+      "kind": "regional_variant",
+      "aliases": [
+        "Moonshot AI (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "moonshotai-cn",
+      "n_models_on_modelsdev": 7,
+      "api": "https://api.moonshot.cn/v1",
+      "homepage": "https://platform.moonshot.cn/docs/api/chat",
+      "variant_of": "moonshotai"
+    },
+    {
+      "id": "morph",
+      "display_name": "Morph",
+      "kind": "author_lab",
+      "aliases": [
+        "Morph"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "morph",
+      "n_models_on_modelsdev": 3,
+      "api": "https://api.morphllm.com/v1",
+      "homepage": "https://docs.morphllm.com/api-reference/introduction"
+    },
+    {
+      "id": "nano-gpt",
+      "display_name": "NanoGPT",
+      "kind": "inference_platform",
+      "aliases": [
+        "NanoGPT"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "nano-gpt",
+      "n_models_on_modelsdev": 525,
+      "api": "https://nano-gpt.com/api/v1",
+      "homepage": "https://docs.nano-gpt.com"
+    },
+    {
+      "id": "nearai",
+      "display_name": "NEAR AI Cloud",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "NEAR AI Cloud"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "nearai",
+      "n_models_on_modelsdev": 37,
+      "api": "https://cloud-api.near.ai/v1",
+      "homepage": "https://docs.near.ai/"
+    },
+    {
+      "id": "nebius",
+      "display_name": "Nebius Token Factory",
+      "kind": "inference_platform",
+      "aliases": [
+        "Nebius Token Factory"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "nebius",
+      "n_models_on_modelsdev": 31,
+      "api": "https://api.tokenfactory.nebius.com/v1",
+      "homepage": "https://docs.tokenfactory.nebius.com/"
+    },
+    {
+      "id": "neuralwatt",
+      "display_name": "Neuralwatt",
+      "kind": "inference_platform",
+      "aliases": [
+        "Neuralwatt"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "neuralwatt",
+      "n_models_on_modelsdev": 14,
+      "api": "https://api.neuralwatt.com/v1",
+      "homepage": "https://portal.neuralwatt.com/docs"
+    },
+    {
+      "id": "nova",
+      "display_name": "Amazon Nova",
+      "kind": "author_lab",
+      "aliases": [
+        "Nova"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "nova",
+      "n_models_on_modelsdev": 2,
+      "api": "https://api.nova.amazon.com/v1",
+      "homepage": "https://nova.amazon.com/dev/documentation",
+      "canonical_org": "amazon",
+      "note": "Amazon's own Nova model family API"
+    },
+    {
+      "id": "novita-ai",
+      "display_name": "Novita AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "NovitaAI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "novita-ai",
+      "n_models_on_modelsdev": 104,
+      "api": "https://api.novita.ai/openai",
+      "homepage": "https://novita.ai/docs/guides/introduction"
+    },
+    {
+      "id": "nvidia",
+      "display_name": "Nvidia",
+      "kind": "author_lab",
+      "aliases": [
+        "Nvidia"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "nvidia",
+      "n_models_on_modelsdev": 93,
+      "api": "https://integrate.api.nvidia.com/v1",
+      "homepage": "https://docs.api.nvidia.com/nim/",
+      "canonical_org": "nvidia",
+      "also_hosts": true
+    },
+    {
+      "id": "ollama-cloud",
+      "display_name": "Ollama Cloud",
+      "kind": "inference_platform",
+      "aliases": [
+        "Ollama Cloud"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "ollama-cloud",
+      "n_models_on_modelsdev": 39,
+      "api": "https://ollama.com/v1",
+      "homepage": "https://docs.ollama.com/cloud"
+    },
+    {
+      "id": "openai",
+      "display_name": "OpenAI",
+      "kind": "author_lab",
+      "aliases": [
+        "OpenAI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "openai",
+      "n_models_on_modelsdev": 52,
+      "homepage": "https://platform.openai.com/docs/models",
+      "canonical_org": "openai"
+    },
+    {
+      "id": "opencode",
+      "display_name": "OpenCode Zen",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "OpenCode Zen"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "opencode",
+      "n_models_on_modelsdev": 66,
+      "api": "https://opencode.ai/zen/v1",
+      "homepage": "https://opencode.ai/docs/zen"
+    },
+    {
+      "id": "opencode-go",
+      "display_name": "OpenCode Go",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "OpenCode Go"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "opencode-go",
+      "n_models_on_modelsdev": 16,
+      "api": "https://opencode.ai/zen/go/v1",
+      "homepage": "https://opencode.ai/docs/zen"
+    },
+    {
+      "id": "openrouter",
+      "display_name": "OpenRouter",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "OpenRouter"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "openrouter",
+      "n_models_on_modelsdev": 344,
+      "api": "https://openrouter.ai/api/v1",
+      "homepage": "https://openrouter.ai/models"
+    },
+    {
+      "id": "orcarouter",
+      "display_name": "OrcaRouter",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "OrcaRouter"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "orcarouter",
+      "n_models_on_modelsdev": 81,
+      "api": "https://api.orcarouter.ai/v1",
+      "homepage": "https://docs.orcarouter.ai"
+    },
+    {
+      "id": "ovhcloud",
+      "display_name": "OVHcloud AI Endpoints",
+      "kind": "inference_platform",
+      "aliases": [
+        "OVHcloud AI Endpoints"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "ovhcloud",
+      "n_models_on_modelsdev": 11,
+      "api": "https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",
+      "homepage": "https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog//"
+    },
+    {
+      "id": "perplexity",
+      "display_name": "Perplexity",
+      "kind": "author_lab",
+      "aliases": [
+        "Perplexity"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "perplexity",
+      "n_models_on_modelsdev": 4,
+      "homepage": "https://docs.perplexity.ai",
+      "canonical_org": "perplexity"
+    },
+    {
+      "id": "perplexity-agent",
+      "display_name": "Perplexity Agent",
+      "kind": "author_lab",
+      "aliases": [
+        "Perplexity Agent"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "perplexity-agent",
+      "n_models_on_modelsdev": 18,
+      "api": "https://api.perplexity.ai/v1",
+      "homepage": "https://docs.perplexity.ai/docs/agent-api/models",
+      "canonical_org": "perplexity",
+      "note": "Perplexity agent API channel"
+    },
+    {
+      "id": "poe",
+      "display_name": "Poe",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Poe"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "poe",
+      "n_models_on_modelsdev": 137,
+      "api": "https://api.poe.com/v1",
+      "homepage": "https://creator.poe.com/docs/external-applications/openai-compatible-api"
+    },
+    {
+      "id": "poolside",
+      "display_name": "Poolside",
+      "kind": "author_lab",
+      "aliases": [
+        "Poolside"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "poolside",
+      "n_models_on_modelsdev": 2,
+      "api": "https://inference.poolside.ai/v1",
+      "homepage": "https://platform.poolside.ai"
+    },
+    {
+      "id": "privatemode-ai",
+      "display_name": "Privatemode AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Privatemode AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "privatemode-ai",
+      "n_models_on_modelsdev": 5,
+      "api": "http://localhost:8080/v1",
+      "homepage": "https://docs.privatemode.ai/api/overview"
+    },
+    {
+      "id": "qihang-ai",
+      "display_name": "QiHang",
+      "kind": "inference_platform",
+      "aliases": [
+        "QiHang"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "qihang-ai",
+      "n_models_on_modelsdev": 9,
+      "api": "https://api.qhaigc.net/v1",
+      "homepage": "https://www.qhaigc.net/docs"
+    },
+    {
+      "id": "qiniu-ai",
+      "display_name": "Qiniu",
+      "kind": "inference_platform",
+      "aliases": [
+        "Qiniu"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "qiniu-ai",
+      "n_models_on_modelsdev": 91,
+      "api": "https://api.qnaigc.com/v1",
+      "homepage": "https://developer.qiniu.com/aitokenapi"
+    },
+    {
+      "id": "regolo-ai",
+      "display_name": "Regolo AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Regolo AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "regolo-ai",
+      "n_models_on_modelsdev": 13,
+      "api": "https://api.regolo.ai/v1",
+      "homepage": "https://docs.regolo.ai/"
+    },
+    {
+      "id": "requesty",
+      "display_name": "Requesty",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Requesty"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "requesty",
+      "n_models_on_modelsdev": 38,
+      "api": "https://router.requesty.ai/v1",
+      "homepage": "https://requesty.ai/solution/llm-routing/models"
+    },
+    {
+      "id": "routing-run",
+      "display_name": "routing.run",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "routing.run"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "routing-run",
+      "n_models_on_modelsdev": 26,
+      "api": "https://ai.routing.sh/v1",
+      "homepage": "https://docs.routing.run/api-reference/models"
+    },
+    {
+      "id": "sap-ai-core",
+      "display_name": "SAP AI Core",
+      "kind": "inference_platform",
+      "aliases": [
+        "SAP AI Core"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "sap-ai-core",
+      "n_models_on_modelsdev": 25,
+      "homepage": "https://help.sap.com/docs/sap-ai-core"
+    },
+    {
+      "id": "sarvam",
+      "display_name": "Sarvam AI",
+      "kind": "author_lab",
+      "aliases": [
+        "Sarvam AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "sarvam",
+      "n_models_on_modelsdev": 2,
+      "api": "https://api.sarvam.ai/v1",
+      "homepage": "https://docs.sarvam.ai/api-reference-docs/getting-started/models"
+    },
+    {
+      "id": "scaleway",
+      "display_name": "Scaleway",
+      "kind": "inference_platform",
+      "aliases": [
+        "Scaleway"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "scaleway",
+      "n_models_on_modelsdev": 16,
+      "api": "https://api.scaleway.ai/v1",
+      "homepage": "https://www.scaleway.com/en/docs/generative-apis/"
+    },
+    {
+      "id": "siliconflow",
+      "display_name": "SiliconFlow",
+      "kind": "inference_platform",
+      "aliases": [
+        "SiliconFlow"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "siliconflow",
+      "n_models_on_modelsdev": 76,
+      "api": "https://api.siliconflow.com/v1",
+      "homepage": "https://cloud.siliconflow.com/models"
+    },
+    {
+      "id": "siliconflow-cn",
+      "display_name": "SiliconFlow (China)",
+      "kind": "regional_variant",
+      "aliases": [
+        "SiliconFlow (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "siliconflow-cn",
+      "n_models_on_modelsdev": 82,
+      "api": "https://api.siliconflow.cn/v1",
+      "homepage": "https://cloud.siliconflow.com/models",
+      "variant_of": "siliconflow"
+    },
+    {
+      "id": "snowflake-cortex",
+      "display_name": "Snowflake Cortex",
+      "kind": "inference_platform",
+      "aliases": [
+        "Snowflake Cortex"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "snowflake-cortex",
+      "n_models_on_modelsdev": 11,
+      "api": "https://${SNOWFLAKE_ACCOUNT}.snowflakecomputing.com/api/v2/cortex/v1",
+      "homepage": "https://docs.snowflake.com/en/user-guide/snowflake-cortex/cortex-rest-api"
+    },
+    {
+      "id": "stackit",
+      "display_name": "STACKIT",
+      "kind": "inference_platform",
+      "aliases": [
+        "STACKIT"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "stackit",
+      "n_models_on_modelsdev": 8,
+      "api": "https://api.openai-compat.model-serving.eu01.onstackit.cloud/v1",
+      "homepage": "https://docs.stackit.cloud/products/data-and-ai/ai-model-serving/basics/available-shared-models"
+    },
+    {
+      "id": "stepfun",
+      "display_name": "StepFun",
+      "kind": "author_lab",
+      "aliases": [
+        "StepFun (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "stepfun",
+      "n_models_on_modelsdev": 4,
+      "api": "https://api.stepfun.com/v1",
+      "homepage": "https://platform.stepfun.com/docs/zh/overview/concept",
+      "canonical_org": "stepfun"
+    },
+    {
+      "id": "stepfun-ai",
+      "display_name": "StepFun (step_plan)",
+      "kind": "author_lab",
+      "aliases": [
+        "StepFun"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "stepfun-ai",
+      "n_models_on_modelsdev": 2,
+      "api": "https://api.stepfun.ai/step_plan/v1",
+      "homepage": "https://platform.stepfun.ai/docs/en/step-plan/integrations/open-code",
+      "canonical_org": "stepfun"
+    },
+    {
+      "id": "submodel",
+      "display_name": "Submodel",
+      "kind": "inference_platform",
+      "aliases": [
+        "submodel"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "submodel",
+      "n_models_on_modelsdev": 9,
+      "api": "https://llm.submodel.ai/v1",
+      "homepage": "https://submodel.gitbook.io"
+    },
+    {
+      "id": "synthetic",
+      "display_name": "Synthetic",
+      "kind": "inference_platform",
+      "aliases": [
+        "Synthetic"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "synthetic",
+      "n_models_on_modelsdev": 33,
+      "api": "https://api.synthetic.new/openai/v1",
+      "homepage": "https://synthetic.new/pricing"
+    },
+    {
+      "id": "tencent-coding-plan",
+      "display_name": "Tencent Coding Plan (China)",
+      "kind": "coding_plan",
+      "aliases": [
+        "Tencent Coding Plan (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "tencent-coding-plan",
+      "n_models_on_modelsdev": 8,
+      "api": "https://api.lkeap.cloud.tencent.com/coding/v3",
+      "homepage": "https://cloud.tencent.com/document/product/1772/128947"
+    },
+    {
+      "id": "tencent-tokenhub",
+      "display_name": "Tencent TokenHub",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Tencent TokenHub"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "tencent-tokenhub",
+      "n_models_on_modelsdev": 1,
+      "api": "https://tokenhub.tencentmaas.com/v1",
+      "homepage": "https://cloud.tencent.com/document/product/1823/130050"
+    },
+    {
+      "id": "the-grid-ai",
+      "display_name": "The Grid AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "The Grid AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "the-grid-ai",
+      "n_models_on_modelsdev": 9,
+      "api": "https://api.thegrid.ai/v1",
+      "homepage": "https://thegrid.ai/docs"
+    },
+    {
+      "id": "togetherai",
+      "display_name": "Together AI",
+      "kind": "inference_platform",
+      "aliases": [
+        "Together AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "togetherai",
+      "n_models_on_modelsdev": 19,
+      "homepage": "https://docs.together.ai/docs/serverless-models"
+    },
+    {
+      "id": "umans-ai-coding-plan",
+      "display_name": "Umans AI Coding Plan",
+      "kind": "coding_plan",
+      "aliases": [
+        "Umans AI Coding Plan"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "umans-ai-coding-plan",
+      "n_models_on_modelsdev": 5,
+      "api": "https://api.code.umans.ai/v1",
+      "homepage": "https://app.umans.ai/offers/code/docs"
+    },
+    {
+      "id": "upstage",
+      "display_name": "Upstage",
+      "kind": "author_lab",
+      "aliases": [
+        "Upstage"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "upstage",
+      "n_models_on_modelsdev": 3,
+      "api": "https://api.upstage.ai/v1/solar",
+      "homepage": "https://developers.upstage.ai/docs/apis/chat",
+      "canonical_org": "upstage"
+    },
+    {
+      "id": "v0",
+      "display_name": "v0 (Vercel)",
+      "kind": "author_lab",
+      "aliases": [
+        "v0"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "v0",
+      "n_models_on_modelsdev": 3,
+      "homepage": "https://sdk.vercel.ai/providers/ai-sdk-providers/vercel",
+      "note": "Vercel's own v0 model"
+    },
+    {
+      "id": "venice",
+      "display_name": "Venice AI",
+      "kind": "author_lab",
+      "aliases": [
+        "Venice AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "venice",
+      "n_models_on_modelsdev": 69,
+      "homepage": "https://docs.venice.ai"
+    },
+    {
+      "id": "vercel",
+      "display_name": "Vercel AI Gateway",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "Vercel AI Gateway"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "vercel",
+      "n_models_on_modelsdev": 245,
+      "homepage": "https://github.com/vercel/ai/tree/5eb85cc45a259553501f535b8ac79a77d0e79223/packages/gateway"
+    },
+    {
+      "id": "vivgrid",
+      "display_name": "Vivgrid",
+      "kind": "inference_platform",
+      "aliases": [
+        "Vivgrid"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "vivgrid",
+      "n_models_on_modelsdev": 13,
+      "api": "https://api.vivgrid.com/v1",
+      "homepage": "https://docs.vivgrid.com/models"
+    },
+    {
+      "id": "vultr",
+      "display_name": "Vultr Inference",
+      "kind": "inference_platform",
+      "aliases": [
+        "Vultr"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "vultr",
+      "n_models_on_modelsdev": 7,
+      "api": "https://api.vultrinference.com/v1",
+      "homepage": "https://api.vultrinference.com/"
+    },
+    {
+      "id": "wafer.ai",
+      "display_name": "Wafer",
+      "kind": "inference_platform",
+      "aliases": [
+        "Wafer"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "wafer.ai",
+      "n_models_on_modelsdev": 7,
+      "api": "https://pass.wafer.ai/v1",
+      "homepage": "https://docs.wafer.ai/wafer-pass"
+    },
+    {
+      "id": "wandb",
+      "display_name": "Weights & Biases Inference",
+      "kind": "inference_platform",
+      "aliases": [
+        "Weights & Biases"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "wandb",
+      "n_models_on_modelsdev": 18,
+      "api": "https://api.inference.wandb.ai/v1",
+      "homepage": "https://docs.wandb.ai/guides/integrations/inference/"
+    },
+    {
+      "id": "xai",
+      "display_name": "xAI",
+      "kind": "author_lab",
+      "aliases": [
+        "xAI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "xai",
+      "n_models_on_modelsdev": 8,
+      "homepage": "https://docs.x.ai/docs/models",
+      "canonical_org": "xai"
+    },
+    {
+      "id": "xiaomi",
+      "display_name": "Xiaomi (MiMo)",
+      "kind": "author_lab",
+      "aliases": [
+        "Xiaomi"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "xiaomi",
+      "n_models_on_modelsdev": 5,
+      "api": "https://api.xiaomimimo.com/v1",
+      "homepage": "https://platform.xiaomimimo.com/#/docs"
+    },
+    {
+      "id": "xiaomi-token-plan-ams",
+      "display_name": "Xiaomi Token Plan (Europe)",
+      "kind": "regional_variant",
+      "aliases": [
+        "Xiaomi Token Plan (Europe)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "xiaomi-token-plan-ams",
+      "n_models_on_modelsdev": 8,
+      "api": "https://token-plan-ams.xiaomimimo.com/v1",
+      "homepage": "https://platform.xiaomimimo.com/#/docs",
+      "variant_of": "xiaomi"
+    },
+    {
+      "id": "xiaomi-token-plan-cn",
+      "display_name": "Xiaomi Token Plan (China)",
+      "kind": "regional_variant",
+      "aliases": [
+        "Xiaomi Token Plan (China)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "xiaomi-token-plan-cn",
+      "n_models_on_modelsdev": 8,
+      "api": "https://token-plan-cn.xiaomimimo.com/v1",
+      "homepage": "https://platform.xiaomimimo.com/#/docs",
+      "variant_of": "xiaomi"
+    },
+    {
+      "id": "xiaomi-token-plan-sgp",
+      "display_name": "Xiaomi Token Plan (Singapore)",
+      "kind": "regional_variant",
+      "aliases": [
+        "Xiaomi Token Plan (Singapore)"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "xiaomi-token-plan-sgp",
+      "n_models_on_modelsdev": 8,
+      "api": "https://token-plan-sgp.xiaomimimo.com/v1",
+      "homepage": "https://platform.xiaomimimo.com/#/docs",
+      "variant_of": "xiaomi"
+    },
+    {
+      "id": "xpersona",
+      "display_name": "Xpersona",
+      "kind": "inference_platform",
+      "aliases": [
+        "Xpersona"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "xpersona",
+      "n_models_on_modelsdev": 1,
+      "api": "https://www.xpersona.co/v1",
+      "homepage": "https://www.xpersona.co/docs"
+    },
+    {
+      "id": "zai",
+      "display_name": "Z.AI (Zhipu)",
+      "kind": "author_lab",
+      "aliases": [
+        "Z.AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "zai",
+      "n_models_on_modelsdev": 13,
+      "api": "https://api.z.ai/api/paas/v4",
+      "homepage": "https://docs.z.ai/guides/overview/pricing",
+      "canonical_org": "zai"
+    },
+    {
+      "id": "zai-coding-plan",
+      "display_name": "Z.AI Coding Plan",
+      "kind": "coding_plan",
+      "aliases": [
+        "Z.AI Coding Plan"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "zai-coding-plan",
+      "n_models_on_modelsdev": 5,
+      "api": "https://api.z.ai/api/coding/paas/v4",
+      "homepage": "https://docs.z.ai/devpack/overview",
+      "variant_of": "zai"
+    },
+    {
+      "id": "zenmux",
+      "display_name": "ZenMux",
+      "kind": "aggregator_gateway",
+      "aliases": [
+        "ZenMux"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "zenmux",
+      "n_models_on_modelsdev": 96,
+      "api": "https://zenmux.ai/api/v1",
+      "homepage": "https://docs.zenmux.ai"
+    },
+    {
+      "id": "zhipuai",
+      "display_name": "Zhipu AI",
+      "kind": "author_lab",
+      "aliases": [
+        "Zhipu AI"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "zhipuai",
+      "n_models_on_modelsdev": 12,
+      "api": "https://open.bigmodel.cn/api/paas/v4",
+      "homepage": "https://docs.z.ai/guides/overview/pricing",
+      "canonical_org": "zai"
+    },
+    {
+      "id": "zhipuai-coding-plan",
+      "display_name": "Zhipu AI Coding Plan",
+      "kind": "coding_plan",
+      "aliases": [
+        "Zhipu AI Coding Plan"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": "zhipuai-coding-plan",
+      "n_models_on_modelsdev": 6,
+      "api": "https://open.bigmodel.cn/api/coding/paas/v4",
+      "homepage": "https://docs.bigmodel.cn/cn/coding-plan/overview",
+      "variant_of": "zai"
+    }
+  ]
+}

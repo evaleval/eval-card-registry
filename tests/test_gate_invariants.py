@@ -191,7 +191,7 @@ def test_oracle_org_aware_match(resolver, oracle, hf_to_dev):
     # Loaded from the sidecar the generator guard (generate_hf_oracle_seed) also
     # reads, so the same list drives prevention and this exemption.
     AUDIT_CORRECTED = frozenset(json.loads(
-        (REGISTRY_ROOT / "specs" / "model-resolution-rework"
+        (REGISTRY_ROOT  / "curation"
          / "audit_bad_nearmiss.json").read_text()
     ).get("raws", []))
 

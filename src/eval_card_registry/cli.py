@@ -50,6 +50,7 @@ def _legacy_parent_model_id_to_parents(entry: dict) -> None:
 from eval_card_registry.store.hf_store import get_store
 from eval_card_registry.store import queries, schemas
 from eval_card_registry.store.queries import _is_na
+from eval_entity_resolver.normalization import normalize as _normalize_alias
 
 app = typer.Typer(help="eval-card-registry CLI")
 
@@ -565,6 +566,37 @@ def seed(
         yaml_ids: set[str] = set()
         yaml_alias_keys: set[tuple[str, str, str, Optional[str]]] = set()
 
+        # Anti-shadowing (models): a community/non-lab model's display_name is a
+        # noisy identity signal. When a fork's bare display_name (e.g.
+        # "aya-expanse-8b") normalizes to the same form as a real LAB model
+        # ("Aya Expanse 8B"), auto-seeding it as a global alias makes the fork
+        # WIN the bare name at confidence 1.0 and shadow the lab. Build the set
+        # of lab-owned normalized forms so we can drop only the COLLIDING
+        # display_name aliases off non-lab models (non-colliding ones still seed,
+        # so coverage is unaffected). org kind comes from canonical_orgs, which
+        # seeds before models.
+        lab_norms: set[str] = set()
+        org_kind: dict[str, str] = {}
+        if entity_type == "model":
+            # Read kinds from the YAML source, not store.table — orgs above were
+            # upserted buffered=True and aren't flushed yet. Curated labs live in
+            # orgs.yaml; any org absent here (or kind!=lab) is treated as non-lab.
+            org_kind = {
+                str(o["id"]): str(o.get("kind") or "")
+                for o in (_load_orgs_merged() or [])
+                if isinstance(o, dict) and o.get("id")
+            }
+            for it in items:
+                if not isinstance(it, dict) or org_kind.get(str(it.get("org_id"))) != "lab":
+                    continue
+                # Only the aliases a lab actually SEEDS (display_name + explicit
+                # aliases) can catch a raw via normalized match — so only drop a
+                # community display that collides with one of THOSE. (name-part /
+                # id are NOT bare aliases, so dropping on them would orphan the raw.)
+                for s in [it.get("display_name"), *(it.get("aliases") or [])]:
+                    if isinstance(s, str) and s:
+                        lab_norms.add(_normalize_alias(s))
+
         for original_item in items:
             item = dict(original_item)
             # Pop 'aliases' / 'scoped_aliases' before upserting — not table columns.
@@ -603,6 +635,16 @@ def seed(
             # source_config — lets short tokens ("Overall", "Arabic") map to different
             # benchmarks depending on which EEE config they came from.
             global_aliases = {canonical_id, display_name} | set(extra_aliases)
+            # Drop a non-lab model's display_name alias when it would shadow a
+            # lab model (see lab_norms above). canonical_id + explicit aliases
+            # are kept — only the auto-promoted display_name is suppressed.
+            if (
+                entity_type == "model"
+                and display_name
+                and org_kind.get(str(entity_item.get("org_id"))) != "lab"
+                and _normalize_alias(display_name) in lab_norms
+            ):
+                global_aliases.discard(display_name)
 
             alias_specs: list[tuple[str, Optional[str]]] = [
                 (raw, None) for raw in global_aliases if raw

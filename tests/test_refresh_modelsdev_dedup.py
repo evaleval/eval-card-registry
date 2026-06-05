@@ -1,7 +1,7 @@
 """Unit tests for the models.dev dedup / group / mint / alias logic.
 
 OFFLINE: drives the committed reference sidecars under
-specs/model-resolution-rework/ plus the PINNED models.dev API snapshot at
+curation/ plus the PINNED models.dev API snapshot at
 tests/fixtures/modelsdev_api.snapshot.json. No network, no seed --local.
 The snapshot and the underlying index are frozen from the SAME models.dev pull,
 so the dedup count and the group roots reproduce EXACTLY (no drift band).
@@ -26,7 +26,7 @@ from pathlib import Path
 import pytest
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SPEC_DIR = REPO_ROOT / "specs" / "model-resolution-rework"
+SPEC_DIR = REPO_ROOT  / "curation"
 API_CACHE = REPO_ROOT / "tests" / "fixtures" / "modelsdev_api.snapshot.json"
 UNDERLYING_INDEX = SPEC_DIR / "modelsdev_underlying_index.json"
 RESCUES = SPEC_DIR / "eee_modelsdev_rescues.json"

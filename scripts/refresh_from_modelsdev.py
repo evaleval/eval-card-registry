@@ -108,7 +108,7 @@ PROVIDER_TO_ORG: dict[str, str] = {
 # byte-identical between seed generation here and runtime capture in fuzzy.py
 # (single-source mandate — DO NOT hand-maintain a parallel dict).
 INFERENCE_PLATFORMS_JSON = (
-    REPO_ROOT / "specs" / "model-resolution-rework" / "inference_platforms.proposed.json"
+    REPO_ROOT  / "curation" / "inference_platforms.proposed.json"
 )
 
 

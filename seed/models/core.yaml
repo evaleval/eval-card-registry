@@ -13955,7 +13955,6 @@ entries:
   - zephyr-7b-beta
   - huggingface/zephyr-7b-beta
   - unknown/zephyr-7b-beta
-  - unknown/infimm-zephyr-7b
   - unknown/zephyr-zero-shot
   - zephyr-7b
 - id: HuggingFaceH4/zephyr-7b-gemma
@@ -19177,8 +19176,7 @@ entries:
   metadata: '{"downloads_all_time": 20410, "hf_id": "LLM360/K2", "library_name": "transformers", "license": "apache-2.0", "likes": 99, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   resolution_source: hf
   review_status: reviewed
-  aliases:
-  - moonshotai/k2
+  aliases: []
 - id: LLM360/K2-Chat
   display_name: K2-Chat
   org_id: LLM360
@@ -21061,9 +21059,7 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
-  - unknown/lfm-7b
   - LFM-40B
-  - unknown/lfm-3b
 - id: LiquidAI/lfm2-1.2b
   display_name: LFM2 1.2B
   org_id: LiquidAI
@@ -21962,7 +21958,6 @@ entries:
   aliases:
   - hammer2.1-7b
   - unknown/hammer2-1-7b-fc
-  - unknown/hammer2-0-7b
   - madeagents/hammer2-1-7b
   - unknown/hammer2-1-7b
 - id: Magpie-Align/Llama-3-8B-Magpie-Align-SFT-v0.1
@@ -25447,8 +25442,6 @@ entries:
   review_status: reviewed
   aliases:
   - nexusflow/starling-rm-34b
-  - unknown/starling-lm-7b-alpha
-  - unknown/starling-lm-alpha-8x7b-moe-gptq
 - id: NikolaSigmoid/AceMath-1.5B-Instruct-1epoch
   display_name: AceMath-1.5B-Instruct-1epoch
   org_id: NikolaSigmoid
@@ -26778,7 +26771,10 @@ entries:
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: OpenAssistant/oasst-rm-pythia
+    relationship: variant
+    axis: size
   open_weights: null
   release_date: null
   input_modalities: null
@@ -26787,13 +26783,18 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - openassistant/oasst-rm-2-pythia-6-9b-epoch-1
 - id: OpenAssistant/oasst-rm-2.1-pythia-1.4b-epoch-2.5
   display_name: oasst-rm-2.1-pythia-1.4b-epoch-2.5
   org_id: OpenAssistant
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: OpenAssistant/oasst-rm-pythia
+    relationship: variant
+    axis: size
   open_weights: null
   release_date: null
   input_modalities: null
@@ -26802,6 +26803,9 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - openassistant/oasst-rm-2-1-pythia-1-4b-epoch-2-5
+  - unknown/oasst-rm-2-1-pythia-1-4b
 - id: OpenAssistant/oasst-rm-pythia
   display_name: OASST RM Pythia
   org_id: OpenAssistant
@@ -26818,10 +26822,7 @@ entries:
   - reward-model
   metadata: '{}'
   review_status: reviewed
-  aliases:
-  - openassistant/oasst-rm-2-1-pythia-1-4b-epoch-2-5
-  - openassistant/oasst-rm-2-pythia-6-9b-epoch-1
-  - unknown/oasst-rm-2-1-pythia-1-4b
+  aliases: []
 - id: OpenAssistant/oasst-sft-1-pythia-12b
   display_name: oasst-sft-1-pythia-12b
   org_id: OpenAssistant
@@ -27494,7 +27495,6 @@ entries:
   - unknown/internvl-2-5-mpo-8b
   - unknown/internvl2-5-5b-mpo
   - opengvlab/internvl2.5-8b
-  - unknown/internvl-2-8b
   - unknown/internvl2-5-8b-sequence
 - id: OpenGVLab/internvl-chat-v1.1
   display_name: InternVL-Chat v1.1
@@ -27563,8 +27563,6 @@ entries:
   - unknown/internvl-1-5
   - unknown/internvl-1-5-26b
   - unknown/internvl-1-5-chat
-  - unknown/internvl-1-5-chat-20b
-  - unknown/internvl-4b-chat-1-5
   - unknown/internvl-chat-v1-5
   - unknown/internvl-chat-v1-5-1f
   - unknown/internvl-chat-v1-5-8f
@@ -27707,6 +27705,7 @@ entries:
   - unknown/internvl-8b
   - unknown/internvl2-8b
   - unknown/col-internvl2
+  - unknown/internvl-2-8b
 - id: OpenGVLab/internvl2.5-1b
   display_name: InternVL2.5 1B
   org_id: OpenGVLab
@@ -27847,7 +27846,6 @@ entries:
   - unknown/internvl-2-5-mpo-78b
   - unknown/internvl-2-5-78b
   - unknown/internvl2-5-78b-cot
-  - unknown/internvl2-5-72b
   - unknown/internvl2-5-78b-mpo-cot
   - unknown/internvl2-5-78b-direct
 - id: OpenGVLab/internvl3-14b
@@ -28011,7 +28009,6 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
-  - unknown/internvl-3-0
   - internvl3-8b
   - unknown/internvl3
   - unknown/internvl3-8b
@@ -28845,9 +28842,7 @@ entries:
   - reward-model
   metadata: '{}'
   review_status: reviewed
-  aliases:
-  - pku-alignment/beaver-7b-v1-0-cost
-  - pku-alignment/beaver-7b-v2-0-cost
+  aliases: []
 - id: PKU-Alignment/beaver-7b-reward
   display_name: Beaver 7B Reward
   org_id: PKU-Alignment
@@ -28883,6 +28878,8 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - pku-alignment/beaver-7b-v1-0-cost
 - id: PKU-Alignment/beaver-7b-v1.0-reward
   display_name: beaver-7b-v1.0-reward
   org_id: PKU-Alignment
@@ -28913,6 +28910,8 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - pku-alignment/beaver-7b-v2-0-cost
 - id: PKU-Alignment/beaver-7b-v2.0-reward
   display_name: beaver-7b-v2.0-reward
   org_id: PKU-Alignment
@@ -30568,7 +30567,6 @@ entries:
   review_status: reviewed
   aliases:
   - qwen-qwq-32b
-  - qwen-32b
   - qwq-32b
   - aliyun/qwq-32b
   - unknown/qwq-32b
@@ -31641,6 +31639,9 @@ entries:
   - id: Qwen/Qwen2.5-72B
     relationship: variant
     axis: training_stage
+  - id: Qwen/Qwen2.5
+    relationship: variant
+    axis: size
   open_weights: true
   release_date: 2024-09
   input_modalities:
@@ -37195,7 +37196,10 @@ entries:
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: Skywork/skywork-reward-v2-qwen3
+    relationship: variant
+    axis: size
   open_weights: null
   release_date: null
   input_modalities: null
@@ -37204,13 +37208,18 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - skywork/skywork-reward-v2-qwen3-0-6b
 - id: Skywork/Skywork-Reward-V2-Qwen3-1.7B
   display_name: Skywork-Reward-V2-Qwen3-1.7B
   org_id: Skywork
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: Skywork/skywork-reward-v2-qwen3
+    relationship: variant
+    axis: size
   open_weights: null
   release_date: null
   input_modalities: null
@@ -37219,13 +37228,18 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - skywork/skywork-reward-v2-qwen3-1-7b
 - id: Skywork/Skywork-Reward-V2-Qwen3-4B
   display_name: Skywork-Reward-V2-Qwen3-4B
   org_id: Skywork
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: Skywork/skywork-reward-v2-qwen3
+    relationship: variant
+    axis: size
   open_weights: null
   release_date: null
   input_modalities: null
@@ -37234,13 +37248,18 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - skywork/skywork-reward-v2-qwen3-4b
 - id: Skywork/Skywork-Reward-V2-Qwen3-8B
   display_name: Skywork-Reward-V2-Qwen3-8B
   org_id: Skywork
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: Skywork/skywork-reward-v2-qwen3
+    relationship: variant
+    axis: size
   open_weights: null
   release_date: null
   input_modalities: null
@@ -37249,6 +37268,8 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - skywork/skywork-reward-v2-qwen3-8b
 - id: Skywork/Skywork-VL-Reward-7B
   display_name: Skywork-VL-Reward-7B
   org_id: Skywork
@@ -37306,7 +37327,6 @@ entries:
   aliases:
   - unknown/skywork-prm-7b
   - skywork-prm-7b
-  - unknown/skywork-prm-1-5b
 - id: Skywork/skywork-r1v3-38b
   display_name: Skywork R1V3 38B
   org_id: Skywork
@@ -37342,11 +37362,7 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
-  - skywork/skywork-reward-v2-qwen3-1-7b
   - skywork-reward-v2-qwen3
-  - skywork/skywork-reward-v2-qwen3-4b
-  - skywork/skywork-reward-v2-qwen3-0-6b
-  - skywork/skywork-reward-v2-qwen3-8b
 - id: Snowflake/snowflake-arctic-instruct
   display_name: Snowflake Arctic Instruct
   org_id: Snowflake
@@ -45971,24 +45987,6 @@ entries:
   - luminous-supreme
   - alephalpha/luminous-supreme
   - aleph-alpha/luminous-supreme-70b
-- id: alibaba/Qwen 2.5
-  display_name: alibaba/Qwen 2.5
-  org_id: alibaba
-  family: null
-  architecture: null
-  params_billions: null
-  parents:
-  - id: alibaba/qwen-turbo
-    relationship: finetune
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
 - id: alibaba/codeqwen1.5-7b-chat
   display_name: Codeqwen1.5 7B Chat
   org_id: alibaba
@@ -46008,8 +46006,8 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/codeqwen1-5-7b-chat
-- id: alibaba/cogito-v1-preview-qwen-32b
-  display_name: Cogito v1 Preview Qwen 32B
+- id: deepcogito/cogito-v1-preview-qwen-32B
+  display_name: deepcogito/cogito-v1-preview-qwen-32B
   org_id: deepcogito
   family: cogito-v1-preview-qwen-32b
   architecture: null
@@ -46025,6 +46023,7 @@ entries:
   review_status: draft
   aliases:
   - cogito-v1-preview-qwen-32b
+  - alibaba/cogito-v1-preview-qwen-32b
 - id: alibaba/cogview4
   display_name: CogView 4
   org_id: zai
@@ -46045,8 +46044,8 @@ entries:
   - thudm/cogview4
   - unknown/cogview4
   - cogview4
-- id: alibaba/deepseek-r1-distill-qwen-32b-abliterated
-  display_name: DeepSeek R1 Qwen Abliterated
+- id: huihui-ai/DeepSeek-R1-Distill-Qwen-32B-abliterated
+  display_name: huihui-ai/DeepSeek-R1-Distill-Qwen-32B-abliterated
   org_id: huihui-ai
   family: deepseek-r1-distill-qwen-32b-abliterated
   architecture: null
@@ -46062,6 +46061,7 @@ entries:
   review_status: draft
   aliases:
   - deepseek-r1-distill-qwen-32b-abliterated
+  - alibaba/deepseek-r1-distill-qwen-32b-abliterated
 - id: alibaba/dolphin-2-9.2-qwen2-72b
   display_name: Dolphin 72b
   org_id: cognitivecomputations
@@ -46077,8 +46077,8 @@ entries:
   metadata: '{"providers": ["nano-gpt"], "underlying_key": "dolphin-2-9.2-qwen2-72b"}'
   resolution_source: models_dev
   review_status: draft
-- id: alibaba/grayline-qwen3-8b
-  display_name: Grayline Qwen3 8B
+- id: soob3123/GrayLine-Qwen3-8B
+  display_name: soob3123/GrayLine-Qwen3-8B
   org_id: soob3123
   family: grayline-qwen3-8b
   architecture: null
@@ -46094,6 +46094,7 @@ entries:
   review_status: draft
   aliases:
   - grayline-qwen3-8b
+  - alibaba/grayline-qwen3-8b
 - id: alibaba/lumina-image-2
   display_name: Lumina Image 2.0
   org_id: alpha-vllm
@@ -46324,7 +46325,7 @@ entries:
   architecture: null
   params_billions: null
   parents:
-  - id: alibaba/qwen3-coder-480b-a35b-instruct-int4-mixed-ar
+  - id: Intel/Qwen3-Coder-480B-A35B-Instruct-int4-mixed-AutoRound
     relationship: finetune
   open_weights: null
   release_date: null
@@ -46951,8 +46952,8 @@ entries:
   - qwen2-5-32b-eva-v0-2
   - alibaba/eva-qwen2-5-32b-v0-2
   - Qwen2.5-32B-EVA-v0.2
-- id: alibaba/qwen2-5-32b-instruct-abliterated
-  display_name: Qwen 2.5 32B Abliterated
+- id: huihui-ai/Qwen2.5-32B-Instruct-abliterated
+  display_name: huihui-ai/Qwen2.5-32B-Instruct-abliterated
   org_id: huihui-ai
   family: qwen2-5-32b-instruct-abliterated
   architecture: null
@@ -46968,6 +46969,7 @@ entries:
   review_status: draft
   aliases:
   - qwen2-5-32b-instruct-abliterated
+  - alibaba/qwen2-5-32b-instruct-abliterated
 - id: alibaba/qwen2-5-72b-instruct-128k
   display_name: Qwen/Qwen2.5-72B-Instruct-128K
   org_id: alibaba
@@ -48602,8 +48604,8 @@ entries:
   - qwen3-coder-480b-a35b
   - qwen.qwen3-coder-480b-a35b-v1:0
   - qwen3-coder
-- id: alibaba/qwen3-coder-480b-a35b-instruct-int4-mixed-ar
-  display_name: Qwen 3 Coder 480B
+- id: Intel/Qwen3-Coder-480B-A35B-Instruct-int4-mixed-AutoRound
+  display_name: Intel/Qwen3-Coder-480B-A35B-Instruct-int4-mixed-AutoRound
   org_id: Intel
   family: qwen3-coder-480b-a35b-instruct-int4-mixed-ar
   architecture: null
@@ -48620,6 +48622,7 @@ entries:
   review_status: draft
   aliases:
   - qwen3-coder-480b-a35b-instruct-int4-mixed-ar
+  - alibaba/qwen3-coder-480b-a35b-instruct-int4-mixed-ar
 - id: alibaba/qwen3-coder-flash
   display_name: Qwen3 Coder Flash
   org_id: alibaba
@@ -49517,8 +49520,8 @@ entries:
   review_status: draft
   aliases:
   - qwen3guard-gen-0-6b
-- id: alibaba/qwenlong-l1-32b
-  display_name: QwenLong L1 32B
+- id: Tongyi-Zhiwen/QwenLong-L1-32B
+  display_name: Tongyi-Zhiwen/QwenLong-L1-32B
   org_id: Tongyi-Zhiwen
   family: qwenlong-l1-32b
   architecture: null
@@ -49534,6 +49537,7 @@ entries:
   review_status: draft
   aliases:
   - qwenlong-l1-32b
+  - alibaba/qwenlong-l1-32b
 - id: alibaba/qwq-plus
   display_name: QWQ Plus
   org_id: alibaba
@@ -52690,7 +52694,6 @@ entries:
   metadata: '{"downloads_all_time": 138370, "hf_id": "allenai/tulu-2-7b", "library_name": "transformers", "likes": 11, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   review_status: reviewed
   aliases:
-  - ai2/tulu-2-7b-rm-v0-nectar-binarized-3-8m-check
   - unknown/tulu2-7b
   - tulu-2-7b
 - id: allenai/tulu-2-dpo-13b
@@ -54680,54 +54683,6 @@ entries:
   metadata: '{"downloads_all_time": 226447, "hf_id": "altomek/YiSM-34B-0rn", "library_name": "transformers", "license": "apache-2.0", "likes": 2, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   resolution_source: hf
   review_status: reviewed
-- id: amazon/amazon.nova-lite-v1:0
-  display_name: amazon/amazon.nova-lite-v1:0
-  org_id: amazon
-  family: null
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
-- id: amazon/amazon.nova-micro-v1:0
-  display_name: amazon/amazon.nova-micro-v1:0
-  org_id: amazon
-  family: null
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
-- id: amazon/amazon.nova-pro-v1:0
-  display_name: amazon/amazon.nova-pro-v1:0
-  org_id: amazon
-  family: null
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
 - id: amazon/lucidnova-rf1-100b
   display_name: LucidNova RF1 100B
   org_id: amazon
@@ -54988,6 +54943,7 @@ entries:
   review_status: reviewed
   aliases:
   - nova-lite-v1
+  - amazon/amazon.nova-lite-v1:0
 - id: amazon/nova-micro
   display_name: Amazon Nova Micro
   org_id: amazon
@@ -55030,6 +54986,7 @@ entries:
   review_status: reviewed
   aliases:
   - nova-micro-v1
+  - amazon/amazon.nova-micro-v1:0
 - id: amazon/nova-premier
   display_name: Amazon Nova Premier
   org_id: amazon
@@ -55064,22 +55021,7 @@ entries:
   review_status: draft
   aliases:
   - nova-premier-v1
-- id: amazon/nova-premier-v1:0
-  display_name: amazon/nova-premier-v1:0
-  org_id: amazon
-  family: null
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
+  - amazon/nova-premier-v1:0
 - id: amazon/nova-pro
   display_name: Amazon Nova Pro
   org_id: amazon
@@ -55123,6 +55065,7 @@ entries:
   review_status: reviewed
   aliases:
   - nova-pro-v1
+  - amazon/amazon.nova-pro-v1:0
 - id: amd/AMD-Llama-135m
   display_name: AMD-Llama-135m
   org_id: amd
@@ -55419,58 +55362,8 @@ entries:
   review_status: draft
   aliases:
   - anthropic-lm-v4-s3-52b
-- id: anthropic/Claude-3.5-Sonnet(Oct)
-  display_name: anthropic/Claude-3.5-Sonnet(Oct)
-  org_id: anthropic
-  family: null
-  architecture: null
-  params_billions: null
-  parents:
-  - id: anthropic/claude-3.5-sonnet
-    relationship: finetune
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
 - id: anthropic/Claude-4
   display_name: anthropic/Claude-4
-  org_id: anthropic
-  family: null
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
-- id: anthropic/Opus 4.1
-  display_name: anthropic/Opus 4.1
-  org_id: anthropic
-  family: null
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: null
-  release_date: null
-  input_modalities: null
-  output_modalities: null
-  tags: null
-  metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
-- id: anthropic/Sonnet 4.5
-  display_name: anthropic/Sonnet 4.5
   org_id: anthropic
   family: null
   architecture: null
@@ -55648,7 +55541,6 @@ entries:
   - unknown/claude-sonnet
   - claude-sonnet
   - claude-3-sonnet
-  - unknown/claude-3-5-sonnet-oct
   - unknown/claude-3-sonnet
 - id: anthropic/claude-3-sonnet-20240229
   display_name: Claude 3 Sonnet (2024-02-29)
@@ -55743,6 +55635,8 @@ entries:
   - anthropic/claude-35-sonnet
   - anthropic--claude-3.5-sonnet
   - claude-35-sonnet
+  - unknown/claude-3-5-sonnet-oct
+  - anthropic/Claude-3.5-Sonnet(Oct)
 - id: anthropic/claude-3.5-sonnet-2024-06-20
   display_name: anthropic/claude-3.5-sonnet-2024-06-20
   org_id: anthropic
@@ -56547,6 +56441,7 @@ entries:
   - claude-opus-4-1-thinking:32000
   - anthropic/claude-opus-41
   - anthropic/claude-4-1-opus-thinking
+  - anthropic/Opus 4.1
 - id: anthropic/claude-opus-4.1-20250805
   display_name: Claude Opus 4.1 (2025-08-05)
   org_id: anthropic
@@ -57098,6 +56993,7 @@ entries:
   - sonnet-4
   - claude-sonnet-4-5
   - anthropic/claude-sonnet-4-6-adaptive
+  - anthropic/Sonnet 4.5
 - id: anthropic/claude-sonnet-4.5-20250929
   display_name: Claude Sonnet 4.5 (2025-09-29)
   org_id: anthropic
@@ -57374,7 +57270,7 @@ entries:
   metadata: '{"downloads_all_time": 19860, "hf_id": "apple/DCLM-7B", "library_name": "transformers", "license": "apple-ascl", "likes": 834, "source": "hub_stats"}'
   resolution_source: hf
   review_status: reviewed
-- id: 'applied-compute/Applied Compute: Small'
+- id: applied-compute/applied-compute-small
   display_name: 'applied-compute/Applied Compute: Small'
   org_id: applied-compute
   family: null
@@ -57390,6 +57286,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - 'applied-compute/Applied Compute: Small'
 - id: appvoid/arco-2
   display_name: arco-2
   org_id: appvoid
@@ -58511,7 +58409,6 @@ entries:
   - baichuan2-7b
   - unknown/baichuan2-vanilla
   - unknown/baichuan2-cpt-sft
-  - unknown/baichuan-7b-ocr
   - unknown/baichuan2-7b
   - unknown/baichuan2-sft
 - id: unknown/baichuan-m2
@@ -59424,6 +59321,7 @@ entries:
   review_status: reviewed
   aliases:
   - berkeley-nest/starling-lm-7b-alpha
+  - unknown/starling-lm-7b-alpha
 - id: berkeley-nest/Starling-RM-7B-alpha
   display_name: Starling-RM-7B-alpha
   org_id: berkeley-nest
@@ -59899,7 +59797,6 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/bloom
-  - unknown/bloomz
   - bloom-176b
   - unknown/bloomchat-176b
 - id: bigscience/bloom-1b1
@@ -59969,7 +59866,6 @@ entries:
   review_status: reviewed
   aliases:
   - bloom-1b1
-  - unknown/bloomz-1-1b
 - id: bigscience/bloom-1b7
   display_name: BLOOM 1B7
   org_id: bigscience
@@ -60037,7 +59933,6 @@ entries:
   review_status: reviewed
   aliases:
   - bloom-1b7
-  - unknown/bloomz-1-7b
 - id: bigscience/bloom-3b
   display_name: BLOOM 3B
   org_id: bigscience
@@ -60172,7 +60067,6 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/bloom-560m
-  - unknown/bloomz-560m
   - bloom-560m
 - id: bigscience/bloom-7b1
   display_name: BLOOM 7B1
@@ -65411,7 +65305,6 @@ entries:
   - unknown/videollama3-7b
   - videollama3-7b
   - unknown/videollama-llama3
-  - unknown/videollama3-8b
   - unknown/videollama-3-7b
   - unknown/videollama3
 - id: darkc0de/BuddyGlassNeverSleeps
@@ -67255,8 +67148,8 @@ entries:
   tags: null
   metadata: null
   review_status: reviewed
-- id: deepseek/deepseek-r1-distill-llama-70b-abliterated
-  display_name: DeepSeek R1 Llama 70B Abliterated
+- id: huihui-ai/DeepSeek-R1-Distill-Llama-70B-abliterated
+  display_name: huihui-ai/DeepSeek-R1-Distill-Llama-70B-abliterated
   org_id: huihui-ai
   family: deepseek-r1-distill-llama-70b-abliterated
   architecture: null
@@ -67272,6 +67165,7 @@ entries:
   review_status: draft
   aliases:
   - deepseek-r1-distill-llama-70b-abliterated
+  - deepseek/deepseek-r1-distill-llama-70b-abliterated
 - id: deepseek/deepseek-r1-distill-qwen3-8b
   display_name: DeepSeek R1 Distill Qwen3 8B
   org_id: deepseek
@@ -67350,8 +67244,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: deepseek/deepseek-v3-1-nex-n1
-  display_name: DeepSeek V3.1 Nex N1
+- id: nex-agi/DeepSeek-V3.1-Nex-N1
+  display_name: nex-agi/DeepSeek-V3.1-Nex-N1
   org_id: nex-agi
   family: deepseek-v3-1-nex-n1
   architecture: null
@@ -67368,6 +67262,7 @@ entries:
   review_status: draft
   aliases:
   - deepseek-v3-1-nex-n1
+  - deepseek/deepseek-v3-1-nex-n1
 - id: deepseek/deepseek-v3.1-nonthinking
   display_name: deepseek/deepseek-v3.1-nonthinking
   org_id: deepseek
@@ -67527,7 +67422,9 @@ entries:
   family: deepseek-v4-flash-6bit
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: deepseek/deepseek-v4-flash
+    relationship: quantized
   open_weights: true
   release_date: '2026-04-24'
   input_modalities: null
@@ -73306,8 +73203,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: google/amoral-gemma3-27b-v2
-  display_name: Amoral Gemma3 27B v2
+- id: soob3123/amoral-gemma3-27B-v2
+  display_name: soob3123/amoral-gemma3-27B-v2
   org_id: soob3123
   family: amoral-gemma3-27b-v2
   architecture: null
@@ -73323,6 +73220,7 @@ entries:
   review_status: draft
   aliases:
   - amoral-gemma3-27b-v2
+  - google/amoral-gemma3-27b-v2
 - id: google/bard
   display_name: Google Bard
   org_id: google
@@ -73363,8 +73261,8 @@ entries:
   - unknown/bert
   - bert-large-uncased
   - bert-base-uncased
-- id: google/bge-multilingual-gemma2
-  display_name: BGE Multilingual Gemma2
+- id: BAAI/bge-multilingual-gemma2
+  display_name: BAAI/bge-multilingual-gemma2
   org_id: BAAI
   family: bge-multilingual-gemma2
   architecture: null
@@ -73380,6 +73278,7 @@ entries:
   review_status: draft
   aliases:
   - bge-multilingual-gemma2
+  - google/bge-multilingual-gemma2
 - id: google/codegemma-1.1-2b
   display_name: codegemma-1.1-2b
   org_id: google
@@ -73832,7 +73731,6 @@ entries:
   aliases:
   - google/gemini-1-5-flash
   - unknown/gemini-1-5-flash
-  - unknown/gemini-1-5-flash-8b
   - google/gemini-1-5-flash-001-safety-block-none
   - google/gemini-flash-1-5
   - google/gemini-1-5-flash-preview-0514
@@ -73898,6 +73796,7 @@ entries:
   review_status: draft
   aliases:
   - google/gemini-1-5-flash-8b
+  - unknown/gemini-1-5-flash-8b
 - id: google/gemini-1.5-flash-8b-001
   display_name: google/gemini-1.5-flash-8b-001
   org_id: google
@@ -74419,6 +74318,7 @@ entries:
   - gemini-2.5-flash-preview
   - unknown/gemini-2-5-flash-think
   - unknown/gemini-2-5-flash-no-code
+  - unknown/gemini-2-5-flash-no-thinking
 - id: google/gemini-2.5-flash-2025-04
   display_name: Gemini 2.5 Flash (2025-04)
   org_id: google
@@ -74710,7 +74610,6 @@ entries:
   - unknown/google-gemini-2-5-flash-preview-thinking
   - unknown/gemini-2-5-flash-thinking-05-20
   - unknown/gemini-2-5-flash-thinking
-  - unknown/gemini-2-5-flash-no-thinking
   - google/gemini-2-5-flash-max-thinking-2025-09-25
 - id: google/gemini-2.5-pro
   display_name: Gemini 2.5 Pro
@@ -89460,8 +89359,8 @@ entries:
   review_status: draft
   aliases:
   - kimi-thinking-preview
-- id: kimi/kimi-linear-48b-a3b-instruct
-  display_name: kimi/kimi-linear-48b-a3b-instruct
+- id: moonshotai/Kimi-Linear-48B-A3B-Instruct
+  display_name: moonshotai/Kimi-Linear-48B-A3B-Instruct
   org_id: moonshotai
   family: null
   architecture: null
@@ -89476,6 +89375,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - kimi/kimi-linear-48b-a3b-instruct
 - id: unknown/kling-v2-6
   display_name: unknown/kling-v2-6
   org_id: null
@@ -91154,8 +91055,8 @@ entries:
   - llava-1.5-7b
   - unknown/llava-1-5-7b
   - unknown/llava-1-5
-- id: liuhaotian/llava-1.6-vicuna-7b
-  display_name: LLaVA 1.6 Vicuna 7B
+- id: liuhaotian/llava-v1.6-vicuna-7b
+  display_name: liuhaotian/llava-v1.6-vicuna-7b
   org_id: liuhaotian
   family: llava-1.6-vicuna-7b
   architecture: null
@@ -91172,8 +91073,9 @@ entries:
   review_status: reviewed
   aliases:
   - llava-1.6-vicuna-7b
-  - unknown/llava-1-6-vicuna-13b
   - unknown/llava-1-6-vicuna-7b
+  - unknown/llava-next-v-7b
+  - liuhaotian/llava-1.6-vicuna-7b
 - id: liuhaotian/llava-13b
   display_name: LLaVA 13B
   org_id: liuhaotian
@@ -91259,7 +91161,6 @@ entries:
   - LLaVA-NeXT-34B
   - llava-1.6-34b
   - llava-v1.6-34b
-  - unknown/llava-video
   - unknown/llava-1-6-34b
 - id: liuhaotian/llava-next-7b
   display_name: LLaVA-NeXT 7B (Vicuna)
@@ -91346,7 +91247,6 @@ entries:
   review_status: reviewed
   aliases:
   - llava-next-m-7b
-  - unknown/llava-next-v-7b
   - unknown/llava-next-m-7b
 - id: lkoenig/BBAI_145_
   display_name: BBAI_145_
@@ -91586,30 +91486,6 @@ entries:
   review_status: draft
   aliases:
   - llama-3-1-8b-cs
-- id: meta/llama-3-3+
-  display_name: meta/llama-3-3+
-  org_id: meta
-  family: llama-3-3+
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2024-12-06'
-  input_modalities: null
-  output_modalities: null
-  tags:
-  - org-unknown
-  metadata: '{"alias_platforms": {"Llama-3.3+(3.1v3.3)-70B-Hanami-x1": "nano-gpt", "Llama-3.3+(3.1v3.3)-70B-New-Dawn-v1.1": "nano-gpt", "Llama-3.3+(3v3.3)-70B-TenyxChat-DaybreakStorywriter": "nano-gpt", "llama-3.3+3.1v3.3-70b-hanami-x1": "nano-gpt", "llama-3.3+3.1v3.3-70b-new-dawn-v1.1": "nano-gpt", "llama-3.3+3v3.3-70b-tenyxchat-daybreakstorywriter": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "llama-3-3+"}'
-  resolution_source: models_dev
-  review_status: draft
-  aliases:
-  - Llama-3.3+(3v3.3)-70B-TenyxChat-DaybreakStorywriter
-  - Llama-3.3+(3.1v3.3)-70B-New-Dawn-v1.1
-  - llama-3.3+3.1v3.3-70b-new-dawn-v1.1
-  - llama-3.3+3v3.3-70b-tenyxchat-daybreakstorywriter
-  - Llama-3.3+(3.1v3.3)-70B-Hanami-x1
-  - llama-3.3+3.1v3.3-70b-hanami-x1
-  - llama-3-3+
 - id: meta/llama-3-3-70b-anthrobomination
   display_name: meta/llama-3-3-70b-anthrobomination
   org_id: meta
@@ -92609,6 +92485,7 @@ entries:
   aliases:
   - unknown/llava-next-video-7b
   - llava-next-video-7b
+  - unknown/llava-video
 - id: lmms-lab/llava-onevision-0.5b
   display_name: LLaVA-OneVision 0.5B
   org_id: lmms-lab
@@ -93232,9 +93109,7 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/otter-7b
-  - otter-9b
   - otter-7b
-  - unknown/otter-9b
 - id: google/lyria
   display_name: google/lyria
   org_id: google
@@ -96157,6 +96032,14 @@ entries:
   - llama-3.3
   - meta/llama-3.3
   - meta/llama3.3
+  - meta/llama-3-3+
+  - Llama-3.3+(3v3.3)-70B-TenyxChat-DaybreakStorywriter
+  - Llama-3.3+(3.1v3.3)-70B-New-Dawn-v1.1
+  - llama-3.3+3.1v3.3-70b-new-dawn-v1.1
+  - llama-3.3+3v3.3-70b-tenyxchat-daybreakstorywriter
+  - Llama-3.3+(3.1v3.3)-70B-Hanami-x1
+  - llama-3.3+3.1v3.3-70b-hanami-x1
+  - llama-3-3+
 - id: meta-llama/llama-30b
   display_name: Llama 30B
   org_id: meta
@@ -96282,9 +96165,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: meta/RAG + SWE-Llama 13B
-  display_name: meta/RAG + SWE-Llama 13B
-  org_id: meta
+- id: unknown/rag-swe-llama-13b
+  display_name: unknown/RAG + SWE-Llama 13B
+  org_id: unknown
   family: null
   architecture: null
   params_billions: null
@@ -96300,6 +96183,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - meta/RAG + SWE-Llama 13B
+  - unknown/RAG + SWE-Llama 13B
 - id: meta/SWE-Llama
   display_name: meta/SWE-Llama
   org_id: meta
@@ -96333,8 +96219,8 @@ entries:
   review_status: draft
   aliases:
   - aion-1-0
-- id: meta/aion-rp-llama-3-1-8b
-  display_name: Llama 3.1 8b (uncensored)
+- id: aion-labs/Aion-RP-Llama-3.1-8B
+  display_name: aion-labs/Aion-RP-Llama-3.1-8B
   org_id: aion-labs
   family: aion-rp-llama-3-1-8b
   architecture: null
@@ -96350,8 +96236,9 @@ entries:
   review_status: draft
   aliases:
   - aion-rp-llama-3-1-8b
-- id: meta/anubis-70b-v1
-  display_name: Anubis 70B v1
+  - meta/aion-rp-llama-3-1-8b
+- id: TheDrummer/Anubis-70B-v1
+  display_name: TheDrummer/Anubis-70B-v1
   org_id: TheDrummer
   family: anubis-70b-v1
   architecture: null
@@ -96367,6 +96254,7 @@ entries:
   review_status: draft
   aliases:
   - anubis-70b-v1
+  - meta/anubis-70b-v1
 - id: meta/anubis-70b-v1-1
   display_name: Anubis 70B v1.1
   org_id: TheDrummer
@@ -96598,8 +96486,8 @@ entries:
   - unknown/codellama-instruct-7b
   - unknown/codellama-7b-instruct-hf
   - unknown/code-llama-7b-instruct
-- id: meta/cydonia-24b-v2
-  display_name: The Drummer Cydonia 24B v4
+- id: TheDrummer/Cydonia-24B-v2
+  display_name: TheDrummer/Cydonia-24B-v2
   org_id: TheDrummer
   family: cydonia-24b-v2
   architecture: null
@@ -96617,6 +96505,7 @@ entries:
   - meta/cydonia-24b-v4
   - cydonia-24b-v2
   - cydonia-24b-v4
+  - meta/cydonia-24b-v2
 - id: meta/cydonia-24b-v4-1
   display_name: The Drummer Cydonia 24B v4.1
   org_id: TheDrummer
@@ -96635,8 +96524,8 @@ entries:
   review_status: draft
   aliases:
   - cydonia-24b-v4-1
-- id: meta/cydonia-24b-v4-3
-  display_name: The Drummer Cydonia 24B v4.3
+- id: TheDrummer/Cydonia-24B-v4.3
+  display_name: TheDrummer/Cydonia-24B-v4.3
   org_id: TheDrummer
   family: cydonia-24b-v4-3
   architecture: null
@@ -96652,8 +96541,9 @@ entries:
   review_status: draft
   aliases:
   - cydonia-24b-v4-3
-- id: meta/eva-llama-3-33-70b-v0-0
-  display_name: EVA Llama 3.33 70B
+  - meta/cydonia-24b-v4-3
+- id: EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.0
+  display_name: EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.0
   org_id: EVA-UNIT-01
   family: eva-llama-3-33-70b-v0-0
   architecture: null
@@ -96669,8 +96559,9 @@ entries:
   review_status: draft
   aliases:
   - eva-llama-3-33-70b-v0-0
-- id: meta/eva-llama-3-33-70b-v0-1
-  display_name: EVA-LLaMA-3.33-70B-v0.1
+  - meta/eva-llama-3-33-70b-v0-0
+- id: EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.1
+  display_name: EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.1
   org_id: EVA-UNIT-01
   family: eva-llama-3-33-70b-v0-1
   architecture: null
@@ -96686,6 +96577,7 @@ entries:
   review_status: draft
   aliases:
   - eva-llama-3-33-70b-v0-1
+  - meta/eva-llama-3-33-70b-v0-1
 - id: meta/groq-llama-4-maverick-17b-128e-instruct
   display_name: Groq-Llama-4-Maverick-17B-128E-Instruct
   org_id: meta
@@ -96737,8 +96629,8 @@ entries:
   review_status: draft
   aliases:
   - l3-1-70b-celeste-v0-1
-- id: meta/l3-1-70b-euryale-v2-2
-  display_name: Llama 3.1 70B Euryale
+- id: Sao10K/L3.1-70B-Euryale-v2.2
+  display_name: Sao10K/L3.1-70B-Euryale-v2.2
   org_id: Sao10K
   family: l3-1-70b-euryale-v2-2
   architecture: null
@@ -96754,8 +96646,9 @@ entries:
   review_status: draft
   aliases:
   - l3-1-70b-euryale-v2-2
-- id: meta/l3-1-70b-hanami-x1
-  display_name: Llama 3.1 70B Hanami
+  - meta/l3-1-70b-euryale-v2-2
+- id: Sao10K/L3.1-70B-Hanami-x1
+  display_name: Sao10K/L3.1-70B-Hanami-x1
   org_id: Sao10K
   family: l3-1-70b-hanami-x1
   architecture: null
@@ -96772,6 +96665,7 @@ entries:
   review_status: draft
   aliases:
   - l3-1-70b-hanami-x1
+  - meta/l3-1-70b-hanami-x1
 - id: meta/l3-1-euryale-70b
   display_name: 'Sao10K: Llama 3.1 Euryale 70B v2.2'
   org_id: Sao10K
@@ -96790,8 +96684,8 @@ entries:
   review_status: draft
   aliases:
   - l3-1-euryale-70b
-- id: meta/l3-3-70b-euryale-v2-3
-  display_name: Llama 3.3 70B Euryale
+- id: Sao10K/L3.3-70B-Euryale-v2.3
+  display_name: Sao10K/L3.3-70B-Euryale-v2.3
   org_id: Sao10K
   family: l3-3-70b-euryale-v2-3
   architecture: null
@@ -96807,8 +96701,9 @@ entries:
   review_status: draft
   aliases:
   - l3-3-70b-euryale-v2-3
-- id: meta/l3-3-70b-loki-v2-0
-  display_name: L3.3 70B Loki v2.0
+  - meta/l3-3-70b-euryale-v2-3
+- id: CrucibleLab/L3.3-70B-Loki-V2.0
+  display_name: CrucibleLab/L3.3-70B-Loki-V2.0
   org_id: CrucibleLab
   family: l3-3-70b-loki-v2-0
   architecture: null
@@ -96824,8 +96719,9 @@ entries:
   review_status: draft
   aliases:
   - l3-3-70b-loki-v2-0
-- id: meta/l3-3-cu-mai-r1-70b
-  display_name: Llama 3.3 70B Cu Mai
+  - meta/l3-3-70b-loki-v2-0
+- id: Steelskull/L3.3-Cu-Mai-R1-70b
+  display_name: Steelskull/L3.3-Cu-Mai-R1-70b
   org_id: Steelskull
   family: l3-3-cu-mai-r1-70b
   architecture: null
@@ -96841,8 +96737,9 @@ entries:
   review_status: draft
   aliases:
   - l3-3-cu-mai-r1-70b
-- id: meta/l3-3-electra-r1-70b
-  display_name: Steelskull Electra R1 70b
+  - meta/l3-3-cu-mai-r1-70b
+- id: Steelskull/L3.3-Electra-R1-70b
+  display_name: Steelskull/L3.3-Electra-R1-70b
   org_id: Steelskull
   family: l3-3-electra-r1-70b
   architecture: null
@@ -96858,6 +96755,7 @@ entries:
   review_status: draft
   aliases:
   - l3-3-electra-r1-70b
+  - meta/l3-3-electra-r1-70b
 - id: meta/l3-3-euryale-70b
   display_name: 'Sao10K: Llama 3.3 Euryale 70B'
   org_id: Sao10K
@@ -97110,7 +97008,9 @@ entries:
   family: llama-2-7b-chat-fp16
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: meta/llama-2-7b-chat
+    relationship: quantized
   open_weights: false
   release_date: '2025-04-03'
   input_modalities: null
@@ -97121,8 +97021,8 @@ entries:
   review_status: draft
   aliases:
   - llama-2-7b-chat-fp16
-- id: meta/llama-3-05-nt-storybreaker-ministral-70b
-  display_name: Llama 3.05 Storybreaker Ministral 70b
+- id: Envoid/Llama-3.05-NT-Storybreaker-Ministral-70B
+  display_name: Envoid/Llama-3.05-NT-Storybreaker-Ministral-70B
   org_id: Envoid
   family: llama-3-05-nt-storybreaker-ministral-70b
   architecture: null
@@ -97138,6 +97038,7 @@ entries:
   review_status: draft
   aliases:
   - llama-3-05-nt-storybreaker-ministral-70b
+  - meta/llama-3-05-nt-storybreaker-ministral-70b
 - id: meta/llama-3-1-8b-instant
   display_name: Llama 3.1 8B Instant
   org_id: meta
@@ -97157,8 +97058,8 @@ entries:
   aliases:
   - llama-3.1-8b-instant
   - llama-3-1-8b-instant
-- id: meta/llama-3-1-nemotron-safety-guard-8b-v3
-  display_name: llama-3.1-nemotron-safety-guard-8b-v3
+- id: nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3
+  display_name: nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3
   org_id: nvidia
   family: llama-3-1-nemotron-safety-guard-8b-v3
   architecture: null
@@ -97175,8 +97076,9 @@ entries:
   review_status: draft
   aliases:
   - llama-3-1-nemotron-safety-guard-8b-v3
-- id: meta/llama-3-3-70b-instruct-abliterated
-  display_name: Llama 3.3 70B Instruct abliterated
+  - meta/llama-3-1-nemotron-safety-guard-8b-v3
+- id: huihui-ai/Llama-3.3-70B-Instruct-abliterated
+  display_name: huihui-ai/Llama-3.3-70B-Instruct-abliterated
   org_id: huihui-ai
   family: llama-3-3-70b-instruct-abliterated
   architecture: null
@@ -97192,6 +97094,7 @@ entries:
   review_status: draft
   aliases:
   - llama-3-3-70b-instruct-abliterated
+  - meta/llama-3-3-70b-instruct-abliterated
 - id: meta/llama-3-3-70b-versatile
   display_name: Llama 3.3 70B Versatile
   org_id: meta
@@ -97333,8 +97236,8 @@ entries:
   - Llama-3-8B-Instruct
   - unknown/llama-3-8b-instruct
   - meta-llama/Llama-3-8B-Instruct
-- id: meta/llama-3-lumimaid-70b-v0-1
-  display_name: Lumimaid 70b
+- id: NeverSleep/Llama-3-Lumimaid-70B-v0.1
+  display_name: NeverSleep/Llama-3-Lumimaid-70B-v0.1
   org_id: NeverSleep
   family: llama-3-lumimaid-70b-v0-1
   architecture: null
@@ -97350,6 +97253,7 @@ entries:
   review_status: draft
   aliases:
   - llama-3-lumimaid-70b-v0-1
+  - meta/llama-3-lumimaid-70b-v0-1
 - id: meta/llama-3.1-405b-instruct-turbo
   display_name: Llama 3.1 405B Instruct Turbo
   org_id: meta
@@ -97721,8 +97625,8 @@ entries:
   review_status: draft
   aliases:
   - llama-prompt-guard-2-86m
-- id: meta/llama-xlam-2-70b-fc-r
-  display_name: Llama-xLAM-2 70B fc-r
+- id: Salesforce/Llama-xLAM-2-70b-fc-r
+  display_name: Salesforce/Llama-xLAM-2-70b-fc-r
   org_id: Salesforce
   family: llama-xlam-2-70b-fc-r
   architecture: null
@@ -97738,6 +97642,7 @@ entries:
   review_status: draft
   aliases:
   - llama-xlam-2-70b-fc-r
+  - meta/llama-xlam-2-70b-fc-r
 - id: meta/llama4-behemoth
   display_name: meta/llama4-behemoth
   org_id: meta
@@ -97792,8 +97697,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: meta/lumimaid-v0-2-70b
-  display_name: Lumimaid v0.2
+- id: NeverSleep/Lumimaid-v0.2-70B
+  display_name: NeverSleep/Lumimaid-v0.2-70B
   org_id: NeverSleep
   family: lumimaid-v0-2-70b
   architecture: null
@@ -97809,6 +97714,7 @@ entries:
   review_status: draft
   aliases:
   - lumimaid-v0-2-70b
+  - meta/lumimaid-v0-2-70b
 - id: meta/magidonia-24b-v4-3
   display_name: The Drummer Magidonia 24B v4.3
   org_id: TheDrummer
@@ -97826,8 +97732,8 @@ entries:
   review_status: draft
   aliases:
   - magidonia-24b-v4-3
-- id: meta/magnum-v4-72b
-  display_name: Magnum v4 72B
+- id: anthracite-org/magnum-v4-72b
+  display_name: anthracite-org/magnum-v4-72b
   org_id: anthracite-org
   family: magnum-v4-72b
   architecture: null
@@ -97844,6 +97750,7 @@ entries:
   review_status: draft
   aliases:
   - magnum-v4-72b
+  - meta/magnum-v4-72b
 - id: meta/meta-llama-3-1-8b-instruct-gguf
   display_name: Meta Llama 3.1 8B Instruct (GGUF)
   org_id: meta
@@ -97896,8 +97803,8 @@ entries:
   review_status: reviewed
   aliases:
   - muse-spark
-- id: meta/mythomax-l2-13b
-  display_name: MythoMax 13B
+- id: Gryphe/MythoMax-L2-13b
+  display_name: Gryphe/MythoMax-L2-13b
   org_id: Gryphe
   family: mythomax-l2-13b
   architecture: null
@@ -97914,6 +97821,7 @@ entries:
   review_status: draft
   aliases:
   - mythomax-l2-13b
+  - meta/mythomax-l2-13b
 - id: meta/reflection-llama-3.1-70b
   display_name: meta/reflection-llama-3.1-70b
   org_id: meta
@@ -97932,8 +97840,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: meta/remm-slerp-l2-13b
-  display_name: ReMM SLERP 13B
+- id: Undi95/ReMM-SLERP-L2-13B
+  display_name: Undi95/ReMM-SLERP-L2-13B
   org_id: Undi95
   family: remm-slerp-l2-13b
   architecture: null
@@ -97950,8 +97858,9 @@ entries:
   review_status: draft
   aliases:
   - remm-slerp-l2-13b
-- id: meta/rocinante-12b-v1-1
-  display_name: Rocinante 12b
+  - meta/remm-slerp-l2-13b
+- id: TheDrummer/Rocinante-12B-v1.1
+  display_name: TheDrummer/Rocinante-12B-v1.1
   org_id: TheDrummer
   family: rocinante-12b-v1-1
   architecture: null
@@ -97968,6 +97877,7 @@ entries:
   aliases:
   - rocinante-12b-v1-1
   - rocinante-12b
+  - meta/rocinante-12b-v1-1
 - id: meta/shisa-v2-1-llama3-3-70b
   display_name: Shisa V2.1 Llama 3.3 70B
   org_id: shisa-ai
@@ -98002,8 +97912,8 @@ entries:
   review_status: draft
   aliases:
   - shisa-v2-llama3-3-70b
-- id: meta/skyfall-36b-v2
-  display_name: TheDrummer Skyfall 36B V2
+- id: TheDrummer/Skyfall-36B-v2
+  display_name: TheDrummer/Skyfall-36B-v2
   org_id: TheDrummer
   family: skyfall-36b-v2
   architecture: null
@@ -98020,8 +97930,9 @@ entries:
   review_status: draft
   aliases:
   - skyfall-36b-v2
-- id: meta/the-omega-abomination-l-70b-v1-0
-  display_name: The Omega Abomination V1
+  - meta/skyfall-36b-v2
+- id: ReadyArt/The-Omega-Abomination-L-70B-v1.0
+  display_name: ReadyArt/The-Omega-Abomination-L-70B-v1.0
   org_id: ReadyArt
   family: the-omega-abomination-l-70b-v1-0
   architecture: null
@@ -98037,8 +97948,9 @@ entries:
   review_status: draft
   aliases:
   - the-omega-abomination-l-70b-v1-0
-- id: meta/unslopnemo-12b-v4-1
-  display_name: UnslopNemo 12b v4
+  - meta/the-omega-abomination-l-70b-v1-0
+- id: TheDrummer/UnslopNemo-12B-v4.1
+  display_name: TheDrummer/UnslopNemo-12B-v4.1
   org_id: TheDrummer
   family: unslopnemo-12b-v4-1
   architecture: null
@@ -98054,8 +97966,9 @@ entries:
   review_status: draft
   aliases:
   - unslopnemo-12b-v4-1
-- id: meta/veiled-calla-12b
-  display_name: Veiled Calla 12B
+  - meta/unslopnemo-12b-v4-1
+- id: soob3123/Veiled-Calla-12B
+  display_name: soob3123/Veiled-Calla-12B
   org_id: soob3123
   family: veiled-calla-12b
   architecture: null
@@ -98071,8 +97984,9 @@ entries:
   review_status: draft
   aliases:
   - veiled-calla-12b
-- id: meta/wayfarer-large-70b-llama-3-3
-  display_name: Llama 3.3 70B Wayfarer
+  - meta/veiled-calla-12b
+- id: LatitudeGames/Wayfarer-Large-70B-Llama-3.3
+  display_name: LatitudeGames/Wayfarer-Large-70B-Llama-3.3
   org_id: LatitudeGames
   family: wayfarer-large-70b-llama-3-3
   architecture: null
@@ -98088,6 +98002,7 @@ entries:
   review_status: draft
   aliases:
   - wayfarer-large-70b-llama-3-3
+  - meta/wayfarer-large-70b-llama-3-3
 - id: mhl1/Qwen2.5-0.5B-cinstruct-stage1
   display_name: Qwen2.5-0.5B-cinstruct-stage1
   org_id: mhl1
@@ -100855,8 +100770,8 @@ entries:
   review_status: draft
   aliases:
   - devstral-small-2-24b-instruct-2512
-- id: mistralai/dolphin-mistral-24b-venice-edition
-  display_name: Uncensored (free)
+- id: dphn/Dolphin-Mistral-24B-Venice-Edition
+  display_name: dphn/Dolphin-Mistral-24B-Venice-Edition
   org_id: cognitivecomputations
   family: dolphin-mistral-24b-venice-edition
   architecture: null
@@ -100873,8 +100788,9 @@ entries:
   review_status: draft
   aliases:
   - dolphin-mistral-24b-venice-edition
-- id: mistralai/e5-mistral-7b-instruct
-  display_name: E5 Mistral 7B
+  - mistralai/dolphin-mistral-24b-venice-edition
+- id: intfloat/e5-mistral-7b-instruct
+  display_name: intfloat/e5-mistral-7b-instruct
   org_id: intfloat
   family: e5-mistral-7b-instruct
   architecture: null
@@ -100891,6 +100807,7 @@ entries:
   review_status: draft
   aliases:
   - e5-mistral-7b-instruct
+  - mistralai/e5-mistral-7b-instruct
 - id: mistralai/magistral-medium-2506
   display_name: mistralai/magistral-medium-2506
   org_id: mistralai
@@ -101785,8 +101702,8 @@ entries:
   - Mixtral-8x7B
   - unknown/mixtral-8x7b-inst
   - unknown/mixtral-8x7b-v0-1
-- id: mistralai/ms3-2-24b-magnum-diamond
-  display_name: MS3.2 24B Magnum Diamond
+- id: Doctor-Shotgun/MS3.2-24B-Magnum-Diamond
+  display_name: Doctor-Shotgun/MS3.2-24B-Magnum-Diamond
   org_id: Doctor-Shotgun
   family: ms3-2-24b-magnum-diamond
   architecture: null
@@ -101802,8 +101719,9 @@ entries:
   review_status: draft
   aliases:
   - ms3-2-24b-magnum-diamond
-- id: mistralai/nemomix-unleashed-12b
-  display_name: NemoMix 12B Unleashed
+  - mistralai/ms3-2-24b-magnum-diamond
+- id: MarinaraSpaghetti/NemoMix-Unleashed-12B
+  display_name: MarinaraSpaghetti/NemoMix-Unleashed-12B
   org_id: MarinaraSpaghetti
   family: nemomix-unleashed-12b
   architecture: null
@@ -101819,6 +101737,7 @@ entries:
   review_status: draft
   aliases:
   - nemomix-unleashed-12b
+  - mistralai/nemomix-unleashed-12b
 - id: mistralai/pixtral-12b
   display_name: Pixtral 12B
   org_id: mistralai
@@ -101913,8 +101832,8 @@ entries:
   review_status: draft
   aliases:
   - sorcererlm-8x22b
-- id: mistralai/starcannon-unleashed-12b-v1-0
-  display_name: Mistral Nemo Starcannon 12b v1
+- id: VongolaChouko/Starcannon-Unleashed-12B-v1.0
+  display_name: VongolaChouko/Starcannon-Unleashed-12B-v1.0
   org_id: VongolaChouko
   family: starcannon-unleashed-12b-v1-0
   architecture: null
@@ -101930,6 +101849,7 @@ entries:
   review_status: draft
   aliases:
   - starcannon-unleashed-12b-v1-0
+  - mistralai/starcannon-unleashed-12b-v1-0
 - id: mistralai/voxtral-mini-3b-2507
   display_name: Voxtral Mini 3B 2507
   org_id: mistralai
@@ -102729,6 +102649,8 @@ entries:
   - moonshotai/moonshot-kimi-k2-instruct
   - Moonshot Kimi K2 Instruct
   - moonshot-kimi-k2-instruct
+  - moonshot.kimi-k2
+  - moonshotai/k2
 - id: moonshotai/Kimi-K2-Instruct-0905
   display_name: Kimi-K2-Instruct-0905
   org_id: moonshotai
@@ -102767,7 +102689,6 @@ entries:
   - kimi-k2:1t
   - kimi/kimi-k2-thinking
   - moonshot-ai/kimi-k2-thinking
-  - moonshot.kimi-k2
   - moonshot.kimi-k2-thinking
   - moonshot/kimi-k2-thinking
   - moonshotai/kimi-k2-thinking-maas
@@ -102977,7 +102898,7 @@ entries:
   - kimi-k2.5-lightning
 - id: moonshotai/kimi-k2-5-nvfp4
   display_name: Kimi K2.5 (NVFP4)
-  org_id: hf:nvidia
+  org_id: nvidia
   family: kimi-k2-5-nvfp4
   architecture: null
   params_billions: null
@@ -107622,8 +107543,8 @@ entries:
   metadata: '{"alias_platforms": {"bevformer": "nvidia"}, "providers": ["nvidia"], "underlying_key": "bevformer"}'
   resolution_source: models_dev
   review_status: reviewed
-- id: nvidia/bge-m3
-  display_name: BGE M3
+- id: BAAI/bge-m3
+  display_name: BAAI/bge-m3
   org_id: BAAI
   family: bge-m3
   architecture: null
@@ -107640,6 +107561,7 @@ entries:
   review_status: reviewed
   aliases:
   - bge-m3
+  - nvidia/bge-m3
 - id: nvidia/cosmos-predict1-5b
   display_name: cosmos-predict1-5b
   org_id: nvidia
@@ -107690,8 +107612,8 @@ entries:
   review_status: reviewed
   aliases:
   - cosmos-transfer2-5-2b
-- id: nvidia/dracarys-llama-3-1-70b-instruct
-  display_name: dracarys-llama-3.1-70b-instruct
+- id: abacusai/Dracarys-Llama-3.1-70B-Instruct
+  display_name: abacusai/Dracarys-Llama-3.1-70B-Instruct
   org_id: abacusai
   family: dracarys-llama-3-1-70b-instruct
   architecture: null
@@ -107708,6 +107630,7 @@ entries:
   review_status: reviewed
   aliases:
   - dracarys-llama-3-1-70b-instruct
+  - nvidia/dracarys-llama-3-1-70b-instruct
 - id: nvidia/esm2-650m
   display_name: esm2-650m
   org_id: meta
@@ -107740,8 +107663,8 @@ entries:
   metadata: '{"alias_platforms": {"esmfold": "nvidia"}, "providers": ["nvidia"], "underlying_key": "esmfold"}'
   resolution_source: models_dev
   review_status: reviewed
-- id: nvidia/flux-1-kontext-dev
-  display_name: FLUX.1-Kontext-dev
+- id: black-forest-labs/FLUX.1-Kontext-dev
+  display_name: black-forest-labs/FLUX.1-Kontext-dev
   org_id: black-forest-labs
   family: flux-1-kontext-dev
   architecture: null
@@ -107758,8 +107681,9 @@ entries:
   review_status: reviewed
   aliases:
   - flux-1-kontext-dev
-- id: nvidia/flux-1-schnell
-  display_name: FLUX.1-schnell
+  - nvidia/flux-1-kontext-dev
+- id: black-forest-labs/FLUX.1-schnell
+  display_name: black-forest-labs/FLUX.1-schnell
   org_id: black-forest-labs
   family: flux-1-schnell
   architecture: null
@@ -107776,6 +107700,7 @@ entries:
   review_status: reviewed
   aliases:
   - flux-1-schnell
+  - nvidia/flux-1-schnell
 - id: nvidia/gliner-pii
   display_name: gliner-pii
   org_id: nvidia
@@ -107810,8 +107735,8 @@ entries:
   review_status: reviewed
   aliases:
   - google-paligemma
-- id: nvidia/llama-3-05-nemotron-tenyxchat-storybreaker-70b
-  display_name: Nemotron Tenyxchat Storybreaker 70b
+- id: Envoid/Llama-3.05-Nemotron-Tenyxchat-Storybreaker-70B
+  display_name: Envoid/Llama-3.05-Nemotron-Tenyxchat-Storybreaker-70B
   org_id: Envoid
   family: llama-3-05-nemotron-tenyxchat-storybreaker-70b
   architecture: null
@@ -107827,6 +107752,7 @@ entries:
   review_status: draft
   aliases:
   - llama-3-05-nemotron-tenyxchat-storybreaker-70b
+  - nvidia/llama-3-05-nemotron-tenyxchat-storybreaker-70b
 - id: nvidia/llama-3-1-nemotron-70b-instruct-hf-abliterated
   display_name: Nemotron 3.1 70B abliterated
   org_id: huihui-ai
@@ -108433,12 +108359,10 @@ entries:
   metadata: '{"alias_platforms": {"nemotron-nano-12b-v2-vl": "digitalocean"}}'
   review_status: reviewed
   aliases:
-  - unknown/llama-3-1-nemotron-nano-vl-8b-v1
   - nvidia/nvidia-nemotron-nano-12b-v2-vl-reasoning
   - nvidia/nemotron-nano-12b-v2-vl
   - nvidia/nvidia-nemotron-nano-12b-v2-vl
   - nemotron-nano-12b-v2-vl
-  - unknown/nemotron-nano-v2-vl
 - id: nvidia/nemotron-voicechat
   display_name: nemotron-voicechat
   org_id: nvidia
@@ -108556,8 +108480,8 @@ entries:
   review_status: draft
   aliases:
   - nvidia.nemotron-super-3-120b
-- id: nvidia/openreasoning-nemotron-32b
-  display_name: OpenReasoning Nemotron 32B
+- id: pamanseau/OpenReasoning-Nemotron-32B
+  display_name: pamanseau/OpenReasoning-Nemotron-32B
   org_id: pamanseau
   family: openreasoning-nemotron-32b
   architecture: null
@@ -108573,6 +108497,7 @@ entries:
   review_status: draft
   aliases:
   - openreasoning-nemotron-32b
+  - nvidia/openreasoning-nemotron-32b
 - id: nvidia/rerank-qa-mistral-4b
   display_name: rerank-qa-mistral-4b
   org_id: nvidia
@@ -108641,8 +108566,8 @@ entries:
   metadata: '{"alias_platforms": {"sparsedrive": "nvidia"}, "providers": ["nvidia"], "underlying_key": "sparsedrive"}'
   resolution_source: models_dev
   review_status: reviewed
-- id: nvidia/step-3-7-flash
-  display_name: Step 3.7 Flash
+- id: stepfun-ai/Step-3.7-Flash
+  display_name: stepfun-ai/Step-3.7-Flash
   org_id: stepfun
   family: step-3-7-flash
   architecture: null
@@ -108659,6 +108584,7 @@ entries:
   review_status: reviewed
   aliases:
   - step-3-7-flash
+  - nvidia/step-3-7-flash
 - id: nvidia/streampetr
   display_name: streampetr
   org_id: nvidia
@@ -108738,8 +108664,8 @@ entries:
   metadata: '{"alias_platforms": {"usdvalidate": "nvidia"}, "providers": ["nvidia"], "underlying_key": "usdvalidate"}'
   resolution_source: models_dev
   review_status: reviewed
-- id: nvidia/whisper-large-v3
-  display_name: Whisper Large v3
+- id: openai/whisper-large-v3
+  display_name: openai/whisper-large-v3
   org_id: openai
   family: whisper-large-v3
   architecture: null
@@ -108756,7 +108682,7 @@ entries:
   review_status: reviewed
   aliases:
   - whisper-large-v3
-  - whisper-large-v3-turbo
+  - nvidia/whisper-large-v3
 - id: nxmwxm/Beast-Soul-new
   display_name: Beast-Soul-new
   org_id: nxmwxm
@@ -109731,9 +109657,9 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
-- id: openai/Lingma Agent + Lingma SWE-GPT 72b (v0918)
-  display_name: openai/Lingma Agent + Lingma SWE-GPT 72b (v0918)
-  org_id: openai
+- id: unknown/lingma-agent-lingma-swe-gpt-72b-v0918
+  display_name: unknown/Lingma Agent + Lingma SWE-GPT 72b (v0918)
+  org_id: unknown
   family: null
   architecture: null
   params_billions: null
@@ -109747,9 +109673,12 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: openai/Lingma Agent + Lingma SWE-GPT 72b (v0925)
-  display_name: openai/Lingma Agent + Lingma SWE-GPT 72b (v0925)
-  org_id: openai
+  aliases:
+  - openai/Lingma Agent + Lingma SWE-GPT 72b (v0918)
+  - unknown/Lingma Agent + Lingma SWE-GPT 72b (v0918)
+- id: unknown/lingma-agent-lingma-swe-gpt-72b-v0925
+  display_name: unknown/Lingma Agent + Lingma SWE-GPT 72b (v0925)
+  org_id: unknown
   family: null
   architecture: null
   params_billions: null
@@ -109763,9 +109692,12 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: openai/Lingma Agent + Lingma SWE-GPT 7b (v0918)
-  display_name: openai/Lingma Agent + Lingma SWE-GPT 7b (v0918)
-  org_id: openai
+  aliases:
+  - openai/Lingma Agent + Lingma SWE-GPT 72b (v0925)
+  - unknown/Lingma Agent + Lingma SWE-GPT 72b (v0925)
+- id: unknown/lingma-agent-lingma-swe-gpt-7b-v0918
+  display_name: unknown/Lingma Agent + Lingma SWE-GPT 7b (v0918)
+  org_id: unknown
   family: null
   architecture: null
   params_billions: null
@@ -109779,9 +109711,12 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: openai/Lingma Agent + Lingma SWE-GPT 7b (v0925)
-  display_name: openai/Lingma Agent + Lingma SWE-GPT 7b (v0925)
-  org_id: openai
+  aliases:
+  - openai/Lingma Agent + Lingma SWE-GPT 7b (v0918)
+  - unknown/Lingma Agent + Lingma SWE-GPT 7b (v0918)
+- id: unknown/lingma-agent-lingma-swe-gpt-7b-v0925
+  display_name: unknown/Lingma Agent + Lingma SWE-GPT 7b (v0925)
+  org_id: unknown
   family: null
   architecture: null
   params_billions: null
@@ -109795,6 +109730,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - openai/Lingma Agent + Lingma SWE-GPT 7b (v0925)
+  - unknown/Lingma Agent + Lingma SWE-GPT 7b (v0925)
 - id: openai/ada-001
   display_name: ada 350M (GPT-3)
   org_id: openai
@@ -109851,7 +109789,6 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
-  - unknown/gpt-3-1-3b-babbage-002
   - unknown/text-babbage-001
   - unknown/babbage-001
   - text-babbage-001
@@ -109977,13 +109914,13 @@ entries:
   - unknown/curie-text-curie-001
   - openai/curie-6-7b
   - openai/text-curie-001
-  - unknown/instructgpt-curie-v1
   - text-curie-001
   - unknown/text-curie-001
   - unknown/gpt-3-curie-ned
   - unknown/gpt-3-curie-v1
   - unknown/curie-001
   - unknown/gpt-3-curie
+  - unknown/instructgpt-curie-v1
 - id: openai/dall-e-2
   display_name: DALL-E 2
   org_id: openai
@@ -110004,7 +109941,6 @@ entries:
   - dall-e-2
   - unknown/dall-e-2
   - dall-e-mini
-  - unknown/dall-e-mini
 - id: openai/dall-e-3
   display_name: DALL-E 3
   org_id: openai
@@ -110041,11 +109977,8 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
-  - unknown/gpt-3-davinci-003
-  - unknown/instructgpt-davinci-v2
   - gpt-3-davinci
   - unknown/gpt-3-davinci
-  - unknown/gpt-3-davinci-002
   - unknown/gpt-3-text-davinci-001
   - openai/davinci-175b
   - unknown/gpt-3-davinci-v1
@@ -110289,7 +110222,6 @@ entries:
   aliases:
   - unknown/gpt-2-0-1b
   - gpt2
-  - unknown/gpt-3
 - id: openai/gpt-2-xl
   display_name: GPT-2 XL
   org_id: openai
@@ -111072,7 +111004,6 @@ entries:
   - openai__chatgpt-4o-latest
   - unknown/gpt-4o-search-preview
   - openai/gpt-4o-cot
-  - openai/chatgpt
 - id: openai/gpt-4o-0806
   display_name: GPT-4o (0806)
   org_id: openai
@@ -113183,8 +113114,8 @@ entries:
   review_status: draft
   aliases:
   - inflection-3-productivity
-- id: openai/mirothinker-v1-5-235b
-  display_name: MiroThinker v1.5 235B
+- id: miromind-ai/MiroThinker-v1.5-235B
+  display_name: miromind-ai/MiroThinker-v1.5-235B
   org_id: miromind-ai
   family: mirothinker-v1-5-235b
   architecture: null
@@ -113200,6 +113131,7 @@ entries:
   review_status: draft
   aliases:
   - mirothinker-v1-5-235b
+  - openai/mirothinker-v1-5-235b
 - id: openai/o1
   display_name: o1
   org_id: openai
@@ -113920,6 +113852,8 @@ entries:
   - gpt-3-text-davinci-002
   - unknown/instructgpt-text-davinci-002
   - unknown/text-davinci-002
+  - unknown/gpt-3-davinci-002
+  - unknown/instructgpt-davinci-v2
 - id: openai/text-davinci-003
   display_name: text-davinci-003
   org_id: openai
@@ -113947,6 +113881,7 @@ entries:
   - unknown/davinci-text-davinci-003
   - unknown/chatgpt-text-davinci-003-zero-shot
   - unknown/text-davinci-003-0-shot-cot
+  - unknown/gpt-3-davinci-003
 - id: openai/text-embedding-3-large
   display_name: Text Embedding 3 Large
   org_id: openai
@@ -114132,12 +114067,10 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/minicpm-v-2-6
-  - unknown/minicpm-llama3-v-2-5
   - unknown/minicpm-v2-6
   - unknown/minicpm-v2-6-8b
   - minicpm-v-2.6
   - minicpm-llama3-v-2-5
-  - unknown/minicpm-llama3-v2-5
   - openbmb/minicpm-v-2.6
   - minicpm-v2-6-8b
   - minicpm-v2-6
@@ -115732,8 +115665,8 @@ entries:
   metadata: '{"downloads_all_time": 51076, "hf_id": "postbot/gpt2-medium-emailgen", "library_name": "transformers", "license": "[''apache-2.0'']", "likes": 6, "pipeline_tag": "text-generation", "source": "hub_stats"}'
   resolution_source: hf
   review_status: reviewed
-- id: prime-intellect/intellect-3
-  display_name: Intellect 3
+- id: PrimeIntellect/INTELLECT-3
+  display_name: PrimeIntellect/INTELLECT-3
   org_id: PrimeIntellect
   family: intellect-3
   architecture: null
@@ -115749,6 +115682,8 @@ entries:
   review_status: reviewed
   aliases:
   - intellect-3
+  - prime-intellect/intellect-3
+  - zai/intellect-3
 - id: prince-canuma/Ministral-8B-Instruct-2410-HF
   display_name: Ministral-8B-Instruct-2410-HF
   org_id: prince-canuma
@@ -119800,9 +119735,6 @@ entries:
   - alibaba/qwen3-0.6b
   - unknown/qwen3-0-6b-think
   - qwen/qwen3-0-6b
-  - unknown/qwen3-0-6b-emb
-  - unknown/qwen3-0-6b-emb-a2a
-  - unknown/qwen3-0-6b-emb-f2f
 - id: qwen/qwen3-235b-a22b-2507
   display_name: Qwen3 235B A22B (2507)
   org_id: alibaba
@@ -124118,7 +124050,6 @@ entries:
   aliases:
   - unknown/bielik-0-1
   - unknown/bielik-2-3
-  - speakleash-ack-cyfronet-agh/bielik-11b-v2-3-instruct
   - speakleash/bielik-11b-v2-2-instruct
   - bielik-11b-v2
   - speakleash/bielik-11b-v2-0-instruct
@@ -124176,7 +124107,9 @@ entries:
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: speakleash/Bielik-11B-v2
+    relationship: merge
   open_weights: null
   release_date: null
   input_modalities: null
@@ -124185,6 +124118,8 @@ entries:
   metadata: '{}'
   resolution_source: hf
   review_status: reviewed
+  aliases:
+  - speakleash-ack-cyfronet-agh/bielik-11b-v2-3-instruct
 - id: spmurrayzzz/Mistral-Syndicate-7B
   display_name: Mistral-Syndicate-7B
   org_id: spmurrayzzz
@@ -129288,7 +129223,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Amazon Q Developer Agent (v20240430-dev)
+- id: unknown/amazon-q-developer-agent-v20240430-dev
   display_name: unknown/Amazon Q Developer Agent (v20240430-dev)
   org_id: unknown
   family: null
@@ -129304,7 +129239,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Amazon Q Developer Agent (v20240719-dev)
+  aliases:
+  - unknown/Amazon Q Developer Agent (v20240430-dev)
+- id: unknown/amazon-q-developer-agent-v20240719-dev
   display_name: unknown/Amazon Q Developer Agent (v20240719-dev)
   org_id: unknown
   family: null
@@ -129320,7 +129257,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Amazon Q Developer Agent (v20241202-dev)
+  aliases:
+  - unknown/Amazon Q Developer Agent (v20240719-dev)
+- id: unknown/amazon-q-developer-agent-v20241202-dev
   display_name: unknown/Amazon Q Developer Agent (v20241202-dev)
   org_id: unknown
   family: null
@@ -129336,7 +129275,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Amazon Q Developer Agent (v20250405-dev)
+  aliases:
+  - unknown/Amazon Q Developer Agent (v20241202-dev)
+- id: unknown/amazon-q-developer-agent-v20250405-dev
   display_name: unknown/Amazon Q Developer Agent (v20250405-dev)
   org_id: unknown
   family: null
@@ -129352,7 +129293,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Artemis Agent v1 (2024-11-20)
+  aliases:
+  - unknown/Amazon Q Developer Agent (v20250405-dev)
+- id: unknown/artemis-agent-v1-2024-11-20
   display_name: unknown/Artemis Agent v1 (2024-11-20)
   org_id: unknown
   family: null
@@ -129368,7 +129311,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Augment Agent v0
+  aliases:
+  - unknown/Artemis Agent v1 (2024-11-20)
+- id: unknown/augment-agent-v0
   display_name: unknown/Augment Agent v0
   org_id: unknown
   family: null
@@ -129384,7 +129329,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Augment Agent v1
+  aliases:
+  - unknown/Augment Agent v0
+- id: unknown/augment-agent-v1
   display_name: unknown/Augment Agent v1
   org_id: unknown
   family: null
@@ -129400,7 +129347,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Blackbox AI Agent
+  aliases:
+  - unknown/Augment Agent v1
+- id: unknown/blackbox-ai-agent
   display_name: unknown/Blackbox AI Agent
   org_id: unknown
   family: null
@@ -129416,6 +129365,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/Blackbox AI Agent
 - id: unknown/Bracket.sh
   display_name: unknown/Bracket.sh
   org_id: unknown
@@ -129432,7 +129383,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Bytedance MarsCode Agent
+- id: unknown/bytedance-marscode-agent
   display_name: unknown/Bytedance MarsCode Agent
   org_id: unknown
   family: null
@@ -129448,6 +129399,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/Bytedance MarsCode Agent
 - id: unknown/CodeArts-MiniMax-M2.5
   display_name: unknown/CodeArts-MiniMax-M2.5
   org_id: unknown
@@ -129464,7 +129417,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Factory Code Droid
+- id: unknown/factory-code-droid
   display_name: unknown/Factory Code Droid
   org_id: unknown
   family: null
@@ -129480,6 +129433,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/Factory Code Droid
 - id: unknown/FrogBoss-32B-2510
   display_name: unknown/FrogBoss-32B-2510
   org_id: unknown
@@ -129512,7 +129467,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Google Jules + Gemini 2.0 Flash (v20241212-experimental)
+- id: unknown/google-jules-gemini-2-0-flash-v20241212-experimental
   display_name: unknown/Google Jules + Gemini 2.0 Flash (v20241212-experimental)
   org_id: unknown
   family: null
@@ -129530,7 +129485,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Gru(2024-08-24)
+  aliases:
+  - unknown/Google Jules + Gemini 2.0 Flash (v20241212-experimental)
+- id: unknown/gru-2024-08-24
   display_name: unknown/Gru(2024-08-24)
   org_id: unknown
   family: null
@@ -129546,7 +129503,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Gru(2024-12-08)
+  aliases:
+  - unknown/Gru(2024-08-24)
+- id: unknown/gru-2024-12-08
   display_name: unknown/Gru(2024-12-08)
   org_id: unknown
   family: null
@@ -129562,6 +129521,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/Gru(2024-12-08)
 - id: unknown/Honeycomb
   display_name: unknown/Honeycomb
   org_id: unknown
@@ -129626,7 +129587,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/OpenHands + 4x Scaled (2024-02-03)
+- id: unknown/openhands-4x-scaled-2024-02-03
   display_name: unknown/OpenHands + 4x Scaled (2024-02-03)
   org_id: unknown
   family: null
@@ -129642,7 +129603,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/OpenHands + CodeAct v2.1 (claude-3-5-sonnet-20241022)
+  aliases:
+  - unknown/OpenHands + 4x Scaled (2024-02-03)
+- id: unknown/openhands-codeact-v2-1-claude-3-5-sonnet-20241022
   display_name: unknown/OpenHands + CodeAct v2.1 (claude-3-5-sonnet-20241022)
   org_id: unknown
   family: null
@@ -129658,7 +129621,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/PatchPilot + Co-PatcheR
+  aliases:
+  - unknown/OpenHands + CodeAct v2.1 (claude-3-5-sonnet-20241022)
+- id: unknown/patchpilot-co-patcher
   display_name: unknown/PatchPilot + Co-PatcheR
   org_id: unknown
   family: null
@@ -129674,7 +129639,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/RAG + ChatGPT 3.5
+  aliases:
+  - unknown/PatchPilot + Co-PatcheR
+- id: unknown/rag-chatgpt-3-5
   display_name: unknown/RAG + ChatGPT 3.5
   org_id: unknown
   family: null
@@ -129690,6 +129657,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/RAG + ChatGPT 3.5
 - id: unknown/SWE-Rizzo
   display_name: unknown/SWE-Rizzo
   org_id: unknown
@@ -129706,7 +129675,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Solver (2024-09-12)
+- id: unknown/solver-2024-09-12
   display_name: unknown/Solver (2024-09-12)
   org_id: unknown
   family: null
@@ -129722,7 +129691,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Solver (2024-10-28)
+  aliases:
+  - unknown/Solver (2024-09-12)
+- id: unknown/solver-2024-10-28
   display_name: unknown/Solver (2024-10-28)
   org_id: unknown
   family: null
@@ -129738,6 +129709,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/Solver (2024-10-28)
 - id: unknown/TRAE
   display_name: unknown/TRAE
   org_id: unknown
@@ -129754,7 +129727,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/Tools + Claude 3.7 Sonnet (2025-02-24)
+- id: unknown/tools-claude-3-7-sonnet-2025-02-24
   display_name: unknown/Tools + Claude 3.7 Sonnet (2025-02-24)
   org_id: unknown
   family: null
@@ -129772,6 +129745,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/Tools + Claude 3.7 Sonnet (2025-02-24)
 - id: unknown/atlassian-rovo-dev
   display_name: unknown/atlassian-rovo-dev
   org_id: unknown
@@ -130110,7 +130085,7 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/nFactorial (2024-10-01)
+- id: unknown/nfactorial-2024-10-01
   display_name: unknown/nFactorial (2024-10-01)
   org_id: unknown
   family: null
@@ -130126,7 +130101,9 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-- id: unknown/nFactorial (2024-10-07)
+  aliases:
+  - unknown/nFactorial (2024-10-01)
+- id: unknown/nfactorial-2024-10-07
   display_name: unknown/nFactorial (2024-10-07)
   org_id: unknown
   family: null
@@ -130142,6 +130119,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
+  aliases:
+  - unknown/nFactorial (2024-10-07)
 - id: unknown/nemotron-3-nano-30b-a3b-base
   display_name: unknown/nemotron-3-nano-30b-a3b-base
   org_id: unknown
@@ -133842,7 +133821,9 @@ entries:
   family: mimo-v2-5-pro-6bit
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: xiaomi/mimo-v2-5-pro
+    relationship: quantized
   open_weights: true
   release_date: '2026-04-22'
   input_modalities: null
@@ -135351,7 +135332,9 @@ entries:
   family: null
   architecture: null
   params_billions: null
-  parents: []
+  parents:
+  - id: zai-org/GLM-4.5-Air
+    relationship: quantized
   open_weights: null
   release_date: null
   input_modalities: null
@@ -136308,22 +136291,6 @@ entries:
   review_status: draft
   aliases:
   - glm-z1-rumination-32b-0414
-- id: zai/intellect-3
-  display_name: INTELLECT-3
-  org_id: PrimeIntellect
-  family: intellect-3
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: true
-  release_date: '2025-11-26'
-  input_modalities: null
-  output_modalities: null
-  tags:
-  - open-weight
-  metadata: '{"providers": ["cortecs", "kilo", "nebius", "openrouter", "vercel"], "underlying_key": "intellect-3"}'
-  resolution_source: models_dev
-  review_status: draft
 - id: zai/olafangensan-glm-4-7-flash-heretic
   display_name: GLM 4.7 Flash Heretic
   org_id: zai
@@ -139845,3 +139812,444 @@ entries:
   review_status: reviewed
   aliases:
   - deepseek-coder
+- id: bigscience/bloomz-560m
+  display_name: bigscience/bloomz-560m
+  org_id: bigscience
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: bigscience/bloom-560m
+    relationship: finetune
+  - id: bigscience/bloomz
+    relationship: variant
+    axis: size
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/bloomz-560m
+- id: bigscience/bloomz-1b1
+  display_name: bigscience/bloomz-1b1
+  org_id: bigscience
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: bigscience/bloom-1b1
+    relationship: finetune
+  - id: bigscience/bloomz
+    relationship: variant
+    axis: size
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/bloomz-1-1b
+- id: bigscience/bloomz-1b7
+  display_name: bigscience/bloomz-1b7
+  org_id: bigscience
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: bigscience/bloom-1b7
+    relationship: finetune
+  - id: bigscience/bloomz
+    relationship: variant
+    axis: size
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/bloomz-1-7b
+- id: bigscience/bloomz
+  display_name: bigscience/bloomz
+  org_id: bigscience
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: bigscience/bloom-176b
+    relationship: finetune
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/bloomz
+- id: liuhaotian/llava-v1.6-vicuna-13b
+  display_name: liuhaotian/llava-v1.6-vicuna-13b
+  org_id: liuhaotian
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: liuhaotian/llava-v1.6-vicuna-7b
+    relationship: variant
+    axis: size
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/llava-1-6-vicuna-13b
+- id: nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1
+  display_name: nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1
+  org_id: nvidia
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/llama-3-1-nemotron-nano-vl-8b-v1
+- id: dalle-mini/dalle-mini
+  display_name: dalle-mini/dalle-mini
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/dall-e-mini
+- id: openbmb/MiniCPM-Llama3-V-2_5
+  display_name: openbmb/MiniCPM-Llama3-V-2_5
+  org_id: openbmb
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/minicpm-llama3-v-2-5
+  - unknown/minicpm-llama3-v2-5
+- id: luodian/OTTER-9B-LA-InContext
+  display_name: luodian/OTTER-9B-LA-InContext
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - otter-9b
+  - unknown/otter-9b
+- id: Skywork/Skywork-o1-Open-PRM-Qwen-2.5-1.5B
+  display_name: Skywork/Skywork-o1-Open-PRM-Qwen-2.5-1.5B
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: Skywork/skywork-prm-7b
+    relationship: variant
+    axis: size
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/skywork-prm-1-5b
+- id: LiquidAI/lfm-3b
+  display_name: LiquidAI/lfm-3b
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: LiquidAI/lfm-40b
+    relationship: variant
+    axis: size
+  open_weights: false
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/lfm-3b
+- id: LiquidAI/lfm-7b
+  display_name: LiquidAI/lfm-7b
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: LiquidAI/lfm-40b
+    relationship: variant
+    axis: size
+  open_weights: false
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/lfm-7b
+- id: openai/gpt-3
+  display_name: openai/gpt-3
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/gpt-3
+- id: openai/babbage-002
+  display_name: openai/babbage-002
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/gpt-3-1-3b-babbage-002
+- id: allenai/tulu-2-7b-rm-v0-nectar-binarized-3.8m-check
+  display_name: allenai/tulu-2-7b-rm-v0-nectar-binarized-3.8m-check
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: allenai/tulu-2-7b
+    relationship: finetune
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - ai2/tulu-2-7b-rm-v0-nectar-binarized-3-8m-check
+- id: Infi-MM/infimm-zephyr
+  display_name: Infi-MM/infimm-zephyr
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/infimm-zephyr-7b
+- id: MadeAgents/Hammer2.0-7b
+  display_name: MadeAgents/Hammer2.0-7b
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/hammer2-0-7b
+- id: Qwen/Qwen3-Embedding-0.6B
+  display_name: Qwen/Qwen3-Embedding-0.6B
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: qwen/qwen3-0.6b
+    relationship: finetune
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/qwen3-0-6b-emb
+  - unknown/qwen3-0-6b-emb-a2a
+  - unknown/qwen3-0-6b-emb-f2f
+- id: OpenGVLab/Mini-InternVL-Chat-4B-V1-5
+  display_name: OpenGVLab/Mini-InternVL-Chat-4B-V1-5
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/internvl-4b-chat-1-5
+- id: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL
+  display_name: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - unknown/nemotron-nano-v2-vl
+- id: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16
+  display_name: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL
+    relationship: quantized
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-FP8
+  display_name: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-FP8
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL
+    relationship: quantized
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-NVFP4-QAD
+  display_name: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-NVFP4-QAD
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL
+    relationship: quantized
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: Qwen/Qwen2.5
+  display_name: Qwen/Qwen2.5
+  org_id: null
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - alibaba/Qwen 2.5
+- id: openai/whisper-large-v3-turbo
+  display_name: openai/whisper-large-v3-turbo
+  org_id: openai
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - whisper-large-v3-turbo

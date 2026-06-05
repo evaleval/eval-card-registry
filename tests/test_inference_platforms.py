@@ -21,8 +21,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SEED_DIR = REPO_ROOT / "seed"
 PROPOSAL_JSON = (
     REPO_ROOT
-    / "specs"
-    / "model-resolution-rework"
+     / "curation"
     / "inference_platforms.proposed.json"
 )
 

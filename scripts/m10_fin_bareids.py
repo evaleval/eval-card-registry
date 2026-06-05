@@ -13,7 +13,7 @@ Convert every BARE canonical id (no "/") in seed/models/core.yaml into a
        re-key to `{org_id}/{slug}`.
   (iii) UNKNOWN route: else (org_id is null), re-key to `unknown/{slug}`, ensure
        tags include `org-unknown`, and surface the entry to
-       specs/model-resolution-rework/org_unknown_review.json.
+       curation/org_unknown_review.json.
 
 NEVER auto-guesses a vendor from a name: path (ii) fires ONLY when an org
 was ALREADY resolved upstream (non-null org_id), never from the slug text.
@@ -46,7 +46,7 @@ CORE = ROOT / "seed" / "models" / "core.yaml"
 FIXTURES = ROOT / "fixtures"
 ORGS_PARQUET = FIXTURES / "canonical_orgs.parquet"
 ORACLE = Path("/Users/jchim/projects/evaleval/hf_model_id_resolution.json")
-REVIEW = ROOT / "specs" / "model-resolution-rework" / "org_unknown_review.json"
+REVIEW = ROOT  / "curation" / "org_unknown_review.json"
 
 
 def normalize(s: str) -> str:

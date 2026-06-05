@@ -1,4 +1,3 @@
-# AUTO — community orgs (referenced, non-curated).
 - id: 0-hero
   display_name: 0-hero
   hf_org: 0-hero
@@ -3481,13 +3480,6 @@
 - id: hendrydong
   display_name: hendrydong
   hf_org: hendrydong
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: hf:nvidia
-  display_name: hf:nvidia
-  hf_org: hf:nvidia
   kind: community
   tags: '[]'
   metadata: '{}'

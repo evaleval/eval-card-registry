@@ -150,20 +150,14 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
       MEMBERSHIP is a total partition — ALWAYS set, equal to SELF when self
       has no such ancestor (self IS the identity-group root; a singleton is a
       group of one whose id is itself). NOT null at the root.
-      Other variant axes (size, mode, training_stage, tier, modality,
-      domain) keep separate identity at the leaf.
 
-      DEFERRED — mode folding into the GROUP walk: the group ultimately folds
-      `{version, quantized, mode}`. We intentionally do NOT
-      add `mode` here yet. The current generated data MISLABELS chat/instruct
-      variants as `axis=mode` (~307 edges); folding `mode` now would collapse
-      those into their group and balloon the canonical_id flip blast radius.
-      Once the chat/instruct edges are reclassified to `axis=training_stage`
-      (different trained weights, kept separate), it becomes
-      safe to add `mode` to `_is_identity_edge`. Until then the group walk
-      stays `{quantized, variant·version}`, keeping the canonical_id flip
-      blast radius small.
-    - `model_family_id` (NEW): walk up the versioned release line, folding
+      The group folds `{quantized, variant·version, variant·mode}`: a
+      reasoning/thinking `mode` toggle is the same underlying model at the API
+      level, so it shares identity (chat/instruct variants are NOT `axis=mode` —
+      those carry `axis=training_stage`, different trained weights). Other variant
+      axes (size, training_stage, tier, modality, domain) keep separate identity
+      at the leaf.
+    - `model_family_id`: walk up the versioned release line, folding
       `quantized` + `variant` axes `{version, mode, training_stage, size,
       tier}`. Does NOT fold `modality`/`domain` (a vision/coder variant is a
       distinct artifact kept at the leaf/group level). Stops at
@@ -173,7 +167,7 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
       within ONE labeled version, so the walk never crosses a version line.
       FAMILY MEMBERSHIP is a total partition — ALWAYS set, equal to SELF when
       self is the family root. NOT null at the root.
-    - `lineage_origin_model_id` (NEW): deepest ancestor reached by walking
+    - `lineage_origin_model_id`: deepest ancestor reached by walking
       non-`variant` edges (quantized / finetune / merge / adapter); the id of
       that ancestor. NULL when self is the origin — NO self-fallback (unlike
       `lineage_origin_model_org_id` below, which keeps its self-fallback).
@@ -378,7 +372,7 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         # model_group_id is ALWAYS set (self at the root — _walk returns self
         # when there is no identity-preserving ancestor, which IS the group id).
         group_updates[cid] = group
-        # Family root via the versioned-release-line fold (NEW).
+        # Family root via the versioned-release-line fold.
         family = _walk(cid, _is_family_fold_edge)
         # FAMILY MEMBERSHIP is likewise a total partition — ALWAYS set (self at
         # the family root). NOT null-at-root.
@@ -436,24 +430,35 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
             lambda r: org_prefix_updates.get(r["id"], r.get("org_id")), axis=1
         ).astype(pd.StringDtype())
 
-    # Org-less honesty: a row whose developer is the `unknown` sentinel org has no
-    # extractable developer, so it carries the `org-unknown` tag. The FK and the
-    # tag move together — the org-less bucket is surfaced for review either way.
-    def _add_org_unknown_tag(row) -> Any:
+    # Org-less honesty: a row is in the org-less bucket iff its developer is the
+    # `unknown` sentinel org (or null). The `org-unknown` tag and that bucket move
+    # together in BOTH directions — add the tag for org-less rows, and strip it
+    # from any row that has since gained a real org (so a stale tag can't claim a
+    # resolved model is org-less).
+    def _sync_org_unknown_tag(row) -> Any:
         raw = row.get("tags")
-        if row.get("org_id") != "unknown":
-            return raw
+        oid = row.get("org_id")
+        try:
+            is_na = bool(pd.isna(oid))
+        except (ValueError, TypeError):
+            is_na = False
+        orgless = is_na or oid == "unknown"
         try:
             cur = json.loads(raw) if isinstance(raw, str) else []
         except (ValueError, TypeError):
             cur = []
         if not isinstance(cur, list):
             cur = []
-        if "org-unknown" not in cur:
+        has = "org-unknown" in cur
+        if orgless and not has:
             cur = [*cur, "org-unknown"]
+        elif not orgless and has:
+            cur = [c for c in cur if c != "org-unknown"]
+        else:
+            return raw
         return json.dumps(cur)
 
-    df["tags"] = df.apply(_add_org_unknown_tag, axis=1).astype(pd.StringDtype())
+    df["tags"] = df.apply(_sync_org_unknown_tag, axis=1).astype(pd.StringDtype())
     store.set_table("canonical_models", df)
 
     # No dangling FK: every org the prefix rule derived must exist in

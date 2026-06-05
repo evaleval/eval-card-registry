@@ -41,9 +41,9 @@ import pandas as pd
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-DOC = ROOT / "specs" / "model-resolution-rework" / "alias-audit.md"
+DOC = ROOT  / "curation" / "alias-audit.md"
 CORE = ROOT / "seed" / "models" / "core.yaml"
-SIDECAR = ROOT / "specs" / "model-resolution-rework" / "audit_bad_nearmiss.json"
+SIDECAR = ROOT  / "curation" / "audit_bad_nearmiss.json"
 FIXTURES = ROOT / "fixtures" / "aliases.parquet"
 ORACLE = ROOT.parent / "hf_model_id_resolution.json"
 

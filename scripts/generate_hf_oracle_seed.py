@@ -151,7 +151,7 @@ def _nm_sizes(name: str) -> set[str]:
 
 
 def _load_audit_bad_nearmiss() -> frozenset[str]:
-    p = REGISTRY_ROOT / "specs" / "model-resolution-rework" / "audit_bad_nearmiss.json"
+    p = REGISTRY_ROOT  / "curation" / "audit_bad_nearmiss.json"
     try:
         return frozenset(json.loads(p.read_text()).get("raws", []))
     except FileNotFoundError:  # pragma: no cover
