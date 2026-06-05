@@ -8,7 +8,9 @@ EntityType = Literal[
 ReviewStatus = Literal["draft", "reviewed"]
 AliasStatus = Literal["auto", "uncertain", "confirmed", "rejected"]
 ParentRelationship = Literal["variant", "finetune", "quantized", "merge", "adapter"]
-ParentAxis = Literal["size", "mode", "modality", "domain", "version"]
+ParentAxis = Literal[
+    "size", "mode", "modality", "domain", "version", "training_stage", "tier"
+]
 OrgKind = Literal["lab", "community", "individual", "unknown"]
 
 
@@ -62,10 +64,17 @@ class ModelResolutionDetail(BaseModel):
 
 
 class BenchmarkResolutionDetail(BaseModel):
-    """Type-specific resolution detail for a benchmark match. `level=slice`
-    + `matched_subset` is how a subset / alias-fold match (e.g. an MMLU
-    subject folded onto the `mmlu` parent) is surfaced without minting a
-    slice entity — a subset is a parent-only alias-fold, never its own canonical."""
+    """Type-specific resolution detail for a benchmark match.
+
+    `level` reports where the matched canonical sits in the benchmark tree:
+    `composite` / `family` / `benchmark`, or `slice` when the matched
+    benchmark itself carries a `parent_benchmark_id` (a decomposed subset
+    of a parent, e.g. `rewardbench-chat` under `rewardbench`).
+
+    `matched_subset` is INDEPENDENT of `level`: it echoes the raw surface
+    form that matched whenever it differs from the canonical id (more than
+    case), e.g. `"MATH Level 5"` -> `math-level-5`. So a plain
+    `level=benchmark` match can still carry a `matched_subset`."""
     level: Optional[str] = None  # composite | family | benchmark | slice
     matched_subset: Optional[str] = None
 
