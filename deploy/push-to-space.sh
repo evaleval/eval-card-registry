@@ -42,6 +42,38 @@ cp -r "$REPO_ROOT/src" "$TMPDIR/src"
 cp "$SCRIPT_DIR/hf-space/README.md" "$TMPDIR/README.md"
 
 echo "Uploading to HF Space $SPACE_REPO ..."
-uv run hf upload "$SPACE_REPO" "$TMPDIR" . --repo-type space
+# Upload via upload_folder, NOT `hf upload`. `hf upload` always calls
+# create_repo(exist_ok=True) first, and the repos/create endpoint is rate-limited
+# far more aggressively than commits — that redundant create is what 429s a deploy
+# when the token's API budget is hot. Instead: a cheap existence check (GET), then
+# create ONLY if the Space is genuinely absent, then commit. Retries a transient
+# 429 with backoff.
+uv run python - "$SPACE_REPO" "$TMPDIR" <<'PY'
+import sys, time
+from huggingface_hub import HfApi
+
+repo, folder = sys.argv[1], sys.argv[2]
+api = HfApi()
+
+# Existence check (repo_info GET) — does NOT hit the throttled repos/create.
+if not api.repo_exists(repo_id=repo, repo_type="space"):
+    print(f"  Space {repo} does not exist — creating it…", file=sys.stderr)
+    api.create_repo(repo_id=repo, repo_type="space", space_sdk="docker", exist_ok=True)
+
+for attempt in range(5):
+    try:
+        api.upload_folder(
+            folder_path=folder, repo_id=repo, repo_type="space",
+            commit_message="Deploy eval-card-registry service",
+        )
+        break
+    except Exception as e:  # noqa: BLE001
+        if "429" in str(e) and attempt < 4:
+            wait = 30 * (attempt + 1)
+            print(f"  429 rate-limited; retrying in {wait}s ({attempt + 1}/4)…", file=sys.stderr)
+            time.sleep(wait)
+            continue
+        raise
+PY
 
 echo "Done. Space will rebuild automatically."
