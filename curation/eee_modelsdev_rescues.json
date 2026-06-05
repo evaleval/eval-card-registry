@@ -774,14 +774,14 @@
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/Claude-4.5-Sonnet": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "anthropic/anthropic/claude-3-7-sonnet-20250219": {
   "author_org": "anthropic",
@@ -921,126 +921,126 @@
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-1"
+  "underlying_model_id": "claude-4-1-opus"
  },
  "anthropic/claude-4-1-opus-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-1"
+  "underlying_model_id": "claude-4-1-opus"
  },
  "anthropic/claude-4-5-haiku": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-haiku-4-5"
+  "underlying_model_id": "claude-4-5-haiku"
  },
  "anthropic/claude-4-5-haiku-reasoning": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-haiku-4-5"
+  "underlying_model_id": "claude-4-5-haiku"
  },
  "anthropic/claude-4-5-sonnet": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "anthropic/claude-4-5-sonnet-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "anthropic/claude-4-opus": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4"
+  "underlying_model_id": "claude-4-opus"
  },
  "anthropic/claude-4-opus-20250514": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4"
+  "underlying_model_id": "claude-4-opus"
  },
  "anthropic/claude-4-opus-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4"
+  "underlying_model_id": "claude-4-opus"
  },
  "anthropic/claude-4-sonnet": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-4-sonnet-20250514": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-4-sonnet-20250522": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-4-sonnet-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-4.1-opus": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-1"
+  "underlying_model_id": "claude-4-1-opus"
  },
  "anthropic/claude-4.5-opus-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-5"
+  "underlying_model_id": "claude-4-5-opus"
  },
  "anthropic/claude-4.5-sonnet-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "anthropic/claude-4.6-opus-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-6"
+  "underlying_model_id": "claude-4-6-opus"
  },
  "anthropic/claude-4.6-sonnet-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "multiset",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-6"
+  "underlying_model_id": "claude-4-6-sonnet"
  },
  "anthropic/claude-code": {
   "author_org": null,
@@ -1054,203 +1054,203 @@
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-haiku-4-5"
+  "underlying_model_id": "claude-4-5-haiku"
  },
  "anthropic/claude-haiku-4-5-20251001-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-haiku-4-5"
+  "underlying_model_id": "claude-4-5-haiku"
  },
  "anthropic/claude-haiku-4.5": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-haiku-4-5"
+  "underlying_model_id": "claude-4-5-haiku"
  },
  "anthropic/claude-opus-4": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4"
+  "underlying_model_id": "claude-4-opus"
  },
  "anthropic/claude-opus-4-1": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-1"
+  "underlying_model_id": "claude-4-1-opus"
  },
  "anthropic/claude-opus-4-1-20250805": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-1"
+  "underlying_model_id": "claude-4-1-opus"
  },
  "anthropic/claude-opus-4-1-20250805-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-1"
+  "underlying_model_id": "claude-4-1-opus"
  },
  "anthropic/claude-opus-4-20250514": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4"
+  "underlying_model_id": "claude-4-opus"
  },
  "anthropic/claude-opus-4-20250514-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4"
+  "underlying_model_id": "claude-4-opus"
  },
  "anthropic/claude-opus-4-5": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-5"
+  "underlying_model_id": "claude-4-5-opus"
  },
  "anthropic/claude-opus-4-5-20251101": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-5"
+  "underlying_model_id": "claude-4-5-opus"
  },
  "anthropic/claude-opus-4-5-20251101-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-5"
+  "underlying_model_id": "claude-4-5-opus"
  },
  "anthropic/claude-opus-4-5-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-5"
+  "underlying_model_id": "claude-4-5-opus"
  },
  "anthropic/claude-opus-4-6": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-6"
+  "underlying_model_id": "claude-4-6-opus"
  },
  "anthropic/claude-opus-4-6-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-6"
+  "underlying_model_id": "claude-4-6-opus"
  },
  "anthropic/claude-opus-4-7": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-7"
+  "underlying_model_id": "claude-4-7-opus"
  },
  "anthropic/claude-opus-4-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4"
+  "underlying_model_id": "claude-4-opus"
  },
  "anthropic/claude-opus-4.1": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-1"
+  "underlying_model_id": "claude-4-1-opus"
  },
  "anthropic/claude-opus-4.5": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-5"
+  "underlying_model_id": "claude-4-5-opus"
  },
  "anthropic/claude-opus-4.6": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-6"
+  "underlying_model_id": "claude-4-6-opus"
  },
  "anthropic/claude-sonnet-4": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-sonnet-4-20250514": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-sonnet-4-20250514-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-sonnet-4-5": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "anthropic/claude-sonnet-4-5-20250929": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "anthropic/claude-sonnet-4-5-20250929-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "anthropic/claude-sonnet-4-6": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-6"
+  "underlying_model_id": "claude-4-6-sonnet"
  },
  "anthropic/claude-sonnet-4-thinking": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4"
+  "underlying_model_id": "claude-4-sonnet"
  },
  "anthropic/claude-sonnet-4.5": {
   "author_org": "anthropic",
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-sonnet-4-5"
+  "underlying_model_id": "claude-4-5-sonnet"
  },
  "arcee/trinity-large-thinking": {
   "author_org": null,
@@ -1348,7 +1348,7 @@
   "candidate_inference_platform": "anthropic",
   "match_method": "exact",
   "open_weights": false,
-  "underlying_model_id": "claude-opus-4-7"
+  "underlying_model_id": "claude-4-7-opus"
  },
  "cohere/command-a": {
   "author_org": "cohere",

@@ -54,11 +54,14 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Optional
 
 import pandas as pd
 import yaml
+
+from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
 
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 
@@ -111,13 +114,12 @@ def _load_curated_orgs() -> list[dict]:
 
 
 def build_hf_to_dev(curated_orgs: list[dict]) -> dict[str, str]:
-    """HF-org-lowercase -> curated developer slug. The SINGLE shared builder
-    (eval_entity_resolver.fold.build_curated_org_map): `_ORG_ALIASES` UNION every
-    curated org's id + hf_org + `aliases`. Reading `aliases` (which the old local
-    builder omitted) is what lets ai2->allenai / aws->amazon / kimi->moonshotai /
-    prime-intellect->PrimeIntellect resolve instead of dangling."""
-    from eval_entity_resolver.fold import build_curated_org_map
-    return build_curated_org_map(curated_orgs)
+    """HF-org-lowercase -> curated developer slug (see
+    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier lets
+    ai2->allenai / aws->amazon / kimi->moonshotai / prime-intellect->PrimeIntellect
+    resolve instead of dangling. `curated_orgs` is accepted for call-site
+    compatibility; the org map is rebuilt from `ORGS_YAML` (identical result)."""
+    return build_hf_to_dev_from_orgs_yaml(ORGS_YAML)
 
 
 def canon_id(hf_model_id: str, hf_to_dev: dict[str, str]) -> tuple[str, str]:
@@ -191,25 +193,19 @@ def nearmiss_changes_identity(raw: str, fixed: str, hf_to_dev: dict[str, str]) -
     return None
 
 
-# --- authoritative-repo marker (Guardrail §5) ------------------------------
+# --- authoritative-repo marker --------------------------------------------
 # Every hf_oracle mint id IS the real HF repo id (canon_id returns it verbatim),
 # so the mint is AUTHORITATIVE: it must WIN id+casing over any colliding curated
 # slug, never be suppressed in favor of one. We record `metadata.hf_id == id` so
-# §5 consumers (and the seed loader's merge) recognise it must not be rewritten.
-#
-# NOTE: a prior Phase-1 `reconcile_mints_against_core` SUPPRESSED such mints when
-# they normalized-collided with a curated-core canonical under a different id —
-# exactly backwards (it could drop the authoritative HF repo to keep a transient
-# dev-org slug, and its §5 guard was dead code because mints carried metadata
-# '{}'). It was removed: the authoritative mint always wins; the dual-id
-# (slug vs real-repo) dedup is handled at un-consolidation, where the slug
-# canonicals are removed rather than the HF repo being suppressed.
+# consumers (and the seed loader's merge) recognise the id must not be rewritten.
+# When a real HF repo and a dev-org slug name the same model, the slug canonical
+# is the one removed — never the authoritative HF repo.
 
 
 def authoritative_metadata(hf_repo_id: str) -> str:
     """metadata JSON marking a mint as the authoritative real HF repo
-    (`hf_id == id`). Guardrail §5: an id whose metadata.hf_id equals itself must
-    never be rewritten/suppressed in favor of a different (e.g. dev-org-slug) id."""
+    (`hf_id == id`). An id whose metadata.hf_id equals itself must never be
+    rewritten/suppressed in favor of a different (e.g. dev-org-slug) id."""
     return json.dumps({"hf_id": hf_repo_id}, sort_keys=True)
 
 
@@ -598,14 +594,14 @@ def main() -> None:
     dropped_collisions = 0
     all_entry_groups = [_entries_view(docs[p]) for p in EDIT_FILES] + [mint_entries]
 
-    # Phase 1: every canonical `id` claims itself FIRST, globally. An id is
+    # Pass 1: every canonical `id` claims itself FIRST, globally. An id is
     # immutable, so it must win over any other entry's display_name/alias.
     for grp in all_entry_groups:
         for e in grp:
             if isinstance(e, dict) and isinstance(e.get("id"), str):
                 decollide_owner.setdefault(e["id"], e["id"])
 
-    # Phase 2: display_names then aliases, keeping the first non-id declarer.
+    # Pass 2: display_names then aliases, keeping the first non-id declarer.
     def _decollide(entries: list[dict]) -> None:
         nonlocal dropped_collisions
         for e in entries:

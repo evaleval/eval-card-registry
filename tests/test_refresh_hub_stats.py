@@ -1,26 +1,17 @@
 """Tests for the hub-stats refresh script — synthetic rows, no network."""
 from __future__ import annotations
 
-import importlib.util
 import json
 from datetime import datetime
-from pathlib import Path
 
 import pytest
 
-
-def _load_module():
-    repo_root = Path(__file__).resolve().parent.parent
-    path = repo_root / "scripts" / "refresh_from_hub_stats.py"
-    spec = importlib.util.spec_from_file_location("refresh_from_hub_stats", path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+from conftest import load_script_module
 
 
 @pytest.fixture
 def mod():
-    return _load_module()
+    return load_script_module("refresh_from_hub_stats")
 
 
 # Mini fixtures mimicking the registry's shape — bypass loading from disk

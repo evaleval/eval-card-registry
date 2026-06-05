@@ -7,15 +7,14 @@ on:
     # catalog split. Both are CORE-AWARE (they suppress/repoint mints colliding
     # with an existing canonical incl. core.yaml, so they only ADD coverage) and
     # the generator is deterministic across runs. Both are gated by the invariant
-    # suite below — a regen that regresses a Phase-0 outcome / re-mints a shadow /
-    # re-splits an org ABORTS before commit, so a bad upstream day skips rather
-    # than corrupts.
+    # suite below — a regen that regresses a known resolution outcome / re-mints a
+    # shadow canonical / re-splits an org ABORTS before commit, so a bad upstream
+    # day skips rather than corrupts.
     - cron: "0 9 * * *"
   workflow_dispatch: {}
 
-# Direct-commit auto-sync (no PR review). When HITL or consumer feedback
-# loops come online we can flip back to PR mode — the prior PR-opening
-# version is in git history if needed.
+# Direct-commit auto-sync (no PR review). Switch to PR mode if human review of
+# refreshes becomes warranted.
 permissions:
   contents: write
   # `gh workflow run seed.yml` (downstream dispatch step below) requires
@@ -72,7 +71,7 @@ jobs:
           LOCAL_MODE=true uv run eval-card-registry seed --local
           # Gate the refresh on the invariant suite over the freshly-seeded
           # fixtures: a regen that re-mints a shadow, re-splits an org, or
-          # regresses a Phase-0 oracle outcome ABORTS here — better to skip a
+          # regresses a known resolution outcome ABORTS here — better to skip a
           # day than commit a regression.
           LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py -q
 

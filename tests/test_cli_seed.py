@@ -1,11 +1,9 @@
 """Tests for the seed CLI — particularly its rename-collision handling.
 
-Regression coverage for a real bug: when seed YAML moves an alias from
-canonical-A to canonical-B, the seed CLI used to
-silently swallow the resulting uniqueness ValueError from add_alias() and
-let stale-removal at the end of seeding delete the row entirely. The
-correct behavior is to repoint the existing alias row at the new canonical
-(YAML is the source of truth).
+When seed YAML moves an alias from canonical-A to canonical-B, the seed CLI must
+repoint the existing alias row at the new canonical (YAML is the source of truth).
+The failure mode this guards against: swallowing the uniqueness ValueError from
+add_alias() and then letting end-of-seed stale-removal delete the row entirely.
 """
 from __future__ import annotations
 
@@ -264,6 +262,68 @@ def test_orgs_generated_curated_wins_on_collision(fresh_seed_env):
     auto = orgs[orgs["id"] == "some-uploader"].iloc[0]
     assert auto["display_name"] == "Some Uploader"
     assert auto["kind"] == "individual"
+
+
+def test_prune_stale_keeps_org_referenced_by_model(fresh_seed_env):
+    """--prune-stale must NOT drop an org still referenced by a surviving model's
+    org_id FK. A model whose org_id is DERIVED from its id-prefix (no curated org
+    row in any YAML) gets an org row auto-created at seed time; pruning it as
+    'stale' (not in the orgs YAML) would orphan the model with a dangling FK."""
+    seed_dir, fixtures_dir = fresh_seed_env
+    (seed_dir / "models" / "core.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "novelorg/some-model",
+            "display_name": "Some Model",
+            "review_status": "reviewed",
+        },
+    ]))
+    runner = CliRunner()
+    result = runner.invoke(app, ["seed", "--seed-dir", str(seed_dir), "--prune-stale"])
+    assert result.exit_code == 0, f"seed --prune-stale failed: {result.output}"
+
+    models = _read_models(fixtures_dir)
+    orgs = _read_orgs(fixtures_dir)
+    row = models[models["id"] == "novelorg/some-model"]
+    assert len(row) == 1
+    org_id = row.iloc[0]["org_id"]
+    assert org_id and str(org_id) != "nan", "model should have a derived org_id"
+    assert str(org_id) in set(orgs["id"].astype(str)), (
+        f"--prune-stale dropped org {org_id!r} still referenced by a surviving "
+        f"model (dangling org_id FK). Org ids: {sorted(orgs['id'].astype(str))}"
+    )
+
+
+def test_prune_stale_keeps_org_referenced_by_parent_org_id(fresh_seed_env):
+    """--prune-stale must NOT drop an org still referenced by a surviving org's
+    parent_org_id FK. Round 1 seeds a child org pointing at a parent; round 2
+    drops the parent from the YAML (so it looks stale) but keeps the child — the
+    parent must survive because the child still references it."""
+    seed_dir, fixtures_dir = fresh_seed_env
+
+    orgs_path = seed_dir / "orgs.yaml"
+    orgs_path.write_text(yaml.safe_dump([
+        {"id": "parent-lab", "display_name": "Parent Lab",
+         "kind": "lab", "review_status": "reviewed"},
+        {"id": "child-lab", "display_name": "Child Lab", "kind": "lab",
+         "review_status": "reviewed", "parent_org_id": "parent-lab"},
+    ]))
+    _seed(seed_dir)
+    assert "parent-lab" in set(_read_orgs(fixtures_dir)["id"].astype(str))
+
+    # Round 2: parent-lab is no longer in the YAML, but child-lab still points at it.
+    orgs_path.write_text(yaml.safe_dump([
+        {"id": "child-lab", "display_name": "Child Lab", "kind": "lab",
+         "review_status": "reviewed", "parent_org_id": "parent-lab"},
+    ]))
+    runner = CliRunner()
+    result = runner.invoke(app, ["seed", "--seed-dir", str(seed_dir), "--prune-stale"])
+    assert result.exit_code == 0, f"seed --prune-stale failed: {result.output}"
+
+    orgs = _read_orgs(fixtures_dir)
+    assert "parent-lab" in set(orgs["id"].astype(str)), (
+        "--prune-stale dropped an org still referenced by a surviving org's "
+        f"parent_org_id FK. Org ids: {sorted(orgs['id'].astype(str))}"
+    )
 
 
 def test_orgs_generated_alone_loads(fresh_seed_env):

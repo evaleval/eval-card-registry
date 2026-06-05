@@ -232,6 +232,10 @@ _ISO_FULL_DATE_RE = re.compile(r"^(.+)-(\d{4})-(\d{2})-(\d{2})$")
 _ISO_MONTH_DATE_RE = re.compile(r"^(.+)-(\d{4})-(\d{2})$")
 _ISO_YEAR_DATE_RE = re.compile(r"^(.+)-(\d{4})$")
 
+# Plausible release-year window; guards against 4-digit tails (param counts,
+# batch numbers) being mis-read as a release year.
+_VALID_YEAR_RANGE = (2015, 2035)
+
 
 def _looks_like_mmdd(token: str) -> bool:
     """4-digit MMDD where MM ∈ [01,12] and DD ∈ [01,31]. Used to gate
@@ -249,20 +253,24 @@ def _looks_like_yyyymm(token: str) -> bool:
     if len(token) != 6 or not token.isdigit():
         return False
     yyyy, mm = int(token[:4]), int(token[4:])
-    return 2015 <= yyyy <= 2035 and 1 <= mm <= 12
+    return _VALID_YEAR_RANGE[0] <= yyyy <= _VALID_YEAR_RANGE[1] and 1 <= mm <= 12
 
 
 def _looks_like_yyyymmdd(token: str) -> bool:
     if len(token) != 8 or not token.isdigit():
         return False
     yyyy, mm, dd = int(token[:4]), int(token[4:6]), int(token[6:])
-    return 2015 <= yyyy <= 2035 and 1 <= mm <= 12 and 1 <= dd <= 31
+    return (
+        _VALID_YEAR_RANGE[0] <= yyyy <= _VALID_YEAR_RANGE[1]
+        and 1 <= mm <= 12
+        and 1 <= dd <= 31
+    )
 
 
 def _looks_like_release_year(token: str) -> bool:
     if len(token) != 4 or not token.isdigit():
         return False
-    return 2015 <= int(token) <= 2035
+    return _VALID_YEAR_RANGE[0] <= int(token) <= _VALID_YEAR_RANGE[1]
 
 
 def infer_family_parent_edge(

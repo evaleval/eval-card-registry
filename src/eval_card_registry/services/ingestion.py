@@ -213,6 +213,10 @@ def process_record(
                 "benchmark_card_id": None,
                 "score": score,
                 "score_details": json.dumps(score_details_raw) if score_details_raw else None,
+                # Per-run serving platform captured from the model spelling
+                # (e.g. a `-together`/`-bedrock` suffix); the eval_results schema
+                # has this column, so carry it through rather than dropping it.
+                "inference_platform": model_res.get("inference_platform"),
             }
         )
 

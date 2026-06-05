@@ -30,9 +30,9 @@ Output:
 Reproducibility: by DEFAULT this reads the committed offline cache
 `curation/hub_stats_frozen.parquet` (the candidate subset of the upstream
 parquet incl. the `baseModels` lineage column), so a clean regen reproduces
-lineage WITHOUT flaky live HF (spec model-resolution-rework, "fix enrichment
-first"). Refresh that cache with `scripts/freeze_hub_stats_cache.py` (live);
-pass `--live` here to bypass the cache and query HF directly.
+lineage without depending on flaky live HF. Refresh that cache with
+`scripts/freeze_hub_stats_cache.py` (live); pass `--live` here to bypass the
+cache and query HF directly.
 
 Usage:
     python scripts/refresh_from_hub_stats.py             # offline cache (reproducible)
@@ -52,6 +52,8 @@ from typing import Optional
 import duckdb
 import httpx
 import yaml
+
+from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml, load_entries_from_yaml
 
 # Shared hub-stats helpers live in the package so the runtime resolver
 # (live lookup at draft creation) and this bulk refresh script stay
@@ -88,9 +90,9 @@ MODELS_DEV_CATALOG_GENERATED = REPO_ROOT / "seed" / "models" / "sources" / "mode
 
 # Durable OFFLINE enrichment cache: the candidate subset of cfahlgren1/hub-stats
 # (incl. the `baseModels` lineage column) frozen by scripts/freeze_hub_stats_cache.py.
-# Reading it makes a regen REPRODUCIBLE without flaky live HF (spec
-# model-resolution-rework, "fix enrichment first"). The default below points
-# HUB_STATS_LOCAL_PARQUET at it unless overridden or --live is passed.
+# Reading it makes a regen REPRODUCIBLE without depending on flaky live HF. The
+# default below points HUB_STATS_LOCAL_PARQUET at it unless overridden or --live
+# is passed.
 FROZEN_CACHE_PATH = REPO_ROOT / "curation" / "hub_stats_frozen.parquet"
 
 # Every model source whose canonicals/aliases can be enriched from hub-stats.
@@ -105,17 +107,11 @@ _MODEL_SOURCES = (
 
 
 def build_hf_to_dev() -> dict[str, str]:
-    """HF-org-lowercase -> developer/community slug, via the shared
-    `fold.build_curated_org_map` (the SAME builder the resolver + the other
-    generators use): `_ORG_ALIASES` UNION every curated org's id / `hf_org` /
-    `aliases`. Reading the ALIAS tier (not just `hf_org`) is what lets a refresh
-    honour a curated same-uploader merge (e.g. `EnnoAi` -> `Enno-Ai`) instead of
-    re-emitting the community-twin spelling the org-fold already merged."""
-    from eval_entity_resolver.fold import build_curated_org_map
-
-    with open(ORGS_PATH) as f:
-        orgs = yaml.safe_load(f) or []
-    return build_curated_org_map(orgs)
+    """HF-org-lowercase -> developer/community slug (see
+    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the ALIAS tier lets a
+    refresh honour a curated same-uploader merge (e.g. `EnnoAi` -> `Enno-Ai`)
+    instead of re-emitting the community-twin spelling the org-fold merged."""
+    return build_hf_to_dev_from_orgs_yaml(ORGS_PATH)
 
 
 # ---------------------------------------------------------------------------
@@ -199,12 +195,6 @@ def load_existing_canonical_aliases() -> dict[str, str]:
     doesn't matter at lookup time."""
     out: dict[str, str] = {}
 
-    def _entries(path: Path):
-        if not path.exists():
-            return []
-        raw = yaml.safe_load(path.read_text()) or []
-        return (raw.get("entries") if isinstance(raw, dict) else raw) or []
-
     # PASS 1: register every canonical `id` first, across ALL sources. A
     # canonical's own id is a STRONGER claim than being listed as another
     # canonical's alias — so when the same normalized form is both (a known
@@ -213,13 +203,13 @@ def load_existing_canonical_aliases() -> dict[str, str]:
     # the id-claim wins. This stops an enrichment from emitting an alias that the
     # seed validator would see as double-claimed.
     for path in _MODEL_SOURCES:
-        for e in _entries(path):
+        for e in load_entries_from_yaml(path):
             cid = e.get("id")
             if cid:
                 out.setdefault(_normalize(cid), cid)
     # PASS 2: aliases fill in only forms no canonical id already claimed.
     for path in _MODEL_SOURCES:
-        for e in _entries(path):
+        for e in load_entries_from_yaml(path):
             cid = e.get("id")
             if not cid:
                 continue
@@ -245,11 +235,7 @@ def load_ambiguous_canonicals() -> set[str]:
             norm_owners.setdefault(_normalize(form), set()).add(cid)
 
     for path in _MODEL_SOURCES:
-        if not path.exists():
-            continue
-        raw = yaml.safe_load(path.read_text()) or []
-        entries = raw.get("entries") if isinstance(raw, dict) else raw
-        for e in entries or []:
+        for e in load_entries_from_yaml(path):
             cid = e.get("id")
             if not isinstance(cid, str):
                 continue
@@ -276,11 +262,7 @@ def load_canonical_id_norms() -> dict[str, str]:
     `alibaba/qwen-qwq-32b` canonical and flip `qwen/qwq-32b`'s resolution)."""
     out: dict[str, str] = {}
     for path in _MODEL_SOURCES:
-        if not path.exists():
-            continue
-        raw = yaml.safe_load(path.read_text()) or []
-        entries = raw.get("entries") if isinstance(raw, dict) else raw
-        for e in entries or []:
+        for e in load_entries_from_yaml(path):
             cid = e.get("id")
             if not isinstance(cid, str):
                 continue
@@ -332,12 +314,11 @@ def build_entry(
     core.yaml rather than overriding them.
     """
     hf_id = row["id"]
-    # CASING FIX: derive the canonical id with HF casing preserved (two-tier org
-    # rule) instead of the lowercasing `hf_id_to_canonical`. A future cron then
-    # computes the SAME HF-cased ids the HF-oracle mints / live auto-create use
-    # — never a lowercase duplicate. The gate below is on the normalized
-    # (case-insensitive) form, so an HF-cased canonical that exists in the seed
-    # still matches.
+    # Derive the canonical id with HF casing preserved (two-tier org rule), so it
+    # matches the SAME HF-cased ids the HF-oracle generator mints and live
+    # auto-create use — never a lowercase duplicate. The gate below is on the
+    # normalized (case-insensitive) form, so an HF-cased canonical that exists in
+    # the seed still matches.
     if hf_to_dev is None:
         hf_to_dev = build_hf_to_dev()
     canonical_id, org_id = hf_id_to_canonical_cased(hf_id, hf_to_dev)
@@ -536,11 +517,7 @@ def main() -> int:
     # big-dev canonicals we also enqueue the reconstructed HF-org repo id.
     initial: set[str] = set()
     for path in _MODEL_SOURCES:
-        if not path.exists():
-            continue
-        raw = yaml.safe_load(path.read_text()) or []
-        entries = raw.get("entries") if isinstance(raw, dict) else raw
-        for e in entries or []:
+        for e in load_entries_from_yaml(path):
             for a in (e.get("aliases") or []):
                 if isinstance(a, str) and "/" in a:
                     initial.add(a)

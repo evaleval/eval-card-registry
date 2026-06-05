@@ -18,7 +18,7 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import pandas as pd
 
@@ -60,8 +60,18 @@ def _is_na(value) -> bool:
         return False
 
 
-def _na_to_none(value):
+def _na_to_none(value: Any) -> Any:
     return None if _is_na(value) else value
+
+
+def _safe_json_load(s: str, default: Any = None) -> Any:
+    """Tolerant `json.loads`: returns `default` on any decode/type error
+    instead of raising. Used wherever a JSON-encoded parquet column may
+    hold malformed or unexpected content."""
+    try:
+        return json.loads(s)
+    except (ValueError, TypeError):
+        return default
 
 
 def decode_parents(value) -> list[dict]:
@@ -76,19 +86,15 @@ def decode_parents(value) -> list[dict]:
         s = value.strip()
         if not s or s in ("[]", "null"):
             return []
-        try:
-            decoded = json.loads(s)
-            return list(decoded) if isinstance(decoded, list) else []
-        except (ValueError, TypeError):
-            return []
+        decoded = _safe_json_load(s, default=[])
+        return list(decoded) if isinstance(decoded, list) else []
     return []
 
 
 def variant_parent_id(parents: list[dict]) -> Optional[str]:
     """Return the id of the first `variant` edge in a parents list, or
-    None. The ResolutionResult `parent_canonical_id` field exposes the
-    family / variant hierarchy that callers historically read off
-    `parent_model_id`."""
+    None. Feeds the ResolutionResult `parent_canonical_id` field, which
+    exposes a model's immediate family / variant parent."""
     for edge in parents:
         if isinstance(edge, dict) and edge.get("relationship") == "variant":
             pid = edge.get("id")
@@ -267,10 +273,7 @@ class CanonicalStore:
                 # build_curated_org_map expects a list, so decode it.
                 al = rec.get("aliases")
                 if isinstance(al, str):
-                    try:
-                        rec["aliases"] = json.loads(al)
-                    except (ValueError, TypeError):
-                        rec["aliases"] = []
+                    rec["aliases"] = _safe_json_load(al, default=[])
                 records.append(rec)
         self._org_dev_map = build_curated_org_map(records)
         return self._org_dev_map
@@ -363,10 +366,7 @@ class CanonicalStore:
         if family_row is not None:
             keys = family_row.get("composite_keys")
             if isinstance(keys, str):
-                try:
-                    keys = json.loads(keys)
-                except (ValueError, TypeError):
-                    keys = []
+                keys = _safe_json_load(keys, default=[])
             if isinstance(keys, list):
                 for k in keys:
                     if isinstance(k, str) and k:
@@ -465,9 +465,9 @@ class CanonicalStore:
     def _build_benchmark_to_family_index(self) -> dict[str, str]:
         """Walk canonical_families and produce a benchmark_id → family_id
         index. `benchmark_ids` is JSON-encoded on the parquet column;
-        decode tolerantly. Empty index when no families table is loaded
-        (back-compat with deployments that haven't published the new
-        table yet)."""
+        decode tolerantly. Returns an empty index when the families table
+        is absent, so a deployment without it still resolves benchmarks
+        (just without family ancestry)."""
         out: dict[str, str] = {}
         df = self._tables.get("family")
         if df is None or df.empty or "id" not in df.columns:
@@ -485,10 +485,9 @@ class CanonicalStore:
                 s = raw.strip()
                 if not s or s in ("[]", "null"):
                     continue
-                try:
-                    items = json.loads(s)
-                except (ValueError, TypeError):
-                    continue
+                # A malformed value decodes to [], so the row contributes
+                # no benchmark→family entries (same effect as skipping it).
+                items = _safe_json_load(s, default=[])
             else:
                 continue
             for bid in items:
@@ -534,9 +533,9 @@ class CanonicalStore:
         `model_family_id` and `lineage_origin_model_id` are read straight off
         the matched (leaf) entity row — `derive_model_lineage_fields` already
         materialised them at seed time. Metadata fields (`open_weights`,
-        `release_date`, `params_billions`) come from the matched LEAF row
-        (post-flip the response identifies the leaf, so its own row is the
-        consistent source)."""
+        `release_date`, `params_billions`) come from the matched LEAF row —
+        the response identifies the leaf, so its own row is the consistent
+        source for these per-artifact values."""
         if not matched_entity:
             return {
                 "canonical_id": matched_canonical_id,
@@ -559,10 +558,10 @@ class CanonicalStore:
             }
 
         # `model_group_id` is the identity-GROUP id (GROUP MEMBERSHIP — a
-        # total partition). Post the group-membership change it is ALWAYS set
-        # on the column: equal to the group root for a member of a larger
-        # group, equal to SELF (the leaf) for a singleton. canonical_id stays
-        # the matched LEAF; for a singleton model_group_id == canonical_id.
+        # total partition), so it is ALWAYS set on the column: equal to the
+        # group root for a member of a larger group, equal to SELF (the leaf)
+        # for a singleton. canonical_id stays the matched LEAF; for a
+        # singleton model_group_id == canonical_id.
         group_id = _na_to_none(matched_entity.get("model_group_id"))
         leaf_id = matched_canonical_id
         parents_decoded = decode_parents(matched_entity.get("parents")) or None
@@ -576,7 +575,7 @@ class CanonicalStore:
         # leaf_id`. The deprecated `root_model_id` compat key keeps its
         # null-at-root semantics — it carries the group only on a real
         # collapse, else None (a singleton, whose group is itself, reports
-        # root_model_id == None, matching the producer's old null-at-root
+        # root_model_id == None, matching the producer's null-at-root
         # contract).
         collapses = group_id is not None and group_id != leaf_id
         return {

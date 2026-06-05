@@ -1,7 +1,7 @@
 name: Publish registry data
 
-# Replaces seed.yml's inline-Python publish path with a dedicated
-# script (scripts/publish_registry_data.py). Two triggers:
+# Publishes the registry's canonical parquets to evaleval/entity-registry-data
+# via scripts/publish_registry_data.py. Two triggers:
 #
 #   - On PRs that touch seed YAML or registry code: --dry-run + tests.
 #     Catches schema breakage / parse failures before merge without

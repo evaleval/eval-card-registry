@@ -49,11 +49,14 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from collections import Counter
 from pathlib import Path
 from typing import Optional
 
 import yaml
+
+from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
 
 from eval_entity_resolver.resolver import Resolver
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
@@ -129,12 +132,12 @@ def _load_curated_orgs() -> list[dict]:
 
 
 def build_hf_to_dev(curated_orgs: list[dict]) -> dict[str, str]:
-    """HF-org-lowercase -> curated developer slug. The SINGLE shared builder
-    (eval_entity_resolver.fold.build_curated_org_map): `_ORG_ALIASES` UNION every
-    curated org's id + hf_org + `aliases` (reading `aliases` is what folds
-    ai2->allenai / aws->amazon / kimi->moonshotai / prime-intellect->PrimeIntellect)."""
-    from eval_entity_resolver.fold import build_curated_org_map
-    return build_curated_org_map(curated_orgs)
+    """HF-org-lowercase -> curated developer slug (see
+    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier folds
+    ai2->allenai / aws->amazon / kimi->moonshotai / prime-intellect->PrimeIntellect.
+    `curated_orgs` is accepted for call-site compatibility; the org map is
+    rebuilt from `ORGS_YAML` (identical result)."""
+    return build_hf_to_dev_from_orgs_yaml(ORGS_YAML)
 
 
 def _core_entries(core_doc) -> list[dict]:
@@ -187,7 +190,7 @@ def core_steals(cid: str, core_norm_index: dict[str, str]) -> bool:
     A minted tier-3 id that `core_steals` is the SAME model as a curated core
     canonical (the stale fixtures-resolver missed it); the row must be SKIPPED
     (not minted) so the raw resolves to the curated canonical via normalized
-    match — never minted as a `-inferred` twin (§5: merge, never dup)."""
+    match — i.e. merge into the existing canonical, never mint a `-inferred` twin."""
     from eval_entity_resolver.normalization import normalize as _rnz
 
     owner = core_norm_index.get(_rnz(cid))
@@ -208,7 +211,7 @@ def mint_collision_decision(
                    Do NOT mint — drop the row so the raw resolves to the curated
                    canonical via normalized match. Minting `{cid}-inferred` here
                    would split one model into two canonicals and SHADOW the
-                   curated entry (§5: merge, never dup).
+                   curated entry (merge into the existing canonical, never dup).
     - 'inferred' — `cid` clashes with a core `skip_ids` entry (would be silently
                    dropped by the loader) or with a DIFFERENT existing canonical
                    the resolver already owns (a genuine cross-ENTITY clash, two
@@ -281,8 +284,9 @@ def main() -> None:
     # Direct core-aware steal-guard: read core.yaml's curated canonicals and
     # index their normalized surface forms, so a mint can never be emitted as a
     # normalized-colliding twin under a DIFFERENT id than a curated core entry.
-    # Reads the SOURCE YAML (not the fixtures-loaded resolver), matching the
-    # generator-layer rule that fixes live in the rules, not the build artifact.
+    # Reads the SOURCE YAML (not the fixtures-loaded resolver): the seed YAML is
+    # the source of truth, while fixtures/*.parquet are a regenerated build
+    # artifact that can lag or be polluted by a prior `seed` run.
     core_norm_index = build_core_norm_index(core_doc)
 
     # Build a resolver from fixtures but with this generator's OWN prior output
@@ -465,8 +469,8 @@ def main() -> None:
         # model as a curated core canonical (normalized-collides under a different
         # id) is SKIPPED so the raw resolves to the curated entry — NOT minted as
         # a `{cid}-inferred` twin (which would split one model in two and shadow
-        # the curated fix, §5). A genuine cross-entity clash (core skip_ids, or a
-        # DIFFERENT existing canonical) is suffix-disambiguated as before.
+        # the curated entry). A genuine cross-entity clash (core skip_ids, or a
+        # DIFFERENT existing canonical) is suffix-disambiguated instead.
         decision = mint_collision_decision(
             cid,
             core_skip_ids,

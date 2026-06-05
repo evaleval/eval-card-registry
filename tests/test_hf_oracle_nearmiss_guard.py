@@ -1,17 +1,13 @@
 """Unit test for the generate_hf_oracle_seed.py near-miss identity guard, which
-stops the generator from propagating an HF "did-you-mean" redirect that changes
-model identity into a confirmed alias (the wrong-alias class found by the alias
-audit). Does NOT run the generator — just exercises the guard predicate."""
-import importlib.util
-from pathlib import Path
+stops the generator from turning an HF "did-you-mean" redirect that changes model
+identity (a size/version/cross-developer change) into a confirmed alias — that
+would mis-merge two distinct models. Does NOT run the generator — just exercises
+the guard predicate."""
+from conftest import load_script_module
 
 
 def _mod():
-    p = Path(__file__).resolve().parent.parent / "scripts" / "generate_hf_oracle_seed.py"
-    spec = importlib.util.spec_from_file_location("gen_hf_oracle", p)
-    m = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(m)
-    return m
+    return load_script_module("generate_hf_oracle_seed", "gen_hf_oracle")
 
 
 def test_nearmiss_identity_guard():

@@ -1,48 +1,33 @@
-"""Phase-1 regression: dedup-vs-core guard at the hub-stats emit point.
+"""Dedup-vs-core guard at the hub-stats emit point.
 
 OFFLINE. Drives the hub-stats refresh script's mint/guard FUNCTION
 (`build_entry`) directly with synthetic rows + a synthetic curated-core
 canonical — never invokes the destructive `main()` and touches no real seed
 file or network.
 
-Spec: model-resolution-rework/generator-layer-rearchitecture.md §4 (Phase 1):
-"Apply the same dedup-vs-core guard to scripts/refresh_from_hub_stats.py at its
-emit point" — no emitted id may collide (normalized) with a curated core
-canonical under a DIFFERENT id (the curated id WINS id + casing; the generated
-row becomes an alias-only enrichment, never a colliding twin).
+Guarantee under test: no emitted id may collide (normalized) with a curated core
+canonical under a DIFFERENT id. The curated id WINS id + casing; the generated
+row becomes an alias-only enrichment that merges onto core, never a colliding
+twin.
 
-The guard in this BACKFILL-ONLY script is structural and even stronger than a
-post-hoc steal pass: `build_entry` returns None unless the row's normalized
-canonical form already maps to an existing canonical in the core-inclusive
-`aliases_to_canonical` index, and then emits under THAT canonical's exact id
-(line `canonical_id = aliases_to_canonical[norm_canon]`). So a different-casing
-twin defers to the curated id; a genuinely-novel HF id is suppressed entirely.
-These tests PIN that guarantee.
-
-Guardrail §5 (`metadata.hf_id` == id → never rewrite) holds trivially here: the
-script never rewrites an id, it only defers to / enriches the existing one.
+The guard in this BACKFILL-ONLY script is structural: `build_entry` returns None
+unless the row's normalized canonical form already maps to an existing canonical
+in the core-inclusive `aliases_to_canonical` index, and then emits under THAT
+canonical's exact id (line `canonical_id = aliases_to_canonical[norm_canon]`). So
+a different-casing twin defers to the curated id; a genuinely-novel HF id is
+suppressed entirely. The script never rewrites an id, it only defers to /
+enriches the existing one.
 """
 from __future__ import annotations
 
-import importlib.util
-from pathlib import Path
-
 import pytest
 
-
-def _load_module():
-    """Load the script via importlib (mirrors tests/test_refresh_modelsdev_dedup.py)."""
-    repo_root = Path(__file__).resolve().parent.parent
-    path = repo_root / "scripts" / "refresh_from_hub_stats.py"
-    spec = importlib.util.spec_from_file_location("refresh_from_hub_stats", path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+from conftest import load_script_module
 
 
 @pytest.fixture
 def mod():
-    return _load_module()
+    return load_script_module("refresh_from_hub_stats")
 
 
 # A synthetic curated-core canonical: HF-true casing, decoupled developer org.
@@ -80,7 +65,7 @@ def test_emit_defers_to_curated_core_id_never_normalized_colliding_twin(mod):
     """A hub-stats row for a DIFFERENT-casing twin of the curated core canonical
     (`foo/bar-7b` vs core `Foo/Bar-7B`) must NOT emit a colliding different id —
     it defers to the curated id + casing, emitting an enrichment that MERGES onto
-    core. This is the §4 dedup-vs-core guarantee."""
+    core. This is the dedup-vs-core guarantee."""
     # The parquet `id` carries the lowercase twin spelling.
     row = {"id": "foo/bar-7b"}
 

@@ -47,10 +47,10 @@ def _seed_benchmark(store: RegistryStore, id: str, display_name: str):
 
 
 class TestHubStatsIndexPriority:
-    """Re-review #6: the live hub-stats alias index must register canonical IDS
-    FIRST (ids beat aliases on a normalized-form collision), matching the
-    generator's order. Building aliases-first made an identical baseModels edge
-    resolve to a DIFFERENT parent live vs at generate time (a wrong-id bug)."""
+    """The live hub-stats alias index must register canonical IDS FIRST (ids beat
+    aliases on a normalized-form collision), matching the generator's order.
+    Building aliases-first would make an identical baseModels edge resolve to a
+    DIFFERENT parent live vs at generate time — a wrong-id bug."""
 
     def test_canonical_id_wins_over_a_colliding_alias(self):
         import pandas as pd

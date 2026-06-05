@@ -1,3 +1,4 @@
-# Consolidation staging (now empty): machine rows from the other generated
-# sources were relocated into seed/models/core.yaml, the authoritative source.
+# Empty staging source, kept as a load-path placeholder. No model rows live
+# here; curated canonicals live in seed/models/core.yaml and bulk rows in the
+# other sources/*.generated.yaml.
 []

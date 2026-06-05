@@ -27,7 +27,7 @@ class ResolveRequest(BaseModel):
     source_field: Optional[str] = None
 
 
-# --- D1 lean resolve contract (post independent review) ---
+# --- Lean resolve contract ---
 # The HTTP resolve response is a TYPE-AGNOSTIC CORE (identical shape for
 # all entity types) + an ordered `ancestry` chain + a typed
 # `resolution_detail` sub-object. Type-specific ENTITY structure
@@ -77,9 +77,9 @@ class ResolveResponse(BaseModel):
     resolution_source: Optional[str] = None
     review_status: Optional[str] = None
     # Ordered hierarchy chain from the matched entity's IMMEDIATE PARENT up
-    # to the root. `[]` when self is a root. Replaces the single
-    # `parent_canonical_id`: the only genuinely type-agnostic way to carry
-    # a 1-hop model edge AND a multi-level benchmark tree.
+    # to the root. `[]` when self is a root. An ordered chain is the only
+    # genuinely type-agnostic way to carry both a 1-hop model edge AND a
+    # multi-level benchmark tree in one field.
     #   model     -> e.g. [{group}, {family}]
     #   benchmark -> e.g. [{family}, {composite}]
     ancestry: list[AncestryEntry] = []

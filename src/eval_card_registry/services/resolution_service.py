@@ -123,8 +123,9 @@ _RESPONSE_FIELDS = (
     "canonical_id", "strategy", "confidence", "review_status",
     "parent_canonical_id", "resolved_leaf_id", "root_model_id",
     "lineage_origin_org_id",
-    # `model_group_id` / `lineage_origin_model_org_id` are the renames of the
-    # two deprecated names above (kept for compat through the rollout).
+    # `root_model_id` / `lineage_origin_org_id` above are deprecated compat
+    # aliases for `model_group_id` / `lineage_origin_model_org_id`; both names
+    # are emitted so older consumers keep working.
     "model_group_id", "model_family_id", "lineage_origin_model_id",
     "lineage_origin_model_org_id", "inference_platform",
     "resolution_source", "resolution_granularity",
@@ -184,10 +185,10 @@ class ResolutionService:
             canonical_store = _build_canonical_store(self.store)
             config = ResolverConfig(threshold=settings.resolver_auto_merge_threshold)
             # The resolver returns a fully-enriched `ResolutionResult` —
-            # same fields the HTTP API exposes. The service no longer
-            # duplicates the parent-decode / root-collapse / metadata
-            # lookup; it just converts the dataclass to a dict and adds
-            # `created_new` (auto-draft state the resolver doesn't track).
+            # same fields the HTTP API exposes. Parent-decode / root-collapse /
+            # metadata lookup all live in the resolver; this service just
+            # converts the dataclass to a dict and adds `created_new`
+            # (auto-draft state the resolver doesn't track).
             self._resolver = Resolver(alias_store, config, canonical_store=canonical_store)
         return self._resolver
 
@@ -717,11 +718,11 @@ class ResolutionService:
             a2c: dict[str, str] = {}
             # PASS 1 — canonical ids FIRST. A canonical's own id is a STRONGER
             # claim on its normalized form than being another canonical's alias,
-            # so ids win on collision. This MUST match the generator's order
-            # (refresh_from_hub_stats.load_existing_canonical_aliases, ids-first);
-            # building aliases-first here made the live auto-create path resolve an
-            # identical baseModels edge to a DIFFERENT parent than the generator
-            # (a wrong-id, not dangling, divergence).
+            # so ids win on collision. This ordering MUST match the generator
+            # (refresh_from_hub_stats.load_existing_canonical_aliases, ids-first):
+            # if the live auto-create path built aliases-first it could resolve an
+            # identical baseModels edge to a DIFFERENT parent id than the generator,
+            # silently diverging the offline and live lineage graphs.
             for _, row in models_df.iterrows():
                 cid = row.get("id")
                 if isinstance(cid, str):

@@ -137,8 +137,8 @@ def seed(
         # Enrichment overlays: every enrichments/*.yaml (flat list of {id, ...}),
         # field-merged onto the matching canonical (aliases + parents UNION; see
         # _merge_into). Separate files keep concerns apart — aliases.yaml carries
-        # alias bridges, parents.yaml the curated typed-edge graph the generators
-        # can't reproduce (the Phase-0 oracle lineage).
+        # alias bridges, parents.yaml the curated typed-edge graph (lineage edges
+        # the bulk generators can't reconstruct from their source data).
         if enrichments_dir.is_dir():
             for enr_path in sorted(enrichments_dir.glob("*.yaml")):
                 with open(enr_path) as f:
@@ -871,6 +871,29 @@ def seed(
             if len(entity_df) > 0:
                 stale = entity_df["id"].isin(yaml_ids)
                 stale_entities = entity_df[~stale & (entity_df["review_status"] == "reviewed")]
+                # FK guard: never prune an org still referenced by a surviving
+                # FK. A model whose org_id is DERIVED from its id-prefix (no
+                # curated remap) gets an org row auto-created at seed time that
+                # isn't in the orgs YAML; without this guard prune would drop it
+                # and orphan the model (dangling org_id FK). Orgs also reference
+                # other orgs via parent_org_id, so an org that is any other org's
+                # parent must be kept too.
+                if entity_type == "org" and len(stale_entities) > 0:
+                    referenced: set[str] = set()
+                    models = store.table("canonical_models")
+                    if models is not None and len(models) > 0:
+                        for col in ("org_id", "lineage_origin_model_org_id"):
+                            if col in models.columns:
+                                referenced |= {
+                                    str(x) for x in models[col].dropna().astype(str)
+                                }
+                    if "parent_org_id" in entity_df.columns:
+                        referenced |= {
+                            str(x) for x in entity_df["parent_org_id"].dropna().astype(str)
+                        }
+                    stale_entities = stale_entities[
+                        ~stale_entities["id"].astype(str).isin(referenced)
+                    ]
                 # Only remove if every alias for this entity is also seed-originated,
                 # meaning it wasn't referenced by sync data.
                 current_aliases = store.table("aliases")

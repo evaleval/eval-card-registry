@@ -45,9 +45,11 @@ from typing import Optional
 
 import yaml
 
+from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
+
 from eval_entity_resolver.normalization import normalize as nz
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
-# Org-aware fold decision now lives in the resolver package (single source of
+# Org-aware fold decision lives in the resolver package (single source of
 # truth shared with scripts/refresh_from_modelsdev.py and the gate). Re-exported
 # below so existing importers (tests/test_gate_invariants.py) keep working.
 from eval_entity_resolver.fold import (  # noqa: F401
@@ -77,15 +79,11 @@ def load_core() -> tuple[dict, list[dict]]:
 
 
 def build_hf_to_dev() -> dict[str, str]:
-    """HF-org-lowercase -> curated developer slug via the SINGLE shared builder
-    `fold.build_curated_org_map` (`_ORG_ALIASES` UNION every curated org's id /
-    hf_org / ALIASES). Reading the alias tier (not just hf_org) is what folds
+    """HF-org-lowercase -> curated developer slug (see
+    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier folds
     minimaxai->minimax, EnnoAi->Enno-Ai, etc. — so the dedup/shadow predicate
     here agrees with the generators + resolver + gate (no divergent weaker map)."""
-    from eval_entity_resolver.fold import build_curated_org_map
-
-    orgs = yaml.safe_load(ORGS_YAML.read_text()) or [] if ORGS_YAML.exists() else []
-    return build_curated_org_map(orgs)
+    return build_hf_to_dev_from_orgs_yaml(ORGS_YAML)
 
 
 # ---------------------------------------------------------------------------
@@ -188,7 +186,7 @@ def _load_md(entry: dict) -> dict:
     if isinstance(md, str):
         try:
             return json.loads(md) or {}
-        except Exception:
+        except (ValueError, TypeError):
             return {}
     if isinstance(md, dict):
         return md
@@ -199,7 +197,7 @@ def _load_md(entry: dict) -> dict:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true")
-    ap.add_argument("--confirm", nargs="*", default=[])
+    ap.add_argument("--confirm", nargs="*", default=None)
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
@@ -222,7 +220,7 @@ def main():
     parent_referenced = sorted(fid for fid in fold_ids if fid in refs)
 
     if args.apply:
-        confirm = set(args.confirm)
+        confirm = set(args.confirm or [])
         if not confirm:
             print("--apply requires --confirm <id> [...]", file=sys.stderr)
             sys.exit(2)

@@ -42,8 +42,7 @@ _SCHEMAS: dict[str, dict] = {
         "parents": pd.StringDtype(),
         # Identity-group root: walk `parents` up following identity-
         # preserving edges (`quantized` + `variant axis=version`). NULL when
-        # self has no such ancestor (i.e. self IS the group root). Formerly
-        # named `root_model_id`. Resolver
+        # self has no such ancestor (i.e. self IS the group root). Resolver
         # default-returns this when set; callers wanting the leaf get the
         # un-collapsed canonical id in `resolved_leaf_id`.
         "model_group_id": pd.StringDtype(),
@@ -59,8 +58,7 @@ _SCHEMAS: dict[str, dict] = {
         # Denormalized: `org_id` of the deepest non-`variant` ancestor in
         # `parents`. For Meta-originated models = self.org_id. For
         # finetunes/quants of someone else's weights = the upstream lab's
-        # org_id. Recomputed on every refresh; treat as a cache. Formerly
-        # named `lineage_origin_org_id`.
+        # org_id. Recomputed on every refresh; treat as a cache.
         "lineage_origin_model_org_id": pd.StringDtype(),
         # Provenance enum {hf|models_dev|curated|inferred|none} of how this
         # canonical was minted. Null by default.

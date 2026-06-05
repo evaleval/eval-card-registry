@@ -1,40 +1,32 @@
 """Offline reproducibility of the hub-stats lineage/enrichment layer.
 
-The generator-layer re-architecture ("fix enrichment first") freezes the
-candidate subset of cfahlgren1/hub-stats — including the `baseModels` lineage
-column — into a committed parquet (curation/hub_stats_frozen.parquet) so a clean
-regen reproduces `parents` / `model_group_id` / `model_family_id` /
+The candidate subset of cfahlgren1/hub-stats — including the `baseModels` lineage
+column — is frozen into a committed parquet (curation/hub_stats_frozen.parquet) so
+a clean regen reproduces `parents` / `model_group_id` / `model_family_id` /
 `lineage_origin` WITHOUT flaky live HF.
 
 These tests pin: (1) the durable cache is committed and carries lineage; (2) the
-generator defaults to reading it offline; (3) the existing enrichment derivation
+generator defaults to reading it offline; (3) the enrichment derivation
 reproduces a baseModels parent edge from a frozen row. All OFFLINE, no network.
-They deliberately do NOT hardcode model ids (so they survive a cache refresh and
-the later core.yaml shrink).
+They deliberately do NOT hardcode model ids so they survive a cache refresh or a
+change to the curated model set.
 """
 from __future__ import annotations
 
-import importlib.util
 from pathlib import Path
 
 import duckdb
 import pytest
 
+from conftest import load_script_module
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CACHE = REPO_ROOT / "curation" / "hub_stats_frozen.parquet"
 
 
-def _load_refresh_module():
-    path = REPO_ROOT / "scripts" / "refresh_from_hub_stats.py"
-    spec = importlib.util.spec_from_file_location("refresh_from_hub_stats", path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
 @pytest.fixture(scope="module")
 def mod():
-    return _load_refresh_module()
+    return load_script_module("refresh_from_hub_stats")
 
 
 def test_frozen_cache_is_committed_and_nonempty():
@@ -66,11 +58,10 @@ def test_generator_defaults_to_the_offline_cache(mod):
 
 
 def test_enrichment_reproduces_a_basemodels_parent_offline(mod):
-    """Drive the existing derivation (enrich_draft_from_row) on a REAL frozen
-    row and assert it reproduces a baseModels parent edge offline. The row +
-    its base are read from the cache (no hardcoded ids), and a minimal alias
-    map resolves the base to a canonical — so the test is independent of
-    core.yaml's (shifting) contents."""
+    """Drive the derivation (enrich_draft_from_row) on a REAL frozen row and
+    assert it reproduces a baseModels parent edge offline. The row + its base are
+    read from the cache (no hardcoded ids), and a minimal alias map resolves the
+    base to a canonical — so the test is independent of core.yaml's contents."""
     import json
 
     from eval_card_registry.services.hub_stats import (

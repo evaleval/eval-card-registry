@@ -63,11 +63,9 @@ _STRIP_SUFFIXES = [
     "-fc",
     "-prompt",
     # NB: hosting-provider suffixes (`-together`, `-bedrock`, `-openrouter`)
-    # used to live here (strip-and-discard). They moved to
-    # `_SUFFIX_PLATFORM_MAP` below so the platform is CAPTURED as an
-    # `inference_platform` side-value instead of silently dropped. The stem
-    # is still produced and matched identically — only the captured side
-    # value is new, so resolution is unchanged.
+    # are NOT stripped here — they live in `_SUFFIX_PLATFORM_MAP` below so the
+    # platform is CAPTURED as an `inference_platform` side-value rather than
+    # discarded. The same stem is produced and matched either way.
     # Reasoning-effort suffixes
     "-high",
     "-medium",
@@ -246,9 +244,9 @@ _HOST_PREFIXES_TO_STRIP: dict[str, Optional[str]] = {
     for token in _HOST_PREFIX_TOKENS
 }
 
-# Suffixes that signal an inference platform (NOT model semantics). These were
-# previously in `_STRIP_SUFFIXES` (strip-and-discard); now they are captured.
-# Maps the literal suffix → platform_id, sourced from the SINGLE source map.
+# Suffixes that signal an inference platform (NOT model semantics). Captured
+# (mapped to a platform_id) rather than stripped-and-discarded, so the platform
+# is preserved. Maps the literal suffix → platform_id from the single host map.
 _SUFFIX_PLATFORM_MAP: dict[str, Optional[str]] = {
     suffix: get_host_token_platform(suffix)
     for suffix in ("-together", "-bedrock", "-openrouter")
@@ -397,10 +395,9 @@ def _strip_and_capture_platform_suffix(value: str) -> tuple[str, Optional[str]] 
 
     Returns None when no platform suffix matched. Run BEFORE the generic
     `_strip_suffix()` so the host suffix is captured as a platform side-value
-    rather than silently discarded by the generic strip. The stem produced is
-    byte-identical to what the old strip-and-discard path produced, so the
-    candidate that goes to matching is unchanged — only the captured platform
-    is new (a SIDE value, never embedded in the candidate)."""
+    rather than discarded. The stem is the value with the suffix removed, so
+    the candidate that goes to matching is the same as a plain suffix strip —
+    the platform is a SIDE value, never embedded in the candidate."""
     lower = value.lower()
     for suffix, platform in _SUFFIX_PLATFORM_MAP.items():
         if lower.endswith(suffix):

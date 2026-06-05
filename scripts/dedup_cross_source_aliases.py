@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Deterministic CROSS-SOURCE alias reconciliation — the finalize step of the
-generator-driven seed layer.
+Deterministic CROSS-SOURCE alias reconciliation — the finalize step run after
+the model seed sources are (re)generated, before seeding.
 
 The seed loader fails fast when two canonicals declare the same alias (the owner
 would be nondeterministic). Per-source generators each clean their own output,

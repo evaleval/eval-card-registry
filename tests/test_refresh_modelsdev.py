@@ -1,24 +1,14 @@
 """Tests for the models.dev refresh script — synthetic data, no network."""
-import importlib.util
 import json
-from pathlib import Path
 
 import pytest
 
-
-def _load_module():
-    """Import scripts/refresh_from_modelsdev.py without making it a package."""
-    repo_root = Path(__file__).resolve().parent.parent
-    path = repo_root / "scripts" / "refresh_from_modelsdev.py"
-    spec = importlib.util.spec_from_file_location("refresh_from_modelsdev", path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+from conftest import load_script_module
 
 
 @pytest.fixture
 def mod():
-    return _load_module()
+    return load_script_module("refresh_from_modelsdev")
 
 
 SYNTHETIC_API = {
@@ -266,8 +256,7 @@ def test_generate_reports_missing_org_ids(mod):
     assert any("anthropic" in m for m in missing)
 
 
-# Override-merge tests previously lived here. The refresh script no longer
-# merges overrides into the generated YAML — the seed CLI loader
-# (`_load_models_merged` in `eval_card_registry.cli`) applies
-# `seed/models/core.yaml` and `seed/models/enrichments/aliases.yaml` at
-# load time. Add merge coverage there if needed.
+# The refresh script does NOT merge overrides into the generated YAML: the seed
+# CLI loader (`_load_models_merged` in `eval_card_registry.cli`) applies
+# `seed/models/core.yaml` and `seed/models/enrichments/aliases.yaml` at load time.
+# Override-merge coverage belongs against that loader, not this script.

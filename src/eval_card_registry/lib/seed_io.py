@@ -1,0 +1,38 @@
+"""Shared seed-YAML I/O helpers for the generator/refresh scripts.
+
+These two helpers were duplicated verbatim across the model-source generators
+(refresh_from_hub_stats, freeze_hub_stats_cache, fold_modelsdev_dupes,
+generate_hf_oracle_seed, generate_tier3_inferred_seed). Single-sourcing them
+here — in the installed package, so the scripts import them with no sys.path
+manipulation — keeps the candidate-loading and org-map construction
+byte-identical across all of them.
+"""
+from __future__ import annotations
+
+from pathlib import Path
+
+import yaml
+
+
+def load_entries_from_yaml(path: Path) -> list[dict]:
+    """Entry list from a seed-model YAML file. Handles both shapes — a flat
+    list, or a ``{skip_ids, skip_source_ids, entries}`` dict (core.yaml).
+    Returns ``[]`` for a missing file so callers can iterate over optional
+    generated sources without a per-path existence check."""
+    if not path.exists():
+        return []
+    raw = yaml.safe_load(path.read_text()) or []
+    return (raw.get("entries") if isinstance(raw, dict) else raw) or []
+
+
+def build_hf_to_dev_from_orgs_yaml(orgs_path: Path) -> dict[str, str]:
+    """HF-org-lowercase -> curated developer slug, via the single shared builder
+    ``eval_entity_resolver.fold.build_curated_org_map`` (``_ORG_ALIASES`` UNION
+    every curated org's id / hf_org / ``aliases``). Reading the ALIAS tier (not
+    just ``hf_org``) is what folds minimaxai->minimax, EnnoAi->Enno-Ai,
+    ai2->allenai, etc. — so the generators, resolver, and gate all agree on one
+    org map."""
+    from eval_entity_resolver.fold import build_curated_org_map
+
+    orgs = yaml.safe_load(orgs_path.read_text()) or [] if orgs_path.exists() else []
+    return build_curated_org_map(orgs)

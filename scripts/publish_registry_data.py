@@ -121,7 +121,8 @@ def _row_counts(fixtures_dir: Path) -> dict[str, int]:
 
 def _run_seed() -> int:
     """Invoke the seed CLI in LOCAL_MODE so it writes to fixtures/
-    without pushing. We push ourselves in step 4."""
+    without pushing. This script handles the upload to HF itself
+    (see upload step in main)."""
     env = dict(os.environ)
     env["LOCAL_MODE"] = "true"
     proc = subprocess.run(

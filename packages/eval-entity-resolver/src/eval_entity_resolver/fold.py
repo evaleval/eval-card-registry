@@ -87,9 +87,8 @@ def build_curated_org_map(orgs_yaml_entries: list[dict]) -> dict[str, str]:
     `hf_org` + each entry in its `aliases`, keyed lowercase -> curated id. The
     curated seed (orgs.yaml) wins over `_ORG_ALIASES` on conflict.
 
-    Replaces the three hand-divergent builders (build_hf_to_dev x2 reading only
-    `hf_org`, _build_org_alias_index reading only orgs.yaml) — so a curated alias
-    added to orgs.yaml automatically reaches every consumer (no drift)."""
+    Every generator and the resolver build their fold map here so a curated
+    alias added to orgs.yaml automatically reaches every consumer (no drift)."""
     m: dict[str, str] = {k.lower(): v for k, v in _ORG_ALIASES.items()}
     for e in orgs_yaml_entries or []:
         if not isinstance(e, dict):

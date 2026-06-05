@@ -26,9 +26,10 @@ creation will handle that case without bulk pre-loading.
 
 ## models.dev
 
-Model seed data in `seed/models/sources/models_dev.generated.yaml` is
-generated from [models.dev](https://models.dev), an open-source
-community-maintained database of AI model specifications.
+Model seed data in `seed/models/sources/models_dev.generated.yaml` and
+`seed/models/sources/models_dev_catalog.generated.yaml` is generated from
+[models.dev](https://models.dev), an open-source community-maintained
+database of AI model specifications.
 
 - **Source:** https://models.dev (https://github.com/anomalyco/models.dev)
 - **License:** MIT
@@ -38,11 +39,16 @@ The generator script (`scripts/refresh_from_modelsdev.py`) fetches
 `https://models.dev/api.json`, filters to known model-author providers,
 and emits one canonical per snapshot/variant with typed `parents` edges
 back to the family root (multi-level chains for compound suffixes like
-`-instruct-v0.3`). The transformed result is committed to
-`seed/models/sources/models_dev.generated.yaml`. Hand-curated additions
-and overrides live in `seed/models/core.yaml` (canonical entities) and
-`seed/models/enrichments/aliases.yaml` (alias-only additions); both
-survive regeneration via the seed loader's three-layer merge.
+`-instruct-v0.3`). It writes two derived files from the same fetch:
+`models_dev.generated.yaml` (the re-cased model-author output) and, via
+`--catalog`, `models_dev_catalog.generated.yaml` (the full-catalog split:
+fresh mints for models.dev-only / not-on-HF models plus alias-only
+enrichments for models that already exist as HF canonicals). Both runs
+dedup against the full canonical universe — including `seed/models/core.yaml`
+— so they only add coverage and never clobber a curated id. Hand-curated
+additions and overrides live in `seed/models/core.yaml` (canonical entities)
+and `seed/models/enrichments/aliases.yaml` (alias-only additions); both
+win over the generated sources via the seed loader's field-level merge.
 
 ```
 MIT License

@@ -4,14 +4,13 @@ Freeze the candidate subset of cfahlgren1/hub-stats into a committed, offline
 parquet cache so the lineage/enrichment layer regenerates REPRODUCIBLY without
 hitting live HuggingFace.
 
-Why this exists (specs/model-resolution-rework/generator-layer-rearchitecture.md,
-"fix enrichment first"): ~2000+ HF-bulk rows' `parents` / `model_group_id` /
+Why this exists: ~2000+ HF-bulk rows' `parents` / `model_group_id` /
 `model_family_id` / `lineage_origin` are derived (in `enrich_draft_from_row`)
-from the parquet's `baseModels` column. Live HF queries are flaky and have
-mis-classified real repos as absent (spec §5), so a clean regen against live HF
-would silently lose lineage. Freezing the actual upstream rows (incl. baseModels)
-to a committed parquet lets `refresh_from_hub_stats.py` reproduce the SAME
-enrichment offline, byte-for-byte, via its existing local-parquet path
+from the parquet's `baseModels` column. Live HF queries are flaky and can
+mis-classify real repos as absent, so a clean regen against live HF would
+silently lose lineage. Freezing the actual upstream rows (incl. baseModels) to a
+committed parquet lets `refresh_from_hub_stats.py` reproduce the SAME enrichment
+offline, byte-for-byte, via its existing local-parquet path
 (`HUB_STATS_LOCAL_PARQUET` / `is_local_parquet`).
 
 This is a CACHE-REFRESH tool — run it occasionally (or in a dedicated cron) to
@@ -33,7 +32,8 @@ import sys
 from pathlib import Path
 
 import duckdb
-import yaml
+
+from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml, load_entries_from_yaml
 
 from eval_card_registry.services.hub_stats import PARQUET_URL, QUERY_COLUMNS
 
@@ -52,34 +52,19 @@ _MODEL_SOURCES = (
 )
 
 
-def _build_hf_to_dev() -> dict[str, str]:
-    # Single source: the shared curated org map (incl. the orgs.yaml alias tier),
-    # so this matches the generators + resolver — no divergent inline copy.
-    from eval_entity_resolver.fold import build_curated_org_map
-
-    return build_curated_org_map(yaml.safe_load(ORGS_PATH.read_text()) or [])
-
-
-def _entries(path: Path):
-    if not path.exists():
-        return []
-    raw = yaml.safe_load(path.read_text()) or []
-    return (raw.get("entries") if isinstance(raw, dict) else raw) or []
-
-
 def build_candidate_ids() -> set[str]:
     """Every HF-shaped (`org/name`) id + alias on a known canonical, plus the
     big-dev re-mapped repo id (`meta/Llama-3.1-8B` -> `meta-llama/Llama-3.1-8B`)
     so the parquet lookup finds the real-namespace row. Mirrors the candidate
     construction in refresh_from_hub_stats.main()."""
-    hf_to_dev = _build_hf_to_dev()
+    hf_to_dev = build_hf_to_dev_from_orgs_yaml(ORGS_PATH)
     dev_to_hf_orgs: dict[str, set[str]] = {}
     for hf_org, dev in hf_to_dev.items():
         dev_to_hf_orgs.setdefault(dev, set()).add(hf_org)
 
     initial: set[str] = set()
     for path in _MODEL_SOURCES:
-        for e in _entries(path):
+        for e in load_entries_from_yaml(path):
             if not isinstance(e, dict):
                 continue
             for a in (e.get("aliases") or []):

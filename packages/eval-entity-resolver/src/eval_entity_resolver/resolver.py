@@ -19,6 +19,11 @@ from eval_entity_resolver.strategies.exact import exact_match
 from eval_entity_resolver.strategies.normalized import normalized_match
 from eval_entity_resolver.strategies.fuzzy import fuzzy_match
 
+# Confidence assigned to normalized-match results. Below 1.0 (exact) and
+# above _STEM_CONFIDENCE (0.90, fuzzy) so the provenance is clear in the
+# resolution log.
+_NORMALIZED_CONFIDENCE = 0.95
+
 
 class Resolver:
     def __init__(
@@ -78,7 +83,6 @@ class Resolver:
             return self._enrich(raw_value, entity_type, source_config, canonical_id, "exact", 1.0)
 
         # 2. Normalized (confidence 0.95 — only return if above threshold)
-        _NORMALIZED_CONFIDENCE = 0.95
         if _NORMALIZED_CONFIDENCE >= self.config.threshold:
             canonical_id = normalized_match(raw_value, entity_type, self.store, source_config)
             if canonical_id is not None:

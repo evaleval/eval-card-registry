@@ -1,7 +1,7 @@
-"""Acceptance-gate invariants for the model-resolution reconcile work.
+"""Acceptance-gate invariants for model-resolution / canonical-graph integrity.
 
 These are PERMANENT regression tests: they encode the acceptance gate as pytest
-cases that must hold across all future reconcile work. They run OFFLINE against
+cases that must hold across all future model-reconcile work. They run OFFLINE against
 the committed `fixtures/` parquet warehouse and the frozen live-HF oracle
 `hf_model_id_resolution.json` (at the evaleval workspace root).
 
@@ -51,8 +51,8 @@ _TRACKED_ORACLE = REGISTRY_ROOT / "curation" / "hf_model_id_resolution.json"
 ORACLE_PATH = _TRACKED_ORACLE if _TRACKED_ORACLE.exists() else REGISTRY_ROOT.parent / "hf_model_id_resolution.json"
 
 # Gate floor numbers (the registry's measured baseline).
-EXPECTED_TOTAL = 6720
-EXPECTED_ORACLE = 4074  # fixed_exact + fixed_near_miss
+EXPECTED_TOTAL = 6720   # total EEE ids in the frozen hf_model_id_resolution.json oracle
+EXPECTED_ORACLE = 4074  # fixed_exact + fixed_near_miss subset of that oracle
 
 
 # --------------------------------------------------------------------------
@@ -268,9 +268,9 @@ def test_oracle_org_aware_match(resolver, oracle, hf_to_dev):
 # 3. DEDUP — 0 case-insensitive duplicate canonical ids
 # --------------------------------------------------------------------------
 def test_no_case_insensitive_duplicate_canonical_ids(models_df):
-    """The casing migration MUST leave no lowercase+HF-cased duplicate pair:
-    the HF-cased id wins, the old lowercase becomes an alias. Two canonical rows
-    whose ids differ only by case are a dedup failure."""
+    """No lowercase+HF-cased duplicate pair may exist: the HF-cased id wins and
+    any lowercase spelling is an alias on it. Two canonical rows whose ids differ
+    only by case are a dedup failure."""
     lc = Counter(i.lower() for i in models_df["id"])
     dups = {k: v for k, v in lc.items() if v > 1}
     # Surface the actual colliding ids for a useful failure message.
@@ -493,13 +493,12 @@ def test_canonical_id_equals_metadata_hf_id(models_df):
 
 @pytest.mark.slow
 def test_old_folded_form_resolves_to_real_hf_id(resolver, models_df):
-    """Safety net (also guards the models.dev refresh cron): the OLD org-folded
-    id (`alibaba/Qwen2.5-7B`) must resolve to the real-HF canonical
-    (`Qwen/Qwen2.5-7B`) via the demoted alias left behind when the folded id was
-    replaced by the real HF id. This is
-    what makes `regenerate_catalog` (refresh_from_modelsdev) fold a future
-    folded-slug mint onto the real canonical instead of minting a duplicate.
-    A regression here = the cron would re-introduce folded canonicals."""
+    """Safety net (also guards the models.dev refresh cron): the org-folded id
+    spelling (`alibaba/Qwen2.5-7B`) must resolve to the real-HF canonical
+    (`Qwen/Qwen2.5-7B`) via an alias on it. That alias is what makes
+    `regenerate_catalog` (refresh_from_modelsdev) fold a folded-slug mint onto the
+    real canonical instead of minting a duplicate. A regression here = the cron
+    would re-introduce folded canonicals."""
     ids = set(models_df["id"].astype(str))
     pairs = [
         ("alibaba/Qwen2.5-7B", "Qwen/Qwen2.5-7B"),
@@ -651,19 +650,15 @@ def _model_aliases_by_canonical() -> dict[str, list[str]]:
     return out
 
 
-# Mints the fold PREDICATE flags but which an adversarial review confirmed are
-# NOT true dupes (the predicate's normalized/brand-stripped tier over-reaches
-# here — a base vs a specific dated/quant/size variant, a family pointer vs a
-# leaf, or a not-yet-real placeholder). These are intentionally NOT folded; the
-# gate allowlists them so a legitimately-not-folded state stays green while any
-# NEW confident mint-dupe still fails. Keep this list tight — every entry is a
-# reviewed exception, not a blanket waiver.
-# Escape hatch for a genuine models_dev mint that decide_fold flags but is NOT a
-# real-HF dupe (a coarse base vs a more-specific variant leaf). Currently EMPTY:
-# the org-canonicalization + shared decide_fold (model-resolution-rework) resolved
-# every prior waiver (alibaba/qwen-3-235b, alibaba/qwen-3-30b, google/gemma4,
-# zai/z-ai-glm-5 now fold/canonicalize correctly). The gate asserts this stays
-# tight — a dead waiver fails it.
+# Allowlist of models.dev mints that the fold PREDICATE flags but which are NOT
+# true dupes: the predicate's normalized/brand-stripped tier can over-reach (a
+# base vs a specific dated/quant/size variant, a family pointer vs a leaf, or a
+# not-yet-real placeholder). Entries here are intentionally NOT folded so the gate
+# stays green for the legitimately-not-folded state while any NEW confident
+# mint-dupe still fails. Keep this list TIGHT — every entry is a reviewed
+# exception, not a blanket waiver; the gate fails on a dead (unused) waiver.
+# Currently EMPTY: org-canonicalization plus the shared decide_fold predicate fold
+# every known case correctly.
 _KNOWN_NON_DUPE_MINTS: frozenset[str] = frozenset()
 
 
@@ -765,24 +760,25 @@ def test_model_group_id_does_not_cross_developer_org(models_df):
 
 
 # --------------------------------------------------------------------------
-# PHASE-0 BEHAVIORAL ORACLE — the restore must not regress already-seen
-# resolution. The HF-id oracle gates above only police the ~4074 HF-resolvable
-# ids in hf_model_id_resolution.json; they are BLIND to the closed-API,
-# NA-source, and reviewed curated canonicals the curated floor exists to
-# preserve. This gate guards the FULL Phase-0 snapshot (curation/oracle_snapshot/
-# canonical_models.parquet + aliases.parquet, 7196 canonicals / 28900 aliases):
-# every oracle canonical id (and every oracle alias raw) must still resolve to a
-# NON-NULL canonical whose developer is ORG-AWARE-equal to the oracle's. Names
-# are NOT required equal — the un-consolidation intentionally re-spells ids
+# BEHAVIORAL ORACLE SNAPSHOT — resolution must not regress an already-seen
+# canonical/alias. The HF-id oracle gates above only police the ~4074
+# HF-resolvable ids in hf_model_id_resolution.json; they are BLIND to the
+# closed-API, NA-source, and reviewed curated canonicals the curated floor exists
+# to preserve. This gate guards the FULL snapshot at curation/oracle_snapshot/
+# (canonical_models.parquet + aliases.parquet, 7196 canonicals / 28900 aliases):
+# every snapshot canonical id (and every snapshot alias raw) must still resolve to
+# a NON-NULL canonical whose developer is ORG-AWARE-equal to the snapshot's. Names
+# are NOT required equal — id spellings may differ from the snapshot
 # (meta/llama-3-70b -> meta-llama/Meta-Llama-3-70B); the invariant is "same
-# developer, still resolves". Deliberately-changed outcomes are enumerated in
-# the exemption sets (kept tight + justified) so drift stays visible.
+# developer, still resolves". Outcomes that intentionally differ from the snapshot
+# are enumerated in the exemption sets (kept tight + justified) so drift stays
+# visible.
 # --------------------------------------------------------------------------
 ORACLE_SNAPSHOT_DIR = REGISTRY_ROOT / "curation" / "oracle_snapshot"
 
-# Oracle canonical ids whose resolution the team DELIBERATELY changed to a
+# Oracle-snapshot canonical ids whose resolution intentionally lands on a
 # different developer in a way the same-model leaf rule below can't auto-detect
-# (the oracle id was MALFORMED — an embedded org or a placeholder host — so the
+# (the snapshot id was MALFORMED — an embedded org or a placeholder host — so the
 # corrected leaf legitimately differs). Each is a reviewed exception.
 _ORACLE_CANON_EXEMPT: frozenset = frozenset({
     "openai/aion-labs-aion-2-0",           # oracle embedded the org in the leaf -> aion-labs/aion-2-0
@@ -792,17 +788,22 @@ _ORACLE_CANON_EXEMPT: frozenset = frozenset({
     # can't auto-detect it; resolving to ai21-labs/ai21-jamba-* is correct.
     "ai21/jamba-1.5-large",
     "ai21/jamba-1.5-mini",
+    # EVA finetune mis-filed under alibaba (it's a Qwen finetune) with the `eva`
+    # brand as a leaf SUFFIX. Real HF repo is EVA-UNIT-01/EVA-Qwen2.5-32B-v0.2 —
+    # right org, brand moves to a PREFIX, so the same-model-leaf rule can't match
+    # the two spellings. Resolving to EVA-UNIT-01/eva-qwen2-5-32b-v0-2 is correct.
+    "alibaba/qwen2-5-32b-eva-v0-2",
 })
 
-# Oracle aliases deliberately NOT resolved any more — the oracle attribution was
-# itself wrong and the un-consolidation corrected it. Reviewed exceptions only.
+# Oracle-snapshot aliases intentionally NOT resolved — the snapshot's attribution
+# was itself wrong. Reviewed exceptions only.
 # Keyed either by bare raw_value or by (entity_type, raw_value).
 _ORACLE_ALIAS_EXEMPT: frozenset = frozenset({
     # `vercel` is an inference platform / AI gateway (seed/inference_platforms.yaml
-    # + the resolver host-prefix strip list), NOT a model developer. The oracle's
-    # `vercel` org (3 models mis-attributed to the host) was a host-mislabel the
-    # un-consolidation correctly fixed by stripping the host — so resolving
-    # `vercel` as a developer org is correctly no_match now.
+    # + the resolver host-prefix strip list), NOT a model developer. The snapshot's
+    # `vercel` org (3 models mis-attributed to the host) is a host-mislabel: the
+    # host is stripped, so resolving `vercel` as a developer org is correctly
+    # no_match.
     ("org", "vercel"),
 })
 
@@ -821,17 +822,17 @@ def _leaf_norm(cid: str) -> str:
 
 @pytest.mark.slow
 def test_phase0_oracle_canonicals_preserved(resolver, hf_to_dev):
-    """GATE: every Phase-0 oracle canonical id still resolves NON-NULL to an
+    """GATE: every oracle-snapshot canonical id still resolves NON-NULL to an
     org-aware-equal developer (no curated/closed-API/NA entity silently orphaned
     to no_match or re-attributed to a different developer).
 
     A resolution to a DIFFERENT developer is permitted ONLY when the model leaf
-    is identical (same model, corrected org) — that is the rework's explicit
-    purpose: fixing the oracle's wrong developer attributions (the models.dev
-    provider mislabels `meta/aion-1-0` -> real `aion-labs/aion-1-0`,
-    `amazon/manta-*` -> `meganova-ai/manta-*`, `meta/l3-euryale` -> `sao10k/...`).
-    A different-developer resolution with a DIFFERENT leaf is a genuine
-    re-attribution and fails (unless explicitly exempted as a malformed oracle id)."""
+    is identical (same model, corrected org) — that corrects wrong developer
+    attributions in the snapshot (the models.dev provider mislabels
+    `meta/aion-1-0` -> real `aion-labs/aion-1-0`, `amazon/manta-*` ->
+    `meganova-ai/manta-*`, `meta/l3-euryale` -> `sao10k/...`). A different-developer
+    resolution with a DIFFERENT leaf is a genuine re-attribution and fails (unless
+    explicitly exempted as a malformed snapshot id)."""
     import pandas as pd
     oc = pd.read_parquet(ORACLE_SNAPSHOT_DIR / "canonical_models.parquet")
     no_match, wrong_dev = [], []
@@ -847,18 +848,18 @@ def test_phase0_oracle_canonicals_preserved(resolver, hf_to_dev):
               and _leaf_norm(cid) != _leaf_norm(oid)):  # not a same-model org correction
             wrong_dev.append((oid, cid))
     assert not no_match, (
-        f"{len(no_match)} Phase-0 oracle canonical(s) now resolve to no_match "
+        f"{len(no_match)} oracle-snapshot canonical(s) now resolve to no_match "
         f"(already-seen resolution regressed). First few: {sorted(no_match)[:15]}"
     )
     assert not wrong_dev, (
-        f"{len(wrong_dev)} Phase-0 oracle canonical(s) now resolve to a DIFFERENT "
+        f"{len(wrong_dev)} oracle-snapshot canonical(s) now resolve to a DIFFERENT "
         f"developer AND a different model leaf (silent re-attribution). First few: {wrong_dev[:15]}"
     )
 
 
 @pytest.mark.slow
 def test_phase0_oracle_aliases_preserved(resolver):
-    """GATE: every Phase-0 oracle alias raw still resolves NON-NULL — for ITS OWN
+    """GATE: every oracle-snapshot alias raw still resolves NON-NULL — for ITS OWN
     entity_type (model / benchmark / org / metric / harness / composite / family),
     with the alias's source_config — so no already-seen resolution regresses for
     ANY entity type, not just models. The coverage backstop the HF-id coverage
@@ -880,21 +881,21 @@ def test_phase0_oracle_aliases_preserved(resolver):
         if resolver.resolve(rv, et, sc).canonical_id is None:
             no_match.add((et, rv))
     assert not no_match, (
-        f"{len(no_match)} Phase-0 oracle alias(es) now resolve to no_match for their "
+        f"{len(no_match)} oracle-snapshot alias(es) now resolve to no_match for their "
         f"entity_type (already-seen resolution regressed). By type: "
         f"{ {t: sum(1 for tt, _ in no_match if tt == t) for t in sorted({tt for tt, _ in no_match})} }. "
         f"First few: {sorted(no_match)[:15]}"
     )
 
 
-# Oracle (oracle_id, parent_id) edges that cannot land until a tracked followup.
-# Each is an enumerated, justified exception — any OTHER lost edge fails the gate.
+# Snapshot (oracle_id, parent_id) edges that are allowed not to land. Each is an
+# enumerated, justified exception — any OTHER lost edge fails the gate.
 _ORACLE_EDGE_EXEMPT: frozenset = frozenset()
 
 
 @pytest.mark.slow
 def test_phase0_oracle_edges_preserved(resolver, models_df):
-    """GATE: every Phase-0 oracle TYPED parent edge (relationship + axis:
+    """GATE: every oracle-snapshot TYPED parent edge (relationship + axis:
     variant/finetune/quantized/merge/adapter, all axes incl. training_stage) on
     a surviving canonical is preserved — repointed to the parent's surviving
     canonical. Guards the full typed lineage GRAPH, not just the derived
@@ -932,7 +933,7 @@ def test_phase0_oracle_edges_preserved(resolver, models_df):
             continue
         t = _home(str(row.id))
         if t is None:
-            continue  # canonical gone -> guarded by test_phase0_oracle_canonicals_preserved
+            continue  # canonical gone -> covered by the snapshot-canonicals gate above
         tedges = cur.get(t, set())
         for e in oes:
             if not isinstance(e, dict) or not e.get("id"):
@@ -949,7 +950,7 @@ def test_phase0_oracle_edges_preserved(resolver, models_df):
             if key not in tedges:
                 missing.append((str(row.id), t, str(e["id"]), tp, e.get("relationship"), e.get("axis")))
     assert not missing, (
-        f"{len(missing)} Phase-0 oracle typed parent edge(s) lost on the surviving "
+        f"{len(missing)} oracle-snapshot typed parent edge(s) lost on the surviving "
         f"canonical (relationship/axis link not preserved). First few: {missing[:15]}"
     )
 
@@ -986,10 +987,11 @@ def test_resolve_surfaces_typed_edges_and_ancestry(resolver, models_df):
     )
 
 
-# Oracle (field, id) lineage memberships that cannot be preserved: the group/
+# Snapshot (field, id) lineage memberships that cannot be preserved: the group/
 # family ROOT model is not a distinct canonical in the registry (its base was
 # coarsened into a variant or is absent), so the variant has no root to group
-# under. Enumerated, justified; followup = keep group/family ROOT models distinct.
+# under. Enumerated, justified — each variant resolves correctly but as a
+# singleton root.
 _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
     ("model_group_id", "Qwen/Qwen3-235B-A22B-Instruct-2507"),
     ("model_group_id", "Qwen/Qwen3-VL-32B-Thinking"),
@@ -1002,7 +1004,7 @@ _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
     ("model_family_id", "xiaomi/mimo-v2-flash"),
     # The models.dev SLUG `nvidia/nemotron-3-super-120b-a12b` folds into the real
     # HF canonical nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16 (curated, recent
-    # model absent from the frozen HF oracle). The oracle's non-trivial family
+    # model absent from the frozen HF oracle). The snapshot's non-trivial family
     # root for the slug was an artifact of the slug arrangement (a size edge to a
     # non-existent `…-120b` base; A12B is the MoE active-param notation, not a
     # separate size); the real canonical is correctly a singleton root.
@@ -1012,13 +1014,13 @@ _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
 
 @pytest.mark.slow
 def test_phase0_oracle_lineage_no_loss(resolver, models_df):
-    """GATE: no oracle canonical LOSES its lineage. For every surviving oracle
-    canonical that had a non-trivial model_group_id / model_family_id /
+    """GATE: no oracle-snapshot canonical LOSES its lineage. For every surviving
+    snapshot canonical that had a non-trivial model_group_id / model_family_id /
     lineage_origin_model_id (root != self, or non-null lineage origin), the
     canonical it now resolves to must ALSO have that field non-trivial.
 
-    Checks PRESENCE, not exact value: the union of oracle + generator edges walks
-    to a deeper/truer origin (an ENRICHMENT, not a regression). The exact raw
+    Checks PRESENCE, not exact value: the union of snapshot + generator edges may
+    walk to a deeper/truer origin (an ENRICHMENT, not a regression). The exact raw
     edges are guarded by test_phase0_oracle_edges_preserved; this guards the
     DERIVED lineage fields against being dropped (so e.g. a change to the org-map
     or lineage-derivation can't silently un-group a model)."""

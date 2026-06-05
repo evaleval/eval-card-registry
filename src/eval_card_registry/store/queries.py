@@ -14,7 +14,7 @@ import json
 import re
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any, Callable, Optional
 
 import pandas as pd
 
@@ -36,6 +36,10 @@ _DATE_ISO_FULL_RE = re.compile(r"-(\d{4})-(\d{2})-(\d{2})$")
 _DATE_PACKED_RE = re.compile(r"-(\d{4})(\d{2})(\d{2})$")
 _DATE_ISO_MONTH_RE = re.compile(r"-(\d{4})-(\d{2})$")
 
+# Plausible release-year window; guards against 4-digit tails (param counts,
+# batch numbers) being mis-read as a release year.
+_VALID_YEAR_RANGE = (2015, 2035)
+
 
 def _derive_release_date_from_id(canonical_id: str) -> Optional[str]:
     """Best-effort: parse a date suffix off the canonical id and return
@@ -51,7 +55,7 @@ def _derive_release_date_from_id(canonical_id: str) -> Optional[str]:
 
     def _ok_year(s: str) -> bool:
         try:
-            return 2015 <= int(s) <= 2035
+            return _VALID_YEAR_RANGE[0] <= int(s) <= _VALID_YEAR_RANGE[1]
         except ValueError:
             return False
 
@@ -221,7 +225,7 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
         rd = row.get("release_date")
         release_by_id[cid] = None if _is_na(rd) else str(rd)
 
-    # Org-from-prefix RULE (registry-proper — NOT a hotfix). For an HF-shaped
+    # Org-from-prefix RULE. For an HF-shaped
     # `org/name` id whose org_id was never set, derive the developer the SAME
     # way the resolver / auto-create does: the curated HF-org map
     # (canonical_orgs.hf_org + strategies/fuzzy._ORG_ALIASES), exactly like
@@ -256,7 +260,11 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
                 org_by_id[cid] = dev  # feed the lineage_origin_org walk below
                 org_prefix_updates[cid] = dev
 
-    def _walk(start: str, edge_ok, org_conditional: bool = False) -> str:
+    def _walk(
+        start: str,
+        edge_ok: Callable[[dict], bool],
+        org_conditional: bool = False,
+    ) -> str:
         """Walk parents through edges where `edge_ok(edge)` is True.
         Returns the deepest reachable id; stops on no-match or cycle.
 
@@ -432,9 +440,8 @@ def derive_model_lineage_fields(store: RegistryStore) -> dict[str, int]:
                 release_derived_count += 1
 
     df = df.copy()
-    # `model_group_id` (formerly `root_model_id`) and
-    # `lineage_origin_model_org_id` (formerly `lineage_origin_org_id`) plus the
-    # family + lineage-model walks are all written here.
+    # `model_group_id`, `lineage_origin_model_org_id`, and the family +
+    # lineage-model walks are all written here.
     df["model_group_id"] = df["id"].map(group_updates).astype(pd.StringDtype())
     df["model_family_id"] = df["id"].map(family_updates).astype(pd.StringDtype())
     df["lineage_origin_model_id"] = df["id"].map(lineage_model_updates).astype(pd.StringDtype())

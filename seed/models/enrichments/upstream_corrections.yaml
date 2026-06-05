@@ -5,8 +5,8 @@
 # the upstream record is corrected.
 #
 # Loaded as an enrichment overlay (cli.py globs enrichments/*.yaml; aliases UNION
-# onto the canonical, scalars override last-write-wins). Survives the floor
-# restore + the refresh crons (it is not a generated file).
+# onto the canonical, scalars override last-write-wins). Hand-maintained: the
+# refresh crons and generators never rewrite this file, so its corrections persist.
 #
 # (1) GPT-J / GPT-NeoX are EleutherAI models. The EEE datastore records them
 #     ALSO under `openai/` (`openai/GPT-J-6B`, `openai/GPT-NeoX-20B`), which HF

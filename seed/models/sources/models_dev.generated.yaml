@@ -63,12 +63,10 @@
   aliases:
   - EVA-LLaMA-3.33-70B-v0.1
   - eva-llama-3-33-70b-v0-1
-- id: EVA-UNIT-01/qwen2-5-32b-eva-v0-2
+- id: EVA-UNIT-01/eva-qwen2-5-32b-v0-2
   aliases:
   - Qwen 2.5 32b EVA
-  - Qwen2.5-32B-EVA-v0.2
-  - qwen2-5-32b-eva-v0-2
-  - qwen2.5-32b-eva-v0.2
+  - eva-qwen2-5-32b-v0-2
 - id: Envoid/llama-3-05-nemotron-tenyxchat-storybreaker-70b
   aliases:
   - Nemotron Tenyxchat Storybreaker 70b
@@ -8735,6 +8733,9 @@
   - Phi-4-reasoning-plus
   - microsoft/phi-4-reasoning-plus
   - phi-4-reasoning-plus
+- id: microsoft/WizardLM-2-8x22B
+  aliases:
+  - WizardLM-2 8x22B
 - id: microsoft/mai-ds-r1
   display_name: MAI-DS-R1
   org_id: microsoft
@@ -8756,23 +8757,6 @@
   aliases:
   - Phi-4
   - phi-4
-- id: microsoft/wizardlm-2-8x22b
-  display_name: microsoft/wizardlm-2-8x22b
-  org_id: microsoft
-  family: wizardlm-2-8x22b
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: true
-  release_date: '2024-04-16'
-  input_modalities: null
-  output_modalities: null
-  tags:
-  - open-weight
-  aliases: []
-  metadata: '{"alias_platforms": {"wizardlm-2-8x22b": "nano-gpt"}, "providers": ["kilo", "nano-gpt", "novita-ai", "openrouter"], "underlying_key": "wizardlm-2-8x22b"}'
-  review_status: draft
-  resolution_source: models_dev
 - id: minimax/minimax-01
   display_name: MiniMax 01
   org_id: minimax

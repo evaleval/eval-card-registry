@@ -1,23 +1,25 @@
 #!/usr/bin/env bash
 # Reproducible, deterministic regeneration of ALL model seed sources from FROZEN
-# inputs — the generator-driven layer of the model-resolution-rework.
+# inputs. The model seed sources (seed/models/sources/*.generated.yaml) are
+# rebuilt from committed snapshots, so a clean checkout reproduces them exactly.
 #
 # Inputs (all committed / frozen, so this is reproducible):
 #   - ../hf_model_id_resolution.json        (frozen HF oracle; hf_oracle + tier3)
 #   - tests/fixtures/modelsdev_api.snapshot.json  (pinned models.dev pull; models_dev)
 #   - curation/hub_stats_frozen.parquet     (frozen hub-stats subset; hub_stats)
 #
-# The DAILY CRON refreshes from LIVE sources on top of this (additive); this
-# script is the reproducible baseline + the verification entrypoint. Run order
-# follows the tier dependency: hf_oracle (HF truth, edits core/models_dev/hub_stats
-# in place) -> models_dev (core-aware) -> hub_stats (enrich, offline cache) ->
-# models_dev --catalog (additive split) -> seed -> tier3 (residual tail) -> seed.
+# This is the reproducible baseline + the verification entrypoint; the daily
+# cron (.github/workflows/refresh-models.yml) refreshes from LIVE sources on top
+# of it additively. Run order follows the tier dependency: hf_oracle (HF truth,
+# edits core/models_dev/hub_stats in place) -> models_dev (core-aware) ->
+# hub_stats (enrich, offline cache) -> models_dev --catalog (additive split) ->
+# seed -> tier3 (residual tail) -> seed.
 #
 # Flags:
-#   --reset-core   empty seed/models/core.yaml entries first (keeps skip lists).
-#                  Used ONLY by the one-time un-consolidation to get full
-#                  generator output; the ongoing/cron path leaves core intact
-#                  (generators are core-aware and won't clobber it).
+#   --reset-core   empty seed/models/core.yaml entries first (keeps skip lists),
+#                  forcing a full regeneration from the generators alone. The
+#                  ongoing/cron path leaves core intact (generators are
+#                  core-aware and won't clobber curated entries).
 #
 # Usage:
 #   bash scripts/regenerate_sources.sh [--reset-core]

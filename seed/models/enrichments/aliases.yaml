@@ -2,7 +2,7 @@
 # NOT, attached to the canonical the entry now resolves to. Gap-filling only
 # (each form was UNCLAIMED by any generator canonical), so these never
 # override or collide. Loader UNIONs these aliases onto the matching
-# canonical. Derived by scripts/oneshots/build_curated_core_floor.py.
+# canonical.
 - id: 01-ai/Yi-Coder-9B-Chat
   aliases:
   - unknown/yi-coder-chat-9b
@@ -102,12 +102,11 @@
 - id: EVA-UNIT-01/eva-llama-3-33-70b-v0-1
   aliases:
   - meta/eva-llama-3-33-70b-v0-1
-- id: EVA-UNIT-01/qwen2-5-32b-eva-v0-2
+- id: EVA-UNIT-01/eva-qwen2-5-32b-v0-2
   aliases:
   - Qwen2.5-32B-EVA-v0.2
   - alibaba/eva-qwen2-5-32b-v0-2
   - alibaba/qwen2-5-32b-eva-v0-2
-  - eva-qwen2-5-32b-v0-2
   - qwen2-5-32b-eva-v0-2
 - id: EleutherAI/gpt-j-6b
   aliases:

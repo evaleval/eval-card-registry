@@ -1,11 +1,11 @@
-"""D1 contract tests — the lean resolve HTTP API + full hierarchy scope.
+"""Contract tests for the lean resolve HTTP API + full hierarchy scope.
 
 Covers, against a fully-populated in-memory hierarchy store:
   - `ancestry` (model group/family chain; benchmark→family→composite;
     family→composite; composite/root → []),
   - typed `resolution_detail.<type>` (model granularity; benchmark
     level/matched_subset incl. the slice + subset-fold cases),
-  - the new GET /families/{id} and GET /composites/{id} endpoints,
+  - GET /families/{id} and GET /composites/{id},
   - composite/family resolving via resolve(entity_type=...).
 
 The fixtures/-backed gate invariants (tests/test_gate_invariants.py) own
@@ -212,7 +212,7 @@ class TestFamilyCompositeEndpoints:
         assert client.get("/api/v1/composites").status_code == 200
 
 
-# --- resolve via the new entity_types --------------------------------------
+# --- resolve via the composite / family entity_types -----------------------
 
 class TestResolveNewEntityTypes:
     def test_resolve_family_entity_type(self, client):

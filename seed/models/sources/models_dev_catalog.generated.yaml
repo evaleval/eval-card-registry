@@ -31,17 +31,15 @@
   aliases:
   - eva-llama-3-33-70b-v0-1
   metadata: '{"alias_platforms": {"eva-llama-3-33-70b-v0-1": "nano-gpt"}}'
+- id: EVA-UNIT-01/eva-qwen2-5-32b-v0-2
+  aliases:
+  - eva-qwen2-5-32b-v0-2
+  metadata: '{"alias_platforms": {"eva-qwen2-5-32b-v0-2": "nano-gpt"}}'
 - id: EVA-UNIT-01/EVA-Qwen2.5-72B-v0.2
   aliases:
   - EVA-UNIT-01/eva-qwen2-5-72b-v0-2
   - eva-qwen2-5-72b-v0-2
   metadata: '{"alias_platforms": {"eva-qwen2-5-72b-v0-2": "nano-gpt"}}'
-- id: EVA-UNIT-01/qwen2-5-32b-eva-v0-2
-  aliases:
-  - Qwen2.5-32B-EVA-v0.2
-  - qwen2-5-32b-eva-v0-2
-  - qwen2.5-32b-eva-v0.2
-  metadata: '{"alias_platforms": {"Qwen2.5-32B-EVA-v0.2": "nano-gpt", "qwen2-5-32b-eva-v0-2": "nano-gpt", "qwen2.5-32b-eva-v0.2": "nano-gpt"}}'
 - id: Envoid/llama-3-05-nemotron-tenyxchat-storybreaker-70b
   aliases:
   - llama-3-05-nemotron-tenyxchat-storybreaker-70b

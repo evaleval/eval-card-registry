@@ -299,8 +299,8 @@ class TestRootCollapseAndLineage:
         assert r["canonical_id"] == "meta/llama-3-8b-instruct-fp8"
         # resolved_leaf_id == canonical_id (both the leaf).
         assert r["resolved_leaf_id"] == "meta/llama-3-8b-instruct-fp8"
-        # The group root (what canonical_id used to be) moves to
-        # model_group_id; root_model_id keeps it for rollout compat.
+        # The identity-group root is carried by model_group_id (root_model_id is
+        # a deprecated compat alias that mirrors it).
         assert r["model_group_id"] == "meta/llama-3-8b-instruct"
         assert r["root_model_id"] == "meta/llama-3-8b-instruct"
         assert r["lineage_origin_org_id"] == "meta"

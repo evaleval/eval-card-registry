@@ -8,8 +8,8 @@ on:
     - cron: "30 9 * * *"
   workflow_dispatch: {}
 
-# Direct-commit auto-sync (no PR review). When HITL or consumer feedback
-# loops come online we can flip to PR mode.
+# Direct-commit auto-sync (no PR review). Switch to PR mode if human review of
+# refreshes becomes warranted.
 permissions:
   contents: write
   # `gh workflow run seed.yml` (downstream dispatch) requires actions:write.
@@ -46,9 +46,8 @@ jobs:
           # and another cron firing in the same window will trip it.
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         # --live: the cron's job is FRESHNESS, so it queries HF directly rather
-        # than the committed offline cache (the script's new reproducible
-        # default). The freeze-then-generate redesign (refresh the cache live,
-        # then derive offline) lands with the un-consolidation / Phase 5.
+        # than the committed offline cache (the script's default, used for
+        # reproducible regens).
         run: uv run python scripts/refresh_from_hub_stats.py --live
 
       # Sanity: the YAML must parse and the seed loader must succeed
@@ -61,7 +60,7 @@ jobs:
           LOCAL_MODE=true uv run eval-card-registry seed --local
           # Gate the refresh on the invariant suite over the freshly-seeded
           # fixtures: a regen that re-mints a shadow, re-splits an org (e.g.
-          # reverts a same-uploader merge), or regresses a Phase-0 oracle
+          # reverts a same-uploader merge), or regresses a known resolution
           # outcome ABORTS here — better to skip a day than commit a regression.
           LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py -q
 

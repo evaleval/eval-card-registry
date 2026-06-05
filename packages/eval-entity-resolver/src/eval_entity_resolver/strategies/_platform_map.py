@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 # Sentinel host token meaning "missing developer field" → no platform.
 _UNKNOWN_SENTINEL = "unknown"
@@ -39,7 +39,7 @@ _HOST_TOKEN_TO_PLATFORM: dict[str, Optional[str]] = {}
 _LOADED = False
 
 
-def _coerce_aliases(raw) -> list[str]:
+def _coerce_aliases(raw: Any) -> list[str]:
     """Accept either a YAML/native list or a JSON-encoded list string."""
     if isinstance(raw, str):
         try:
@@ -57,7 +57,7 @@ def _load_via_registry_lib() -> Optional[dict[str, Optional[str]]]:
             all_host_tokens,
             get_host_token_platform,
         )
-    except Exception:
+    except (ImportError, AttributeError, ModuleNotFoundError):
         return None
     mapping: dict[str, Optional[str]] = {}
     for token in all_host_tokens():
@@ -82,7 +82,7 @@ def _load_via_seed_yaml() -> Optional[dict[str, Optional[str]]]:
         return None
     try:
         import yaml  # optional dep; present in the workspace env
-    except Exception:
+    except (ImportError, ModuleNotFoundError):
         return None
     try:
         with open(seed_path) as f:

@@ -18,13 +18,14 @@ Validates:
 """
 from __future__ import annotations
 
-import importlib.util
 import json
 from collections import defaultdict
 from pathlib import Path
 
 import pytest
 import yaml
+
+from conftest import load_script_module
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SPEC_DIR = REPO_ROOT  / "curation"
@@ -33,18 +34,17 @@ UNDERLYING_INDEX = SPEC_DIR / "modelsdev_underlying_index.json"
 RESCUES = SPEC_DIR / "eee_modelsdev_rescues.json"
 PLATFORMS = SPEC_DIR / "inference_platforms.proposed.json"
 
-
-def _load_module():
-    path = REPO_ROOT / "scripts" / "refresh_from_modelsdev.py"
-    spec = importlib.util.spec_from_file_location("refresh_from_modelsdev", path)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
+# Frozen-pull dedup floor: distinct underlying groups in curation/modelsdev_underlying_index.json.
+EXPECTED_UNDERLYING_GROUPS = 1_279
+# EEE rescue floor: rows in curation/eee_modelsdev_rescues.json.
+EXPECTED_EEE_RESCUES = 662
+# Curated inference-platform count: entries in curation/inference_platforms.proposed.json.
+EXPECTED_PLATFORM_COUNT = 137
 
 
 @pytest.fixture(scope="module")
 def mod():
-    return _load_module()
+    return load_script_module("refresh_from_modelsdev")
 
 
 @pytest.fixture(scope="module")
@@ -72,8 +72,8 @@ def test_dedup_reproduces_underlying_group_count(mod, api, underlying_index):
     # normalizer was corrected (`-maas` serving-tier collapse + `:NNNb` size specs
     # kept distinct, e.g. gemma3:12b / gpt-oss:120b); the index was regenerated
     # from the same snapshot with the corrected normalize.
-    assert n == 1_279, f"expected 1279 underlying groups, got {n}"
-    assert len(underlying_index) == 1_279
+    assert n == EXPECTED_UNDERLYING_GROUPS, f"expected {EXPECTED_UNDERLYING_GROUPS} underlying groups, got {n}"
+    assert len(underlying_index) == EXPECTED_UNDERLYING_GROUPS
 
 
 def test_dedup_group_roots_match_committed_index(mod, api, underlying_index):
@@ -114,6 +114,50 @@ def test_dedup_spotcheck_known_groups(mod, api, underlying_index, root, expect_a
     idx_entry = underlying_index[root]
     assert idx_entry["has_author_lab_entry"] is expect_author
     assert idx_entry["author_org"] == expect_org_hf
+
+
+def _reorder_api(api: dict) -> dict:
+    """Return the same catalog with provider order AND per-provider model order
+    reversed — a non-trivial deterministic permutation of models.dev's key order.
+    Used to prove grouping/head-pick don't depend on upstream iteration order."""
+    out = {}
+    for prov in reversed(list(api.keys())):
+        pdata = dict(api[prov])
+        models = pdata.get("models")
+        if isinstance(models, dict):
+            pdata["models"] = {k: models[k] for k in reversed(list(models.keys()))}
+        out[prov] = pdata
+    return out
+
+
+def test_grouping_invariant_to_modelsdev_key_order(mod, api):
+    """GATE: build_underlying_groups must produce the SAME roots and the SAME
+    group membership regardless of models.dev's key order. Guards the determinism
+    fix — the union-find base is the lexicographically-first key (not API order),
+    so a provider/model reordering upstream cannot flip a group head."""
+    a = mod.build_underlying_groups(api)
+    b = mod.build_underlying_groups(_reorder_api(api))
+    assert set(a.keys()) == set(b.keys()), (
+        f"roots changed under key reorder: "
+        f"new={sorted(set(b) - set(a))[:8]} gone={sorted(set(a) - set(b))[:8]}"
+    )
+    membership = lambda g: {root: sorted(r["raw"] for r in recs) for root, recs in g.items()}
+    assert membership(a) == membership(b), "group membership changed under key reorder"
+
+
+def test_head_pick_invariant_to_modelsdev_key_order(mod, api):
+    """GATE: pick_underlying's head_spelling must be stable under a key reorder —
+    the author-rec sort keys on (len(norm), raw), not provider iteration order, so
+    the minted id can't churn when models.dev reorders providers."""
+    a = mod.build_underlying_groups(api)
+    b = mod.build_underlying_groups(_reorder_api(api))
+    for root in a:
+        ha = mod.pick_underlying(root, a[root])
+        hb = mod.pick_underlying(root, b[root])
+        assert ha["head_spelling"] == hb["head_spelling"], (
+            f"head_spelling for {root!r} flipped under key reorder: "
+            f"{ha['head_spelling']!r} != {hb['head_spelling']!r}"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -186,7 +230,7 @@ def test_rescues_map_to_underlying_groups(mod, underlying_index):
     if not RESCUES.exists():
         pytest.skip(f"rescues sidecar missing at {RESCUES}")
     rescues = json.loads(RESCUES.read_text())
-    assert len(rescues) == 662
+    assert len(rescues) == EXPECTED_EEE_RESCUES
 
     key_to_root = {r: r for r in underlying_index}
     mset_to_root: dict[str, list[str]] = defaultdict(list)
@@ -208,7 +252,9 @@ def test_rescues_map_to_underlying_groups(mod, underlying_index):
     matched = sum(1 for eee_id, rec in rescues.items()
                   if lookup(eee_id) == rec["underlying_model_id"])
     # The ported normalize/canon must reproduce every recorded match.
-    assert matched == 662, f"only {matched}/662 rescues reproduced"
+    assert matched == EXPECTED_EEE_RESCUES, (
+        f"only {matched}/{EXPECTED_EEE_RESCUES} rescues reproduced"
+    )
 
 
 def test_rescues_sample_spotcheck(mod, underlying_index):
@@ -329,8 +375,9 @@ def test_provider_to_inference_platform_ids_exist(mod):
     valid_providers = {p["models_dev_provider"] for p in catalog["platforms"]}
 
     assert mod.PROVIDER_TO_INFERENCE_PLATFORM, "map is empty"
-    # Maps all 137 providers (the ~122 previously discarded + the author labs).
-    assert len(mod.PROVIDER_TO_INFERENCE_PLATFORM) == len(catalog["platforms"]) == 137
+    # Every models.dev provider (inference platforms + author labs) maps to a
+    # catalog platform; counts are kept in lockstep with the curated catalog.
+    assert len(mod.PROVIDER_TO_INFERENCE_PLATFORM) == len(catalog["platforms"]) == EXPECTED_PLATFORM_COUNT
 
     for provider, platform_id in mod.PROVIDER_TO_INFERENCE_PLATFORM.items():
         assert platform_id in valid_ids, f"platform id {platform_id!r} not in catalog"
@@ -503,7 +550,8 @@ def test_mint_decision_emits_hf_deferred_record_in_generation(mod, api):
 
 
 # ---------------------------------------------------------------------------
-# 8. Phase-1: core-aware reconciliation of the NON-catalog write path.
+# Core-aware reconciliation of the NON-catalog write path: a mint must defer to
+# an existing curated canonical it normalized-collides with, never emit a twin.
 # ---------------------------------------------------------------------------
 REHOST_REPOINT = SPEC_DIR / "rehost_repoint.json"
 
@@ -555,7 +603,7 @@ def test_reconciliation_suppresses_normalized_collision_with_core(mod, tmp_path)
     assert "foo/bar-7b" not in emitted_ids, "normalized-colliding twin must be suppressed"
     assert "openai/gpt-4o" in emitted_ids, "non-colliding mint must survive"
 
-    # MERGE, not drop (§5): the suppressed mint's non-stealing alias must be
+    # MERGE, not drop: the suppressed mint's non-stealing alias must be
     # carried onto an enrich record for the curated OWNER — not lost.
     assert "Foo/Bar-7B" in by_id, "expected an enrich record merging onto the owner"
     assert "foo-bar-7b-extra-alias" in by_id["Foo/Bar-7B"]["aliases"], (
@@ -575,7 +623,7 @@ def test_reconciliation_suppresses_normalized_collision_with_core(mod, tmp_path)
 
 
 def test_reconciliation_rewrites_surviving_parent_edges_off_suppressed_mints(mod, tmp_path):
-    """§5 'rewrite parent edges': when a mint is suppressed (collides with a core
+    """Rewrite parent edges: when a mint is suppressed (collides with a core
     canonical), a SURVIVING entry whose parents[].id pointed at that suppressed
     mint must be repointed to the owner — never left dangling."""
     core = tmp_path / "core.yaml"
@@ -671,8 +719,8 @@ def test_reconciliation_does_not_donate_suppressed_id_owned_elsewhere(mod, tmp_p
 
 def test_reconciliation_no_op_when_no_collision(mod, tmp_path):
     """When no mint collides (normalized) with the injected existing set, the
-    reconciliation is a pure pass-through (id-sorted), so the additive
-    re-cased rewrite is unaffected for the common case."""
+    reconciliation is a pure pass-through (id-sorted): the common no-collision case
+    leaves the generated rows unchanged apart from ordering."""
     core = tmp_path / "core.yaml"
     core.write_text(yaml.safe_dump([{"id": "Acme/Widget-3B", "aliases": []}]))
     generated = [
@@ -684,8 +732,8 @@ def test_reconciliation_no_op_when_no_collision(mod, tmp_path):
 
 
 def test_rehost_mint_never_uses_base_vendor_prefix(mod, api):
-    """Phase-1 re-host id rule (spec §2.3): a minted canonical id must NEVER be
-    the base-vendor `{junk}` id from curation/rehost_repoint.json. Drive
+    """Re-host id rule: a minted canonical id must NEVER be the base-vendor
+    `{junk}` id from curation/rehost_repoint.json. Drive
     `_generate_models` over the pinned snapshot and assert that for every
     REKEY_REAL / CLOSED entry the generator does NOT emit the `junk`
     (base-vendor) id as a canonical.
@@ -752,8 +800,9 @@ def test_rehost_mint_never_uses_base_vendor_prefix(mod, api):
 
 
 # ---------------------------------------------------------------------------
-# 9. ROOT-CAUSE of the seed-abort collisions: a variant must never emit its
-#    variant-suffix-stripped BASE form as one of its own aliases (§5 dup bug).
+# A variant must never emit its variant-suffix-stripped BASE form as one of its
+# own aliases: that base form is owned by another canonical, so donating it
+# would double-claim the form and abort the seed (e.g. gpt-4-turbo -> gpt-4).
 # ---------------------------------------------------------------------------
 @pytest.mark.parametrize(
     "variant_raw,stolen_base",
@@ -768,8 +817,8 @@ def test_rehost_mint_never_uses_base_vendor_prefix(mod, api):
 )
 def test_provider_alias_forms_never_emits_variant_stripped_base(mod, variant_raw, stolen_base):
     """A variant spelling's alias forms must PRESERVE its identity — never the
-    base id/slug that another canonical owns. Regression for the §5 id-steal that
-    aborted the seed (gpt-4-turbo -> alias gpt-4)."""
+    base id/slug that another canonical owns. Donating the base form (gpt-4-turbo
+    -> alias gpt-4) double-claims it and aborts the seed."""
     forms = mod._provider_alias_forms(variant_raw, "anyorg")
     assert stolen_base not in forms, f"{variant_raw} emitted base {stolen_base!r}: {forms}"
     assert f"anyorg/{stolen_base}" not in forms, f"{variant_raw} emitted org/base: {forms}"
@@ -787,10 +836,9 @@ def test_serving_tags_still_stripped_in_alias_forms(mod):
 
 
 def test_intra_output_merge_preserves_loser_scalars_and_parents(mod):
-    """Re-review must-fix: the winner-merge must FILL empty winner scalars from a
-    loser and UNION parent edges — not silently drop the richer loser's
-    modalities / params / lineage (the winner is often an hf_deferred entry with
-    those fields empty)."""
+    """The winner-merge must FILL empty winner scalars from a loser and UNION
+    parent edges — not silently drop the richer loser's modalities / params /
+    lineage (the winner is often an hf_deferred entry with those fields empty)."""
     entries = [
         # Winner: hf_deferred real repo, empty enrichment fields.
         {
@@ -823,9 +871,9 @@ def test_intra_output_merge_preserves_loser_scalars_and_parents(mod):
 
 
 def test_reconcile_strips_surviving_mint_foreign_alias_and_displayname(mod, tmp_path):
-    """Re-review must-fix (the ~69 cross-source aborts): a SURVIVING mint (its id
-    does not steal) must not keep an alias OR display_name owned by a DIFFERENT
-    existing canonical — that double-claim aborts the seed. Strip both."""
+    """A SURVIVING mint (its id does not steal) must not keep an alias OR
+    display_name owned by a DIFFERENT existing canonical — that double-claim aborts
+    the seed. Strip both."""
     core = tmp_path / "core.yaml"
     core.write_text(
         yaml.safe_dump(
@@ -847,8 +895,8 @@ def test_reconcile_strips_surviving_mint_foreign_alias_and_displayname(mod, tmp_
 
 
 def test_intra_output_dedupes_ambiguous_bare_alias_across_distinct_canonicals(mod):
-    """Re-review must-fix: a bare alias claimed by 2+ DISTINCT surviving
-    canonicals (cross-org `gemma-3-1b-it`) aborts the seed. Keep it on one
+    """A bare alias claimed by 2+ DISTINCT surviving canonicals (cross-org
+    `gemma-3-1b-it`) double-claims the form and aborts the seed. Keep it on one
     (the natural/first owner), drop from the others."""
     entries = [
         {"id": "google/gemma-3-1b-it", "org_id": "google", "aliases": ["gemma-3-1b-it"]},
@@ -862,8 +910,7 @@ def test_intra_output_dedupes_ambiguous_bare_alias_across_distinct_canonicals(mo
 def test_no_emitted_alias_steals_another_canonical_id(mod, api):
     """End-to-end over the pinned snapshot: NO emitted entry may carry another
     emitted canonical's id (exact OR resolver-normalized) as an alias — that is
-    the exact double-claim the seed loader aborts on. This is the guard that
-    fails on the pre-fix code (the ~85 collisions)."""
+    the exact double-claim the seed loader aborts on."""
     from collections import defaultdict
 
     from eval_entity_resolver.normalization import normalize as _nz
@@ -892,12 +939,12 @@ def test_no_emitted_alias_steals_another_canonical_id(mod, api):
 
 
 # ---------------------------------------------------------------------------
-# SOURCE-SHAPE GUARD (Phase D STEP 1): a catalog regen is deterministic and
-# never DROPS a committed canonical id. The resolution gates
-# (tests/test_gate_invariants.py) validate resolution OUTCOMES, not the shape of
-# *.generated.yaml — so a cron regen that silently drops / renames / re-cases a
-# mint would pass them. This guards the 'only ADD, never regress' invariant at
-# the SOURCE layer, which is what makes the daily --catalog cron safe.
+# SOURCE-SHAPE GUARD: a catalog regen is deterministic and never DROPS a
+# committed canonical id. The resolution gates (tests/test_gate_invariants.py)
+# validate resolution OUTCOMES, not the shape of *.generated.yaml — so a cron
+# regen that silently drops / renames / re-cases a mint would pass them. This
+# guards the 'only ADD, never regress' invariant at the SOURCE layer, which is
+# what makes the daily --catalog cron safe.
 # ---------------------------------------------------------------------------
 def test_catalog_regen_deterministic_and_no_drop(mod, api, tmp_path, monkeypatch):
     import copy
@@ -948,13 +995,13 @@ def test_catalog_regen_deterministic_and_no_drop(mod, api, tmp_path, monkeypatch
 
 
 # ---------------------------------------------------------------------------
-# CONFLUENCE (re-enable guard): the committed models_dev.generated.yaml IS fresh
-# generator output — a regen from the pinned snapshot, via the SAME pipeline the
-# daily cron's non-catalog step runs (generate -> finalize -> reconcile ->
-# org-canon -> write), reproduces it BYTE-FOR-BYTE. This is what makes the
-# re-enabled cron safe: a clean run produces no diff, and any generator change
-# that drifts from the committed source of truth fails HERE (not silently
-# committed by the cron). Twin of the catalog source-shape guard above.
+# CONFLUENCE: the committed models_dev.generated.yaml IS fresh generator output —
+# a regen from the pinned snapshot, via the SAME pipeline the non-catalog step
+# runs (generate -> finalize -> reconcile -> org-canon -> write), reproduces it
+# BYTE-FOR-BYTE. The generators are the source of truth, so a clean run produces
+# no diff; any generator change that drifts from the committed output fails HERE
+# rather than being silently committed. Twin of the catalog source-shape guard
+# above.
 # ---------------------------------------------------------------------------
 def test_noncatalog_regen_is_confluent_with_committed(mod, api):
     gen, _ = mod._generate_models(api, mod._load_known_org_ids())
@@ -975,13 +1022,13 @@ def test_noncatalog_regen_is_confluent_with_committed(mod, api):
 
 
 # ---------------------------------------------------------------------------
-# MERGE CORRECTNESS (Phase C): a NEW upstream model whose author org already
-# exists in our registry as a community org under HF-true casing (e.g. Sao10K)
-# but arrives lowercased (sao10k) must FK to the EXISTING org row — NOT mint a
-# case-variant twin (split identity). This is the "only enhance new entities,
-# never regress merge" invariant at the org-FK layer. The daily --catalog cron
-# regenerates against live models.dev, so a freshly-added model under an
-# existing org in a different casing is the exact path this guards.
+# MERGE CORRECTNESS: a NEW upstream model whose author org already exists in our
+# registry as a community org under HF-true casing (e.g. Sao10K) but arrives
+# lowercased (sao10k) must FK to the EXISTING org row — NOT mint a case-variant
+# twin (split identity). This is the "only enhance new entities, never regress
+# merge" invariant at the org-FK layer. The daily --catalog cron regenerates
+# against live models.dev, so a freshly-added model under an existing org in a
+# different casing is the exact path this guards.
 # ---------------------------------------------------------------------------
 def test_catalog_new_model_snaps_to_existing_community_org_casing(mod, tmp_path, monkeypatch):
     import yaml as _y

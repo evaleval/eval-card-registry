@@ -2,8 +2,7 @@
 # bulk source of truth under sources/*.generated.yaml). This floor holds the
 # entities NO generator reproduces (resolver exact/normalized): closed-API
 # (open_weights=False), hand-curated (resolution_source=NA), curated judgment
-# calls. Derived by scripts/oneshots/build_curated_core_floor.py. May use the
-# {skip_ids, skip_source_ids, entries} shape.
+# calls. May use the {skip_ids, skip_source_ids, entries} shape.
 skip_ids: []
 skip_source_ids:
 - alibaba/qwen3-235b-a22b-instruct
@@ -2518,7 +2517,7 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/codeqwen1-5-7b-chat
-- id: alibaba/cogview4
+- id: zai/cogview4
   display_name: CogView 4
   org_id: zai
   family: cogview4
@@ -2535,6 +2534,7 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
+  - alibaba/cogview4
   - thudm/cogview4
   - unknown/cogview4
   - cogview4
@@ -10354,7 +10354,7 @@ entries:
   review_status: reviewed
   aliases:
   - whisper-large-v3-turbo
-- id: openai/wizardlm-2-8x22b
+- id: microsoft/WizardLM-2-8x22B
   display_name: WizardLM-2 8x22B
   org_id: microsoft
   family: wizardlm-2-8x22b
@@ -10370,7 +10370,8 @@ entries:
   metadata: '{"providers": ["kilo", "nano-gpt", "novita-ai", "openrouter"], "underlying_key": "wizardlm-2-8x22b"}'
   resolution_source: models_dev
   review_status: draft
-  aliases: []
+  aliases:
+  - openai/wizardlm-2-8x22b
 - id: openbmb/MiniCPM-Llama3-V-2_5
   display_name: openbmb/MiniCPM-Llama3-V-2_5
   org_id: openbmb

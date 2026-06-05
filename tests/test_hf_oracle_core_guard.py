@@ -1,31 +1,26 @@
-"""Guardrail §5 for scripts/generate_hf_oracle_seed.py: hf_oracle mints are
+"""Guard for scripts/generate_hf_oracle_seed.py: hf_oracle mints are
 AUTHORITATIVE real HF repos that must WIN id+casing, never be suppressed.
+
+The authoritative invariant these tests pin: an hf_oracle mint's id IS the real
+HF repo id, and every mint is marked `metadata.hf_id == id` so any downstream
+dedup/reconcile consumer recognises it as authoritative and must not rewrite or
+suppress it in favor of a colliding curated-slug canonical under a different id.
+Suppressing such a mint is backwards — it would drop an authoritative HF repo to
+keep a transient dev-org slug.
 
 OFFLINE. Does NOT run the generator's destructive main() (it rewrites seed files
 in place). Loads the module via importlib and exercises the mint id-derivation +
 authoritative-marker logic in isolation.
-
-History: a prior Phase-1 `reconcile_mints_against_core` SUPPRESSED a mint when it
-normalized-collided with a curated-core canonical under a different id — exactly
-backwards (an authoritative HF repo could be dropped to keep a transient dev-org
-slug), and its §5 guard was dead code because mints carried metadata '{}'. The
-adversarial review caught this; the suppressor was removed. These tests pin the
-corrected behavior: the mint id IS the real HF repo, and every mint is marked
-`metadata.hf_id == id` so §5 consumers never rewrite/suppress it.
 """
 from __future__ import annotations
 
-import importlib.util
 import json
-from pathlib import Path
+
+from conftest import load_script_module
 
 
 def _load_module():
-    p = Path(__file__).resolve().parent.parent / "scripts" / "generate_hf_oracle_seed.py"
-    spec = importlib.util.spec_from_file_location("gen_hf_oracle_core_guard", p)
-    m = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(m)
-    return m
+    return load_script_module("generate_hf_oracle_seed", "gen_hf_oracle_core_guard")
 
 
 def test_authoritative_metadata_marks_repo_as_its_own_hf_id():
@@ -48,10 +43,10 @@ def test_canon_id_returns_the_real_hf_repo_verbatim():
 
 
 def test_mint_id_equals_its_metadata_hf_id_so_it_is_never_rewritten():
-    """The §5 invariant for an hf_oracle mint: id == metadata.hf_id, so a §5
-    consumer recognises it as the authoritative real repo and must not rewrite or
-    suppress it in favor of a colliding dev-org slug. Reproduces the mint-entry
-    construction in main()."""
+    """The authoritative invariant for an hf_oracle mint: id == metadata.hf_id,
+    so a downstream consumer recognises it as the authoritative real repo and must
+    not rewrite or suppress it in favor of a colliding dev-org slug. Reproduces the
+    mint-entry construction in main()."""
     mod = _load_module()
     tgt, _org = mod.canon_id("meta-llama/Meta-Llama-3-8B-Instruct", {"meta-llama": "meta"})
     entry = {"id": tgt, "metadata": mod.authoritative_metadata(tgt)}
@@ -59,8 +54,8 @@ def test_mint_id_equals_its_metadata_hf_id_so_it_is_never_rewritten():
 
 
 def test_nearmiss_separator_rename_is_aliased_but_cross_uploader_is_blocked():
-    """FIX 1: a same-uploader org RENAME (separator/case variant, same model name)
-    is NOT identity-changing -> aliased onto the HF-true canonical. A genuine
+    """A same-uploader org RENAME (separator/case variant, same model name) is NOT
+    identity-changing -> aliased onto the HF-true canonical. A genuine
     cross-uploader migration IS identity-changing -> blocked (resolves to self,
     never mis-aliased cross-developer)."""
     mod = _load_module()
@@ -77,11 +72,13 @@ def test_nearmiss_separator_rename_is_aliased_but_cross_uploader_is_blocked():
         "foo/model-7b", "foo/model-13b", hf_to_dev) is not None
 
 
-def test_suppressor_was_removed():
-    """The backwards `reconcile_mints_against_core` must NOT come back: an
-    authoritative HF repo is never suppressed by a curated-slug collision."""
+def test_no_mint_suppressor_against_core():
+    """No reconcile pass may suppress an authoritative HF-repo mint because it
+    normalized-collides with a curated-core canonical under a different id: that is
+    backwards (it drops the authoritative repo to keep a transient dev-org slug).
+    Pinned by asserting the generator exposes no `reconcile_mints_against_core`."""
     mod = _load_module()
     assert not hasattr(mod, "reconcile_mints_against_core"), (
-        "reconcile_mints_against_core was removed (it suppressed authoritative HF "
-        "mints, §5 violation); do not reintroduce it"
+        "do not add a reconcile pass that suppresses authoritative HF mints "
+        "(id == metadata.hf_id) in favor of a colliding curated slug"
     )

@@ -136,10 +136,9 @@ class AliasStore:
             #     reading the downloaded file.
             #   - ValueError: pyarrow.lib.ArrowInvalid (parquet corruption)
             #     subclasses ValueError.
-            # We keep the fallback-to-empty recovery (callers expect the
-            # store to construct), but emit a warning so the failure is
-            # visible — silent fallback was masking auth and corruption
-            # issues during deploys.
+            # Fall back to an empty store (callers expect construction to
+            # succeed) but emit a warning so auth and corruption failures
+            # stay visible rather than silently degrading to no aliases.
             logger.warning(
                 "AliasStore.from_hf: failed to load aliases from %r (%s: %s); "
                 "falling back to empty store",
