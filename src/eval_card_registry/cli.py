@@ -51,6 +51,32 @@ from eval_card_registry.store.hf_store import get_store
 from eval_card_registry.store import queries, schemas
 from eval_card_registry.store.queries import _is_na
 from eval_entity_resolver.normalization import normalize as _normalize_alias
+from eval_entity_resolver.display import humanize_model_slug
+
+
+def _humanized_display(entry: dict) -> str:
+    """Presentation display_name for a model, humanized at load time for the rows
+    that ship without a real label.
+
+    This shapes ONLY the stored display column — NOT alias promotion — so display
+    coverage stays fully DECOUPLED from resolution: the seed loop promotes the
+    ORIGINAL display_name (pre-humanize) as an alias exactly as before, leaving
+    every raw's resolved canonical unchanged.
+
+    - tier-3 `resolution_source == inferred` rows carry the verbatim raw EEE
+      string as their display (e.g. `EVA-UNIT-01/eva-qwen2-5-32b-v0-2`); humanize
+      that.
+    - an empty display, or a placeholder equal to the id itself
+      (`meta-llama/Llama-3.1-8B-Instruct` is an id, not a label): humanize the id.
+    - otherwise keep the curated / generator-supplied name as-is.
+    """
+    cid = str(entry.get("id") or "")
+    dn = str(entry.get("display_name") or "").strip()
+    if str(entry.get("resolution_source") or "") == "inferred" and dn:
+        return humanize_model_slug(dn)
+    if cid and (not dn or dn == cid):
+        return humanize_model_slug(cid)
+    return dn
 
 app = typer.Typer(help="eval-card-registry CLI")
 
@@ -631,9 +657,17 @@ def seed(
                 )
             if "id" not in entity_item:
                 raise typer.BadParameter(f"{label} seed entry is missing required id: {original_item!r}")
+            # Presentation-only: humanize the STORED display column for label-less
+            # model rows (tier-3 raws, empty, id-placeholder). Alias promotion
+            # below uses `display_name` = the ORIGINAL value, so resolution is
+            # unchanged — display coverage is decoupled from resolution.
+            display_name = entity_item.get("display_name", "")
+            if entity_type == "model":
+                humanized = _humanized_display(entity_item)
+                if humanized:
+                    entity_item["display_name"] = humanized
             queries.upsert_entity(store, table, entity_item, buffered=True)
             canonical_id = entity_item["id"]
-            display_name = entity_item.get("display_name", "")
             yaml_ids.add(canonical_id)
 
             # Global aliases (source_config=None): matched regardless of caller's source_config.

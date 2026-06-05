@@ -888,6 +888,23 @@ def test_phase0_oracle_aliases_preserved(resolver):
     )
 
 
+def test_model_display_names_are_humanized(models_df):
+    """GATE: every canonical model carries a real, human-facing display_name —
+    non-empty and never just the canonical id. The seed loader humanizes the
+    tail at load time (tier-3 `inferred` raws, empty rows, and id-placeholder
+    rows where a source set display_name to the id itself), so a regression here
+    means a model would render as a raw slug in the frontend."""
+    dn = models_df["display_name"].fillna("").astype(str).str.strip()
+    ids = models_df["id"].astype(str)
+    empty = sorted(models_df.loc[dn == "", "id"].tolist())
+    id_placeholder = sorted(models_df.loc[(dn != "") & (dn == ids), "id"].tolist())
+    assert not empty, f"{len(empty)} model(s) have an empty display_name: {empty[:15]}"
+    assert not id_placeholder, (
+        f"{len(id_placeholder)} model(s) have display_name == id (a raw slug, not a "
+        f"label) — the load-time humanizer should have replaced it: {id_placeholder[:15]}"
+    )
+
+
 # Snapshot (oracle_id, parent_id) edges that are allowed not to land. Each is an
 # enumerated, justified exception — any OTHER lost edge fails the gate.
 _ORACLE_EDGE_EXEMPT: frozenset = frozenset()
