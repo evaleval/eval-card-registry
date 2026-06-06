@@ -7,6 +7,7 @@ skip_ids: []
 skip_source_ids:
 - alibaba/qwen3-235b-a22b-instruct
 - anthropic/claude-35-sonnet
+- anthropic/claude-sonnet-4-5-thinking-20250929
 - cohere/cohere-command-r-plus
 - kwaipilot/kat-coder-pro
 - microsoft/phi3-medium-128k
@@ -16,6 +17,10 @@ skip_source_ids:
 - mistralai/mistral-7b-instruct
 - openai/GPT-J-6B
 - openai/GPT-NeoX-20B
+- openai/gpt-4-5-2025-02-27
+- openai/gpt-4.5-preview-2025-02-27
+- openai/gpt-5.1-instant-2025-11-12
+- openai/gpt-5.1-thinking-2025-11-12
 - paddlepaddle/paddleocr-vl
 - stable-diffusion-3-5-large
 - voyage/voyage-3-large
@@ -12799,3 +12804,78 @@ entries:
   - unknown/glm-4-5v-106b-a12b-thinking
   - unknown/glm-4-5v-thinking
   - z-ai/glm-4-5v-w-thinking
+- id: anthropic/claude-sonnet-4-5-thinking-20250929
+  display_name: Claude Sonnet 4.5 Thinking (2025-09-29)
+  org_id: anthropic
+  parents:
+  - id: anthropic/claude-sonnet-4.5-thinking
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-09-29'
+  resolution_source: NA
+  review_status: reviewed
+  resolution_granularity: variant
+  aliases:
+  - anthropic/claude-sonnet-4-5-thinking-20250929
+  metadata: '{}'
+- id: openai/gpt-4-5-2025-02-27
+  display_name: GPT-4.5 (2025-02-27)
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.5
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-02-27'
+  resolution_source: NA
+  review_status: reviewed
+  resolution_granularity: variant
+  aliases:
+  - openai/gpt-4-5-2025-02-27
+  metadata: '{}'
+- id: openai/gpt-4.5-preview-2025-02-27
+  display_name: GPT-4.5 Preview (2025-02-27)
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.5-preview
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-02-27'
+  resolution_source: NA
+  review_status: reviewed
+  resolution_granularity: variant
+  aliases:
+  - openai/gpt-4.5-preview-2025-02-27
+  metadata: '{}'
+- id: openai/gpt-5.1-instant-2025-11-12
+  display_name: GPT-5.1 Instant (2025-11-12)
+  org_id: openai
+  parents:
+  - id: openai/gpt-5.1
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-11-12'
+  resolution_source: NA
+  review_status: reviewed
+  resolution_granularity: variant
+  aliases:
+  - openai/gpt-5.1-instant-2025-11-12
+  metadata: '{}'
+- id: openai/gpt-5.1-thinking-2025-11-12
+  display_name: GPT-5.1 Thinking (2025-11-12)
+  org_id: openai
+  parents:
+  - id: openai/gpt-5.1-thinking
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-11-12'
+  resolution_source: NA
+  review_status: reviewed
+  resolution_granularity: variant
+  aliases:
+  - openai/gpt-5.1-thinking-2025-11-12
+  metadata: '{}'

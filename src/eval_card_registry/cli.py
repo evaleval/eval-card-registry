@@ -49,6 +49,8 @@ def _legacy_parent_model_id_to_parents(entry: dict) -> None:
 
 from eval_card_registry.store.hf_store import get_store
 from eval_card_registry.store import queries, schemas
+from eval_card_registry.lib import collision_fold, org_attribution
+from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
 from eval_card_registry.store.queries import _is_na
 from eval_entity_resolver.normalization import normalize as _normalize_alias
 from eval_entity_resolver.display import humanize_model_slug
@@ -334,7 +336,32 @@ def seed(
         _absorb(source_entries, extra_skip=skip_source_ids)
         _absorb(core_entries)
         _absorb(enrichment_entries, extra_skip=skip_source_ids)
-        return list(by_id.values())
+        merged = list(by_id.values())
+
+        # Attribute the developer org to malformed-org draft ids (no '/', org
+        # glued by -/.) so genuine models aren't orphaned from their developer
+        # (cohere-march-2024 -> org cohere; nvidia.nemotron-* -> nvidia/...).
+        # Runs BEFORE the fold so any normalised id can collapse with its twin.
+        merged, _org_merges = org_attribution.attribute_orgs(
+            merged, build_hf_to_dev_from_orgs_yaml(seed_path / "orgs.yaml")
+        )
+
+        # Fold normalize-collisions: the SAME model minted under different
+        # separator spellings (gemini-1.5-pro vs gemini-1-5-pro, gpt-5.2 vs the
+        # venice relabel gpt-52) collapses into ONE canonical so it surfaces as
+        # one page. Guarded against false size merges (opt-1.3b != opt-13b); a
+        # curated collision_overrides.yaml carries the do-not-fold list + winner
+        # pins. (See lib/collision_fold.py.)
+        ov_file = models_dir / "collision_overrides.yaml"
+        never_fold, prefer = [], {}
+        if ov_file.is_file():
+            ov = yaml.safe_load(ov_file.read_text()) or {}
+            never_fold = ov.get("never_fold") or []
+            prefer = ov.get("prefer") or {}
+        merged, _remap = collision_fold.fold_collisions(
+            merged, never_fold, prefer, force_merge=_org_merges
+        )
+        return merged
 
     # ------------------------------------------------------------------
     # Benchmarks — two-source load:

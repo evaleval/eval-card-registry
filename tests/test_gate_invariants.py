@@ -784,6 +784,7 @@ ORACLE_SNAPSHOT_DIR = REGISTRY_ROOT / "curation" / "oracle_snapshot"
 _ORACLE_CANON_EXEMPT: frozenset = frozenset({
     "openai/aion-labs-aion-2-0",           # oracle embedded the org in the leaf -> aion-labs/aion-2-0
     "unknown/perplexity-sonar-reasoning",  # `unknown/` placeholder host -> perplexity/sonar-reasoning
+    "unknown/cohere-embed-v-4-0",          # `unknown/` placeholder host -> cohere/embed-v4-0 (collision fold)
     # ai21 == ai21-labs (same developer; HF org is ai21-labs). The leaf also
     # gains an `ai21-` brand prefix in the real repo so the same-model-leaf rule
     # can't auto-detect it; resolving to ai21-labs/ai21-jamba-* is correct.
@@ -908,7 +909,34 @@ def test_model_display_names_are_humanized(models_df):
 
 # Snapshot (oracle_id, parent_id) edges that are allowed not to land. Each is an
 # enumerated, justified exception — any OTHER lost edge fails the gate.
-_ORACLE_EDGE_EXEMPT: frozenset = frozenset()
+#
+# Dated-snapshot reclassification (finetune -> variant/version): each of these is
+# a pinned release snapshot of its SAME-org base (e.g. gpt-5.4-pro-2026-03-05 of
+# gpt-5.4-pro). The snapshot recorded the edge as `finetune`, which is not
+# identity-preserving — it broke the model-group walk so every snapshot surfaced
+# as a SEPARATE model page from its base. They are now `variant/version` edges
+# (same release along the version line) so they fold into the base's group; the
+# old `finetune` tuple intentionally no longer lands.
+_ORACLE_EDGE_EXEMPT: frozenset = frozenset({
+    ("alibaba/qwen3-vl-plus-2025-09-23", "alibaba/qwen3-vl-plus"),
+    ("anthropic/claude-sonnet-4-5-thinking-20250929", "anthropic/claude-sonnet-4.5-thinking"),
+    ("openai/gpt-4-5-2025-02-27", "openai/gpt-4.5"),
+    ("openai/gpt-4-turbo-2024-04-09", "openai/gpt-4-turbo"),
+    ("openai/gpt-4.1-2025-04-14", "openai/gpt-4.1"),
+    ("openai/gpt-4.1-nano-2025-04-14", "openai/gpt-4.1-nano"),
+    ("openai/gpt-4.5-preview-2025-02-27", "openai/gpt-4.5"),
+    ("openai/gpt-5-mini-2025-08-07", "openai/gpt-5-mini"),
+    ("openai/gpt-5-nano-2025-08-07", "openai/gpt-5-nano"),
+    ("openai/gpt-5-pro-2025-10-06", "openai/gpt-5-pro"),
+    ("openai/gpt-5.1-high-2025-11-12", "openai/gpt-5.1"),
+    ("openai/gpt-5.1-instant-2025-11-12", "openai/gpt-5.1"),
+    ("openai/gpt-5.1-medium-2025-11-12", "openai/gpt-5.1"),
+    ("openai/gpt-5.1-thinking-2025-11-12", "openai/gpt-5.1-thinking"),
+    ("openai/gpt-5.2-2025-12-11", "openai/gpt-5.2"),
+    ("openai/gpt-5.2-pro-2025-12-11", "openai/gpt-5.2-pro"),
+    ("openai/gpt-5.4-2026-03-05", "openai/gpt-5.4"),
+    ("openai/gpt-5.4-pro-2026-03-05", "openai/gpt-5.4-pro"),
+})
 
 
 @pytest.mark.slow
@@ -1027,6 +1055,37 @@ _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
     # non-existent `…-120b` base; A12B is the MoE active-param notation, not a
     # separate size); the real canonical is correctly a singleton root.
     ("model_family_id", "nvidia/nemotron-3-super-120b-a12b"),
+    # Dated-snapshot reclassification (finetune -> variant/version): a pinned
+    # release snapshot of its same-org base is the SAME model along the version
+    # line, so it correctly has NO finetune/quant lineage origin. The snapshot's
+    # (buggy) finetune edge walked to a lineage_origin; that origin is
+    # intentionally dropped now the edge is variant/version. (model_group_id is
+    # GAINED here, not lost — these now fold into the base group.)
+    ("lineage_origin_model_id", "alibaba/qwen3-vl-plus-2025-09-23"),
+    ("lineage_origin_model_id", "anthropic/claude-sonnet-4-5-thinking-20250929"),
+    ("lineage_origin_model_id", "openai/gpt-4-5-2025-02-27"),
+    ("lineage_origin_model_id", "openai/gpt-4-turbo-2024-04-09"),
+    ("lineage_origin_model_id", "openai/gpt-4.1-2025-04-14"),
+    ("lineage_origin_model_id", "openai/gpt-4.1-nano-2025-04-14"),
+    ("lineage_origin_model_id", "openai/gpt-4.5-preview-2025-02-27"),
+    ("lineage_origin_model_id", "openai/gpt-5-mini-2025-08-07"),
+    ("lineage_origin_model_id", "openai/gpt-5-nano-2025-08-07"),
+    ("lineage_origin_model_id", "openai/gpt-5-pro-2025-10-06"),
+    ("lineage_origin_model_id", "openai/gpt-5.1-high-2025-11-12"),
+    ("lineage_origin_model_id", "openai/gpt-5.1-instant-2025-11-12"),
+    ("lineage_origin_model_id", "openai/gpt-5.1-medium-2025-11-12"),
+    ("lineage_origin_model_id", "openai/gpt-5.1-thinking-2025-11-12"),
+    ("lineage_origin_model_id", "openai/gpt-5.2-2025-12-11"),
+    ("lineage_origin_model_id", "openai/gpt-5.2-pro-2025-12-11"),
+    ("lineage_origin_model_id", "openai/gpt-5.4-2026-03-05"),
+    ("lineage_origin_model_id", "openai/gpt-5.4-pro-2026-03-05"),
+    # Normalize-collision fold (lib/collision_fold.py): these dated Claude 3.5
+    # Sonnet snapshots are the surviving canonical after folding the dashed/
+    # compact-date spelling in; as version snapshots they correctly carry a
+    # variant/version edge (no finetune lineage origin). The oracle recorded a
+    # finetune-derived origin on the folded spelling; intentionally dropped.
+    ("lineage_origin_model_id", "anthropic/claude-3.5-sonnet-2024-06-20"),
+    ("lineage_origin_model_id", "anthropic/claude-3.5-sonnet-2024-10-22"),
 })
 
 

@@ -1,0 +1,16 @@
+# Curated exceptions to the seed-time normalize-collision fold
+# (src/eval_card_registry/lib/collision_fold.py). The fold collapses canonicals
+# that are the SAME model under separator-stripping (gemini-1.5-pro vs
+# gemini-1-5-pro; gpt-5.2 vs the venice relabel gpt-52) into one canonical.
+#
+# never_fold: id pairs that collide under separator-stripping but are DIFFERENT
+#   models — a separator difference that changes a parameter SIZE's value. These
+#   are also caught automatically by the `…b` (billions) size guard; listed here
+#   so the intent is explicit and reviewable.
+# prefer: pin the winning canonical id for a collision key
+#   (collision_key = id lowercased with -, _, ., / removed). Empty = use the
+#   automatic winner rule (prefer real-HF/curated source, then dotted spelling).
+never_fold:
+- [deepseek/deepseek-coder-1.3b, deepseek/deepseek-coder-13b]
+- [facebook/opt-1.3b, facebook/opt-13b]
+prefer: {}
