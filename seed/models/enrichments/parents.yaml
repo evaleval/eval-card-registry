@@ -5909,7 +5909,8 @@
 - id: alibaba/qwen3-vl-plus-2025-09-23
   parents:
   - id: alibaba/qwen3-vl-plus
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: alibaba/qwen3.5-122b-instruct
   parents:
   - id: alibaba/qwen3-5-122b
@@ -12999,11 +13000,13 @@
 - id: openai/gpt-4-turbo-2024-04-09
   parents:
   - id: openai/gpt-4-turbo
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4.1-2025-04-14
   parents:
   - id: openai/gpt-4.1
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4.1-mini
   parents:
   - id: openai/gpt-4.1
@@ -13022,7 +13025,8 @@
 - id: openai/gpt-4.1-nano-2025-04-14
   parents:
   - id: openai/gpt-4.1-nano
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4.5-preview-2025-02-27
   parents:
   - id: openai/gpt-4.5
@@ -13158,7 +13162,8 @@
 - id: openai/gpt-5-mini-2025-08-07
   parents:
   - id: openai/gpt-5-mini
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5-mini-2025-08-07-fc
   parents:
   - id: openai/gpt-5-mini
@@ -13186,7 +13191,8 @@
 - id: openai/gpt-5-nano-2025-08-07
   parents:
   - id: openai/gpt-5-nano
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5-nano-2025-08-07-fc
   parents:
   - id: openai/gpt-5-nano
@@ -13214,7 +13220,8 @@
 - id: openai/gpt-5-pro-2025-10-06
   parents:
   - id: openai/gpt-5-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.1-2025-11-13
   parents:
   - id: openai/gpt-5.1
@@ -13223,7 +13230,8 @@
 - id: openai/gpt-5.1-high-2025-11-12
   parents:
   - id: openai/gpt-5.1
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.1-instant-2025-11-12
   parents:
   - id: openai/gpt-5.1
@@ -13231,7 +13239,8 @@
 - id: openai/gpt-5.1-medium-2025-11-12
   parents:
   - id: openai/gpt-5.1
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.1-thinking
   parents:
   - id: openai/gpt-5.1
@@ -13244,15 +13253,18 @@
 - id: openai/gpt-5.2-2025-12-11
   parents:
   - id: openai/gpt-5.2
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.2-pro-2025-12-11
   parents:
   - id: openai/gpt-5.2-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.4-2026-03-05
   parents:
   - id: openai/gpt-5.4
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.4-2026-03-05-xhigh-thinking
   parents:
   - id: openai/gpt-5.4
@@ -13270,7 +13282,8 @@
 - id: openai/gpt-5.4-pro-2026-03-05
   parents:
   - id: openai/gpt-5.4-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-o1
   parents:
   - id: openai/o1
@@ -15460,3 +15473,23 @@
   parents:
   - id: Qwen/Qwen2.5-32B-Instruct
     relationship: finetune
+- id: openai/gpt-4-1-2025-04-14
+  parents:
+  - id: openai/gpt-4.1
+    relationship: variant
+    axis: version
+- id: openai/gpt-4-1-mini-2025-04-14
+  parents:
+  - id: openai/gpt-4.1-mini
+    relationship: variant
+    axis: version
+- id: openai/gpt-4-1-nano-2025-04-14
+  parents:
+  - id: openai/gpt-4.1-nano
+    relationship: variant
+    axis: version
+- id: openai/gpt-5-2025-08-07
+  parents:
+  - id: openai/gpt-5
+    relationship: variant
+    axis: version

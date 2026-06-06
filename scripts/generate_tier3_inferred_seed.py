@@ -270,6 +270,26 @@ def has_derivation_marker(name: str) -> bool:
     return any(m in tokset for m in DERIVATION_MARKERS)
 
 
+def _is_pure_version_suffix(tokens: list[str]) -> bool:
+    """True iff the suffix tokens (the delta between a child id and its confirmed
+    base) are PURELY a release-snapshot date or version string — e.g.
+    `2026-03-05`, `20250929`, `2025-08`, `v0-3`. When the only difference from a
+    confirmed base is such a suffix, the id is the SAME model identity along the
+    version line and earns an identity-preserving `variant/version` edge (folds
+    into the base's model group), rather than the conservative `finetune`."""
+    if not tokens:
+        return False
+    joined = "-".join(tokens)
+    # Full ISO / compact / year-month date forms (tokens split on separators, so
+    # a date like 2026-03-05 arrives as ['2026','03','05']).
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}|\d{8}|\d{4}-\d{2}|\d{6}", joined):
+        return True
+    # vN(-N)* version strings (slugified v0.3 -> v0-3).
+    if re.fullmatch(r"v\d+(?:-\d+)*", joined):
+        return True
+    return False
+
+
 def main() -> None:
     oracle = json.loads(ORACLE.read_text())["resolutions"]
     curated_orgs = _load_curated_orgs()
@@ -391,18 +411,19 @@ def main() -> None:
             except StopIteration:
                 start = 0
             tail = name_toks[start:]
-            candidates: list[str] = []
+            candidates: list[tuple[str, int]] = []
             for end in range(len(tail), 0, -1):
                 stem = "-".join(tail[:end])
                 if has_org:
                     org_slug = raw.split("/", 1)[0]
                     dev = hf_to_dev.get(org_slug.lower(), org_slug)
-                    candidates.append(f"{dev}/{stem}")
-                candidates.append(stem)
+                    candidates.append((f"{dev}/{stem}", end))
+                candidates.append((stem, end))
             # de-dup preserving order; skip a candidate identical to raw itself.
             raw_name_nz = _nz(name_for_infer)
             seen = set()
-            for cand in candidates:
+            confirmed_end: Optional[int] = None
+            for cand, end in candidates:
                 if cand in seen or _nz(cand) == _nz(raw):
                     continue
                 seen.add(cand)
@@ -417,15 +438,26 @@ def main() -> None:
                 if _nz(hit) == _nz(raw) or _nz(hit_name) == raw_name_nz:
                     continue
                 confirmed_base = hit
+                confirmed_end = end
                 break
             if confirmed_base:
-                # Derivation marker present => finetune (new release, no axis).
-                # Otherwise it's a variant of a known base along the family
-                # version line; emit a plain finetune edge unless the only
-                # difference is a recognized variant axis. We stay conservative:
-                # mark `finetune` (community uploads are overwhelmingly
-                # finetunes/merges of the confirmed base).
-                parent_edge = {"id": confirmed_base, "relationship": "finetune"}
+                # The tokens AFTER the confirmed base stem are the delta suffix.
+                # When that delta is PURELY a date/version snapshot, the id is the
+                # same model identity along the version line -> emit an
+                # identity-preserving `variant/version` edge so it folds into the
+                # base's model group (a dated snapshot like `gpt-4o-2024-05-13` is
+                # the same release as the moving `gpt-4o` pointer). Anything else
+                # stays a conservative `finetune` (community uploads are
+                # overwhelmingly finetunes/merges of the confirmed base).
+                suffix_toks = tail[confirmed_end:] if confirmed_end is not None else []
+                if _is_pure_version_suffix(suffix_toks):
+                    parent_edge = {
+                        "id": confirmed_base,
+                        "relationship": "variant",
+                        "axis": "version",
+                    }
+                else:
+                    parent_edge = {"id": confirmed_base, "relationship": "finetune"}
 
         # --- mint id + org -------------------------------------------------
         if has_org:
