@@ -27,11 +27,6 @@ relationships:
     relationship_type: extended_from
     is_confirmed: true
 
-  - entity_a: core-bench-hard
-    entity_b: core-bench
-    relationship_type: subset_of
-    is_confirmed: true
-
   - entity_a: terminalbench-hard
     entity_b: terminal-bench
     relationship_type: subset_of
@@ -110,6 +105,198 @@ relationships:
   - entity_a: mmlu-pro
     entity_b: mmlu
     relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: aime-2024
+    entity_b: aime
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: aime-2025
+    entity_b: aime
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: aime-2026
+    entity_b: aime
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: arc-agi-2
+    entity_b: arc-agi
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: arc-agi-3
+    entity_b: arc-agi-2
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: mmmu-pro
+    entity_b: mmmu
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: humaneval-v
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: humaneval-haskell
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: humaneval-decompile
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: humaneval-nfr
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: humanevalcomm
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: humanevalnext
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: mhumaneval
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: buggy-humaneval
+    entity_b: humaneval
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: humaneval-plus
+    entity_b: evalplus
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: mbpp-plus
+    entity_b: mbpp
+    relationship_type: extended_from
+    is_confirmed: true
+
+  # --- Missing successor/subset edges (no parent change) ---
+
+  - entity_a: tau2-bench
+    entity_b: tau-bench
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: terminal-bench-2
+    entity_b: terminal-bench
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: bfcl-v2
+    entity_b: bfcl
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: bfcl-v3
+    entity_b: bfcl
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: mm-vet-v2
+    entity_b: mm-vet
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: mrcr-v2
+    entity_b: mrcr
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: osworld-verified
+    entity_b: osworld
+    relationship_type: version_of
+    is_confirmed: true
+
+  - entity_a: osworld-extended
+    entity_b: osworld
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: bigcodebench-hard
+    entity_b: bigcodebench
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: healthbench-hard
+    entity_b: healthbench
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: simpleqa-verified
+    entity_b: simpleqa
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: browsecomp-small
+    entity_b: browsecomp
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: browsecomp-plus
+    entity_b: browsecomp
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: browsecomp-zh
+    entity_b: browsecomp
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: mathvista-mini
+    entity_b: mathvista
+    relationship_type: subset_of
+    is_confirmed: true
+
+  - entity_a: global-mmlu
+    entity_b: mmlu
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: screenspot-pro
+    entity_b: screenspot
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: seed-bench-2-plus
+    entity_b: seed-bench-2
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: mmsearch-plus
+    entity_b: mmsearch
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: effibench-x
+    entity_b: effibench
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: vibe-pro
+    entity_b: vibe
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: swe-polybench-verified
+    entity_b: swe-polybench
+    relationship_type: subset_of
     is_confirmed: true
 
   # --- Nesting relationships (also in parent_benchmark_id) ---

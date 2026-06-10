@@ -115,6 +115,7 @@ fibble-arena:
 tau-bench:
   display: Tau-Bench
   category: agentic
+  benchmarks: [tau-bench, tau2-bench]
   folder_aliases:
     - tau-bench
     - tau-bench-2
@@ -139,7 +140,7 @@ cyse2:
 mmmu:
   display: MMMU
   category: multimodal
-  benchmarks: [mmmu, mmmu-multiple-choice, mmmu-open-ended]
+  benchmarks: [mmmu, mmmu-multiple-choice, mmmu-open-ended, mmmu-pro]
   folder_aliases:
     - MMMU-Multiple-Choice
     - MMMU-Open-Ended
@@ -202,3 +203,32 @@ hf-open-llm-v2:
   display: HF Open LLM v2
   category: general
   composite_keys: [hf-open-llm-v2]
+
+aime:
+  display: AIME family
+  category: math
+  benchmarks: [aime, aime-2024, aime-2025, aime-2026]
+
+arc-agi:
+  display: ARC-AGI family
+  category: reasoning
+  benchmarks: [arc-agi, arc-agi-2, arc-agi-3]
+
+humaneval:
+  display: HumanEval family
+  category: code
+  benchmarks:
+    - humaneval
+    - humaneval-v
+    - humaneval-haskell
+    - humaneval-decompile
+    - humaneval-nfr
+    - humanevalcomm
+    - humanevalnext
+    - mhumaneval
+    - buggy-humaneval
+
+evalplus:
+  display: EvalPlus family
+  category: code
+  benchmarks: [evalplus, humaneval-plus, mbpp-plus]
