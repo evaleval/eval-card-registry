@@ -4348,6 +4348,30 @@ entries:
   review_status: reviewed
   aliases:
   - claude-3.5-sonnet-v2
+- id: anthropic/claude-fable-5
+  display_name: Claude Fable 5
+  org_id: anthropic
+  family: claude-fable-5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-06-09'
+  input_modalities:
+  - image
+  - pdf
+  - text
+  output_modalities:
+  - text
+  tags: null
+  metadata: null
+  review_status: reviewed
+  aliases:
+  - claude-fable-5
+  - anthropic.claude-fable-5
+  - eu.anthropic.claude-fable-5
+  - global.anthropic.claude-fable-5
+  - us.anthropic.claude-fable-5
 - id: anthropic/claude-haiku-4.5-thinking
   display_name: Claude Haiku 4.5 Thinking
   org_id: anthropic
@@ -4410,6 +4434,27 @@ entries:
   review_status: reviewed
   aliases:
   - anthropic.claude-opus-4-6-v1
+- id: anthropic/claude-opus-4.7-non-reasoning
+  display_name: Claude Opus 4.7 Non-Reasoning
+  org_id: anthropic
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: anthropic/claude-opus-4.7
+    relationship: variant
+    axis: mode
+  open_weights: false
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: null
+  metadata: null
+  review_status: reviewed
+  aliases:
+  - claude-opus-4.7-non-reasoning
+  - claude-opus-4-7-non-reasoning
+  - anthropic/claude-opus-4-7-non-reasoning
 - id: anthropic/claude-sonnet-4.5-thinking
   display_name: Claude Sonnet 4.5 Thinking
   org_id: anthropic
