@@ -103,7 +103,7 @@
 
 - id: mmlu
   display_name: MMLU
-  aliases: ["MMLU All Subjects"]
+  aliases: ["MMLU All Subjects", "mmlu-base", "Mmlu Base", "mmlu_base", "llm_stats_mmlu_base"]
   scoped_aliases:
     helm_mmlu:
       - "helm_mmlu"
@@ -692,7 +692,7 @@
   aliases: ["v2_Semi_Private", "v2_semi_private"]
   description: ARC-AGI v2 semi-private evaluation set.
   dataset_repo: null
-  parent_benchmark_id: arc-agi
+  parent_benchmark_id: arc-agi-2
   tags: '["reasoning", "abstraction"]'
   metadata: '{}'
   review_status: reviewed
@@ -702,7 +702,7 @@
   aliases: ["v2_Public_Eval", "v2_public_eval"]
   description: ARC-AGI v2 public evaluation set.
   dataset_repo: null
-  parent_benchmark_id: arc-agi
+  parent_benchmark_id: arc-agi-2
   tags: '["reasoning", "abstraction"]'
   metadata: '{}'
   review_status: reviewed
@@ -1039,7 +1039,7 @@
   aliases: ["core-bench-hard", "core_bench_hard", "corebench-hard", "CORE-Bench Hard", "hal-corebench-hard"]
   description: CORE-Bench Hard — hardest of the three CORE-Bench difficulty tiers; agent receives only the README and must figure out env setup, run code, and answer questions. HAL is the official leaderboard for the Hard tier.
   dataset_repo: siegelz/core-bench
-  parent_benchmark_id: null
+  parent_benchmark_id: core-bench
   tags: '["agent", "reproducibility"]'
   metadata: '{}'
   review_status: reviewed
@@ -1124,7 +1124,7 @@
   aliases: ["v2_Private_Eval", "v2_private_eval", "arc_agi_v2_private_eval"]
   description: ARC-AGI v2 private evaluation set.
   dataset_repo: null
-  parent_benchmark_id: arc-agi
+  parent_benchmark_id: arc-agi-2
   tags: '["reasoning", "abstraction"]'
   metadata: '{}'
   review_status: reviewed
@@ -1134,7 +1134,7 @@
   aliases: ["v3_Semi_Private", "v3_semi_private", "arc_agi_v3_semi_private"]
   description: ARC-AGI v3 semi-private evaluation set.
   dataset_repo: null
-  parent_benchmark_id: arc-agi
+  parent_benchmark_id: arc-agi-3
   tags: '["reasoning", "abstraction"]'
   metadata: '{}'
   review_status: reviewed
@@ -1488,7 +1488,7 @@
   aliases: ["AIME-25", "Aime 25", "aime_25", "aime-25", "AIME 2025", "aime-2025", "aime_2025", "aime 2025", "artificial_analysis.aime_25", "artificial_analysis_aime_25", "Aime aime 2025", "vals_ai_aime_aime_2025", "llm_stats_aime_2025"]
   description: AIME 2025 problem set — used by AA and others as a frontier math reasoning benchmark distinct from earlier AIME years.
   dataset_repo: null
-  parent_benchmark_id: aime
+  parent_benchmark_id: null
   tags: '["math", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
@@ -2248,6 +2248,10 @@
     - BigCodeBench
     - bigcodebench
     - bigcode/bigcodebench
+    - bigcodebench-full
+    - Bigcodebench Full
+    - bigcodebench_full
+    - llm_stats_bigcodebench_full
   description: BigCodeBench — coding benchmark covering many libraries and tasks (Hugging Face BigCode project).
   dataset_repo: bigcode/bigcodebench
   parent_benchmark_id: null
@@ -2273,9 +2277,9 @@
     - MMMU-Pro
     - mmmu-pro
     - mmmu_pro
-  description: MMMU-Pro — harder version of MMMU with stricter answer formats and adversarial variants.
+  description: MMMU-Pro — harder version of MMMU with stricter answer formats and adversarial variants. Successor benchmark, not a subset — kept un-parented so it is never folded into MMMU as a slice.
   dataset_repo: null
-  parent_benchmark_id: mmmu
+  parent_benchmark_id: null
   tags: '["multimodal", "knowledge"]'
   metadata: '{}'
   review_status: reviewed
@@ -2329,9 +2333,23 @@
     - ARC AGI 2
     - arc_agi_2
     - arc-agi-v2
-  description: ARC-AGI 2 — second-generation ARC (Abstraction and Reasoning Corpus) benchmark.
+  description: ARC-AGI 2 — second-generation ARC (Abstraction and Reasoning Corpus) benchmark. Successor benchmark, not a subset — kept un-parented so it is never folded into ARC-AGI as a slice.
   dataset_repo: null
-  parent_benchmark_id: arc-agi
+  parent_benchmark_id: null
+  tags: '["reasoning", "abstract-reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-agi-3
+  display_name: ARC-AGI 3
+  aliases:
+    - ARC-AGI-3
+    - ARC AGI 3
+    - arc_agi_3
+    - arc-agi-v3
+  description: ARC-AGI 3 — third-generation ARC Prize benchmark (interactive game-environment tasks). Successor benchmark, not a subset — kept un-parented; parents the v3 eval-set splits.
+  dataset_repo: null
+  parent_benchmark_id: null
   tags: '["reasoning", "abstract-reasoning"]'
   metadata: '{}'
   review_status: reviewed
@@ -2809,7 +2827,7 @@
   display_name: AIME 2024
   description: AIME 2024 problem set — frontier math reasoning benchmark for the 2024 American Invitational Mathematics Examination year.
   dataset_repo: null
-  parent_benchmark_id: aime
+  parent_benchmark_id: null
   tags: '["math", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
@@ -2830,7 +2848,7 @@
   display_name: AIME 2026
   description: AIME 2026 problem set — frontier math reasoning benchmark for the 2026 American Invitational Mathematics Examination year.
   dataset_repo: null
-  parent_benchmark_id: aime
+  parent_benchmark_id: null
   tags: '["math", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
@@ -3910,19 +3928,6 @@
     - big-bench-hard
     - big_bench_hard
     - llm_stats_big_bench_hard
-
-- id: bigcodebench-full
-  display_name: Bigcodebench Full
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["coding"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Bigcodebench Full
-    - bigcodebench-full
-    - bigcodebench_full
-    - llm_stats_bigcodebench_full
 
 - id: bigcodebench-hard
   display_name: Bigcodebench Hard
@@ -14042,19 +14047,6 @@
     - mmlongbench-doc
     - mmlongbench_doc
 
-- id: mmlu-base
-  display_name: Mmlu Base
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["reasoning"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Mmlu Base
-    - llm_stats_mmlu_base
-    - mmlu-base
-    - mmlu_base
-
 - id: mmlu-chat
   display_name: Mmlu Chat
   dataset_repo: null
@@ -17007,7 +16999,7 @@
 - id: polymath-en
   display_name: Polymath En
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: polymath
   tags: '["math"]'
   metadata: '{}'
   review_status: reviewed
@@ -24269,18 +24261,6 @@
     - caparena-vs-gpt-4o
     - caparena_auto_caparena_auto_score_vs_gpt_4o
 
-- id: caparena-auto-avg
-  display_name: CapArena-Auto Score (avg)
-  dataset_repo: null
-  parent_benchmark_id: caparena-auto
-  tags: '["multimodal"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - CapArena-Auto Score (avg)
-    - caparena-auto-avg
-    - caparena_auto_caparena_auto_score_avg
-
 - id: judgebench-knowledge
   display_name: JudgeBench Knowledge
   description: JudgeBench — knowledge sub-category.
@@ -24360,7 +24340,7 @@
   display_name: HumanEval-V
   description: HumanEval-V — vision-language benchmark adapting HumanEval-style coding problems to multimodal models (visual context required to solve).
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding", "multimodal"]'
   metadata: '{}'
   review_status: reviewed
@@ -24373,7 +24353,7 @@
   display_name: HumanEval-Haskell
   description: HumanEval ported to Haskell — same problem set, evaluated against Haskell solutions.
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding", "multilingual-code"]'
   metadata: '{}'
   review_status: reviewed
@@ -24386,7 +24366,7 @@
   display_name: HumanEval-Decompile
   description: HumanEval-Decompile — benchmark probing models' ability to decompile assembly/binary back to source C, derived from HumanEval problems.
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding", "decompilation"]'
   metadata: '{}'
   review_status: reviewed
@@ -24399,7 +24379,7 @@
   display_name: HumanEval-NFR
   description: HumanEval-NFR — HumanEval extended with non-functional requirements (performance, security, style) beyond pass/fail correctness.
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding"]'
   metadata: '{}'
   review_status: reviewed
@@ -24412,7 +24392,7 @@
   display_name: HumanEvalComm
   description: HumanEvalComm — HumanEval variant focused on communication competency, requiring models to ask clarifying questions on ambiguous problem specs.
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding", "communication"]'
   metadata: '{}'
   review_status: reviewed
@@ -24426,7 +24406,7 @@
   display_name: HumanEvalNext
   description: HumanEvalNext — extended HumanEval with harder, perturbed problems aimed at reducing leakage and benchmark saturation.
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding"]'
   metadata: '{}'
   review_status: reviewed
@@ -24440,7 +24420,7 @@
   display_name: mHumanEval
   description: mHumanEval — multilingual extension of HumanEval covering many natural languages and programming languages.
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding", "multilingual"]'
   metadata: '{}'
   review_status: reviewed
@@ -24454,7 +24434,7 @@
   display_name: Buggy-HumanEval
   description: Buggy-HumanEval — HumanEval problems perturbed with intentional bugs to evaluate debugging / repair ability.
   dataset_repo: null
-  parent_benchmark_id: humaneval
+  parent_benchmark_id: null
   tags: '["coding", "debugging"]'
   metadata: '{}'
   review_status: reviewed
@@ -24495,7 +24475,7 @@
   display_name: HumanEval+
   description: HumanEval+ — EvalPlus's enhanced-test-suite version of HumanEval (~80x more tests for stricter correctness).
   dataset_repo: evalplus/evalplus
-  parent_benchmark_id: evalplus
+  parent_benchmark_id: null
   tags: '["coding"]'
   metadata: '{}'
   review_status: reviewed
@@ -24537,6 +24517,10 @@
 
 - id: caparena-auto
   display_name: CapArena-Auto
+  aliases:
+    - caparena-auto-avg
+    - CapArena-Auto Score (avg)
+    - caparena_auto_caparena_auto_score_avg
   description: CapArena automatic evaluation — aggregates across vs-reference and caption-length metrics.
   dataset_repo: null
   parent_benchmark_id: null
