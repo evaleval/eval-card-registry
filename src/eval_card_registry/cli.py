@@ -50,8 +50,8 @@ def _legacy_parent_model_id_to_parents(entry: dict) -> None:
 from eval_card_registry.store.hf_store import get_store
 from eval_card_registry.store import queries, schemas
 from eval_card_registry.lib import collision_fold, org_attribution
-from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
-from eval_card_registry.store.queries import _is_na
+from eval_card_registry.lib.seed_io import WEAK_SCALAR_FIELDS, build_hf_to_dev_from_orgs_yaml
+from eval_card_registry.store.queries import _derive_release_date_from_id, _is_na
 from eval_entity_resolver.normalization import normalize as _normalize_alias
 from eval_entity_resolver.display import humanize_model_slug
 
@@ -147,6 +147,9 @@ def seed(
     # Merge order: sources → core → enrichments. Field-level merge per entry
     # (aliases / tags UNION; other scalars prefer non-empty, last-write-wins).
     # `skip_ids` from core drops generated entries we don't want.
+    # Source enrich records may carry a `weak:` scalar map (donated from a
+    # suppressed/folded mint); weak values are applied LAST, filling only
+    # fields every strong merge left empty — see the weak-fill block below.
     # ------------------------------------------------------------------
     def _load_models_merged() -> list[dict]:
         models_dir = seed_path / "models"
@@ -159,12 +162,36 @@ def seed(
         enrichment_entries: list[dict] = []
         skip_ids: set[str] = set()
 
+        def _is_empty(v) -> bool:
+            if v is None:
+                return True
+            if isinstance(v, (list, dict)) and len(v) == 0:
+                return True
+            if isinstance(v, str) and v.strip() in ("", "[]", "{}"):
+                return True
+            return False
+
+        # WEAK scalar contributions: a generated enrich record may carry a
+        # `weak: {field: value}` map (scalars donated from a suppressed/folded
+        # mint by scripts/refresh_from_modelsdev.py). Pulled out at load so
+        # they never enter the strong field merge; applied after ALL strong
+        # merges (see the weak-fill block below). Collected in deterministic
+        # order: source files in sorted-filename order, records in file order.
+        weak_candidates: list[tuple[str, str, object]] = []
         if sources_dir.is_dir():
             for src_path in sorted(sources_dir.glob("*.generated.yaml")):
                 with open(src_path) as f:
                     loaded = yaml.safe_load(f) or []
                 if not isinstance(loaded, list):
                     raise typer.BadParameter(f"{src_path} must be a flat list")
+                for entry in loaded:
+                    if not isinstance(entry, dict) or not entry.get("id"):
+                        continue
+                    weak = entry.pop("weak", None)
+                    if isinstance(weak, dict):
+                        for field in WEAK_SCALAR_FIELDS:
+                            if not _is_empty(weak.get(field)):
+                                weak_candidates.append((entry["id"], field, weak[field]))
                 source_entries.extend(loaded)
 
         skip_source_ids: set[str] = set()
@@ -184,6 +211,15 @@ def seed(
                 skip_source_ids = set(loaded.get("skip_source_ids", []) or [])
             else:
                 raise typer.BadParameter(f"{core_file} unexpected shape {type(loaded)}")
+
+        # Keys EXPLICITLY present on each core entry — even with a null value.
+        # An explicit core null (e.g. `open_weights: null` where the upstream
+        # catalog's value is known-wrong) is a curated "unknown" and blocks
+        # weak fill on that field; weak fills only keys core leaves ABSENT.
+        core_explicit: dict[str, set[str]] = {}
+        for entry in core_entries:
+            if isinstance(entry, dict) and entry.get("id"):
+                core_explicit.setdefault(entry["id"], set()).update(entry.keys())
 
         # Enrichment overlays: every enrichments/*.yaml (flat list of {id, ...}),
         # field-merged onto the matching canonical (aliases + parents UNION; see
@@ -259,15 +295,6 @@ def seed(
             # Re-encode if either source was a JSON string (the parquet column
             # is VARCHAR; _json_encode_if_needed downstream handles either).
             tags_merged = _json.dumps(tgt_tags) if (tgt_was_json or src_was_json) else tgt_tags
-
-            def _is_empty(v) -> bool:
-                if v is None:
-                    return True
-                if isinstance(v, (list, dict)) and len(v) == 0:
-                    return True
-                if isinstance(v, str) and v.strip() in ("", "[]", "{}"):
-                    return True
-                return False
 
             # Union `parents` by id. For an edge present in both, field-merge
             # within the edge so a later source can fill in `axis` (or correct
@@ -402,6 +429,32 @@ def seed(
         merged, _remap = collision_fold.fold_collisions(
             merged, never_fold, prefer, force_merge=_org_merges
         )
+
+        # WEAK FILL — LAST, after every strong merge INCLUDING the collision
+        # fold (a folded-in full entry's scalars are strong too), so a value
+        # from any full entry beats a weak one regardless of file load order.
+        # A weak value lands only when the merged field is still empty AND the
+        # key is not explicitly present on the core entry (an explicit core
+        # null is a curated unknown — see core_explicit above). Two weak values
+        # for the same (id, field): the FIRST contribution wins — source files
+        # in sorted-filename order, records in file order (weak_candidates).
+        weak_scalars: dict[tuple[str, str], object] = {}
+        for eid, field, value in weak_candidates:
+            if eid in skip_ids or eid in skip_source_ids:
+                continue
+            weak_scalars.setdefault((_remap.get(eid, eid), field), value)
+        by_merged_id = {e["id"]: e for e in merged}
+        for (eid, field), value in weak_scalars.items():
+            target = by_merged_id.get(eid)
+            if target is None or field in core_explicit.get(eid, ()):
+                continue
+            # A dated-snapshot id's parsed date outranks weak data: the
+            # seed-time derive fallback (`release_date_derived_from_id`) would
+            # fill it anyway, and the id stamp is the snapshot's own identity.
+            if field == "release_date" and _derive_release_date_from_id(eid) is not None:
+                continue
+            if _is_empty(target.get(field)):
+                target[field] = value
         return merged
 
     # ------------------------------------------------------------------

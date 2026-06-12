@@ -1425,3 +1425,156 @@ def test_reconcile_orgs_never_writes_core_by_default(mod, tmp_path, monkeypatch,
     assert n2 == 1
     rewritten = yaml.safe_load(core.read_text())
     assert rewritten["entries"][0]["org_id"] == existing
+
+
+# ---------------------------------------------------------------------------
+# Scalar enrichment flow: a suppressed/folded/skipped mint's non-empty scalars
+# travel onto the owner's enrich record under `weak:` (the seed loader fills
+# only still-empty, non-core-claimed fields with them) instead of being
+# dropped on the floor. Parents edges and mint-specific metadata stay behind.
+# ---------------------------------------------------------------------------
+def test_reconciliation_donates_suppressed_mint_scalars(mod, tmp_path):
+    core = tmp_path / "core.yaml"
+    core.write_text(yaml.safe_dump([
+        {"id": "Foo/Bar-7B", "display_name": "Foo Bar 7B", "aliases": ["foo-bar-7b"]},
+    ]))
+    generated = [
+        {
+            "id": "foo/bar-7b",
+            "display_name": "foo bar 7b",
+            "aliases": ["foo-bar-7b-extra-alias"],
+            "release_date": "2025-12-01",
+            "open_weights": True,
+            "params_billions": None,
+            "input_modalities": ["text"],
+            "output_modalities": ["video"],
+            "parents": [{"id": "foo/bar", "relationship": "variant", "axis": "size"}],
+            "metadata": json.dumps({"providers": ["fastrouter"], "underlying_key": "bar-7b"}),
+        },
+    ]
+    out = mod.reconcile_generated_against_existing(generated, sources=(core,))
+    by_id = {e["id"]: e for e in out}
+    assert "foo/bar-7b" not in by_id
+    rec = by_id["Foo/Bar-7B"]
+    assert rec["weak"] == {
+        "release_date": "2025-12-01",
+        "open_weights": True,
+        "input_modalities": ["text"],
+        "output_modalities": ["video"],
+    }
+    assert "display_name" not in rec, "enrich records must stay display_name-less"
+    assert "parents" not in rec, "parents edges must NOT be donated (dangling-edge risk)"
+    assert "metadata" not in rec, "mint-specific metadata must NOT be donated"
+
+
+def test_carry_forward_skip_donates_scalars_onto_claiming_owner(cf_mod, tmp_path):
+    """skip_source_ids fold: a core-skipped committed entry whose surface form
+    an existing canonical claims (here: core aliasing the skipped mint) donates
+    its scalars as a weak enrich record onto that owner — its aliases stay
+    suppressed (that is what skip_source_ids curates away)."""
+    cf_mod.CORE_PATH.write_text(
+        yaml.safe_dump({"skip_source_ids": ["wanx/wan-v2-6"], "entries": []})
+    )
+    existing = tmp_path / "existing.yaml"
+    existing.write_text(yaml.safe_dump([
+        {"id": "alibaba/wan-v2-6", "display_name": "Wan 2.6",
+         "aliases": ["wanx/wan-v2-6", "wan-v2-6"]},
+    ]))
+    cf_mod._NONCATALOG_EXISTING_SOURCES = (existing,)
+    committed = [{
+        "id": "wanx/wan-v2-6",
+        "display_name": "Wan 2.6",
+        "aliases": ["wan-v2-6"],
+        "release_date": "2025-12-01",
+        "open_weights": True,
+        "metadata": "{}",
+    }]
+    batch, _claims = cf_mod._carry_forward_committed([], committed)
+    assert batch == [
+        {"id": "alibaba/wan-v2-6",
+         "weak": {"release_date": "2025-12-01", "open_weights": True}}
+    ]
+
+
+def test_carry_forward_skip_unclaimed_stays_pure_skip(cf_mod, tmp_path):
+    """A core-skipped entry whose surface form nothing claims keeps the current
+    behavior: pure skip, even when it carries scalars."""
+    cf_mod.CORE_PATH.write_text(
+        yaml.safe_dump({"skip_source_ids": ["lonely/mint-1b"], "entries": []})
+    )
+    empty = tmp_path / "existing.yaml"
+    empty.write_text("[]\n")
+    cf_mod._NONCATALOG_EXISTING_SOURCES = (empty,)
+    committed = [{
+        "id": "lonely/mint-1b", "display_name": "Lonely Mint 1B",
+        "release_date": "2024-01-01", "metadata": "{}",
+    }]
+    batch, _claims = cf_mod._carry_forward_committed([], committed)
+    assert batch == []
+
+
+def test_catalog_enrich_record_carries_donor_scalars(mod, tmp_path, monkeypatch):
+    """The --catalog split's HF-present fold (`_enrich_target`) donates the
+    folded record's scalars under `weak:` on the alias-only enrichment."""
+    core = tmp_path / "core.yaml"
+    core.write_text(yaml.safe_dump({
+        "skip_source_ids": [],
+        "entries": [
+            {"id": "alibaba/zzz-wan-v9", "display_name": "Zzz Wan V9",
+             "aliases": ["wanx/zzz-wan-v9", "zzz-wan-v9"], "open_weights": None},
+        ],
+    }))
+    cat_out = tmp_path / "cat.yaml"
+    orgs_out = tmp_path / "orgs.yaml"
+    orgs_out.write_text((REPO_ROOT / "seed" / "orgs.generated.yaml").read_text())
+    monkeypatch.setattr(mod, "CORE_PATH", core)
+    monkeypatch.setattr(mod, "_CATALOG_EXISTING_SOURCES", (core,))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat_out)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", orgs_out)
+    full = [{
+        "id": "wanx/zzz-wan-v9",
+        "display_name": "Zzz Wan V9",
+        "org_id": "wanx",
+        "aliases": ["zzz-wan-v9"],
+        "release_date": "2025-12-01",
+        "open_weights": True,
+        "metadata": "{}",
+        "review_status": "draft",
+    }]
+    mod.regenerate_catalog([dict(e) for e in full])
+    cat = yaml.safe_load(cat_out.read_text()) or []
+    rec = next(e for e in cat if e.get("id") == "alibaba/zzz-wan-v9")
+    assert rec["weak"] == {"release_date": "2025-12-01", "open_weights": True}
+    assert "display_name" not in rec
+
+
+def test_catalog_committed_skip_donates_scalars(mod, tmp_path, monkeypatch):
+    """The --catalog carry-forward applies the same skip_source_ids rule: a
+    core-skipped committed mint donates its scalars (no aliases) weakly onto
+    the canonical claiming its surface form."""
+    core = tmp_path / "core.yaml"
+    core.write_text(yaml.safe_dump({
+        "skip_source_ids": ["wanx/zzz-wan-v9"],
+        "entries": [
+            {"id": "alibaba/zzz-wan-v9", "display_name": "Zzz Wan V9",
+             "aliases": ["wanx/zzz-wan-v9", "zzz-wan-v9"], "open_weights": None},
+        ],
+    }))
+    cat_out = tmp_path / "cat.yaml"
+    cat_out.write_text(yaml.safe_dump([
+        {"id": "wanx/zzz-wan-v9", "display_name": "Zzz Wan V9",
+         "aliases": ["zzz-wan-v9"], "release_date": "2025-11-30",
+         "open_weights": True, "metadata": "{}"},
+    ]))
+    orgs_out = tmp_path / "orgs.yaml"
+    orgs_out.write_text((REPO_ROOT / "seed" / "orgs.generated.yaml").read_text())
+    monkeypatch.setattr(mod, "CORE_PATH", core)
+    monkeypatch.setattr(mod, "_CATALOG_EXISTING_SOURCES", (core,))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat_out)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", orgs_out)
+    mod.regenerate_catalog([])
+    cat = yaml.safe_load(cat_out.read_text()) or []
+    assert cat == [
+        {"id": "alibaba/zzz-wan-v9",
+         "weak": {"release_date": "2025-11-30", "open_weights": True}}
+    ], "skipped committed mint's scalars must flow weakly onto the owner, aliases suppressed"

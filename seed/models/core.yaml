@@ -3,6 +3,11 @@
 # entities NO generator reproduces (resolver exact/normalized): closed-API
 # (open_weights=False), hand-curated (resolution_source=NA), curated judgment
 # calls. May use the {skip_ids, skip_source_ids, entries} shape.
+# Keys EXPLICITLY present on an entry — even with a null value — are strong
+# claims: they block the loader's weak fill (the `weak:` scalar maps donated
+# by generated enrich records). Write `open_weights: null` to pin a field as
+# curated-unknown against bad upstream data; DELETE the key to let a weak
+# value fill it.
 skip_ids: []
 skip_source_ids:
 - alibaba/qwen3-235b-a22b-instruct
@@ -12952,7 +12957,6 @@ entries:
   display_name: Wan 2.6
   org_id: alibaba
   open_weights: null
-  release_date: '2025-12-01'
   resolution_source: NA
   review_status: reviewed
   aliases:

@@ -19,19 +19,40 @@
 # resolve to this family canonical without needing per-snapshot entries.
 #
 # `aliases` lists snapshot IDs we observed in models.dev for this family.
+# Enrich records ({id, aliases} onto an existing canonical) may carry a
+# `weak:` scalar map donated from the suppressed/folded mint; the seed
+# loader applies those only to fields every full entry left empty and
+# core.yaml does not explicitly carry.
 
 - id: ByteDance-Seed/Seed-OSS-36B-Instruct
   aliases:
   - bytedance/seed-oss-36b-instruct
   - seed-oss-36b-instruct
+  weak:
+    release_date: '2025-09-04'
+    open_weights: false
 - id: CohereLabs/aya-expanse-32b
   aliases:
   - Aya Expanse 32B
   - cohere/aya-expanse-32b
+  weak:
+    release_date: '2024-10-24'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: CohereLabs/aya-expanse-8b
   aliases:
   - Aya Expanse 8B
   - cohere/aya-expanse-8b
+  weak:
+    release_date: '2024-10-24'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: CohereLabs/c4ai-command-r-plus
   aliases:
   - Cohere Command R+
@@ -39,54 +60,101 @@
   - cohere-command-r-plus
   - cohere/cohere-command-r-plus
   - cohere/command-r+
+  weak:
+    release_date: '2024-04-04'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: CohereLabs/command-a-reasoning-08-2025
   aliases:
   - cohere/command-a-reasoning-08-2025
   - command-a-reasoning-08-2025
+  weak:
+    release_date: '2025-08-21'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: CrucibleLab/l3-3-70b-loki-v2-0
   aliases:
   - L3.3 70B Loki v2.0
   - l3-3-70b-loki-v2-0
+  weak:
+    release_date: '2026-01-22'
+    open_weights: false
 - id: Doctor-Shotgun/ms3-2-24b-magnum-diamond
   aliases:
   - MS3.2 24B Magnum Diamond
   - ms3-2-24b-magnum-diamond
+  weak:
+    release_date: '2025-11-24'
+    open_weights: false
 - id: EVA-UNIT-01/EVA-Qwen2.5-72B-v0.2
   aliases:
   - EVA-Qwen2.5-72B-v0.2
   - eva-qwen2-5-72b-v0-2
+  weak:
+    release_date: '2025-09-25'
+    open_weights: false
 - id: EVA-UNIT-01/eva-llama-3-33-70b-v0-0
   aliases:
   - EVA Llama 3.33 70B
   - eva-llama-3-33-70b-v0-0
+  weak:
+    release_date: '2025-07-26'
+    open_weights: false
 - id: EVA-UNIT-01/eva-llama-3-33-70b-v0-1
   aliases:
   - EVA-LLaMA-3.33-70B-v0.1
   - eva-llama-3-33-70b-v0-1
+  weak:
+    release_date: '2025-09-25'
+    open_weights: false
 - id: EVA-UNIT-01/eva-qwen2-5-32b-v0-2
   aliases:
   - Qwen 2.5 32b EVA
   - eva-qwen2-5-32b-v0-2
+  weak:
+    release_date: '2024-09-01'
+    open_weights: false
 - id: Envoid/llama-3-05-nemotron-tenyxchat-storybreaker-70b
   aliases:
   - Nemotron Tenyxchat Storybreaker 70b
   - llama-3-05-nemotron-tenyxchat-storybreaker-70b
+  weak:
+    release_date: '2024-12-01'
+    open_weights: false
 - id: Envoid/llama-3-05-nt-storybreaker-ministral-70b
   aliases:
   - Llama 3.05 Storybreaker Ministral 70b
   - llama-3-05-nt-storybreaker-ministral-70b
+  weak:
+    release_date: '2024-12-01'
+    open_weights: false
 - id: GalrionSoftworks/MN-LooseCannon-12B-v1
   aliases:
   - MN-LooseCannon-12B-v1
   - mn-loosecannon-12b-v1
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: Gryphe/mythomax-l2-13b
   aliases:
   - MythoMax 13B
   - mythomax-l2-13b
+  weak:
+    release_date: '2023-07-02'
+    open_weights: true
 - id: Infermatic/MN-12B-Inferor-v0.0
   aliases:
   - Mistral Nemo Inferor 12B
   - mn-12b-inferor-v0-0
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: Intel/qwen3-coder-480b-a35b-instruct-int4-mixed-ar
   display_name: Qwen 3 Coder 480B
   org_id: Intel
@@ -109,6 +177,9 @@
   aliases:
   - KB Whisper
   - kb-whisper-large
+  weak:
+    release_date: '2024-10-01'
+    open_weights: true
 - id: Kwaipilot/kat-dev
   display_name: Kwaipilot/KAT-Dev
   org_id: Kwaipilot
@@ -126,14 +197,25 @@
   metadata: '{"alias_platforms": {"kat-dev": "siliconflow-cn"}, "providers": ["siliconflow-cn"], "underlying_key": "kat-dev"}'
   review_status: draft
   resolution_source: models_dev
+- id: LLM360/K2
+  weak:
+    release_date: '2025-07-26'
+    open_weights: false
+  aliases: []
 - id: LatitudeGames/wayfarer-large-70b-llama-3-3
   aliases:
   - Llama 3.3 70B Wayfarer
   - wayfarer-large-70b-llama-3-3
+  weak:
+    release_date: '2025-02-20'
+    open_weights: false
 - id: MarinaraSpaghetti/nemomix-unleashed-12b
   aliases:
   - NemoMix 12B Unleashed
   - nemomix-unleashed-12b
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: MiniMaxAI/MiniMax-M2.1
   aliases:
   - MiniMax M2.1
@@ -144,6 +226,13 @@
   - minimax/minimax-m2-1
   - minimax/minimax-m2.1
   - minimax/minimax.minimax-m2-1
+  weak:
+    release_date: '2025-12-23'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: MiniMaxAI/MiniMax-M2.5
   aliases:
   - MiniMax M2.5
@@ -155,14 +244,27 @@
   - minimax/minimax-m2.5
   - minimax/minimax-m2p5
   - minimax/minimax.minimax-m2-5
+  weak:
+    release_date: '2026-02-12'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: NeverSleep/llama-3-lumimaid-70b-v0-1
   aliases:
   - Lumimaid 70b
   - llama-3-lumimaid-70b-v0-1
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: NeverSleep/lumimaid-v0-2-70b
   aliases:
   - Lumimaid v0.2
   - lumimaid-v0-2-70b
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: NousResearch 2/deephermes-3-mistral-24b-preview
   display_name: NousResearch 2/deephermes-3-mistral-24b-preview
   org_id: NousResearch 2
@@ -185,11 +287,17 @@
   - Hermes 2 Pro Llama 3 8B
   - hermes-2-pro-llama-3-8b
   - nous-research/hermes-2-pro-llama-3-8b
+  weak:
+    release_date: '2024-05-27'
+    open_weights: true
 - id: NousResearch/Hermes-3-Llama-3.1-70B
   aliases:
   - Hermes 3 70B
   - hermes-3-llama-3-1-70b
   - nous-research/hermes-3-llama-3-1-70b
+  weak:
+    release_date: '2024-08-18'
+    open_weights: true
 - id: OpenPipe/qwen3-14b-instruct
   display_name: OpenPipe Qwen3 14B Instruct
   org_id: OpenPipe
@@ -230,6 +338,9 @@
   aliases:
   - INTELLECT-3
   - intellect-3
+  weak:
+    release_date: '2025-11-26'
+    open_weights: true
 - id: Qwen/QwQ-32B
   aliases:
   - QwQ 32B
@@ -237,10 +348,20 @@
   - alibaba/qwen-qwq-32b
   - alibaba/qwq-32b
   - qwq-32b
+  weak:
+    release_date: '2024-11-27'
+    open_weights: true
 - id: Qwen/Qwen2.5-14B
   aliases:
   - Qwen2.5 14B
   - alibaba/qwen2.5-14b
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-14B-Instruct
   aliases:
   - Qwen 2.5 14B Instruct
@@ -251,20 +372,48 @@
   - qwen-2-5-14b-instruct
   - qwen-2.5-14b-instruct
   - qwen2-5-14b-instruct
+  weak:
+    release_date: '2024-09-19'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-32B
   aliases:
   - Qwen2.5 32B
   - alibaba/qwen2.5-32b
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-32B-Instruct
   aliases:
   - Qwen2.5 32B Instruct
   - alibaba/qwen2-5-32b-instruct
   - alibaba/qwen2.5-32b-instruct
   - qwen2-5-32b-instruct
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-72B
   aliases:
   - Qwen2.5 72B
   - alibaba/qwen2.5-72b
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-72B-Instruct
   aliases:
   - Qwen2.5 72B Instruct
@@ -272,10 +421,24 @@
   - alibaba/qwen2-5-72b-instruct
   - alibaba/qwen2.5-72b-instruct
   - qwen2-5-72b-instruct
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-7B
   aliases:
   - Qwen2.5 7B
   - alibaba/qwen2.5-7b
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-7B-Instruct
   aliases:
   - 'Qwen: Qwen2.5 7B Instruct'
@@ -283,18 +446,31 @@
   - alibaba/qwen2-5-7b-instruct
   - alibaba/qwen2.5-7b-instruct
   - qwen2-5-7b-instruct
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen2.5-Coder-32B
   aliases:
   - Qwen 2.5 Coder 32B
   - alibaba/qwen-2-5-coder-32b
   - qwen-2-5-coder-32b
   - qwen-2.5-coder-32b
+  weak:
+    release_date: '2024-11-11'
+    open_weights: true
 - id: Qwen/Qwen2.5-Coder-32B-Instruct
   aliases:
   - Qwen2.5 Coder 32B Instruct
   - alibaba/qwen-2-5-coder-32b-instruct
   - alibaba/qwen2-5-coder-32b-instruct
   - qwen2-5-coder-32b-instruct
+  weak:
+    release_date: 2024-11
+    open_weights: true
 - id: Qwen/Qwen2.5-Coder-7B
   aliases:
   - Qwen2.5 Coder 7B
@@ -303,27 +479,50 @@
   - alibaba/qwen25-coder-7b
   - qwen2-5-coder-7b
   - qwen2.5-coder-7b-fast
+  weak:
+    release_date: '2024-09-15'
+    open_weights: true
 - id: Qwen/Qwen2.5-Coder-7B-Instruct
   aliases:
   - Qwen2.5-Coder 7B Instruct
   - alibaba/qwen2-5-coder-7b-instruct
   - qwen2-5-coder-7b-instruct
+  weak:
+    release_date: 2024-11
+    open_weights: true
 - id: Qwen/Qwen2.5-Math-72B-Instruct
   aliases:
   - Qwen2.5-Math 72B Instruct
   - alibaba/qwen2-5-math-72b-instruct
   - qwen2-5-math-72b-instruct
+  weak:
+    release_date: 2024-09
+    open_weights: true
 - id: Qwen/Qwen2.5-Math-7B-Instruct
   aliases:
   - Qwen2.5-Math 7B Instruct
   - alibaba/qwen2-5-math-7b-instruct
   - qwen2-5-math-7b-instruct
+  weak:
+    release_date: 2024-09
+    open_weights: true
 - id: Qwen/Qwen2.5-Omni-7B
   aliases:
   - Qwen2.5 Omni 7B
   - alibaba/qwen2-5-omni-7b
   - alibaba/qwen2.5-omni-7b
   - qwen2-5-omni-7b
+  weak:
+    release_date: 2024-12
+    open_weights: true
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - audio
+    - text
 - id: Qwen/Qwen2.5-VL-72B-Instruct
   aliases:
   - Qwen2.5-VL 72B Instruct
@@ -334,18 +533,40 @@
   - qwen2-5-vl-72b-instruct
   - qwen2.5-vl-72b-instruct
   - qwen25-vl-72b-instruct
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-14B
   aliases:
   - Qwen3-14B
   - alibaba/qwen-3-14b
   - alibaba/qwen3-14b
   - qwen3-14b
+  weak:
+    release_date: 2025-04
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-235B-A22B
   aliases:
   - Qwen3-235B-A22B
   - alibaba/qwen3-235b
   - alibaba/qwen3-235b-a22b
   - qwen3-235b-a22b
+  weak:
+    release_date: '2024-12-01'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-235B-A22B-Instruct-2507
   aliases:
   - Qwen3 235B A22B Instruct 2507
@@ -356,15 +577,24 @@
   - alibaba/qwen3-235b-a22b-instruct-2507
   - qwen3-235b-a22b-instruct
   - qwen3-235b-a22b-instruct-2507
+  weak:
+    release_date: 2025-04
+    open_weights: true
 - id: Qwen/Qwen3-235B-A22B-Instruct-2507-FP8
   aliases:
   - Qwen3 235B A22B Instruct 2507 FP8
   - alibaba/qwen3-235b-a22b-instruct-2507-tput
+  weak:
+    release_date: '2025-07-25'
+    open_weights: true
 - id: Qwen/Qwen3-235B-A22B-Thinking-2507
   aliases:
   - Qwen3 235B A22B Thinking 2507
   - alibaba/qwen3-235b-a22b-thinking-2507
   - qwen3-235b-a22b-thinking-2507
+  weak:
+    release_date: '2025-04-29'
+    open_weights: true
 - id: Qwen/Qwen3-30B-A3B
   aliases:
   - Qwen3 30B A3B
@@ -372,16 +602,25 @@
   - alibaba/qwen-3-30b
   - alibaba/qwen3-30b-a3b
   - qwen3-30b-a3b
+  weak:
+    release_date: 2025-04
+    open_weights: true
 - id: Qwen/Qwen3-30B-A3B-Instruct-2507
   aliases:
   - Qwen3 30B A3B Instruct 2507
   - alibaba/qwen3-30b-a3b-instruct-2507
   - qwen3-30b-a3b-instruct-2507
+  weak:
+    release_date: '2025-02-20'
+    open_weights: true
 - id: Qwen/Qwen3-30B-A3B-Thinking-2507
   aliases:
   - Qwen3 30B A3B Thinking 2507
   - alibaba/qwen3-30b-a3b-thinking-2507
   - qwen3-30b-a3b-thinking-2507
+  weak:
+    release_date: '2025-07-08'
+    open_weights: true
 - id: Qwen/Qwen3-32B
   aliases:
   - Qwen 3.32B
@@ -392,56 +631,112 @@
   - qwen-3-32b
   - qwen.qwen3-32b-v1:0
   - qwen3-32b
+  weak:
+    release_date: 2025-04
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-8B
   aliases:
   - Qwen3 8B
   - alibaba/qwen3-8b
   - qwen3-8b
+  weak:
+    release_date: 2025-04
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-Coder-480B-A35B-Instruct
   aliases:
   - Qwen3 Coder 480B A35B Instruct
   - alibaba/qwen3-coder-480b-a35b-instruct
   - qwen3-coder-480b-a35b-instruct
+  weak:
+    release_date: 2025-04
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-Next-80B-A3B-Instruct
   aliases:
   - Qwen3-Next 80B-A3B Instruct
   - alibaba/qwen3-next-80b-a3b-instruct
   - qwen3-next-80b-a3b-instruct
+  weak:
+    release_date: 2025-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-Next-80B-A3B-Thinking
   aliases:
   - Qwen3-Next 80B-A3B (Thinking)
   - alibaba/qwen3-next-80b-a3b-thinking
   - qwen3-next-80b-a3b-thinking
+  weak:
+    release_date: 2025-09
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: Qwen/Qwen3-Omni-30B-A3B-Thinking
   aliases:
   - alibaba/qwen3-omni-30b-a3b
+  weak:
+    release_date: '2025-09-24'
+    open_weights: true
 - id: Qwen/Qwen3-VL-235B-A22B-Instruct
   aliases:
   - Qwen3 VL 235B A22B Instruct
   - alibaba/qwen3-vl-235b-a22b-instruct
   - qwen3-vl-235b-a22b-instruct
+  weak:
+    release_date: '2024-11-01'
+    open_weights: true
 - id: Qwen/Qwen3-VL-30B-A3B-Instruct
   aliases:
   - alibaba/qwen3-vl-30b-a3b-instruct
   - qwen3-vl-30b-a3b-instruct
+  weak:
+    release_date: '2025-07-30'
+    open_weights: true
 - id: Qwen/Qwen3-VL-32B-Instruct
   aliases:
   - alibaba/qwen3-vl-32b-instruct
   - qwen3-vl-32b-instruct
+  weak:
+    release_date: '2025-10-21'
+    open_weights: true
 - id: Qwen/Qwen3-VL-32B-Thinking
   aliases:
   - alibaba/qwen3-vl-32b
   - alibaba/qwen3-vl-32b-thinking
   - qwen3-vl-32b-thinking
+  weak:
+    release_date: '2025-10-21'
+    open_weights: false
 - id: Qwen/Qwen3-VL-8B-Instruct
   aliases:
   - alibaba/qwen3-vl-8b-instruct
   - qwen3-vl-8b-instruct
+  weak:
+    release_date: '2025-08-19'
+    open_weights: true
 - id: Qwen/Qwen3-VL-8B-Thinking
   aliases:
   - alibaba/qwen3-vl-8b
   - alibaba/qwen3-vl-8b-thinking
   - qwen3-vl-8b-thinking
+  weak:
+    release_date: '2025-10-14'
+    open_weights: true
 - id: Qwen/Qwen3.5-122B-A10B
   aliases:
   - Qwen3.5 122B-A10B
@@ -449,6 +744,16 @@
   - alibaba/qwen3.5-122b-a10b
   - qwen3-5-122b-a10b
   - qwen3.5-122b-a10b
+  weak:
+    release_date: '2026-02-23'
+    open_weights: true
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: Qwen/Qwen3.5-27B
   aliases:
   - Qwen3.5 27B
@@ -456,6 +761,16 @@
   - alibaba/qwen3.5-27b
   - qwen3-5-27b
   - qwen3.5-27b
+  weak:
+    release_date: '2026-02-23'
+    open_weights: true
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: Qwen/Qwen3.5-35B-A3B
   aliases:
   - Qwen3.5 35B-A3B
@@ -463,6 +778,16 @@
   - alibaba/qwen3.5-35b-a3b
   - qwen3-5-35b-a3b
   - qwen3.5-35b-a3b
+  weak:
+    release_date: '2026-02-23'
+    open_weights: true
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: Qwen/Qwen3.5-397B-A17B
   aliases:
   - Qwen3.5 397B-A17B
@@ -472,16 +797,32 @@
   - alibaba/qwen35-397b-a17b
   - qwen3-5-397b-a17b
   - qwen3.5-397b-a17b
+  weak:
+    release_date: '2026-02-15'
+    open_weights: true
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: Qwen/Qwen3.5-4B
   aliases:
   - alibaba/qwen3-5-4b
   - qwen3-5-4b
+  weak:
+    release_date: '2026-03-03'
+    open_weights: true
 - id: Qwen/Qwen3.5-9B
   aliases:
   - Qwen3.5-9B
   - alibaba/qwen3-5-9b
   - qwen3-5-9b
   - qwen3.5-9b
+  weak:
+    release_date: '2026-02-01'
+    open_weights: true
 - id: Qwen/Qwen3.6-27B
   aliases:
   - Qwen3.6 27B
@@ -489,6 +830,16 @@
   - alibaba/qwen3.6-27b
   - qwen3-6-27b
   - qwen3.6-27b
+  weak:
+    release_date: '2026-04-22'
+    open_weights: true
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: Qwen/Qwen3.6-35B-A3B
   aliases:
   - Qwen3.6 35B A3B
@@ -498,62 +849,114 @@
   - alibaba/umans-qwen3-6-35b-a3b
   - qwen3-6-35b-a3b
   - qwen3.6-35b-a3b
+  weak:
+    release_date: '2026-04-17'
+    open_weights: true
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: ReadyArt/ms3-2-the-omega-directive-24b-unslop-v2-0
   aliases:
   - Omega Directive 24B Unslop v2.0
   - ms3-2-the-omega-directive-24b-unslop-v2-0
+  weak:
+    release_date: '2025-12-08'
+    open_weights: false
 - id: ReadyArt/the-omega-abomination-l-70b-v1-0
   aliases:
   - The Omega Abomination V1
   - the-omega-abomination-l-70b-v1-0
+  weak:
+    release_date: '2024-12-01'
+    open_weights: false
 - id: Salesforce/llama-xlam-2-70b-fc-r
   aliases:
   - Llama-xLAM-2 70B fc-r
   - llama-xlam-2-70b-fc-r
+  weak:
+    release_date: '2025-04-13'
+    open_weights: false
 - id: Sao10K/L3-70B-Euryale-v2.1
   aliases:
   - "L3 70B Euryale V2.1\t"
   - l3-70b-euryale-v2-1
+  weak:
+    release_date: '2024-06-18'
+    open_weights: true
 - id: Sao10K/L3-8B-Stheno-v3.2
   aliases:
   - Sao10K Stheno 8b
   - l3-8b-stheno-v3-2
+  weak:
+    release_date: '2024-11-29'
+    open_weights: true
 - id: Sao10K/l3-1-70b-euryale-v2-2
   aliases:
   - Llama 3.1 70B Euryale
   - l3-1-70b-euryale-v2-2
+  weak:
+    release_date: '2024-07-23'
+    open_weights: false
 - id: Sao10K/l3-1-70b-hanami-x1
   aliases:
   - Llama 3.1 70B Hanami
   - l3-1-70b-hanami-x1
+  weak:
+    release_date: '2024-07-23'
+    open_weights: true
 - id: Sao10K/l3-3-70b-euryale-v2-3
   aliases:
   - Llama 3.3 70B Euryale
   - l3-3-70b-euryale-v2-3
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: Steelskull/L3.3-MS-Nevoria-70b
   aliases:
   - Steelskull Nevoria 70b
   - l3-3-ms-nevoria-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: Steelskull/L3.3-Nevoria-R1-70b
   aliases:
   - Steelskull Nevoria R1 70b
   - l3-3-nevoria-r1-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: Steelskull/l3-3-cu-mai-r1-70b
   aliases:
   - Llama 3.3 70B Cu Mai
   - l3-3-cu-mai-r1-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: Steelskull/l3-3-electra-r1-70b
   aliases:
   - Steelskull Electra R1 70b
   - l3-3-electra-r1-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: Steelskull/l3-3-ms-evalebis-70b
   aliases:
   - MS Evalebis 70b
   - l3-3-ms-evalebis-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: Steelskull/l3-3-ms-evayale-70b
   aliases:
   - 'Evayale 70b '
   - l3-3-ms-evayale-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: TEE/llama3-3-70b
   display_name: llama3-3-70b
   org_id: TEE
@@ -575,26 +978,44 @@
   aliases:
   - Anubis 70B v1
   - anubis-70b-v1
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: TheDrummer/anubis-70b-v1-1
   aliases:
   - Anubis 70B v1.1
   - anubis-70b-v1-1
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: TheDrummer/cydonia-24b-v2
   aliases:
   - The Drummer Cydonia 24B v4
   - cydonia-24b-v2
+  weak:
+    release_date: '2025-02-17'
+    open_weights: false
 - id: TheDrummer/cydonia-24b-v4-1
   aliases:
   - The Drummer Cydonia 24B v4.1
   - cydonia-24b-v4-1
+  weak:
+    release_date: '2025-08-19'
+    open_weights: true
 - id: TheDrummer/cydonia-24b-v4-3
   aliases:
   - The Drummer Cydonia 24B v4.3
   - cydonia-24b-v4-3
+  weak:
+    release_date: '2025-12-25'
+    open_weights: false
 - id: TheDrummer/magidonia-24b-v4-3
   aliases:
   - The Drummer Magidonia 24B v4.3
   - magidonia-24b-v4-3
+  weak:
+    release_date: '2025-12-25'
+    open_weights: false
 - id: TheDrummer/rocinante-12b
   display_name: 'TheDrummer: Rocinante 12B'
   org_id: TheDrummer
@@ -616,10 +1037,16 @@
 - id: TheDrummer/rocinante-12b-v1-1
   aliases:
   - rocinante-12b-v1-1
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: TheDrummer/skyfall-36b-v2
   aliases:
   - TheDrummer Skyfall 36B V2
   - skyfall-36b-v2
+  weak:
+    release_date: '2025-03-10'
+    open_weights: true
 - id: TheDrummer/unslopnemo-12b
   display_name: 'TheDrummer: UnslopNemo 12B'
   org_id: TheDrummer
@@ -642,29 +1069,47 @@
   aliases:
   - UnslopNemo 12b v4
   - unslopnemo-12b-v4-1
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: Tongyi-Zhiwen/qwenlong-l1-32b
   aliases:
   - QwenLong L1 32B
   - qwenlong-l1-32b
+  weak:
+    release_date: '2025-01-25'
+    open_weights: false
 - id: VongolaChouko/starcannon-unleashed-12b-v1-0
   aliases:
   - Mistral Nemo Starcannon 12b v1
   - starcannon-unleashed-12b-v1-0
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: XiaomiMiMo/MiMo-V2-Flash
   aliases:
   - MiMo-V2-Flash
   - mimo-v2-flash
   - mimo-v2-flash-free
   - xiaomi/mimo-v2-flash
+  weak:
+    release_date: '2025-12-16'
+    open_weights: true
 - id: abacusai/Dracarys-72B-Instruct
   aliases:
   - Llama 3.1 70B Dracarys 2
   - abacusai/dracarys-72b-instruct
   - dracarys-72b-instruct
+  weak:
+    release_date: '2025-08-02'
+    open_weights: false
 - id: abacusai/dracarys-llama-3-1-70b-instruct
   aliases:
   - dracarys-llama-3-1-70b-instruct
   - dracarys-llama-3.1-70b-instruct
+  weak:
+    release_date: '2024-09-11'
+    open_weights: true
 - id: abliterated-model
   display_name: Abliterated Model
   org_id: null
@@ -738,10 +1183,16 @@
   aliases:
   - AI21 Jamba 1.5 Large
   - ai21-jamba-1-5-large
+  weak:
+    release_date: '2024-08-29'
+    open_weights: false
 - id: ai21-labs/ai21-jamba-1-5-mini
   aliases:
   - AI21 Jamba 1.5 Mini
   - ai21-jamba-1-5-mini
+  weak:
+    release_date: '2024-08-29'
+    open_weights: false
 - id: ai21/jamba-large
   display_name: Jamba Large
   org_id: ai21
@@ -853,19 +1304,31 @@
   aliases:
   - Aion 1.0
   - aion-1-0
+  weak:
+    release_date: '2025-02-01'
+    open_weights: false
 - id: aion-labs/aion-1-0-mini
   aliases:
   - Aion 1.0 mini (DeepSeek)
   - aion-1-0-mini
+  weak:
+    release_date: '2025-02-04'
+    open_weights: true
 - id: aion-labs/aion-2-0
   aliases:
   - 'AionLabs: Aion-2.0'
   - aion-2-0
   - aion-labs-aion-2-0
+  weak:
+    release_date: '2026-02-23'
+    open_weights: false
 - id: aion-labs/aion-rp-llama-3-1-8b
   aliases:
   - Llama 3.1 8b (uncensored)
   - aion-rp-llama-3-1-8b
+  weak:
+    release_date: '2024-07-23'
+    open_weights: false
 - id: alfredpros/codellama-7b-instruct-solidity
   display_name: 'AlfredPros: CodeLLaMa 7B Instruct Solidity'
   org_id: alfredpros
@@ -1011,6 +1474,9 @@
 - id: alibaba/qwen-doc
   aliases:
   - Qwen Doc Turbo
+  weak:
+    release_date: 2024-01
+    open_weights: false
 - id: alibaba/qwen-flash
   display_name: Qwen Flash
   org_id: alibaba
@@ -1083,6 +1549,9 @@
 - id: alibaba/qwen-math
   aliases:
   - Qwen Math Turbo
+  weak:
+    release_date: '2024-09-19'
+    open_weights: false
 - id: alibaba/qwen-math-plus
   display_name: Qwen Math Plus
   org_id: alibaba
@@ -1104,6 +1573,13 @@
   aliases:
   - Qwen Max
   - qwen-max
+  weak:
+    release_date: '2024-04-03'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen-mt-plus
   display_name: Qwen-MT Plus
   org_id: alibaba
@@ -1126,10 +1602,28 @@
   aliases:
   - Qwen-MT Turbo
   - qwen-mt-turbo
+  weak:
+    release_date: 2025-01
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen-omni-turbo
   aliases:
   - Qwen-Omni Turbo
   - qwen-omni-turbo
+  weak:
+    release_date: '2025-01-19'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - audio
+    - text
 - id: alibaba/qwen-omni-turbo-realtime
   display_name: Qwen-Omni Turbo Realtime
   org_id: alibaba
@@ -1155,6 +1649,13 @@
   aliases:
   - Qwen Plus
   - qwen-plus
+  weak:
+    release_date: '2024-01-25'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen-plus-character
   display_name: Qwen Plus Character
   org_id: alibaba
@@ -1175,10 +1676,24 @@
 - id: alibaba/qwen-plus-character-japanese
   aliases:
   - Qwen Plus Character Japanese
+  weak:
+    release_date: 2024-01
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen-turbo
   aliases:
   - Qwen Turbo
   - qwen-turbo
+  weak:
+    release_date: '2024-11-01'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen-vl-max
   display_name: Qwen-VL Max
   org_id: alibaba
@@ -1257,18 +1772,45 @@
   aliases:
   - Qwen2.5 VL 32B Instruct
   - qwen2-5-vl-32b-instruct
+  weak:
+    release_date: '2024-11-01'
+    open_weights: true
 - id: alibaba/qwen2.5-vl-72b
   aliases:
   - Qwen2.5 VL 72B
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen2.5-vl-7b
   aliases:
   - Qwen2.5 VL 7B
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen2.5-vl-7b-instruct
   aliases:
   - Qwen2.5-VL 7B Instruct
   - alibaba/qwen2-5-vl-7b-instruct
   - qwen2-5-vl-7b-instruct
   - qwen2.5-vl-7b-instruct
+  weak:
+    release_date: 2024-09
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen3-235b-2507-cs
   display_name: qwen3-235b-2507-cs
   org_id: alibaba
@@ -1324,6 +1866,9 @@
 - id: alibaba/qwen3-4b
   aliases:
   - Qwen3 4B
+  weak:
+    release_date: '2025-04-28'
+    open_weights: true
 - id: alibaba/qwen3-5-122b
   display_name: Qwen3.5-122B
   org_id: alibaba
@@ -1348,6 +1893,9 @@
   - qwen3-5-397b
   - qwen3.5-397b-fast
   - qwen3.5:397b
+  weak:
+    release_date: '2026-02-01'
+    open_weights: true
 - id: alibaba/qwen3-5-9b-mlx-4bit
   display_name: Qwen 3.5 9B (MLX 4-bit)
   org_id: alibaba
@@ -1391,6 +1939,9 @@
   - Qwen3.5 Flash
   - qwen3-5-flash
   - qwen3.5-flash
+  weak:
+    release_date: '2026-02-23'
+    open_weights: true
 - id: alibaba/qwen3-6-27b-202k
   display_name: Qwen3.6 27B 202K
   org_id: alibaba
@@ -1414,6 +1965,9 @@
   - Qwen3.6 35B Fast
   - qwen3-6-35b
   - qwen3.6-35b-fast
+  weak:
+    release_date: '2026-04-01'
+    open_weights: true
 - id: alibaba/qwen3-asr-flash
   display_name: Qwen3-ASR Flash
   org_id: alibaba
@@ -1473,10 +2027,20 @@
   - Qwen3-Coder 30B-A3B
   - qwen.qwen3-coder-30b-a3b-v1:0
   - qwen3-coder-30b-a3b
+  weak:
+    release_date: 2025-04
+    open_weights: true
 - id: alibaba/qwen3-coder-30b-a3b-instruct
   aliases:
   - Qwen3-Coder 30B-A3B Instruct
   - qwen3-coder-30b-a3b-instruct
+  weak:
+    release_date: 2025-04
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen3-coder-480b
   display_name: qwen3-coder:480b
   org_id: alibaba
@@ -1499,6 +2063,13 @@
 - id: alibaba/qwen3-coder-480b-a35b
   aliases:
   - Qwen3 Coder 480B A35B
+  weak:
+    release_date: 2025-04
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen3-coder-flash
   display_name: Qwen3 Coder Flash
   org_id: alibaba
@@ -1561,6 +2132,9 @@
   - Qwen3 Embedding 0.6B
   - qwen3-embedding-0-6b
   - qwen3-embedding-0.6b
+  weak:
+    release_date: '2025-06-03'
+    open_weights: true
 - id: alibaba/qwen3-embedding-4b
   display_name: Qwen 3 Embedding 4B
   org_id: alibaba
@@ -1658,6 +2232,9 @@
   aliases:
   - qwen3-next-80b
   - qwen3-next:80b
+  weak:
+    release_date: '2025-04-29'
+    open_weights: true
 - id: alibaba/qwen3-next-80b-a3b
   display_name: Qwen3 Next 80B A3B
   org_id: alibaba
@@ -1852,6 +2429,14 @@
   - Qwen3-VL 235B-A22B
   - qwen.qwen3-vl-235b-a22b
   - qwen3-vl-235b-a22b
+  weak:
+    release_date: 2025-04
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen3-vl-235b-a22b-instruct-original
   display_name: Qwen3 VL 235B A22B Instruct Original
   org_id: alibaba
@@ -1967,6 +2552,15 @@
   - alibaba/qwen3-5-plus
   - qwen3-5-plus
   - qwen3.5-plus
+  weak:
+    release_date: '2026-02-16'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: alibaba/qwen3.6-flash
   display_name: Qwen3.6 Flash
   org_id: alibaba
@@ -1992,6 +2586,13 @@
 - id: alibaba/qwen3.6-max
   aliases:
   - Qwen3.6 Max
+  weak:
+    release_date: '2026-04-20'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: alibaba/qwen3.6-plus
   display_name: Qwen3.6 Plus
   org_id: alibaba
@@ -2183,12 +2784,18 @@
   - Olmo 3.1 32B Instruct
   - allenai/olmo-3-1-32b-instruct
   - olmo-3-1-32b-instruct
+  weak:
+    release_date: '2026-01-25'
+    open_weights: false
 - id: allenai/Olmo-3.1-32B-Think
   aliases:
   - Olmo 3.1 32B Think
   - allenai/olmo-3-1-32b
   - allenai/olmo-3-1-32b-think
   - olmo-3-1-32b-think
+  weak:
+    release_date: '2026-01-25'
+    open_weights: false
 - id: allenai/molmo-2-8b
   display_name: Molmo 2 8B
   org_id: allenai
@@ -2206,6 +2813,11 @@
   metadata: '{"alias_platforms": {"molmo-2-8b": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "molmo-2-8b"}'
   review_status: draft
   resolution_source: models_dev
+- id: allenai/olmo-3-32b
+  weak:
+    release_date: '2025-11-01'
+    open_weights: true
+  aliases: []
 - id: amazon/nova-2-lite-v1
   display_name: nova-2-lite-v1
   org_id: amazon
@@ -2245,11 +2857,17 @@
   - Nova Lite
   - amazon.nova-lite-v1:0
   - nova-lite
+  weak:
+    release_date: '2024-12-03'
+    open_weights: false
 - id: amazon/nova-micro
   aliases:
   - Nova Micro
   - amazon.nova-micro-v1:0
   - nova-micro
+  weak:
+    release_date: '2024-12-03'
+    open_weights: false
 - id: amazon/nova-premier-v1
   display_name: 'Amazon: Nova Premier 1.0'
   org_id: amazon
@@ -2272,6 +2890,9 @@
   - Nova Pro 1.0
   - amazon.nova-pro-v1:0
   - nova-pro
+  weak:
+    release_date: '2024-12-03'
+    open_weights: false
 - id: amazon/titan-embed-text-v2
   display_name: Titan Text Embeddings V2
   org_id: amazon
@@ -2293,10 +2914,16 @@
   aliases:
   - Magnum V2 72B
   - magnum-v2-72b
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: anthracite-org/magnum-v4-72b
   aliases:
   - Magnum v4 72B
   - magnum-v4-72b
+  weak:
+    release_date: '2024-10-22'
+    open_weights: true
 - id: anthropic/claude-haiku-3
   display_name: Claude Haiku 3
   org_id: anthropic
@@ -2347,6 +2974,15 @@
   - claude-haiku-4-5
   - claude-haiku-4.5
   - databricks-claude-haiku-4-5
+  weak:
+    release_date: '2025-10-15'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-haiku-4.5-20251001
   aliases:
   - anthropic.claude-haiku-4-5-20251001-v1:0
@@ -2358,6 +2994,15 @@
   - eu.anthropic.claude-haiku-4-5-20251001-v1:0
   - global.anthropic.claude-haiku-4-5-20251001-v1:0
   - us.anthropic.claude-haiku-4-5-20251001-v1:0
+  weak:
+    release_date: '2025-10-15'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-haiku-latest
   display_name: 'Anthropic: Claude Haiku Latest'
   org_id: anthropic
@@ -2399,6 +3044,15 @@
   - Claude Opus 4
   - anthropic-claude-opus-4
   - claude-opus-4
+  weak:
+    release_date: '2025-05-22'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4-0
   display_name: Claude Opus 4 (latest)
   org_id: anthropic
@@ -2426,12 +3080,30 @@
   aliases:
   - claude-opus-4-20250514
   - claude-opus-4@20250514
+  weak:
+    release_date: '2025-05-22'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4.1
   aliases:
   - Claude Opus 4.1
   - anthropic/claude-opus-4-1
   - claude-opus-4-1
   - databricks-claude-opus-4-1
+  weak:
+    release_date: '2025-08-05'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4.1-20250805
   aliases:
   - anthropic.claude-opus-4-1-20250805-v1:0
@@ -2440,6 +3112,15 @@
   - claude-opus-4-1@20250805
   - claude-opus-4.1-20250805
   - us.anthropic.claude-opus-4-1-20250805-v1:0
+  weak:
+    release_date: '2025-08-05'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4.5
   aliases:
   - Claude Opus 4.5
@@ -2448,6 +3129,15 @@
   - claude-opus-4-5
   - claude-opus-4.5
   - databricks-claude-opus-4-5
+  weak:
+    release_date: '2025-11-01'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4.5-20251101
   aliases:
   - anthropic.claude-opus-4-5-20251101-v1:0
@@ -2459,6 +3149,15 @@
   - eu.anthropic.claude-opus-4-5-20251101-v1:0
   - global.anthropic.claude-opus-4-5-20251101-v1:0
   - us.anthropic.claude-opus-4-5-20251101-v1:0
+  weak:
+    release_date: '2025-11-01'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4.6
   aliases:
   - Claude Opus 4.6
@@ -2469,6 +3168,15 @@
   - claude-opus-4-6@default
   - claude-opus-4.6
   - databricks-claude-opus-4-6
+  weak:
+    release_date: '2026-02-05'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4.7
   aliases:
   - Claude Opus 4.7
@@ -2484,6 +3192,15 @@
   - global.anthropic.claude-opus-4-7
   - jp.anthropic.claude-opus-4-7
   - us.anthropic.claude-opus-4-7
+  weak:
+    release_date: '2026-04-16'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-opus-4.8
   display_name: Claude Opus 4.8
   org_id: anthropic
@@ -2671,6 +3388,15 @@
   - anthropic-claude-sonnet-4
   - claude-sonnet-4
   - databricks-claude-sonnet-4
+  weak:
+    release_date: '2025-05-22'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-sonnet-4-0
   display_name: Claude Sonnet 4 (latest)
   org_id: anthropic
@@ -2698,6 +3424,15 @@
   aliases:
   - claude-sonnet-4-20250514
   - claude-sonnet-4@20250514
+  weak:
+    release_date: '2025-05-22'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-sonnet-4.5
   aliases:
   - Claude Sonnet 4.5
@@ -2705,6 +3440,15 @@
   - claude-sonnet-4-5
   - claude-sonnet-4.5
   - databricks-claude-sonnet-4-5
+  weak:
+    release_date: '2025-09-29'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-sonnet-4.5-20250929
   aliases:
   - anthropic.claude-sonnet-4-5-20250929-v1:0
@@ -2717,6 +3461,15 @@
   - global.anthropic.claude-sonnet-4-5-20250929-v1:0
   - jp.anthropic.claude-sonnet-4-5-20250929-v1:0
   - us.anthropic.claude-sonnet-4-5-20250929-v1:0
+  weak:
+    release_date: '2025-09-29'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-sonnet-4.6
   aliases:
   - Claude Sonnet 4.6
@@ -2731,6 +3484,15 @@
   - global.anthropic.claude-sonnet-4-6
   - jp.anthropic.claude-sonnet-4-6
   - us.anthropic.claude-sonnet-4-6
+  weak:
+    release_date: '2026-02-17'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-sonnet-latest
   display_name: 'Anthropic: Claude Sonnet Latest'
   org_id: anthropic
@@ -2754,6 +3516,9 @@
   - arcee-ai/trinity-large
   - arcee-ai/trinity-large-thinking
   - trinity-large-thinking
+  weak:
+    release_date: '2025-12-01'
+    open_weights: true
 - id: arcee-ai/coder-large
   display_name: 'Arcee AI: Coder Large'
   org_id: arcee-ai
@@ -2775,6 +3540,9 @@
 - id: arcee-ai/maestro
   aliases:
   - 'Arcee AI: Maestro Reasoning'
+  weak:
+    release_date: '2025-05-05'
+    open_weights: true
 - id: arcee-ai/spotlight
   display_name: 'Arcee AI: Spotlight'
   org_id: arcee-ai
@@ -2937,6 +3705,9 @@
 - id: auto
   aliases:
   - Auto
+  weak:
+    release_date: '2023-11-08'
+    open_weights: false
 - id: auto-model
   display_name: Auto model
   org_id: null
@@ -3043,10 +3814,16 @@
   aliases:
   - BGE M3
   - bge-m3
+  weak:
+    release_date: '2024-01-30'
+    open_weights: true
 - id: baai/bge-multilingual-gemma2
   aliases:
   - BGE Multilingual Gemma2
   - bge-multilingual-gemma2
+  weak:
+    release_date: '2024-07-26'
+    open_weights: false
 - id: baai/bge-reranker-base
   display_name: BGE Reranker Base
   org_id: BAAI
@@ -3138,6 +3915,9 @@
 - id: baichuan4
   aliases:
   - Baichuan 4 Turbo
+  weak:
+    release_date: '2025-08-19'
+    open_weights: false
 - id: baichuan4-air
   display_name: Baichuan 4 Air
   org_id: null
@@ -3177,6 +3957,9 @@
   aliases:
   - ERNIE 4.5 21B A3B
   - ernie-4-5-21b-a3b
+  weak:
+    release_date: '2025-03-16'
+    open_weights: true
 - id: baidu/ernie-4-5-300b-a47b
   display_name: baidu/ERNIE-4.5-300B-A47B
   org_id: baidu
@@ -3413,6 +4196,9 @@
   - PaddleOCR-VL
   - paddleocr-vl
   - paddlepaddle/paddleocr-vl
+  weak:
+    release_date: '2025-10-16'
+    open_weights: true
 - id: baidu/qianfan-ocr
   display_name: 'Baidu: Qianfan-OCR-Fast'
   org_id: baidu
@@ -3485,10 +4271,16 @@
   aliases:
   - FLUX.1-Kontext-dev
   - flux-1-kontext-dev
+  weak:
+    release_date: '2025-08-12'
+    open_weights: true
 - id: black-forest-labs/flux-1-schnell
   aliases:
   - FLUX.1-schnell
   - flux-1-schnell
+  weak:
+    release_date: '2024-08-01'
+    open_weights: true
 - id: black-forest-labs/flux-2-klein-4b
   display_name: flux-2-klein-4b
   org_id: black-forest-labs
@@ -3596,6 +4388,9 @@
   aliases:
   - FLUX.1-dev
   - flux.1-dev
+  weak:
+    release_date: '2024-08-01'
+    open_weights: false
 - id: black-forest-labs/flux.2-klein-4b
   display_name: FLUX.2 Klein 4B
   org_id: black-forest-labs
@@ -3723,15 +4518,24 @@
   - Doubao 1.5 Thinking Pro
   - doubao-1-5-thinking-pro
   - doubao-1.5-thinking-pro
+  weak:
+    release_date: '2025-04-17'
+    open_weights: false
 - id: bytedance/doubao-1-5-thinking-pro-vision-250415
   aliases:
   - Doubao 1.5 Thinking Vision Pro
   - doubao-1-5-thinking-pro-vision-250415
+  weak:
+    release_date: '2025-04-15'
+    open_weights: false
 - id: bytedance/doubao-1-5-vision-pro
   aliases:
   - Doubao 1.5 Vision Pro
   - doubao-1-5-vision-pro
   - doubao-1.5-vision-pro
+  weak:
+    release_date: '2025-08-05'
+    open_weights: false
 - id: bytedance/doubao-1-5-vision-pro-32k
   display_name: Doubao 1.5 Vision Pro 32k
   org_id: bytedance
@@ -3755,11 +4559,17 @@
   - Doubao Seed 1.6
   - doubao-seed-1-6
   - doubao-seed-1.6
+  weak:
+    release_date: '2025-06-15'
+    open_weights: false
 - id: bytedance/doubao-seed-1-6-flash
   aliases:
   - Doubao Seed 1.6 Flash
   - doubao-seed-1-6-flash
   - doubao-seed-1.6-flash
+  weak:
+    release_date: '2025-06-15'
+    open_weights: false
 - id: bytedance/doubao-seed-1-6-thinking-250615
   display_name: doubao-seed-1-6-thinking-250715
   org_id: bytedance
@@ -3833,21 +4643,33 @@
   aliases:
   - Doubao Seed 2.0 Code Preview
   - doubao-seed-2-0-code-preview
+  weak:
+    release_date: '2026-02-14'
+    open_weights: false
 - id: bytedance/doubao-seed-2-0-lite
   aliases:
   - Doubao Seed 2.0 Lite
   - doubao-seed-2-0-lite
   - doubao-seed-2.0-lite
+  weak:
+    release_date: '2026-02-14'
+    open_weights: false
 - id: bytedance/doubao-seed-2-0-mini
   aliases:
   - Doubao Seed 2.0 Mini
   - doubao-seed-2-0-mini
   - doubao-seed-2.0-mini
+  weak:
+    release_date: '2026-02-14'
+    open_weights: false
 - id: bytedance/doubao-seed-2-0-pro
   aliases:
   - Doubao Seed 2.0 Pro
   - doubao-seed-2-0-pro
   - doubao-seed-2.0-pro
+  weak:
+    release_date: '2026-02-14'
+    open_weights: false
 - id: bytedance/doubao-seed-code
   display_name: Doubao-Seed-Code
   org_id: bytedance
@@ -3868,18 +4690,30 @@
 - id: bytedance/doubao-seed-code-preview-251028
   aliases:
   - doubao-seed-code-preview-251028
+  weak:
+    release_date: '2025-11-11'
+    open_weights: false
 - id: bytedance/seed-1-6
   aliases:
   - Seed 1.6
   - seed-1-6
+  weak:
+    release_date: '2025-06-25'
+    open_weights: true
 - id: bytedance/seed-1-6-flash
   aliases:
   - 'ByteDance Seed: Seed 1.6 Flash'
   - seed-1-6-flash
+  weak:
+    release_date: '2025-07-26'
+    open_weights: true
 - id: bytedance/seed-1-8
   aliases:
   - Seed 1.8 (251228)
   - seed-1-8
+  weak:
+    release_date: 2025-10
+    open_weights: true
 - id: bytedance/seed-2-0-lite
   display_name: 'ByteDance Seed: Seed-2.0-Lite'
   org_id: bytedance
@@ -4058,23 +4892,38 @@
   - Coding GLM 5.1 (free)
   - coding-glm-5.1
   - coding-glm-5.1-free
+  weak:
+    release_date: '2026-04-11'
+    open_weights: true
 - id: coding-minimax-m2-7
   aliases:
   - Coding MiniMax M2.7
   - coding-minimax-m2.7
   - coding-minimax-m2.7-free
+  weak:
+    release_date: '2026-03-18'
+    open_weights: true
 - id: coding-minimax-m2-7-highspeed
   aliases:
   - Coding MiniMax M2.7 Highspeed
   - coding-minimax-m2.7-highspeed
+  weak:
+    release_date: '2026-03-18'
+    open_weights: true
 - id: coding-xiaomi-mimo-v2-5
   aliases:
   - Coding Xiaomi MiMo-V2.5
   - coding-xiaomi-mimo-v2.5
+  weak:
+    release_date: '2026-04-22'
+    open_weights: true
 - id: coding-xiaomi-mimo-v2-5-pro
   aliases:
   - Coding Xiaomi MiMo-V2.5-Pro
   - coding-xiaomi-mimo-v2.5-pro
+  weak:
+    release_date: '2026-04-22'
+    open_weights: true
 - id: cognitivecomputations/dolphin-2-9.2-qwen2-72b
   display_name: Dolphin 72b
   org_id: cognitivecomputations
@@ -4095,6 +4944,9 @@
   aliases:
   - Uncensored (free)
   - dolphin-mistral-24b-venice-edition
+  weak:
+    release_date: '2025-07-09'
+    open_weights: true
 - id: cohere-embed-v-4-0
   display_name: Embed v4
   org_id: null
@@ -4152,9 +5004,25 @@
 - id: cohere/aya-vision-32b
   aliases:
   - Aya Vision 32B
+  weak:
+    release_date: '2025-03-04'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: cohere/aya-vision-8b
   aliases:
   - Aya Vision 8B
+  weak:
+    release_date: '2025-03-04'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: cohere/cohere-command-r-plus-08-2024
   display_name: cohere-command-r-plus-08-2024
   org_id: cohere
@@ -4196,6 +5064,13 @@
 - id: cohere/command-a-03-2025
   aliases:
   - command-a-03-2025
+  weak:
+    release_date: '2025-03-13'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: cohere/command-a-reasoning
   display_name: Command A Reasoning
   org_id: cohere
@@ -4235,6 +5110,13 @@
 - id: cohere/command-a-translate-08-2025
   aliases:
   - command-a-translate-08-2025
+  weak:
+    release_date: '2025-08-28'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: cohere/command-a-vision
   display_name: Command A Vision
   org_id: cohere
@@ -4257,17 +5139,35 @@
 - id: cohere/command-a-vision-07-2025
   aliases:
   - command-a-vision-07-2025
+  weak:
+    release_date: '2025-07-31'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: cohere/command-r
   aliases:
   - 'Cohere: Command R'
   - cohere-command-r
   - cohere/cohere-command-r
   - command-r
+  weak:
+    release_date: '2024-03-11'
+    open_weights: true
 - id: cohere/command-r-08-2024
   aliases:
   - cohere-command-r-08-2024
   - cohere/cohere-command-r-08-2024
   - command-r-08-2024
+  weak:
+    release_date: '2024-08-01'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: cohere/command-r7b
   display_name: Command R7b
   org_id: cohere
@@ -4290,6 +5190,13 @@
   aliases:
   - Command R7B
   - command-r7b-12-2024
+  weak:
+    release_date: '2024-02-27'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: cohere/command-r7b-arabic
   display_name: Command R7b Arabic
   org_id: cohere
@@ -4456,6 +5363,9 @@
   aliases:
   - Cogito v1 Preview Qwen 32B
   - cogito-v1-preview-qwen-32b
+  weak:
+    release_date: '2025-05-10'
+    open_weights: false
 - id: deepcogito/cogito-v2-1-671b
   display_name: Cogito v2.1 671B MoE
   org_id: deepcogito
@@ -4480,43 +5390,70 @@
   - deepseek-r1
   - deepseek/deepseek-r1
   - deepseek/r1
+  weak:
+    release_date: '2024-12-26'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-R1-0528
   aliases:
   - DeepSeek R1 0528
   - deepseek-r1-0528
   - deepseek/deepseek-r1-0528
+  weak:
+    release_date: '2025-01-20'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-R1-Distill-Llama-70B
   aliases:
   - DeepSeek R1 Distill Llama 70B
   - deepseek-r1-distill-llama-70b
   - deepseek/deepseek-r1-distill-llama-70b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
   aliases:
   - DeepSeek R1 Distill Llama 8B
   - deepseek-r1-distill-llama-8b
   - deepseek/deepseek-r1-distill-llama-8b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: false
 - id: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
   aliases:
   - DeepSeek R1 Distill Qwen 1.5B
   - deepseek-r1-distill-qwen-1-5b
   - deepseek/deepseek-r1-distill-qwen-1-5b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: false
 - id: deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
   aliases:
   - deepseek/deepseek-r1-distill-qwen-14b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-R1-Distill-Qwen-32B
   aliases:
   - DeepSeek R1 Distill Qwen 32B
   - deepseek-r1-distill-qwen-32b
   - deepseek/deepseek-r1-distill-qwen-32b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
   aliases:
   - deepseek/deepseek-r1-distill-qwen-7b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: false
 - id: deepseek-ai/DeepSeek-V3.1-Terminus
   aliases:
   - DeepSeek V3.1 Terminus
   - deepseek-v3-1-terminus
   - deepseek-v3.1-terminus
   - deepseek/deepseek-v3-1-terminus
+  weak:
+    release_date: '2025-06-01'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-V3.2
   aliases:
   - DeepSeek V3.2
@@ -4526,18 +5463,31 @@
   - deepseek/deepseek-3-2
   - deepseek/deepseek-v3-2
   - deepseek/v3-2
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-V3.2-Speciale
   aliases:
   - DeepSeek-V3.2-Speciale
   - deepseek-v3-2-speciale
   - deepseek-v3.2-speciale
   - deepseek/deepseek-v3-2-speciale
+  weak:
+    release_date: '2025-12-01'
+    open_weights: true
 - id: deepseek-ai/DeepSeek-V4-Pro
   aliases:
   - DeepSeek V4 Pro
   - deepseek-v4-pro
   - deepseek/deepseek-v4-pro
   - deepseek/deepseek-v4-pro-lightning
+  weak:
+    release_date: '2026-04-24'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: deepseek-chat-cheaper
   display_name: DeepSeek V3/Chat Cheaper
   org_id: null
@@ -4886,6 +5836,9 @@
   - DeepSeek V3.1
   - deepseek-v3-1
   - deepseek-v3.1
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: deepseek/deepseek-v3-1-671b
   display_name: deepseek-v3.1:671b
   org_id: deepseek
@@ -4984,6 +5937,9 @@
   aliases:
   - deepseek-ai/deepseek-vl2
   - deepseek-vl2
+  weak:
+    release_date: '2024-12-13'
+    open_weights: false
 - id: distilbert-sst-2
   display_name: DistilBERT SST-2 INT8
   org_id: null
@@ -5005,61 +5961,118 @@
   aliases:
   - DMind-1
   - dmind-1
+  weak:
+    release_date: '2025-06-01'
+    open_weights: false
 - id: dmind/dmind-1-mini
   aliases:
   - DMind-1-Mini
   - dmind-1-mini
+  weak:
+    release_date: '2025-06-01'
+    open_weights: false
 - id: duo-chat-gpt-5-1
   aliases:
   - Agentic Chat (GPT-5.1)
+  weak:
+    release_date: '2026-01-22'
+    open_weights: false
 - id: duo-chat-gpt-5-2
   aliases:
   - Agentic Chat (GPT-5.2)
+  weak:
+    release_date: '2026-01-23'
+    open_weights: false
 - id: duo-chat-gpt-5-2-codex
   aliases:
   - Agentic Chat (GPT-5.2 Codex)
+  weak:
+    release_date: '2026-01-22'
+    open_weights: false
 - id: duo-chat-gpt-5-3-codex
   aliases:
   - Agentic Chat (GPT-5.3 Codex)
+  weak:
+    release_date: '2026-02-05'
+    open_weights: false
 - id: duo-chat-gpt-5-4
   aliases:
   - Agentic Chat (GPT-5.4)
+  weak:
+    release_date: '2026-03-05'
+    open_weights: false
 - id: duo-chat-gpt-5-4-mini
   aliases:
   - Agentic Chat (GPT-5.4 Mini)
+  weak:
+    release_date: '2026-03-17'
+    open_weights: false
 - id: duo-chat-gpt-5-4-nano
   aliases:
   - Agentic Chat (GPT-5.4 Nano)
+  weak:
+    release_date: '2026-03-17'
+    open_weights: false
 - id: duo-chat-gpt-5-5
   aliases:
   - Agentic Chat (GPT-5.5)
+  weak:
+    release_date: '2026-04-23'
+    open_weights: false
 - id: duo-chat-gpt-5-codex
   aliases:
   - Agentic Chat (GPT-5 Codex)
+  weak:
+    release_date: '2026-01-22'
+    open_weights: false
 - id: duo-chat-gpt-5-mini
   aliases:
   - Agentic Chat (GPT-5 Mini)
+  weak:
+    release_date: '2026-01-22'
+    open_weights: false
 - id: duo-chat-haiku-4-5
   aliases:
   - Agentic Chat (Claude Haiku 4.5)
+  weak:
+    release_date: '2026-01-08'
+    open_weights: false
 - id: duo-chat-opus-4-5
   aliases:
   - Agentic Chat (Claude Opus 4.5)
+  weak:
+    release_date: '2026-01-08'
+    open_weights: false
 - id: duo-chat-opus-4-6
   aliases:
   - Agentic Chat (Claude Opus 4.6)
+  weak:
+    release_date: '2026-02-05'
+    open_weights: false
 - id: duo-chat-opus-4-7
   aliases:
   - Agentic Chat (Claude Opus 4.7)
+  weak:
+    release_date: '2026-04-16'
+    open_weights: false
 - id: duo-chat-opus-4-8
   aliases:
   - Agentic Chat (Claude Opus 4.8)
+  weak:
+    release_date: '2026-05-28'
+    open_weights: false
 - id: duo-chat-sonnet-4-5
   aliases:
   - Agentic Chat (Claude Sonnet 4.5)
+  weak:
+    release_date: '2026-01-08'
+    open_weights: false
 - id: duo-chat-sonnet-4-6
   aliases:
   - Agentic Chat (Claude Sonnet 4.6)
+  weak:
+    release_date: '2026-02-17'
+    open_weights: false
 - id: e5-large-v2
   display_name: E5 Large v2
   org_id: null
@@ -5098,6 +6111,9 @@
 - id: elevenlabs/elevenlabs-v2-5
   aliases:
   - ElevenLabs-v2.5-Turbo
+  weak:
+    release_date: '2024-10-28'
+    open_weights: false
 - id: elevenlabs/elevenlabs-v3
   display_name: ElevenLabs-v3
   org_id: elevenlabs
@@ -5225,6 +6241,9 @@
   - Llama 3 70B abliterated
   - failspy/meta-llama-3-70b-instruct-abliterated-v3-5
   - meta-llama-3-70b-instruct-abliterated-v3-5
+  weak:
+    release_date: '2025-07-26'
+    open_weights: false
 - id: fast-sdxl
   display_name: Fast SDXL
   org_id: null
@@ -5403,6 +6422,9 @@
 - id: google/gemini-2-0-pro
   aliases:
   - Gemini 2.0 Pro Reasoner
+  weak:
+    release_date: '2025-02-05'
+    open_weights: false
 - id: google/gemini-2-0-pro-exp-02-05
   display_name: Gemini 2.0 Pro 0205
   org_id: google
@@ -5592,12 +6614,34 @@
   - gemini-2-0-flash
   - gemini-2.0-flash
   - google/gemini-2-0-flash
+  weak:
+    release_date: '2024-12-11'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-2.0-flash-lite
   aliases:
   - Gemini 2.0 Flash-Lite
   - gemini-2-0-flash-lite
   - gemini-2.0-flash-lite
   - google/gemini-2-0-flash-lite
+  weak:
+    release_date: '2024-12-11'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-2.5-flash
   aliases:
   - Gemini 2.5 Flash
@@ -5605,12 +6649,34 @@
   - gemini-2-5-flash
   - gemini-2.5-flash
   - google/gemini-2-5-flash
+  weak:
+    release_date: '2025-03-20'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-2.5-flash-lite
   aliases:
   - Gemini 2.5 Flash-Lite
   - gemini-2-5-flash-lite
   - gemini-2.5-flash-lite
   - google/gemini-2-5-flash-lite
+  weak:
+    release_date: '2025-06-17'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-2.5-flash-preview-tts
   display_name: Gemini 2.5 Flash Preview TTS
   org_id: google
@@ -5639,6 +6705,17 @@
   - gemini-2-5-pro
   - gemini-2.5-pro
   - google/gemini-2-5-pro
+  weak:
+    release_date: '2025-03-20'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-2.5-pro-preview-tts
   display_name: Gemini 2.5 Pro Preview TTS
   org_id: google
@@ -5761,6 +6838,9 @@
   aliases:
   - databricks-gemini-3-pro
   - gemini-3-pro
+  weak:
+    release_date: '2025-10-22'
+    open_weights: false
 - id: google/gemini-3-pro-image
   display_name: Nano Banana Pro (Gemini 3 Pro Image)
   org_id: google
@@ -5799,6 +6879,17 @@
   aliases:
   - Gemini 3 Pro Preview
   - gemini-3-pro-preview
+  weak:
+    release_date: '2025-11-18'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-3.1-flash-lite
   aliases:
   - Gemini 3.1 Flash Lite
@@ -5806,6 +6897,17 @@
   - gemini-3-1-flash-lite
   - gemini-3.1-flash-lite
   - google/gemini-3-1-flash-lite
+  weak:
+    release_date: '2026-03-03'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-3.1-pro
   aliases:
   - Gemini 3.1 Pro
@@ -5813,9 +6915,31 @@
   - gemini-3-1-pro
   - gemini-3.1-pro
   - google/gemini-3-1-pro
+  weak:
+    release_date: '2026-02-19'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-3.1-pro-preview-custom-tools
   aliases:
   - Gemini 3.1 Pro Preview Custom Tools
+  weak:
+    release_date: '2026-02-19'
+    open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: google/gemini-3.5-flash
   display_name: Gemini 3.5 Flash
   org_id: google
@@ -6039,18 +7163,30 @@
 - id: google/gemma-2-27b
   aliases:
   - 'Google: Gemma 2 27B'
+  weak:
+    release_date: '2024-06-24'
+    open_weights: true
 - id: google/gemma-2-27b-it
   aliases:
   - Gemma 2 27B IT
   - google/gemma-2-27b-it-together
+  weak:
+    release_date: '2024-06-27'
+    open_weights: true
 - id: google/gemma-2-2b-it
   aliases:
   - Gemma 2 2b It
   - gemma-2-2b-it
+  weak:
+    release_date: '2024-07-16'
+    open_weights: true
 - id: google/gemma-2-9b
   aliases:
   - Gemma 2 9B
   - google/gemma2-9b-it
+  weak:
+    release_date: '2024-06-25'
+    open_weights: true
 - id: google/gemma-3
   display_name: Google Gemma 3
   org_id: google
@@ -6074,6 +7210,9 @@
   - Gemma 3 12B IT
   - gemma-3-12b-it
   - google.gemma-3-12b-it
+  weak:
+    release_date: '2024-12-01'
+    open_weights: true
 - id: google/gemma-3-27b
   display_name: Gemma 3 27B
   org_id: google
@@ -6170,6 +7309,9 @@
   - gemma-3-27b-it
   - google-gemma-3-27b-it
   - google.gemma-3-27b-it
+  weak:
+    release_date: '2024-12-01'
+    open_weights: true
 - id: google/gemma-3-27b-it-abliterated
   display_name: Gemma 3 27B IT Abliterated
   org_id: google
@@ -6211,19 +7353,41 @@
   - Gemma 3n E2b It
   - gemma-3n-e2b-it
   - google/gemma-3n-e2b-it
+  weak:
+    release_date: '2025-06-12'
+    open_weights: true
 - id: google/gemma-3n-E4B-it
   aliases:
   - 'Google: Gemma 3n 4B'
   - gemma-3n-e4b-it
   - google/gemma-3n-e4b-it
+  weak:
+    release_date: '2025-05-20'
+    open_weights: true
 - id: google/gemma-4-26B-A4B
   aliases:
   - Gemma 4 26B A4B
+  weak:
+    release_date: '2026-04-02'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: google/gemma-4-26B-A4B-it
   aliases:
   - Gemma 4 26B A4B IT
   - gemma-4-26b-a4b-it
   - google-gemma-4-26b-a4b-it
+  weak:
+    release_date: '2026-04-02'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: google/gemma-4-31B
   aliases:
   - gemma 4 31B turbo TEE
@@ -6232,12 +7396,28 @@
   - gemma4:31b
   - google/gemma-4-31b
   - google/gemma4-31b
+  weak:
+    release_date: '2026-04-02'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: google/gemma-4-31B-it
   aliases:
   - Gemma 4 31B IT
   - gemma-4-31B-it
   - gemma-4-31b-it
   - google-gemma-4-31b-it
+  weak:
+    release_date: '2026-04-02'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: google/gemma-4-e4b-it-iq4-xs
   display_name: Gemma 4 E4B Instruct (IQ4_XS)
   org_id: google
@@ -6316,6 +7496,9 @@
   aliases:
   - gemma3-12b
   - gemma3:12b
+  weak:
+    release_date: '2024-12-01'
+    open_weights: true
 - id: google/gemma3-27b
   display_name: gemma3:27b
   org_id: google
@@ -6339,10 +7522,16 @@
   aliases:
   - gemma3-4b
   - gemma3:4b
+  weak:
+    release_date: '2024-12-01'
+    open_weights: true
 - id: google/google-paligemma
   aliases:
   - google-paligemma
   - paligemma
+  weak:
+    release_date: '2024-05-14'
+    open_weights: true
 - id: google/imagen-3
   display_name: Imagen-3-Fast
   org_id: google
@@ -6518,6 +7707,15 @@
   aliases:
   - Nano Banana
   - nano-banana
+  weak:
+    release_date: '2025-08-21'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - image
+    - text
 - id: google/nano-banana-2
   display_name: Nano Banana 2
   org_id: google
@@ -6748,29 +7946,50 @@
   aliases:
   - DeepSeek R1 Llama 70B Abliterated
   - deepseek-r1-distill-llama-70b-abliterated
+  weak:
+    release_date: '2025-01-20'
+    open_weights: false
 - id: huihui-ai/deepseek-r1-distill-qwen-32b-abliterated
   aliases:
   - DeepSeek R1 Qwen Abliterated
   - deepseek-r1-distill-qwen-32b-abliterated
+  weak:
+    release_date: '2025-01-20'
+    open_weights: false
 - id: huihui-ai/llama-3-1-nemotron-70b-instruct-hf-abliterated
   aliases:
   - Nemotron 3.1 70B abliterated
   - llama-3-1-nemotron-70b-instruct-hf-abliterated
+  weak:
+    release_date: '2024-07-23'
+    open_weights: false
 - id: huihui-ai/llama-3-3-70b-instruct-abliterated
   aliases:
   - Llama 3.3 70B Instruct abliterated
   - llama-3-3-70b-instruct-abliterated
+  weak:
+    release_date: '2025-08-08'
+    open_weights: false
 - id: huihui-ai/qwen2-5-32b-instruct-abliterated
   aliases:
   - Qwen 2.5 32B Abliterated
   - qwen2-5-32b-instruct-abliterated
+  weak:
+    release_date: '2025-01-06'
+    open_weights: false
 - id: hunyuan-2-0
   aliases:
   - Tencent HY 2.0 Think
+  weak:
+    release_date: '2026-03-08'
+    open_weights: false
 - id: hunyuan-2-0-instruct
   aliases:
   - Tencent HY 2.0 Instruct
   - hunyuan-2.0-instruct
+  weak:
+    release_date: '2026-03-08'
+    open_weights: false
 - id: ibm/granite-4-0-h-micro
   display_name: 'IBM: Granite 4.0 Micro'
   org_id: ibm
@@ -6811,6 +8030,9 @@
   aliases:
   - Ideogram
   - ideogram
+  weak:
+    release_date: '2024-04-03'
+    open_weights: false
 - id: ideogramai/ideogram-v2a
   display_name: Ideogram-v2a
   org_id: ideogramai
@@ -6886,11 +8108,17 @@
   - Ling-1T
   - inclusionai/ling-1t
   - ling-1t
+  weak:
+    release_date: 2025-10
+    open_weights: true
 - id: inclusionAI/Ring-1T
   aliases:
   - Ring-1T
   - inclusionai/ring-1t
   - ring-1t
+  weak:
+    release_date: 2025-10
+    open_weights: true
 - id: inclusionAI/ling-flash-2-0
   display_name: inclusionAI/Ling-flash-2.0
   org_id: inclusionAI
@@ -7020,14 +8248,23 @@
   - Mag Mell R1
   - inflatebot/mn-12b-mag-mell-r1
   - mn-12b-mag-mell-r1
+  weak:
+    release_date: '2024-07-01'
+    open_weights: false
 - id: inflection/inflection-3-pi
   aliases:
   - Inflection 3 Pi
   - inflection-3-pi
+  weak:
+    release_date: '2024-10-11'
+    open_weights: false
 - id: inflection/inflection-3-productivity
   aliases:
   - Inflection 3 Productivity
   - inflection-3-productivity
+  weak:
+    release_date: '2024-10-11'
+    open_weights: false
 - id: interfaze/interfaze-beta
   display_name: Interfaze Beta
   org_id: interfaze
@@ -7049,10 +8286,16 @@
   aliases:
   - E5 Mistral 7B
   - e5-mistral-7b-instruct
+  weak:
+    release_date: '2023-12-11'
+    open_weights: true
 - id: intfloat/multilingual-e5-large-instruct
   aliases:
   - E5 Multi-Lingual Large Embeddings 0.6B
   - multilingual-e5-large-instruct
+  weak:
+    release_date: '2024-06-01'
+    open_weights: true
 - id: kat-coder-air-v1
   display_name: KAT Coder Air V1
   org_id: null
@@ -7128,6 +8371,9 @@
   - KAT Coder Pro V1
   - kat-coder-pro
   - kwaipilot/kat-coder-pro
+  weak:
+    release_date: '2025-10-24'
+    open_weights: true
 - id: liquid/lfm-2-24b-a2b
   display_name: lfm-2-24b-a2b
   org_id: liquid
@@ -7149,6 +8395,9 @@
 - id: liquid/lfm-2-5-1-2b
   aliases:
   - LFM2.5-1.2B-Thinking (free)
+  weak:
+    release_date: '2026-01-20'
+    open_weights: true
 - id: liquid/lfm-2-5-1-2b-instruct
   display_name: LFM2.5-1.2B-Instruct (free)
   org_id: liquid
@@ -7189,6 +8438,9 @@
 - id: lucidnova-rf1-100b
   aliases:
   - LucidNova RF1 100B
+  weak:
+    release_date: '2024-12-28'
+    open_weights: false
 - id: lucidquery-nexus-coder
   display_name: LucidQuery Nexus Coder
   org_id: null
@@ -7261,14 +8513,23 @@
   aliases:
   - Manta Flash 1.0
   - manta-flash-1-0
+  weak:
+    release_date: '2025-12-20'
+    open_weights: false
 - id: meganova-ai/manta-mini-1-0
   aliases:
   - Manta Mini 1.0
   - manta-mini-1-0
+  weak:
+    release_date: '2025-12-20'
+    open_weights: false
 - id: meganova-ai/manta-pro-1-0
   aliases:
   - Manta Pro 1.0
   - manta-pro-1-0
+  weak:
+    release_date: '2025-12-20'
+    open_weights: false
 - id: meituan/longcat-flash
   display_name: LongCat Flash Thinking
   org_id: meituan
@@ -7289,6 +8550,9 @@
   aliases:
   - LongCat Flash
   - longcat-flash-chat
+  weak:
+    release_date: '2025-08-30'
+    open_weights: false
 - id: meituan/longcat-flash-lite
   display_name: Meituan/Longcat-Flash-Lite
   org_id: meituan
@@ -7310,6 +8574,9 @@
   aliases:
   - LongCat Flash Thinking 2601
   - longcat-flash-thinking-2601
+  weak:
+    release_date: '2026-03-13'
+    open_weights: false
 - id: melotts
   display_name: MyShell MeloTTS
   org_id: null
@@ -7332,6 +8599,9 @@
   - Llama-3.1-70B
   - llama-3-1-70b
   - meta/llama-3-1-70b
+  weak:
+    release_date: '2024-07-23'
+    open_weights: false
 - id: meta-llama/Llama-3.1-70B-Instruct
   aliases:
   - Llama 3.1 70B Instruct
@@ -7341,6 +8611,9 @@
   - meta/llama-3-1-70b-instruct
   - meta/llama3-1-70b-instruct
   - meta/meta-llama-3-1-70b-instruct
+  weak:
+    release_date: '2024-07-16'
+    open_weights: true
 - id: meta-llama/Llama-3.1-8B
   aliases:
   - Llama 3.1 8B
@@ -7348,34 +8621,52 @@
   - llama-3-1-8b
   - meta/llama-3-1-8b
   - meta/llama3-1-8b
+  weak:
+    release_date: '2024-07-23'
+    open_weights: true
 - id: meta-llama/Llama-3.1-8B-Instruct
   aliases:
   - Meta-Llama-3.1-8B-Instruct
   - meta/llama-3-1-8b-instruct
   - meta/llama3-1-8b-instruct
   - meta/meta-llama-3-1-8b-instruct
+  weak:
+    release_date: '2024-07-23'
+    open_weights: true
 - id: meta-llama/Llama-3.2-1B
   aliases:
   - Llama-3.2-1B
   - llama-3-2-1b
   - meta/llama-3-2-1b
+  weak:
+    release_date: '2024-09-18'
+    open_weights: false
 - id: meta-llama/Llama-3.2-1B-Instruct
   aliases:
   - Llama 3.2 1B Instruct
   - llama-3-2-1b-instruct
   - meta/llama-3-2-1b-instruct
+  weak:
+    release_date: '2024-09-18'
+    open_weights: true
 - id: meta-llama/Llama-3.2-3B
   aliases:
   - Llama 3.2 3B
   - llama-3-2-3b
   - llama-3.2-3b
   - meta/llama-3-2-3b
+  weak:
+    release_date: '2024-09-18'
+    open_weights: true
 - id: meta-llama/Llama-3.2-3B-Instruct
   aliases:
   - Llama 3.2 3B Instruct
   - llama-3-2-3b-instruct
   - llama-3.2-3b-instruct
   - meta/llama-3-2-3b-instruct
+  weak:
+    release_date: '2024-09-18'
+    open_weights: true
 - id: meta-llama/Llama-3.2-90B-Vision-Instruct
   aliases:
   - Llama 3.2 90B Vision Instruct
@@ -7384,6 +8675,9 @@
   - llama-3.2-90b-vision-instruct
   - meta/llama-3-2-90b
   - meta/llama-3-2-90b-vision-instruct
+  weak:
+    release_date: '2024-09-25'
+    open_weights: true
 - id: meta-llama/Llama-3.3-70B-Instruct
   aliases:
   - Llama 3.3 Instruct 70B
@@ -7397,16 +8691,25 @@
   - meta/llama-3-3-70b-instruct
   - meta/llama3-3-70b-instruct
   - meta/meta-llama-3-3-70b-instruct
+  weak:
+    release_date: '2024-08-01'
+    open_weights: true
 - id: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
   aliases:
   - Llama-4-Maverick-17B-128E-Instruct-FP8
   - llama-4-maverick-17b-128e-instruct-fp8
   - meta/llama-4-maverick-17b-128e-instruct-fp8
+  weak:
+    release_date: '2025-01-15'
+    open_weights: true
 - id: meta-llama/Llama-4-Scout-17B-16E-Instruct
   aliases:
   - Llama-4-Scout-17B-16E-Instruct-FP8
   - llama-4-scout-17b-16e-instruct
   - meta/llama-4-scout-17b-16e-instruct
+  weak:
+    release_date: '2025-01-31'
+    open_weights: true
 - id: meta-llama/Meta-Llama-3-70B-Instruct
   aliases:
   - Meta-Llama-3-70B-Instruct
@@ -7414,30 +8717,51 @@
   - meta-llama-3-70b-instruct
   - meta/llama-3-70b-instruct
   - meta/meta-llama-3-70b-instruct
+  weak:
+    release_date: '2024-04-18'
+    open_weights: true
 - id: meta-llama/Meta-Llama-3-8B-Instruct
   aliases:
   - Meta-Llama-3-8B-Instruct
   - meta-llama-3-8b-instruct
   - meta/llama-3-8b-instruct
   - meta/meta-llama-3-8b-instruct
+  weak:
+    release_date: '2024-04-18'
+    open_weights: true
 - id: meta/cerebras-llama-4-maverick-17b-128e-instruct
   aliases:
   - Cerebras-Llama-4-Maverick-17B-128E-Instruct
   - cerebras-llama-4-maverick-17b-128e-instruct
+  weak:
+    release_date: '2025-04-05'
+    open_weights: true
 - id: meta/cerebras-llama-4-scout-17b-16e-instruct
   aliases:
   - Cerebras-Llama-4-Scout-17B-16E-Instruct
   - cerebras-llama-4-scout-17b-16e-instruct
+  weak:
+    release_date: '2025-04-05'
+    open_weights: true
 - id: meta/esm2-650m
   aliases:
   - esm2-650m
+  weak:
+    release_date: '2024-08-29'
+    open_weights: true
 - id: meta/esmfold
   aliases:
   - esmfold
+  weak:
+    release_date: '2024-03-15'
+    open_weights: true
 - id: meta/groq-llama-4-maverick-17b-128e-instruct
   aliases:
   - Groq-Llama-4-Maverick-17B-128E-Instruct
   - groq-llama-4-maverick-17b-128e-instruct
+  weak:
+    release_date: '2025-04-05'
+    open_weights: true
 - id: meta/llama-2-7b-chat-fp16
   display_name: Llama 2 7B Chat FP16
   org_id: meta
@@ -7463,6 +8787,9 @@
   - meta-llama-3-1-405b-instruct
   - meta-llama-3.1-405b-instruct
   - meta/meta-llama-3-1-405b-instruct
+  weak:
+    release_date: '2024-07-23'
+    open_weights: true
 - id: meta/llama-3-1-8b-cs
   display_name: Llama-3.1-8B-CS
   org_id: meta
@@ -7579,6 +8906,9 @@
   - Llama 3.3 70B
   - llama-3-3-70b
   - llama-3.3-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: true
 - id: meta/llama-3-3-70b-anthrobomination
   display_name: Llama 3.3 70B Anthrobomination
   org_id: meta
@@ -7645,6 +8975,9 @@
   - Llama-3.3-70B-ArliAI-RPMax-v2
   - llama-3-3-70b-arliai-rpmax-v2
   - llama-3.3-70b-arliai-rpmax-v2
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: meta/llama-3-3-70b-aurora-borealis
   display_name: Llama 3.3 70B Aurora Borealis
   org_id: meta
@@ -8670,72 +10003,114 @@
   - Phi-3-medium-instruct (128k)
   - microsoft/phi-3-medium-128k-instruct
   - phi-3-medium-128k-instruct
+  weak:
+    release_date: '2024-04-23'
+    open_weights: true
 - id: microsoft/Phi-3-medium-4k-instruct
   aliases:
   - Phi-3-medium-instruct (4k)
   - microsoft/phi-3-medium-4k-instruct
   - phi-3-medium-4k-instruct
+  weak:
+    release_date: '2024-04-23'
+    open_weights: true
 - id: microsoft/Phi-3-mini-128k-instruct
   aliases:
   - Phi-3-mini-instruct (128k)
   - microsoft/phi-3-mini-128k-instruct
   - phi-3-mini-128k-instruct
+  weak:
+    release_date: '2024-04-23'
+    open_weights: true
 - id: microsoft/Phi-3-mini-4k-instruct
   aliases:
   - Phi-3-mini-instruct (4k)
   - microsoft/phi-3-mini-4k-instruct
   - phi-3-mini-4k-instruct
+  weak:
+    release_date: '2024-04-23'
+    open_weights: true
 - id: microsoft/Phi-3-small-128k-instruct
   aliases:
   - Phi-3-small-instruct (128k)
   - microsoft/phi-3-small-128k-instruct
   - phi-3-small-128k-instruct
+  weak:
+    release_date: '2024-04-23'
+    open_weights: true
 - id: microsoft/Phi-3-small-8k-instruct
   aliases:
   - Phi-3-small-instruct (8k)
   - microsoft/phi-3-small-8k-instruct
   - phi-3-small-8k-instruct
+  weak:
+    release_date: '2024-04-23'
+    open_weights: true
 - id: microsoft/Phi-3.5-MoE-instruct
   aliases:
   - Phi-3.5-MoE-instruct
   - microsoft/phi-3-5-moe-instruct
   - phi-3-5-moe-instruct
   - phi-3.5-moe-instruct
+  weak:
+    release_date: '2024-08-20'
+    open_weights: true
 - id: microsoft/Phi-3.5-mini-instruct
   aliases:
   - Phi-3.5-mini-instruct
   - microsoft/phi-3-5-mini-instruct
   - phi-3-5-mini-instruct
   - phi-3.5-mini-instruct
+  weak:
+    release_date: '2024-08-20'
+    open_weights: true
 - id: microsoft/Phi-3.5-vision-instruct
   aliases:
   - Phi-3.5-vision instruct (128k)
   - microsoft/phi-3-5-vision-instruct
   - phi-3-5-vision-instruct
+  weak:
+    release_date: '2024-08-20'
+    open_weights: true
 - id: microsoft/Phi-4-mini-instruct
   aliases:
   - Phi-4-mini-instruct
   - microsoft/phi-4-mini-instruct
   - phi-4-mini-instruct
+  weak:
+    release_date: '2024-12-01'
+    open_weights: true
 - id: microsoft/Phi-4-mini-reasoning
   aliases:
   - Phi-4-mini-reasoning
   - microsoft/phi-4-mini
   - microsoft/phi-4-mini-reasoning
   - phi-4-mini-reasoning
+  weak:
+    release_date: '2024-12-11'
+    open_weights: true
 - id: microsoft/Phi-4-multimodal-instruct
   aliases:
   - Phi 4 Multimodal
   - microsoft/phi-4-multimodal-instruct
   - phi-4-multimodal-instruct
+  weak:
+    release_date: '2024-12-11'
+    open_weights: true
 - id: microsoft/Phi-4-reasoning-plus
   aliases:
   - Phi-4-reasoning-plus
   - microsoft/phi-4-reasoning-plus
   - phi-4-reasoning-plus
+  weak:
+    release_date: '2024-12-11'
+    open_weights: true
 - id: microsoft/WizardLM-2-8x22B
   aliases:
   - WizardLM-2 8x22B
+  weak:
+    release_date: '2024-04-16'
+    open_weights: true
 - id: microsoft/mai-ds-r1
   display_name: MAI-DS-R1
   org_id: microsoft
@@ -8757,6 +10132,14 @@
   aliases:
   - Phi-4
   - phi-4
+  weak:
+    release_date: '2024-12-11'
+    open_weights: true
+- id: microsoft/phi-4-multimodal
+  weak:
+    release_date: '2024-12-11'
+    open_weights: true
+  aliases: []
 - id: minimax/minimax-01
   display_name: MiniMax 01
   org_id: minimax
@@ -8780,6 +10163,9 @@
   - MiniMax M1
   - MiniMax-M1
   - minimax-m1
+  weak:
+    release_date: '2025-06-16'
+    open_weights: true
 - id: minimax/minimax-m1-80k
   display_name: minimax-m1-80k
   org_id: minimax
@@ -9021,6 +10407,9 @@
   aliases:
   - MiniMax Text 01
   - minimax-text-01
+  weak:
+    release_date: '2025-01-15'
+    open_weights: true
 - id: minimax/minimax.minimax-m2
   display_name: minimax.minimax-m2
   org_id: minimax
@@ -9043,30 +10432,56 @@
   aliases:
   - MiroThinker v1.5 235B
   - mirothinker-v1-5-235b
+  weak:
+    release_date: '2026-01-07'
+    open_weights: false
 - id: mistralai/Devstral-Small-2505
   aliases:
   - Devstral Small 2505
   - devstral-small-2505
+  weak:
+    release_date: '2025-05-07'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: mistralai/Devstral-Small-2507
   aliases:
   - devstral-small-2507
+  weak:
+    release_date: '2025-07-10'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: mistralai/Magistral-Small-2506
   aliases:
   - Magistral Small 2506
   - Magistral-Small-2506
   - magistral-small-2506
   - mistralai/magistral-small-2506
+  weak:
+    release_date: '2025-06-01'
+    open_weights: false
 - id: mistralai/Magistral-Small-2509
   aliases:
   - Magistral Small 1.2 24B
   - magistral-small-2509
   - mistral.magistral-small-2509
   - mistralai/magistral-small-2509
+  weak:
+    release_date: '2025-06-01'
+    open_weights: true
 - id: mistralai/Mistral-7B-Instruct-v0.1
   aliases:
   - 'Mistral: Mistral 7B Instruct v0.1'
   - mistral-7b-instruct-v0-1
   - mistralai/mistral-7b-instruct-v0-1
+  weak:
+    release_date: '2025-04-03'
+    open_weights: false
 - id: mistralai/Mistral-7B-Instruct-v0.3
   aliases:
   - Mistral 7B Instruct
@@ -9076,30 +10491,48 @@
   - mistral-7b-instruct-v0.3
   - mistralai/mistral-7b-instruct
   - mistralai/mistral-7b-instruct-v0-3
+  weak:
+    release_date: '2024-05-22'
+    open_weights: true
 - id: mistralai/Mistral-Large-3-675B-Instruct-2512
   aliases:
   - Mistral Large 3 675B
   - mistral-large-3-675b-instruct-2512
   - mistralai/mistral-large-3-675b-instruct-2512
+  weak:
+    release_date: '2025-12-02'
+    open_weights: true
 - id: mistralai/Mistral-Large-Instruct-2411
   aliases:
   - Mistral Large Instruct 2411
   - mistral-large-instruct-2411
   - mistralai/mistral-large-instruct-2411
+  weak:
+    release_date: '2024-11-01'
+    open_weights: false
 - id: mistralai/Mistral-Nemo-Instruct-2407
   aliases:
   - Mistral Nemo Instruct 2407
   - mistral-nemo-instruct-2407
   - mistralai/mistral-nemo-instruct-2407
+  weak:
+    release_date: '2024-07-01'
+    open_weights: true
 - id: mistralai/Mistral-Small-4-119B-2603
   aliases:
   - mistral-small-4-119b-2603
   - mistralai/mistral-small-4-119b-2603
+  weak:
+    release_date: '2026-03-16'
+    open_weights: true
 - id: mistralai/Mixtral-8x22B-Instruct-v0.1
   aliases:
   - Mixtral-8x22B-Instruct-v0.1
   - mistralai/mixtral-8x22b-instruct-v0-1
   - mixtral-8x22b-instruct-v0-1
+  weak:
+    release_date: '2025-12-11'
+    open_weights: false
 - id: mistralai/Mixtral-8x7B-Instruct-v0.1
   aliases:
   - Mixtral-8x7B-Instruct-v0.1
@@ -9107,10 +10540,20 @@
   - mixtral-8x7B-instruct-v0.1
   - mixtral-8x7b-instruct-v0-1
   - mixtral-8x7b-instruct-v0.1
+  weak:
+    release_date: '2023-12-11'
+    open_weights: true
 - id: mistralai/codestral
   aliases:
   - Codestral
   - codestral
+  weak:
+    release_date: '2024-05-29'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: mistralai/codestral-2501
   display_name: Codestral 25.01
   org_id: mistralai
@@ -9189,6 +10632,9 @@
   aliases:
   - Devstral 2
   - devstral-2
+  weak:
+    release_date: '2025-12-02'
+    open_weights: true
 - id: mistralai/devstral-2-123b
   display_name: devstral-2:123b
   org_id: mistralai
@@ -9272,10 +10718,16 @@
   aliases:
   - 'Mistral: Devstral Small 1.1'
   - devstral-small
+  weak:
+    release_date: '2025-05-07'
+    open_weights: true
 - id: mistralai/devstral-small-2
   aliases:
   - Devstral Small 2
   - devstral-small-2
+  weak:
+    release_date: '2025-05-07'
+    open_weights: true
 - id: mistralai/devstral-small-2-24b
   display_name: devstral-small-2:24b
   org_id: mistralai
@@ -9749,6 +11201,13 @@
 - id: mistralai/mistral-7b
   aliases:
   - Mistral 7B
+  weak:
+    release_date: '2023-09-27'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-embed
   display_name: Mistral Embed
   org_id: mistralai
@@ -9809,10 +11268,21 @@
   aliases:
   - Mistral Large 2407
   - mistral-large-2407
+  weak:
+    release_date: '2024-11-19'
+    open_weights: true
 - id: mistralai/mistral-large-3
   aliases:
   - Mistral Large 3
   - mistral-large-3
+  weak:
+    release_date: '2024-11-01'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-large-3-675b
   display_name: mistral-large-3:675b
   org_id: mistralai
@@ -9897,6 +11367,14 @@
   aliases:
   - Mistral Medium 3
   - mistral-medium-3
+  weak:
+    release_date: '2025-05-07'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-medium-3-5-128b
   display_name: Mistral Medium 3.5 128B
   org_id: mistralai
@@ -9938,11 +11416,27 @@
   - Mistral Medium 3.1
   - mistral-medium-3-1
   - mistralai/mistral-medium-3-1
+  weak:
+    release_date: '2025-08-12'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-medium-3.5
   aliases:
   - Mistral Medium 3.5
   - mistral-medium-3-5
   - mistralai/mistral-medium-3-5
+  weak:
+    release_date: '2026-04-29'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-medium-latest
   display_name: Mistral Medium (latest)
   org_id: mistralai
@@ -9970,6 +11464,13 @@
   aliases:
   - Mistral Nemo
   - mistral-nemo
+  weak:
+    release_date: '2024-07-01'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-nemo-12b-instruct
   display_name: Mistral Nemo 12B Instruct
   org_id: mistralai
@@ -10009,6 +11510,9 @@
 - id: mistralai/mistral-nemotron
   aliases:
   - mistral-nemotron
+  weak:
+    release_date: '2025-06-11'
+    open_weights: true
 - id: mistralai/mistral-saba
   display_name: Mistral Saba
   org_id: mistralai
@@ -10048,10 +11552,21 @@
   aliases:
   - Mistral Small
   - mistral-small
+  weak:
+    release_date: '2026-03-16'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-small-24b-instruct-2501
   aliases:
   - 'Mistral: Mistral Small 3'
   - mistral-small-24b-instruct-2501
+  weak:
+    release_date: '2025-01-30'
+    open_weights: true
 - id: mistralai/mistral-small-2503
   display_name: Mistral Small 3.1
   org_id: mistralai
@@ -10074,6 +11589,9 @@
   aliases:
   - Mistral Small 3.1 24B Instruct
   - mistral-small-3-1-24b-instruct
+  weak:
+    release_date: '2025-03-17'
+    open_weights: true
 - id: mistralai/mistral-small-3-2-24b-instruct
   display_name: 'Mistral: Mistral Small 3.2 24B'
   org_id: mistralai
@@ -10115,6 +11633,14 @@
 - id: mistralai/mistral-small-3.2
   aliases:
   - Mistral Small 3.2
+  weak:
+    release_date: '2025-06-20'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-small-31-24b-instruct
   display_name: Mistral Small 31 24b Instruct
   org_id: mistralai
@@ -10135,6 +11661,14 @@
 - id: mistralai/mistral-small-4
   aliases:
   - Mistral Small 4
+  weak:
+    release_date: '2026-03-16'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mistral-small-4-119b
   display_name: Mistral Small 4 119B
   org_id: mistralai
@@ -10230,6 +11764,13 @@
 - id: mistralai/mixtral-8x22b
   aliases:
   - Mixtral 8x22B
+  weak:
+    release_date: '2024-04-17'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mixtral-8x22b-instruct
   display_name: 'Mistral: Mixtral 8x22B Instruct'
   org_id: mistralai
@@ -10251,14 +11792,32 @@
 - id: mistralai/mixtral-8x7b
   aliases:
   - Mixtral 8x7B
+  weak:
+    release_date: '2023-12-11'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: mistralai/mixtral-8x7b-instruct
   aliases:
   - 'Mistral: Mixtral 8x7B Instruct'
   - mixtral-8x7b-instruct
+  weak:
+    release_date: '2023-12-10'
+    open_weights: true
 - id: mistralai/pixtral-12b
   aliases:
   - Pixtral 12B
   - pixtral-12b
+  weak:
+    release_date: '2024-09-01'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/pixtral-12b-2409
   display_name: Pixtral 12B 2409
   org_id: mistralai
@@ -10281,6 +11840,14 @@
   aliases:
   - Pixtral Large
   - pixtral-large
+  weak:
+    release_date: '2024-11-01'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: mistralai/pixtral-large-2411
   display_name: 'Mistral: Pixtral Large 2411'
   org_id: mistralai
@@ -10365,6 +11932,9 @@
   - Neural Daredevil 8B abliterated
   - mlabonne/neuraldaredevil-8b-abliterated
   - neuraldaredevil-8b-abliterated
+  weak:
+    release_date: '2024-12-01'
+    open_weights: false
 - id: mm-poly-8b
   display_name: MM Poly 8B
   org_id: null
@@ -10407,17 +11977,30 @@
   - kimi-k2-instruct-fast
   - moonshotai/kimi-k2-instruct
   - moonshotai/moonshot-kimi-k2-instruct
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: moonshotai/Kimi-K2-Instruct-0905
   aliases:
   - Kimi-K2-Instruct-0905
   - kimi-k2-instruct-0905
   - moonshotai/kimi-k2-instruct-0905
+  weak:
+    release_date: '2024-09-05'
+    open_weights: true
 - id: moonshotai/Kimi-K2-Thinking
   aliases:
   - Kimi K2 Thinking
   - kimi-k2-thinking
   - moonshotai/kimi-k2-thinking
   - moonshotai/moonshot.kimi-k2
+  weak:
+    release_date: '2025-11-06'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: moonshotai/Kimi-K2.5
   aliases:
   - Kimi K2.5
@@ -10430,6 +12013,15 @@
   - moonshotai/kimi-k2.5
   - moonshotai/kimi-k2p5
   - moonshotai/moonshotai.kimi-k2-5
+  weak:
+    release_date: 2026-01
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: moonshotai/Kimi-K2.6
   aliases:
   - Kimi K2.6
@@ -10441,6 +12033,15 @@
   - moonshotai/kimi-k2-6
   - moonshotai/kimi-k2.6
   - moonshotai/umans-kimi-k2-6
+  weak:
+    release_date: 2026-04
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: moonshotai/kimi-dev-72b
   display_name: Kimi Dev 72B
   org_id: moonshotai
@@ -10459,7 +12060,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: moonshotai/kimi-k2-0711
-  display_name: Kimi K2 (0711)
+  display_name: moonshotai/kimi-k2-0711
   org_id: moonshotai
   family: kimi-k2-0711
   architecture: null
@@ -10477,7 +12078,7 @@
   metadata: '{"knowledge_cutoffs": ["2024-10"], "release_dates": ["2025-07-14"], "snapshots": ["kimi-k2-0711-preview"]}'
   review_status: reviewed
 - id: moonshotai/kimi-k2-0711-preview
-  display_name: Kimi K2 0711
+  display_name: kimi-k2-0711-preview
   org_id: moonshotai
   family: kimi-k2-0711
   architecture: null
@@ -10666,6 +12267,13 @@
   aliases:
   - Kimi K2 Thinking Turbo
   - kimi-k2-thinking-turbo
+  weak:
+    release_date: '2025-11-06'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: moonshotai/kimi-k2-thinking-turbo-original
   display_name: Kimi K2 Thinking Turbo Original
   org_id: moonshotai
@@ -10849,6 +12457,9 @@
   aliases:
   - DeepSeek V3.1 Nex N1
   - deepseek-v3-1-nex-n1
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: nothingiisreal/l3-1-70b-celeste-v0-1
   display_name: Llama 3.1 70B Celeste v0.1
   org_id: nothingiisreal
@@ -10941,6 +12552,9 @@
 - id: nova-3
   aliases:
   - Deepgram Nova 3
+  weak:
+    release_date: '2025-11-14'
+    open_weights: false
 - id: novita/glm-4-7-n
   display_name: glm-4.7-n
   org_id: novita
@@ -10961,9 +12575,15 @@
 - id: nvidia.nemotron-nano-12b-v2
   aliases:
   - NVIDIA Nemotron Nano 12B v2 VL BF16
+  weak:
+    release_date: '2024-12-01'
+    open_weights: false
 - id: nvidia.nemotron-nano-3-30b
   aliases:
   - NVIDIA Nemotron Nano 3 30B
+  weak:
+    release_date: '2025-12-23'
+    open_weights: true
 - id: nvidia.nemotron-nano-9b-v2
   display_name: nvidia.nemotron-nano-9b-v2
   org_id: null
@@ -10981,16 +12601,27 @@
   metadata: '{"providers": ["amazon-bedrock"], "underlying_key": "nvidia.nemotron-nano-9b"}'
   review_status: draft
   resolution_source: models_dev
+- id: nvidia.nemotron-super-3-120b
+  weak:
+    release_date: '2026-03-11'
+    open_weights: true
+  aliases: []
 - id: nvidia/Llama-3.1-Nemotron-70B-Instruct-HF
   aliases:
   - Nvidia Nemotron 70b
   - llama-3-1-nemotron-70b-instruct-hf
   - nvidia/llama-3-1-nemotron-70b-instruct-hf
+  weak:
+    release_date: '2025-04-15'
+    open_weights: false
 - id: nvidia/Llama-3_3-Nemotron-Super-49B-v1
   aliases:
   - Llama 3.3 Nemotron Super 49B v1
   - llama-3-3-nemotron-super-49b-v1
   - nvidia/llama-3-3-nemotron-super-49b-v1
+  weak:
+    release_date: '2025-04-07'
+    open_weights: true
 - id: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16
   aliases:
   - Nemotron-3-Super-120B
@@ -10998,17 +12629,26 @@
   - nvidia-nemotron-3-super-120b
   - nvidia/nemotron-3-super-120b-a12b
   - nvidia/nvidia-nemotron-3-super-120b
+  weak:
+    release_date: '2026-03-11'
+    open_weights: true
 - id: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-FP8
   aliases:
   - nvidia-nemotron-3-super-120b-a12b-fp8
   - nvidia/nvidia-nemotron-3-super-120b-a12b
   - nvidia/nvidia-nemotron-3-super-120b-a12b-fp8
+  weak:
+    release_date: '2026-03-11'
+    open_weights: true
 - id: nvidia/NVIDIA-Nemotron-Nano-9B-v2
   aliases:
   - 'NVIDIA: Nemotron Nano 9B V2'
   - nvidia-nemotron-nano-9b-v2
   - nvidia/nemotron-nano-9b-v2
   - nvidia/nvidia-nemotron-nano-9b-v2
+  weak:
+    release_date: '2025-08-18'
+    open_weights: true
 - id: nvidia/Nemotron-Cascade-2-30B-A3B
   aliases:
   - NVIDIA Nemotron Cascade 2
@@ -11016,9 +12656,15 @@
   - nemotron-cascade-2-30b-a3b
   - nvidia/nemotron-cascade-2-30b-a3b
   - nvidia/nvidia-nemotron-cascade-2-30b-a3b
+  weak:
+    release_date: '2025-12-01'
+    open_weights: true
 - id: nvidia/Nemotron-Mini-4B-Instruct
   aliases:
   - nvidia/nemotron-mini-4b-instruct
+  weak:
+    release_date: '2024-08-21'
+    open_weights: true
 - id: nvidia/active-speaker-detection
   display_name: Active Speaker Detection
   org_id: nvidia
@@ -11149,10 +12795,16 @@
   aliases:
   - Kimi K2.5 (NVFP4)
   - kimi-k2-5-nvfp4
+  weak:
+    release_date: 2026-01
+    open_weights: true
 - id: nvidia/llama-3-1-nemotron-safety-guard-8b-v3
   aliases:
   - llama-3-1-nemotron-safety-guard-8b-v3
   - llama-3.1-nemotron-safety-guard-8b-v3
+  weak:
+    release_date: '2025-10-28'
+    open_weights: true
 - id: nvidia/llama-3-1-nemotron-ultra-253b
   display_name: Nvidia Nemotron Ultra 253B
   org_id: nvidia
@@ -11211,9 +12863,15 @@
 - id: nvidia/llama-nemotron-embed-vl-1b-v2
   aliases:
   - llama-nemotron-embed-vl-1b-v2
+  weak:
+    release_date: '2026-02-10'
+    open_weights: true
 - id: nvidia/llama-nemotron-rerank-vl-1b-v2
   aliases:
   - llama-nemotron-rerank-vl-1b-v2
+  weak:
+    release_date: '2026-03-31'
+    open_weights: true
 - id: nvidia/magpie-tts-zeroshot
   display_name: magpie-tts-zeroshot
   org_id: nvidia
@@ -11344,6 +13002,11 @@
   metadata: '{"alias_platforms": {"nemotron-3-nano-omni": "digitalocean"}, "providers": ["digitalocean", "nebius"], "underlying_key": "nemotron-3-nano-omni"}'
   review_status: draft
   resolution_source: models_dev
+- id: nvidia/nemotron-3-nano-omni-30b-a3b
+  weak:
+    release_date: '2026-04-28'
+    open_weights: true
+  aliases: []
 - id: nvidia/nemotron-3-super
   display_name: nemotron-3-super
   org_id: nvidia
@@ -11677,10 +13340,16 @@
   aliases:
   - Codex Mini
   - codex-mini
+  weak:
+    release_date: '2025-05-16'
+    open_weights: false
 - id: openai/dall-e-3
   aliases:
   - DALL-E-3
   - dall-e-3
+  weak:
+    release_date: '2023-11-06'
+    open_weights: false
 - id: openai/gpt-3-5-turbo-0125
   display_name: GPT-3.5 Turbo 0125
   org_id: openai
@@ -11816,10 +13485,24 @@
   - gpt-3-5-turbo
   - gpt-3.5-turbo
   - openai/gpt-3-5-turbo
+  weak:
+    release_date: '2023-03-01'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-4
   aliases:
   - GPT-4
   - gpt-4
+  weak:
+    release_date: '2023-11-06'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-4-0314
   display_name: 'OpenAI: GPT-4 (older v0314)'
   org_id: openai
@@ -12031,6 +13714,15 @@
   - azure-gpt-4o
   - gpt-4o
   - openai-gpt-4o
+  weak:
+    release_date: '2024-05-13'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-4o-2024-05-13
   display_name: GPT-4o (2024-05-13)
   org_id: openai
@@ -12229,6 +13921,14 @@
   - databricks-gpt-5
   - gpt-5
   - openai-gpt-5
+  weak:
+    release_date: '2025-08-07'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-5-1-instant
   display_name: GPT-5.1-Instant
   org_id: openai
@@ -12415,6 +14115,14 @@
   - databricks-gpt-5-mini
   - gpt-5-mini
   - openai-gpt-5-mini
+  weak:
+    release_date: '2025-08-07'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-5-nano
   display_name: GPT-5 Nano
   org_id: openai
@@ -12464,6 +14172,14 @@
   - gpt-5.1
   - openai-gpt-5.1
   - openai/gpt-5-1
+  weak:
+    release_date: '2025-11-13'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-5.1-codex
   display_name: GPT-5.1 Codex
   org_id: openai
@@ -12539,6 +14255,14 @@
   - gpt-5.2
   - openai-gpt-5.2
   - openai/gpt-5-2
+  weak:
+    release_date: '2025-12-11'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-5.2-codex
   display_name: GPT-5.2 Codex
   org_id: openai
@@ -12588,6 +14312,14 @@
 - id: openai/gpt-5.3
   aliases:
   - GPT-5.3
+  weak:
+    release_date: '2026-03-03'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-5.3-codex
   display_name: GPT-5.3 Codex
   org_id: openai
@@ -12977,6 +14709,14 @@
   aliases:
   - gpt-image-1
   - openai-gpt-image-1
+  weak:
+    release_date: '2025-04-24'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - image
 - id: openai/gpt-image-1-mini
   display_name: gpt-image-1-mini
   org_id: openai
@@ -13081,6 +14821,9 @@
   - gpt-oss:120b
   - openai-gpt-oss-120b
   - openai/openai.gpt-oss-120b-1
+  weak:
+    release_date: '1970-01-01'
+    open_weights: true
 - id: openai/gpt-oss-120b-cs
   display_name: GPT-OSS-120B-CS
   org_id: openai
@@ -13124,6 +14867,9 @@
   - gpt-oss:20b
   - openai-gpt-oss-20b
   - openai/openai.gpt-oss-20b-1
+  weak:
+    release_date: '1970-01-01'
+    open_weights: true
 - id: openai/gpt-oss-safeguard-20b
   display_name: gpt-oss-safeguard-20b
   org_id: openai
@@ -13147,6 +14893,15 @@
   - azure-o1
   - o1
   - openai-o1
+  weak:
+    release_date: '2024-09-12'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: openai/o1-mini
   display_name: o1-mini
   org_id: openai
@@ -13209,6 +14964,15 @@
   aliases:
   - o3
   - openai-o3
+  weak:
+    release_date: '2025-04-16'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: openai/o3-deep-research
   display_name: o3-deep-research
   org_id: openai
@@ -13233,6 +14997,13 @@
   - azure-o3-mini
   - o3-mini
   - openai-o3-mini
+  weak:
+    release_date: '2024-12-20'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: openai/o3-mini-high
   display_name: OpenAI o3-mini (High)
   org_id: openai
@@ -13289,6 +15060,14 @@
 - id: openai/o4-mini
   aliases:
   - o4-mini
+  weak:
+    release_date: '2025-04-16'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: openai/o4-mini-deep-research
   display_name: o4-mini-deep-research
   org_id: openai
@@ -13451,10 +15230,16 @@
   aliases:
   - Whisper Large v3
   - whisper-large-v3
+  weak:
+    release_date: '2023-09-01'
+    open_weights: true
 - id: osmosis/osmosis-structure-0-6b
   aliases:
   - Osmosis Structure 0.6B
   - osmosis-structure-0-6b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: true
 - id: owl-alpha
   display_name: Owl Alpha
   org_id: null
@@ -13476,6 +15261,9 @@
   aliases:
   - OpenReasoning Nemotron 32B
   - openreasoning-nemotron-32b
+  weak:
+    release_date: '2025-08-21'
+    open_weights: false
 - id: pareto-code
   display_name: Pareto Code Router
   org_id: null
@@ -13513,6 +15301,13 @@
 - id: perplexity/perplexity-sonar-deep-research
   aliases:
   - Perplexity Sonar Deep Research
+  weak:
+    release_date: '2025-02-01'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: perplexity/sonar
   display_name: Sonar
   org_id: perplexity
@@ -13676,6 +15471,9 @@
   aliases:
   - SorcererLM 8x22B
   - sorcererlm-8x22b
+  weak:
+    release_date: '2025-01-01'
+    open_weights: false
 - id: raptor-mini
   display_name: Raptor mini
   org_id: null
@@ -13697,9 +15495,15 @@
   aliases:
   - Recraft V2
   - recraft-v2
+  weak:
+    release_date: 2024-03
+    open_weights: false
 - id: rednote-hilab/dots.ocr
   aliases:
   - dots.ocr
+  weak:
+    release_date: '2025-12-29'
+    open_weights: true
 - id: reka-ai/reka-edge
   display_name: Reka Edge
   org_id: reka-ai
@@ -13792,6 +15596,9 @@
 - id: route-llm
   aliases:
   - Route LLM
+  weak:
+    release_date: '2024-01-01'
+    open_weights: false
 - id: runwayml/runway
   display_name: Runway
   org_id: runwayml
@@ -13812,10 +15619,16 @@
 - id: runwayml/runway-gen-4
   aliases:
   - Runway-Gen-4-Turbo
+  weak:
+    release_date: '2025-05-09'
+    open_weights: false
 - id: sao10K/l3-8b-lunaris
   aliases:
   - "Sao10k L3 8B Lunaris\t"
   - l3-8b-lunaris
+  weak:
+    release_date: '2024-08-13'
+    open_weights: true
 - id: sao10K/l31-70b-euryale-v2-2
   display_name: L31 70B Euryale V2.2
   org_id: Sao10K
@@ -13838,14 +15651,23 @@
   aliases:
   - 'Sao10K: Llama 3.1 Euryale 70B v2.2'
   - l3-1-euryale-70b
+  weak:
+    release_date: '2024-08-28'
+    open_weights: true
 - id: sao10k/l3-3-euryale-70b
   aliases:
   - 'Sao10K: Llama 3.3 Euryale 70B'
   - l3-3-euryale-70b
+  weak:
+    release_date: '2024-12-18'
+    open_weights: true
 - id: sao10k/l3-euryale-70b
   aliases:
   - 'Sao10k: Llama 3 Euryale 70B v2.1'
   - l3-euryale-70b
+  weak:
+    release_date: '2024-06-18'
+    open_weights: true
 - id: sapiens-ai/agnes-1-5-lite
   display_name: Agnes 1.5 Lite
   org_id: sapiens-ai
@@ -13883,14 +15705,23 @@
 - id: sarvam/sarvam-m
   aliases:
   - sarvam-m
+  weak:
+    release_date: '2025-07-25'
+    open_weights: true
 - id: sarvamai/sarvam-105b
   aliases:
   - Sarvam-105B
   - sarvam-105b
+  weak:
+    release_date: '2026-02-18'
+    open_weights: true
 - id: sarvamai/sarvam-30b
   aliases:
   - Sarvam-30B
   - sarvam-30b
+  weak:
+    release_date: '2026-02-18'
+    open_weights: true
 - id: sarvan-medium
   display_name: Sarvam Medium
   org_id: null
@@ -13911,14 +15742,23 @@
 - id: schnell
   aliases:
   - FLUX.1 [schnell]
+  weak:
+    release_date: '2024-08-01'
+    open_weights: true
 - id: shisa-ai/shisa-v2-1-llama3-3-70b
   aliases:
   - Shisa V2.1 Llama 3.3 70B
   - shisa-v2-1-llama3-3-70b
+  weak:
+    release_date: '2024-12-06'
+    open_weights: false
 - id: shisa-ai/shisa-v2-llama3-3-70b
   aliases:
   - Shisa V2 Llama 3.3 70B
   - shisa-v2-llama3-3-70b
+  weak:
+    release_date: '2025-07-26'
+    open_weights: false
 - id: small
   display_name: Kilo Auto Small
   org_id: null
@@ -13957,14 +15797,23 @@
   aliases:
   - Amoral Gemma3 27B v2
   - amoral-gemma3-27b-v2
+  weak:
+    release_date: '2025-05-23'
+    open_weights: false
 - id: soob3123/grayline-qwen3-8b
   aliases:
   - Grayline Qwen3 8B
   - grayline-qwen3-8b
+  weak:
+    release_date: '2025-09-25'
+    open_weights: false
 - id: soob3123/veiled-calla-12b
   aliases:
   - Veiled Calla 12B
   - veiled-calla-12b
+  weak:
+    release_date: '2025-04-13'
+    open_weights: false
 - id: speakleash/bielik-11b-v2-6-instruct
   display_name: Bielik 11B v2.6 Instruct
   org_id: speakleash
@@ -14006,6 +15855,9 @@
   - Stable Diffusion 3.5 Large
   - stable-diffusion-3-5-large
   - stable-diffusion-3.5-large
+  weak:
+    release_date: '2024-10-22'
+    open_weights: true
 - id: stabilityai/stablediffusionxl
   display_name: StableDiffusionXL
   org_id: stabilityai
@@ -14099,6 +15951,13 @@
   - step-3.5-flash
   - stepfun/step-3-5-flash
   - stepfun/step-3.5-flash
+  weak:
+    release_date: '2026-01-29'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: stepfun/gelab-zero-4b-preview
   display_name: Stepfun-Ai/Gelab Zero 4b Preview
   org_id: stepfun
@@ -14173,6 +16032,9 @@
   aliases:
   - Step 3.7 Flash
   - step-3-7-flash
+  weak:
+    release_date: '2026-05-28'
+    open_weights: true
 - id: stepfun/step-3.5-flash-2603
   display_name: Step 3.5 Flash 2603
   org_id: stepfun
@@ -14286,10 +16148,16 @@
   aliases:
   - Hunyuan T1
   - hunyuan-t1
+  weak:
+    release_date: '2025-03-22'
+    open_weights: false
 - id: tencent/hunyuan-turbos
   aliases:
   - Hunyuan Turbo S
   - hunyuan-turbos
+  weak:
+    release_date: '2025-02-27'
+    open_weights: false
 - id: tencent/hy3-preview
   display_name: Hy3 preview
   org_id: tencent
@@ -14466,13 +16334,22 @@
 - id: umans-coder
   aliases:
   - Umans Coder
+  weak:
+    release_date: '2026-04-21'
+    open_weights: true
 - id: umans-flash
   aliases:
   - Umans Flash
+  weak:
+    release_date: '2026-04-17'
+    open_weights: true
 - id: undi95/remm-slerp-l2-13b
   aliases:
   - ReMM SLERP 13B
   - remm-slerp-l2-13b
+  weak:
+    release_date: '2023-07-22'
+    open_weights: true
 - id: universal-summarizer
   display_name: Universal Summarizer
   org_id: null
@@ -14529,6 +16406,9 @@
   aliases:
   - solar-10-7b-instruct
   - solar-10.7b-instruct
+  weak:
+    release_date: '2024-06-05'
+    open_weights: true
 - id: upstage/solar-mini
   display_name: solar-mini
   org_id: upstage
@@ -14567,6 +16447,13 @@
 - id: upstage/solar-pro2
   aliases:
   - solar-pro2
+  weak:
+    release_date: '2025-05-20'
+    open_weights: false
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: upstage/solar-pro3
   display_name: solar-pro3
   org_id: upstage
@@ -14697,46 +16584,79 @@
   aliases:
   - Voxtral Mini 3B 2507
   - mistral.voxtral-mini-3b-2507
+  weak:
+    release_date: '2024-12-01'
+    open_weights: false
 - id: voyage/voyage-3-5
   aliases:
   - voyage-3-5
   - voyage-3.5
+  weak:
+    release_date: '2025-05-20'
+    open_weights: false
 - id: voyage/voyage-3-5-lite
   aliases:
   - voyage-3-5-lite
   - voyage-3.5-lite
+  weak:
+    release_date: '2025-05-20'
+    open_weights: false
 - id: voyageai/voyage-3-large
   aliases:
   - voyage-3-large
   - voyage/voyage-3-large
+  weak:
+    release_date: 2024-09
+    open_weights: false
 - id: voyageai/voyage-4
   aliases:
   - voyage-4
   - voyage/voyage-4
+  weak:
+    release_date: '2026-03-06'
+    open_weights: false
 - id: voyageai/voyage-4-large
   aliases:
   - voyage-4-large
   - voyage/voyage-4-large
+  weak:
+    release_date: '2026-03-06'
+    open_weights: false
 - id: voyageai/voyage-4-lite
   aliases:
   - voyage-4-lite
   - voyage/voyage-4-lite
+  weak:
+    release_date: '2026-03-06'
+    open_weights: false
 - id: voyageai/voyage-code-2
   aliases:
   - voyage-code-2
   - voyage/voyage-code-2
+  weak:
+    release_date: 2024-01
+    open_weights: false
 - id: voyageai/voyage-code-3
   aliases:
   - voyage-code-3
   - voyage/voyage-code-3
+  weak:
+    release_date: 2024-09
+    open_weights: false
 - id: voyageai/voyage-finance-2
   aliases:
   - voyage-finance-2
   - voyage/voyage-finance-2
+  weak:
+    release_date: 2024-03
+    open_weights: false
 - id: voyageai/voyage-law-2
   aliases:
   - voyage-law-2
   - voyage/voyage-law-2
+  weak:
+    release_date: 2024-03
+    open_weights: false
 - id: wan2-2-t2v-a14b
   display_name: Wan2.2-T2V-A14B
   org_id: null
@@ -14914,6 +16834,9 @@
   aliases:
   - Grok 4
   - grok-4
+  weak:
+    release_date: '2024-07-09'
+    open_weights: false
 - id: xai/grok-4-0709
   display_name: Grok 4 (0709)
   org_id: xai
@@ -14953,6 +16876,9 @@
 - id: xai/grok-4-1-fast-non
   aliases:
   - Grok 4.1 Fast (Non-Reasoning)
+  weak:
+    release_date: '2025-06-27'
+    open_weights: false
 - id: xai/grok-4-2
   display_name: Grok 4.2 Fast
   org_id: xai
@@ -14973,6 +16899,9 @@
 - id: xai/grok-4-2-fast-non
   aliases:
   - Grok 4.2 Fast Non Reasoning
+  weak:
+    release_date: '2026-03-20'
+    open_weights: false
 - id: xai/grok-4-20
   display_name: Grok 4.20
   org_id: xai
@@ -14993,9 +16922,15 @@
 - id: xai/grok-4-20-beta-0309
   aliases:
   - grok-4.20-beta-0309-reasoning
+  weak:
+    release_date: '2026-03-09'
+    open_weights: false
 - id: xai/grok-4-20-beta-0309-non
   aliases:
   - grok-4.20-beta-0309-non-reasoning
+  weak:
+    release_date: '2026-03-09'
+    open_weights: false
 - id: xai/grok-4-20-multi-agent-beta
   display_name: Grok 4.20 Multi Agent Beta
   org_id: xai
@@ -15034,6 +16969,9 @@
 - id: xai/grok-4-20-non
   aliases:
   - Grok 4.20 (Non-Reasoning)
+  weak:
+    release_date: '2026-03-09'
+    open_weights: false
 - id: xai/grok-4-20-non-reasoning-beta
   display_name: Grok 4.20 Beta Non-Reasoning
   org_id: xai
@@ -15089,12 +17027,39 @@
   - Grok 4.20 Multi Agent
   - grok-4-20-multi-agent
   - xai/grok-4-20-multi-agent
+  weak:
+    release_date: '2026-03-09'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: xai/grok-4.20-non-reasoning
   aliases:
   - Grok 4.20 Non Reasoning
+  weak:
+    release_date: '2026-03-09'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: xai/grok-4.20-reasoning
   aliases:
   - Grok 4.20 Reasoning
+  weak:
+    release_date: '2026-03-09'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: xai/grok-4.3
   display_name: Grok 4.3
   org_id: xai
@@ -15285,6 +17250,9 @@
   - xiaomi-mimo-v2-5-pro
   - xiaomi-mimo-v2.5-pro
   - xiaomi-mimo-v2.5-pro-free
+  weak:
+    release_date: '2026-04-22'
+    open_weights: true
 - id: xiaomi/mimo-v2-5-pro-6bit
   display_name: MiMo V2.5 Pro 6bit
   org_id: xiaomi
@@ -15546,6 +17514,13 @@
   - glm-4.5
   - zai/glm-4-5
   - zai/glm-4.5
+  weak:
+    release_date: '2025-07-28'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: zai-org/GLM-4.5-Air
   aliases:
   - GLM-4.5-Air
@@ -15553,6 +17528,13 @@
   - glm-4.5-air
   - zai/glm-4-5-air
   - zai/glm-4.5-air
+  weak:
+    release_date: '2025-07-28'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: zai-org/GLM-4.6
   aliases:
   - GLM 4.6
@@ -15561,6 +17543,13 @@
   - zai/glm-4-6
   - zai/glm-4.6
   - zai/zai-org-glm-4-6
+  weak:
+    release_date: '2024-04-01'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: zai-org/GLM-4.7
   aliases:
   - GLM 4.7
@@ -15575,6 +17564,13 @@
   - zai/glm4-7
   - zai/zai-org-glm-4-7
   - zai/zai.glm-4-7
+  weak:
+    release_date: '2025-12-22'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: zai-org/GLM-4.7-Flash
   aliases:
   - GLM 4.7 Flash
@@ -15585,6 +17581,13 @@
   - zai/glm-4.7-flash
   - zai/zai-org-glm-4-7-flash
   - zai/zai.glm-4-7-flash
+  weak:
+    release_date: '2026-01-19'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: zai-org/GLM-5
   aliases:
   - GLM 5
@@ -15596,6 +17599,13 @@
   - zai/z-ai-glm-5
   - zai/zai-org-glm-5
   - zai/zai.glm-5
+  weak:
+    release_date: '2026-02-11'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: zai-org/GLM-5.1
   aliases:
   - GLM 5.1
@@ -15610,6 +17620,13 @@
   - zai/umans-glm-5-1
   - zai/zai-glm-5-1
   - zai/zai-org-glm-5-1
+  weak:
+    release_date: '2025-01-20'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: zai/alicloud-glm-5-1
   display_name: GLM-5.1 (Alibaba Cloud)
   org_id: zai
@@ -15668,6 +17685,9 @@
   aliases:
   - GLM-4
   - glm-4
+  weak:
+    release_date: '2024-01-16'
+    open_weights: false
 - id: zai/glm-4-1v-thinking-flash
   display_name: GLM 4.1V Thinking Flash
   org_id: zai
@@ -16131,6 +18151,15 @@
   - glm-4-5v
   - glm-4.5v
   - zai/glm-4-5v
+  weak:
+    release_date: '2025-08-11'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: zai/glm-4.6v
   display_name: GLM-4.6V
   org_id: zai
@@ -16214,6 +18243,16 @@
   aliases:
   - GLM-5V-Turbo
   - glm-5v-turbo
+  weak:
+    release_date: '2026-04-01'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    - video
+    output_modalities:
+    - text
 - id: zai/glm-for-coding
   display_name: glm-for-coding
   org_id: zai
@@ -16352,3 +18391,8 @@
   metadata: '{"alias_platforms": {"olafangensan-glm-4-7-flash-heretic": "venice", "olafangensan-glm-4.7-flash-heretic": "venice"}, "providers": ["venice"], "underlying_key": "olafangensan-glm-4-7-flash-heretic"}'
   review_status: draft
   resolution_source: models_dev
+- id: zai/z-ai-glm-5v
+  weak:
+    release_date: '2026-04-01'
+    open_weights: false
+  aliases: []

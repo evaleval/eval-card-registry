@@ -67,7 +67,7 @@ class UnionFind:
         self._parent[self.find(a)] = self.find(b)
 
 from eval_card_registry.lib.collision_fold import _bsizes, collision_key
-from eval_card_registry.lib.seed_io import resolve_oracle_path
+from eval_card_registry.lib.seed_io import WEAK_SCALAR_FIELDS, resolve_oracle_path
 
 # Resolver lives in the workspace package; this script runs from the repo
 # root via `uv run`, so the import resolves through pyproject's path dep.
@@ -1765,6 +1765,10 @@ _HEADER = """# Generated from models.dev (https://models.dev) — DO NOT EDIT BY
 # resolve to this family canonical without needing per-snapshot entries.
 #
 # `aliases` lists snapshot IDs we observed in models.dev for this family.
+# Enrich records ({id, aliases} onto an existing canonical) may carry a
+# `weak:` scalar map donated from the suppressed/folded mint; the seed
+# loader applies those only to fields every full entry left empty and
+# core.yaml does not explicitly carry.
 """
 
 
@@ -1859,6 +1863,51 @@ def _entry_alias_platforms(e: dict) -> dict:
     return ap if isinstance(ap, dict) else {}
 
 
+def _donor_scalars(e: dict) -> dict:
+    """Non-empty weak-scalar fields a suppressed/folded/skipped mint donates
+    onto its owner's enrich record (under `weak:`; the seed loader applies them
+    only to fields every full entry left empty and core.yaml does not
+    explicitly carry). Reads a full entry's top-level fields or an enrich
+    record's existing `weak:` map. `parents` edges (dangling-edge risk) and
+    mint-specific metadata (`providers`, `underlying_key`) are deliberately
+    NOT donated."""
+    weak = e.get("weak")
+    weak = weak if isinstance(weak, dict) else {}
+    out: dict = {}
+    for f in WEAK_SCALAR_FIELDS:
+        v = e.get(f)
+        if v in (None, "", [], {}):
+            v = weak.get(f)
+        if v not in (None, "", [], {}):
+            out[f] = v
+    return out
+
+
+def _merge_weak(rec: dict, scalars: dict) -> None:
+    """Merge donated scalars into rec['weak'] (existing keys win), keeping the
+    canonical WEAK_SCALAR_FIELDS key order so output stays byte-deterministic."""
+    if not scalars:
+        return
+    weak = rec.get("weak")
+    weak = dict(weak) if isinstance(weak, dict) else {}
+    for k, v in scalars.items():
+        weak.setdefault(k, v)
+    rec["weak"] = {k: weak[k] for k in WEAK_SCALAR_FIELDS if k in weak}
+
+
+def _make_form_owner_lookup(sources: tuple[Path, ...]) -> Callable[[str], str | None]:
+    """form -> owning canonical id over `sources` (exact, then resolver-
+    normalized) — the same claims/alias index the reconcile passes use."""
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    exact, normed = _build_existing_index(sources)
+
+    def _owner(form: str) -> str | None:
+        return exact.get(form) or normed.get(_norm(form))
+
+    return _owner
+
+
 def _union_alias_platforms(entry: dict, donor_ap: dict) -> None:
     """Union `donor_ap` into entry's metadata.alias_platforms for forms the
     entry carries as aliases, so a committed alias that the carry-forward
@@ -1910,6 +1959,10 @@ def _carry_forward_committed(
         Retained entries then run through the same core-aware reconciliation
         as fresh mints, so an entry that has since been curated/folded is
         suppressed rather than resurrected;
+      * core-skipped id whose surface form an existing canonical claims (e.g.
+        core aliasing the skipped mint): its scalars still flow as a weak
+        enrich record onto that owner — only the aliases stay suppressed
+        (that is what skip_source_ids curates away). Unclaimed: pure skip;
       * returns (batch, committed_claims): every committed id/alias mapped to
         its surviving owner. reconcile_generated_against_existing pre-seeds
         its form-hygiene `claimed` map with these, so a NEW mint can never
@@ -1925,6 +1978,7 @@ def _carry_forward_committed(
     out = list(fresh)
     retained = 0
     absorbed = 0
+    skip_owner: Callable[[str], str | None] | None = None
     for c in committed:
         cid = c.get("id")
         if not cid:
@@ -1956,6 +2010,13 @@ def _carry_forward_committed(
                 _union_alias_platforms(cur, _entry_alias_platforms(c))
             continue
         if cid in skip:
+            scalars = _donor_scalars(c)
+            if scalars:
+                if skip_owner is None:
+                    skip_owner = _make_form_owner_lookup(_NONCATALOG_EXISTING_SOURCES)
+                fold_owner = skip_owner(cid)
+                if fold_owner is not None and fold_owner != cid:
+                    out.append({"id": fold_owner, "weak": scalars})
             continue
         if twin is not None:
             back = (set(c.get("aliases") or []) | {cid}) - {twin["id"]}
@@ -2164,26 +2225,37 @@ def reconcile_generated_against_existing(
 
     # MERGE: accumulate enrich records keyed by owner. The dropped mint id plus
     # its non-stealing aliases (forms not owned by yet another canonical) are
-    # carried onto the owner so resolvable spellings survive.
+    # carried onto the owner so resolvable spellings survive; its non-empty
+    # scalars are carried as WEAK values (under `weak:`) so the suppressed
+    # mint's metadata isn't dropped on the floor either. Donors iterate in id
+    # order so the first donor wins per scalar field, deterministically.
     sibling_ids = {e["id"] for e in survivors}
     _committed = committed_claims or {}
     enrich_aliases: dict[str, set[str]] = defaultdict(set)
-    for e in suppressed:
+    enrich_scalars: dict[str, dict] = defaultdict(dict)
+    for e in sorted(suppressed, key=lambda x: x["id"]):
         cid = e["id"]
         owner = suppressed_owner[cid]
+        # cid is ITSELF a real canonical owned by a DIFFERENT id: a distinct
+        # model an org-aware fold wrongly dragged here (e.g. the base repo
+        # `google/gemma-2-9b` folded onto the variant `…-9b-it` via a mangled
+        # models.dev key alias) — donating its id OR its scalars would attach
+        # one model's identity/metadata to another.
+        cid_owner = _owner_broad(cid)
+        foreign_cid = cid_owner is not None and cid_owner != owner
         if not _steals(cid, owner) or cid != owner:
             # The dropped mint id resolves to the owner: keep it as an alias —
-            # UNLESS it normalized-equals the owner's own id form, OR cid is
-            # ITSELF a real canonical owned by a DIFFERENT id (a distinct model
-            # an org-aware fold wrongly dragged here, e.g. the base repo
-            # `google/gemma-2-9b` folded onto the variant `…-9b-it` via a mangled
-            # models.dev key alias). Donating it would double-claim the form and
-            # merge two distinct canonicals. The real owner already supplies it,
-            # so drop it. Same foreign-owner guard the loser's OTHER aliases get
-            # (via `_owner_broad`) — applied symmetrically to the loser id.
-            cid_owner = _owner_broad(cid)
-            if _norm(cid) != _norm(owner) and not (cid_owner is not None and cid_owner != owner):
+            # UNLESS it normalized-equals the owner's own id form, OR it is a
+            # foreign canonical (above). Donating it would double-claim the
+            # form and merge two distinct canonicals. The real owner already
+            # supplies it, so drop it. Same foreign-owner guard the loser's
+            # OTHER aliases get (via `_owner_broad`) — applied symmetrically
+            # to the loser id.
+            if _norm(cid) != _norm(owner) and not foreign_cid:
                 enrich_aliases[owner].add(cid)
+        if not foreign_cid:
+            for k, v in _donor_scalars(e).items():
+                enrich_scalars[owner].setdefault(k, v)
         # Carry the dropped mint's display_name too (it was a resolvable form: a
         # raw value can NORMALIZED-match a canonical via its display_name, e.g.
         # `command-r+` -> the folded `cohere/command-r+` whose display was
@@ -2266,11 +2338,14 @@ def reconcile_generated_against_existing(
             cand = cid.split("/", 1)[-1]
             e["display_name"] = cid if _foreign(cand) else cand
 
-    enrich_records = [
-        {"id": owner, "aliases": sorted(aliases)}
-        for owner, aliases in enrich_aliases.items()
-        if aliases
-    ]
+    enrich_records: list[dict] = []
+    for owner in sorted(set(enrich_aliases) | set(enrich_scalars)):
+        rec: dict = {"id": owner}
+        if enrich_aliases.get(owner):
+            rec["aliases"] = sorted(enrich_aliases[owner])
+        _merge_weak(rec, enrich_scalars.get(owner) or {})
+        if len(rec) > 1:
+            enrich_records.append(rec)
     out = survivors + enrich_records
     return sorted(out, key=lambda e: e.get("id") or "")
 
@@ -2282,7 +2357,9 @@ _CATALOG_HEADER = """# AUTO-GENERATED by scripts/refresh_from_modelsdev.py (cata
 #   * alias-only enrichments {id, aliases}: a models.dev model that IS HF-present
 #     (already a canonical). The existing HF-cased canonical wins; only the
 #     provider-spelling aliases (carrying inference_platform in
-#     metadata.alias_platforms) union onto it. No duplicate canonical is minted.
+#     metadata.alias_platforms) union onto it, plus the donor's scalars under
+#     `weak:` (the seed loader fills only still-empty fields with those). No
+#     duplicate canonical is minted.
 # The re-cased seed/models/sources/models_dev.generated.yaml is left intact;
 # this file is purely additive. Regenerated by the daily refresh-models cron.
 """
@@ -2358,6 +2435,12 @@ def regenerate_catalog(full: list[dict]) -> None:
 
     fresh: list[dict] = []
     enrich: list[dict] = []
+    # First emitted enrich record per owner id. Weak scalars from EVERY donor
+    # consolidate onto this record (the loader's first-record tie-break would
+    # pick it anyway); without the consolidation, the carry-forward would fold
+    # a later duplicate-id record's scalars onto the first one on the NEXT run
+    # and the output would not be byte-idempotent.
+    enrich_by_id: dict[str, dict] = {}
     fresh_seen_lc: dict[str, dict] = {}
     fresh_seen_twin: dict[str, dict] = {}
     fresh_form_owner: dict[str, str] = {}
@@ -2381,9 +2464,17 @@ def regenerate_catalog(full: list[dict]) -> None:
         if isinstance(cdn, str) and cdn:
             fresh_form_owner.setdefault(cdn, ccid)
 
-    def _enrich_target(cid: str, aliases: list[str], ap: dict | None, donor_id: str | None = None) -> None:
+    def _enrich_target(
+        cid: str,
+        aliases: list[str],
+        ap: dict | None,
+        donor_id: str | None = None,
+        scalars: dict | None = None,
+    ) -> None:
         # `donor_id`: a committed record being DONATED onto `cid` (its id has
         # since been absorbed/folded) — forms it pre-claimed are donatable.
+        # `scalars`: the donor's non-empty weak scalars (_donor_scalars),
+        # carried under `weak:` for the seed loader's empty-fields-only fill.
         ok = (None, cid) if donor_id is None else (None, cid, donor_id)
         keep = sorted({
             a for a in aliases
@@ -2403,8 +2494,14 @@ def regenerate_catalog(full: list[dict]) -> None:
             }
             if ap2:
                 rec["metadata"] = json.dumps({"alias_platforms": ap2}, sort_keys=True)
-        if keep or rec.get("metadata"):
+        first = enrich_by_id.get(cid)
+        if first is not None:
+            _merge_weak(first, scalars or {})
+        else:
+            _merge_weak(rec, scalars or {})
+        if len(rec) > 1:
             enrich.append(rec)
+            enrich_by_id.setdefault(cid, rec)
 
     def _forms_of(e: dict) -> list[str]:
         forms = [e["id"]]
@@ -2421,7 +2518,7 @@ def regenerate_catalog(full: list[dict]) -> None:
 
         cased = existing_form_to_cid.get(cid_low)
         if cased is not None:
-            _enrich_target(cased, e.get("aliases", []), ap)
+            _enrich_target(cased, e.get("aliases", []), ap, scalars=_donor_scalars(e))
             continue
         owner_exact = (
             existing_exact.get(cid)
@@ -2429,11 +2526,11 @@ def regenerate_catalog(full: list[dict]) -> None:
             or (existing_exact.get(e.get("display_name")) if e.get("display_name") else None)
         )
         if owner_exact is not None:
-            _enrich_target(owner_exact, [cid] + list(e.get("aliases", [])), ap)
+            _enrich_target(owner_exact, [cid] + list(e.get("aliases", [])), ap, scalars=_donor_scalars(e))
             continue
         fold_tgt = _catalog_fold_target(e)
         if fold_tgt is not None:
-            _enrich_target(fold_tgt, [cid] + list(e.get("aliases", [])), ap)
+            _enrich_target(fold_tgt, [cid] + list(e.get("aliases", [])), ap, scalars=_donor_scalars(e))
             continue
         if cid_low in fresh_seen_lc:
             prior = fresh_seen_lc[cid_low]
@@ -2491,10 +2588,6 @@ def regenerate_catalog(full: list[dict]) -> None:
     # against its still-existing canonical, donated onto the canonical that has
     # since absorbed it, or (for a full mint with no surviving target) retained
     # verbatim tagged `metadata.upstream_status: removed`.
-    enrich_by_id: dict[str, dict] = {}
-    for r in enrich:
-        enrich_by_id.setdefault(r["id"], r)
-
     def _committed_forms(c: dict) -> list[str]:
         """A committed record's donatable surface forms: aliases plus its
         display_name (a loader-promoted global alias — dropping it on a fold
@@ -2519,13 +2612,33 @@ def regenerate_catalog(full: list[dict]) -> None:
                 continue
             cur.add(a)
             fresh_form_owner[a] = rcid
-        rec["aliases"] = sorted(cur)
+        # Don't materialize `aliases: []` on a weak-only enrich record — the
+        # fresh emission omits the key, and the carry-forward must round-trip
+        # byte-identically.
+        if cur or "aliases" in rec:
+            rec["aliases"] = sorted(cur)
         _union_alias_platforms(rec, _entry_alias_platforms(c))
+        # Weak scalars on a committed enrich record persist through the
+        # carry-forward (today's values win per field); a FULL mint keeps its
+        # own strong fields and never absorbs weak ones.
+        if "display_name" not in rec:
+            _merge_weak(rec, _donor_scalars(c))
 
     retained = 0
     for c in committed:
         ccid = c.get("id")
-        if not ccid or ccid in core_skip:
+        if not ccid:
+            continue
+        if ccid in core_skip:
+            # Same skip rule as _carry_forward_committed: a core-skipped
+            # committed record whose surface form an existing canonical claims
+            # still donates its scalars weakly onto that owner; its aliases
+            # stay suppressed (skip_source_ids curates them away).
+            scalars = _donor_scalars(c)
+            if scalars:
+                sk_owner = existing_exact.get(ccid) or existing_norm.get(_norm(ccid))
+                if sk_owner is not None and sk_owner != ccid:
+                    _enrich_target(sk_owner, [], None, scalars=scalars)
             continue
         prior = fresh_seen_lc.get(ccid.lower())
         if prior is None and "display_name" in c:
@@ -2543,13 +2656,10 @@ def regenerate_catalog(full: list[dict]) -> None:
             continue
         owner = existing_exact.get(ccid) or existing_norm.get(_norm(ccid))
         if owner == ccid:
-            n = len(enrich)
-            _enrich_target(ccid, _committed_forms(c), _entry_alias_platforms(c))
-            if len(enrich) > n:
-                enrich_by_id.setdefault(ccid, enrich[-1])
+            _enrich_target(ccid, _committed_forms(c), _entry_alias_platforms(c), scalars=_donor_scalars(c))
             continue
         if owner is not None:
-            _enrich_target(owner, [ccid, *_committed_forms(c)], _entry_alias_platforms(c), donor_id=ccid)
+            _enrich_target(owner, [ccid, *_committed_forms(c)], _entry_alias_platforms(c), donor_id=ccid, scalars=_donor_scalars(c))
             continue
         if "display_name" in c:  # full mint with no surviving target anywhere
             rc = dict(c)
