@@ -214,8 +214,9 @@
   - 'Qwen: Qwen3 235B A22B Instruct 2507'
   - alibaba/qwen-3-235b
   - alibaba/qwen3-235b-a22b-instruct-2507
+  - qwen3-235b-a22b-instruct
   - qwen3-235b-a22b-instruct-2507
-  metadata: '{"alias_platforms": {"alibaba/qwen3-235b-a22b-instruct-2507": "302ai", "qwen3-235b-a22b-instruct-2507": "302ai"}}'
+  metadata: '{"alias_platforms": {"alibaba/qwen3-235b-a22b-instruct-2507": "302ai", "qwen3-235b-a22b-instruct": "iflowcn", "qwen3-235b-a22b-instruct-2507": "302ai"}}'
 - id: Qwen/Qwen3-235B-A22B-Instruct-2507-FP8
   aliases:
   - Qwen3 235B A22B Instruct 2507 FP8
@@ -251,9 +252,10 @@
   - Qwen3-32B
   - alibaba/alibaba-qwen3-32b
   - alibaba/qwen3-32b
+  - qwen-3-32b
   - qwen.qwen3-32b-v1:0
   - qwen3-32b
-  metadata: '{"alias_platforms": {"qwen.qwen3-32b-v1:0": "amazon-bedrock", "qwen3-32b": "ovhcloud"}}'
+  metadata: '{"alias_platforms": {"qwen-3-32b": "vercel", "qwen.qwen3-32b-v1:0": "amazon-bedrock", "qwen3-32b": "ovhcloud"}}'
 - id: Qwen/Qwen3-Coder-480B-A35B-Instruct
   aliases:
   - Qwen3 Coder 480B A35B Instruct
@@ -516,9 +518,11 @@
   metadata: '{"alias_platforms": {"qvq-max": "nano-gpt"}}'
 - id: Qwen/Qwen2.5-14B-Instruct
   aliases:
+  - alibaba/qwen2-5-14b-instruct
   - qwen-2-5-14b-instruct
   - qwen-2.5-14b-instruct
-  metadata: '{"alias_platforms": {"qwen-2-5-14b-instruct": "digitalocean", "qwen-2.5-14b-instruct": "digitalocean"}}'
+  - qwen2-5-14b-instruct
+  metadata: '{"alias_platforms": {"alibaba/qwen2-5-14b-instruct": "alibaba-cn", "qwen-2-5-14b-instruct": "digitalocean", "qwen-2.5-14b-instruct": "digitalocean", "qwen2-5-14b-instruct": "alibaba-cn"}}'
 - id: alibaba/qwen-2-5-7b-vision-instruct
   aliases:
   - qwen-2-5-7b-vision-instruct
@@ -645,7 +649,8 @@
   - alibaba/qwen2-5-vl-72b-instruct
   - qwen2-5-vl-72b-instruct
   - qwen2.5-vl-72b-instruct
-  metadata: '{"alias_platforms": {"alibaba/qwen2-5-vl-72b-instruct": "ovhcloud", "qwen2-5-vl-72b-instruct": "ovhcloud", "qwen2.5-vl-72b-instruct": "ovhcloud"}}'
+  - qwen25-vl-72b-instruct
+  metadata: '{"alias_platforms": {"alibaba/qwen2-5-vl-72b-instruct": "ovhcloud", "qwen2-5-vl-72b-instruct": "ovhcloud", "qwen2.5-vl-72b-instruct": "ovhcloud", "qwen25-vl-72b-instruct": "nano-gpt"}}'
 - id: alibaba/qwen2.5-vl-7b-instruct
   aliases:
   - alibaba/qwen2-5-vl-7b-instruct
@@ -2108,8 +2113,10 @@
   aliases:
   - gemma 4 31B turbo TEE
   - gemma-4-31b
+  - gemma4-31b
+  - gemma4:31b
   - google/gemma-4-31b
-  metadata: '{"alias_platforms": {"gemma-4-31b": "poe", "google/gemma-4-31b": "poe"}}'
+  metadata: '{"alias_platforms": {"gemma-4-31b": "poe", "gemma4-31b": "ollama-cloud", "gemma4:31b": "ollama-cloud", "google/gemma-4-31b": "poe"}}'
 - id: google/gemma-4-31B-it
   aliases:
   - gemma-4-31B-it
@@ -2469,9 +2476,13 @@
   - Meta-Llama-3_3-70B-Instruct
   - llama-3-3-70b-instruct
   - llama-3.3-70b-instruct
+  - llama3-3-70b-instruct
+  - llama3.3-70b-instruct
+  - meta.llama3-3-70b-instruct-v1:0
   - meta/llama-3-3-70b-instruct
   - meta/meta-llama-3-3-70b-instruct
-  metadata: '{"alias_platforms": {"llama-3-3-70b-instruct": "nano-gpt", "llama-3.3-70b-instruct": "regolo-ai", "meta/llama-3-3-70b-instruct": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"llama-3-3-70b-instruct": "nano-gpt", "llama-3.3-70b-instruct": "regolo-ai", "llama3-3-70b-instruct": "digitalocean", "llama3.3-70b-instruct": "digitalocean", "meta.llama3-3-70b-instruct-v1:0":
+    "amazon-bedrock", "meta/llama-3-3-70b-instruct": "nano-gpt"}}'
 - id: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
   aliases:
   - Llama-4-Maverick-17B-128E-Instruct-FP8
@@ -3063,10 +3074,11 @@
 - id: mistralai/Mistral-7B-Instruct-v0.3
   aliases:
   - Mistral-7B-Instruct-v0.3
+  - mistral-7b-instruct
   - mistral-7b-instruct-v0-3
   - mistral-7b-instruct-v0.3
   - mistralai/mistral-7b-instruct-v0-3
-  metadata: '{"alias_platforms": {"mistral-7b-instruct-v0-3": "ovhcloud", "mistral-7b-instruct-v0.3": "ovhcloud", "mistralai/mistral-7b-instruct-v0-3": "ovhcloud"}}'
+  metadata: '{"alias_platforms": {"mistral-7b-instruct": "nano-gpt", "mistral-7b-instruct-v0-3": "ovhcloud", "mistral-7b-instruct-v0.3": "ovhcloud", "mistralai/mistral-7b-instruct-v0-3": "ovhcloud"}}'
 - id: mistralai/Mistral-Large-3-675B-Instruct-2512
   aliases:
   - Mistral Large 3 675B
@@ -3728,7 +3740,8 @@
 - id: nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16
   aliases:
   - nemotron-3-super-120b-a12b
-  metadata: '{"alias_platforms": {"nemotron-3-super-120b-a12b": "kilo"}}'
+  - nvidia-nemotron-3-super-120b
+  metadata: '{"alias_platforms": {"nemotron-3-super-120b-a12b": "kilo", "nvidia-nemotron-3-super-120b": "digitalocean"}}'
 - id: nvidia/nemotron-content-safety-reasoning-4b
   aliases:
   - nemotron-content-safety-reasoning-4b

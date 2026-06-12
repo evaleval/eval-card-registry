@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Reproducible, deterministic regeneration of ALL model seed sources from FROZEN
 # inputs. The model seed sources (seed/models/sources/*.generated.yaml) are
-# rebuilt from committed snapshots, so a clean checkout reproduces them exactly.
+# rebuilt from committed snapshots. With --reset-core a clean checkout
+# reproduces them exactly; WITHOUT it the rebuild is additive — carry-forward
+# retains committed entries/aliases the frozen inputs no longer produce, so
+# prior cron-committed coverage is never deleted.
 #
 # Inputs (all committed / frozen, so this is reproducible):
 #   - curation/hf_model_id_resolution.json  (frozen HF oracle; hf_oracle + tier3)
@@ -81,7 +84,9 @@ log "STEP 7: tier3 inferred (residual no_match tail)"
 uv run python scripts/generate_tier3_inferred_seed.py 2>&1 | tail -5
 
 log "STEP 7a: universal org reconcile (union of ALL sources incl. tier3)"
-uv run python scripts/refresh_from_modelsdev.py --reconcile-orgs 2>&1 | tail -3
+# --reconcile-orgs-write-core: the one-shot may rewrite core.yaml org_id
+# spellings too (the cron's --reconcile-orgs never writes the curated file).
+uv run python scripts/refresh_from_modelsdev.py --reconcile-orgs-write-core 2>&1 | tail -3
 
 log "STEP 7b: cross-source alias reconciliation (deterministic finalize)"
 uv run python scripts/dedup_cross_source_aliases.py 2>&1 | tail -6

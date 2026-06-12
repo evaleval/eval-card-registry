@@ -5,8 +5,8 @@ Different sources mint the SAME model under different separator spellings
 venice relabel `openai/gpt-52`, `anthropic/claude-opus-4.5` vs `claude-opus4-5`).
 Each becomes its own canonical → its own page. This pass folds the losers of a
 collision group into one winner so there is ONE canonical (one page) per model:
-the loser id + its aliases move onto the winner, and parent edges that pointed at
-a loser are repointed to the winner.
+the loser id + display_name + aliases move onto the winner, and parent edges
+that pointed at a loser are repointed to the winner.
 
 Guards against FALSE merges — a separator difference that changes a parameter
 SIZE's value (`opt-1.3b` is 1.3B params, `opt-13b` is 13B — different models). A
@@ -118,11 +118,18 @@ def fold_collisions(entries: list[dict], never_fold=(), prefer=None, force_merge
     surviving = [e for e in entries if e["id"] not in remap]
     surv_by_id = {e["id"]: e for e in surviving}
 
-    # Move each loser's id + aliases onto its winner; backfill missing scalars.
+    # Move each loser's id + display_name + aliases onto its winner; backfill
+    # missing scalars. The display_name counts: the seed promotes it to a
+    # global alias, so dropping it on fold deletes a resolvable surface form
+    # (e.g. `Veo-3.1-Fast` when `google/veo-3-1` folds into `google/veo3-1`).
     for lid, wid in remap.items():
         le, we = by_id[lid], surv_by_id[wid]
         aliases = list(we.get("aliases") or [])
-        for a in [lid, *(le.get("aliases") or [])]:
+        ldn = le.get("display_name")
+        forms = [lid, *(le.get("aliases") or [])]
+        if isinstance(ldn, str) and ldn and ldn != we.get("display_name"):
+            forms.append(ldn)
+        for a in forms:
             if a and a != wid and a not in aliases:
                 aliases.append(a)
         we["aliases"] = aliases

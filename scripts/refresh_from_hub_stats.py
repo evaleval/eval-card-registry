@@ -321,7 +321,7 @@ def build_entry(
     # the seed still matches.
     if hf_to_dev is None:
         hf_to_dev = build_hf_to_dev()
-    canonical_id, org_id = hf_id_to_canonical_cased(hf_id, hf_to_dev)
+    canonical_id, _ = hf_id_to_canonical_cased(hf_id, hf_to_dev)
     norm_canon = _normalize(canonical_id)
     if norm_canon not in aliases_to_canonical:
         return None
@@ -388,6 +388,23 @@ def build_entry(
         target_canonical=canonical_id,
     )
 
+    # `metadata.hf_id` claims "this canonical IS that real HF repo". When the
+    # enrichment lands on a registry canonical under a DIFFERENT spelling
+    # (org-slug mint, e.g. `deepseek/deepseek-vl2`) and the real id is not
+    # itself a canonical anywhere, keeping the claim trips the
+    # canonical-id-equals-hf-id gate (the canonical id would 404 on HF) and
+    # stalls the cron. The HF surface form still resolves via the alias —
+    # drop only the metadata claim.
+    if "metadata" in enrichment and hf_id != canonical_id:
+        if aliases_to_canonical.get(_normalize(hf_id)) != hf_id:
+            try:
+                meta = json.loads(enrichment["metadata"])
+            except (ValueError, TypeError):
+                meta = None
+            if isinstance(meta, dict) and "hf_id" in meta:
+                meta.pop("hf_id")
+                enrichment["metadata"] = json.dumps(meta, sort_keys=True)
+
     # Decode tags from JSON-encoded string (helper output) back to a YAML
     # list. Loader accepts either form; list-form keeps generated YAML
     # diffs reviewable.
@@ -406,9 +423,13 @@ def build_entry(
     # name (e.g. `QwenStock1 14B`) would (a) collide across orgs — the seed
     # auto-derives display_name as a global alias — and (b) needlessly churn the
     # diff. The loader's field-merge keeps the existing display_name.
+    # NO org_id either: the owning source / seed-time org-from-prefix rule
+    # derives it (and auto-creates the org row — which only fires when org_id
+    # is None). Stamping the raw HF prefix here both overrode deliberately
+    # org-less curated canonicals via the prefer-non-empty field merge and left
+    # dangling org FKs for prefixes this cron never writes a row for.
     entry: dict = {
         "id": canonical_id,
-        "org_id": org_id,
     }
     if "release_date" in enrichment:
         entry["release_date"] = enrichment["release_date"]
@@ -429,6 +450,49 @@ def build_entry(
     return entry
 
 
+def _carry_forward_committed(fresh: list[dict], committed: list[dict]) -> list[dict]:
+    """Merge the COMMITTED generated file into a fresh wholesale rewrite so a
+    model that fell out of today's fetch (upstream parquet shrank, repo gated/
+    deleted) never silently loses its committed enrichment at the next seed.
+    Mirrors refresh_from_modelsdev's carry-forward:
+
+      * id still in the fresh output: the fresh entry wins outright (and a
+        prior `upstream_status: removed` tag is thereby cleared);
+      * id absent: retain the committed entry, tagged
+        `metadata.upstream_status: removed`. The committed `org_id` field
+        (pre-dating the no-stamping rule) is dropped — the seed-time
+        org-from-prefix rule recovers the org.
+
+    Malformed committed metadata degrades to {} (with a warning) rather than
+    crashing the cron. Output is id-sorted (deterministic)."""
+    fresh_ids = {e["id"] for e in fresh if e.get("id")}
+    out = list(fresh)
+    retained = 0
+    for c in committed:
+        cid = c.get("id")
+        if not cid or cid in fresh_ids:
+            continue
+        rc = {k: v for k, v in c.items() if k != "org_id"}
+        try:
+            meta = json.loads(rc.get("metadata") or "{}")
+            if not isinstance(meta, dict):
+                meta = {}
+        except (ValueError, TypeError):
+            print(f"[refresh] WARN: malformed committed metadata on {cid}; treating as empty", file=sys.stderr)
+            meta = {}
+        meta["upstream_status"] = "removed"
+        rc["metadata"] = json.dumps(meta, sort_keys=True)
+        out.append(rc)
+        retained += 1
+    if retained:
+        print(
+            f"[refresh] carry-forward: retained {retained} committed entr(ies) "
+            f"absent from today's fetch",
+            file=sys.stderr,
+        )
+    return sorted(out, key=lambda e: e["id"])
+
+
 # ---------------------------------------------------------------------------
 # Output writing.
 # ---------------------------------------------------------------------------
@@ -443,6 +507,10 @@ _HEADER = """# Generated from cfahlgren1/hub-stats — DO NOT EDIT BY HAND.
 # row at seed time. Fills in release_date, params_billions, license, tags,
 # etc. via the seed loader's field-level merge (curated values in
 # core.yaml take precedence on conflict).
+#
+# Entries tagged `metadata.upstream_status: removed` are carry-forwards:
+# their id fell out of the upstream fetch, so the committed enrichment is
+# retained rather than deleted. A reappearing id replaces the carried entry.
 #
 # Lineage descendant pre-load (community quants/finetunes of our covered
 # models) is not done here. EEE drafts get on-demand enrichment via the
@@ -622,6 +690,15 @@ def main() -> int:
             file=sys.stderr,
         )
     entries = sorted(by_id.values(), key=lambda e: e["id"])
+
+    # Carry the committed file forward: an id that fell out of today's fetch
+    # keeps its committed enrichment (tagged `upstream_status: removed`)
+    # instead of losing release_date/params/metadata at the next seed.
+    committed = (
+        yaml.safe_load(MODELS_OUT_PATH.read_text()) or []
+        if MODELS_OUT_PATH.exists() else []
+    )
+    entries = _carry_forward_committed(entries, committed)
     print(f"[refresh] enrichment entries: {len(entries)}", file=sys.stderr)
 
     if args.dry_run:

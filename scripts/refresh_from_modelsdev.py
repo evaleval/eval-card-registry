@@ -66,6 +66,7 @@ class UnionFind:
     def union(self, a: str, b: str) -> None:
         self._parent[self.find(a)] = self.find(b)
 
+from eval_card_registry.lib.collision_fold import _bsizes, collision_key
 from eval_card_registry.lib.seed_io import resolve_oracle_path
 
 # Resolver lives in the workspace package; this script runs from the repo
@@ -1828,6 +1829,164 @@ _NONCATALOG_EXISTING_SOURCES = (
 )
 
 
+def _load_core_skip_ids() -> set[str]:
+    """Ids core.yaml suppresses (`skip_ids` + `skip_source_ids`). A committed
+    entry with one of these ids is NOT carried forward — curation explicitly
+    removed it from the source universe."""
+    if not CORE_PATH.exists():
+        return set()
+    doc = yaml.safe_load(CORE_PATH.read_text())
+    if not isinstance(doc, dict):
+        return set()
+    return set(doc.get("skip_ids") or []) | set(doc.get("skip_source_ids") or [])
+
+
+def _entry_meta(e: dict) -> dict:
+    """Parse an entry's metadata JSON into a dict. Malformed COMMITTED
+    metadata degrades to {} (with a warning) instead of crashing the cron."""
+    try:
+        meta = json.loads(e.get("metadata") or "{}")
+    except (ValueError, TypeError):
+        print(f"[refresh] WARN: malformed metadata on {e.get('id')!r}; treating as empty", file=sys.stderr)
+        return {}
+    return meta if isinstance(meta, dict) else {}
+
+
+def _entry_alias_platforms(e: dict) -> dict:
+    """The {alias -> inference_platform} provenance map from a persisted
+    entry's metadata JSON ({} when absent/malformed)."""
+    ap = _entry_meta(e).get("alias_platforms")
+    return ap if isinstance(ap, dict) else {}
+
+
+def _union_alias_platforms(entry: dict, donor_ap: dict) -> None:
+    """Union `donor_ap` into entry's metadata.alias_platforms for forms the
+    entry carries as aliases, so a committed alias that the carry-forward
+    re-added keeps its platform-FK provenance. Existing keys win."""
+    aliases = set(entry.get("aliases") or [])
+    add = {k: v for k, v in donor_ap.items() if v and k in aliases}
+    if not add:
+        return
+    meta = _entry_meta(entry)
+    ap = meta.get("alias_platforms") or {}
+    meta["alias_platforms"] = dict(sorted({**add, **ap}.items()))
+    entry["metadata"] = json.dumps(meta, sort_keys=True)
+
+
+def _twin_key(cid: str) -> str:
+    """Org-aware seed-collision key for a model id: the org prefix folded
+    through the curated dev-org map, the name part keyed exactly like the
+    seed loader's collision fold (`collision_key`). A committed id and a
+    fresh respelling of it (`google/veo-3-1` vs `google/veo3-1`) share a key,
+    so the carry-forward can absorb the reappearance instead of emitting
+    normalized twins for the seed's collision_fold / gate to trip on."""
+    if "/" in cid:
+        org, name = cid.split("/", 1)
+        dev = _hf_to_dev().get(org.lower())
+        if dev:
+            return f"{dev}/{collision_key(name)}"
+    return collision_key(cid)
+
+
+def _carry_forward_committed(
+    fresh: list[dict], committed: list[dict]
+) -> tuple[list[dict], dict[str, str]]:
+    """Merge the COMMITTED generated file into a fresh wholesale rewrite so an
+    upstream (provider,model) removal never deletes a resolvable surface form:
+
+      * surviving id (still emitted today): union the committed aliases back
+        in — an alias-level upstream removal must not regress resolution —
+        keeping platform provenance for re-added forms. The committed
+        display_name counts too (the loader promotes it to a global alias):
+        when upstream re-spells it, the old one is unioned back as an alias;
+      * respelled reappearance: a removed id whose org-aware collision key
+        matches a FRESH mint (upstream re-emitted the model under a new
+        spelling, `google/veo-3-1` -> `google/veo3-1`) is ABSORBED onto that
+        mint — the committed id + display_name + aliases become aliases on
+        the fresh spelling — never retained as a normalized twin that the
+        seed's collision_fold / gate would trip on;
+      * removed id: retain the committed entry verbatim (full entries tagged
+        `metadata.upstream_status: removed`) UNLESS core.yaml skips it.
+        Retained entries then run through the same core-aware reconciliation
+        as fresh mints, so an entry that has since been curated/folded is
+        suppressed rather than resurrected;
+      * returns (batch, committed_claims): every committed id/alias mapped to
+        its surviving owner. reconcile_generated_against_existing pre-seeds
+        its form-hygiene `claimed` map with these, so a NEW mint can never
+        steal a carried-forward entry's alias claims.
+    """
+    by_id = {e["id"]: e for e in fresh if e.get("id")}
+    by_twin: dict[str, dict] = {}
+    for e in sorted(fresh, key=lambda x: x.get("id") or ""):
+        if e.get("id"):
+            by_twin.setdefault(_twin_key(e["id"]), e)
+    skip = _load_core_skip_ids()
+    claims: dict[str, str] = {}
+    out = list(fresh)
+    retained = 0
+    absorbed = 0
+    for c in committed:
+        cid = c.get("id")
+        if not cid:
+            continue
+        cur = by_id.get(cid)
+        dn = c.get("display_name")
+        # Respelled-reappearance twin: FULL committed entries only (an enrich
+        # record's id is ANOTHER canonical — never donatable as an alias), and
+        # only when the b-size signature agrees (same guard as fold_collisions:
+        # opt-1.3b vs opt-13b key-collide but are different models).
+        twin = None
+        if cur is None and cid not in skip and "display_name" in c:
+            t = by_twin.get(_twin_key(cid))
+            if t is not None and _bsizes(cid) == _bsizes(t["id"]):
+                twin = t
+        owner = cur["id"] if cur is not None else (twin["id"] if twin is not None else cid)
+        claims.setdefault(cid, owner)
+        for a in (c.get("aliases") or []):
+            if a:
+                claims.setdefault(a, owner)
+        if isinstance(dn, str) and dn:
+            claims.setdefault(dn, owner)
+        if cur is not None:
+            back = set(c.get("aliases") or []) - {cid}
+            if isinstance(dn, str) and dn and dn not in (cid, cur.get("display_name")):
+                back.add(dn)
+            if back:
+                cur["aliases"] = sorted(set(cur.get("aliases") or []) | back)
+                _union_alias_platforms(cur, _entry_alias_platforms(c))
+            continue
+        if cid in skip:
+            continue
+        if twin is not None:
+            back = (set(c.get("aliases") or []) | {cid}) - {twin["id"]}
+            if isinstance(dn, str) and dn and dn not in (twin["id"], twin.get("display_name")):
+                back.add(dn)
+            twin["aliases"] = sorted(set(twin.get("aliases") or []) | back)
+            _union_alias_platforms(twin, _entry_alias_platforms(c))
+            absorbed += 1
+            continue
+        rc = dict(c)
+        if "display_name" in rc:  # full entry, not an alias-only enrich record
+            meta = _entry_meta(rc)
+            meta["upstream_status"] = "removed"
+            rc["metadata"] = json.dumps(meta, sort_keys=True)
+            retained += 1  # enrich records are carried too but not counted here
+        out.append(rc)
+    if retained:
+        print(
+            f"[refresh] carry-forward: retained {retained} committed entr(ies) "
+            f"absent from today's upstream",
+            file=sys.stderr,
+        )
+    if absorbed:
+        print(
+            f"[refresh] carry-forward: absorbed {absorbed} respelled committed "
+            f"id(s) onto today's fresh spelling",
+            file=sys.stderr,
+        )
+    return out, claims
+
+
 def _build_existing_index(
     sources: tuple[Path, ...],
 ) -> tuple[dict[str, str], dict[str, str]]:
@@ -1884,6 +2043,7 @@ def _make_steal_guard(
 def reconcile_generated_against_existing(
     entries: list[dict],
     sources: tuple[Path, ...] = _NONCATALOG_EXISTING_SOURCES,
+    committed_claims: dict[str, str] | None = None,
 ) -> list[dict]:
     """Core-aware reconciliation for the NON-catalog write path — a true MERGE,
     not a drop: on an alias collision, move aliases onto the owner, drop the
@@ -1900,8 +2060,11 @@ def reconcile_generated_against_existing(
          mint to the owner instead, so no surviving lineage edge dangles.
 
     Reuses the steal-guard machinery (`_build_existing_index`/`_make_steal_guard`).
-    `sources` is injectable for unit testing. Returns a new id-sorted list of
-    survivors + enrich records.
+    `sources` is injectable for unit testing. `committed_claims` (from
+    `_carry_forward_committed`) maps every previously-committed id/alias to its
+    committed owner; the form-hygiene pass below treats those claims as already
+    taken, so a NEW mint can never steal a carried-forward entry's alias.
+    Returns a new id-sorted list of survivors + enrich records.
     """
     from eval_entity_resolver.fold import build_hf_index, decide_fold
     from eval_entity_resolver.normalization import normalize as _norm
@@ -1979,6 +2142,20 @@ def reconcile_generated_against_existing(
             suppressed.append(e)
             suppressed_owner[cid] = owner
             continue
+        # A carried-forward enrich record (no display_name) whose owner id no
+        # longer exists ANYWHERE (existing sources, catalog/tier3, core's
+        # entry/alias surface) would otherwise survive as a bare canonical
+        # (no display_name/org) forever. Enriching nothing is meaningless —
+        # drop it LOUDLY; a real resolution loss then fails the oracle gates
+        # instead of hiding behind a silent bare canonical.
+        if cid and "display_name" not in e and _owner_broad(cid) is None:
+            print(
+                f"[refresh] WARNING: dropping orphaned enrich record {cid!r} "
+                f"(owner vanished from every source); forms dropped: "
+                f"{[cid, *(e.get('aliases') or [])]}",
+                file=sys.stderr,
+            )
+            continue
         survivors.append(e)
 
     # NOTE: do NOT early-return when `suppressed` is empty — the surviving-mint
@@ -1988,6 +2165,8 @@ def reconcile_generated_against_existing(
     # MERGE: accumulate enrich records keyed by owner. The dropped mint id plus
     # its non-stealing aliases (forms not owned by yet another canonical) are
     # carried onto the owner so resolvable spellings survive.
+    sibling_ids = {e["id"] for e in survivors}
+    _committed = committed_claims or {}
     enrich_aliases: dict[str, set[str]] = defaultdict(set)
     for e in suppressed:
         cid = e["id"]
@@ -2015,8 +2194,17 @@ def reconcile_generated_against_existing(
                 continue
             # Drop an alias only if it is owned by a DIFFERENT canonical than the
             # owner we are merging onto (would double-claim); else carry it over.
+            # A surviving batch mint's id counts as such an owner too — donating
+            # it would alias-claim a sibling canonical's id. Likewise a form the
+            # COMMITTED file assigns to a third entity (carry-forward keeps it
+            # there; donating it here would double-claim).
             other = _owner_broad(a)
             if other is not None and other != owner:
+                continue
+            if a in sibling_ids:
+                continue
+            co = _committed.get(a)
+            if co is not None and co not in (owner, cid):
                 continue
             enrich_aliases[owner].add(a)
 
@@ -2047,8 +2235,10 @@ def reconcile_generated_against_existing(
     # beats any alias (distinct canonicals — drop the alias, not a merge); a
     # non-id form shared by >1 survivor goes to the lexicographically-first
     # claimant. Mirrors the catalog path's fresh_form_owner ownership.
-    sibling_ids = {e["id"] for e in survivors}
-    claimed: dict[str, str] = {}  # non-id form -> first survivor (sorted) that claims it
+    # Non-id form -> owning claimant. Pre-seeded with the committed file's
+    # claims (carry-forward), so a contested form stays with its committed
+    # owner regardless of sort order — a NEW mint cannot steal it.
+    claimed: dict[str, str] = dict(committed_claims or {})
     for e in sorted(survivors, key=lambda x: x["id"]):
         cid = e["id"]
 
@@ -2169,15 +2359,48 @@ def regenerate_catalog(full: list[dict]) -> None:
     fresh: list[dict] = []
     enrich: list[dict] = []
     fresh_seen_lc: dict[str, dict] = {}
+    fresh_seen_twin: dict[str, dict] = {}
     fresh_form_owner: dict[str, str] = {}
 
-    def _enrich_target(cid: str, aliases: list[str], ap: dict | None) -> None:
-        keep = sorted({a for a in aliases if a and a != cid and not _steals(a, cid)})
+    # Carry-forward inputs: the COMMITTED catalog's claims (incl. its
+    # display_names — loader-promoted global aliases) pre-seed
+    # fresh_form_owner, so today's split can never steal (or duplicate-claim) a
+    # committed record's surface form; after the split the committed records
+    # are unioned back / re-emitted below.
+    committed = _catalog_load_list(CATALOG_OUT_PATH)
+    core_skip = _load_core_skip_ids()
+    for c in committed:
+        ccid = c.get("id")
+        if not ccid or ccid in core_skip:
+            continue
+        fresh_form_owner.setdefault(ccid, ccid)
+        for a in (c.get("aliases") or []):
+            if a:
+                fresh_form_owner.setdefault(a, ccid)
+        cdn = c.get("display_name")
+        if isinstance(cdn, str) and cdn:
+            fresh_form_owner.setdefault(cdn, ccid)
+
+    def _enrich_target(cid: str, aliases: list[str], ap: dict | None, donor_id: str | None = None) -> None:
+        # `donor_id`: a committed record being DONATED onto `cid` (its id has
+        # since been absorbed/folded) — forms it pre-claimed are donatable.
+        ok = (None, cid) if donor_id is None else (None, cid, donor_id)
+        keep = sorted({
+            a for a in aliases
+            if a and a != cid and not _steals(a, cid)
+            and fresh_form_owner.get(a) in ok
+        })
+        for a in keep:
+            fresh_form_owner[a] = cid
         rec: dict = {"id": cid}
         if keep:
             rec["aliases"] = keep
         if ap:
-            ap2 = {k: v for k, v in ap.items() if k != cid and not _steals(k, cid)}
+            ap2 = {
+                k: v for k, v in ap.items()
+                if k != cid and not _steals(k, cid)
+                and fresh_form_owner.get(k) in ok
+            }
             if ap2:
                 rec["metadata"] = json.dumps({"alias_platforms": ap2}, sort_keys=True)
         if keep or rec.get("metadata"):
@@ -2252,6 +2475,7 @@ def regenerate_catalog(full: list[dict]) -> None:
             existing_exact.setdefault(form, cid)
             existing_norm.setdefault(_norm(form), cid)
         fresh_seen_lc[cid_low] = e
+        fresh_seen_twin.setdefault(_twin_key(cid), e)
         if ap:
             ap2 = {k: v for k, v in ap.items() if k in e["aliases"]}
             if ap2:
@@ -2260,6 +2484,90 @@ def regenerate_catalog(full: list[dict]) -> None:
                 meta.pop("alias_platforms", None)
             e["metadata"] = json.dumps(meta, sort_keys=True)
         fresh.append(e)
+
+    # Carry the committed catalog forward: an upstream removal must not delete
+    # a resolvable surface form. A surviving record gets its committed aliases
+    # unioned back; a record whose id vanished from today's split is re-emitted
+    # against its still-existing canonical, donated onto the canonical that has
+    # since absorbed it, or (for a full mint with no surviving target) retained
+    # verbatim tagged `metadata.upstream_status: removed`.
+    enrich_by_id: dict[str, dict] = {}
+    for r in enrich:
+        enrich_by_id.setdefault(r["id"], r)
+
+    def _committed_forms(c: dict) -> list[str]:
+        """A committed record's donatable surface forms: aliases plus its
+        display_name (a loader-promoted global alias — dropping it on a fold
+        deletes a resolvable form, e.g. the Veo `Veo-3.1-Fast` regression)."""
+        forms = list(c.get("aliases") or [])
+        cdn = c.get("display_name")
+        if isinstance(cdn, str) and cdn and cdn not in forms:
+            forms.append(cdn)
+        return forms
+
+    def _union_back(rec: dict, c: dict, donor_id: str | None = None) -> None:
+        # `donor_id`: c's committed id when it differs from rec's (a respelled
+        # reappearance) — it and the forms it pre-claimed become aliases.
+        rcid = rec["id"]
+        ok = (None, rcid) if donor_id is None else (None, rcid, donor_id)
+        cur = set(rec.get("aliases") or [])
+        forms = _committed_forms(c) + ([donor_id] if donor_id else [])
+        for a in forms:
+            if not a or a in (rcid, rec.get("display_name")) or a in cur or _steals(a, rcid):
+                continue
+            if fresh_form_owner.get(a) not in ok:
+                continue
+            cur.add(a)
+            fresh_form_owner[a] = rcid
+        rec["aliases"] = sorted(cur)
+        _union_alias_platforms(rec, _entry_alias_platforms(c))
+
+    retained = 0
+    for c in committed:
+        ccid = c.get("id")
+        if not ccid or ccid in core_skip:
+            continue
+        prior = fresh_seen_lc.get(ccid.lower())
+        if prior is None and "display_name" in c:
+            # Respelled reappearance (org-aware collision key + the
+            # fold_collisions size guard) — full committed mints only.
+            t = fresh_seen_twin.get(_twin_key(ccid))
+            if t is not None and _bsizes(ccid) == _bsizes(t["id"]):
+                prior = t
+        if prior is not None:
+            _union_back(prior, c, donor_id=ccid if prior["id"] != ccid else None)
+            continue
+        target = enrich_by_id.get(ccid)
+        if target is not None:
+            _union_back(target, c)
+            continue
+        owner = existing_exact.get(ccid) or existing_norm.get(_norm(ccid))
+        if owner == ccid:
+            n = len(enrich)
+            _enrich_target(ccid, _committed_forms(c), _entry_alias_platforms(c))
+            if len(enrich) > n:
+                enrich_by_id.setdefault(ccid, enrich[-1])
+            continue
+        if owner is not None:
+            _enrich_target(owner, [ccid, *_committed_forms(c)], _entry_alias_platforms(c), donor_id=ccid)
+            continue
+        if "display_name" in c:  # full mint with no surviving target anywhere
+            rc = dict(c)
+            meta = _entry_meta(rc)
+            meta["upstream_status"] = "removed"
+            rc["metadata"] = json.dumps(meta, sort_keys=True)
+            fresh.append(rc)
+            fresh_seen_lc[ccid.lower()] = rc
+            fresh_seen_twin.setdefault(_twin_key(ccid), rc)
+            for form in _forms_of(rc):
+                fresh_form_owner.setdefault(form, ccid)
+            retained += 1
+    if retained:
+        print(
+            f"[refresh] catalog carry-forward: retained {retained} committed "
+            f"mint(s) absent from today's upstream",
+            file=sys.stderr,
+        )
 
     # Org-FK canonicalization (merge NEW upstream models against the EXISTING org
     # universe): snap each fresh mint's org_id to the canonical developer /
@@ -2377,7 +2685,7 @@ def _build_org_canonicalizer() -> Callable[[str | None], str | None]:
     return _canon
 
 
-def canonicalize_model_org_ids() -> int:
+def canonicalize_model_org_ids(write_core: bool = False) -> int:
     """Canonicalize EVERY model's org_id + lineage_origin_model_org_id across all
     sources to ONE spelling per developer, via the single shared
     eval_entity_resolver.fold.canonicalize_org: curated developer id when the org
@@ -2386,7 +2694,14 @@ def canonicalize_model_org_ids() -> int:
 
     This is the single org-canonicalization pass — replaces relying on each
     generator to emit a consistent casing (they see different raw spellings). A
-    refresh re-runs it deterministically. Returns the number of fields rewritten."""
+    refresh re-runs it deterministically. Returns the number of fields rewritten.
+
+    `write_core` gates rewriting the hand-curated core.yaml: the cron path
+    NEVER writes it (`_write_source_entries`'s YAML re-dump hoists core's
+    inline comments and reformats the whole file) — core stays in the READ
+    set for the canonicalization authority, and any core org_id spelling
+    that would need rewriting is reported loudly for a manual fix instead.
+    The one-shot regenerate_sources.sh opts in via --reconcile-orgs-write-core."""
     _canon = _build_org_canonicalizer()
 
     rewritten = 0
@@ -2394,6 +2709,7 @@ def canonicalize_model_org_ids() -> int:
         entries = _catalog_load_list(path)
         if not entries:
             continue
+        core_readonly = path == CORE_PATH and not write_core
         changed = False
         for e in entries:
             if not isinstance(e, dict):
@@ -2402,6 +2718,13 @@ def canonicalize_model_org_ids() -> int:
                 old = e.get(field)
                 new = _canon(old)
                 if new != old:
+                    if core_readonly:
+                        print(
+                            f"::warning::core.yaml {e.get('id')}: {field} {old!r} "
+                            f"should be {new!r} — fix core.yaml by hand (the cron "
+                            f"never rewrites the curated file)"
+                        )
+                        continue
                     e[field] = new
                     rewritten += 1
                     changed = True
@@ -2412,7 +2735,7 @@ def canonicalize_model_org_ids() -> int:
     return rewritten
 
 
-def reconcile_all_orgs() -> None:
+def reconcile_all_orgs(write_core: bool = False) -> None:
     """Ensure EVERY org_id referenced by ANY model (across all sources + core)
     has a canonical_orgs row — mint a community org for those that don't.
 
@@ -2428,7 +2751,7 @@ def reconcile_all_orgs() -> None:
     # FIRST canonicalize every model's org_id to one spelling per developer
     # (curated id / HF-true community casing), so the rows minted below are over
     # canonical org_ids and no case/separator twins are created.
-    canonicalize_model_org_ids()
+    canonicalize_model_org_ids(write_core=write_core)
 
     # Curated CLAIMS (not just ids) so a referenced org that a curated lab already
     # owns as an hf_org/alias is remapped, not minted as a community twin.
@@ -2524,13 +2847,22 @@ def main() -> int:
         help="ONLY run the universal org reconcile: mint a community canonical_orgs "
         "row for every org_id referenced by ANY model source (incl. tier3) that "
         "lacks one. Run as the LAST regen step (after tier3) — does not fetch or "
-        "rewrite model sources.",
+        "rewrite model sources. Never WRITES core.yaml (reads it for authority; "
+        "warns when a core org_id spelling needs a manual fix).",
+    )
+    p.add_argument(
+        "--reconcile-orgs-write-core",
+        action="store_true",
+        help="like --reconcile-orgs, but ALSO rewrites core.yaml org_id "
+        "spellings (a full YAML re-dump that hoists core's inline comments). "
+        "Manual/one-shot use only (regenerate_sources.sh) — the cron must "
+        "never write the curated file.",
     )
     args = p.parse_args()
 
     # --reconcile-orgs: standalone, no network / no model-source rewrite.
-    if args.reconcile_orgs:
-        reconcile_all_orgs()
+    if args.reconcile_orgs or args.reconcile_orgs_write_core:
+        reconcile_all_orgs(write_core=args.reconcile_orgs_write_core)
         return 0
 
     api = _fetch(use_cache=args.no_fetch)
@@ -2574,13 +2906,23 @@ def main() -> int:
     # them, aborting the seed with a base/variant alias collision. Idempotent, so
     # _write_yaml's re-finalize below is a no-op.
     generated = _finalize_entries(generated)
+    # Carry the committed file forward through the wholesale rewrite: an
+    # upstream (provider,model) removal retains the committed entry, an
+    # alias-level removal unions the committed aliases back, and the returned
+    # claims map stops a fresh mint from stealing a carried entry's forms.
+    generated, committed_claims = _carry_forward_committed(
+        generated, _catalog_load_list(SEED_PATH)
+    )
     # Core-aware reconciliation: suppress/repoint any mint whose normalized id
     # collides with an existing canonical (incl. core.yaml) under a DIFFERENT id,
     # so the full re-cased rewrite is ADDITIVE rather than clobbering curated
     # fixes. Same steal-guard the --catalog path uses; excludes SEED_PATH (we are
-    # rewriting it).
+    # rewriting it). Carried-forward entries run through the same pass, so one
+    # that has since been curated/folded is suppressed, not resurrected.
     before = len(generated)
-    generated = reconcile_generated_against_existing(generated)
+    generated = reconcile_generated_against_existing(
+        generated, committed_claims=committed_claims
+    )
     if len(generated) != before:
         print(
             f"[refresh] reconciliation: suppressed {before - len(generated)} "

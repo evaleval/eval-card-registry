@@ -222,6 +222,62 @@ def test_parents_union_by_id_across_sources(fresh_seed_env):
     assert by_id["lab/parent-core-only"]["relationship"] == "finetune"
 
 
+def test_metadata_merges_per_key_across_sources(fresh_seed_env):
+    """metadata is a per-key JSON-object merge, not an opaque scalar: a later
+    source's `{alias_platforms}` must not clobber an earlier source's hub-stats
+    keys (`hf_id`, `downloads_all_time`, ...). Later source wins per key on
+    overlap; a side that isn't a JSON object falls back to last-non-empty-wins."""
+    import json
+    seed_dir, fixtures_dir = fresh_seed_env
+
+    sources_dir = seed_dir / "models" / "sources"
+    (sources_dir / "a.generated.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "lab/model-m",
+            "display_name": "Model M",
+            "metadata": json.dumps(
+                {"hf_id": "lab/model-m", "downloads_all_time": 42, "license": "mit"}
+            ),
+            "review_status": "reviewed",
+        },
+        {
+            "id": "lab/model-n",
+            "display_name": "Model N",
+            "metadata": "{not-valid-json",
+            "review_status": "reviewed",
+        },
+    ]))
+    (sources_dir / "b.generated.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "lab/model-m",
+            "display_name": "Model M",
+            "metadata": json.dumps(
+                {"alias_platforms": {"model-m": "poe"}, "license": "apache-2.0"}
+            ),
+            "review_status": "reviewed",
+        },
+        {
+            "id": "lab/model-n",
+            "display_name": "Model N",
+            "metadata": json.dumps({"source": "b"}),
+            "review_status": "reviewed",
+        },
+    ]))
+    _seed(seed_dir)
+
+    df = _read_models(fixtures_dir)
+    meta = json.loads(df[df["id"] == "lab/model-m"].iloc[0]["metadata"])
+    # Disjoint keys from BOTH sources survive.
+    assert meta["hf_id"] == "lab/model-m"
+    assert meta["downloads_all_time"] == 42
+    assert meta["alias_platforms"] == {"model-m": "poe"}
+    # Overlapping key: later source wins.
+    assert meta["license"] == "apache-2.0"
+    # Malformed side: fall back to the scalar rule (later non-empty wins whole).
+    meta_n = json.loads(df[df["id"] == "lab/model-n"].iloc[0]["metadata"])
+    assert meta_n == {"source": "b"}
+
+
 def test_orgs_generated_curated_wins_on_collision(fresh_seed_env):
     """seed/orgs.generated.yaml entries are dropped when the id is already
     in seed/orgs.yaml; non-conflicting entries are still loaded."""

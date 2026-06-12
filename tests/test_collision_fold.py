@@ -24,6 +24,22 @@ def test_folds_separator_spellings_into_one_winner():
     assert {"raw-a", "raw-b"} <= set(w["aliases"])
 
 
+def test_fold_keeps_loser_display_name_as_alias():
+    """Fold keeps EVERY resolvable surface form: the loser's display_name is a
+    loader-promoted global alias, so it must land on the winner's aliases (the
+    Veo class — `google/veo-3-1` display `Veo-3.1-Fast` folding into
+    `google/veo3-1` must not delete `Veo-3.1-Fast`)."""
+    entries = [
+        _e("google/veo3-1", "models_dev", display_name="veo3-1"),
+        _e("google/veo-3-1", "models_dev", ["veo-3-1"], display_name="Veo-3.1-Fast"),
+    ]
+    out, remap = fold_collisions(entries)
+    assert len(out) == 1
+    w = out[0]
+    assert remap == {"google/veo-3-1": "google/veo3-1"}
+    assert {"google/veo-3-1", "veo-3-1", "Veo-3.1-Fast"} <= set(w["aliases"])
+
+
 def test_real_hf_spelling_wins_over_inferred():
     entries = [_e("abacus-ai/llama3-smaug-8b", "inferred"),
                _e("abacusai/Llama-3-Smaug-8B", "hf")]

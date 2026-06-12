@@ -6,9 +6,12 @@
 skip_ids: []
 skip_source_ids:
 - alibaba/qwen3-235b-a22b-instruct
+- alibaba/qwen3-omni-30b-a3b
+- alibaba/qwen3-omni-30b-a3b-reasoning
 - anthropic/claude-35-sonnet
 - anthropic/claude-sonnet-4-5-thinking-20250929
 - cohere/cohere-command-r-plus
+- kimi/kimi-linear-48b-a3b-instruct
 - kwaipilot/kat-coder-pro
 - microsoft/phi3-medium-128k
 - microsoft/phi3-medium-4k
@@ -31,6 +34,7 @@ skip_source_ids:
 - voyage/voyage-code-3
 - voyage/voyage-finance-2
 - voyage/voyage-law-2
+- wanx/wan-v2-6
 - xai/grok-1
 entries:
 - id: 01-ai/Yi-Coder-1.5B-Chat
@@ -1797,6 +1801,25 @@ entries:
   - alibaba/qwen3-1.7b
   - unknown/qwen3-1-7b-think
   - qwen/qwen3-1-7b
+# Real HF repo for the skipped models.dev stub + tier3 `…-reasoning` mint.
+- id: Qwen/Qwen3-Omni-30B-A3B-Thinking
+  display_name: Qwen3-Omni 30B A3B Thinking
+  org_id: alibaba
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - alibaba/qwen3-omni-30b-a3b
+  - alibaba/qwen3-omni-30b-a3b-reasoning
 - id: RLHFlow/armorm-llama3-8b
   display_name: ArmoRM Llama3 8B
   org_id: RLHFlow
@@ -5744,7 +5767,7 @@ entries:
   architecture: null
   params_billions: 7.0
   parents:
-  - id: deepseek/deepseek-math-7b
+  - id: deepseek-ai/deepseek-math-7b-rl
     relationship: variant
     axis: training_stage
   open_weights: true
@@ -5909,7 +5932,7 @@ entries:
   review_status: reviewed
   aliases:
   - deepseek-llm-7b
-- id: deepseek/deepseek-math-7b
+- id: deepseek-ai/deepseek-math-7b-rl
   display_name: DeepSeek Math 7B RL
   org_id: deepseek
   family: deepseek-math-7b
@@ -5926,7 +5949,7 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
-  - deepseek-ai/deepseek-math-7b-rl
+  - deepseek/deepseek-math-7b
   - unknown/deepseek-math-7b-rl
   - unknown/deepseek-math
   - deepseek-math-7b-rl
@@ -5989,7 +6012,7 @@ entries:
   review_status: reviewed
   aliases:
   - DeepSeek-V4
-- id: deepseek/deepseek-vl
+- id: deepseek-ai/deepseek-vl-7b-chat
   display_name: DeepSeek-VL
   org_id: deepseek
   family: deepseek-vl
@@ -6006,8 +6029,8 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
+  - deepseek/deepseek-vl
   - unknown/deepseek-vl-7b-chat
-  - deepseek-ai/deepseek-vl-7b-chat
   - deepseek-vl-7b-chat
   - unknown/deepseek-vl
   - unknown/deepseek-vl-1-3b
@@ -9518,7 +9541,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-  aliases: []
+  aliases:
+  - kimi/kimi-linear-48b-a3b-instruct
 - id: moonshotai/kimi-k2.5-non-reasoning
   display_name: Kimi K2.5 Non Reasoning
   org_id: moonshotai
@@ -12923,4 +12947,16 @@ entries:
   resolution_granularity: variant
   aliases:
   - openai/gpt-5.1-thinking-2025-11-12
+  metadata: '{}'
+- id: alibaba/wan-v2-6
+  display_name: Wan 2.6
+  org_id: alibaba
+  open_weights: null
+  release_date: '2025-12-01'
+  resolution_source: NA
+  review_status: reviewed
+  aliases:
+  - alibaba/wan-v2-6
+  - wanx/wan-v2-6
+  - wan-v2-6
   metadata: '{}'

@@ -412,6 +412,9 @@
   - Qwen3-Next 80B-A3B (Thinking)
   - alibaba/qwen3-next-80b-a3b-thinking
   - qwen3-next-80b-a3b-thinking
+- id: Qwen/Qwen3-Omni-30B-A3B-Thinking
+  aliases:
+  - alibaba/qwen3-omni-30b-a3b
 - id: Qwen/Qwen3-VL-235B-A22B-Instruct
   aliases:
   - Qwen3 VL 235B A22B Instruct
@@ -1673,9 +1676,6 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-04"], "release_dates": ["2025-09"], "snapshots": ["qwen3-next-80b-a3b-instruct"]}'
   review_status: reviewed
-- id: alibaba/qwen3-omni-30b-a3b
-  aliases:
-  - Qwen/Qwen3-Omni-30B-A3B-Thinking
 - id: alibaba/qwen3-omni-30b-a3b-captioner
   display_name: Qwen/Qwen3-Omni-30B-A3B-Captioner
   org_id: alibaba

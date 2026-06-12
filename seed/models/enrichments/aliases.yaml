@@ -907,7 +907,7 @@
 - id: alibaba/qwen3-next-80b-a3b-reasoning
   aliases:
   - Qwen3 Next 80B A3B Reasoning
-- id: alibaba/qwen3-omni-30b-a3b
+- id: Qwen/Qwen3-Omni-30B-A3B-Thinking
   aliases:
   - qwen3-omni-30b-a3b
 - id: alibaba/qwen3-vl-235b-a22b

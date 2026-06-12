@@ -632,10 +632,11 @@ def test_reconciliation_rewrites_surviving_parent_edges_off_suppressed_mints(mod
     core.write_text(yaml.safe_dump([{"id": "Acme/Base-7B", "aliases": ["acme-base-7b"]}]))
     generated = [
         # Collides (normalized) with the curated Acme/Base-7B -> suppressed.
-        {"id": "acme/base-7b", "aliases": []},
+        {"id": "acme/base-7b", "display_name": "Acme Base 7B v0", "aliases": []},
         # A surviving child whose parent edge points at the suppressed mint id.
         {
             "id": "acme/base-7b-instruct",
+            "display_name": "Acme Base 7B Instruct",
             "aliases": [],
             "parents": [{"id": "acme/base-7b", "relationship": "variant", "axis": "training_stage"}],
         },
@@ -663,9 +664,10 @@ def test_reconciliation_drops_intra_batch_sibling_id_alias(mod, tmp_path):
     # only collision under test is the intra-batch sibling-id one, not an
     # incidental org-aware fold to a real upstream id.
     generated = [
-        {"id": "acmecorp/Foo-70B",
+        {"id": "acmecorp/Foo-70B", "display_name": "Acmecorp Foo 70B",
          "aliases": ["acmecorp/Foo-70B-Instruct", "foo-70b-bare"]},
-        {"id": "acmecorp/Foo-70B-Instruct", "aliases": []},
+        {"id": "acmecorp/Foo-70B-Instruct", "display_name": "Acmecorp Foo 70B Instruct",
+         "aliases": []},
     ]
     out = mod.reconcile_generated_against_existing([dict(e) for e in generated], sources=(core,))
     by_id = {e["id"]: e for e in out}
@@ -685,8 +687,8 @@ def test_reconciliation_dedups_intra_batch_shared_nonid_alias(mod, tmp_path):
     core = tmp_path / "core.yaml"
     core.write_text("entries: []\n")
     generated = [
-        {"id": "zzz/model-b", "aliases": ["shared-free-alias"]},
-        {"id": "aaa/model-a", "aliases": ["shared-free-alias"]},
+        {"id": "zzz/model-b", "display_name": "Model B", "aliases": ["shared-free-alias"]},
+        {"id": "aaa/model-a", "display_name": "Model A", "aliases": ["shared-free-alias"]},
     ]
     out = mod.reconcile_generated_against_existing([dict(e) for e in generated], sources=(core,))
     owners = sorted(e["id"] for e in out if "shared-free-alias" in (e.get("aliases") or []))
@@ -1077,3 +1079,349 @@ def test_catalog_new_model_snaps_to_existing_community_org_casing(mod, tmp_path,
     assert variant not in after_ids, (
         f"minted a case-variant twin org {variant!r} alongside existing {existing!r}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Carry-forward: a wholesale rewrite never deletes committed surface forms.
+# ---------------------------------------------------------------------------
+
+@pytest.fixture
+def cf_mod(tmp_path):
+    """Fresh module instance (not the module-scoped `mod`) with CORE_PATH
+    pointed at a tmp file, so each test controls the core skip lists."""
+    m = load_script_module("refresh_from_modelsdev", "refresh_modelsdev_carryforward")
+    m.CORE_PATH = tmp_path / "core.yaml"
+    return m
+
+
+def _cf_entry(cid: str, aliases=(), metadata: str = "{}") -> dict:
+    return {
+        "id": cid,
+        "display_name": cid.split("/")[-1],
+        "org_id": cid.split("/")[0] if "/" in cid else None,
+        "aliases": list(aliases),
+        "metadata": metadata,
+        "review_status": "draft",
+    }
+
+
+def test_carry_forward_retains_upstream_removed_entry(cf_mod):
+    """A committed entry whose id vanished from today's upstream is retained
+    verbatim, tagged `metadata.upstream_status: removed`, and its forms are
+    recorded in the returned claims map."""
+    committed = [_cf_entry("groq/llama3-9b-9192", ["llama3-9b-9192"])]
+    fresh = [_cf_entry("openai/gpt-4o-test", ["gpt-4o-test"])]
+    batch, claims = cf_mod._carry_forward_committed(fresh, committed)
+    by_id = {e["id"]: e for e in batch}
+    kept = by_id["groq/llama3-9b-9192"]
+    assert kept["aliases"] == ["llama3-9b-9192"]
+    assert json.loads(kept["metadata"])["upstream_status"] == "removed"
+    assert claims["llama3-9b-9192"] == "groq/llama3-9b-9192"
+    assert by_id["openai/gpt-4o-test"]["aliases"] == ["gpt-4o-test"]
+
+
+def test_carry_forward_respects_core_skip(cf_mod):
+    """An id core.yaml suppresses (skip_ids / skip_source_ids) is NOT carried
+    forward — curation removed it from the source universe on purpose."""
+    cf_mod.CORE_PATH.write_text(
+        yaml.safe_dump({"skip_source_ids": ["groq/llama3-9b-9192"], "entries": []})
+    )
+    committed = [_cf_entry("groq/llama3-9b-9192", ["llama3-9b-9192"])]
+    batch, _claims = cf_mod._carry_forward_committed([], committed)
+    assert batch == []
+
+
+def test_carry_forward_unions_committed_aliases_back(cf_mod):
+    """An alias-level upstream removal (cerebras dropping `llama3.1-8b`) must
+    not regress resolution: the committed alias is unioned back onto the
+    surviving entry, keeping its platform provenance."""
+    committed = [_cf_entry(
+        "meta/llama3.1-8b-cftest",
+        ["llama3.1-8b-cftest"],
+        metadata=json.dumps(
+            {"alias_platforms": {"llama3.1-8b-cftest": "cerebras"}}, sort_keys=True
+        ),
+    )]
+    fresh = [_cf_entry("meta/llama3.1-8b-cftest", ["llama-3.1-8b-cftest-new"])]
+    batch, _claims = cf_mod._carry_forward_committed(fresh, committed)
+    (e,) = batch
+    assert e["aliases"] == ["llama-3.1-8b-cftest-new", "llama3.1-8b-cftest"]
+    assert json.loads(e["metadata"])["alias_platforms"]["llama3.1-8b-cftest"] == "cerebras"
+
+
+def test_new_mint_cannot_steal_retained_alias(cf_mod, tmp_path):
+    """The TEE/gemma4-31b class: upstream re-spells a model under a serving-org
+    prefix and the old entry drops out. The fresh mint must NOT capture the
+    carried-forward entry's alias claims — the committed owner keeps them
+    through reconcile's pre-seeded `claimed` map."""
+    core = tmp_path / "sources-core.yaml"
+    core.write_text(yaml.safe_dump([]))
+    committed = [_cf_entry("google/gemma-9-31B", ["gemma9-31b", "gemma9:31b"])]
+    fresh = [_cf_entry("TEE/gemma9-31b", ["gemma9-31b", "gemma9:31b"])]
+    batch, claims = cf_mod._carry_forward_committed(fresh, committed)
+    out = cf_mod.reconcile_generated_against_existing(
+        batch, sources=(core,), committed_claims=claims
+    )
+    by_id = {e["id"]: e for e in out}
+    assert set(by_id["google/gemma-9-31B"]["aliases"]) >= {"gemma9-31b", "gemma9:31b"}
+    assert not set(by_id["TEE/gemma9-31b"].get("aliases") or []) & {"gemma9-31b", "gemma9:31b"}
+
+
+def test_carry_forward_unions_replaced_display_name_back(cf_mod):
+    """A committed display_name is a loader-promoted global alias: when today's
+    upstream re-spells it, the old display must survive as an alias on the
+    surviving entry (e.g. `IBM: Granite 4.0 Micro` after openrouter renamed)."""
+    committed = [dict(_cf_entry("ibm/granite-cftest-micro", ["granite-cftest-micro"]),
+                      display_name="IBM: Granite CFTest Micro")]
+    fresh = [dict(_cf_entry("ibm/granite-cftest-micro", ["granite-cftest-micro"]),
+                  display_name="Granite CFTest Micro")]
+    batch, claims = cf_mod._carry_forward_committed(fresh, committed)
+    (e,) = batch
+    assert "IBM: Granite CFTest Micro" in e["aliases"]
+    assert claims["IBM: Granite CFTest Micro"] == "ibm/granite-cftest-micro"
+
+
+def test_carry_forward_reappearing_id_clears_removed_tag(cf_mod):
+    """A previously-retained entry (`upstream_status: removed`) whose id
+    reappears upstream is REPLACED by the fresh entry: exactly one record,
+    tag cleared, committed aliases unioned back."""
+    committed = [dict(
+        _cf_entry("groq/llama3-9b-9192", ["llama3-9b-9192"]),
+        metadata=json.dumps({"upstream_status": "removed"}, sort_keys=True),
+    )]
+    fresh = [_cf_entry("groq/llama3-9b-9192")]
+    batch, claims = cf_mod._carry_forward_committed(fresh, committed)
+    assert [e["id"] for e in batch] == ["groq/llama3-9b-9192"]
+    (e,) = batch
+    assert "llama3-9b-9192" in e["aliases"]
+    assert "upstream_status" not in json.loads(e["metadata"])
+    assert claims["llama3-9b-9192"] == "groq/llama3-9b-9192"
+
+
+def test_carry_forward_absorbs_respelled_reappearance(cf_mod, tmp_path):
+    """The Veo class: upstream drops `zorgvid/Zeo-3-1` and re-emits the model
+    respelled (`zorgvid/zeo3-1`). The fresh spelling wins; the committed id,
+    display_name AND aliases all become aliases on it — never a normalized
+    twin for the seed's collision_fold / gate to trip on. Deterministic."""
+    core = tmp_path / "sources-core.yaml"
+    core.write_text("entries: []\n")
+    committed = [dict(_cf_entry("zorgvid/Zeo-3-1", ["zeo-3-1-alias"]),
+                      display_name="Zeo-3.1-Fast")]
+    fresh = [_cf_entry("zorgvid/zeo3-1")]
+    batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    assert [e["id"] for e in batch] == ["zorgvid/zeo3-1"], "expected a single survivor"
+    (e,) = batch
+    assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(e["aliases"])
+    assert "upstream_status" not in json.loads(e["metadata"])
+    # Claims point at the SURVIVOR, so reconcile's hygiene keeps the donated forms.
+    assert claims["zorgvid/Zeo-3-1"] == "zorgvid/zeo3-1"
+    assert claims["Zeo-3.1-Fast"] == "zorgvid/zeo3-1"
+    out = cf_mod.reconcile_generated_against_existing(
+        batch, sources=(core,), committed_claims=claims
+    )
+    (surv,) = [x for x in out if x["id"] == "zorgvid/zeo3-1"]
+    assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(surv["aliases"])
+    batch2, claims2 = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    assert batch2 == batch and claims2 == claims
+
+
+def test_carry_forward_size_guard_blocks_false_absorb(cf_mod):
+    """The twin key strips separators, so `opt-1.3b`/`opt-13b` collide — the
+    fold_collisions b-size guard must keep them apart (different models):
+    the committed entry is retained, not absorbed."""
+    committed = [_cf_entry("acme/opt-1.3b")]
+    fresh = [_cf_entry("acme/opt-13b")]
+    batch, _claims = cf_mod._carry_forward_committed(fresh, committed)
+    by_id = {e["id"]: e for e in batch}
+    assert set(by_id) == {"acme/opt-13b", "acme/opt-1.3b"}
+    assert json.loads(by_id["acme/opt-1.3b"]["metadata"])["upstream_status"] == "removed"
+
+
+def test_carry_forward_does_not_absorb_enrich_record_onto_mint(cf_mod):
+    """An alias-only enrich record's id is ANOTHER canonical — even if a fresh
+    mint twin-matches it, it must NOT be absorbed (its id would become a mint's
+    alias, stealing the canonical). It is carried verbatim instead."""
+    committed = [{"id": "Realorg/Real-Canon-9X", "aliases": ["real-canon-9x-form"]}]
+    fresh = [_cf_entry("realorg/real-canon-9x")]
+    batch, _claims = cf_mod._carry_forward_committed(fresh, committed)
+    by_id = {e["id"]: e for e in batch}
+    assert set(by_id) == {"realorg/real-canon-9x", "Realorg/Real-Canon-9X"}
+    assert "Realorg/Real-Canon-9X" not in (by_id["realorg/real-canon-9x"].get("aliases") or [])
+
+
+# ---------------------------------------------------------------------------
+# Orphaned enrich records: enriching a vanished owner is meaningless — drop
+# loudly rather than survive as a bare canonical forever.
+# ---------------------------------------------------------------------------
+def test_reconcile_drops_orphaned_enrich_record_loudly(mod, tmp_path, capsys):
+    core = tmp_path / "core.yaml"
+    core.write_text(yaml.safe_dump({"entries": [{"id": "Kept/Owner-X", "aliases": []}]}))
+    generated = [
+        # Owner id exists nowhere (sources, catalog, tier3, core) -> drop + warn.
+        {"id": "ghostorg/vanished-owner-xyz", "aliases": ["ghost-form-1"]},
+        # Owner still in core -> the enrich record keeps donating onto it.
+        {"id": "Kept/Owner-X", "aliases": ["kept-form-1"]},
+    ]
+    out = mod.reconcile_generated_against_existing([dict(e) for e in generated], sources=(core,))
+    by_id = {e["id"]: e for e in out}
+    assert "ghostorg/vanished-owner-xyz" not in by_id, "bare canonical must not survive"
+    assert "kept-form-1" in by_id["Kept/Owner-X"]["aliases"]
+    err = capsys.readouterr().err
+    assert "vanished-owner-xyz" in err and "ghost-form-1" in err, (
+        "dropping an orphaned enrich record must be loud (forms listed)"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Catalog carry-forward: display-name donation on fold, retention/union-back/
+# dup-record consolidation, and idempotence over its own output.
+# ---------------------------------------------------------------------------
+def test_catalog_carry_forward_donates_display_name_on_respelled_fold(mod, tmp_path, monkeypatch):
+    """The Veo regression shape: the committed catalog mint `…/zeo-3-1`
+    (display_name `Zeo-3.1-Fast`) vanished upstream and reappeared respelled
+    as `…/zeo3-1`. The committed id, display_name AND aliases must all stay
+    resolvable as aliases on the fresh spelling — display_name was the one
+    form the fold deleted."""
+    committed = [{
+        "id": "zorgvid/zeo-3-1", "display_name": "Zeo-3.1-Fast", "org_id": None,
+        "aliases": ["zeo-3-1"],
+        "metadata": json.dumps({"alias_platforms": {"zeo-3-1": "poe"}}, sort_keys=True),
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    cat = tmp_path / "cat.yaml"
+    cat.write_text(yaml.safe_dump(committed, sort_keys=False))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", tmp_path / "orgs.yaml")
+    fresh = [{
+        "id": "zorgvid/zeo3-1", "display_name": "Zeo 3.1", "org_id": None,
+        "aliases": [], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    mod.regenerate_catalog(fresh)
+    out = yaml.safe_load(cat.read_text()) or []
+    assert "zorgvid/zeo-3-1" not in {e["id"] for e in out}, "respelled twin must not survive"
+    (surv,) = [e for e in out if e["id"] == "zorgvid/zeo3-1"]
+    assert {"zorgvid/zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1"} <= set(surv["aliases"]), (
+        f"committed surface forms lost on fold: {surv['aliases']}"
+    )
+    # Platform provenance for the re-added committed alias survives too.
+    assert json.loads(surv["metadata"])["alias_platforms"]["zeo-3-1"] == "poe"
+
+
+def test_catalog_carry_forward_retention_unionback_and_dup_consolidation(mod, tmp_path, monkeypatch):
+    """Direct test of the catalog carry-forward block: a committed file with
+    TWO records for one id (mint + enrich dup) consolidates onto the single
+    fresh mint (union of all aliases, exactly one record); a committed mint
+    with no surviving target is retained tagged `upstream_status: removed`."""
+    committed = [
+        {"id": "zorg/zmodel-cf", "display_name": "ZModel CF", "org_id": None,
+         "aliases": ["zmodel-cf-a1"], "metadata": "{}",
+         "review_status": "draft", "resolution_source": "models_dev"},
+        {"id": "zorg/zmodel-cf", "aliases": ["zmodel-cf-a2"]},  # dup record, same id
+        {"id": "zorg/zgone-cf", "display_name": "ZGone CF", "org_id": None,
+         "aliases": ["zgone-cf-alias"], "metadata": "{}",
+         "review_status": "draft", "resolution_source": "models_dev"},
+    ]
+    cat = tmp_path / "cat.yaml"
+    cat.write_text(yaml.safe_dump(committed, sort_keys=False))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", tmp_path / "orgs.yaml")
+    fresh = [{
+        "id": "zorg/zmodel-cf", "display_name": "ZModel CF", "org_id": None,
+        "aliases": ["zmodel-cf-a3"], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    mod.regenerate_catalog(fresh)
+    out = yaml.safe_load(cat.read_text()) or []
+    recs = [e for e in out if e["id"] == "zorg/zmodel-cf"]
+    assert len(recs) == 1, f"dup committed records must consolidate, got {len(recs)}"
+    assert {"zmodel-cf-a1", "zmodel-cf-a2", "zmodel-cf-a3"} <= set(recs[0]["aliases"])
+    (gone,) = [e for e in out if e["id"] == "zorg/zgone-cf"]
+    assert json.loads(gone["metadata"])["upstream_status"] == "removed"
+    assert "zgone-cf-alias" in gone["aliases"]
+
+
+def test_catalog_pipeline_idempotent_over_committed_output(mod, api, tmp_path, monkeypatch):
+    """Run the --catalog step over the COMMITTED catalog, then AGAIN over its
+    own output: byte-identical. This is the daily-cron regression class
+    (oscillating carry-forward/split output)."""
+    import copy
+
+    mod._HF_AUTHORITY = None
+    full = mod._finalize_entries(mod._generate_models(api, mod._load_known_org_ids())[0])
+    cat = tmp_path / "cat.yaml"
+    cat.write_text((REPO_ROOT / "seed" / "models" / "sources" / "models_dev_catalog.generated.yaml").read_text())
+    orgs = tmp_path / "orgs.yaml"
+    orgs.write_text((REPO_ROOT / "seed" / "orgs.generated.yaml").read_text())
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", orgs)
+    mod.regenerate_catalog(copy.deepcopy(full))
+    text1 = cat.read_text()
+    mod.regenerate_catalog(copy.deepcopy(full))
+    assert cat.read_text() == text1, "catalog regen not idempotent over its own output"
+
+
+def test_noncatalog_pipeline_idempotent_over_own_output(mod, api):
+    """Run the full non-catalog pipeline (carry-forward + reconcile + org-canon
+    + write) over the COMMITTED file, then AGAIN over its own output:
+    byte-identical."""
+    mod._HF_AUTHORITY = None
+
+    def run(committed):
+        gen, skipped = mod._generate_models(api, mod._load_known_org_ids())
+        assert skipped == []
+        gen = mod._finalize_entries([dict(e) for e in gen])
+        batch, claims = mod._carry_forward_committed(gen, committed)
+        out = mod.reconcile_generated_against_existing(batch, committed_claims=claims)
+        _canon = mod._build_org_canonicalizer()
+        for e in out:
+            for f in ("org_id", "lineage_origin_model_org_id"):
+                if e.get(f):
+                    e[f] = _canon(e[f])
+        return mod._write_yaml(out, mod.SEED_PATH)  # returns text; does not write
+
+    text1 = run(mod._catalog_load_list(mod.SEED_PATH))
+    text2 = run(yaml.safe_load(text1))
+    assert text1 == text2, "non-catalog regen not idempotent over its own output"
+
+
+# ---------------------------------------------------------------------------
+# --reconcile-orgs must never WRITE core.yaml (a YAML re-dump hoists its inline
+# comments); core stays in the READ set and mis-spellings are warned loudly.
+# ---------------------------------------------------------------------------
+def test_reconcile_orgs_never_writes_core_by_default(mod, tmp_path, monkeypatch, capsys):
+    gen_orgs = yaml.safe_load((REPO_ROOT / "seed" / "orgs.generated.yaml").read_text()) or []
+    _canon = mod._build_org_canonicalizer()
+    # An existing community org whose lowercased spelling the shared
+    # canonicalizer maps back to it — so a core entry carrying the lowercase
+    # variant genuinely NEEDS the rewrite.
+    existing = next(
+        e["id"] for e in gen_orgs
+        if isinstance(e, dict) and e.get("id") and "/" not in e["id"]
+        and e["id"].lower() != e["id"] and _canon(e["id"].lower()) == e["id"]
+    )
+    variant = existing.lower()
+    core = tmp_path / "core.yaml"
+    core_text = (
+        "# hand-curated header comment that a re-dump would hoist\n"
+        + yaml.safe_dump(
+            {"skip_ids": [], "entries": [
+                {"id": f"{variant}/zzz-core-org-write-test", "org_id": variant}
+            ]},
+            sort_keys=False,
+        )
+    )
+    core.write_text(core_text)
+    monkeypatch.setattr(mod, "CORE_PATH", core)
+    monkeypatch.setattr(mod, "_ALL_MODEL_SOURCES", (core,))
+
+    n = mod.canonicalize_model_org_ids()  # cron default: no core write
+    assert core.read_text() == core_text, "the cron must never rewrite core.yaml"
+    assert n == 0
+    out = capsys.readouterr().out
+    assert "::warning::" in out and variant in out, "needed core fix must be loud"
+
+    n2 = mod.canonicalize_model_org_ids(write_core=True)  # one-shot opt-in
+    assert n2 == 1
+    rewritten = yaml.safe_load(core.read_text())
+    assert rewritten["entries"][0]["org_id"] == existing

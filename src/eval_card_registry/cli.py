@@ -206,6 +206,11 @@ def seed(
             - `tags`: UNION (case-insensitive dedup). Both YAML-list and
               JSON-encoded-string forms supported. Protects against session
               additions overwriting `[open-weight, moe]` with `[open-weight]`.
+            - `metadata`: per-KEY merge of the two JSON objects (later source
+              wins per key, no key ever dropped). Protects against e.g.
+              models_dev_catalog's `{alias_platforms}` wiping hub_stats'
+              `{hf_id, downloads_all_time, ...}`. Falls back to the scalar
+              rule when either side isn't a JSON object.
             - Other scalars: prefer non-empty across the pair; when both
               sides have a non-empty value, last-write-wins. Protects against
               session-batch entries that omit `architecture` /
@@ -299,13 +304,49 @@ def seed(
                 else parents_list
             )
 
+            # Per-key metadata merge. Both sides may be a dict or a
+            # JSON-encoded string; malformed/non-dict input opts that pair out
+            # (handled by the scalar last-non-empty-wins loop below instead).
+            def _decode_dict_field(v):
+                """Return (dict, was_json, is_dict)."""
+                if v is None:
+                    return {}, False, True
+                if isinstance(v, dict):
+                    return dict(v), False, True
+                if isinstance(v, str):
+                    s = v.strip()
+                    if not s or s in ("{}", "null"):
+                        return {}, True, True
+                    try:
+                        d = _json.loads(s)
+                        if isinstance(d, dict):
+                            return d, True, True
+                    except (ValueError, TypeError):
+                        pass
+                return {}, False, False
+
+            tgt_meta, tgt_m_json, tgt_m_ok = _decode_dict_field(target.get("metadata"))
+            src_meta, src_m_json, src_m_ok = _decode_dict_field(src.get("metadata"))
+            metadata_handled = tgt_m_ok and src_m_ok
+            if metadata_handled:
+                meta_merged = {**tgt_meta, **src_meta}  # later source wins per key
+                metadata_merged = (
+                    _json.dumps(meta_merged, sort_keys=True)
+                    if (tgt_m_json or src_m_json)
+                    else meta_merged
+                )
+
             merged = dict(target)
             for k, v in src.items():
                 if k in ("aliases", "tags", "parents"):
                     continue  # handled separately
+                if k == "metadata" and metadata_handled:
+                    continue  # handled separately
                 if _is_empty(v):
                     continue
                 merged[k] = v
+            if metadata_handled and ("metadata" in target or "metadata" in src):
+                merged["metadata"] = metadata_merged
             merged["aliases"] = existing_aliases
             merged["tags"] = tags_merged
             # Only emit `parents` if at least one side had any (avoids creating
