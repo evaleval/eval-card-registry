@@ -33,7 +33,7 @@
 
 - id: f1
   display_name: F1 Score
-  aliases: ["F1"]
+  aliases: ["F1", "F1-macro"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0

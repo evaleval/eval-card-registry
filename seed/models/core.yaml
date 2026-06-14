@@ -3,18 +3,31 @@
 # entities NO generator reproduces (resolver exact/normalized): closed-API
 # (open_weights=False), hand-curated (resolution_source=NA), curated judgment
 # calls. May use the {skip_ids, skip_source_ids, entries} shape.
+# Keys EXPLICITLY present on an entry — even with a null value — are strong
+# claims: they block the loader's weak fill (the `weak:` scalar maps donated
+# by generated enrich records). Write `open_weights: null` to pin a field as
+# curated-unknown against bad upstream data; DELETE the key to let a weak
+# value fill it.
 skip_ids: []
 skip_source_ids:
 - alibaba/qwen3-235b-a22b-instruct
+- alibaba/qwen3-omni-30b-a3b
+- alibaba/qwen3-omni-30b-a3b-reasoning
 - anthropic/claude-35-sonnet
 - anthropic/claude-sonnet-4-5-thinking-20250929
 - cohere/cohere-command-r-plus
+- deepseek/deepseek-vl2
+- deepseek/deepseek-vl2-small
+- deepseek/deepseek-vl2-tiny
+- kimi/kimi-linear-48b-a3b-instruct
 - kwaipilot/kat-coder-pro
 - microsoft/phi3-medium-128k
 - microsoft/phi3-medium-4k
 - microsoft/phi3-mini-128k
 - microsoft/phi3-mini-4k
 - mistralai/mistral-7b-instruct
+- nvidia/nemotron-120b-a12b
+- nvidia/nemotron-3-120b-a12b
 - openai/GPT-J-6B
 - openai/GPT-NeoX-20B
 - openai/gpt-4-5-2025-02-27
@@ -31,6 +44,7 @@ skip_source_ids:
 - voyage/voyage-code-3
 - voyage/voyage-finance-2
 - voyage/voyage-law-2
+- wanx/wan-v2-6
 - xai/grok-1
 entries:
 - id: 01-ai/Yi-Coder-1.5B-Chat
@@ -1797,6 +1811,25 @@ entries:
   - alibaba/qwen3-1.7b
   - unknown/qwen3-1-7b-think
   - qwen/qwen3-1-7b
+# Real HF repo for the skipped models.dev stub + tier3 `…-reasoning` mint.
+- id: Qwen/Qwen3-Omni-30B-A3B-Thinking
+  display_name: Qwen3-Omni 30B A3B Thinking
+  org_id: alibaba
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - alibaba/qwen3-omni-30b-a3b
+  - alibaba/qwen3-omni-30b-a3b-reasoning
 - id: RLHFlow/armorm-llama3-8b
   display_name: ArmoRM Llama3 8B
   org_id: RLHFlow
@@ -5744,7 +5777,7 @@ entries:
   architecture: null
   params_billions: 7.0
   parents:
-  - id: deepseek/deepseek-math-7b
+  - id: deepseek-ai/deepseek-math-7b-rl
     relationship: variant
     axis: training_stage
   open_weights: true
@@ -5909,7 +5942,7 @@ entries:
   review_status: reviewed
   aliases:
   - deepseek-llm-7b
-- id: deepseek/deepseek-math-7b
+- id: deepseek-ai/deepseek-math-7b-rl
   display_name: DeepSeek Math 7B RL
   org_id: deepseek
   family: deepseek-math-7b
@@ -5926,7 +5959,7 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
-  - deepseek-ai/deepseek-math-7b-rl
+  - deepseek/deepseek-math-7b
   - unknown/deepseek-math-7b-rl
   - unknown/deepseek-math
   - deepseek-math-7b-rl
@@ -5989,7 +6022,7 @@ entries:
   review_status: reviewed
   aliases:
   - DeepSeek-V4
-- id: deepseek/deepseek-vl
+- id: deepseek-ai/deepseek-vl-7b-chat
   display_name: DeepSeek-VL
   org_id: deepseek
   family: deepseek-vl
@@ -6006,12 +6039,73 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases:
+  - deepseek/deepseek-vl
   - unknown/deepseek-vl-7b-chat
-  - deepseek-ai/deepseek-vl-7b-chat
   - deepseek-vl-7b-chat
   - unknown/deepseek-vl
   - unknown/deepseek-vl-1-3b
   - deepseek-vl-1.3b
+- id: deepseek-ai/deepseek-vl2
+  display_name: DeepSeek-VL2
+  org_id: deepseek
+  family: deepseek-vl2
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2024-12-13'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - multimodal
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - deepseek/deepseek-vl2
+  - deepseek-vl2
+- id: deepseek-ai/deepseek-vl2-small
+  display_name: DeepSeek-VL2 Small
+  org_id: deepseek
+  family: deepseek-vl2
+  architecture: null
+  params_billions: null
+  parents:
+  - id: deepseek-ai/deepseek-vl2
+    relationship: variant
+    axis: tier
+  open_weights: true
+  release_date: '2024-12-13'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - multimodal
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - deepseek/deepseek-vl2-small
+- id: deepseek-ai/deepseek-vl2-tiny
+  display_name: DeepSeek-VL2 Tiny
+  org_id: deepseek
+  family: deepseek-vl2
+  architecture: null
+  params_billions: null
+  parents:
+  - id: deepseek-ai/deepseek-vl2
+    relationship: variant
+    axis: tier
+  open_weights: true
+  release_date: '2024-12-13'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - multimodal
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - deepseek/deepseek-vl2-tiny
 - id: deepseek/deepseek-vl-7b
   display_name: DeepSeek-VL 7B
   org_id: deepseek
@@ -9518,7 +9612,8 @@ entries:
   resolution_source: inferred
   resolution_granularity: variant
   review_status: draft
-  aliases: []
+  aliases:
+  - kimi/kimi-linear-48b-a3b-instruct
 - id: moonshotai/kimi-k2.5-non-reasoning
   display_name: Kimi K2.5 Non Reasoning
   org_id: moonshotai
@@ -9729,6 +9824,10 @@ entries:
   - nvidia-nemotron-3-super-120b
   - nemotron-3-super-120b-a12b
   - NVIDIA Nemotron 3 Super 120B
+  - nvidia/nemotron-120b-a12b
+  - nemotron-120b-a12b
+  - nvidia/nemotron-3-120b-a12b
+  - nemotron-3-120b-a12b
 - id: nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1
   display_name: nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1
   org_id: nvidia
@@ -12923,4 +13022,15 @@ entries:
   resolution_granularity: variant
   aliases:
   - openai/gpt-5.1-thinking-2025-11-12
+  metadata: '{}'
+- id: alibaba/wan-v2-6
+  display_name: Wan 2.6
+  org_id: alibaba
+  open_weights: null
+  resolution_source: NA
+  review_status: reviewed
+  aliases:
+  - alibaba/wan-v2-6
+  - wanx/wan-v2-6
+  - wan-v2-6
   metadata: '{}'

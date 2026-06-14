@@ -3,7 +3,7 @@
 
 Reusable generator (mirrors the refresh_from_* pattern) that reads
 ``curation/inference_platforms.proposed.json`` and writes
-``seed/inference_platforms.yaml`` with all 137 platform entries.
+``seed/inference_platforms.yaml`` with all platform entries.
 
 Field mapping:
   id, display_name, kind, aliases, canonical_org (when present),

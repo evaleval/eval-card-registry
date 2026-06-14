@@ -776,6 +776,26 @@
   metadata: '{}'
   review_status: reviewed
 
+- id: journalistic-bias
+  display_name: Journalistic Bias
+  aliases: ["journalistic-bias", "journalistic_bias"]
+  description: Third-party benchmark for detecting political or ideological bias in news articles, scored by Accuracy and F1.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["bias", "classification"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: apex-swe
+  display_name: Mercor APEX-SWE
+  aliases: ["apex-swe"]
+  description: Third-party long-horizon software-engineering agent benchmark from Mercor and Cognition, a sibling of APEX v1 and APEX Agents. Pre-registered; no results yet.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["agent", "software-engineering"]'
+  metadata: '{}'
+  review_status: reviewed
+
 - id: wordle-arena
   display_name: Wordle Arena
   aliases: ["wordle_arena", "wordle arena", "Wordle Arena Word Set", "wordle_arena_daily"]

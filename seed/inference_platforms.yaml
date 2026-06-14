@@ -615,6 +615,12 @@
   aliases:
   - Privatemode AI
   homepage: https://docs.privatemode.ai/api/overview
+- id: prodia
+  display_name: Prodia
+  kind: inference_platform
+  aliases:
+  - Prodia
+  homepage: https://docs.prodia.com
 - id: qihang-ai
   display_name: QiHang
   kind: inference_platform

@@ -13,6 +13,21 @@ from pathlib import Path
 
 import yaml
 
+# Scalar fields a generated enrich record may donate under its `weak:` map
+# (written by scripts/refresh_from_modelsdev.py when a mint is suppressed,
+# folded, or core-skipped). The seed loader applies weak values LAST: a weak
+# value fills a field only when every full entry left it empty AND core.yaml
+# does not explicitly carry the key (even as null). Single-sourced here so the
+# generator and the loader cannot drift on the field set.
+WEAK_SCALAR_FIELDS = (
+    "release_date",
+    "open_weights",
+    "params_billions",
+    "input_modalities",
+    "output_modalities",
+    "architecture",
+)
+
 
 def resolve_oracle_path(name: str = "hf_model_id_resolution.json") -> Path:
     """Absolute path to a frozen curation input (the HF oracle JSON by default).

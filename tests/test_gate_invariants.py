@@ -1086,6 +1086,13 @@ _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
     # finetune-derived origin on the folded spelling; intentionally dropped.
     ("lineage_origin_model_id", "anthropic/claude-3.5-sonnet-2024-06-20"),
     ("lineage_origin_model_id", "anthropic/claude-3.5-sonnet-2024-10-22"),
+    # Curated fold (core.yaml skip_source_ids): the tier3 `…-reasoning` mint and
+    # the models.dev slug stub both fold into the real HF repo
+    # Qwen/Qwen3-Omni-30B-A3B-Thinking ("reasoning" IS the Thinking repo, not a
+    # finetune of a base). The snapshot's lineage origin was an artifact of the
+    # tier3-inferred finetune edge to the slug stub; the real canonical is
+    # correctly at origin (no base Qwen/Qwen3-Omni-30B-A3B canonical exists).
+    ("lineage_origin_model_id", "alibaba/qwen3-omni-30b-a3b-reasoning"),
 })
 
 

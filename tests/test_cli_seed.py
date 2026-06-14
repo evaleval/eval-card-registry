@@ -222,6 +222,62 @@ def test_parents_union_by_id_across_sources(fresh_seed_env):
     assert by_id["lab/parent-core-only"]["relationship"] == "finetune"
 
 
+def test_metadata_merges_per_key_across_sources(fresh_seed_env):
+    """metadata is a per-key JSON-object merge, not an opaque scalar: a later
+    source's `{alias_platforms}` must not clobber an earlier source's hub-stats
+    keys (`hf_id`, `downloads_all_time`, ...). Later source wins per key on
+    overlap; a side that isn't a JSON object falls back to last-non-empty-wins."""
+    import json
+    seed_dir, fixtures_dir = fresh_seed_env
+
+    sources_dir = seed_dir / "models" / "sources"
+    (sources_dir / "a.generated.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "lab/model-m",
+            "display_name": "Model M",
+            "metadata": json.dumps(
+                {"hf_id": "lab/model-m", "downloads_all_time": 42, "license": "mit"}
+            ),
+            "review_status": "reviewed",
+        },
+        {
+            "id": "lab/model-n",
+            "display_name": "Model N",
+            "metadata": "{not-valid-json",
+            "review_status": "reviewed",
+        },
+    ]))
+    (sources_dir / "b.generated.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "lab/model-m",
+            "display_name": "Model M",
+            "metadata": json.dumps(
+                {"alias_platforms": {"model-m": "poe"}, "license": "apache-2.0"}
+            ),
+            "review_status": "reviewed",
+        },
+        {
+            "id": "lab/model-n",
+            "display_name": "Model N",
+            "metadata": json.dumps({"source": "b"}),
+            "review_status": "reviewed",
+        },
+    ]))
+    _seed(seed_dir)
+
+    df = _read_models(fixtures_dir)
+    meta = json.loads(df[df["id"] == "lab/model-m"].iloc[0]["metadata"])
+    # Disjoint keys from BOTH sources survive.
+    assert meta["hf_id"] == "lab/model-m"
+    assert meta["downloads_all_time"] == 42
+    assert meta["alias_platforms"] == {"model-m": "poe"}
+    # Overlapping key: later source wins.
+    assert meta["license"] == "apache-2.0"
+    # Malformed side: fall back to the scalar rule (later non-empty wins whole).
+    meta_n = json.loads(df[df["id"] == "lab/model-n"].iloc[0]["metadata"])
+    assert meta_n == {"source": "b"}
+
+
 def test_orgs_generated_curated_wins_on_collision(fresh_seed_env):
     """seed/orgs.generated.yaml entries are dropped when the id is already
     in seed/orgs.yaml; non-conflicting entries are still loaded."""
@@ -386,3 +442,88 @@ def test_scoped_alias_rename_doesnt_drop(fresh_seed_env):
         "(this is the bug, scoped variant)"
     )
     assert row.iloc[0]["canonical_id"] == "new-bench"
+
+
+# ----------------------------------------------------------------------
+# Weak scalar fill: generated enrich records may carry a `weak:` map of
+# scalars donated from a suppressed/folded models.dev mint. Weak values
+# apply after ALL strong merges (fill empty fields only), an explicit core
+# key (even null) blocks them, and weak-vs-weak ties break to the first
+# contribution (sorted-filename then record order).
+# ----------------------------------------------------------------------
+
+def test_weak_scalar_fills_empty_but_never_beats_full_entry(fresh_seed_env):
+    """A weak value fills a field no full entry set, but a full entry's value
+    wins regardless of whether the weak record's file loads before (a.* vs
+    z.*) or after (zz.* vs z.*) the full entry's file."""
+    seed_dir, fixtures_dir = fresh_seed_env
+    sources_dir = seed_dir / "models" / "sources"
+    (sources_dir / "a.generated.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-a", "aliases": [],
+         "weak": {"release_date": "2024-01-01", "open_weights": True}},
+    ]))
+    (sources_dir / "z.generated.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-a", "display_name": "Model A",
+         "release_date": "2023-05-05", "review_status": "reviewed"},
+        {"id": "lab/model-b", "display_name": "Model B",
+         "release_date": "2023-06-06", "review_status": "reviewed"},
+    ]))
+    (sources_dir / "zz.generated.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-b", "aliases": [],
+         "weak": {"release_date": "2024-02-02", "open_weights": True}},
+    ]))
+    _seed(seed_dir)
+
+    df = _read_models(fixtures_dir)
+    a = df[df["id"] == "lab/model-a"].iloc[0]
+    b = df[df["id"] == "lab/model-b"].iloc[0]
+    assert a["release_date"] == "2023-05-05", "weak (loaded first) must not beat full entry"
+    assert b["release_date"] == "2023-06-06", "weak (loaded last) must not beat full entry"
+    assert bool(a["open_weights"]) and bool(b["open_weights"]), "weak must fill the empty field"
+
+
+def test_core_explicit_null_blocks_weak_fill(fresh_seed_env):
+    """A key explicitly present on the core entry — even with a null value —
+    is a curated claim that blocks weak fill; a key core leaves ABSENT stays
+    open for a weak value."""
+    import pandas as pd
+    seed_dir, fixtures_dir = fresh_seed_env
+    sources_dir = seed_dir / "models" / "sources"
+    (sources_dir / "a.generated.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-c", "aliases": [],
+         "weak": {"open_weights": True, "release_date": "2025-12-01"}},
+    ]))
+    (seed_dir / "models" / "core.yaml").write_text(yaml.safe_dump({
+        "skip_ids": [],
+        "skip_source_ids": [],
+        "entries": [
+            {"id": "lab/model-c", "display_name": "Model C",
+             "open_weights": None, "review_status": "reviewed"},
+        ],
+    }))
+    _seed(seed_dir)
+
+    row = _read_models(fixtures_dir)
+    row = row[row["id"] == "lab/model-c"].iloc[0]
+    assert pd.isna(row["open_weights"]), "explicit core null must block weak fill"
+    assert row["release_date"] == "2025-12-01", "absent core key must accept weak fill"
+
+
+def test_two_weak_values_tiebreak_first_file_first_record(fresh_seed_env):
+    """Two weak values for the same (id, field): the first contribution wins —
+    source files in sorted-filename order, records in file order."""
+    seed_dir, fixtures_dir = fresh_seed_env
+    sources_dir = seed_dir / "models" / "sources"
+    (sources_dir / "a.generated.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-d", "aliases": [], "weak": {"release_date": "2024-03-03"}},
+        {"id": "lab/model-d", "aliases": [], "weak": {"release_date": "2024-04-04"}},
+        {"id": "lab/model-d", "display_name": "Model D", "review_status": "reviewed"},
+    ]))
+    (sources_dir / "b.generated.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-d", "aliases": [], "weak": {"release_date": "2024-05-05"}},
+    ]))
+    _seed(seed_dir)
+
+    df = _read_models(fixtures_dir)
+    row = df[df["id"] == "lab/model-d"].iloc[0]
+    assert row["release_date"] == "2024-03-03"

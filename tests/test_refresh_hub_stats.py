@@ -128,7 +128,10 @@ def test_build_entry_job_a_existing_canonical(mod):
     e = mod.build_entry(row, ORG_ALIAS_MAP, ALIASES_TO_CANONICAL)
     assert e is not None
     assert e["id"] == "meta-llama/Llama-3.1-70B"
-    assert e["org_id"] == "meta"
+    # No org_id stamped: the seed-time org-from-prefix rule derives (and
+    # auto-creates) the developer; stamping it here would override curated
+    # org-less canonicals and leave dangling FKs for unseeded prefixes.
+    assert "org_id" not in e
     assert e["release_date"] == "2024-07-14"
     assert e["params_billions"] == 70.5  # safetensors.total is the param count
     assert "parents" not in e, "no baseModels in row → no parents in entry"
@@ -136,6 +139,8 @@ def test_build_entry_job_a_existing_canonical(mod):
     metadata = json.loads(e["metadata"])
     assert metadata["source"] == "hub_stats"
     assert metadata["license"] == "llama3.1"
+    # canonical IS the real repo id -> the hf_id claim is kept.
+    assert metadata["hf_id"] == "meta-llama/Llama-3.1-70B"
 
 
 def test_build_entry_propagates_resolvable_parents(mod):
@@ -236,7 +241,122 @@ def test_build_entry_uses_registry_canonical_id_not_slugified(mod):
     # Registry canonical = the real HF repo id; build_entry uses the
     # registry's exact spelling (from aliases_to_canonical), not a re-slugify.
     assert e["id"] == "Qwen/Qwen2.5-7B"
-    assert e["org_id"] == "alibaba"
+    assert "org_id" not in e
+
+
+def test_build_entry_drops_hf_id_claim_when_canonical_is_not_the_repo(mod):
+    """When the enrichment lands on a registry canonical that is NOT the real
+    HF repo id (an org-slug mint, e.g. `deepseek/deepseek-vl2`) and the real
+    id is no canonical anywhere, `metadata.hf_id` is dropped — keeping the
+    claim would trip the canonical-id-equals-hf-id gate (the canonical id
+    404s on HF). The rest of the metadata survives."""
+    aliases = {
+        "deepseek-deepseek-vl2": "deepseek/deepseek-vl2",
+        "deepseek-ai-deepseek-vl2": "deepseek/deepseek-vl2",
+    }
+    row = {
+        "id": "deepseek-ai/deepseek-vl2",
+        "author": "deepseek-ai",
+        "createdAt": datetime(2024, 12, 13),
+        "tags": ["image-text-to-text"],
+        "cardData": {"license": "other"},
+        "safetensors": None,
+        "library_name": "transformers",
+        "pipeline_tag": "image-text-to-text",
+        "downloadsAllTime": 174_382,
+        "likes": 385,
+    }
+    e = mod.build_entry(row, ORG_ALIAS_MAP, aliases)
+    assert e is not None
+    assert e["id"] == "deepseek/deepseek-vl2"
+    meta = json.loads(e["metadata"])
+    assert "hf_id" not in meta, "hf_id claim on a non-repo canonical trips the gate"
+    assert meta["source"] == "hub_stats"
+    assert meta["downloads_all_time"] == 174_382
+
+
+# ---------------------------------------------------------------------------
+# Carry-forward: a wholesale regen never deletes committed enrichment for a
+# model that fell out of today's fetch.
+# ---------------------------------------------------------------------------
+
+def _committed_entry(cid: str, **extra) -> dict:
+    e = {
+        "id": cid,
+        "org_id": cid.split("/")[0],  # pre-no-stamping committed shape
+        "release_date": "2024-01-01",
+        "tags": ["en"],
+        "aliases": [],
+        "metadata": json.dumps({"hf_id": cid, "source": "hub_stats"}, sort_keys=True),
+        "review_status": "reviewed",
+        "params_billions": 7.0,
+        "open_weights": True,
+    }
+    e.update(extra)
+    return e
+
+
+def test_carry_forward_retains_entry_missing_from_fetch(mod):
+    """A committed id absent from today's fetch is retained with its
+    enrichment intact, tagged `upstream_status: removed`, and its legacy
+    org_id dropped (the seed-time prefix rule recovers the org)."""
+    committed = [_committed_entry("openai-community/gpt2-cftest")]
+    fresh = [_committed_entry("dreamgen/other-model-cftest")]
+    fresh[0].pop("org_id")
+    out = mod._carry_forward_committed(fresh, committed)
+    by_id = {e["id"]: e for e in out}
+    kept = by_id["openai-community/gpt2-cftest"]
+    assert kept["release_date"] == "2024-01-01"
+    assert kept["params_billions"] == 7.0
+    assert kept["open_weights"] is True
+    assert "org_id" not in kept
+    meta = json.loads(kept["metadata"])
+    assert meta["upstream_status"] == "removed"
+    assert meta["hf_id"] == "openai-community/gpt2-cftest"  # keys preserved
+
+
+def test_carry_forward_reappearance_replaces_and_clears_tag(mod):
+    """An id that reappears in the fetch is replaced by the fresh entry —
+    exactly one record, no `upstream_status` tag left behind."""
+    committed = [_committed_entry(
+        "openai-community/gpt2-cftest",
+        metadata=json.dumps({"hf_id": "x", "upstream_status": "removed"}, sort_keys=True),
+    )]
+    fresh = [_committed_entry("openai-community/gpt2-cftest", release_date="2024-06-01")]
+    fresh[0].pop("org_id")
+    out = mod._carry_forward_committed(fresh, committed)
+    assert len(out) == 1
+    (e,) = out
+    assert e["release_date"] == "2024-06-01"
+    assert "upstream_status" not in json.loads(e["metadata"])
+
+
+def test_carry_forward_deterministic_and_stable_over_own_output(mod):
+    """Same inputs -> same output, and re-running over its own output is a
+    fixed point (the daily-cron stability property)."""
+    committed = [
+        _committed_entry("zz-org/model-b-cftest"),
+        _committed_entry("aa-org/model-a-cftest"),
+    ]
+    fresh = [_committed_entry("mm-org/model-m-cftest")]
+    fresh[0].pop("org_id")
+    first = mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    again = mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    assert first == again
+    assert [e["id"] for e in first] == sorted(e["id"] for e in first)
+    # Fixed point: carrying forward the merged output retains the same rows
+    # (the removed tag is already present; re-tagging is byte-identical).
+    second = mod._carry_forward_committed([dict(e) for e in fresh], first)
+    assert second == first
+
+
+def test_carry_forward_malformed_committed_metadata_does_not_crash(mod):
+    """A malformed committed metadata string degrades to {} + the tag,
+    never an exception (the cron must not crash on a bad committed row)."""
+    committed = [_committed_entry("bad-org/model-x-cftest", metadata="{broken")]
+    out = mod._carry_forward_committed([], committed)
+    (e,) = out
+    assert json.loads(e["metadata"]) == {"upstream_status": "removed"}
 
 
 def test_approx_params_billions_from_safetensors_total(mod):

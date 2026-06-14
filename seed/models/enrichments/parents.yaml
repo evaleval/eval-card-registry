@@ -7630,7 +7630,7 @@
     axis: training_stage
 - id: deepseek-ai/deepseek-math-7b-instruct
   parents:
-  - id: deepseek/deepseek-math-7b
+  - id: deepseek-ai/deepseek-math-7b-rl
     relationship: variant
     axis: training_stage
 - id: deepseek-ai/deepseek-r1-hide-reasoning

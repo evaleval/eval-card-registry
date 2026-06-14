@@ -64,9 +64,9 @@ def seeded_store(tmp_path, monkeypatch):
     hf_store._store = None
 
 
-def test_seed_produces_137_rows(seeded_store):
+def test_seed_produces_138_rows(seeded_store):
     df = seeded_store.table("canonical_inference_platforms")
-    assert len(df) == 137
+    assert len(df) == 138
 
 
 def test_kind_enum(seeded_store):

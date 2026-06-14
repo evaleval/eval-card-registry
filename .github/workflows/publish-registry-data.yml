@@ -47,9 +47,12 @@ jobs:
   dry-run:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Seeds, runs the full gate suite, then a dry-run publish (which re-seeds).
+    # The seed grew with the carry-forward/enrichment work, so 15 min now
+    # clips the trailing publish step after the gates have already passed.
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           # publish_registry_data.py reads `git rev-parse HEAD` for the
           # manifest's seed_git_sha. Default fetch-depth=1 is fine; full
@@ -57,7 +60,7 @@ jobs:
           fetch-depth: 1
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v8.2.0
 
       - name: Sync dependencies
         run: uv sync
@@ -84,12 +87,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@v8.2.0
 
       - name: Sync dependencies
         run: uv sync

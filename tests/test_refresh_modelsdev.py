@@ -242,6 +242,52 @@ def test_generate_promotes_earliest_release_date(mod):
     assert by_id["anthropic/claude-bar-1"]["release_date"] is None
 
 
+def test_tee_prefix_is_serving_marker_for_org_derivation(mod):
+    """A `TEE/`-prefixed id (nano-gpt's trusted-execution namespace) is a
+    serving marker, not an uploader org: the developer comes from the name."""
+    org, rehost = mod._derive_group_org(
+        [{"raw": "TEE/gemma9x-31b", "name": "Gemma 9X 31B"}], mod._dev_alias_index()
+    )
+    assert org == "google"
+    assert rehost is None
+
+
+def test_provider_alias_forms_keep_tee_prefixed_raw(mod):
+    """The raw `TEE/...` spelling stays resolvable as an alias on whatever the
+    stripped name resolves to (fold-keeps-alias)."""
+    forms = mod._provider_alias_forms("TEE/gemma9x-31b", "google")
+    assert "TEE/gemma9x-31b" in forms
+    assert "gemma9x-31b" in forms
+    assert "google/gemma9x-31b" in forms
+
+
+def test_generate_tee_group_mints_under_name_vendor_with_tee_alias(mod):
+    """End-to-end TEE strip: a TEE-only group mints via the bare-name path
+    (developer from the leading name token), never under org `TEE`, and the
+    raw TEE/ spellings survive as aliases."""
+    api = {
+        "nano-gpt": {
+            "id": "nano-gpt", "name": "NanoGPT", "models": {
+                "TEE/gemma9x-31b": {
+                    "id": "TEE/gemma9x-31b", "name": "Gemma 9X 31B",
+                    "release_date": "2026-04-04", "open_weights": False,
+                },
+                "TEE/gemma9x-26b-uncensored": {
+                    "id": "TEE/gemma9x-26b-uncensored",
+                    "name": "Gemma 9X 26B Uncensored TEE", "open_weights": False,
+                },
+            },
+        },
+    }
+    out, _missing = mod._generate_models(api, KNOWN_ORGS)
+    out = mod._finalize_entries(out)
+    assert all(not e["id"].startswith("TEE/") for e in out)
+    assert all(e.get("org_id") != "TEE" for e in out)
+    by_id = {e["id"]: e for e in out}
+    assert "TEE/gemma9x-31b" in by_id["google/gemma9x-31b"]["aliases"]
+    assert "TEE/gemma9x-26b-uncensored" in by_id["google/gemma9x-26b-uncensored"]["aliases"]
+
+
 def test_generate_reports_missing_org_ids(mod):
     """When PROVIDER_TO_ORG references an org_id not in known_orgs, report it."""
     api = {
