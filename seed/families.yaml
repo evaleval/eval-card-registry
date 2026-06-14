@@ -232,3 +232,11 @@ evalplus:
   display: EvalPlus family
   category: code
   benchmarks: [evalplus, humaneval-plus, mbpp-plus]
+
+# apex-swe is pre-registered with no data yet, so it has no composite_key.
+apex:
+  display: Mercor APEX
+  category: agentic
+  benchmarks: [apex-v1, apex-agents, apex-swe]
+  composite_keys: [apex-v1, apex-agents]
+  primary_benchmark_key: apex-v1

@@ -116,8 +116,10 @@ ace:
   display: Mercor ACE
 apex-agents:
   display: Mercor APEX-Agents
+  family_id: apex
 apex-v1:
   display: Mercor APEX-v1
+  family_id: apex
 arc-agi:
   display: ARC Prize
 facts-grounding:
