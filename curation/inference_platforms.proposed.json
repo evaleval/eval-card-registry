@@ -22,13 +22,13 @@
     "alias_of": "this id is a duplicate of another platform id"
   },
   "counts_by_kind": {
-    "inference_platform": 69,
+    "inference_platform": 70,
     "aggregator_gateway": 22,
     "author_lab": 29,
     "regional_variant": 7,
     "coding_plan": 10
   },
-  "total_platforms": 137,
+  "total_platforms": 138,
   "eee_host_tokens": {
     "fireworks": {
       "platform": "fireworks-ai",
@@ -1377,6 +1377,17 @@
       "n_models_on_modelsdev": 5,
       "api": "http://localhost:8080/v1",
       "homepage": "https://docs.privatemode.ai/api/overview"
+    },
+    {
+      "id": "prodia",
+      "display_name": "Prodia",
+      "kind": "inference_platform",
+      "aliases": [
+        "Prodia"
+      ],
+      "source": "models.dev",
+      "models_dev_provider": null,
+      "homepage": "https://docs.prodia.com"
     },
     {
       "id": "qihang-ai",

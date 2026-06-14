@@ -126,7 +126,7 @@ PROVIDER_TO_ORG: dict[str, str] = {
 }
 
 # --- inference_platforms single-source --------------------------------------
-# Path to the curated 137-platform catalog (source of truth). The same file
+# Path to the curated platform catalog (source of truth). The same file
 # seeds seed/inference_platforms.yaml; we read its `models_dev_provider` field
 # to build PROVIDER_TO_INFERENCE_PLATFORM so the host-token→platform map stays
 # byte-identical between seed generation here and runtime capture in fuzzy.py
@@ -140,10 +140,11 @@ def _load_provider_to_inference_platform(
     path: Path = INFERENCE_PLATFORMS_JSON,
 ) -> dict[str, str]:
     """Build {models.dev provider slug -> inference_platforms.id} from the
-    curated catalog. Every one of the 137 platforms declares exactly one
-    `models_dev_provider`; this maps all of them, so every provider with a
-    catalog entry is processed (PROVIDER_TO_ORG, narrower, only governs which
-    providers can anchor a group's authorship)."""
+    curated catalog. Every platform built from a models.dev provider declares
+    its `models_dev_provider` (null only for non-provider platforms, e.g.
+    prodia); this maps all of them, so every provider with a catalog entry is
+    processed (PROVIDER_TO_ORG, narrower, only governs which providers can
+    anchor a group's authorship)."""
     data = json.loads(path.read_text())
     mapping: dict[str, str] = {}
     for plat in data.get("platforms", []):
@@ -306,6 +307,9 @@ _SERVING_HOSTS = {
     # serving-brand id namespaces (not top-level providers, but appear as id
     # prefixes): ByteDance's Volcano Engine cloud, fal's image-serving, etc.
     "volcengine", "fal-ai", "fal", "kilo", "kilo-auto",
+    # nano-gpt's trusted-execution serving namespace (`TEE/gemma4-31b`) — a
+    # serving mode like the `-tee` suffix, NOT an uploader org.
+    "tee",
 } | ({p.lower() for p in PROVIDER_TO_INFERENCE_PLATFORM} - {a.lower() for a in STRICT_AUTHOR})
 # model NAME starts with TOKEN -> HF-style developer slug (normalize_org_slug
 # maps to the curated org). Longest-prefix-first.
@@ -462,6 +466,10 @@ _REGION_PREFIXES = ["us.", "eu.", "jp.", "au.", "apac.", "global."]
 # is a SIZE spec (gpt-oss:120b), NOT a tag — it is converted to `-NNNb` in
 # normalize_modelsdev_id BEFORE the `:.*$` strip fires, so it survives as a size.
 _TAG_SUFFIX_RE = re.compile(r"(:.*$)|(-fast$)|(-precision$)|(-free$)|(-maas$)|(-tee$)")
+# The PREFIX spelling of the trusted-execution serving marker (`TEE/gemma4-31b`)
+# — stripped like the `-tee` suffix; the raw form is kept as an alias on the
+# stripped target.
+_TEE_PREFIX_RE = re.compile(r"^TEE/", re.IGNORECASE)
 # IDENTITY variants — a genuinely DIFFERENT canonical (a decoding mode, a quant).
 # Stripped ONLY for routing/dedup grouping (strip_variants=True), NEVER for alias
 # derivation: collapsing `gpt-4-turbo`->`gpt-4` would emit the BASE id as one of
@@ -1032,6 +1040,10 @@ def _provider_alias_forms(raw: str, org_id: str | None) -> list[str]:
         slug_raw = _slugify(raw)
         if slug_raw:
             forms.add(slug_raw)
+    # A `TEE/`-prefixed raw (nano-gpt's trusted-execution serving namespace) is
+    # a clean resolvable surface form: keep it verbatim on the stripped target.
+    elif _TEE_PREFIX_RE.match(raw):
+        forms.add(raw)
     # Always emit the normalized form + its org-prefixed variant. Use
     # strip_variants=False: alias forms must PRESERVE a variant's identity
     # (-turbo/-thinking/-reasoner/-fp8/...). Stripping them here would emit the
@@ -1970,9 +1982,13 @@ def _carry_forward_committed(
     """
     by_id = {e["id"]: e for e in fresh if e.get("id")}
     by_twin: dict[str, dict] = {}
+    by_form: dict[str, dict] = {}
     for e in sorted(fresh, key=lambda x: x.get("id") or ""):
         if e.get("id"):
             by_twin.setdefault(_twin_key(e["id"]), e)
+            for a in (e.get("aliases") or []):
+                if a:
+                    by_form.setdefault(a, e)
     skip = _load_core_skip_ids()
     claims: dict[str, str] = {}
     out = list(fresh)
@@ -1992,6 +2008,11 @@ def _carry_forward_committed(
         twin = None
         if cur is None and cid not in skip and "display_name" in c:
             t = by_twin.get(_twin_key(cid))
+            if t is None and "/" in cid and cid.split("/", 1)[0].lower() in _SERVING_HOSTS:
+                # A committed mint under a serving-host prefix (the pre-strip
+                # `TEE/...` uploader-org bug): the fresh batch carries that id
+                # as an alias on the stripped target — absorb onto it.
+                t = by_form.get(cid)
             if t is not None and _bsizes(cid) == _bsizes(t["id"]):
                 twin = t
         owner = cur["id"] if cur is not None else (twin["id"] if twin is not None else cid)
@@ -2435,11 +2456,11 @@ def regenerate_catalog(full: list[dict]) -> None:
 
     fresh: list[dict] = []
     enrich: list[dict] = []
-    # First emitted enrich record per owner id. Weak scalars from EVERY donor
-    # consolidate onto this record (the loader's first-record tie-break would
-    # pick it anyway); without the consolidation, the carry-forward would fold
-    # a later duplicate-id record's scalars onto the first one on the NEXT run
-    # and the output would not be byte-idempotent.
+    # The single enrich record per owner id (first emission wins the slot).
+    # EVERY donor for an owner consolidates onto this record — aliases
+    # set-union, alias_platforms per-key union (first writer wins), weak
+    # per-field first-wins (the loader's tie-break order) — so one owner never
+    # carries duplicate records in the written catalog.
     enrich_by_id: dict[str, dict] = {}
     fresh_seen_lc: dict[str, dict] = {}
     fresh_seen_twin: dict[str, dict] = {}
@@ -2483,25 +2504,34 @@ def regenerate_catalog(full: list[dict]) -> None:
         })
         for a in keep:
             fresh_form_owner[a] = cid
-        rec: dict = {"id": cid}
-        if keep:
-            rec["aliases"] = keep
+        ap2: dict = {}
         if ap:
             ap2 = {
                 k: v for k, v in ap.items()
                 if k != cid and not _steals(k, cid)
                 and fresh_form_owner.get(k) in ok
             }
+        rec = enrich_by_id.get(cid)
+        if rec is None:
+            rec = {"id": cid}
+            if keep:
+                rec["aliases"] = keep
             if ap2:
                 rec["metadata"] = json.dumps({"alias_platforms": ap2}, sort_keys=True)
-        first = enrich_by_id.get(cid)
-        if first is not None:
-            _merge_weak(first, scalars or {})
-        else:
             _merge_weak(rec, scalars or {})
-        if len(rec) > 1:
-            enrich.append(rec)
-            enrich_by_id.setdefault(cid, rec)
+            if len(rec) > 1:
+                enrich.append(rec)
+                enrich_by_id[cid] = rec
+            return
+        if keep:
+            rec["aliases"] = sorted(set(rec.get("aliases") or []) | set(keep))
+        if ap2:
+            meta = _entry_meta(rec)
+            cur_ap = meta.get("alias_platforms")
+            cur_ap = cur_ap if isinstance(cur_ap, dict) else {}
+            meta["alias_platforms"] = dict(sorted({**ap2, **cur_ap}.items()))
+            rec["metadata"] = json.dumps(meta, sort_keys=True)
+        _merge_weak(rec, scalars or {})
 
     def _forms_of(e: dict) -> list[str]:
         forms = [e["id"]]
@@ -2695,7 +2725,12 @@ def regenerate_catalog(full: list[dict]) -> None:
             if e.get(field):
                 e[field] = _canon_org(e[field])
 
-    out_entries = fresh + enrich
+    # Stable record key order regardless of which donor reached the owner
+    # first (a later donor may add `aliases` to a weak-only record).
+    out_entries = fresh + [
+        {k: r[k] for k in ("id", "aliases", "metadata", "weak") if k in r}
+        for r in enrich
+    ]
     body = yaml.safe_dump(out_entries, sort_keys=False, allow_unicode=True, width=200)
     CATALOG_OUT_PATH.write_text(_CATALOG_HEADER + "\n" + body)
 

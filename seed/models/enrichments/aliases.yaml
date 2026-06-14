@@ -1542,18 +1542,18 @@
 - id: deepseek/deepseek-v3-2-reasoning-0925
   aliases:
   - DeepSeek V3.2 Reasoning (0925)
-- id: deepseek/deepseek-vl2
+- id: deepseek-ai/deepseek-vl2
   aliases:
   - deepseek-vl2-27b
   - unknown/deepseek-vl2-27b
-- id: deepseek/deepseek-vl2-small
+- id: deepseek-ai/deepseek-vl2-small
   aliases:
   - DeepSeek-VL2 Small
   - deepseek-vl2-small-16b
   - unknown/deepseek-vl2-16b
   - unknown/deepseek-vl2-small
   - unknown/deepseek-vl2-small-16b
-- id: deepseek/deepseek-vl2-tiny
+- id: deepseek-ai/deepseek-vl2-tiny
   aliases:
   - DeepSeek-VL2 Tiny
   - deepseek-vl2-tiny-3b

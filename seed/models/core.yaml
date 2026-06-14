@@ -16,6 +16,9 @@ skip_source_ids:
 - anthropic/claude-35-sonnet
 - anthropic/claude-sonnet-4-5-thinking-20250929
 - cohere/cohere-command-r-plus
+- deepseek/deepseek-vl2
+- deepseek/deepseek-vl2-small
+- deepseek/deepseek-vl2-tiny
 - kimi/kimi-linear-48b-a3b-instruct
 - kwaipilot/kat-coder-pro
 - microsoft/phi3-medium-128k
@@ -23,6 +26,8 @@ skip_source_ids:
 - microsoft/phi3-mini-128k
 - microsoft/phi3-mini-4k
 - mistralai/mistral-7b-instruct
+- nvidia/nemotron-120b-a12b
+- nvidia/nemotron-3-120b-a12b
 - openai/GPT-J-6B
 - openai/GPT-NeoX-20B
 - openai/gpt-4-5-2025-02-27
@@ -6040,6 +6045,67 @@ entries:
   - unknown/deepseek-vl
   - unknown/deepseek-vl-1-3b
   - deepseek-vl-1.3b
+- id: deepseek-ai/deepseek-vl2
+  display_name: DeepSeek-VL2
+  org_id: deepseek
+  family: deepseek-vl2
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2024-12-13'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - multimodal
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - deepseek/deepseek-vl2
+  - deepseek-vl2
+- id: deepseek-ai/deepseek-vl2-small
+  display_name: DeepSeek-VL2 Small
+  org_id: deepseek
+  family: deepseek-vl2
+  architecture: null
+  params_billions: null
+  parents:
+  - id: deepseek-ai/deepseek-vl2
+    relationship: variant
+    axis: tier
+  open_weights: true
+  release_date: '2024-12-13'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - multimodal
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - deepseek/deepseek-vl2-small
+- id: deepseek-ai/deepseek-vl2-tiny
+  display_name: DeepSeek-VL2 Tiny
+  org_id: deepseek
+  family: deepseek-vl2
+  architecture: null
+  params_billions: null
+  parents:
+  - id: deepseek-ai/deepseek-vl2
+    relationship: variant
+    axis: tier
+  open_weights: true
+  release_date: '2024-12-13'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - multimodal
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - deepseek/deepseek-vl2-tiny
 - id: deepseek/deepseek-vl-7b
   display_name: DeepSeek-VL 7B
   org_id: deepseek
@@ -9758,6 +9824,10 @@ entries:
   - nvidia-nemotron-3-super-120b
   - nemotron-3-super-120b-a12b
   - NVIDIA Nemotron 3 Super 120B
+  - nvidia/nemotron-120b-a12b
+  - nemotron-120b-a12b
+  - nvidia/nemotron-3-120b-a12b
+  - nemotron-3-120b-a12b
 - id: nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1
   display_name: nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1
   org_id: nvidia

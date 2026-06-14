@@ -41,7 +41,7 @@ EXPECTED_UNDERLYING_GROUPS = 1_279
 # EEE rescue floor: rows in curation/eee_modelsdev_rescues.json.
 EXPECTED_EEE_RESCUES = 662
 # Curated inference-platform count: entries in curation/inference_platforms.proposed.json.
-EXPECTED_PLATFORM_COUNT = 137
+EXPECTED_PLATFORM_COUNT = 138
 
 
 @pytest.fixture(scope="module")
@@ -379,7 +379,11 @@ def test_provider_to_inference_platform_ids_exist(mod):
     assert mod.PROVIDER_TO_INFERENCE_PLATFORM, "map is empty"
     # Every models.dev provider (inference platforms + author labs) maps to a
     # catalog platform; counts are kept in lockstep with the curated catalog.
-    assert len(mod.PROVIDER_TO_INFERENCE_PLATFORM) == len(catalog["platforms"]) == EXPECTED_PLATFORM_COUNT
+    # Platforms without a models_dev_provider (EEE/prefix-only, e.g. prodia)
+    # are catalog entries but not provider-map entries.
+    assert len(catalog["platforms"]) == EXPECTED_PLATFORM_COUNT
+    provider_backed = [p for p in catalog["platforms"] if p.get("models_dev_provider")]
+    assert len(mod.PROVIDER_TO_INFERENCE_PLATFORM) == len(provider_backed)
 
     for provider, platform_id in mod.PROVIDER_TO_INFERENCE_PLATFORM.items():
         assert platform_id in valid_ids, f"platform id {platform_id!r} not in catalog"
@@ -1167,6 +1171,45 @@ def test_new_mint_cannot_steal_retained_alias(cf_mod, tmp_path):
     assert not set(by_id["TEE/gemma9-31b"].get("aliases") or []) & {"gemma9-31b", "gemma9:31b"}
 
 
+def test_carry_forward_absorbs_serving_prefixed_committed_mint(cf_mod):
+    """A committed mint under a serving-host prefix (the pre-strip `TEE/...`
+    uploader-org bug) is absorbed onto the fresh entry that now carries that
+    id as an alias on the stripped target — never retained as a `TEE/`
+    canonical."""
+    committed = [_cf_entry("TEE/zmodel9-70b", ["zmodel9-70b"])]
+    fresh = [_cf_entry("meta/zmodel9-70b", ["TEE/zmodel9-70b", "zmodel9-70b"])]
+    batch, claims = cf_mod._carry_forward_committed(fresh, committed)
+    assert [e["id"] for e in batch] == ["meta/zmodel9-70b"]
+    (e,) = batch
+    assert {"TEE/zmodel9-70b", "zmodel9-70b"} <= set(e["aliases"])
+    assert claims["TEE/zmodel9-70b"] == "meta/zmodel9-70b"
+    assert claims["zmodel9-70b"] == "meta/zmodel9-70b"
+
+
+def test_tee_stripped_mint_folds_onto_claims_owner_with_weak_donation(cf_mod, tmp_path):
+    """The live `TEE/gemma4-31b` class: after the serving-prefix strip the
+    group mints under the name-derived org; that mint folds onto the existing
+    canonical that claims the form, the TEE/ raw form rides along as an alias,
+    and the mint's scalars donate weakly."""
+    core = tmp_path / "sources-core.yaml"
+    core.write_text(yaml.safe_dump([{
+        "id": "google/gemma-9X-31B", "display_name": "Gemma 9X 31B",
+        "aliases": ["google/gemma9x-31b"],
+    }]))
+    fresh = [{
+        "id": "google/gemma9x-31b", "display_name": "Gemma 9X 31B",
+        "org_id": "google", "aliases": ["TEE/gemma9x-31b", "gemma9x-31b"],
+        "release_date": "2026-04-04", "open_weights": True,
+        "metadata": "{}", "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    out = cf_mod.reconcile_generated_against_existing(fresh, sources=(core,))
+    by_id = {e["id"]: e for e in out}
+    assert "google/gemma9x-31b" not in by_id
+    rec = by_id["google/gemma-9X-31B"]
+    assert {"TEE/gemma9x-31b", "gemma9x-31b", "google/gemma9x-31b"} <= set(rec["aliases"])
+    assert rec["weak"] == {"release_date": "2026-04-04", "open_weights": True}
+
+
 def test_carry_forward_unions_replaced_display_name_back(cf_mod):
     """A committed display_name is a loader-promoted global alias: when today's
     upstream re-spells it, the old display must survive as an alias on the
@@ -1339,6 +1382,44 @@ def test_catalog_carry_forward_retention_unionback_and_dup_consolidation(mod, tm
     (gone,) = [e for e in out if e["id"] == "zorg/zgone-cf"]
     assert json.loads(gone["metadata"])["upstream_status"] == "removed"
     assert "zgone-cf-alias" in gone["aliases"]
+
+
+def test_catalog_consolidates_enrich_records_per_owner(mod, tmp_path, monkeypatch):
+    """Two donors folding onto the SAME owner emit exactly ONE enrich record:
+    aliases set-union, alias_platforms per-key union (first writer wins), weak
+    per-field first-wins — the loader's tie-break order."""
+    src = tmp_path / "src-core.yaml"
+    src.write_text(yaml.safe_dump([{
+        "id": "zorg/ZModel-9B", "display_name": "ZModel 9B",
+        "aliases": ["zorg/zmodel-9b", "zmodel-9b-v0"],
+    }]))
+    monkeypatch.setattr(mod, "_CATALOG_EXISTING_SOURCES", (src,))
+    cat = tmp_path / "cat.yaml"
+    cat.write_text(yaml.safe_dump([]))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", tmp_path / "orgs.yaml")
+    full = [
+        {"id": "zorg/zmodel-9b", "display_name": "ZModel 9B A", "org_id": "zorg",
+         "aliases": ["zmodel-9b-alias1"],
+         "metadata": json.dumps({"alias_platforms": {"zmodel-9b-alias1": "poe"}}),
+         "release_date": "2024-01-01", "open_weights": True,
+         "review_status": "draft", "resolution_source": "models_dev"},
+        {"id": "zmodel-9b-v0", "display_name": "ZModel 9B B", "org_id": "zorg",
+         "aliases": ["zmodel-9b-alias2"],
+         "metadata": json.dumps({"alias_platforms": {"zmodel-9b-alias2": "novita-ai"}}),
+         "release_date": "2024-02-02",
+         "review_status": "draft", "resolution_source": "models_dev"},
+    ]
+    mod.regenerate_catalog(full)
+    out = yaml.safe_load(cat.read_text()) or []
+    recs = [e for e in out if e["id"] == "zorg/ZModel-9B"]
+    assert len(recs) == 1, f"expected one consolidated enrich record, got {len(recs)}"
+    rec = recs[0]
+    assert {"zmodel-9b-alias1", "zmodel-9b-alias2"} <= set(rec["aliases"])
+    ap = json.loads(rec["metadata"])["alias_platforms"]
+    assert ap == {"zmodel-9b-alias1": "poe", "zmodel-9b-alias2": "novita-ai"}
+    assert rec["weak"]["release_date"] == "2024-01-01"  # first donor wins per field
+    assert rec["weak"]["open_weights"] is True
 
 
 def test_catalog_pipeline_idempotent_over_committed_output(mod, api, tmp_path, monkeypatch):

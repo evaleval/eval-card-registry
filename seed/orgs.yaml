@@ -458,3 +458,19 @@
   kind: lab
   metadata: '{}'
   review_status: reviewed
+- id: kuaishou
+  display_name: Kuaishou
+  website: https://www.kuaishou.com
+  aliases: ["Kling AI", "klingai", "KlingAI"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+- id: leonardo-ai
+  display_name: Leonardo.Ai
+  website: https://leonardo.ai
+  aliases: ["Leonardo AI"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
