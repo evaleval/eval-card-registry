@@ -47,7 +47,10 @@ jobs:
   dry-run:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Seeds, runs the full gate suite, then a dry-run publish (which re-seeds).
+    # The seed grew with the carry-forward/enrichment work, so 15 min now
+    # clips the trailing publish step after the gates have already passed.
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
