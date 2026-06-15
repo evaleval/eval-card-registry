@@ -336,13 +336,18 @@ def main() -> None:
         # the incumbent's existing org. Re-key key becomes {inc_org}/{hf_name}.
         if inc is not None and _nz(inc.split("/", 1)[-1]) == _nz(hf_name):
             inc_org = inc.split("/", 1)[0]
-            # Remap a raw HF-namespace incumbent org to its curated dev slug
-            # (e.g. an incumbent under `cohereforai` becomes `cohere`) so the
-            # re-keyed id is org-consistent with the two-tier rule.
-            inc_org = hf_to_dev.get(inc_org.lower(), inc_org)
+            # The re-key adopts the HF NAME casing but KEEPS the incumbent's id
+            # prefix (the real HF repo namespace, e.g. `zai-org`, or a curated
+            # dev slug). The curated developer is recorded on `org_id` ONLY —
+            # canonical_id stays the real HF repo id, decoupled from the org (the
+            # two-tier rule). Folding the prefix into the dev slug here
+            # (`zai-org/x` -> `zai/x`) would re-mint a shadow id that collides
+            # with the committed `zai/x` -> `zai-org/x` enrichment alias and abort
+            # the seed.
+            dev_org = hf_to_dev.get(inc_org.lower(), inc_org)
             rekey_tgt = f"{inc_org}/{hf_name}"
             if rekey_tgt == inc:
-                # Name already correctly cased under the incumbent's org.
+                # Name already correctly cased under the incumbent's id prefix.
                 ok_targets[rekey_tgt] = info
                 continue
             # Guard: one re-key per incumbent. If another target already claims
@@ -359,7 +364,7 @@ def main() -> None:
             rk = dict(
                 info,
                 old_id=inc,
-                org_id=inc_org,
+                org_id=dev_org,
                 raws=set(info["raws"]),
                 fixed=set(info["fixed"]),
             )
@@ -486,7 +491,8 @@ def main() -> None:
                     aliases.append(cid)
                 entry["aliases"] = aliases
                 if isinstance(entry.get("org_id"), str):
-                    entry["org_id"] = winner.split("/", 1)[0]
+                    win_org = winner.split("/", 1)[0]
+                    entry["org_id"] = hf_to_dev.get(win_org.lower(), win_org)
                 rekeyed_count += 1
             # Strip HF/raw ids that a MINT is taking over from this incumbent
             # (token-different curated short-slugs) so the alias doesn't collide

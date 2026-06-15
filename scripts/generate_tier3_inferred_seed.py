@@ -89,6 +89,13 @@ BASE_FAMILY_TOKENS = [
     "neural", "solar", "nous", "zephyr", "orca", "dolphin",
 ]
 
+# Placeholder org prefixes. These are NOT real namespaces — the upstream
+# harness/leaderboard wrote them when it didn't know the developer (e.g.
+# `unknown/MiniMax-Text-01`). Treated as org-less: the prefix is stripped and
+# the bare name re-resolved against the real-HF universe (a confident hit folds
+# the raw onto the true canonical; a miss falls to org-less review).
+SENTINEL_ORGS = {"unknown"}
+
 # Derivation markers: presence => finetune/merge (no axis). Order doesn't
 # matter; we only use them as a boolean "this is a derivation" signal.
 DERIVATION_MARKERS = [
@@ -372,21 +379,53 @@ def main() -> None:
         return None
 
     # --- find the CURRENT no_match residual over all 6,720 EEE ids. ----------
-    residual: list[str] = []
-    for raw in oracle:
-        if r.resolve(raw, "model").canonical_id is None:
-            residual.append(raw)
-
+    # Sentinel-org ids (`unknown/<name>`) are handled up front: the placeholder
+    # prefix is a stand-in the upstream harness used when it didn't know the
+    # developer, so we drop it and re-resolve the bare name against the real-HF
+    # universe. A confident (exact/normalized) hit emits an EXPLICIT alias of
+    # the raw onto the true canonical — so `unknown/minimax-text-01` resolves to
+    # `minimax/minimax-text-01` (real org), via a stable alias rather than the
+    # fragile fuzzy tier, and never as a shadow `unknown/` mint carrying org
+    # `unknown`. Unresolvable sentinels (genuinely opaque agents like
+    # `unknown/OpenHands`) fall through to the residual and mint org-less.
     minted: list[dict] = []
     minted_by_id: dict[str, dict] = {}
     review: list[dict] = []
     buckets = Counter()
 
+    residual: list[str] = []
+    for raw in oracle:
+        if "/" in raw and raw.split("/", 1)[0].strip().lower() in SENTINEL_ORGS:
+            sres = r.resolve(raw.split("/", 1)[1], "model")
+            if sres.canonical_id and sres.strategy in ("exact", "normalized"):
+                fold_enrich.setdefault(sres.canonical_id, set()).add(raw)
+                buckets["folded-sentinel-org"] += 1
+                continue
+        if r.resolve(raw, "model").canonical_id is None:
+            residual.append(raw)
+
     for raw in residual:
-        has_org = "/" in raw and all(p.strip() for p in raw.split("/", 1))
+        # A placeholder org prefix (`unknown/…`) is NOT a real namespace. The
+        # resolvable ones were already aliased onto their true canonical in the
+        # residual pass above, so any sentinel id reaching here is genuinely
+        # opaque (e.g. `unknown/OpenHands`). Force it down the org-less path
+        # (org_id=None + review) rather than letting `canon_id_for_org_present`
+        # mint it with org `unknown` — the bug that surfaced these as
+        # "Unknown / <model>". The mint id keeps the raw form (incl. the
+        # `unknown/` prefix) deliberately: an org-qualified id avoids the
+        # bare-name alias collisions the org-less slug is designed to dodge.
+        sentinel_org = "/" in raw and raw.split("/", 1)[0].strip().lower() in SENTINEL_ORGS
+        has_org = (
+            "/" in raw
+            and all(p.strip() for p in raw.split("/", 1))
+            and not sentinel_org
+        )
 
         # Base inference from the model-name part (right of `/`) or whole id.
-        name_for_infer = raw.split("/", 1)[1] if has_org else raw
+        # Strip a sentinel prefix here so base detection keys off the real model
+        # name, not the placeholder org.
+        name_for_infer = raw.split("/", 1)[1] if (has_org or sentinel_org) else raw
+
         base_tok = detect_base_token(name_for_infer)
         deriv = has_derivation_marker(name_for_infer)
 
@@ -465,7 +504,10 @@ def main() -> None:
             bucket = "inferable-base" if confirmed_base else "opaque"
         else:
             # org-less: stable slug, org_id None, flagged for review. NEVER
-            # auto-guess the org even if a base alias-confirms.
+            # auto-guess the org even if a base alias-confirms. Slug the full raw
+            # (keeping any `unknown/` prefix) so the mint stays org-qualified —
+            # a bare slug can normalized-collide with a real org-prefixed
+            # canonical at seed time.
             cid = _slug(raw)
             org_id = None
             bucket = "org-less"
