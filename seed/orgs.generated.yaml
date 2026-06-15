@@ -6280,3 +6280,24 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: nanogpt
+  display_name: nanogpt
+  hf_org: nanogpt
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: neuralmagic
+  display_name: neuralmagic
+  hf_org: neuralmagic
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: prodia
+  display_name: prodia
+  hf_org: prodia
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
