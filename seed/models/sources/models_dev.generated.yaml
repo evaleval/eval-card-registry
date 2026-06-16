@@ -6544,7 +6544,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: cohere/north-mini-code
-  display_name: North Mini Code
+  display_name: cohere/north-mini-code
   org_id: cohere
   family: north-mini-code
   architecture: null
@@ -7391,7 +7391,7 @@
   tags:
   - org-unknown
   aliases: []
-  metadata: '{"providers": ["gitlab"], "underlying_key": "duo-chat-fable-5"}'
+  metadata: '{"providers": ["gitlab"], "underlying_key": "duo-chat-fable-5", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: duo-chat-gpt-5-1
@@ -8129,7 +8129,7 @@
   - gemini-2.5-flash
   - google/gemini-2-5-flash
   weak:
-    release_date: '2025-03-20'
+    release_date: '2025-06-17'
     open_weights: false
     input_modalities:
     - audio
@@ -8185,7 +8185,7 @@
   - gemini-2.5-pro
   - google/gemini-2-5-pro
   weak:
-    release_date: '2025-03-20'
+    release_date: '2025-06-17'
     open_weights: false
     input_modalities:
     - audio
@@ -11929,7 +11929,7 @@
   - open-weight
   aliases:
   - llama-4-maverick
-  metadata: '{"alias_platforms": {"llama-4-maverick": "vercel"}, "providers": ["digitalocean", "helicone", "kilo", "nano-gpt", "openrouter", "vercel"], "underlying_key": "llama-4-maverick"}'
+  metadata: '{"alias_platforms": {"llama-4-maverick": "vercel"}, "providers": ["cortecs", "digitalocean", "helicone", "kilo", "nano-gpt", "openrouter", "vercel"], "underlying_key": "llama-4-maverick"}'
   review_status: draft
   resolution_source: models_dev
 - id: meta/llama-4-maverick-17b-instruct
@@ -13580,7 +13580,7 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2024-11-01'
+  release_date: '2024-11-18'
   input_modalities:
   - text
   output_modalities:
@@ -13588,7 +13588,7 @@
   tags:
   - open-weight
   aliases: []
-  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-01"], "snapshots": ["mistral-large-2411"]}'
+  metadata: '{"knowledge_cutoffs": ["2024-11"], "release_dates": ["2024-11-18"], "snapshots": ["mistral-large-2411"]}'
   review_status: reviewed
 - id: mistralai/mistral-large-2407
   aliases:
@@ -14740,6 +14740,30 @@
   metadata: '{"alias_platforms": {"kimi-k2-7-code": "vercel", "kimi-k2.7-code": "moonshotai", "moonshotai/kimi-k2-7-code": "vercel"}, "knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-06-12"], "snapshots":
     ["kimi-k2.7-code"]}'
   review_status: reviewed
+- id: moonshotai/kimi-k2.7-code-highspeed
+  display_name: Kimi K2.7 Code HighSpeed
+  org_id: moonshotai
+  family: kimi-k2.7-code-highspeed
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-06-12'
+  input_modalities:
+  - image
+  - text
+  - video
+  output_modalities:
+  - text
+  tags:
+  - open-weight
+  aliases:
+  - kimi-k2-7-code-highspeed
+  - kimi-k2.7-code-highspeed
+  - moonshotai/kimi-k2-7-code-highspeed
+  metadata: '{"alias_platforms": {"kimi-k2-7-code-highspeed": "vercel", "kimi-k2.7-code-highspeed": "moonshotai", "moonshotai/kimi-k2-7-code-highspeed": "vercel"}, "knowledge_cutoffs": ["2025-01"], "release_dates":
+    ["2026-06-12"], "snapshots": ["kimi-k2.7-code-highspeed"]}'
+  review_status: reviewed
 - id: moonshotai/kimi-k2p6
   display_name: Kimi K2.6 Turbo
   org_id: moonshotai
@@ -15612,7 +15636,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: nvidia/nemotron-3-ultra-550b
-  display_name: Nemotron 3 Ultra
+  display_name: nemotron-3-ultra-550b
   org_id: nvidia
   family: nemotron-3-ultra-550b
   architecture: null

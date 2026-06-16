@@ -4189,10 +4189,6 @@
   weak:
     release_date: '2025-06-01'
     open_weights: false
-- id: duo-chat-fable-5
-  weak:
-    release_date: '2026-06-09'
-    open_weights: false
 - id: duo-chat-gpt-5-1
   weak:
     release_date: '2026-01-22'
@@ -4532,7 +4528,7 @@
   - google/gemini-2-5-flash
   metadata: '{"alias_platforms": {"databricks-gemini-2-5-flash": "databricks", "gemini-2-5-flash": "requesty", "gemini-2.5-flash": "qiniu-ai", "google/gemini-2-5-flash": "requesty"}}'
   weak:
-    release_date: '2025-03-20'
+    release_date: '2025-06-17'
     open_weights: false
     input_modalities:
     - audio
@@ -4580,7 +4576,7 @@
   - google/gemini-2-5-pro
   metadata: '{"alias_platforms": {"databricks-gemini-2-5-pro": "databricks", "gemini-2-5-pro": "requesty", "gemini-2.5-pro": "qiniu-ai", "google/gemini-2-5-pro": "requesty"}}'
   weak:
-    release_date: '2025-03-20'
+    release_date: '2025-06-17'
     open_weights: false
     input_modalities:
     - audio
@@ -6991,7 +6987,7 @@
     - text
 - id: mistralai/mistral-large-2.1
   weak:
-    release_date: '2024-11-01'
+    release_date: '2024-11-18'
     open_weights: true
     input_modalities:
     - text
@@ -7598,6 +7594,21 @@
   - kimi-k2.7-code
   - moonshotai/kimi-k2-7-code
   metadata: '{"alias_platforms": {"kimi-k2-7-code": "vercel", "kimi-k2.7-code": "moonshotai", "moonshotai/kimi-k2-7-code": "vercel"}}'
+  weak:
+    release_date: '2026-06-12'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
+- id: moonshotai/kimi-k2.7-code-highspeed
+  aliases:
+  - kimi-k2-7-code-highspeed
+  - kimi-k2.7-code-highspeed
+  - moonshotai/kimi-k2-7-code-highspeed
+  metadata: '{"alias_platforms": {"kimi-k2-7-code-highspeed": "vercel", "kimi-k2.7-code-highspeed": "moonshotai", "moonshotai/kimi-k2-7-code-highspeed": "vercel"}}'
   weak:
     release_date: '2026-06-12'
     open_weights: true
@@ -10929,6 +10940,10 @@
 - id: zai/z-ai-glm-5v
   weak:
     release_date: '2026-04-01'
+    open_weights: false
+- id: duo-chat-fable-5
+  weak:
+    release_date: '2026-06-09'
     open_weights: false
 - id: CrucibleLab/l3-3-70b-loki-v2-0
   aliases:
