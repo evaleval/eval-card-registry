@@ -474,3 +474,12 @@
   kind: lab
   metadata: '{}'
   review_status: reviewed
+- id: drchangliu
+  display_name: VITAL Lab
+  website: https://drchangliu.github.io/
+  hf_org: drchangliu
+  aliases: ["Dr. Chang Liu's Lab", "Dr Chang Liu's Lab", "Chang Liu's Lab", "Wordle Arena Project"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
