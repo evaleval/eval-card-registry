@@ -46,6 +46,56 @@ skip_source_ids:
 - voyage/voyage-law-2
 - wanx/wan-v2-6
 - xai/grok-1
+# ─────────────────────────────────────────────────────────────────────────────
+# TEMPORARY STOPGAP — delete this entire block once the model-seed regeneration
+# is repaired (details at the end of this note).
+#
+# What these `unknown/...` ids are: bogus model canonicals. The upstream eval data
+# writes `unknown/<name>` when it doesn't know who made a model, using `unknown`
+# as a stand-in org. One of our seed generators (scripts/generate_tier3_inferred_seed.py,
+# which invents canonicals for models not found anywhere else) mistook `unknown`
+# for a real org and minted each one as its own model with org_id = "unknown".
+# That is why the cards showed "Unknown / MiniMax Text 01", "Unknown / Smollm 360m", etc.
+#
+# What listing them here does: skip_source_ids drops these bogus canonicals at
+# seed time. With them gone, each raw id instead resolves to the REAL model and
+# its real developer org — e.g. unknown/minimax-text-01 -> minimax/minimax-text-01
+# (MiniMax), unknown/smollm-360m -> HuggingFaceTB/SmolLM-360M (Hugging Face).
+#
+# Why this is a stopgap and how to remove it: this is a hand-maintained list, not
+# the real fix. The generator above has ALREADY been fixed to never mint these
+# (it now treats `unknown/` as a placeholder), but a generator fix only changes
+# the data when the whole model seed is regenerated — and that regeneration is
+# currently broken for unrelated reasons. When the seed regeneration is repaired
+# and re-run, these entries stop being produced and this whole block should be
+# DELETED. Until then: any NEW `unknown/...` model that appears upstream is NOT
+# handled automatically and would have to be added here by hand.
+# ─────────────────────────────────────────────────────────────────────────────
+- unknown/Doubao-1.5-pro
+- unknown/Doubao-1.5-thinking
+- unknown/Doubao-Seed-Code
+- unknown/aya-expanse-32b
+- unknown/ernie-4.5-300b-a47b
+- unknown/granite-4.0-h-small
+- unknown/hunyuan-t1
+- unknown/intern-s1
+- unknown/longcat-flash-chat
+- unknown/minimax-m1
+- unknown/minimax-m2
+- unknown/minimax-m2.1
+- unknown/minimax-m2.5
+- unknown/minimax-text-01
+- unknown/ministral-8b-instruct-2410
+- unknown/qwq-32b
+- unknown/qwq-32b-preview
+- unknown/seed-oss-36b-instruct
+- unknown/smollm-1.7b
+- unknown/smollm-135m
+- unknown/smollm-360m
+- unknown/smollm2-1.7b
+- unknown/smollm2-135m
+- unknown/smollm2-360m
+- unknown/zephyr-7b-beta
 entries:
 - id: 01-ai/Yi-Coder-1.5B-Chat
   display_name: Yi Coder 1.5B Chat
