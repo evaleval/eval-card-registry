@@ -48,7 +48,8 @@ from typing import Callable, Optional, TypeVar
 # Bump when removing/renaming columns in any canonical_* table.
 # Bump minor when ADDING columns (backward-compatible). The producer
 # asserts the major matches what it expects.
-SCHEMA_VERSION = "registry.3.0"
+# 3.1: added canonical_orgs.logo_url (org brand-mark pointer).
+SCHEMA_VERSION = "registry.3.1"
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SEED_DIR = REPO_ROOT / "seed"
