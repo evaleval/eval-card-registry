@@ -8,6 +8,11 @@ _SCHEMAS: dict[str, dict] = {
         "display_name": pd.StringDtype(),
         "parent_org_id": pd.StringDtype(),
         "website": pd.StringDtype(),
+        # Pointer to the org's brand mark — a frontend-relative path
+        # (e.g. "/org-logos/huggingface.svg") or absolute URL. The registry owns
+        # the pointer (source of truth); the bytes are served by the frontend.
+        # Null → consumers render a monogram fallback.
+        "logo_url": pd.StringDtype(),
         "hf_org": pd.StringDtype(),
         # Org category — `lab` (curated first-party), `community` (multi-model
         # HF org), `individual` (single-person account), `unknown` (auto-

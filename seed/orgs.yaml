@@ -18,6 +18,7 @@
 - id: anthropic
   display_name: Anthropic
   website: https://www.anthropic.com
+  logo_url: /org-logos/si-anthropic.svg
   hf_org: anthropic
   aliases: ["Anthropic, PBC", "Anthropic PBC"]
   tags: '["lab", "closed-source"]'
@@ -290,6 +291,7 @@
   display_name: Stanford CRFM
   parent_org_id: stanford
   website: https://crfm.stanford.edu
+  logo_url: /org-logos/stanford-crfm.png
   aliases: ["CRFM", "Stanford Center for Research on Foundation Models", "Stanford HELM"]
   tags: '["academic", "evaluator"]'
   kind: lab
@@ -328,9 +330,191 @@
 - id: huggingface
   display_name: Hugging Face
   website: https://huggingface.co
+  logo_url: /org-logos/huggingface.svg
   hf_org: huggingfaceh4
   aliases: ["HuggingFace", "Hugging Face Inc.", "HuggingFaceH4", "HF", "HuggingFaceTB", "huggingfacetb"]
   tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mercor
+  display_name: Mercor
+  website: https://mercor.com
+  logo_url: /org-logos/mercor.png
+  aliases: ["Mercor AI"]
+  tags: '["lab", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: kaggle
+  display_name: Kaggle
+  website: https://www.kaggle.com
+  logo_url: /org-logos/si-kaggle.svg
+  aliases: ["kaggle"]
+  tags: '["community", "evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: artificial-analysis
+  display_name: Artificial Analysis
+  website: https://artificialanalysis.ai
+  logo_url: /org-logos/artificial-analysis.svg
+  aliases: ["ArtificialAnalysis", "artificialanalysis.ai", "Artificial Analysis AI"]
+  tags: '["community", "evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: llm-stats
+  display_name: LLM Stats
+  website: https://llm-stats.com
+  logo_url: /org-logos/llm-stats.svg
+  aliases: ["LLMStats", "llm-stats", "llm-stats.com", "LLM-Stats"]
+  tags: '["community", "evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+# --- Evaluator orgs: homepage URLs added 2026-06-17 (verified resolving) ---
+- id: vals-ai
+  display_name: Vals.ai
+  website: https://www.vals.ai
+  aliases: ["Vals AI"]
+  tags: '["evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: livebench
+  display_name: LiveBench
+  website: https://livebench.ai
+  tags: '["evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: uc-berkeley-gorilla
+  display_name: UC Berkeley Gorilla
+  website: https://gorilla.cs.berkeley.edu
+  tags: '["academic", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-prize
+  display_name: ARC Prize
+  website: https://arcprize.org
+  tags: '["evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arcadia-impact
+  display_name: Arcadia Impact
+  website: https://www.arcadiaimpact.org
+  logo_url: /org-logos/arcadia.webp
+  tags: '["evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: swe-bench
+  display_name: SWE-bench
+  website: https://www.swebench.com
+  aliases: ["SWEbench"]
+  tags: '["academic", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: scale-ai
+  display_name: Scale
+  website: https://scale.com
+  aliases: ["Scale AI"]
+  tags: '["lab", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: terminal-bench
+  display_name: Terminal-Bench
+  website: https://www.tbench.ai
+  tags: '["evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: caparena
+  display_name: CapArena
+  website: https://caparena.github.io
+  aliases: ["CapArena (Cheng et al., 2025)", "CapArena-Bench"]
+  tags: '["academic", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: exgentic
+  display_name: Exgentic
+  website: https://www.exgentic.ai
+  logo_url: /org-logos/exgentic.png
+  tags: '["evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: cocoabench
+  display_name: CocoaBench
+  website: https://github.com/cocoabench/cocoa-agent
+  tags: '["evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: la-leaderboard
+  display_name: La Leaderboard
+  website: https://huggingface.co/la-leaderboard
+  tags: '["community", "evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: wmt-conference
+  display_name: WMT Conference
+  website: https://www2.statmt.org
+  aliases: ["Conference on Machine Translation"]
+  tags: '["academic", "evaluator"]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed
+
+- id: amazon-science
+  display_name: AmazonScience
+  website: https://www.amazon.science
+  aliases: ["Amazon Science"]
+  tags: '["lab", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+# Override auto-generated community stubs to add homepage URLs.
+- id: TIGER-Lab
+  display_name: TIGER-Lab
+  website: https://huggingface.co/TIGER-Lab
+  hf_org: TIGER-Lab
+  tags: '["academic", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: lmsys
+  display_name: lmsys
+  website: https://lmsys.org
+  hf_org: lmsys
+  aliases: ["LMSYS"]
+  tags: '["academic", "evaluator"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -356,6 +540,7 @@
 - id: writer
   display_name: Writer
   website: https://writer.com
+  logo_url: /org-logos/writer.svg
   hf_org: writer
   aliases: ["Writer Inc.", "Writer AI"]
   tags: '["lab"]'

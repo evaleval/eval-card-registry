@@ -543,6 +543,7 @@ class ResolutionService:
             base.update({
                 "parent_org_id": None,
                 "website": None,
+                "logo_url": None,
                 "hf_org": None,
                 "kind": "unknown",
                 "tags": "[]",
@@ -883,6 +884,7 @@ class ResolutionService:
                 "display_name": org_id,
                 "parent_org_id": None,
                 "website": None,
+                "logo_url": None,
                 "hf_org": org_id,
                 "kind": "community",
                 "tags": "[]",

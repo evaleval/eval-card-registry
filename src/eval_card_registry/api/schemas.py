@@ -209,6 +209,7 @@ class OrgCreate(BaseModel):
     parent_org_id: Optional[str] = None
     website: Optional[str] = None
     hf_org: Optional[str] = None
+    logo_url: Optional[str] = None
     kind: OrgKind = "unknown"
     tags: list[str] = []
     metadata: dict[str, Any] = {}
@@ -220,6 +221,7 @@ class OrgPatch(BaseModel):
     parent_org_id: Optional[str] = None
     website: Optional[str] = None
     hf_org: Optional[str] = None
+    logo_url: Optional[str] = None
     kind: Optional[OrgKind] = None
     tags: Optional[list[str]] = None
     metadata: Optional[dict[str, Any]] = None
