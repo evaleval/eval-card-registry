@@ -16,7 +16,6 @@
 # Lineage descendant pre-load (community quants/finetunes of our covered
 # models) is not done here. EEE drafts get on-demand enrichment via the
 # live hub-stats lookup at draft creation.
-
 - id: 0-hero/Matter-0.1-7B-DPO-preview
   release_date: '2024-03-19'
   tags:
@@ -2156,7 +2155,7 @@
   parents:
   - id: CohereLabs/c4ai-command-a-03-2025
     relationship: finetune
-  lineage_origin_model_org_id: CohereLabs
+  lineage_origin_model_org_id: cohere
 - id: CohereLabs/tiny-aya-global
   release_date: '2026-02-13'
   tags:
@@ -34726,7 +34725,7 @@
   parents:
   - id: ibm-granite/granite-3.0-1b-a400m-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.0-2b-base
   release_date: '2024-10-02'
   tags:
@@ -34753,7 +34752,7 @@
   parents:
   - id: ibm-granite/granite-3.0-2b-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.0-3b-a800m-base
   release_date: '2024-10-03'
   tags:
@@ -34779,7 +34778,7 @@
   parents:
   - id: ibm-granite/granite-3.0-3b-a800m-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.0-8b-base
   release_date: '2024-10-02'
   tags:
@@ -34806,7 +34805,7 @@
   parents:
   - id: ibm-granite/granite-3.0-8b-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.1-1b-a400m-base
   release_date: '2024-12-06'
   tags:
@@ -34834,7 +34833,7 @@
   parents:
   - id: ibm-granite/granite-3.1-1b-a400m-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.1-2b-base
   release_date: '2024-12-06'
   tags:
@@ -34862,7 +34861,7 @@
   parents:
   - id: ibm-granite/granite-3.1-2b-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.1-3b-a800m-base
   release_date: '2024-12-06'
   tags:
@@ -34890,7 +34889,7 @@
   parents:
   - id: ibm-granite/granite-3.1-3b-a800m-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.1-8b-base
   release_date: '2024-12-06'
   tags:
@@ -34918,7 +34917,7 @@
   parents:
   - id: ibm-granite/granite-3.1-8b-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.2-2b-instruct
   release_date: '2025-02-17'
   tags:
@@ -34933,7 +34932,7 @@
   parents:
   - id: ibm-granite/granite-3.1-2b-instruct
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-3.2-8b-instruct
   release_date: '2025-02-17'
   tags:
@@ -34948,7 +34947,7 @@
   parents:
   - id: ibm-granite/granite-3.1-8b-instruct
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-granite/granite-4.0-micro
   release_date: '2025-09-16'
   tags:
@@ -34987,7 +34986,7 @@
   parents:
   - id: ibm-granite/granite-7b-base
     relationship: finetune
-  lineage_origin_model_org_id: ibm-granite
+  lineage_origin_model_org_id: ibm
 - id: ibm-research/PowerLM-3b
   release_date: '2024-08-14'
   tags:

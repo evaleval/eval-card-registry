@@ -6719,7 +6719,7 @@
 - id: mistralai/devstral-small-2-24b-instruct-2512
   aliases:
   - devstral-small-2-24b-instruct-2512
-  metadata: '{"alias_platforms": {"devstral-small-2-24b-instruct-2512": "neuralwatt"}}'
+  metadata: '{"alias_platforms": {"devstral-small-2-24b-instruct-2512": "evroc"}}'
   weak:
     release_date: '2025-12-01'
     open_weights: true
@@ -10844,10 +10844,10 @@
   aliases:
   - glm-5-2
   - glm-5.2
-  metadata: '{"alias_platforms": {"glm-5-2": "zai-coding-plan", "glm-5.2": "zai-coding-plan"}}'
+  metadata: '{"alias_platforms": {"glm-5-2": "vercel", "glm-5.2": "opencode-go"}}'
   weak:
     release_date: '2026-06-13'
-    open_weights: false
+    open_weights: true
 - id: zai/glm-5-original
   aliases:
   - glm-5-original
@@ -10866,6 +10866,13 @@
     - text
     output_modalities:
     - text
+- id: zai/glm-5p2
+  aliases:
+  - glm-5p2
+  metadata: '{"alias_platforms": {"glm-5p2": "fireworks-ai"}}'
+  weak:
+    release_date: '2026-06-16'
+    open_weights: true
 - id: zai/glm-5v-turbo
   aliases:
   - glm-5v-turbo
@@ -10941,6 +10948,13 @@
   weak:
     release_date: '2026-04-01'
     open_weights: false
+- id: zai/zai-org-glm-5-2
+  aliases:
+  - zai-org-glm-5-2
+  metadata: '{"alias_platforms": {"zai-org-glm-5-2": "venice"}}'
+  weak:
+    release_date: '2026-06-16'
+    open_weights: true
 - id: duo-chat-fable-5
   weak:
     release_date: '2026-06-09'

@@ -13054,7 +13054,7 @@
   - open-weight
   aliases:
   - devstral-small-2-24b-instruct-2512
-  metadata: '{"alias_platforms": {"devstral-small-2-24b-instruct-2512": "neuralwatt"}, "providers": ["evroc", "neuralwatt"], "underlying_key": "devstral-small-2-24b-instruct-2512"}'
+  metadata: '{"alias_platforms": {"devstral-small-2-24b-instruct-2512": "evroc"}, "providers": ["evroc"], "underlying_key": "devstral-small-2-24b-instruct-2512"}'
   review_status: draft
   resolution_source: models_dev
 - id: mistralai/devstral-small-2512
@@ -21280,15 +21280,17 @@
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
+  open_weights: true
   release_date: '2026-06-13'
   input_modalities: null
   output_modalities: null
-  tags: []
+  tags:
+  - open-weight
   aliases:
   - glm-5-2
   - glm-5.2
-  metadata: '{"alias_platforms": {"glm-5-2": "zai-coding-plan", "glm-5.2": "zai-coding-plan"}, "providers": ["zai-coding-plan", "zhipuai-coding-plan"], "underlying_key": "glm-5-2"}'
+  metadata: '{"alias_platforms": {"glm-5-2": "vercel", "glm-5.2": "opencode-go"}, "providers": ["baseten", "cloudflare-workers-ai", "neuralwatt", "opencode-go", "openrouter", "vercel", "zai-coding-plan",
+    "zhipuai-coding-plan"], "underlying_key": "glm-5-2"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-5-original
@@ -21326,6 +21328,24 @@
   - glm-5-turbo
   metadata: '{"alias_platforms": {"glm-5-turbo": "vercel"}, "release_dates": ["2026-03-16"], "snapshots": ["glm-5-turbo"]}'
   review_status: reviewed
+- id: zai/glm-5p2
+  display_name: glm-5p2
+  org_id: zai
+  family: glm-5p2
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-06-16'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-5p2
+  metadata: '{"alias_platforms": {"glm-5p2": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "glm-5p2"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: zai/glm-5v-turbo
   aliases:
   - GLM-5V-Turbo
@@ -21500,3 +21520,21 @@
     release_date: '2026-04-01'
     open_weights: false
   aliases: []
+- id: zai/zai-org-glm-5-2
+  display_name: zai-org-glm-5-2
+  org_id: zai
+  family: zai-org-glm-5-2
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-06-16'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - zai-org-glm-5-2
+  metadata: '{"alias_platforms": {"zai-org-glm-5-2": "venice"}, "providers": ["venice"], "underlying_key": "zai-org-glm-5-2"}'
+  review_status: draft
+  resolution_source: models_dev
