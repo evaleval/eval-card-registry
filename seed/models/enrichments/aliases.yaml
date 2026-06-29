@@ -3315,3 +3315,72 @@
 - id: zhipu/glm-4-6-fc-thinking
   aliases:
   - zai/glm-4-6-fc-thinking
+
+# --- BenchPress score-matrix slug aliases (added 2026-06-29) ---
+# Raw BenchPress model slugs that resolved to no_match; each canonical id below
+# was verified to exist on the HF model API (HTTP 200). Loader UNIONs these onto
+# the matching canonical. NOTE: not yet verified against the registry resolver/
+# generators (requires py>=3.11 + uv + network); run `uv run pytest` before PR.
+- id: deepseek-ai/DeepSeek-V3.1
+  aliases:
+  - deepseek-3.1
+- id: deepseek-ai/DeepSeek-V2.5
+  aliases:
+  - deepseek-v2.5-0905
+- id: LGAI-EXAONE/EXAONE-Deep-32B
+  aliases:
+  - exaone-deep-32b
+- id: google/gemma-3n-E2B-it
+  aliases:
+  - gemma-3n-e2b-instructed
+- id: google/gemma-3n-E2B-it-litert-preview
+  aliases:
+  - gemma-3n-e2b-instructed-litert-preview
+- id: google/gemma-3n-E4B-it
+  aliases:
+  - gemma-3n-e4b-instructed
+- id: google/gemma-3n-E4B-it-litert-preview
+  aliases:
+  - gemma-3n-e4b-instructed-litert-preview
+- id: ibm-granite/granite-4.0-1b
+  aliases:
+  - granite-4.0-1b
+- id: ibm-granite/granite-4.0-h-1b
+  aliases:
+  - granite-4.0-h-1b
+- id: LiquidAI/LFM2.5-1.2B-Instruct
+  aliases:
+  - lfm2.5-1.2b-instruct
+- id: LiquidAI/LFM2.5-1.2B-Thinking
+  aliases:
+  - lfm2.5-1.2b-thinking
+- id: mistralai/Mistral-Large-Instruct-2407
+  aliases:
+  - mistral-large-2
+- id: mistralai/Mistral-Small-24B-Instruct-2501
+  aliases:
+  - mistral-small-3-24b-instruct
+- id: nvidia/Llama-3_1-Nemotron-Ultra-253B-v1
+  aliases:
+  - nemotron-ultra-253b
+- id: allenai/OLMo-1B
+  aliases:
+  - olmo-1b
+- id: allenai/OLMo-2-1124-13B
+  aliases:
+  - olmo-2-13b
+- id: allenai/OLMo-2-0425-1B
+  aliases:
+  - olmo-2-1b
+- id: allenai/OLMo-2-0325-32B
+  aliases:
+  - olmo-2-32b
+- id: allenai/OLMo-2-1124-7B
+  aliases:
+  - olmo-2-7b
+- id: open-thoughts/OpenThinker2-32B
+  aliases:
+  - openthinker2-32b
+- id: microsoft/Phi-3-medium-4k-instruct
+  aliases:
+  - phi-3-14b
