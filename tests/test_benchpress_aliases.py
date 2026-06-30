@@ -52,10 +52,9 @@ def resolver():
 @pytest.mark.parametrize("slug,expected", BENCHPRESS_SLUGS.items())
 def test_benchpress_slug_resolves(resolver, slug, expected):
     res = resolver.resolve(slug, entity_type="model")
-    # Must attach to a canonical (no_match -> None). Casing may differ from the HF
-    # id where the registry already carries a lowercase canonical, so compare
-    # case-insensitively rather than exact.
+    # Must attach to a canonical (no_match -> None) AND use the exact HF repo id
+    # (HF-true casing) per the registry's canonical-id standard.
     assert res.canonical_id is not None, f"{slug} did not resolve"
-    assert res.canonical_id.lower() == expected.lower(), (
-        f"{slug} -> {res.canonical_id} (expected ~{expected})"
+    assert res.canonical_id == expected, (
+        f"{slug} -> {res.canonical_id} (expected {expected})"
     )

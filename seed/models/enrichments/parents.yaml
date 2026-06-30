@@ -5936,7 +5936,7 @@
     relationship: finetune
 - id: allenai/OLMo-2-0325-32B-Instruct
   parents:
-  - id: allenai/olmo-2-0325-32b
+  - id: allenai/OLMo-2-0325-32B
     relationship: variant
     axis: training_stage
 - id: allenai/OLMo-2-1124-13B-Instruct
