@@ -43658,7 +43658,7 @@
   params_billions: 24.01
   open_weights: true
   parents:
-  - id: mistralai/mistral-small-3-2-24b-instruct-2506
+  - id: mistralai/Mistral-Small-3.2-24B-Instruct-2506
     relationship: finetune
   lineage_origin_model_org_id: mistralai
 - id: mistralai/Mathstral-7B-v0.1

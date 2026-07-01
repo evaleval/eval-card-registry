@@ -10,7 +10,27 @@
 # prefer: pin the winning canonical id for a collision key
 #   (collision_key = id lowercased with -, _, ., / removed). Empty = use the
 #   automatic winner rule (prefer real-HF/curated source, then dotted spelling).
+#
+# Cross-namespace same-model duplicates (deepseek/… vs deepseek-ai/…) are NOT
+# listed here: the curated HF-true canonical carries `resolution_source: hf`, so
+# the generators' org-aware fold absorbs the simplified-org mint automatically,
+# and any surface form the fold can't reproduce is a curated enrichment alias.
 never_fold:
 - [deepseek/deepseek-coder-1.3b, deepseek/deepseek-coder-13b]
 - [facebook/opt-1.3b, facebook/opt-13b]
-prefer: {}
+# Pin `mistralai/Mistral-Small-24B-Instruct-2501` (HF-true) as the winner over the
+# lowercase models.dev spelling: they share a collision_key AND size, so the
+# automatic group fold would otherwise pick the winner by id tiebreak (which favours
+# the lowercase spelling) and chain the winner backward. The pin folds the lowercase
+# in as an alias and repoints its (generated) child edges to the HF-true id.
+prefer:
+  mistralaimistralsmall24binstruct2501: mistralai/Mistral-Small-24B-Instruct-2501
+# non_lineage_bases: ids that are UNDERSPECIFIED family/product umbrellas, not
+# specific checkpoints — they stay resolvable canonicals but must NEVER be used as
+# a lineage PARENT. tier3 name-inference falls back to these (`deepseek/deepseek`)
+# when it can't confirm a real base, producing bogus `finetune` edges; this drops
+# those edges everywhere so a curated root (e.g. DeepSeek-V2) folding an inferred
+# dup doesn't inherit the umbrella as its origin. (Seed of the broader
+# fake/underspecified-model handling — expand deliberately.)
+non_lineage_bases:
+- deepseek/deepseek

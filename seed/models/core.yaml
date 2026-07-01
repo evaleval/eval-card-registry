@@ -10,8 +10,6 @@
 # value fill it.
 skip_ids: []
 skip_source_ids:
-# lowercase models.dev dup of the HF-cased canonical curated below (2026-06-30)
-- mistralai/mistral-small-24b-instruct-2501
 - alibaba/qwen3-235b-a22b-instruct
 - alibaba/qwen3-omni-30b-a3b
 - alibaba/qwen3-omni-30b-a3b-reasoning
@@ -48,6 +46,24 @@ skip_source_ids:
 - voyage/voyage-law-2
 - wanx/wan-v2-6
 - xai/grok-1
+# TEMPORARY STOPGAP — like the block below, delete once the model-seed regeneration
+# is repaired. These are duplicate spellings that the generated sources (models.dev)
+# mint as their OWN model ids, e.g. `mistralai/mistral-small3-2`, when they are just
+# alternate spellings of the HF-true models on the right. A working regen would fold
+# them automatically (those targets now carry resolution_source: hf). Until then, we
+# drop the duplicate rows here and alias each spelling onto its real id
+# (enrichments/aliases.yaml). Hand-maintained; a NEW upstream spelling is NOT handled
+# automatically and would have to be added here by hand.
+- deepseek/deepseek-v3-1                          # -> deepseek-ai/DeepSeek-V3.1
+- deepseek/deepseek-v3-1-671b                     # -> deepseek-ai/DeepSeek-V3.1
+- liquid/lfm-2-5-1-2b-instruct                    # -> LiquidAI/LFM2.5-1.2B-Instruct
+- mistralai/mistral-small-2503                    # -> mistralai/Mistral-Small-3.1-24B-Instruct-2503
+- mistralai/mistral-small-3-1-24b-instruct        # -> mistralai/Mistral-Small-3.1-24B-Instruct-2503
+- mistralai/mistral-small-31-24b-instruct         # -> mistralai/Mistral-Small-3.1-24B-Instruct-2503
+- mistralai/mistral-small-3.2                     # -> mistralai/Mistral-Small-3.2-24B-Instruct-2506
+- mistralai/mistral-small3-2                      # -> mistralai/Mistral-Small-3.2-24B-Instruct-2506
+- mistralai/mistral-small-3-2-24b-instruct        # -> mistralai/Mistral-Small-3.2-24B-Instruct-2506
+- mistralai/mistral-small-3-2-24b-instruct-2506   # -> mistralai/Mistral-Small-3.2-24B-Instruct-2506
 # ─────────────────────────────────────────────────────────────────────────────
 # TEMPORARY STOPGAP — delete this entire block once the model-seed regeneration
 # is repaired (details at the end of this note).
@@ -99,16 +115,18 @@ skip_source_ids:
 - unknown/smollm2-360m
 - unknown/zephyr-7b-beta
 entries:
-# Curated HF-cased canonical: models.dev shipped this only as the lowercase
-# `mistralai/mistral-small-24b-instruct-2501` (skipped above); the real HF repo
-# uses this casing. Standard: canonical_id = real HF repo id (HF-true casing).
+# HF-true canonical; the lowercase models.dev spelling folds in via
+# collision_overrides.yaml `prefer:`.
 - id: mistralai/Mistral-Small-24B-Instruct-2501
+  resolution_source: hf
   display_name: Mistral Small 3 (24B Instruct, 2501)
   org_id: mistralai
   family: mistral-small-24b-instruct-2501
   architecture: null
   params_billions: 24.0
-  parents: []
+  parents:
+  - id: mistralai/Mistral-Small-24B-Base-2501
+    relationship: finetune
   open_weights: true
   release_date: '2025-01-30'
   input_modalities: null
@@ -120,6 +138,392 @@ entries:
   aliases:
   - mistral-small-24b-instruct-2501
   - 'Mistral: Mistral Small 3'
+- id: mistralai/Mistral-Small-3.1-24B-Base-2503
+  resolution_source: hf
+  display_name: Mistral Small 3.1 (24B Base, 2503)
+  org_id: mistralai
+  family: mistral-small-3.1-24b-base-2503
+  architecture: null
+  params_billions: 24.0
+  parents: []
+  open_weights: true
+  release_date: '2025-03-16'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: mistralai/Mistral-Small-3.1-24B-Instruct-2503
+  resolution_source: hf
+  display_name: Mistral Small 3.1 (24B Instruct, 2503)
+  org_id: mistralai
+  family: mistral-small-3.1-24b-instruct-2503
+  architecture: null
+  params_billions: 24.0
+  parents:
+  - id: mistralai/Mistral-Small-3.1-24B-Base-2503
+    relationship: finetune
+  open_weights: true
+  release_date: '2025-03-11'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: mistralai/Mistral-Small-3.2-24B-Instruct-2506
+  resolution_source: hf
+  display_name: Mistral Small 3.2 (24B Instruct, 2506)
+  org_id: mistralai
+  family: mistral-small-3.2-24b-instruct-2506
+  architecture: null
+  params_billions: 24.0
+  parents:
+  - id: mistralai/Mistral-Small-3.1-24B-Base-2503
+    relationship: finetune
+  open_weights: true
+  release_date: '2025-06-19'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+# Curated HF-true canonicals for eval-harness model slugs the generated sources
+# miss or mis-spell. The DeepSeek/LFM entries are the fold winners for the lowercase
+# models.dev/tier3 spellings (see collision_overrides.yaml `merge:`).
+- id: deepseek-ai/DeepSeek-V3.1
+  resolution_source: hf
+  display_name: DeepSeek V3.1
+  org_id: deepseek
+  family: deepseek-v3.1
+  architecture: null
+  params_billions: 671.0
+  parents: []
+  open_weights: true
+  release_date: '2025-08-21'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: deepseek-ai/DeepSeek-V2.5
+  resolution_source: hf
+  display_name: DeepSeek V2.5
+  org_id: deepseek
+  family: deepseek-v2.5
+  architecture: null
+  params_billions: 236.0
+  # DeepSeek V2.5 is the disclosed merge of DeepSeek-V2-Chat-0628 and
+  # DeepSeek-Coder-V2-Instruct (per DeepSeek's release notes).
+  parents:
+  - id: deepseek-ai/DeepSeek-V2-Chat-0628
+    relationship: merge
+  - id: deepseek-ai/DeepSeek-Coder-V2-Instruct
+    relationship: merge
+  open_weights: true
+  release_date: '2024-09-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+# DeepSeek-V2 family root (the 236B base + its chat). Hand-curated because the
+# hub_stats snapshot omits them; the lowercase tier3 spellings fold in via
+# collision_overrides.yaml `merge:`.
+- id: deepseek-ai/DeepSeek-V2
+  resolution_source: hf
+  display_name: DeepSeek V2
+  org_id: deepseek
+  family: deepseek-v2
+  architecture: mixture-of-experts
+  params_billions: 236.0
+  parents: []
+  open_weights: true
+  release_date: '2024-04-22'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - moe
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: deepseek-ai/DeepSeek-V2-Chat
+  resolution_source: hf
+  display_name: DeepSeek V2 Chat
+  org_id: deepseek
+  family: deepseek-v2-chat
+  architecture: mixture-of-experts
+  params_billions: 236.0
+  parents:
+  - id: deepseek-ai/DeepSeek-V2
+    relationship: variant
+    axis: training_stage
+  open_weights: true
+  release_date: '2024-04-28'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - moe
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: deepseek-ai/DeepSeek-V2-Chat-0628
+  display_name: DeepSeek V2 Chat (0628)
+  org_id: deepseek
+  family: deepseek-v2-chat
+  architecture: null
+  params_billions: 236.0
+  parents:
+  - id: deepseek-ai/DeepSeek-V2-Chat
+    relationship: variant
+    axis: version
+  open_weights: true
+  release_date: '2024-07-18'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: deepseek-ai/DeepSeek-Coder-V2-Instruct
+  resolution_source: hf
+  display_name: DeepSeek Coder V2 Instruct
+  org_id: deepseek
+  family: deepseek-coder-v2-instruct
+  architecture: null
+  params_billions: 236.0
+  # Finetune of DeepSeek-Coder-V2-Base per hub-stats baseModels.
+  parents:
+  - id: deepseek-ai/DeepSeek-Coder-V2-Base
+    relationship: finetune
+  open_weights: true
+  release_date: '2024-06-14'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: deepseek-ai/DeepSeek-Coder-V2-Base
+  display_name: DeepSeek Coder V2 Base
+  org_id: deepseek
+  family: deepseek-coder-v2-base
+  architecture: mixture-of-experts
+  params_billions: 236.0
+  parents: []
+  open_weights: true
+  release_date: '2024-06-14'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - moe
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: deepseek-ai/DeepSeek-Coder-V2-Lite-Base
+  resolution_source: hf
+  display_name: DeepSeek Coder V2 Lite Base
+  org_id: deepseek
+  family: deepseek-coder-v2-lite-base
+  architecture: mixture-of-experts
+  params_billions: 16.0
+  parents: []
+  open_weights: true
+  release_date: '2024-06-14'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - moe
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct
+  resolution_source: hf
+  display_name: DeepSeek Coder V2 Lite Instruct
+  org_id: deepseek
+  family: deepseek-coder-v2-lite-instruct
+  architecture: mixture-of-experts
+  params_billions: 16.0
+  # Instruct-tuned (SFT) from the Lite base, per DeepSeek's model card.
+  parents:
+  - id: deepseek-ai/DeepSeek-Coder-V2-Lite-Base
+    relationship: variant
+    axis: training_stage
+  open_weights: true
+  release_date: '2024-06-14'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - moe
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: LiquidAI/LFM2.5-1.2B-Instruct
+  resolution_source: hf
+  display_name: LFM2.5 1.2B Instruct
+  org_id: LiquidAI
+  family: lfm2.5-1.2b-instruct
+  architecture: null
+  params_billions: 1.2
+  parents: []
+  open_weights: true
+  release_date: '2026-01-06'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: LiquidAI/LFM2.5-1.2B-Thinking
+  resolution_source: hf
+  display_name: LFM2.5 1.2B Thinking
+  org_id: LiquidAI
+  family: lfm2.5-1.2b-thinking
+  architecture: null
+  params_billions: 1.2
+  parents: []
+  open_weights: true
+  release_date: '2026-01-20'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: LGAI-EXAONE/EXAONE-Deep-32B
+  display_name: EXAONE Deep 32B
+  org_id: LGAI-EXAONE
+  family: exaone-deep-32b
+  architecture: null
+  params_billions: 32.0
+  parents:
+  - id: LGAI-EXAONE/EXAONE-3.5-32B-Instruct
+    relationship: finetune
+  open_weights: true
+  release_date: '2025-03-12'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: ibm-granite/granite-4.0-1b
+  display_name: Granite 4.0 1B
+  org_id: ibm
+  family: granite-4.0-1b
+  architecture: null
+  params_billions: 1.6
+  parents: []
+  open_weights: true
+  release_date: '2025-10-07'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: ibm-granite/granite-4.0-h-1b
+  display_name: Granite 4.0 H 1B
+  org_id: ibm
+  family: granite-4.0-h-1b
+  architecture: null
+  params_billions: 1.5
+  parents: []
+  open_weights: true
+  release_date: '2025-10-07'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: nvidia/Llama-3_1-Nemotron-Ultra-253B-v1
+  display_name: Llama 3.1 Nemotron Ultra 253B v1
+  org_id: nvidia
+  family: llama-3_1-nemotron-ultra-253b-v1
+  architecture: null
+  params_billions: 253.0
+  parents: []
+  open_weights: true
+  release_date: '2025-04-07'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: allenai/OLMo-1B
+  display_name: OLMo 1B
+  org_id: allenai
+  family: olmo-1b
+  architecture: null
+  params_billions: 1.2
+  parents: []
+  open_weights: true
+  release_date: '2024-01-26'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: allenai/OLMo-2-0425-1B
+  display_name: OLMo 2 (0425, 1B)
+  org_id: allenai
+  family: olmo-2-0425-1b
+  architecture: null
+  params_billions: 1.5
+  parents: []
+  open_weights: true
+  release_date: '2025-04-17'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
+- id: open-thoughts/OpenThinker2-32B
+  display_name: OpenThinker2 32B
+  org_id: open-thoughts
+  family: openthinker2-32b
+  architecture: null
+  params_billions: 32.8
+  parents:
+  - id: Qwen/Qwen2.5-32B-Instruct
+    relationship: finetune
+  open_weights: true
+  release_date: '2025-04-03'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases: []
 - id: 01-ai/Yi-Coder-1.5B-Chat
   display_name: Yi Coder 1.5B Chat
   org_id: 01-ai

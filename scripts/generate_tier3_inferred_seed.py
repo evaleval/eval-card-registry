@@ -291,6 +291,14 @@ def _is_pure_version_suffix(tokens: list[str]) -> bool:
     # a date like 2026-03-05 arrives as ['2026','03','05']).
     if re.fullmatch(r"\d{4}-\d{2}-\d{2}|\d{8}|\d{4}-\d{2}|\d{6}", joined):
         return True
+    # Bare 4-digit release tag: YYMM (`2411` = Nov 2024, Mistral) or MMDD (`0514`
+    # = May 14, Gemini). Validated so a non-date 4-digit (param count, opaque
+    # version) is NOT mistaken for a snapshot and still earns the conservative
+    # finetune edge.
+    if re.fullmatch(r"\d{4}", joined):
+        a, b = int(joined[:2]), int(joined[2:])
+        if (20 <= a <= 29 and 1 <= b <= 12) or (1 <= a <= 12 and 1 <= b <= 31):
+            return True
     # vN(-N)* version strings (slugified v0.3 -> v0-3).
     if re.fullmatch(r"v\d+(?:-\d+)*", joined):
         return True

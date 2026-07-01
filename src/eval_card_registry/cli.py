@@ -421,13 +421,22 @@ def seed(
         # curated collision_overrides.yaml carries the do-not-fold list + winner
         # pins. (See lib/collision_fold.py.)
         ov_file = models_dir / "collision_overrides.yaml"
-        never_fold, prefer = [], {}
+        never_fold, prefer, curated_merge, non_lineage_bases = [], {}, {}, set()
         if ov_file.is_file():
             ov = yaml.safe_load(ov_file.read_text()) or {}
             never_fold = ov.get("never_fold") or []
             prefer = ov.get("prefer") or {}
+            # `merge`: curated {loser_id -> HF-true winner_id} for same-model
+            # cross-namespace spellings the automatic fold can't key together
+            # (different org prefix, or a `1-2b`-vs-`1.2B` size-guard false block).
+            curated_merge = ov.get("merge") or {}
+            # `non_lineage_bases`: underspecified umbrella ids that stay resolvable
+            # but may never be a lineage PARENT (see collision_overrides.yaml).
+            non_lineage_bases = set(ov.get("non_lineage_bases") or [])
         merged, _remap = collision_fold.fold_collisions(
-            merged, never_fold, prefer, force_merge=_org_merges
+            merged, never_fold, prefer,
+            force_merge={**_org_merges, **curated_merge},
+            non_lineage_bases=non_lineage_bases,
         )
 
         # WEAK FILL — LAST, after every strong merge INCLUDING the collision

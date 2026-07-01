@@ -6786,7 +6786,8 @@
   org_id: alibaba
   parents:
   - id: alibaba/qwen3-max
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: alibaba/qwen3-max-thinking
   display_name: alibaba/qwen3-max-thinking
   resolution_source: inferred
@@ -6906,7 +6907,8 @@
   org_id: alibaba
   parents:
   - id: alibaba/qwen3-vl-plus
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: alibaba/qwen3.5-plus-thinking
   display_name: alibaba/qwen3.5-plus-thinking
   resolution_source: inferred
@@ -10728,66 +10730,6 @@
   parents:
   - id: deepseek/deepseek-chat
     relationship: finetune
-- id: deepseek/deepseek-coder-v2
-  display_name: deepseek/deepseek-coder-v2
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-coder-v2
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
-- id: deepseek/deepseek-coder-v2-instruct
-  display_name: deepseek/deepseek-coder-v2-instruct
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-coder-v2-instruct
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
-- id: deepseek/deepseek-coder-v2-lite
-  display_name: deepseek/deepseek-coder-v2-lite
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-coder-v2-lite
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
-- id: deepseek/deepseek-coder-v2-lite-base
-  display_name: deepseek/deepseek-coder-v2-lite-base
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-coder-v2-lite-base
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
-- id: deepseek/deepseek-coder-v2-lite-instruct
-  display_name: deepseek/deepseek-coder-v2-lite-instruct
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-coder-v2-lite-instruct
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
 - id: deepseek/deepseek-r1-0120
   display_name: deepseek/deepseek-r1-0120
   resolution_source: inferred
@@ -10799,7 +10741,8 @@
   org_id: deepseek
   parents:
   - id: deepseek-ai/DeepSeek-R1
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: deepseek/deepseek-r1-14b
   display_name: deepseek/deepseek-r1-14b
   resolution_source: inferred
@@ -10836,18 +10779,6 @@
   parents:
   - id: deepseek-ai/DeepSeek-R1
     relationship: finetune
-- id: deepseek/deepseek-v2
-  display_name: deepseek/deepseek-v2
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-v2
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
 - id: deepseek/deepseek-v2-16b
   display_name: deepseek/deepseek-v2-16b
   resolution_source: inferred
@@ -10856,18 +10787,6 @@
   metadata: '{}'
   aliases:
   - deepseek/deepseek-v2-16b
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
-- id: deepseek/deepseek-v2-5
-  display_name: deepseek/deepseek-v2-5
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-v2-5
   org_id: deepseek
   parents:
   - id: deepseek/deepseek
@@ -10884,30 +10803,6 @@
   parents:
   - id: deepseek/deepseek
     relationship: finetune
-- id: deepseek/deepseek-v2-chat
-  display_name: deepseek/deepseek-v2-chat
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-v2-chat
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
-- id: deepseek/deepseek-v2.5
-  display_name: deepseek/deepseek-v2.5
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - deepseek/deepseek-v2.5
-  org_id: deepseek
-  parents:
-  - id: deepseek/deepseek
-    relationship: finetune
 - id: deepseek/deepseek-v3-1-reasoning
   display_name: deepseek/deepseek-v3-1-reasoning
   resolution_source: inferred
@@ -10918,7 +10813,7 @@
   - deepseek/deepseek-v3-1-reasoning
   org_id: deepseek
   parents:
-  - id: deepseek/deepseek-v3-1
+  - id: deepseek-ai/DeepSeek-V3.1
     relationship: finetune
 - id: deepseek/deepseek-v3-1-terminus-reasoning
   display_name: deepseek/deepseek-v3-1-terminus-reasoning
@@ -10943,7 +10838,8 @@
   org_id: deepseek
   parents:
   - id: deepseek-ai/DeepSeek-V3.2
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: deepseek/deepseek-v3-2-exp-prompt-thinking
   display_name: deepseek/deepseek-v3-2-exp-prompt-thinking
   resolution_source: inferred
@@ -10990,7 +10886,7 @@
   - deepseek/deepseek-v3.1-nonthinking
   org_id: deepseek
   parents:
-  - id: deepseek/deepseek-v3-1
+  - id: deepseek-ai/DeepSeek-V3.1
     relationship: finetune
 - id: deepseek/deepseek-v3.1-thinking
   display_name: deepseek/deepseek-v3.1-thinking
@@ -11002,7 +10898,7 @@
   - deepseek/deepseek-v3.1-thinking
   org_id: deepseek
   parents:
-  - id: deepseek/deepseek-v3-1
+  - id: deepseek-ai/DeepSeek-V3.1
     relationship: finetune
 - id: deepseek/deepseek-v3.2-thinking
   display_name: deepseek/deepseek-v3.2-thinking
@@ -11282,7 +11178,8 @@
   org_id: fireworks
   parents:
   - id: deepseek-ai/DeepSeek-V3
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: fireworks/deepseek-v3p1
   display_name: fireworks/deepseek-v3p1
   resolution_source: inferred
@@ -13600,24 +13497,6 @@
   aliases:
   - liquidai/lfm2-2-6b
   org_id: LiquidAI
-- id: liquidai/lfm2-5-1-2b-instruct
-  display_name: liquidai/lfm2-5-1-2b-instruct
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - liquidai/lfm2-5-1-2b-instruct
-  org_id: LiquidAI
-- id: liquidai/lfm2-5-1-2b-thinking
-  display_name: liquidai/lfm2-5-1-2b-thinking
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - liquidai/lfm2-5-1-2b-thinking
-  org_id: LiquidAI
 - id: liquidai/lfm2-5-vl-1-6b
   display_name: liquidai/lfm2-5-vl-1-6b
   resolution_source: inferred
@@ -14826,7 +14705,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistral/mistral-large-2411
   display_name: mistral/mistral-large-2411
   resolution_source: inferred
@@ -14838,7 +14718,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistral/mistral-large-3-2509
   display_name: mistral/mistral-large-3-2509
   resolution_source: inferred
@@ -14850,7 +14731,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large-3
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistral/mistral-large-3-675b-base-2512
   display_name: mistral/mistral-large-3-675b-base-2512
   resolution_source: inferred
@@ -14898,7 +14780,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-small
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistral/mistral-small-2409
   display_name: mistral/mistral-small-2409
   resolution_source: inferred
@@ -14910,43 +14793,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-small
-    relationship: finetune
-- id: mistral/mistral-small-2501
-  display_name: mistral/mistral-small-2501
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistral/mistral-small-2501
-  org_id: mistralai
-  parents:
-  - id: mistralai/mistral-small
-    relationship: finetune
-- id: mistral/mistral-small-3.1-24b-base-2503
-  display_name: mistral/mistral-small-3.1-24b-base-2503
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistral/mistral-small-3.1-24b-base-2503
-  org_id: mistralai
-  parents:
-  - id: mistralai/mistral-small-2503
-    relationship: finetune
-- id: mistral/mistral-small-3.1-24b-instruct-2503
-  display_name: mistral/mistral-small-3.1-24b-instruct-2503
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistral/mistral-small-3.1-24b-instruct-2503
-  org_id: mistralai
-  parents:
-  - id: mistralai/mistral-small-3-1-24b-instruct
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistral/mistral-small-4-non-reasoning
   display_name: mistral/mistral-small-4-non-reasoning
   resolution_source: inferred
@@ -15081,7 +14929,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistralai/mistral-large-2411
   display_name: mistralai/mistral-large-2411
   resolution_source: inferred
@@ -15093,7 +14942,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistralai/mistral-large-2411-fc
   display_name: mistralai/mistral-large-2411-fc
   resolution_source: inferred
@@ -15129,7 +14979,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistralai/mistral-medium-2312
   display_name: mistralai/mistral-medium-2312
   resolution_source: inferred
@@ -15141,7 +14992,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-medium
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistralai/mistral-medium-2505
   display_name: mistralai/mistral-medium-2505
   resolution_source: inferred
@@ -15153,7 +15005,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-medium
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistralai/mistral-medium-2505-fc
   display_name: mistralai/mistral-medium-2505-fc
   resolution_source: inferred
@@ -15177,19 +15030,8 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-small
-    relationship: finetune
-- id: mistralai/mistral-small-2501
-  display_name: mistralai/mistral-small-2501
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistralai/mistral-small-2501
-  org_id: mistralai
-  parents:
-  - id: mistralai/mistral-small
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: mistralai/mistral-small-2506-fc
   display_name: mistralai/mistral-small-2506-fc
   resolution_source: inferred
@@ -15213,18 +15055,6 @@
   org_id: mistralai
   parents:
   - id: mistralai/mistral-small
-    relationship: finetune
-- id: mistralai/mistral-small-3.1
-  display_name: mistralai/mistral-small-3.1
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistralai/mistral-small-3.1
-  org_id: mistralai
-  parents:
-  - id: mistralai/mistral-small-2503
     relationship: finetune
 - id: mistralai/mistral-small-base
   display_name: mistralai/mistral-small-base
@@ -16050,7 +15880,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4o
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/GPT-J-6B
   display_name: openai/GPT-J-6B
   resolution_source: inferred
@@ -16209,7 +16040,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4-1-2025-04-14
   display_name: openai/gpt-4-1-2025-04-14
   resolution_source: inferred
@@ -16221,7 +16053,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4.1
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4-1-2025-04-14-fc
   display_name: openai/gpt-4-1-2025-04-14-fc
   resolution_source: inferred
@@ -16257,7 +16090,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4.1-mini
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4-1-mini-2025-04-14-fc
   display_name: openai/gpt-4-1-mini-2025-04-14-fc
   resolution_source: inferred
@@ -16293,7 +16127,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4.1-nano
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4-1-nano-2025-04-14-fc
   display_name: openai/gpt-4-1-nano-2025-04-14-fc
   resolution_source: inferred
@@ -16365,7 +16200,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4-turbo
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4.1-2025-04-14
   display_name: openai/gpt-4.1-2025-04-14
   resolution_source: inferred
@@ -16377,7 +16213,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4.1
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4.1-mini-2025-04-14
   display_name: openai/gpt-4.1-mini-2025-04-14
   resolution_source: inferred
@@ -16389,7 +16226,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4.1-mini
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4.1-nano-2025-04-14
   display_name: openai/gpt-4.1-nano-2025-04-14
   resolution_source: inferred
@@ -16401,7 +16239,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4.1-nano
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4.5
   display_name: openai/gpt-4.5
   resolution_source: inferred
@@ -16473,7 +16312,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-4o-mini
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4o-mini-realtime-dec-2024
   display_name: openai/gpt-4o-mini-realtime-dec-2024
   resolution_source: inferred
@@ -16713,7 +16553,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5-2025-08-07-high
   display_name: openai/gpt-5-2025-08-07-high
   resolution_source: inferred
@@ -16881,7 +16722,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5-mini
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5-mini-2025-08-07-fc
   display_name: openai/gpt-5-mini-2025-08-07-fc
   resolution_source: inferred
@@ -16965,7 +16807,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5-nano
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5-nano-2025-08-07-fc
   display_name: openai/gpt-5-nano-2025-08-07-fc
   resolution_source: inferred
@@ -17049,7 +16892,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.1-2025-11-13
   display_name: openai/gpt-5.1-2025-11-13
   resolution_source: inferred
@@ -17061,7 +16905,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5.1
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.1-high-2025-11-12
   display_name: openai/gpt-5.1-high-2025-11-12
   resolution_source: inferred
@@ -17085,7 +16930,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5-1-instant
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.1-medium-2025-11-12
   display_name: openai/gpt-5.1-medium-2025-11-12
   resolution_source: inferred
@@ -17133,7 +16979,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5.2
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.2-pro-2025-12-11
   display_name: openai/gpt-5.2-pro-2025-12-11
   resolution_source: inferred
@@ -17145,7 +16992,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5.2-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.3-chat-latest
   display_name: openai/gpt-5.3-chat-latest
   resolution_source: inferred
@@ -17169,7 +17017,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5.4
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.4-2026-03-05-xhigh-thinking
   display_name: openai/gpt-5.4-2026-03-05-xhigh-thinking
   resolution_source: inferred
@@ -17193,7 +17042,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5.4-mini
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.4-nano-2026-03-17
   display_name: openai/gpt-5.4-nano-2026-03-17
   resolution_source: inferred
@@ -17205,7 +17055,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5.4-nano
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.4-pro-2026-03-05
   display_name: openai/gpt-5.4-pro-2026-03-05
   resolution_source: inferred
@@ -17217,7 +17068,8 @@
   org_id: openai
   parents:
   - id: openai/gpt-5.4-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-o1
   display_name: openai/gpt-o1
   resolution_source: inferred
