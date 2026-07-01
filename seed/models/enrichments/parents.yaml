@@ -5879,7 +5879,7 @@
     axis: mode
 - id: alibaba/qwen3-omni-30b-a3b-reasoning
   parents:
-  - id: alibaba/qwen3-omni-30b-a3b
+  - id: Qwen/Qwen3-Omni-30B-A3B-Thinking
     relationship: finetune
 - id: alibaba/qwen3-vl-235b-a22b-reasoning
   parents:
@@ -6392,13 +6392,7 @@
   - id: anthropic/claude-3-7-sonnet-20250219
     relationship: finetune
 - id: anthropic/claude-3.5-sonnet-2024-06-20
-  parents:
-  - id: Anthropic/claude-3-5-sonnet-20240620
-    relationship: finetune
 - id: anthropic/claude-3.5-sonnet-2024-10-22
-  parents:
-  - id: anthropic/claude-3-5-sonnet-20241022
-    relationship: finetune
 - id: anthropic/claude-3.5-sonnet-october-2024
   parents:
   - id: anthropic/claude-3.5-sonnet
@@ -6563,7 +6557,8 @@
 - id: anthropic/claude-sonnet-4-5-thinking-20250929
   parents:
   - id: anthropic/claude-sonnet-4.5-thinking
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: anthropic/claude-sonnet-4-6-default
   parents:
   - id: anthropic/claude-sonnet-4.6
@@ -6593,7 +6588,7 @@
     relationship: merge
 - id: arcee-ai/Arcee-Blitz
   parents:
-  - id: mistralai/mistral-small-24b-instruct-2501
+  - id: mistralai/Mistral-Small-24B-Instruct-2501
     relationship: finetune
 - id: arcee-ai/Arcee-Maestro-7B-Preview
   parents:
@@ -7659,20 +7654,15 @@
   - id: deepseek/deepseek-coder-1.3b
     relationship: variant
     axis: training_stage
-- id: deepseek/deepseek-coder-v2-instruct
-  parents:
-  - id: deepseek/deepseek-coder-v2
-    relationship: variant
-    axis: training_stage
-- id: deepseek/deepseek-coder-v2-lite-base
-  parents:
-  - id: deepseek/deepseek-coder-v2-lite
-    relationship: finetune
-- id: deepseek/deepseek-coder-v2-lite-instruct
-  parents:
-  - id: deepseek/deepseek-coder-v2-lite
-    relationship: variant
-    axis: training_stage
+- id: deepseek-ai/DeepSeek-Coder-V2-Instruct
+  aliases:
+  - deepseek/deepseek-coder-v2-instruct
+- id: deepseek-ai/DeepSeek-Coder-V2-Lite-Base
+  aliases:
+  - deepseek/deepseek-coder-v2-lite-base
+- id: deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct
+  aliases:
+  - deepseek/deepseek-coder-v2-lite-instruct
 - id: deepseek/deepseek-r1-0120
   parents:
   - id: deepseek-ai/DeepSeek-R1
@@ -7688,11 +7678,13 @@
     relationship: finetune
 - id: deepseek/deepseek-v2-5-sep-2024
   parents:
-  - id: deepseek/deepseek-v2.5
+  - id: deepseek-ai/DeepSeek-V2.5
     relationship: finetune
-- id: deepseek/deepseek-v2-chat
+- id: deepseek-ai/DeepSeek-V2-Chat
+  aliases:
+  - deepseek/deepseek-v2-chat
   parents:
-  - id: deepseek/deepseek-v2
+  - id: deepseek-ai/DeepSeek-V2
     relationship: variant
     axis: training_stage
 - id: deepseek/deepseek-v3-0324
@@ -7702,7 +7694,7 @@
     axis: version
 - id: deepseek/deepseek-v3-1-reasoning
   parents:
-  - id: deepseek/deepseek-v3-1
+  - id: deepseek-ai/DeepSeek-V3.1
     relationship: variant
     axis: mode
 - id: deepseek/deepseek-v3-2-0925
@@ -7722,11 +7714,11 @@
     axis: version
 - id: deepseek/deepseek-v3.1-nonthinking
   parents:
-  - id: deepseek/deepseek-v3-1
+  - id: deepseek-ai/DeepSeek-V3.1
     relationship: finetune
 - id: deepseek/deepseek-v3.1-thinking
   parents:
-  - id: deepseek/deepseek-v3-1
+  - id: deepseek-ai/DeepSeek-V3.1
     relationship: finetune
 - id: deepseek/deepseek-v4-flash-6bit
   parents:
@@ -8512,11 +8504,13 @@
 - id: google/gemini-1.5-pro-0514
   parents:
   - id: google/gemini-1.5-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: google/gemini-1.5-pro-0924
   parents:
   - id: google/gemini-1.5-pro
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: google/gemini-1.5-pro-exp-0801
   parents:
   - id: google/gemini-1.5-pro
@@ -8694,11 +8688,13 @@
 - id: google/gemini-exp-1114
   parents:
   - id: google/gemini-exp
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: google/gemini-exp-1121
   parents:
   - id: google/gemini-exp
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: google/gemini-exp-1206
   parents:
   - id: google/gemini-exp
@@ -8754,7 +8750,7 @@
     axis: training_stage
 - id: google/gemma-3-27b-it
   parents:
-  - id: google/gemma-3-27b
+  - id: google/gemma3-27b
     relationship: variant
     axis: training_stage
 - id: google/gemma-3-4b-it
@@ -11004,7 +11000,7 @@
     relationship: adapter
 - id: lars1234/Mistral-Small-24B-Instruct-2501-writer
   parents:
-  - id: mistralai/mistral-small-24b-instruct-2501
+  - id: mistralai/Mistral-Small-24B-Instruct-2501
     relationship: finetune
 - id: lcb-math-qwen2-72b-instructv3-merged-50
   parents:
@@ -11981,7 +11977,7 @@
     axis: version
 - id: mistralai/Magistral-Small-2509
   parents:
-  - id: mistralai/mistral-small-3-2-24b-instruct-2506
+  - id: mistralai/Mistral-Small-3.2-24B-Instruct-2506
     relationship: finetune
   - id: mistralai/magistral-small
     relationship: variant
@@ -12193,7 +12189,7 @@
     relationship: finetune
 - id: mlx-community/Mistral-Small-24B-Instruct-2501-bf16
   parents:
-  - id: mistralai/mistral-small-24b-instruct-2501
+  - id: mistralai/Mistral-Small-24B-Instruct-2501
     relationship: finetune
 - id: mobiuslabsgmbh/DeepSeek-R1-ReDistill-Qwen-7B-v1.1
   parents:
@@ -12853,7 +12849,7 @@
     axis: mode
 - id: nvidia/llama-3-1-nemotron-ultra-253b-v1-reasoning
   parents:
-  - id: nvidia/llama-3.1-nemotron-ultra-253b-v1
+  - id: nvidia/Llama-3_1-Nemotron-Ultra-253B-v1
     relationship: variant
     axis: mode
 - id: nvidia/llama-3-3-nemotron-super-49b-reasoning
@@ -12992,7 +12988,8 @@
 - id: openai/gpt-4-5-2025-02-27
   parents:
   - id: openai/gpt-4.5
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-4-mini-high
   parents:
   - id: openai/gpt-4
@@ -13249,7 +13246,8 @@
 - id: openai/gpt-5.1-thinking-2025-11-12
   parents:
   - id: openai/gpt-5.1-thinking
-    relationship: finetune
+    relationship: variant
+    axis: version
 - id: openai/gpt-5.2-2025-12-11
   parents:
   - id: openai/gpt-5.2
@@ -14739,7 +14737,7 @@
     relationship: finetune
 - id: tensopolis/mistral-small-r1-tensopolis
   parents:
-  - id: mistralai/mistral-small-24b-instruct-2501
+  - id: mistralai/Mistral-Small-24B-Instruct-2501
     relationship: finetune
 - id: tensopolis/phi-4-tensopolis-v1
   parents:

@@ -1328,32 +1328,27 @@
   - bytedance/seed-1-8-251228
 - id: coding-glm-5-1
   aliases:
-  - coding-glm-5-1
   - coding-glm-5.1
   - zai/coding-glm-5-1
 - id: coding-minimax-m2-7
   aliases:
   - Coding MiniMax M2.7
   - MiniMaxAI/coding-minimax-m2-7
-  - coding-minimax-m2-7
   - coding-minimax-m2.7
   - coding-minimax-m2.7-free
 - id: coding-minimax-m2-7-highspeed
   aliases:
   - Coding MiniMax M2.7 Highspeed
   - MiniMaxAI/coding-minimax-m2-7-highspeed
-  - coding-minimax-m2-7-highspeed
   - coding-minimax-m2.7-highspeed
 - id: coding-xiaomi-mimo-v2-5
   aliases:
   - Coding Xiaomi MiMo-V2.5
-  - coding-xiaomi-mimo-v2-5
   - coding-xiaomi-mimo-v2.5
   - xiaomi/coding-xiaomi-mimo-v2-5
 - id: coding-xiaomi-mimo-v2-5-pro
   aliases:
   - Coding Xiaomi MiMo-V2.5-Pro
-  - coding-xiaomi-mimo-v2-5-pro
   - coding-xiaomi-mimo-v2.5-pro
   - xiaomi/coding-xiaomi-mimo-v2-5-pro
 - id: cognitivecomputations/dolphin-mistral-24b-venice-edition
@@ -1500,36 +1495,54 @@
 - id: deepseek-ai/deepseek-r1-hide-reasoning
   aliases:
   - deepseek/deepseek-r1-hide-reasoning
-- id: deepseek/deepseek-coder-v2
+- id: deepseek-ai/DeepSeek-Coder-V2-Instruct
   aliases:
+  - deepseek/deepseek-coder-v2
   - DeepSeek Coder V2
   - unknown/deepseek-coder-v2
-- id: deepseek/deepseek-coder-v2-instruct
-  aliases:
+  - deepseek/deepseek-coder-v2-instruct
   - DeepSeek Coder V2 Instruct
-- id: deepseek/deepseek-coder-v2-lite
+- id: deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct
   aliases:
+  - deepseek/deepseek-coder-v2-lite
   - DeepSeek Coder V2 Lite
   - unknown/deepseek-coder-v2-lite
+  - deepseek/deepseek-coder-v2-lite-instruct
 - id: deepseek/deepseek-r1-0120
   aliases:
   - DeepSeek R1 (0120)
-- id: deepseek/deepseek-v2
+- id: deepseek-ai/DeepSeek-V2
   aliases:
+  - deepseek/deepseek-v2
   - DeepSeek V2
-- id: deepseek/deepseek-v2-chat
+- id: deepseek-ai/DeepSeek-V2-Chat
   aliases:
+  - deepseek/deepseek-v2-chat
   - DeepSeek V2 Chat
-- id: deepseek/deepseek-v2.5
+- id: deepseek-ai/DeepSeek-V2.5
   aliases:
+  - deepseek/deepseek-v2.5
   - DeepSeek V2.5
   - unknown/deepseek-v2-5
-- id: deepseek/deepseek-v3-1
+  - deepseek-v2.5-0905
+  - deepseek/deepseek-v2-5
+- id: deepseek-ai/DeepSeek-V3.1
   aliases:
+  - deepseek/deepseek-v3-1
   - deepseek-ai/deepseek-v3.1-maas
   - deepseek-v3-1-maas
   - deepseek/deepseek-v3-1-maas
   - fireworks-ai/deepseek-v3p1
+  - deepseek-3.1
+  - DeepSeek V3.1
+  - TEE/deepseek-v3.1
+  - deepseek-v3-1
+  - deepseek-v3.1
+  - unknown/deepseek-v3-1
+  - deepseek-v3-1-671b
+  - deepseek-v3.1:671b
+  - deepseek/deepseek-v3-1-671b
+  - unknown/deepseek-v3-1-671b
 - id: deepseek/deepseek-v3-1-reasoning
   aliases:
   - DeepSeek V3.1 Reasoning
@@ -1570,72 +1583,55 @@
   - openai/dmind-1-mini
 - id: duo-chat-gpt-5-1
   aliases:
-  - duo-chat-gpt-5-1
   - openai/duo-chat-gpt-5-1
 - id: duo-chat-gpt-5-2
   aliases:
-  - duo-chat-gpt-5-2
   - openai/duo-chat-gpt-5-2
 - id: duo-chat-gpt-5-2-codex
   aliases:
-  - duo-chat-gpt-5-2-codex
   - openai/duo-chat-gpt-5-2-codex
 - id: duo-chat-gpt-5-3-codex
   aliases:
-  - duo-chat-gpt-5-3-codex
   - openai/duo-chat-gpt-5-3-codex
 - id: duo-chat-gpt-5-4
   aliases:
-  - duo-chat-gpt-5-4
   - openai/duo-chat-gpt-5-4
 - id: duo-chat-gpt-5-4-mini
   aliases:
-  - duo-chat-gpt-5-4-mini
   - openai/duo-chat-gpt-5-4-mini
 - id: duo-chat-gpt-5-4-nano
   aliases:
-  - duo-chat-gpt-5-4-nano
   - openai/duo-chat-gpt-5-4-nano
 - id: duo-chat-gpt-5-5
   aliases:
-  - duo-chat-gpt-5-5
   - openai/duo-chat-gpt-5-5
 - id: duo-chat-gpt-5-codex
   aliases:
-  - duo-chat-gpt-5-codex
   - openai/duo-chat-gpt-5-codex
 - id: duo-chat-gpt-5-mini
   aliases:
-  - duo-chat-gpt-5-mini
   - openai/duo-chat-gpt-5-mini
 - id: duo-chat-haiku-4-5
   aliases:
   - anthropic/duo-chat-haiku-4-5
-  - duo-chat-haiku-4-5
 - id: duo-chat-opus-4-5
   aliases:
   - anthropic/duo-chat-opus-4-5
-  - duo-chat-opus-4-5
 - id: duo-chat-opus-4-6
   aliases:
   - anthropic/duo-chat-opus-4-6
-  - duo-chat-opus-4-6
 - id: duo-chat-opus-4-7
   aliases:
   - anthropic/duo-chat-opus-4-7
-  - duo-chat-opus-4-7
 - id: duo-chat-opus-4-8
   aliases:
   - anthropic/duo-chat-opus-4-8
-  - duo-chat-opus-4-8
 - id: duo-chat-sonnet-4-5
   aliases:
   - anthropic/duo-chat-sonnet-4-5
-  - duo-chat-sonnet-4-5
 - id: duo-chat-sonnet-4-6
   aliases:
   - anthropic/duo-chat-sonnet-4-6
-  - duo-chat-sonnet-4-6
 - id: duyhv1411/Llama-3.2-3B-en-vi
   aliases:
   - Llama-3.2-3B-en-vi
@@ -1843,9 +1839,11 @@
 - id: google/gemma-3n-E2B-it
   aliases:
   - nvidia/gemma-3n-e2b-it
+  - gemma-3n-e2b-instructed
 - id: google/gemma-3n-E4B-it
   aliases:
   - Gemma 3n 4B
+  - gemma-3n-e4b-instructed
 - id: google/gemma-4-26B-A4B-it
   aliases:
   - Google Gemma 4 26B A4B Instruct
@@ -1925,12 +1923,10 @@
   - alibaba/qwen2-5-32b-instruct-abliterated
 - id: hunyuan-2-0
   aliases:
-  - hunyuan-2-0
   - hunyuan-2.0-thinking
   - tencent/hunyuan-2-0
 - id: hunyuan-2-0-instruct
   aliases:
-  - hunyuan-2-0-instruct
   - hunyuan-2.0-instruct
   - tencent/hunyuan-2-0-instruct
 - id: ibm-granite/granite-3.2-8b-instruct
@@ -2060,7 +2056,6 @@
   aliases:
   - LucidNova RF1 100B
   - amazon/lucidnova-rf1-100b
-  - lucidnova-rf1-100b
 - id: marcuscedricridia/pre-cursa-o1-v1.2
   aliases:
   - pre-cursa-o1-v1.2
@@ -2340,8 +2335,9 @@
   aliases:
   - Mistral Large 3 (2509)
   - mistralai/mistral-large-3-2509
-- id: mistral/mistral-small-3.1-24b-base-2503
+- id: mistralai/Mistral-Small-3.1-24B-Base-2503
   aliases:
+  - mistral/mistral-small-3.1-24b-base-2503
   - mistral-small-3-1-24b-base-2503
 - id: mistral/mistral-small-4-non-reasoning
   aliases:
@@ -2437,28 +2433,66 @@
   - mistralai/mistral-small-24b
   - mistralai/mistral-small-3-24b
   - unknown/mistral-24b
-- id: mistralai/mistral-small-24b-instruct-2501
+- id: mistralai/Mistral-Small-24B-Instruct-2501
   aliases:
   - Mistral Small 3 (24B)
   - Mistral-Small-2501
   - Mistral-Small-Instruct-2501
-  - mistral/mistral-small-3-1
   - mistralai/Mistral-Small-Instruct-2501
   - mistralai/mistral-small-3
   - unknown/mistral-small-3
-  - unknown/mistral-small-3-1
+  - mistral-small-3-24b-instruct
+  - mistral/mistral-small-24b-instruct-2501
+  - mistral/mistral-small-2501
+  - mistralai/mistral-small-2501
+  - mistral/mistral-small-3
+- id: mistralai/Mistral-Small-3.1-24B-Instruct-2503
+  aliases:
+  - mistralai/mistral-small-2503
   - unknown/mistral-small-3-1-24b
   - unknown/mistral-small-3-1-24b-2503
   - unknown/mistral-small-3-1-24b-instruct-2503
-  - unknown/mistral-small-3-2-24b-2506-non-thinking
-- id: mistralai/mistral-small-3-1-24b-instruct
-  aliases:
+  - mistralai/mistral-small-3-1-24b-instruct
   - Mistral-Small-Instruct-2503
   - mistralai/Mistral-Small-Instruct-2503
-- id: mistralai/mistral-small-3.2
+  - mistral/mistral-small-3-1
+  - mistral/mistral-small-3.1-24b-instruct-2503
+  - mistralai/mistral-small-3.1
+  - Mistral Small 3.1
+  - Mistral Small 3.1 24B Instruct
+  - mistral-small-2503
+  - mistral-small-3-1-24b-instruct
+  - unknown/mistral-small-2503
+  - unknown/mistral-small-3-1-24b-instruct
+  - Mistral Small 31 24b Instruct
+  - mistral-small-31-24b-instruct
+  - mistralai/mistral-small-31-24b-instruct
+  - unknown/mistral-small-31-24b-instruct
+- id: mistralai/Mistral-Small-3.2-24B-Instruct-2506
   aliases:
+  - mistralai/mistral-small-3-2-24b-instruct-2506
+  - unknown/mistral-small-3-2-24b-2506-non-thinking
+  - mistralai/mistral-small-3.2
   - mistral-small-2506
   - mistralai/mistral-small-2506
+  - mistral/mistral-small-3-2
+  - mistral/mistral-small-3.2-24b-instruct-2506
+  - Mistral Small 3.2
+  - Mistral Small 3.2 24B Instruct 2506
+  - Mistral-Small-3.2-24B-Instruct-2506
+  - mistral-small-3-2-24b-instruct-2506
+  - mistral-small-3.2-24b-instruct-2506
+  - unknown/mistral-small-3-2-24b-instruct-2506
+  - unknown/mistral-small-3.2
+  - Mistral Small 3.2 24B Instruct
+  - 'Mistral: Mistral Small 3.2 24B'
+  - mistral-small-3-2-24b-instruct
+  - mistralai/mistral-small-3-2-24b-instruct
+  - unknown/mistral-small-3-2-24b-instruct
+  - mistral-small3-2
+  - mistral-small3.2
+  - mistralai/mistral-small3-2
+  - unknown/mistral-small3-2
 - id: mistralai/mistral-small-4
   aliases:
   - mistral-small-2603
@@ -2573,19 +2607,15 @@
 - id: nova-3
   aliases:
   - amazon/nova-3
-  - nova-3
 - id: nvidia.nemotron-nano-12b-v2
   aliases:
-  - nvidia.nemotron-nano-12b-v2
   - nvidia/nvidia.nemotron-nano-12b-v2
 - id: nvidia.nemotron-nano-3-30b
   aliases:
   - NVIDIA Nemotron Nano 3 30B
-  - nvidia.nemotron-nano-3-30b
   - nvidia/nvidia.nemotron-nano-3-30b
 - id: nvidia.nemotron-super-3-120b
   aliases:
-  - nvidia.nemotron-super-3-120b
   - nvidia/nvidia.nemotron-super-3-120b
 - id: nvidia/NVIDIA-Nemotron-Nano-9B-v2
   aliases:
@@ -2877,7 +2907,6 @@
   aliases:
   - Route LLM
   - openai/route-llm
-  - route-llm
 - id: runwayml/runway-gen-4
   aliases:
   - runway-gen-4
@@ -2923,7 +2952,6 @@
 - id: schnell
   aliases:
   - black-forest-labs/schnell
-  - schnell
 - id: shisa-ai/shisa-v2-1-llama3-3-70b
   aliases:
   - Shisa V2.1 Llama 3.3 70B
@@ -3029,12 +3057,10 @@
   aliases:
   - Umans Coder
   - moonshotai/umans-coder
-  - umans-coder
 - id: umans-flash
   aliases:
   - Umans Flash
   - alibaba/umans-flash
-  - umans-flash
 - id: undi95/remm-slerp-l2-13b
   aliases:
   - meta/remm-slerp-l2-13b
@@ -3055,7 +3081,6 @@
   - Voxtral Mini 3B 2507
   - mistral.voxtral-mini-3b-2507
   - mistralai/voxtral-mini-3b-2507
-  - voxtral-mini-3b-2507
 - id: voyage/voyage-3-5
   aliases:
   - voyage-3-5
@@ -3315,30 +3340,12 @@
 - id: zhipu/glm-4-6-fc-thinking
   aliases:
   - zai/glm-4-6-fc-thinking
-
-# --- BenchPress score-matrix slug aliases (added 2026-06-29) ---
-# Raw BenchPress model slugs that resolved to no_match; each canonical id below
-# was verified to exist on the HF model API (HTTP 200). Loader UNIONs these onto
-# the matching canonical. NOTE: not yet verified against the registry resolver/
-# generators (requires py>=3.11 + uv + network); run `uv run pytest` before PR.
-- id: deepseek-ai/DeepSeek-V3.1
-  aliases:
-  - deepseek-3.1
-- id: deepseek-ai/DeepSeek-V2.5
-  aliases:
-  - deepseek-v2.5-0905
 - id: LGAI-EXAONE/EXAONE-Deep-32B
   aliases:
   - exaone-deep-32b
-- id: google/gemma-3n-E2B-it
-  aliases:
-  - gemma-3n-e2b-instructed
 - id: google/gemma-3n-E2B-it-litert-preview
   aliases:
   - gemma-3n-e2b-instructed-litert-preview
-- id: google/gemma-3n-E4B-it
-  aliases:
-  - gemma-3n-e4b-instructed
 - id: google/gemma-3n-E4B-it-litert-preview
   aliases:
   - gemma-3n-e4b-instructed-litert-preview
@@ -3351,15 +3358,18 @@
 - id: LiquidAI/LFM2.5-1.2B-Instruct
   aliases:
   - lfm2.5-1.2b-instruct
+  - liquidai/lfm2-5-1-2b-instruct
+  - LFM2.5-1.2B-Instruct (free)
+  - lfm-2-5-1-2b-instruct
+  - liquid/lfm-2-5-1-2b-instruct
+  - unknown/lfm-2-5-1-2b-instruct
 - id: LiquidAI/LFM2.5-1.2B-Thinking
   aliases:
   - lfm2.5-1.2b-thinking
+  - liquidai/lfm2-5-1-2b-thinking
 - id: mistralai/Mistral-Large-Instruct-2407
   aliases:
   - mistral-large-2
-- id: mistralai/Mistral-Small-24B-Instruct-2501
-  aliases:
-  - mistral-small-3-24b-instruct
 - id: nvidia/Llama-3_1-Nemotron-Ultra-253B-v1
   aliases:
   - nemotron-ultra-253b
@@ -3384,3 +3394,12 @@
 - id: microsoft/Phi-3-medium-4k-instruct
   aliases:
   - phi-3-14b
+- id: deepseek-ai/DeepSeek-Coder-V2-Lite-Base
+  aliases:
+  - deepseek/deepseek-coder-v2-lite-base
+- id: mistralai/Mistral-Small-24B-Base-2501
+  aliases:
+  - mistral/mistral-small-24b-base-2501
+- id: mistralai/Mistral-Small-Instruct-2409
+  aliases:
+  - mistralai/mistral-small-instruct-2409

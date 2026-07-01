@@ -404,8 +404,10 @@
   metadata: '{}'
   review_status: reviewed
 
-- id: arc-prize
+- id: arcprize
   display_name: ARC Prize
+  aliases:
+  - arc-prize
   website: https://arcprize.org
   tags: '["evaluator"]'
   kind: community

@@ -286,6 +286,44 @@ def test_no_case_insensitive_duplicate_canonical_ids(models_df):
 
 
 # --------------------------------------------------------------------------
+# 3b. NO ENRICHMENT-MINT — enrichments/*.yaml bridge, never create a canonical
+# --------------------------------------------------------------------------
+def test_alias_enrichments_never_mint_canonicals():
+    """`enrichments/*.yaml` records (aliases.yaml AND parents.yaml, etc.) must
+    attach to an EXISTING canonical, never mint one. The loader (`cli.py::_absorb`)
+    creates a bare canonical for ANY enrichment-record id with no backing entity
+    def — a metadata-less row that silently shadows any real canonical it
+    normalize-duplicates. Every enrichment id must be a def id in core.yaml or
+    sources/*.generated.yaml.
+
+    `skip_source_ids` is subtracted: an id core deliberately skips is DROPPED by the
+    loader (`_absorb(..., extra_skip=skip_source_ids)`), never minted, so it can't
+    create a phantom. (A stale record pointing at a skipped id merely loses its
+    surface forms — a separate, lesser cleanup, not the mint bug this gate guards.)"""
+    seed_models = REGISTRY_ROOT / "seed" / "models"
+
+    def _entry_ids(obj) -> set[str]:
+        entries = obj.get("entries", []) if isinstance(obj, dict) else obj
+        return {e["id"] for e in (entries or []) if isinstance(e, dict) and e.get("id")}
+
+    core = yaml.safe_load((seed_models / "core.yaml").read_text()) or {}
+    def_ids = _entry_ids(core)
+    for src in sorted((seed_models / "sources").glob("*.generated.yaml")):
+        def_ids |= _entry_ids(yaml.safe_load(src.read_text()) or [])
+    skip = set(core.get("skip_source_ids") or []) if isinstance(core, dict) else set()
+
+    minted = {}
+    for enr in sorted((seed_models / "enrichments").glob("*.yaml")):
+        bad = sorted(_entry_ids(yaml.safe_load(enr.read_text()) or []) - def_ids - skip)
+        if bad:
+            minted[enr.name] = bad
+    assert minted == {}, (
+        f"enrichment record(s) MINT a new canonical (id absent from core/sources "
+        f"and not in skip_source_ids): {minted}"
+    )
+
+
+# --------------------------------------------------------------------------
 # 4. NO DANGLING — every parents[].id references an existing canonical id
 # --------------------------------------------------------------------------
 def test_no_dangling_parent_edges(models_df):
@@ -918,6 +956,20 @@ def test_model_display_names_are_humanized(models_df):
 # (same release along the version line) so they fold into the base's group; the
 # old `finetune` tuple intentionally no longer lands.
 _ORACLE_EDGE_EXEMPT: frozenset = frozenset({
+    # Snapshot holds the tier3 draft edge; the real parent is
+    # deepseek-ai/DeepSeek-Coder-V2-Base (finetune, per hub-stats baseModels).
+    ("deepseek-ai/DeepSeek-Coder-V2-Instruct", "deepseek/deepseek-coder-v2"),
+    # Snapshot edge is inverted: Lite-Base is the pretrained ORIGIN (parents: []),
+    # not a finetune of the Lite umbrella (which folds to Lite-Instruct) — keeping
+    # it would make Lite-Base a finetune of its own instruct sibling (a cycle).
+    ("deepseek/deepseek-coder-v2-lite-base", "deepseek/deepseek-coder-v2-lite"),
+    # Dated snapshots re-typed from the snapshot's conservative `finetune` to the
+    # correct identity-preserving `variant/version` (same parent) — a relationship
+    # refinement, not a lost edge.
+    ("google/gemini-1.5-pro-0514", "google/gemini-1.5-pro"),
+    ("google/gemini-1.5-pro-0924", "google/gemini-1.5-pro"),
+    ("google/gemini-exp-1114", "google/gemini-exp"),
+    ("google/gemini-exp-1121", "google/gemini-exp"),
     ("alibaba/qwen3-vl-plus-2025-09-23", "alibaba/qwen3-vl-plus"),
     ("anthropic/claude-sonnet-4-5-thinking-20250929", "anthropic/claude-sonnet-4.5-thinking"),
     ("openai/gpt-4-5-2025-02-27", "openai/gpt-4.5"),
@@ -1039,6 +1091,20 @@ def test_resolve_surfaces_typed_edges_and_ancestry(resolver, models_df):
 # under. Enumerated, justified — each variant resolves correctly but as a
 # singleton root.
 _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
+    # Gemini dated snapshots re-typed finetune -> variant/version (a dated
+    # snapshot is the SAME identity as its family, not a finetune of it), so
+    # they correctly no longer carry a separate lineage origin.
+    ("lineage_origin_model_id", "google/gemini-1.5-pro-0514"),
+    ("lineage_origin_model_id", "google/gemini-1.5-pro-0924"),
+    ("lineage_origin_model_id", "google/gemini-exp-1114"),
+    ("lineage_origin_model_id", "google/gemini-exp-1121"),
+    # DeepSeek-Coder-V2-Instruct family root shifted when its parent edge was
+    # corrected from the tier3 draft `deepseek/deepseek-coder-v2` to the
+    # authoritative deepseek-ai/DeepSeek-Coder-V2-Base (see _ORACLE_EDGE_EXEMPT).
+    ("model_family_id", "deepseek-ai/DeepSeek-Coder-V2-Instruct"),
+    # Folds into the curated HF-true DeepSeek-Coder-V2-Lite-Base (a clean root);
+    # its snapshot lineage_origin was the deepseek/deepseek umbrella.
+    ("lineage_origin_model_id", "deepseek/deepseek-coder-v2-lite-base"),
     ("model_group_id", "Qwen/Qwen3-235B-A22B-Instruct-2507"),
     ("model_group_id", "Qwen/Qwen3-VL-32B-Thinking"),
     ("model_group_id", "Qwen/Qwen3-VL-8B-Thinking"),

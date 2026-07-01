@@ -71,7 +71,8 @@ def _edges(v):
     return list(v) if isinstance(v, list) else []
 
 
-def fold_collisions(entries: list[dict], never_fold=(), prefer=None, force_merge=None):
+def fold_collisions(entries: list[dict], never_fold=(), prefer=None, force_merge=None,
+                    non_lineage_bases=None):
     """Fold normalize-colliding canonical model entries into one winner each.
 
     `force_merge` is an explicit {loser_id -> winner_id} map for duplicates that
@@ -83,6 +84,7 @@ def fold_collisions(entries: list[dict], never_fold=(), prefer=None, force_merge
     its winner id. Pure function over the entry dicts (mutates winners in place).
     """
     prefer = prefer or {}
+    non_lineage_bases = set(non_lineage_bases or ())
     never = [frozenset(p) for p in never_fold]
     by_id = {e["id"]: e for e in entries}
 
@@ -115,6 +117,18 @@ def fold_collisions(entries: list[dict], never_fold=(), prefer=None, force_merge
     if not remap:
         return entries, {}
 
+    # Path-compress loser->loser chains: a group-fold winner may itself be a
+    # curated force_merge loser (e.g. `…-31-24b-instruct` folds to
+    # `…-3-1-24b-instruct`, which force-merges to `…-Instruct-2503`). Resolve each
+    # loser to its FINAL surviving winner so the transfer pass below never looks
+    # up a folded-away id.
+    for lid in list(remap):
+        w, seen = remap[lid], {lid}
+        while w in remap and w not in seen:
+            seen.add(w)
+            w = remap[w]
+        remap[lid] = w
+
     surviving = [e for e in entries if e["id"] not in remap]
     surv_by_id = {e["id"]: e for e in surviving}
 
@@ -136,8 +150,27 @@ def fold_collisions(entries: list[dict], never_fold=(), prefer=None, force_merge
         # Union the loser's parent edges into the winner — they are the same
         # model, so the winner inherits the loser's lineage (the repoint pass
         # below repoints folded parent ids, drops self-edges, and dedupes by id).
-        le_edges = _edges(le.get("parents"))
-        if le_edges:
+        # PRECEDENCE: a curated (`reviewed`) winner that DECLARES its own parents is
+        # authoritative for lineage — it does NOT absorb a `draft`/inferred loser's
+        # inferred edges (the same core-beats-generated rule the loader applies to
+        # scalars). Prevents a tier3 name-inference guess (e.g. the stub edge
+        # `deepseek/deepseek-v2.5 -> deepseek/deepseek`) from polluting a curated
+        # lineage. Scoped to winners with NON-EMPTY curated parents so a reviewed
+        # root still inherits a loser's (possibly correct) inferred base — dropping
+        # that too is too blunt and regresses real lineage (e.g. Nemotron<-Llama).
+        winner_curated_lineage = (
+            we.get("review_status") == "reviewed" and _edges(we.get("parents"))
+        )
+        loser_inferred = (
+            le.get("review_status") == "draft" or le.get("resolution_source") == "inferred"
+        )
+        # Never inherit an edge to an underspecified umbrella (`deepseek/deepseek`):
+        # a tier3 finetune fallback must not become a curated winner's lineage when
+        # its inferred dup folds in. (Only filters FOLD-inherited edges, so the
+        # pre-existing umbrella children the oracle froze are left untouched.)
+        le_edges = [e for e in _edges(le.get("parents"))
+                    if not (isinstance(e, dict) and e.get("id") in non_lineage_bases)]
+        if le_edges and not (winner_curated_lineage and loser_inferred):
             raw = we.get("parents")
             combined = _edges(raw) + le_edges
             we["parents"] = _json.dumps(combined) if isinstance(raw, str) else combined
