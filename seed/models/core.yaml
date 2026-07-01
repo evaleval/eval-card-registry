@@ -10,6 +10,8 @@
 # value fill it.
 skip_ids: []
 skip_source_ids:
+# lowercase models.dev dup of the HF-cased canonical curated below (2026-06-30)
+- mistralai/mistral-small-24b-instruct-2501
 - alibaba/qwen3-235b-a22b-instruct
 - alibaba/qwen3-omni-30b-a3b
 - alibaba/qwen3-omni-30b-a3b-reasoning
@@ -97,6 +99,27 @@ skip_source_ids:
 - unknown/smollm2-360m
 - unknown/zephyr-7b-beta
 entries:
+# Curated HF-cased canonical: models.dev shipped this only as the lowercase
+# `mistralai/mistral-small-24b-instruct-2501` (skipped above); the real HF repo
+# uses this casing. Standard: canonical_id = real HF repo id (HF-true casing).
+- id: mistralai/Mistral-Small-24B-Instruct-2501
+  display_name: Mistral Small 3 (24B Instruct, 2501)
+  org_id: mistralai
+  family: mistral-small-24b-instruct-2501
+  architecture: null
+  params_billions: 24.0
+  parents: []
+  open_weights: true
+  release_date: '2025-01-30'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - mistral-small-24b-instruct-2501
+  - 'Mistral: Mistral Small 3'
 - id: 01-ai/Yi-Coder-1.5B-Chat
   display_name: Yi Coder 1.5B Chat
   org_id: 01-ai
@@ -3924,7 +3947,7 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/molmo-7b-d-0924
-- id: allenai/olmo-2-0325-32b
+- id: allenai/OLMo-2-0325-32B
   display_name: OLMo-2 0325 32B
   org_id: allenai
   family: olmo-2-0325-32b
