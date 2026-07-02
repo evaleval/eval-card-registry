@@ -5913,6 +5913,32 @@ entries:
   metadata: '{}'
   review_status: reviewed
   aliases: []
+- id: cohere/command-nightly
+  display_name: Command Nightly
+  org_id: cohere
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: cohere/command
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - proprietary
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - command-nightly
+  scoped_aliases:
+    # AlpacaEval records Cohere's nightly-track entry under the raw
+    # `cohere/cohere`; scoped so the org/org-shaped string can't leak into
+    # other configs where it might mean something else.
+    alpacaeval:
+    - cohere/cohere
 - id: cohere/command-original
   display_name: Cohere Command (original)
   org_id: cohere

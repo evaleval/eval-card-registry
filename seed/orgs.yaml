@@ -511,6 +511,109 @@
   metadata: '{}'
   review_status: reviewed
 
+# Override auto-generated community stubs for first-party model publishers:
+# same id as the generated stub (curated wins on collision), upgraded to
+# kind: lab so their models own their bare leaf names (prefer-official).
+- id: internlm
+  display_name: Shanghai AI Laboratory
+  website: https://www.shlab.org.cn
+  hf_org: internlm
+  aliases: ["InternLM", "Shanghai AI Lab", "Shanghai AI Laboratory"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: LGAI-EXAONE
+  display_name: LG AI Research
+  website: https://www.lgresearch.ai
+  hf_org: LGAI-EXAONE
+  aliases: ["LG AI Research", "LG AI", "EXAONE"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: baidu
+  display_name: Baidu
+  website: https://ernie.baidu.com
+  hf_org: baidu
+  aliases: ["Baidu Inc.", "ERNIE"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: openbmb
+  display_name: OpenBMB
+  website: https://www.openbmb.cn
+  hf_org: openbmb
+  aliases: ["OpenBMB"]
+  tags: '["lab", "academic", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: Skywork
+  display_name: Skywork
+  website: https://skywork.ai
+  hf_org: Skywork
+  aliases: ["Skywork AI"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: kyutai
+  display_name: Kyutai
+  website: https://kyutai.org
+  hf_org: kyutai
+  aliases: ["Kyutai Labs"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: apple
+  display_name: Apple
+  website: https://machinelearning.apple.com
+  hf_org: apple
+  aliases: ["Apple Inc.", "Apple Machine Learning Research"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: Salesforce
+  display_name: Salesforce
+  website: https://www.salesforceairesearch.com
+  hf_org: Salesforce
+  aliases: ["Salesforce AI Research", "Salesforce Research"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: Snowflake
+  display_name: Snowflake
+  website: https://www.snowflake.com
+  hf_org: Snowflake
+  aliases: ["Snowflake AI Research"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
+- id: LiquidAI
+  display_name: Liquid AI
+  website: https://www.liquid.ai
+  hf_org: LiquidAI
+  aliases: ["Liquid AI"]
+  tags: '["lab", "open-weight"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
 - id: lmsys
   display_name: lmsys
   website: https://lmsys.org
