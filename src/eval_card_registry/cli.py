@@ -706,8 +706,11 @@ def seed(
     # silently. NOTE: a legitimate YAML *rename* (the persisted store had the
     # alias on a canonical that no longer claims it) is NOT a collision — only
     # same-pass double-claims are, which is why this is keyed on this run only.
-    run_alias_owners: dict[tuple[str, str, Optional[str]], str] = {}
-    alias_collisions: list[tuple[str, str, Optional[str], str, str]] = []
+    # Values/rows carry (owner, declarer) pairs: `owner` is the post-redirect
+    # target the row will point at; `declarer` is the entity whose alias list
+    # actually claimed the raw (what the operator must edit to resolve it).
+    run_alias_owners: dict[tuple[str, str, Optional[str]], tuple[str, str]] = {}
+    alias_collisions: list[tuple[str, str, Optional[str], str, str, str, str]] = []
 
     # Build the alias index once so add_alias collision checks are O(1) instead
     # of O(N) DataFrame mask scans. Combined with buffered=True below, this
@@ -761,18 +764,94 @@ def seed(
         # so coverage is unaffected). org kind comes from canonical_orgs, which
         # seeds before models.
         lab_norms: set[str] = set()
+        # Prefer-official: normalized bare LEAF -> owning canonical id, decided
+        # by precedence instead of seed load order:
+        #   1. lab_leaf_owner — a LAB model owns its leaf. A lab rarely seeds
+        #      its own bare leaf as an alias (its forms are org-prefixed), so a
+        #      non-lab FORK sharing the leaf (jebish7/Llama-3.1-8B-Instruct,
+        #      whose display IS the bare "Llama-3.1-8B-Instruct") would
+        #      otherwise win the un-namespaced name.
+        #   2. strong_leaf_owner — else the leaf's UNIQUE confirmed entry
+        #      (hf-sourced or reviewed) owns it: a machine-minted draft
+        #      (models.dev / tier3 name inference, where org mis-attributions
+        #      live) never beats a real repo (e.g. the models.dev draft
+        #      `alibaba/dolphin-2-9.2-qwen2-72b` vs the real hf
+        #      `dphn/dolphin-2.9.2-qwen2-72b`). Applied only when the alias's
+        #      own entry is neither confirmed nor lab-owned — evidence can rank
+        #      a draft below a real repo, but not two real repos against each
+        #      other, and a lab draft (e.g. `microsoft/WizardLM-2-8x22B`, repo
+        #      deleted upstream) keeps its name on developer-attribution
+        #      grounds.
+        # Leaves with 2+ confirmed non-lab claimants stay unowned: those are
+        # duplicate re-uploads to deduplicate, not a name-preference call.
+        lab_leaf_owner: dict[str, str] = {}
+        lab_owner_dev: dict[str, str] = {}
+        strong_leaf_owner: dict[str, str] = {}
+        strong_ids: set[str] = set()
         org_kind: dict[str, str] = {}
+        hf_to_dev: dict[str, str] = {}
+        org_names: dict[str, str] = {}
+
+        def _entry_dev(it: dict) -> str:
+            # Resolved developer org id for a seed entry. A set org_id is
+            # authoritative (curated remaps put the TRUE developer there —
+            # e.g. the mis-prefixed draft `alibaba/dolphin-2-9.2-qwen2-72b`
+            # carries org_id `cognitivecomputations`, and trusting its
+            # `alibaba/` prefix would launder the mis-attribution into lab
+            # status). Only when org_id is unset at load time (derived later,
+            # e.g. dated snapshots) fall back to the id's org prefix, resolved
+            # through the curated org map and then the merged-orgs name map —
+            # the same surface forms `derive_model_lineage_fields` uses to
+            # fill org_id, so the seed's lab decision and the seeded org_id
+            # agree (a prefix-shaped org display_name like "Scale" resolves
+            # identically in both).
+            org_id = it.get("org_id")
+            if org_id:
+                return str(org_id)
+            cid = str(it.get("id") or "")
+            if "/" not in cid:
+                return ""
+            prefix = cid.split("/", 1)[0]
+            return hf_to_dev.get(prefix.lower()) or org_names.get(prefix.lower()) or prefix
+
+        def _entry_is_lab(it: dict) -> bool:
+            return org_kind.get(_entry_dev(it)) == "lab"
+
         if entity_type == "model":
             # Read kinds from the YAML source, not store.table — orgs above were
             # upserted buffered=True and aren't flushed yet. Curated labs live in
             # orgs.yaml; any org absent here (or kind!=lab) is treated as non-lab.
-            org_kind = {
-                str(o["id"]): str(o.get("kind") or "")
-                for o in (_load_orgs_merged() or [])
-                if isinstance(o, dict) and o.get("id")
-            }
+            merged_orgs = [
+                o for o in (_load_orgs_merged() or []) if isinstance(o, dict) and o.get("id")
+            ]
+            org_kind = {str(o["id"]): str(o.get("kind") or "") for o in merged_orgs}
+            hf_to_dev = build_hf_to_dev_from_orgs_yaml(seed_path / "orgs.yaml")
+            for o in merged_orgs:
+                oid = str(o["id"])
+                for name in [oid, o.get("hf_org"), o.get("display_name"), *(o.get("aliases") or [])]:
+                    if isinstance(name, str) and name:
+                        org_names.setdefault(name.lower(), oid)
+
+            strong_claimants: dict[str, set[str]] = {}
             for it in items:
-                if not isinstance(it, dict) or org_kind.get(str(it.get("org_id"))) != "lab":
+                if not isinstance(it, dict):
+                    continue
+                cid = str(it.get("id") or "")
+                # "Confirmed" = a real repo (hf-sourced) or a reviewed entry —
+                # never a tier3 name-inferred draft, which is where org
+                # mis-attributions live (e.g. `meta/reflection-llama-3.1-70b`,
+                # inferred, would otherwise steal `Reflection-Llama-3.1-70B`
+                # from the real hf `mattshumer/Reflection-Llama-3.1-70B`).
+                confirmed = "/" in cid and (
+                    it.get("resolution_source") == "hf"
+                    or it.get("review_status") == "reviewed"
+                )
+                if confirmed:
+                    strong_ids.add(cid)
+                    strong_claimants.setdefault(
+                        _normalize_alias(cid.split("/", 1)[1]), set()
+                    ).add(cid)
+                if not _entry_is_lab(it):
                     continue
                 # Only the aliases a lab actually SEEDS (display_name + explicit
                 # aliases) can catch a raw via normalized match — so only drop a
@@ -781,6 +860,18 @@ def seed(
                 for s in [it.get("display_name"), *(it.get("aliases") or [])]:
                     if isinstance(s, str) and s:
                         lab_norms.add(_normalize_alias(s))
+                if confirmed:
+                    # First claimant wins on a shared lab leaf; the gate
+                    # (test_lab_leaf_ownership_is_unambiguous) enforces that
+                    # no two confirmed lab models actually share one.
+                    _leaf_norm = _normalize_alias(cid.split("/", 1)[1])
+                    if lab_leaf_owner.setdefault(_leaf_norm, cid) == cid:
+                        lab_owner_dev[_leaf_norm] = _entry_dev(it)
+            strong_leaf_owner = {
+                norm: next(iter(cids))
+                for norm, cids in strong_claimants.items()
+                if len(cids) == 1
+            }
 
         for original_item in items:
             item = dict(original_item)
@@ -831,10 +922,18 @@ def seed(
             # Drop a non-lab model's display_name alias when it would shadow a
             # lab model (see lab_norms above). canonical_id + explicit aliases
             # are kept — only the auto-promoted display_name is suppressed.
+            # global_aliases is a set, so when display_name IS the canonical_id
+            # (id-placeholder display) or an explicitly curated alias,
+            # discarding it would destroy that stronger claim too (an entity
+            # unresolvable by its own id) — never drop those strings.
+            item_dev = _entry_dev(entity_item) if entity_type == "model" else ""
+            item_is_lab = org_kind.get(item_dev) == "lab"
             if (
                 entity_type == "model"
                 and display_name
-                and org_kind.get(str(entity_item.get("org_id"))) != "lab"
+                and display_name != canonical_id
+                and display_name not in extra_aliases
+                and not item_is_lab
                 and _normalize_alias(display_name) in lab_norms
             ):
                 global_aliases.discard(display_name)
@@ -848,24 +947,49 @@ def seed(
                         alias_specs.append((raw, source_cfg))
 
             for raw_value, source_cfg in alias_specs:
+                # Prefer-official redirect: an un-namespaced leaf alias (a fork's
+                # bare display "Llama-3.1-8B-Instruct", or a short/dated form) is
+                # pointed at the leaf's owner (see the precedence above
+                # lab_leaf_owner / strong_leaf_owner) so the official model wins
+                # the bare name, not whichever entry sorts first. Global aliases
+                # only (source_config=None). The lab tier takes names from
+                # non-lab entries and from SAME-developer lab entries (a lab's
+                # models.dev/casing mint folding onto its confirmed repo) but
+                # never across distinct labs — a lab entry keeps its name on
+                # developer-attribution grounds even against another lab's
+                # colliding leaf. The confirmed tier only takes names FROM
+                # unconfirmed non-lab drafts.
+                target_cid = canonical_id
+                if entity_type == "model" and source_cfg is None:
+                    _norm = _normalize_alias(raw_value)
+                    _lab = lab_leaf_owner.get(_norm)
+                    if _lab and _lab != canonical_id and (
+                        not item_is_lab or lab_owner_dev.get(_norm) == item_dev
+                    ):
+                        target_cid = _lab
+                    elif not item_is_lab and canonical_id not in strong_ids:
+                        _strong = strong_leaf_owner.get(_norm)
+                        if _strong and _strong != canonical_id:
+                            target_cid = _strong
                 # Index stale-removal by (raw_value, entity_type, canonical_id, source_config)
-                yaml_alias_keys.add((raw_value, entity_type, canonical_id, source_cfg))
+                yaml_alias_keys.add((raw_value, entity_type, target_cid, source_cfg))
                 # Same-run collision check (see run_alias_owners above): if a
                 # different canonical already claimed this exact alias in this
                 # pass, the owner would be nondeterministic — record it.
                 _claim_key = (raw_value, entity_type, queries._source_config_key(source_cfg))
-                _prev_owner = run_alias_owners.get(_claim_key)
-                if _prev_owner is None:
-                    run_alias_owners[_claim_key] = canonical_id
-                elif _prev_owner != canonical_id:
+                _prev = run_alias_owners.get(_claim_key)
+                if _prev is None:
+                    run_alias_owners[_claim_key] = (target_cid, canonical_id)
+                elif _prev[0] != target_cid:
                     alias_collisions.append(
-                        (raw_value, entity_type, _claim_key[2], _prev_owner, canonical_id)
+                        (raw_value, entity_type, _claim_key[2],
+                         _prev[0], target_cid, _prev[1], canonical_id)
                     )
                 try:
                     queries.add_alias(store, {
                         "raw_value": raw_value,
                         "entity_type": entity_type,
-                        "canonical_id": canonical_id,
+                        "canonical_id": target_cid,
                         "source_config": source_cfg,
                         "source_field": "seed",
                         "status": "confirmed",
@@ -901,30 +1025,36 @@ def seed(
                         # pending dict in place so the rename isn't lost on
                         # flush. _alias_index points at the same dict, so
                         # updating it here keeps the index consistent.
+                        # Repoint to target_cid, NOT canonical_id: a redirected
+                        # alias (see target_cid above) must keep its redirect
+                        # target even when a duplicate same-run claim lands here
+                        # — repointing to the raw claimant would silently undo
+                        # prefer-official for exactly the contested names it
+                        # exists to protect.
                         for p in queries._get_pending(store, "aliases"):
                             if (p.get("entity_type") == entity_type
                                     and p.get("raw_value") == raw_value
                                     and queries._source_config_key(p.get("source_config")) == queries._source_config_key(source_cfg)
                                     and p.get("status") != "rejected"):
-                                if p["canonical_id"] != canonical_id:
+                                if p["canonical_id"] != target_cid:
                                     prev = p["canonical_id"]
-                                    p["canonical_id"] = canonical_id
+                                    p["canonical_id"] = target_cid
                                     p["source_field"] = "seed"
                                     p["status"] = "confirmed"
                                     p["strategy"] = "seed"
                                     p["confidence"] = 1.0
                                     typer.echo(
                                         f"  [rename] alias {raw_value!r} ({entity_type}) "
-                                        f"moved {prev!r} -> {canonical_id!r} (pending)"
+                                        f"moved {prev!r} -> {target_cid!r} (pending)"
                                     )
                                     alias_count += 1
                                 break
                         continue
                     row = existing.iloc[0]
-                    if row["canonical_id"] != canonical_id:
+                    if row["canonical_id"] != target_cid:
                         # Rename: repoint the existing row at the new canonical.
                         queries.update_alias(store, row["id"], {
-                            "canonical_id": canonical_id,
+                            "canonical_id": target_cid,
                             "source_field": "seed",
                             "status": "confirmed",
                             "strategy": "seed",
@@ -932,7 +1062,7 @@ def seed(
                         })
                         typer.echo(
                             f"  [rename] alias {raw_value!r} ({entity_type}) "
-                            f"moved {row['canonical_id']!r} -> {canonical_id!r}"
+                            f"moved {row['canonical_id']!r} -> {target_cid!r}"
                         )
                         alias_count += 1
                     # else: identical re-seed of an existing alias — no-op.
@@ -949,8 +1079,9 @@ def seed(
         deduped = sorted(set(alias_collisions))
         lines = "\n".join(
             f"    {rv!r} ({et}{', cfg=' + ck if ck else ''}): "
-            f"declared by both {a!r} and {b!r}"
-            for (rv, et, ck, a, b) in deduped
+            f"would point at both {a!r} (declared by {da!r}) "
+            f"and {b!r} (declared by {db!r})"
+            for (rv, et, ck, a, b, da, db) in deduped
         )
         raise typer.BadParameter(
             f"{len(deduped)} alias collision(s) — the same alias is declared by "

@@ -1211,3 +1211,174 @@ def test_phase0_oracle_lineage_no_loss(resolver, models_df):
         f"{ {f: sum(1 for ff, _, _ in lost if ff == f) for f in sorted({ff for ff, _, _ in lost})} }. "
         f"First few: {lost[:12]}"
     )
+
+
+# --------------------------------------------------------------------------
+# BARE-NAME OWNERSHIP (prefer-official gate) — when several models share a
+# normalized leaf name, the un-namespaced alias must belong to the owner the
+# seed precedence selects (lab first, else the unique confirmed entry), not
+# to whichever entry a regen happens to seed first. Guards the redirect in
+# cli.py `seed` (lab_leaf_owner / strong_leaf_owner) against silent flips
+# from the daily source refreshes.
+# --------------------------------------------------------------------------
+@pytest.fixture(scope="module")
+def aliases_df() -> pd.DataFrame:
+    df = pd.read_parquet(FIXTURES_DIR / "aliases.parquet")
+    assert not df.empty
+    return df
+
+
+def _nz(v) -> str:
+    """NA/None-safe str."""
+    if v is None:
+        return ""
+    try:
+        if pd.isna(v):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    return str(v)
+
+
+@pytest.fixture(scope="module")
+def leaf_ownership(models_df, orgs_df):
+    """Recompute the leaf-ownership maps from the OUTPUT tables (the seed
+    builds them from the merged YAML; org_id in fixtures is the derived
+    superset of the load-time signal, so this is the post-hoc view of the
+    same precedence)."""
+    from eval_entity_resolver.normalization import normalize
+
+    kind = dict(zip(orgs_df["id"].astype(str), orgs_df["kind"].astype(str)))
+    lab_claimants: dict[str, set[str]] = {}
+    strong_claimants: dict[str, set[str]] = {}
+    strong_ids: set[str] = set()
+    lab_ids: set[str] = set()
+    for r in models_df.itertuples():
+        cid = _nz(r.id)
+        is_lab = kind.get(_nz(r.org_id)) == "lab"
+        if is_lab:
+            lab_ids.add(cid)
+        if "/" not in cid:
+            continue
+        confirmed = _nz(r.resolution_source) == "hf" or _nz(r.review_status) == "reviewed"
+        if not confirmed:
+            continue
+        norm = normalize(cid.split("/", 1)[1])
+        strong_ids.add(cid)
+        strong_claimants.setdefault(norm, set()).add(cid)
+        if is_lab:
+            lab_claimants.setdefault(norm, set()).add(cid)
+    return {
+        "lab_claimants": lab_claimants,
+        "strong_claimants": strong_claimants,
+        "strong_ids": strong_ids,
+        "lab_ids": lab_ids,
+    }
+
+
+def test_lab_leaf_ownership_is_unambiguous(leaf_ownership):
+    """No two confirmed LAB models may share a normalized leaf — the seed's
+    lab_leaf_owner keeps the first claimant, so a second would make the bare
+    name's owner load-order-dependent across regens."""
+    multi = {n: sorted(c) for n, c in leaf_ownership["lab_claimants"].items() if len(c) > 1}
+    assert multi == {}, f"{len(multi)} normalized leaf(s) owned by 2+ lab models: {multi}"
+
+
+def test_bare_alias_points_at_lab_leaf_owner(aliases_df, leaf_ownership):
+    """Every global model alias whose normalized form IS a lab-confirmed
+    model's leaf must resolve to that lab model (prefer-official, tier 1)."""
+    from eval_entity_resolver.normalization import normalize
+
+    lab_claimants = leaf_ownership["lab_claimants"]
+    mal = aliases_df[
+        (aliases_df["entity_type"] == "model") & aliases_df["source_config"].isna()
+    ]
+    bad = []
+    for raw, cid in zip(mal["raw_value"].astype(str), mal["canonical_id"].astype(str)):
+        owners = lab_claimants.get(normalize(raw))
+        if owners and len(owners) == 1 and cid not in owners:
+            bad.append((raw, cid, next(iter(owners))))
+    assert bad == [], (
+        f"{len(bad)} bare alias(es) not pointing at their lab leaf owner "
+        f"(raw, points_at, lab_owner): {bad[:10]}"
+    )
+
+
+def test_bare_alias_points_at_unique_confirmed_owner(aliases_df, leaf_ownership):
+    """Prefer-official tier 2: an alias whose normalized form matches exactly
+    ONE confirmed model's leaf (and no lab's) must resolve to it — unless the
+    alias's own entry is itself confirmed or lab-owned (the seed never takes
+    a name from a real repo or a lab entry, only from unconfirmed drafts)."""
+    from eval_entity_resolver.normalization import normalize
+
+    lab_claimants = leaf_ownership["lab_claimants"]
+    strong_claimants = leaf_ownership["strong_claimants"]
+    strong_ids = leaf_ownership["strong_ids"]
+    lab_ids = leaf_ownership["lab_ids"]
+    mal = aliases_df[
+        (aliases_df["entity_type"] == "model") & aliases_df["source_config"].isna()
+    ]
+    bad = []
+    for raw, cid in zip(mal["raw_value"].astype(str), mal["canonical_id"].astype(str)):
+        norm = normalize(raw)
+        if norm in lab_claimants:
+            continue  # tier 1 governs
+        owners = strong_claimants.get(norm)
+        if not owners or len(owners) != 1:
+            continue  # no unique confirmed owner -> no expectation
+        owner = next(iter(owners))
+        if cid == owner or cid in strong_ids or cid in lab_ids:
+            continue  # exempt: alias belongs to a real repo / lab entry
+        bad.append((raw, cid, owner))
+    assert bad == [], (
+        f"{len(bad)} draft-owned alias(es) shadowing a unique confirmed repo "
+        f"(raw, points_at, confirmed_owner): {bad[:10]}"
+    )
+
+
+def test_every_model_id_is_a_resolvable_raw(models_df, aliases_df):
+    """Every canonical model id must appear as an alias raw_value — the
+    anti-shadow display drop must never eat an entity's own id alias (it did
+    once: an id-placeholder display colliding with a lab norm discarded the
+    shared string from the alias set)."""
+    raws = set(
+        aliases_df[aliases_df["entity_type"] == "model"]["raw_value"].astype(str)
+    )
+    missing = [i for i in models_df["id"].astype(str) if i not in raws]
+    assert missing == [], f"{len(missing)} model id(s) with no alias row: {missing[:10]}"
+
+
+def test_prefer_official_pinned_examples(aliases_df):
+    """Concrete regression pins for the ownership precedence — each one is a
+    case that WAS wrong (or luck-dependent) before the redirect existed."""
+    mal = aliases_df[
+        (aliases_df["entity_type"] == "model") & aliases_df["source_config"].isna()
+    ]
+    lookup = dict(zip(mal["raw_value"].astype(str), mal["canonical_id"].astype(str)))
+    pins = {
+        # fork's bare display must not shadow the official repo (tier 1)
+        "Llama-3.1-8B-Instruct": "meta-llama/Llama-3.1-8B-Instruct",
+        # models.dev draft with a mis-attributed org prefix loses the bare
+        # name to the real hf repo (tier 2)
+        "dolphin-2-9.2-qwen2-72b": "dphn/dolphin-2.9.2-qwen2-72b",
+        # tier3 bare-slug draft loses its id-shaped claim to the curated
+        # official entry that lists it as an alias
+        "llama-4-maverick-17b-128e-instruct": "meta-llama/Llama-4-Maverick-17B-128E-Instruct",
+        # a name-inferred `meta/...` draft must NOT own the bare name of a
+        # real community repo (confirmed-only ownership)
+        "Reflection-Llama-3.1-70B": "mattshumer/Reflection-Llama-3.1-70B",
+        # the entity healed by the display==id guard resolves by its own id
+        "nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL": "nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL",
+    }
+    wrong = {
+        raw: (lookup[raw], want)
+        for raw, want in pins.items()
+        if raw in lookup and lookup[raw] != want
+    }
+    gone = [raw for raw in pins if raw not in lookup]
+    assert wrong == {}, f"pinned bare-name owner(s) regressed (raw: (got, want)): {wrong}"
+    assert gone == [], (
+        f"pinned raw(s) no longer seeded at all — the contested surface form "
+        f"disappeared from the seed (upstream refresh dropped it?), not an "
+        f"ownership regression: {gone}"
+    )
