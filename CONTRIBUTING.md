@@ -36,7 +36,7 @@ uv run pytest
 Running only a subset (e.g. the resolver tests) and calling the change green is the
 most common way a seed PR passes locally but fails the publish dry-run.
 
-### The two rules that trip people up
+### Nuances that trip people up
 
 **1. Attach an alias to the EXISTING canonical. Never introduce a competing
 canonical, and never rename one.**
