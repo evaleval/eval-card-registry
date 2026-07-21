@@ -163,6 +163,41 @@ Canonical entities start as `draft` and can be promoted to `reviewed`. Aliases t
 
 ---
 
+## ID conventions
+
+The rules a canonical id and its aliases follow. (Resolution *mechanics* are in
+"How it works" above; the contribution *workflow* is in `CONTRIBUTING.md`.)
+
+**Models** — the canonical id is the **real HuggingFace repo id, in HF-true
+casing** (`Qwen/Qwen2.5-7B-Instruct`, not `qwen/qwen2.5-7b-instruct`). It is
+grounded in a three-tier source of truth, HF first — **HuggingFace → models.dev →
+name-based inference** — and when they disagree, HF casing wins.
+
+- **Closed / off-HF models** use `{org}/{name}` with a lowercase org and
+  `hf_repo_id: null` (e.g. `anthropic/claude-opus-4.6`).
+- **Dated snapshots are legitimate identity** (`gpt-5.4-2026-03-05`); date
+  suffixes are deliberately **not** stripped, so a dated slug needs its own alias.
+- **Effort / mode / quantization tiers do not belong in the id** (`…-default`,
+  `…-high`) — they split one model across ids. They belong in the eval record's
+  `generation_config`.
+
+**Benchmarks, metrics, harnesses** — lowercase, hyphenated slugs
+(`ai2-reasoning-challenge-arc`, `pass-rate`, `lm-evaluation-harness`) — a
+different scheme from models.
+
+**Aliases are gap-filling only.** Each alias must be a form no generator canonical
+already claims; the loader unions them (case-insensitive dedup). Don't add
+mechanical variants — the `normalized` matcher already collapses case + all
+separators + dots-between-digits, so add an alias only for forms it can't reach (a
+*removed* separator, a token reshape, a `-v2`, a date suffix, a marketing name).
+
+**`core.yaml` is the minimal override floor** — closed-API models and hand
+judgement calls layered on top of the generated sources; its `skip_ids` drops a
+bad source id when a generator ships wrong data for a model `core` curates
+correctly.
+
+---
+
 ## Project layout
 
 ```

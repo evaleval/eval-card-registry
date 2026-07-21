@@ -41,16 +41,14 @@ most common way a seed PR passes locally but fails the publish dry-run.
 **1. Attach an alias to the EXISTING canonical. Never introduce a competing
 canonical, and never rename one.**
 
-Canonical model ids are the real HF repo id, in HF-true casing. Adding a second,
-differently-cased canonical for the same model — or renaming an existing canonical
-"to fix its casing" — orphans the oracle typed-parent edges that point at the old
-id. The gate suite fails on this (`test_oracle_org_aware_match` and the other
-oracle gates). If a slug or variant should resolve to an entity that already
-exists, add it as an **alias** and leave the canonical id untouched. Aliases are
-gap-filling only: each form must be unclaimed by a generator canonical, and the
-`normalized` strategy already collapses case and all separators, so you only need
-an alias for forms normalization can't reach (a removed separator, a token
-reshape, a semantic variant, a date-suffixed snapshot).
+Adding a second, differently-cased canonical for the same model — or renaming an
+existing canonical "to fix its casing" — orphans the oracle typed-parent edges
+that point at the old id, and the gate suite fails on it
+(`test_oracle_org_aware_match` and the other oracle gates). If a slug or variant
+should resolve to an entity that already exists, add it as an **alias** and leave
+the canonical id untouched. (What a canonical id and its aliases must look like —
+HF-true casing, and when an alias is even needed — is in
+[README → ID conventions](README.md#id-conventions).)
 
 **2. Two org spellings that are the same uploader → merge; genuinely distinct
 uploaders → allowlist.**
