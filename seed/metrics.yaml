@@ -3,7 +3,7 @@
 
 - id: accuracy
   display_name: Accuracy
-  aliases: ["Acc"]
+  aliases: ["Acc", "Macro Accuracy", "Top-1 Accuracy"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
@@ -23,7 +23,7 @@
 
 - id: exact-match
   display_name: Exact Match
-  aliases: ["EM"]
+  aliases: ["EM", "EM-1"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
@@ -33,7 +33,7 @@
 
 - id: f1
   display_name: F1 Score
-  aliases: ["F1", "F1-macro"]
+  aliases: ["F1", "F1-macro", "Tokenized F1"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
@@ -93,7 +93,7 @@
 
 - id: win-rate
   display_name: Win Rate
-  aliases: ["Win rate (%)", "win_rate"]
+  aliases: ["Win rate (%)", "win_rate", "Median Win Rate"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
@@ -214,7 +214,7 @@
 
 - id: rank
   display_name: Rank
-  aliases: ["Rank", "rank"]
+  aliases: ["Rank", "rank", "Average Rank"]
   score_type: continuous
   lower_is_better: true
   min_score: 1.0
@@ -350,4 +350,1781 @@
   min_score: 0.0
   max_score: 1.0
   metadata: '{}'
+  review_status: draft
+
+# --- PwC adapter metric enrichment (auto-researched; review_status: draft) ---
+- id: anls
+  display_name: ANLS
+  aliases:
+  - ANLS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: musiq
+  display_name: MUSIQ
+  aliases:
+  - MUSIQ
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: rtfx
+  display_name: RTFx
+  aliases:
+  - RTFx
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: fps
+  display_name: FPS
+  aliases:
+  - FPS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: maniqa
+  display_name: MANIQA
+  aliases:
+  - MANIQA
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: ap50
+  display_name: AP50
+  aliases:
+  - AP50
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: normalized-score
+  display_name: Normalized Score
+  aliases:
+  - Normalized Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: crps
+  display_name: CRPS
+  aliases:
+  - CRPS
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: clipiqa-plus
+  display_name: CLIPIQA+
+  aliases:
+  - CLIPIQA+
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: dists
+  display_name: DISTS
+  aliases:
+  - DISTS
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: mteb-score
+  display_name: MTEB Score
+  aliases:
+  - MTEB Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: mmteb-score
+  display_name: MMTEB Score
+  aliases:
+  - MMTEB Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: j-and-f
+  display_name: J&F
+  aliases:
+  - J&F
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: speaker-similarity
+  display_name: Speaker Similarity
+  aliases:
+  - Speaker Similarity
+  score_type: continuous
+  lower_is_better: false
+  min_score: -1.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: gradient-error
+  display_name: Gradient
+  aliases:
+  - Gradient
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: return
+  display_name: Return
+  aliases:
+  - Return
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: calvin-avg-seq-length
+  display_name: Average Length
+  aliases:
+  - Average Length
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 5.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: niqe
+  display_name: NIQE
+  aliases:
+  - NIQE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: truthfulqa-mc2
+  display_name: MC2Acc
+  aliases:
+  - MC2Acc
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: median-human-normalized-score
+  display_name: Median Human Normalized Score
+  aliases:
+  - Median Human Normalized Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: correlation
+  display_name: Pearson/Spearman Correlation
+  aliases:
+  - Pearson/Spearman Correlation
+  score_type: continuous
+  lower_is_better: false
+  min_score: -1.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: pointmap-accuracy
+  display_name: Pointmap Accuracy
+  aliases:
+  - Pointmap Accuracy
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: recall-at-5
+  display_name: Recall@5
+  aliases:
+  - Recall@5
+  - R@5
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: log-loss
+  display_name: Log Loss
+  aliases:
+  - Log Loss
+  - LogLoss
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: counting-precision
+  display_name: CntP
+  aliases:
+  - CntP
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: xcomet-xl
+  display_name: xCOMETxl
+  aliases:
+  - xCOMETxl
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mlgm
+  display_name: mLGM
+  aliases:
+  - mLGM
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: sad
+  display_name: SAD
+  aliases:
+  - SAD
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: rpe-rotation
+  display_name: RPE-R
+  aliases:
+  - RPE-R
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: correspondence-recall
+  display_name: Correspondence Recall
+  aliases:
+  - Correspondence Recall
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: clip-score
+  display_name: CLIP Sim
+  aliases:
+  - CLIP Sim
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: chamfer-distance
+  display_name: CD
+  aliases:
+  - CD
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: vqascore
+  display_name: VQA Score
+  aliases:
+  - VQA Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: vpq
+  display_name: VPQ
+  aliases:
+  - VPQ
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: soda
+  display_name: SODA
+  aliases:
+  - SODA
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: nds
+  display_name: NDS
+  aliases:
+  - NDS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: radle-cwi
+  display_name: RadLE-C
+  aliases:
+  - RadLE-C
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 2000.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: completeness
+  display_name: Completeness
+  aliases:
+  - Completeness
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: edit-distance
+  display_name: Edit Distance
+  aliases:
+  - Edit Distance
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: pccn
+  display_name: PCCN
+  aliases:
+  - PCCN
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: hota
+  display_name: HOTA
+  aliases:
+  - HOTA
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: gedit-overall
+  display_name: G_O (Overall)
+  aliases:
+  - G_O (Overall)
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 10.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: hpsv3
+  display_name: HPSv3 Score
+  aliases:
+  - HPSv3 Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: v-star-mam
+  display_name: mAM
+  aliases:
+  - mAM
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: ate
+  display_name: ATE
+  aliases:
+  - ATE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: tm-score
+  display_name: TM-score
+  aliases:
+  - TM-score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: clip-r-precision
+  display_name: CLIP R-Precision
+  aliases:
+  - CLIP R-Precision
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: nrqm
+  display_name: NRQM
+  aliases:
+  - NRQM
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 10.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: llm-score
+  display_name: LLM-Score
+  aliases:
+  - LLM-Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: target-area-coverage
+  display_name: Target Area Coverage
+  aliases:
+  - Target Area Coverage
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: recall-at-1
+  display_name: Mean Recall@1
+  aliases:
+  - Mean Recall@1
+  - R@1
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: tar-at-far
+  display_name: TAR @ FAR=1e-4
+  aliases:
+  - TAR @ FAR=1e-4
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: clip-iqa
+  display_name: CLIP-IQA
+  aliases:
+  - CLIP-IQA
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: multimodality
+  display_name: Multimodality
+  aliases:
+  - Multimodality
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: diversity
+  display_name: Diversity
+  aliases:
+  - Diversity
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: mpjpe
+  display_name: MPJPE
+  aliases:
+  - MPJPE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: warping-error
+  display_name: E_warp
+  aliases:
+  - E_warp
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: paired-accuracy
+  display_name: Paired Accuracy
+  aliases:
+  - Paired Accuracy
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: overall
+  display_name: Overall
+  aliases:
+  - Overall
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: rra-at-15
+  display_name: RRA@15
+  aliases:
+  - RRA@15
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: hr-at-10
+  display_name: HR@10
+  aliases:
+  - HR@10
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: gap
+  display_name: GAP
+  aliases:
+  - GAP
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: rpe-translation
+  display_name: RPE-T
+  aliases:
+  - RPE-T
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mce
+  display_name: mCE
+  aliases:
+  - mCE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: image-reward
+  display_name: ImageReward
+  aliases:
+  - ImageReward
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: perceptual-index
+  display_name: PI
+  aliases:
+  - PI
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: ods
+  display_name: ODS
+  aliases:
+  - ODS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: grits
+  display_name: GriTS
+  aliases:
+  - GriTS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: utmos
+  display_name: UTMOS
+  aliases:
+  - UTMOS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 1.0
+  max_score: 5.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: judge-score-1-10
+  display_name: Score (1-10)
+  aliases:
+  - Score (1-10)
+  score_type: continuous
+  lower_is_better: false
+  min_score: 1.0
+  max_score: 10.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: r-precision-top-3
+  display_name: R Precision Top3
+  aliases:
+  - R Precision Top3
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: normal-consistency
+  display_name: Normal Consistency
+  aliases:
+  - Normal Consistency
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: hits-at-10
+  display_name: Hit@10
+  aliases:
+  - Hit@10
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: nmn
+  display_name: NMN
+  aliases:
+  - NMN
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: imgedit-score
+  display_name: ImgEdit Score
+  aliases:
+  - ImgEdit Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 1.0
+  max_score: 5.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: mean-recall
+  display_name: mR
+  aliases:
+  - mR
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: mmota
+  display_name: mMOTA
+  aliases:
+  - mMOTA
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: brisque
+  display_name: BRISQUE
+  aliases:
+  - BRISQUE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: gpt4o-judge-score
+  display_name: GPT4o
+  aliases:
+  - GPT4o
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: maa-at-30
+  display_name: mAA@30
+  aliases:
+  - mAA@30
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: maa-at-10px
+  display_name: mAA@10px
+  aliases:
+  - mAA@10px
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: mean-normalized-performance
+  display_name: Mean Normalized Performance
+  aliases:
+  - Mean Normalized Performance
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: rta-at-15
+  display_name: RTA@15
+  aliases:
+  - RTA@15
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: human-normalized-score
+  display_name: Mean Human Normalized Score
+  aliases:
+  - Mean Human Normalized Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: dominance
+  display_name: Dominance
+  aliases:
+  - Dominance
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: word-accuracy
+  display_name: Word Accuracy
+  aliases:
+  - Word Accuracy
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: panoptic-quality
+  display_name: PQ
+  aliases:
+  - PQ
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mota
+  display_name: MOTA
+  aliases:
+  - MOTA
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: normalized-precision
+  display_name: Normalized Precision
+  aliases:
+  - Normalized Precision
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: teds
+  display_name: TEDS
+  aliases:
+  - TEDS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: average-overlap
+  display_name: Average Overlap
+  aliases:
+  - Average Overlap
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: radgraph-f1
+  display_name: RadGraph F1
+  aliases:
+  - RadGraph F1
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: fastervqa
+  display_name: FasterVQA
+  aliases:
+  - FasterVQA
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: xcomet-xxl
+  display_name: XCOMET-XXL
+  aliases:
+  - XCOMET-XXL
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: acc-at-0-25
+  display_name: Acc@0.25
+  aliases:
+  - Acc@0.25
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: average
+  display_name: Average
+  aliases:
+  - Average
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: dover
+  display_name: DOVER
+  aliases:
+  - DOVER
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: ap-large
+  display_name: AP^L
+  aliases:
+  - AP^L
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: multi-binary-accuracy
+  display_name: MBAcc
+  aliases:
+  - MBAcc
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: localization-recall
+  display_name: Localization Recall
+  aliases:
+  - DUC1 @0.25m/2deg
+  - DUC1 @0.5m/5deg
+  - DUC1 @1.0m/10deg
+  - DUC2 @0.25m/2deg
+  - DUC2 @0.5m/5deg
+  - DUC2 @1.0m/10deg
+  - Day @0.25m/2deg
+  - Day @0.5m/5deg
+  - Day @1.0m/10deg
+  - Night @0.25m/2deg
+  - Night @0.5m/5deg
+  - Night @1.0m/10deg
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium", "note": "pose recall at various
+    distance/angle thresholds; threshold+scene in the raw alias"}'
+  review_status: draft
+- id: mae
+  display_name: mae
+  aliases:
+  - MAD
+  - MAD-T
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: map
+  display_name: map
+  aliases:
+  - AP
+  - Mean AP
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mrr
+  display_name: mrr
+  aliases:
+  - MRR
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: success-rate
+  display_name: success-rate
+  aliases:
+  - Pass Rate
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: auc
+  display_name: auc
+  aliases:
+  - ROC-AUC
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: recall
+  display_name: recall
+  aliases:
+  - CntR
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: miou
+  display_name: miou
+  aliases:
+  - mIoU (5-click)
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: bleu
+  display_name: bleu
+  aliases:
+  - spBLEU
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+
+# --- PwC adapter metric enrichment (auto-researched; review_status: draft) ---
+- id: wer
+  display_name: WER
+  aliases:
+  - WER
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mase
+  display_name: MASE
+  aliases:
+  - MASE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: geneval-score
+  display_name: GenEval Score
+  aliases:
+  - GenEval Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: mdpbench-overall
+  display_name: MDPBench Overall
+  aliases:
+  - MDPBench Overall
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: mdpbench-non-latin
+  display_name: MDPBench Non-Latin
+  aliases:
+  - MDPBench Non-Latin
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: matthews-correlation
+  display_name: Matthews Correlation
+  aliases:
+  - Matthews Correlation
+  score_type: continuous
+  lower_is_better: false
+  min_score: -1.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: dpg-bench-score
+  display_name: DPG-Bench Score
+  aliases:
+  - DPG-Bench Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: rouge-1
+  display_name: ROUGE-1
+  aliases:
+  - ROUGE-1
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: pose-auc-at-30
+  display_name: AUC@30
+  aliases:
+  - AUC@30
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: precision
+  display_name: Precision
+  aliases:
+  - Precision
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: line-accuracy
+  display_name: Web LACC
+  aliases:
+  - Document LACC
+  - Handwriting LACC
+  - Scene LACC
+  - Web LACC
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: waics
+  display_name: WAICS (Artistic)
+  aliases:
+  - WAICS (Artistic)
+  - WAICS (Average, excl. Incomplete)
+  - WAICS (Contextless)
+  - WAICS (Curve)
+  - WAICS (General)
+  - WAICS (Multi-Oriented)
+  - WAICS (Multi-Words)
+  - WAICS (Salient)
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: pose-auc-at-20
+  display_name: AUC@20
+  aliases:
+  - AUC@20
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: mrr-at-20
+  display_name: MRR@20
+  aliases:
+  - MRR@20
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: bpc
+  display_name: bpc
+  aliases:
+  - bpc
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: chrf-plus-plus
+  display_name: chrF++
+  aliases:
+  - chrF++
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: iou
+  display_name: IoU
+  aliases:
+  - IoU
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: comet
+  display_name: COMET
+  aliases:
+  - COMET
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: cometkiwi
+  display_name: CometKiwi
+  aliases:
+  - CometKiwi
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: cer
+  display_name: CER
+  aliases:
+  - CER
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: hits-at-100
+  display_name: Hits@100
+  aliases:
+  - Hits@100
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: bleu-1
+  display_name: BLEU-1
+  aliases:
+  - BLEU-1
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: bleu-3
+  display_name: BLEU-3
+  aliases:
+  - BLEU-3
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: bleurt
+  display_name: BLEURT
+  aliases:
+  - BLEURT
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: omnicontext-score
+  display_name: OmniContext score
+  aliases:
+  - OmniContext score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 10.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: f1-at-0-25
+  display_name: F1@0.25
+  aliases:
+  - F1@0.25
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: rouge-l
+  display_name: ROUGE-L
+  aliases:
+  - ROUGE-L
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mdpbench-latin
+  display_name: MDPBench Latin
+  aliases:
+  - MDPBench Latin
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: perplexity
+  display_name: Perplexity
+  aliases:
+  - Perplexity
+  score_type: continuous
+  lower_is_better: true
+  min_score: 1.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: ndcg-at-10
+  display_name: NDCG@10
+  aliases:
+  - NDCG@10
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: ndcg-at-20
+  display_name: NDCG@20
+  aliases:
+  - NDCG@20
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: rouge-2
+  display_name: ROUGE-2
+  aliases:
+  - ROUGE-2
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: geometric-auc-at-10
+  display_name: AUC@10
+  aliases:
+  - AUC@10
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: inception-score
+  display_name: IS
+  aliases:
+  - IS
+  score_type: continuous
+  lower_is_better: false
+  min_score: 1.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: geometric-auc-at-3
+  display_name: AUC@3
+  aliases:
+  - AUC@3
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: precision-at-20
+  display_name: Precision@20
+  aliases:
+  - Precision@20
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: wise-score
+  display_name: WISE Score
+  aliases:
+  - WISE Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: top-5-accuracy
+  display_name: Top-5 Accuracy
+  aliases:
+  - Top-5 Accuracy
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: success-rate-0-5
+  display_name: Success Rate 0.5
+  aliases:
+  - Success Rate 0.5
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: dockq-success-rate
+  display_name: DockQ Pass Rate
+  aliases:
+  - DockQ Pass Rate
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: fvd
+  display_name: FVD
+  aliases:
+  - FVD
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: ice-bench-overall
+  display_name: Task1-31 Overall
+  aliases:
+  - Task1-31 Overall
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: geometric-auc-at-1
+  display_name: AUC@1
+  aliases:
+  - AUC@1
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: mdpbench-private
+  display_name: MDPBench Private
+  aliases:
+  - MDPBench Private
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  review_status: draft
+- id: ndcg-at-5
+  display_name: NDCG@5
+  aliases:
+  - NDCG@5
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: score-0-10
+  display_name: Score (0-10)
+  aliases:
+  - Score (0-10)
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "low"}'
+  review_status: draft
+- id: recall-at-20
+  display_name: Recall@20
+  aliases:
+  - Recall@20
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: glue-score
+  display_name: GLUE (dev)
+  aliases:
+  - GLUE (dev)
+  - GLUE (test)
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "dataset_specific", "confidence": "high"}'
+  review_status: draft
+- id: oneig-overall-score
+  display_name: OneIG Overall Score
+  aliases:
+  - OneIG Overall Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: ocrbench-v2-english-score
+  display_name: English Score
+  aliases:
+  - English Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: ocrbench-v2-chinese-score
+  display_name: Chinese Score
+  aliases:
+  - Chinese Score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: ap-rare
+  display_name: mAP (rare)
+  aliases:
+  - mAP (rare)
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: maph
+  display_name: mAPH
+  aliases:
+  - mAPH
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: success-rate-at-0-75
+  display_name: Success Rate 0.75
+  aliases:
+  - Success Rate 0.75
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: recall-at-10
+  display_name: R@10
+  aliases:
+  - R@10
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: top-5-localization-error
+  display_name: Top-5 Localization Error
+  aliases:
+  - Top-5 Localization Error
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: hits-at-50
+  display_name: Hits@50
+  aliases:
+  - Hits@50
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: bleu-2
+  display_name: BLEU-2
+  aliases:
+  - BLEU-2
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: comet-22
+  display_name: COMET-22
+  aliases:
+  - COMET-22
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mega-bench-macro-score
+  display_name: Macro score
+  aliases:
+  - Macro score
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "dataset_specific", "confidence": "medium"}'
+  review_status: draft
+- id: map-at-10
+  display_name: mAP@10
+  aliases:
+  - mAP@10
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: normalized-edit-similarity
+  display_name: Normalized Edit Similarity
+  aliases:
+  - Document NED
+  - Handwriting NED
+  - NED
+  - Scene NED
+  - Web NED
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium", "note": "family-merged; threshold/subset
+    in the raw alias"}'
+  review_status: draft
+- id: mse
+  display_name: mse
+  aliases:
+  - MSE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: cider
+  display_name: cider
+  aliases:
+  - CIDEr
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: rmse
+  display_name: rmse
+  aliases:
+  - RMSE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: fid
+  display_name: fid
+  aliases:
+  - FID
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
   review_status: draft
