@@ -282,3 +282,72 @@
   max_score: null
   metadata: '{}'
   review_status: reviewed
+
+# --- image/geometry benchmark metrics (added for the paperswithcode adapter) ---
+# Bounds from the metrics' defining papers. Unbounded ranges use max_score: null
+# (PSNR/AbsRel/Chamfer are half-open). review_status: draft -> maintainer should
+# confirm the bounds before promoting to reviewed.
+- id: psnr
+  display_name: PSNR
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: null
+  metadata: '{}'
+  review_status: draft
+
+- id: ssim
+  display_name: SSIM
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: draft
+
+- id: lpips
+  display_name: LPIPS
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: draft
+
+- id: abs-rel
+  display_name: AbsRel
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{}'
+  review_status: draft
+
+- id: delta1
+  display_name: delta1
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: draft
+
+- id: overall-chamfer
+  display_name: Overall (Chamfer)
+  aliases: ["Overall (Chamfer)", "Chamfer Distance"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{}'
+  review_status: draft
+
+- id: auc-5
+  display_name: AUC@5
+  aliases: ["AUC@5"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: draft
