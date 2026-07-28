@@ -16,6 +16,10 @@ metadata:
 The registry maps raw model/benchmark/metric/harness strings to stable **canonical
 ids**; the common task is teaching it a slug it doesn't resolve.
 
+> **How this runs.** A person (the **operator**) runs you and can answer mid-run —
+> you're not fully autonomous. Minting a new canonical id is a lasting namespace
+> call: **ask the operator** first (step 3), and log any id you couldn't verify.
+
 ## Procedure
 1. **Search the seed first** — `grep -ri <slug> seed/` for an existing canonical.
 2. If one exists, **add your raw form to its `aliases`** ("upstream an alias") — the common case.
