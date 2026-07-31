@@ -334,7 +334,7 @@
 
 - id: overall-chamfer
   display_name: Overall (Chamfer)
-  aliases: ["Overall (Chamfer)", "Chamfer Distance"]
+  aliases: ["Overall (Chamfer)"]
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
@@ -669,6 +669,7 @@
   display_name: CD
   aliases:
   - CD
+  - Chamfer Distance
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
@@ -916,6 +917,242 @@
   max_score: null
   metadata: '{"kind": "real", "confidence": "high"}'
   review_status: draft
+# --- PwC recurring image-geometry + 3D-pose metrics -------------------------
+# Added for the Papers with Code adapter. Bounds/direction are paper-defined,
+# not observed: distance errors (mm/px) are [0, unbounded]; keypoint/bad-pixel
+# rates are proportions in [0,1] (leaderboards report them as percent 0-100, so
+# the adapter rescales on ingest). review_status: draft pending human vetting.
+- id: p-mpjpe
+  display_name: P-MPJPE
+  # Procrustes-aligned MPJPE = Human3.6M "Protocol #2"; mm, lower better.
+  aliases:
+  - P-MPJPE
+  - PA-MPJPE
+  - PMPJPE
+  - MPJPE-PA
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: mpvpe
+  display_name: MPVPE
+  # Mean per-vertex position error over the SMPL mesh; mm, lower better.
+  # MVE / PVE are the same quantity under different names (HMR lineage).
+  aliases:
+  - MPVPE
+  - MVE
+  - PVE
+  - MPVE
+  - Mean Vertex Error
+  - Per-Vertex Error
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: pa-pve
+  display_name: PA-PVE
+  # Procrustes-aligned per-vertex error (distinct from unaligned MPVPE); mm.
+  aliases:
+  - PA-PVE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: pck
+  display_name: PCK
+  # Percentage of Correct Keypoints (within a distance threshold); higher
+  # better. Proportion [0,1] — leaderboards report percent (e.g. 98.5).
+  aliases:
+  - PCK
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: 3dpck
+  display_name: 3DPCK
+  # 3D PCK (canonically @150mm on MPI-INF-3DHP/MuPoTS-3D); higher better,
+  # proportion [0,1] reported as percent.
+  aliases:
+  - 3DPCK
+  - 3D-PCK
+  - PCK3D
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: geodesic-error
+  display_name: Geodesic Error (degrees)
+  # Angular distance between predicted and GT rotation; bounded [0,180] deg.
+  aliases:
+  - Geodesic Error (degrees)
+  - Geodesic Error
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 180.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: epe
+  display_name: EPE
+  # End-Point Error for optical flow/stereo; pixels, lower better, unbounded.
+  aliases:
+  - EPE
+  - Average End-Point Error
+  - AEPE
+  - Avg EPE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: tepe
+  display_name: TEPE
+  # Temporal End-Point Error (EPE across frames) for video stereo/flow; px.
+  aliases:
+  - TEPE
+  - Temporal EPE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: fl-all
+  display_name: Fl-all
+  # KITTI flow outlier rate over all pixels; lower better, proportion [0,1]
+  # reported as percent.
+  aliases:
+  - Fl-all
+  - F1-all
+  - Fl
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: d1-all
+  display_name: D1-all
+  # KITTI stereo disparity outlier rate over all pixels; lower better,
+  # proportion [0,1] reported as percent.
+  aliases:
+  - D1-all
+  - D1
+  - Overall D1
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: bad-1.0
+  display_name: Bad 1.0
+  # Middlebury/ETH3D bad-pixel rate at the 1px threshold; lower better,
+  # proportion [0,1] reported as percent. BP-1 is the same on stereo boards.
+  aliases:
+  - Bad 1.0
+  - BP-1
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: bad-2.0
+  display_name: Bad 2.0
+  # Middlebury/ETH3D bad-pixel rate at the 2px threshold; lower better,
+  # proportion [0,1] reported as percent. BP-2 is the same on stereo boards.
+  aliases:
+  - Bad 2.0
+  - BP-2
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: n-mpjpe
+  display_name: N-MPJPE
+  # Normalized MPJPE (scale-normalized before the error; Rhodin et al. 2018);
+  # mm, lower better, unbounded. Distinct from Procrustes-aligned P-MPJPE.
+  aliases:
+  - N-MPJPE
+  - NMPJPE
+  - Normalized MPJPE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: n-pve
+  display_name: N-PVE
+  # Normalized per-vertex error (scale-normalized MPVPE); mm, lower better,
+  # unbounded. N-MPVPE names the same quantity.
+  aliases:
+  - N-PVE
+  - NPVE
+  - Normalized PVE
+  - N-MPVPE
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: add
+  display_name: ADD (mm)
+  # Average Distance of model points, 6DoF object/head pose (Hinterstoisser
+  # et al. 2012 / PoseCNN); mm, lower better, unbounded. ADD-S (the symmetric
+  # variant) is a distinct metric and is intentionally NOT aliased here.
+  aliases:
+  - ADD (mm)
+  - ADD
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "high"}'
+  review_status: draft
+- id: rotation-mae
+  display_name: Rotation MAE (degrees)
+  # Mean absolute rotation error; angular distance is bounded [0,180] deg,
+  # lower better.
+  aliases:
+  - Rotation MAE (degrees)
+  - Rotation MAE
+  - Rotation Error (degrees)
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 180.0
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+- id: translation-mae
+  display_name: Translation MAE (mm)
+  # Mean absolute translation error; mm, lower better, unbounded.
+  aliases:
+  - Translation MAE (mm)
+  - Translation MAE
+  - Translation Error (mm)
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: null
+  metadata: '{"kind": "real", "confidence": "medium"}'
+  review_status: draft
+# --- end PwC recurring image-geometry + 3D-pose metrics ---------------------
 - id: warping-error
   display_name: E_warp
   aliases:
