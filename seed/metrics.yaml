@@ -1030,8 +1030,9 @@
   review_status: draft
 - id: fl-all
   display_name: Fl-all
-  # KITTI flow outlier rate over all pixels; lower better, proportion [0,1]
-  # reported as percent.
+  # KITTI flow outlier rate over all pixels (percent of pixels failing the
+  # error threshold); lower better, natural scale [0,100] (always reported as
+  # a percentage on the leaderboards, never as a fraction).
   aliases:
   - Fl-all
   - F1-all
@@ -1039,13 +1040,14 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: 1.0
+  max_score: 100.0
   metadata: '{"kind": "real", "confidence": "high"}'
   review_status: draft
 - id: d1-all
   display_name: D1-all
-  # KITTI stereo disparity outlier rate over all pixels; lower better,
-  # proportion [0,1] reported as percent.
+  # KITTI stereo disparity outlier rate over all pixels (percent of pixels
+  # failing the error threshold); lower better, natural scale [0,100] (always
+  # reported as a percentage on the leaderboards, never as a fraction).
   aliases:
   - D1-all
   - D1
@@ -1053,33 +1055,36 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: 1.0
+  max_score: 100.0
   metadata: '{"kind": "real", "confidence": "high"}'
   review_status: draft
 - id: bad-1.0
   display_name: Bad 1.0
-  # Middlebury/ETH3D bad-pixel rate at the 1px threshold; lower better,
-  # proportion [0,1] reported as percent. BP-1 is the same on stereo boards.
+  # Middlebury/ETH3D bad-pixel rate at the 1px threshold (percent of pixels
+  # failing); lower better, natural scale [0,100]. Always reported as a
+  # percentage (runs ~0-3% on ETH3D nonocc), never as a fraction. BP-1 is the
+  # same metric on stereo boards.
   aliases:
   - Bad 1.0
   - BP-1
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: 1.0
+  max_score: 100.0
   metadata: '{"kind": "real", "confidence": "medium"}'
   review_status: draft
 - id: bad-2.0
   display_name: Bad 2.0
-  # Middlebury/ETH3D bad-pixel rate at the 2px threshold; lower better,
-  # proportion [0,1] reported as percent. BP-2 is the same on stereo boards.
+  # Middlebury/ETH3D bad-pixel rate at the 2px threshold (percent of pixels
+  # failing); lower better, natural scale [0,100]. Always reported as a
+  # percentage, never as a fraction. BP-2 is the same metric on stereo boards.
   aliases:
   - Bad 2.0
   - BP-2
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: 1.0
+  max_score: 100.0
   metadata: '{"kind": "real", "confidence": "medium"}'
   review_status: draft
 - id: n-mpjpe
