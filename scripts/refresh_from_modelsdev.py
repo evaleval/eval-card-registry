@@ -851,8 +851,18 @@ def _classify_suffix_segments(suffix: str) -> list[tuple[str, str | None, str]]:
     return segments
 
 
-def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> list[dict]:
+def _build_family_entries(
+    org_id: str,
+    family_slug: str,
+    models: list[dict],
+    group_recs: list[dict] | None = None,
+    alias_index: dict[str, str] | None = None,
+) -> list[dict]:
     """Emit canonical entries for a family.
+
+    `group_recs` (the full underlying group's provider records) enables the
+    G1 OpenRouter id adoption over the emitted entries; None (legacy callers)
+    skips adoption.
 
     Returns a list:
       [0]   family root canonical (parents=[])
@@ -1013,16 +1023,30 @@ def _build_family_entries(org_id: str, family_slug: str, models: list[dict]) -> 
             out_entries.append(entry)
             current_id = new_id
 
+    # G1: adopt eligible OpenRouter keys over invented family ids (per-entry
+    # identity match — a variant/dated key can only rename the entity it
+    # names, never the family root). Children of a renamed root keep their
+    # invented ids; their parent edges are repointed inside the adoption pass.
+    if group_recs:
+        _adopt_openrouter_ids(
+            out_entries, group_recs, org_id, alias_index or _dev_alias_index()
+        )
     return out_entries
 
 
-def _provider_alias_forms(raw: str, org_id: str | None) -> list[str]:
+def _provider_alias_forms(
+    raw: str, org_id: str | None, provider: str | None = None
+) -> list[str]:
     """Surface forms a provider's raw spelling should resolve through.
 
     Emits clean, resolvable forms only:
       - the raw spelling AS-IS when it carries no host/account scaffolding
         (no leading `@cf/`, no `accounts/...`, no embedded slash) — a provider's
         own bare spelling is worth an exact alias;
+      - for the OpenRouter provider, the raw `org/slug` catalog key VERBATIM
+        (G2: OpenRouter ids are resolvable everywhere, not only where they are
+        canonical) plus its tag-stripped cleaned form — router pseudo-endpoints
+        (`openrouter/*`) excluded;
       - the models.dev-normalized form (host/region/account scaffolding stripped),
         which is what the resolver sees post-host-capture;
       - the org-prefixed form of the normalized slug (last path segment), so both
@@ -1034,6 +1058,10 @@ def _provider_alias_forms(raw: str, org_id: str | None) -> list[str]:
     forms: set[str] = set()
     if not raw:
         return []
+    # `openrouter/*` router pseudo-endpoints are routing products, not models:
+    # no surface form of them is ever a model alias.
+    if _is_router_pseudo_endpoint(raw):
+        return []
     # Keep the raw spelling only when it's a clean single-token id.
     if "/" not in raw and not raw.startswith("@") and not raw.startswith("~"):
         forms.add(raw)
@@ -1044,6 +1072,18 @@ def _provider_alias_forms(raw: str, org_id: str | None) -> list[str]:
     # a clean resolvable surface form: keep it verbatim on the stripped target.
     elif _TEE_PREFIX_RE.match(raw):
         forms.add(raw)
+    # OpenRouter's `org/slug` catalog keys are real external ids: emit the raw
+    # key verbatim (incl. a `~`/tagged spelling) AND the cleaned tag-stripped
+    # key, so both resolve wherever the entity lives (canonical or alias).
+    if (
+        provider == _OPENROUTER_PROVIDER
+        and "/" in raw
+        and not _is_router_pseudo_endpoint(raw)
+    ):
+        forms.add(raw)
+        cleaned = _clean_openrouter_key(raw)
+        if cleaned:
+            forms.add(cleaned)
     # Always emit the normalized form + its org-prefixed variant. Use
     # strip_variants=False: alias forms must PRESERVE a variant's identity
     # (-turbo/-thinking/-reasoner/-fp8/...). Stripping them here would emit the
@@ -1066,6 +1106,170 @@ def _variant_identity(s: str) -> str:
     means a different model. Shared by _attach_provider_aliases AND the reconcile
     merge so neither attaches an `-instruct`/`-fp8`/`-120b` form onto a base/sibling."""
     return _slugify(normalize_modelsdev_id(s, strip_variants=False)).rsplit("/", 1)[-1]
+
+
+# ---------------------------------------------------------------------------
+# OpenRouter id adoption (specs/model-id-resolution/PLAN.md G1/G2).
+# The id ladder: a real HF id is adopted first, then an OpenRouter catalog key,
+# and only a model on neither gets an invented `{org}/{slug}` id. `org_id`
+# stays the curated developer for all three rungs.
+# ---------------------------------------------------------------------------
+_OPENROUTER_PROVIDER = "openrouter"
+
+# Curated re-host repoint oracle: `junk` ids are spellings curation has ruled
+# must NEVER be canonical (the model's real identity is the `target`, e.g. a
+# real HF repo the frozen oracle predates — `prime-intellect/intellect-3` ->
+# `PrimeIntellect/INTELLECT-3`). Adoption must respect that ruling: an
+# OpenRouter key that equals a junk id is not adopted (the reconcile passes
+# still fold the mint onto the real target as before).
+_REHOST_REPOINT_JSON = REPO_ROOT / "curation" / "rehost_repoint.json"
+_REHOST_JUNK_IDS: frozenset[str] | None = None
+
+
+def _rehost_junk_ids() -> frozenset[str]:
+    global _REHOST_JUNK_IDS
+    if _REHOST_JUNK_IDS is None:
+        junk: set[str] = set()
+        if _REHOST_REPOINT_JSON.exists():
+            for e in json.loads(_REHOST_REPOINT_JSON.read_text()) or []:
+                j = e.get("junk") if isinstance(e, dict) else None
+                if isinstance(j, str) and j:
+                    junk.add(j)
+        _REHOST_JUNK_IDS = frozenset(junk)
+    return _REHOST_JUNK_IDS
+
+
+def _is_router_pseudo_endpoint(raw: str) -> bool:
+    """`openrouter/*` keys (`auto`, `free`, `bodybuilder`, `owl-alpha`,
+    `pareto-code`) are routing PRODUCTS, not models: never adopted, never
+    minted, never aliased."""
+    return raw.lstrip("~").lower().startswith("openrouter/")
+
+
+def _clean_openrouter_key(raw: str) -> str | None:
+    """The adoptable form of an OpenRouter catalog key: the `~` latest marker
+    and `_TAG_SUFFIX_RE` serving tags stripped, `org/leaf` shape enforced — a
+    key is never adopted with a tag in it. Returns None when the key is not
+    adoptable at all: a router pseudo-endpoint, a tag-only leaf, or a moving
+    `…-latest` pointer (names no fixed release; stays an alias)."""
+    key = raw.lstrip("~")
+    if "/" not in key or _is_router_pseudo_endpoint(raw):
+        return None
+    org, _, leaf = key.partition("/")
+    prev = None
+    while prev != leaf:
+        prev = leaf
+        leaf = _TAG_SUFFIX_RE.sub("", leaf)
+    if not org or not leaf or leaf.endswith("-latest"):
+        return None
+    return f"{org}/{leaf}"
+
+
+def _identity_sig(s: str) -> str:
+    """Order-insensitive, variant-preserving identity signature: `safe_sig`
+    over `_variant_identity`. Two spellings with the same sig name the same
+    canonical even when token ORDER differs (`claude-haiku-3` vs OpenRouter's
+    `claude-3-haiku`); any added/removed token (`-instruct`, `-fp8`, `-think`,
+    a date) is a different identity, so a variant key can never match a base."""
+    return safe_sig(_variant_identity(s))
+
+
+def _entity_identity_sigs(
+    cid: str, org_id: str | None, alias_index: dict[str, str]
+) -> set[str]:
+    """Identity sigs an entry answers to: its own, plus the brand-stripped one
+    when the leaf's LEADING token is a curated alias of the entry's dev org
+    (`perplexity/perplexity-sonar-…` == OpenRouter's `perplexity/sonar-…`) —
+    the same brand-strip rule `_candidate_name_norms` applies for HF defer."""
+    ident = _variant_identity(cid)
+    sigs = {safe_sig(ident)}
+    if org_id:
+        dev = alias_index.get(org_id.lower(), org_id)
+        toks = ident.split("-")
+        if len(toks) > 1 and alias_index.get(toks[0]) == dev:
+            sigs.add(safe_sig("-".join(toks[1:])))
+    return sigs
+
+
+def _openrouter_org_agrees(
+    key_org: str, org_id: str | None, alias_index: dict[str, str]
+) -> bool:
+    """Adoption org guard: the OpenRouter key's org prefix must fold to the
+    SAME developer as the entry's org_id (curated fold, then case/separator
+    collapse for the unregistered community tail). A key under a different
+    developer's namespace (e.g. a `google/…` key on an `unsloth` re-upload
+    group) must never re-attribute the entry via adoption."""
+    if not org_id:
+        return False
+    from eval_entity_resolver.fold import _norm_org_key
+
+    fold = lambda o: alias_index.get(o.lower(), o)  # noqa: E731
+    a, b = fold(key_org), fold(org_id)
+    return a == b or _norm_org_key(a) == _norm_org_key(b)
+
+
+def _adopt_openrouter_ids(
+    entries: list[dict],
+    group_recs: list[dict],
+    org_id: str | None,
+    alias_index: dict[str, str],
+) -> None:
+    """G1 adoption, shared by BOTH generator paths (`_mint_or_defer_rehost`
+    and `_build_family_entries`): an entry that would carry an INVENTED
+    `{org}/{slug}` id, whose group has an eligible OpenRouter key naming the
+    SAME variant-preserving identity, takes the cleaned OpenRouter key as its
+    canonical id VERBATIM (prefix included); the invented id becomes an alias.
+
+    Guards: HF-deferred entries never rename (rung 1 of the ladder); identity
+    match (a variant/dated/version-only key aliases the entity it names, never
+    the base); org agreement; tag/`~` cleanup; tie-break shortest tag-stripped
+    key then alphabetical; `openrouter/*` router endpoints excluded."""
+    cands = sorted(
+        {
+            k
+            for r in group_recs
+            if r.get("provider") == _OPENROUTER_PROVIDER
+            for k in (_clean_openrouter_key(r.get("raw") or ""),)
+            if k and k not in _rehost_junk_ids()
+        },
+        key=lambda k: (len(k), k),
+    )
+    if not cands:
+        return
+    taken = {e["id"] for e in entries if e.get("id")}
+    renames: dict[str, str] = {}
+    for e in entries:
+        cid = e.get("id")
+        if not cid or "/" not in cid:
+            continue  # org-less mints keep their invented slug
+        if cid in cands:
+            continue  # already carries an OpenRouter spelling verbatim
+        if _entry_meta(e).get("hf_deferred"):
+            continue  # canonical is the real HF id — never demoted
+        sigs = _entity_identity_sigs(cid, e.get("org_id"), alias_index)
+        for key in cands:
+            if key in taken:
+                continue
+            if _identity_sig(key) not in sigs:
+                continue
+            if not _openrouter_org_agrees(
+                key.split("/", 1)[0], e.get("org_id"), alias_index
+            ):
+                continue
+            renames[cid] = key
+            taken.add(key)
+            e["id"] = key
+            e["aliases"] = sorted(set(e.get("aliases") or []) | {cid})
+            meta = _entry_meta(e)
+            meta["openrouter_adopted"] = True
+            e["metadata"] = json.dumps(meta, sort_keys=True)
+            break
+    if renames:
+        # Repoint intra-group parent edges (family children of a renamed root).
+        for e in entries:
+            for edge in e.get("parents") or []:
+                if isinstance(edge, dict) and edge.get("id") in renames:
+                    edge["id"] = renames[edge["id"]]
 
 
 def _attach_provider_aliases(
@@ -1114,11 +1318,15 @@ def _attach_provider_aliases(
         # target would otherwise contaminate it with the variant's id as an alias
         # and abort the seed (a models.dev mint shadowing a distinct canonical's id).
         # Serving tags are already stripped by _identity, so legit `:free`/`-maas`
-        # /`-tee` spellings still match their target and attach.
-        if _identity(raw) != _identity(target["id"]):
+        # /`-tee` spellings still match their target and attach. Compared via the
+        # order-insensitive `safe_sig` (token multiset, numbers order-preserved):
+        # an OpenRouter-adopted target (`claude-3-haiku`) still matches the other
+        # providers' spellings of the same identity (`claude-haiku-3`), while any
+        # added/removed variant token keeps mismatching.
+        if safe_sig(_identity(raw)) != safe_sig(_identity(target["id"])):
             continue
         ap = target.setdefault("alias_platforms", {})
-        for form in _provider_alias_forms(raw, org_id):
+        for form in _provider_alias_forms(raw, org_id, r.get("provider")):
             if form == target["id"]:
                 continue
             # Intra-group steal-guard: never attach a form that is already the
@@ -1421,7 +1629,11 @@ def _mint_or_defer_rehost(
     if hf_id is not None:
         head = {**head, "root_key": root_key}
         return [_hf_deferred_entry(hf_id, org_id, head, group_recs, mint_id, display_name)]
-    return _mint_rehost_entry(root_key, org_id, head, group_recs)
+    entries = _mint_rehost_entry(root_key, org_id, head, group_recs)
+    # Rung 2 of the id ladder: no HF defer -> adopt an eligible OpenRouter key
+    # over the invented `{org}/{slug}` id (G1).
+    _adopt_openrouter_ids(entries, group_recs, org_id, alias_index)
+    return entries
 
 
 def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict], list[str]]:
@@ -1445,8 +1657,14 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
 
     for root_key, recs in sorted(groups.items()):
         # Drop records whose provider isn't a known inference_platform (none
-        # today — all 137 map — but keep the guard for forward-compat).
-        recs = [r for r in recs if r["provider"] in PROVIDER_TO_INFERENCE_PLATFORM]
+        # today — all 137 map — but keep the guard for forward-compat), and
+        # `openrouter/*` router pseudo-endpoint references (routing products,
+        # not models — never minted, never aliased; G1 exclusion).
+        recs = [
+            r for r in recs
+            if r["provider"] in PROVIDER_TO_INFERENCE_PLATFORM
+            and not _is_router_pseudo_endpoint(r.get("raw") or "")
+        ]
         if not recs:
             # No record survived the platform filter; nothing to mint or track.
             continue
@@ -1494,7 +1712,10 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
             for family_slug, models in sorted(by_family.items()):
                 if not family_slug:
                     continue
-                group_entries.extend(_build_family_entries(org_id, family_slug, models))
+                group_entries.extend(_build_family_entries(
+                    org_id, family_slug, models,
+                    group_recs=recs, alias_index=alias_index,
+                ))
             if not group_entries:
                 group_entries = _mint_or_defer_rehost(root_key, org_id, head, recs, alias_index)
         else:
@@ -1521,20 +1742,23 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
 
 def _pick_winner(group: list[dict]) -> dict:
     """Pick the authoritative entry among same-model dups: prefer an HF-deferred
-    real repo, then an HF-true-cased id (has uppercase — e.g. `Qwen/...`), then a
+    real repo, then an OpenRouter-adopted external id (rung 2 of the id ladder —
+    an adopted key must never lose to an invented twin), then an org-qualified
+    id, then an HF-true-cased id (has uppercase — e.g. `Qwen/...`), then a
     reviewed entry, then the shortest id (drops doubled-brand mints like
     `cohere/cohere-command-a` in favour of `cohere/command-a`), then alphabetical
     for determinism."""
-    def _deferred(e: dict) -> bool:
+    def _meta_flag(e: dict, flag: str) -> bool:
         try:
-            return json.loads(e.get("metadata") or "{}").get("hf_deferred") is True
+            return json.loads(e.get("metadata") or "{}").get(flag) is True
         except (ValueError, TypeError):
             return False
 
     def key(e: dict):
         cid = e.get("id") or ""
         return (
-            0 if _deferred(e) else 1,
+            0 if _meta_flag(e, "hf_deferred") else 1,
+            0 if _meta_flag(e, "openrouter_adopted") else 1,
             0 if "/" in cid else 1,            # org-qualified beats bare org-less
             0 if any(c.isupper() for c in cid) else 1,  # HF-true casing
             0 if e.get("review_status") == "reviewed" else 1,
@@ -1949,8 +2173,29 @@ def _twin_key(cid: str) -> str:
     return collision_key(cid)
 
 
+def _extended_twin_keys(cid: str) -> set[str]:
+    """Order/brand-insensitive FALLBACK twin keys for the respellings
+    `_twin_key`'s ordered `collision_key` cannot match — the OpenRouter
+    adoption class (`anthropic/claude-haiku-3` vs adopted
+    `anthropic/claude-3-haiku`, `sao10K/l3-8b-lunaris` vs
+    `sao10k/l3-lunaris-8b`, `perplexity/perplexity-sonar-…` vs
+    `perplexity/sonar-…`). Keys are `dev-org/identity-sig` (identity sig =
+    variant-preserving token multiset), so a variant/size difference still
+    never twins. Used only after a `_twin_key` miss, with the same `_bsizes`
+    guard at the call sites."""
+    if "/" not in cid:
+        return {_identity_sig(cid)}
+    org, name = cid.split("/", 1)
+    dev = _hf_to_dev().get(org.lower()) or org.lower()
+    keys = {f"{dev}/{_identity_sig(name)}"}
+    toks = _variant_identity(name).split("-")
+    if len(toks) > 1 and _hf_to_dev().get(toks[0]) == dev:
+        keys.add(f"{dev}/{safe_sig('-'.join(toks[1:]))}")
+    return keys
+
+
 def _carry_forward_committed(
-    fresh: list[dict], committed: list[dict]
+    fresh: list[dict], committed: list[dict], adopt_migration: bool = False
 ) -> tuple[list[dict], dict[str, str]]:
     """Merge the COMMITTED generated file into a fresh wholesale rewrite so an
     upstream (provider,model) removal never deletes a resolvable surface form:
@@ -1960,12 +2205,18 @@ def _carry_forward_committed(
         keeping platform provenance for re-added forms. The committed
         display_name counts too (the loader promotes it to a global alias):
         when upstream re-spells it, the old one is unioned back as an alias;
-      * respelled reappearance: a removed id whose org-aware collision key
-        matches a FRESH mint (upstream re-emitted the model under a new
-        spelling, `google/veo-3-1` -> `google/veo3-1`) is ABSORBED onto that
-        mint — the committed id + display_name + aliases become aliases on
-        the fresh spelling — never retained as a normalized twin that the
-        seed's collision_fold / gate would trip on;
+      * respelled reappearance / twin (STABILITY RULE): a removed id whose
+        org-aware twin key matches a FRESH mint (upstream re-emitted the model
+        under a new spelling, `google/veo-3-1` -> `google/veo3-1`, or an
+        OpenRouter listing change renamed the adopted key) is unified with
+        that mint. The COMMITTED id wins: the fresh entry is renamed to the
+        committed id and today's spelling becomes an alias — so the daily cron
+        can never thrash canonical ids on upstream respells/relistings.
+        EXCEPT with `adopt_migration=True` (the one-shot
+        `--adopt-openrouter-ids-migration` run): the FRESH (externally-
+        adopted) id wins and the committed id + display_name + aliases become
+        aliases on it — never retained as a normalized twin that the seed's
+        collision_fold / gate would trip on;
       * removed id: retain the committed entry verbatim (full entries tagged
         `metadata.upstream_status: removed`) UNLESS core.yaml skips it.
         Retained entries then run through the same core-aware reconciliation
@@ -1982,10 +2233,13 @@ def _carry_forward_committed(
     """
     by_id = {e["id"]: e for e in fresh if e.get("id")}
     by_twin: dict[str, dict] = {}
+    by_twin_ext: dict[str, dict] = {}
     by_form: dict[str, dict] = {}
     for e in sorted(fresh, key=lambda x: x.get("id") or ""):
         if e.get("id"):
             by_twin.setdefault(_twin_key(e["id"]), e)
+            for k in _extended_twin_keys(e["id"]):
+                by_twin_ext.setdefault(k, e)
             for a in (e.get("aliases") or []):
                 if a:
                     by_form.setdefault(a, e)
@@ -1994,6 +2248,7 @@ def _carry_forward_committed(
     out = list(fresh)
     retained = 0
     absorbed = 0
+    stabilized: dict[str, str] = {}  # fresh-spelling id -> committed id it took
     skip_owner: Callable[[str], str | None] | None = None
     for c in committed:
         cid = c.get("id")
@@ -2004,18 +2259,45 @@ def _carry_forward_committed(
         # Respelled-reappearance twin: FULL committed entries only (an enrich
         # record's id is ANOTHER canonical — never donatable as an alias), and
         # only when the b-size signature agrees (same guard as fold_collisions:
-        # opt-1.3b vs opt-13b key-collide but are different models).
+        # opt-1.3b vs opt-13b key-collide but are different models). The
+        # order/brand-insensitive `_extended_twin_keys` fallback catches the
+        # OpenRouter-adoption respellings the ordered collision key cannot.
         twin = None
+        twin_via_form = False
         if cur is None and cid not in skip and "display_name" in c:
             t = by_twin.get(_twin_key(cid))
+            if t is None:
+                t = next(
+                    (by_twin_ext[k] for k in sorted(_extended_twin_keys(cid))
+                     if k in by_twin_ext),
+                    None,
+                )
             if t is None and "/" in cid and cid.split("/", 1)[0].lower() in _SERVING_HOSTS:
                 # A committed mint under a serving-host prefix (the pre-strip
                 # `TEE/...` uploader-org bug): the fresh batch carries that id
-                # as an alias on the stripped target — absorb onto it.
+                # as an alias on the stripped target — absorb onto it (a
+                # malformed serving-prefixed id never wins the stability rule).
                 t = by_form.get(cid)
+                twin_via_form = t is not None
             if t is not None and _bsizes(cid) == _bsizes(t["id"]):
                 twin = t
-        owner = cur["id"] if cur is not None else (twin["id"] if twin is not None else cid)
+        # STABILITY RULE: on a twin match the COMMITTED id wins (the fresh
+        # entry will be renamed below), so the cron never thrashes ids on an
+        # upstream respell/relisting. The one-shot migration flag inverts it
+        # (the fresh externally-adopted id wins). A twin that already took an
+        # earlier committed id this run is never renamed twice — later
+        # committed twins absorb onto it instead.
+        rename_twin = (
+            twin is not None
+            and not adopt_migration
+            and not twin_via_form
+            and twin["id"] not in stabilized
+            and "display_name" in twin
+        )
+        owner = (
+            cur["id"] if cur is not None
+            else (cid if rename_twin else (twin["id"] if twin is not None else cid))
+        )
         claims.setdefault(cid, owner)
         for a in (c.get("aliases") or []):
             if a:
@@ -2040,7 +2322,14 @@ def _carry_forward_committed(
                     out.append({"id": fold_owner, "weak": scalars})
             continue
         if twin is not None:
-            back = (set(c.get("aliases") or []) | {cid}) - {twin["id"]}
+            if rename_twin:
+                fresh_spelling = twin["id"]
+                twin["id"] = cid
+                stabilized[cid] = fresh_spelling
+                by_id[cid] = twin
+                back = (set(c.get("aliases") or []) | {fresh_spelling}) - {cid}
+            else:
+                back = (set(c.get("aliases") or []) | {cid}) - {twin["id"]}
             if isinstance(dn, str) and dn and dn not in (twin["id"], twin.get("display_name")):
                 back.add(dn)
             twin["aliases"] = sorted(set(twin.get("aliases") or []) | back)
@@ -2054,6 +2343,19 @@ def _carry_forward_committed(
             rc["metadata"] = json.dumps(meta, sort_keys=True)
             retained += 1  # enrich records are carried too but not counted here
         out.append(rc)
+    if stabilized:
+        # Repoint parent edges that referenced a fresh spelling the stability
+        # rule renamed back to its committed id.
+        renamed = {old: new for new, old in stabilized.items()}
+        for e in out:
+            for edge in e.get("parents") or []:
+                if isinstance(edge, dict) and edge.get("id") in renamed:
+                    edge["id"] = renamed[edge["id"]]
+        print(
+            f"[refresh] carry-forward: kept {len(stabilized)} committed id(s) "
+            f"over a respelled fresh twin (stability rule)",
+            file=sys.stderr,
+        )
     if retained:
         print(
             f"[refresh] carry-forward: retained {retained} committed entr(ies) "
@@ -2063,7 +2365,7 @@ def _carry_forward_committed(
     if absorbed:
         print(
             f"[refresh] carry-forward: absorbed {absorbed} respelled committed "
-            f"id(s) onto today's fresh spelling",
+            f"id(s) onto today's {'fresh spelling' if adopt_migration else 'surviving entry'}",
             file=sys.stderr,
         )
     return out, claims
@@ -2261,9 +2563,16 @@ def reconcile_generated_against_existing(
         # model an org-aware fold wrongly dragged here (e.g. the base repo
         # `google/gemma-2-9b` folded onto the variant `…-9b-it` via a mangled
         # models.dev key alias) — donating its id OR its scalars would attach
-        # one model's identity/metadata to another.
+        # one model's identity/metadata to another. EXCEPTION: a stale claim
+        # by an id the carry-forward just absorbed onto `owner` (recorded in
+        # committed_claims — e.g. the not-yet-regenerated catalog still keys a
+        # record by the pre-adoption id) is not foreign.
         cid_owner = _owner_broad(cid)
-        foreign_cid = cid_owner is not None and cid_owner != owner
+        foreign_cid = (
+            cid_owner is not None
+            and cid_owner != owner
+            and _committed.get(cid_owner) != owner
+        )
         if not _steals(cid, owner) or cid != owner:
             # The dropped mint id resolves to the owner: keep it as an alias —
             # UNLESS it normalized-equals the owner's own id form, OR it is a
@@ -2292,7 +2601,8 @@ def reconcile_generated_against_existing(
             # COMMITTED file assigns to a third entity (carry-forward keeps it
             # there; donating it here would double-claim).
             other = _owner_broad(a)
-            if other is not None and other != owner:
+            if other is not None and other != owner and _committed.get(other) != owner:
+                # (stale claim by an id absorbed onto `owner` is not foreign)
                 continue
             if a in sibling_ids:
                 continue
@@ -2337,8 +2647,11 @@ def reconcile_generated_against_existing(
 
         def _foreign(form: str) -> bool:
             o = _owner_broad(form)
-            if o is not None and o != cid:
-                return True                       # owned by an established canonical
+            if o is not None and o != cid and claimed.get(o) != cid:
+                # owned by an established canonical — unless that "owner" id
+                # was itself just absorbed onto cid by the carry-forward (a
+                # stale record in a not-yet-regenerated source file)
+                return True
             if form in sibling_ids and form != cid:
                 return True                       # is a different sibling's id
             c = claimed.get(form)
@@ -2395,7 +2708,7 @@ def _catalog_load_list(path: Path) -> list[dict]:
     return d or []
 
 
-def regenerate_catalog(full: list[dict]) -> None:
+def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
     """Split the finalized full models.dev catalog (`full`) against the existing
     canonical universe and write models_dev_catalog.generated.yaml + reconcile
     HF-derived community orgs into orgs.generated.yaml. `full` is the output of
@@ -2603,6 +2916,8 @@ def regenerate_catalog(full: list[dict]) -> None:
             existing_norm.setdefault(_norm(form), cid)
         fresh_seen_lc[cid_low] = e
         fresh_seen_twin.setdefault(_twin_key(cid), e)
+        for k in _extended_twin_keys(cid):
+            fresh_seen_twin.setdefault(k, e)
         if ap:
             ap2 = {k: v for k, v in ap.items() if k in e["aliases"]}
             if ap2:
@@ -2655,6 +2970,7 @@ def regenerate_catalog(full: list[dict]) -> None:
             _merge_weak(rec, _donor_scalars(c))
 
     retained = 0
+    stabilized_cat: dict[str, str] = {}  # committed id kept -> fresh spelling renamed away
     for c in committed:
         ccid = c.get("id")
         if not ccid:
@@ -2673,11 +2989,42 @@ def regenerate_catalog(full: list[dict]) -> None:
         prior = fresh_seen_lc.get(ccid.lower())
         if prior is None and "display_name" in c:
             # Respelled reappearance (org-aware collision key + the
-            # fold_collisions size guard) — full committed mints only.
-            t = fresh_seen_twin.get(_twin_key(ccid))
+            # fold_collisions size guard, with the order/brand-insensitive
+            # extended-twin fallback) — full committed mints only.
+            t = fresh_seen_twin.get(_twin_key(ccid)) or next(
+                (fresh_seen_twin[k] for k in sorted(_extended_twin_keys(ccid))
+                 if k in fresh_seen_twin),
+                None,
+            )
             if t is not None and _bsizes(ccid) == _bsizes(t["id"]):
                 prior = t
         if prior is not None:
+            # STABILITY RULE (same as _carry_forward_committed): a committed
+            # id beats a respelled fresh twin, except during the one-shot
+            # adoption migration. Renamed spellings are repointed below.
+            if (
+                prior["id"] != ccid
+                and not adopt_migration
+                and "display_name" in prior
+                and prior["id"] not in stabilized_cat  # already took a committed id
+                and prior["id"].lower() != ccid.lower()  # case-respell keeps fresh casing path
+            ):
+                old = prior["id"]
+                prior["id"] = ccid
+                stabilized_cat[ccid] = old
+                fresh_seen_lc[ccid.lower()] = prior
+                fresh_seen_twin.setdefault(_twin_key(ccid), prior)
+                for _m in (fresh_form_owner, existing_exact):
+                    for k, v in list(_m.items()):
+                        if v == old:
+                            _m[k] = ccid
+                for k, v in list(existing_norm.items()):
+                    if v == old:
+                        existing_norm[k] = ccid
+                prior["aliases"] = sorted(set(prior.get("aliases") or []) | {old})
+                fresh_form_owner[old] = ccid
+                _union_back(prior, c, donor_id=old)
+                continue
             _union_back(prior, c, donor_id=ccid if prior["id"] != ccid else None)
             continue
         target = enrich_by_id.get(ccid)
@@ -2699,9 +3046,22 @@ def regenerate_catalog(full: list[dict]) -> None:
             fresh.append(rc)
             fresh_seen_lc[ccid.lower()] = rc
             fresh_seen_twin.setdefault(_twin_key(ccid), rc)
+            for k in _extended_twin_keys(ccid):
+                fresh_seen_twin.setdefault(k, rc)
             for form in _forms_of(rc):
                 fresh_form_owner.setdefault(form, ccid)
             retained += 1
+    if stabilized_cat:
+        renamed = {old: new for new, old in stabilized_cat.items()}
+        for e in fresh:
+            for edge in e.get("parents") or []:
+                if isinstance(edge, dict) and edge.get("id") in renamed:
+                    edge["id"] = renamed[edge["id"]]
+        print(
+            f"[refresh] catalog carry-forward: kept {len(stabilized_cat)} committed "
+            f"id(s) over a respelled fresh twin (stability rule)",
+            file=sys.stderr,
+        )
     if retained:
         print(
             f"[refresh] catalog carry-forward: retained {retained} committed "
@@ -2996,6 +3356,16 @@ def main() -> int:
         "warns when a core org_id spelling needs a manual fix).",
     )
     p.add_argument(
+        "--adopt-openrouter-ids-migration",
+        action="store_true",
+        help="ONE-SHOT migration switch for the OpenRouter id adoption "
+        "(specs/model-id-resolution PLAN.md G3): on a committed/fresh twin "
+        "match the FRESH externally-adopted id wins and the committed id "
+        "becomes an alias. Without it the stability rule holds — the "
+        "committed id wins — so the daily cron can never thrash ids on "
+        "OpenRouter listing changes.",
+    )
+    p.add_argument(
         "--reconcile-orgs-write-core",
         action="store_true",
         help="like --reconcile-orgs, but ALSO rewrites core.yaml org_id "
@@ -3023,7 +3393,10 @@ def main() -> int:
         if skipped_no_org:
             print(f"[refresh] ERROR: {len(skipped_no_org)} provider(s) -> unknown org_id", file=sys.stderr)
             return 1
-        regenerate_catalog(_finalize_entries(generated))
+        regenerate_catalog(
+            _finalize_entries(generated),
+            adopt_migration=args.adopt_openrouter_ids_migration,
+        )
         return 0
 
     generated, skipped_no_org = _generate_models(api, known_orgs)
@@ -3056,7 +3429,8 @@ def main() -> int:
     # alias-level removal unions the committed aliases back, and the returned
     # claims map stops a fresh mint from stealing a carried entry's forms.
     generated, committed_claims = _carry_forward_committed(
-        generated, _catalog_load_list(SEED_PATH)
+        generated, _catalog_load_list(SEED_PATH),
+        adopt_migration=args.adopt_openrouter_ids_migration,
     )
     # Core-aware reconciliation: suppress/repoint any mint whose normalized id
     # collides with an existing canonical (incl. core.yaml) under a DIFFERENT id,

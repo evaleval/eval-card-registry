@@ -1241,31 +1241,67 @@ def test_carry_forward_reappearing_id_clears_removed_tag(cf_mod):
     assert claims["llama3-9b-9192"] == "groq/llama3-9b-9192"
 
 
-def test_carry_forward_absorbs_respelled_reappearance(cf_mod, tmp_path):
-    """The Veo class: upstream drops `zorgvid/Zeo-3-1` and re-emits the model
-    respelled (`zorgvid/zeo3-1`). The fresh spelling wins; the committed id,
-    display_name AND aliases all become aliases on it — never a normalized
-    twin for the seed's collision_fold / gate to trip on. Deterministic."""
+def test_carry_forward_respelled_reappearance_committed_id_wins(cf_mod, tmp_path):
+    """The Veo class under the STABILITY RULE: upstream drops
+    `zorgvid/Zeo-3-1` and re-emits the model respelled (`zorgvid/zeo3-1`).
+    The COMMITTED id wins — the fresh entry is renamed back and today's
+    spelling becomes an alias — so the daily cron can never thrash canonical
+    ids on upstream respells. Never a normalized twin for the seed's
+    collision_fold / gate to trip on. Deterministic."""
     core = tmp_path / "sources-core.yaml"
     core.write_text("entries: []\n")
     committed = [dict(_cf_entry("zorgvid/Zeo-3-1", ["zeo-3-1-alias"]),
                       display_name="Zeo-3.1-Fast")]
     fresh = [_cf_entry("zorgvid/zeo3-1")]
     batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
-    assert [e["id"] for e in batch] == ["zorgvid/zeo3-1"], "expected a single survivor"
+    assert [e["id"] for e in batch] == ["zorgvid/Zeo-3-1"], "expected a single survivor"
     (e,) = batch
-    assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(e["aliases"])
+    assert {"zorgvid/zeo3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(e["aliases"])
     assert "upstream_status" not in json.loads(e["metadata"])
     # Claims point at the SURVIVOR, so reconcile's hygiene keeps the donated forms.
-    assert claims["zorgvid/Zeo-3-1"] == "zorgvid/zeo3-1"
-    assert claims["Zeo-3.1-Fast"] == "zorgvid/zeo3-1"
+    assert claims["zorgvid/Zeo-3-1"] == "zorgvid/Zeo-3-1"
+    assert claims["Zeo-3.1-Fast"] == "zorgvid/Zeo-3-1"
     out = cf_mod.reconcile_generated_against_existing(
         batch, sources=(core,), committed_claims=claims
     )
-    (surv,) = [x for x in out if x["id"] == "zorgvid/zeo3-1"]
-    assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(surv["aliases"])
+    (surv,) = [x for x in out if x["id"] == "zorgvid/Zeo-3-1"]
+    assert {"zorgvid/zeo3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(surv["aliases"])
     batch2, claims2 = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
     assert batch2 == batch and claims2 == claims
+
+
+def test_carry_forward_respelled_reappearance_migration_flag_inverts(cf_mod, tmp_path):
+    """With the one-shot `--adopt-openrouter-ids-migration` flag the FRESH
+    (externally-adopted) spelling wins the twin match and the committed id,
+    display_name AND aliases all become aliases on it — the pre-stability
+    behavior, reserved for the deliberate migration run."""
+    committed = [dict(_cf_entry("zorgvid/Zeo-3-1", ["zeo-3-1-alias"]),
+                      display_name="Zeo-3.1-Fast")]
+    fresh = [_cf_entry("zorgvid/zeo3-1")]
+    batch, claims = cf_mod._carry_forward_committed(
+        [dict(e) for e in fresh], committed, adopt_migration=True
+    )
+    assert [e["id"] for e in batch] == ["zorgvid/zeo3-1"], "expected a single survivor"
+    (e,) = batch
+    assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(e["aliases"])
+    assert claims["zorgvid/Zeo-3-1"] == "zorgvid/zeo3-1"
+    assert claims["Zeo-3.1-Fast"] == "zorgvid/zeo3-1"
+
+
+def test_carry_forward_stability_repoints_parent_edges(cf_mod):
+    """When the stability rule renames a fresh twin back to the committed id,
+    sibling entries' parent edges that pointed at the fresh spelling are
+    repointed to the surviving committed id (no dangling edge)."""
+    committed = [dict(_cf_entry("zorgvid/Zeo-3-1"), display_name="Zeo 3.1")]
+    child = dict(_cf_entry("zorgvid/zeo3-1-mini"))
+    child["parents"] = [{"id": "zorgvid/zeo3-1", "relationship": "variant", "axis": "tier"}]
+    fresh = [_cf_entry("zorgvid/zeo3-1"), child]
+    batch, _claims = cf_mod._carry_forward_committed(
+        [dict(e) for e in fresh], committed
+    )
+    by_id = {e["id"]: e for e in batch}
+    assert "zorgvid/Zeo-3-1" in by_id and "zorgvid/zeo3-1" not in by_id
+    assert by_id["zorgvid/zeo3-1-mini"]["parents"][0]["id"] == "zorgvid/Zeo-3-1"
 
 
 def test_carry_forward_size_guard_blocks_false_absorb(cf_mod):
@@ -1320,11 +1356,11 @@ def test_reconcile_drops_orphaned_enrich_record_loudly(mod, tmp_path, capsys):
 # dup-record consolidation, and idempotence over its own output.
 # ---------------------------------------------------------------------------
 def test_catalog_carry_forward_donates_display_name_on_respelled_fold(mod, tmp_path, monkeypatch):
-    """The Veo regression shape: the committed catalog mint `…/zeo-3-1`
-    (display_name `Zeo-3.1-Fast`) vanished upstream and reappeared respelled
-    as `…/zeo3-1`. The committed id, display_name AND aliases must all stay
-    resolvable as aliases on the fresh spelling — display_name was the one
-    form the fold deleted."""
+    """The Veo regression shape under the STABILITY RULE: the committed
+    catalog mint `…/zeo-3-1` (display_name `Zeo-3.1-Fast`) vanished upstream
+    and reappeared respelled as `…/zeo3-1`. The COMMITTED id wins — the fresh
+    spelling and its display all stay resolvable as aliases on it — and no
+    normalized twin survives."""
     committed = [{
         "id": "zorgvid/zeo-3-1", "display_name": "Zeo-3.1-Fast", "org_id": None,
         "aliases": ["zeo-3-1"],
@@ -1340,14 +1376,43 @@ def test_catalog_carry_forward_donates_display_name_on_respelled_fold(mod, tmp_p
         "aliases": [], "metadata": "{}",
         "review_status": "draft", "resolution_source": "models_dev",
     }]
-    mod.regenerate_catalog(fresh)
+    mod.regenerate_catalog([dict(e) for e in fresh])
+    out = yaml.safe_load(cat.read_text()) or []
+    assert "zorgvid/zeo3-1" not in {e["id"] for e in out}, "respelled twin must not survive"
+    (surv,) = [e for e in out if e["id"] == "zorgvid/zeo-3-1"]
+    assert {"zorgvid/zeo3-1", "zeo-3-1"} <= set(surv["aliases"]), (
+        f"surface forms lost on fold: {surv['aliases']}"
+    )
+    # Platform provenance for the re-added committed alias survives too.
+    assert json.loads(surv["metadata"])["alias_platforms"]["zeo-3-1"] == "poe"
+
+
+def test_catalog_carry_forward_respelled_fold_migration_flag_inverts(mod, tmp_path, monkeypatch):
+    """Same shape with `adopt_migration=True` (the one-shot adoption run): the
+    FRESH spelling wins and the committed id + display_name become aliases —
+    display_name was the one form the fold used to delete."""
+    committed = [{
+        "id": "zorgvid/zeo-3-1", "display_name": "Zeo-3.1-Fast", "org_id": None,
+        "aliases": ["zeo-3-1"],
+        "metadata": json.dumps({"alias_platforms": {"zeo-3-1": "poe"}}, sort_keys=True),
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    cat = tmp_path / "cat.yaml"
+    cat.write_text(yaml.safe_dump(committed, sort_keys=False))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", tmp_path / "orgs.yaml")
+    fresh = [{
+        "id": "zorgvid/zeo3-1", "display_name": "Zeo 3.1", "org_id": None,
+        "aliases": [], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    mod.regenerate_catalog([dict(e) for e in fresh], adopt_migration=True)
     out = yaml.safe_load(cat.read_text()) or []
     assert "zorgvid/zeo-3-1" not in {e["id"] for e in out}, "respelled twin must not survive"
     (surv,) = [e for e in out if e["id"] == "zorgvid/zeo3-1"]
     assert {"zorgvid/zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1"} <= set(surv["aliases"]), (
         f"committed surface forms lost on fold: {surv['aliases']}"
     )
-    # Platform provenance for the re-added committed alias survives too.
     assert json.loads(surv["metadata"])["alias_platforms"]["zeo-3-1"] == "poe"
 
 

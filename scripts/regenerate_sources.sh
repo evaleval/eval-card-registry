@@ -23,14 +23,27 @@
 #                  forcing a full regeneration from the generators alone. The
 #                  ongoing/cron path leaves core intact (generators are
 #                  core-aware and won't clobber curated entries).
+#   --adopt-openrouter-ids-migration
+#                  ONE-SHOT OpenRouter id-adoption migration (specs/
+#                  model-id-resolution PLAN.md G3): passes the flag through to
+#                  both refresh_from_modelsdev.py runs so a freshly-adopted
+#                  external id wins over the committed invented twin. Ordinary
+#                  runs omit it — the stability rule keeps committed ids.
 #
 # Usage:
-#   bash scripts/regenerate_sources.sh [--reset-core]
+#   bash scripts/regenerate_sources.sh [--reset-core] [--adopt-openrouter-ids-migration]
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export LOCAL_MODE=true
 RESET_CORE=0
-[ "${1:-}" = "--reset-core" ] && RESET_CORE=1
+MODELSDEV_FLAGS=""
+for arg in "$@"; do
+  case "$arg" in
+    --reset-core) RESET_CORE=1 ;;
+    --adopt-openrouter-ids-migration) MODELSDEV_FLAGS="--adopt-openrouter-ids-migration" ;;
+    *) echo "unknown flag: $arg" >&2; exit 2 ;;
+  esac
+done
 
 log(){ echo "[regen] === $* ==="; }
 
@@ -65,13 +78,13 @@ log "STEP 2: hf_oracle (frozen oracle; mints HF repos, re-keys in place)"
 uv run python scripts/generate_hf_oracle_seed.py 2>&1 | tail -4
 
 log "STEP 3: models_dev non-catalog (core-aware, --no-fetch pinned snapshot)"
-uv run python scripts/refresh_from_modelsdev.py --no-fetch 2>&1 | tail -4
+uv run python scripts/refresh_from_modelsdev.py --no-fetch $MODELSDEV_FLAGS 2>&1 | tail -4
 
 log "STEP 4: hub_stats (offline frozen cache)"
 uv run python scripts/refresh_from_hub_stats.py 2>&1 | grep -vE 'WARN' | tail -4
 
 log "STEP 5: models_dev --catalog (additive split)"
-uv run python scripts/refresh_from_modelsdev.py --no-fetch --catalog 2>&1 | tail -4
+uv run python scripts/refresh_from_modelsdev.py --no-fetch --catalog $MODELSDEV_FLAGS 2>&1 | tail -4
 
 log "STEP 5b: cross-source alias reconciliation (must precede the seed)"
 uv run python scripts/dedup_cross_source_aliases.py 2>&1 | tail -4
