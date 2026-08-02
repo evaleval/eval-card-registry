@@ -633,7 +633,10 @@ def test_reconciliation_rewrites_surviving_parent_edges_off_suppressed_mints(mod
     canonical), a SURVIVING entry whose parents[].id pointed at that suppressed
     mint must be repointed to the owner — never left dangling."""
     core = tmp_path / "core.yaml"
-    core.write_text(yaml.safe_dump([{"id": "Acme/Base-7B", "aliases": ["acme-base-7b"]}]))
+    core.write_text(yaml.safe_dump([{
+        "id": "Acme/Base-7B", "display_name": "Acme Base 7B",
+        "aliases": ["acme-base-7b"],
+    }]))
     generated = [
         # Collides (normalized) with the curated Acme/Base-7B -> suppressed.
         {"id": "acme/base-7b", "display_name": "Acme Base 7B v0", "aliases": []},
@@ -732,8 +735,9 @@ def test_reconciliation_no_op_when_no_collision(mod, tmp_path):
     core = tmp_path / "core.yaml"
     core.write_text(yaml.safe_dump([{"id": "Acme/Widget-3B", "aliases": []}]))
     generated = [
-        {"id": "openai/gpt-4o", "aliases": ["gpt-4o"]},
-        {"id": "anthropic/claude-opus-4-5", "aliases": ["claude-opus-4-5"]},
+        {"id": "openai/gpt-4o", "display_name": "GPT-4o", "aliases": ["gpt-4o"]},
+        {"id": "anthropic/claude-opus-4-5", "display_name": "Claude Opus 4.5",
+         "aliases": ["claude-opus-4-5"]},
     ]
     out = mod.reconcile_generated_against_existing(generated, sources=(core,))
     assert [e["id"] for e in out] == sorted(e["id"] for e in generated)
@@ -1334,7 +1338,9 @@ def test_carry_forward_does_not_absorb_enrich_record_onto_mint(cf_mod):
 # ---------------------------------------------------------------------------
 def test_reconcile_drops_orphaned_enrich_record_loudly(mod, tmp_path, capsys):
     core = tmp_path / "core.yaml"
-    core.write_text(yaml.safe_dump({"entries": [{"id": "Kept/Owner-X", "aliases": []}]}))
+    core.write_text(yaml.safe_dump({"entries": [{
+        "id": "Kept/Owner-X", "display_name": "Owner X", "aliases": [],
+    }]}))
     generated = [
         # Owner id exists nowhere (sources, catalog, tier3, core) -> drop + warn.
         {"id": "ghostorg/vanished-owner-xyz", "aliases": ["ghost-form-1"]},

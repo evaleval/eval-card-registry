@@ -129,6 +129,29 @@ def _clean_resolver() -> Resolver:
         aliases_df = aliases_df[
             ~aliases_df["canonical_id"].astype(str).isin(inferred_ids)
         ].reset_index(drop=True)
+    # ALSO strip every alias row whose raw form ORIGINATED from this
+    # generator's own committed output — enrich-record aliases (folded-to-HF
+    # `{id, aliases}` rows put raws on NON-inferred canonicals) AND full-draft
+    # ids/aliases that the seed's collision_fold moved onto a twin canonical.
+    # The inferred-row filter above misses both classes. Leaving them in flips
+    # the residual tail run-to-run: with the alias seeded the raw resolves
+    # (record dropped), without it the raw is no_match again (record
+    # re-minted) — a two-state oscillation.
+    if TIER3_YAML.exists():
+        prior = yaml.safe_load(TIER3_YAML.read_text()) or []
+        prior = prior.get("entries", prior) if isinstance(prior, dict) else prior
+        own_forms: set[str] = set()
+        for e in prior:
+            if not isinstance(e, dict) or not e.get("id"):
+                continue
+            if "display_name" in e:
+                own_forms.add(str(e["id"]))
+            for a in e.get("aliases") or []:
+                if a:
+                    own_forms.add(str(a))
+        if own_forms:
+            keep = [str(rv) not in own_forms for rv in aliases_df["raw_value"]]
+            aliases_df = aliases_df.loc[keep].reset_index(drop=True)
     alias_store = AliasStore(aliases_df, read_only=True)
     return Resolver(alias_store, canonical_store=cs)
 
@@ -372,6 +395,28 @@ def main() -> None:
     # so the seed loader unions the raw onto the existing HF canonical.
     fold_enrich: dict[str, set[str]] = {}
 
+    # Seed-time collision-fold parity: the seed's fold_collisions merges any
+    # canonical whose separator/case-stripped id key matches an existing one
+    # (`cohere/CommandA` -> `cohere/command-a`). Minting such a draft here
+    # would create a one-run row the NEXT seed folds away (its raw then
+    # resolves via the fold alias, the run after re-mints it — a two-state
+    # oscillation). Detect the fold up front and emit the stable enrich
+    # record instead. Same `_bsizes` guard as fold_collisions.
+    from eval_card_registry.lib.collision_fold import _bsizes as _ck_bsizes
+    from eval_card_registry.lib.collision_fold import collision_key as _ck
+
+    ck_index: dict[str, str] = {}
+    _clean_models = r.canonical_store._tables.get("model")
+    if _clean_models is not None and not _clean_models.empty:
+        for _cid in _clean_models["id"].astype(str):
+            ck_index.setdefault(_ck(_cid), _cid)
+
+    def fold_to_collision_twin(cid: str) -> Optional[str]:
+        hit = ck_index.get(_ck(cid))
+        if hit is not None and hit != cid and _ck_bsizes(hit) == _ck_bsizes(cid):
+            return hit
+        return None
+
     # --- alias-confirmation index: normalized base candidate -> canonical id.
     # Built from the resolver's own alias/canonical universe so an inferred base
     # only yields an edge when it alias-confirms to something that exists.
@@ -528,6 +573,15 @@ def main() -> None:
         if fold_hf is not None:
             fold_enrich.setdefault(fold_hf, set()).add(raw)
             buckets["folded-to-hf"] += 1
+            continue
+
+        # --- DEFER to a seed-time collision twin ---------------------------
+        # A mint the seed's fold_collisions would merge anyway (case/separator
+        # twin of an existing canonical) becomes a stable enrich record here.
+        fold_ck = fold_to_collision_twin(cid)
+        if fold_ck is not None:
+            fold_enrich.setdefault(fold_ck, set()).add(raw)
+            buckets["folded-collision"] += 1
             continue
 
         # id-collision guard (CASE-INSENSITIVE). Two distinct raw ids can mint to

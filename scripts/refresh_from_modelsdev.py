@@ -1058,10 +1058,6 @@ def _provider_alias_forms(
     forms: set[str] = set()
     if not raw:
         return []
-    # `openrouter/*` router pseudo-endpoints are routing products, not models:
-    # no surface form of them is ever a model alias.
-    if _is_router_pseudo_endpoint(raw):
-        return []
     # Keep the raw spelling only when it's a clean single-token id.
     if "/" not in raw and not raw.startswith("@") and not raw.startswith("~"):
         forms.add(raw)
@@ -1657,14 +1653,8 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
 
     for root_key, recs in sorted(groups.items()):
         # Drop records whose provider isn't a known inference_platform (none
-        # today — all 137 map — but keep the guard for forward-compat), and
-        # `openrouter/*` router pseudo-endpoint references (routing products,
-        # not models — never minted, never aliased; G1 exclusion).
-        recs = [
-            r for r in recs
-            if r["provider"] in PROVIDER_TO_INFERENCE_PLATFORM
-            and not _is_router_pseudo_endpoint(r.get("raw") or "")
-        ]
+        # today — all 137 map — but keep the guard for forward-compat).
+        recs = [r for r in recs if r["provider"] in PROVIDER_TO_INFERENCE_PLATFORM]
         if not recs:
             # No record survived the platform filter; nothing to mint or track.
             continue
@@ -2173,24 +2163,35 @@ def _twin_key(cid: str) -> str:
     return collision_key(cid)
 
 
+def _version_marker_sig(name: str) -> str:
+    """Sorted `vN`-marker tokens of a RAW leaf (split on separators BEFORE any
+    tag/Bedrock strip). `nova-premier-v1:0` carries `v1`; the bare
+    `nova-premier` carries none — the two must never twin (a `-v1`/Bedrock
+    version key keeps separate identity per the adoption plan)."""
+    toks = re.split(r"[-_.:/\s]+", name.lower())
+    return "+".join(sorted(t for t in toks if re.fullmatch(r"v\d+", t)))
+
+
 def _extended_twin_keys(cid: str) -> set[str]:
     """Order/brand-insensitive FALLBACK twin keys for the respellings
     `_twin_key`'s ordered `collision_key` cannot match — the OpenRouter
     adoption class (`anthropic/claude-haiku-3` vs adopted
     `anthropic/claude-3-haiku`, `sao10K/l3-8b-lunaris` vs
     `sao10k/l3-lunaris-8b`, `perplexity/perplexity-sonar-…` vs
-    `perplexity/sonar-…`). Keys are `dev-org/identity-sig` (identity sig =
-    variant-preserving token multiset), so a variant/size difference still
-    never twins. Used only after a `_twin_key` miss, with the same `_bsizes`
-    guard at the call sites."""
+    `perplexity/sonar-…`). Keys are `dev-org/identity-sig#vN-markers`
+    (identity sig = variant-preserving token multiset; the vN-marker sig keeps
+    a Bedrock `-v1:0` spelling from twinning its base), so a
+    variant/size/version difference still never twins. Used only after a
+    `_twin_key` miss, with the same `_bsizes` guard at the call sites."""
     if "/" not in cid:
-        return {_identity_sig(cid)}
+        return {f"{_identity_sig(cid)}#{_version_marker_sig(cid)}"}
     org, name = cid.split("/", 1)
     dev = _hf_to_dev().get(org.lower()) or org.lower()
-    keys = {f"{dev}/{_identity_sig(name)}"}
+    vsig = _version_marker_sig(name)
+    keys = {f"{dev}/{_identity_sig(name)}#{vsig}"}
     toks = _variant_identity(name).split("-")
     if len(toks) > 1 and _hf_to_dev().get(toks[0]) == dev:
-        keys.add(f"{dev}/{safe_sig('-'.join(toks[1:]))}")
+        keys.add(f"{dev}/{safe_sig('-'.join(toks[1:]))}#{vsig}")
     return keys
 
 
@@ -2456,6 +2457,29 @@ def reconcile_generated_against_existing(
     existing_exact, existing_norm = _build_existing_index(sources)
     _steals = _make_steal_guard(existing_exact, existing_norm)
 
+    # Ids DEFINED (not merely enriched) by an existing source: only a record
+    # with a display_name defines a canonical. An alias-only enrich record
+    # (e.g. an enrichments/aliases.yaml bridge keyed by the id) must not make
+    # the re-emit branch below suppress the batch's own DEFINITION of that id
+    # — that would leave the canonical defined nowhere (a bare row).
+    defining_ids: set[str] = set()
+    for path in sources:
+        for e in _catalog_load_list(path):
+            if isinstance(e, dict) and e.get("id") and "display_name" in e:
+                defining_ids.add(e["id"])
+    # Valid suppression OWNERS additionally include ids defined by the derived
+    # broad sources and by this batch itself — but NEVER an id that exists
+    # only as an enrich-record key (suppressing a definition onto a
+    # non-defining id would materialize a bare canonical).
+    owner_defining: set[str] = set(defining_ids)
+    for path in (CATALOG_OUT_PATH, TIER3_PATH):
+        for e in _catalog_load_list(path):
+            if isinstance(e, dict) and e.get("id") and "display_name" in e:
+                owner_defining.add(e["id"])
+    for e in entries:
+        if isinstance(e, dict) and e.get("id") and "display_name" in e:
+            owner_defining.add(e["id"])
+
     def _owner_of(form: str) -> str | None:
         """The existing canonical id that owns `form` (exact then normalized)."""
         return existing_exact.get(form) or existing_norm.get(_norm(form))
@@ -2472,6 +2496,33 @@ def reconcile_generated_against_existing(
 
     def _owner_broad(form: str) -> str | None:
         return _hy_exact.get(form) or _hy_norm.get(_norm(form))
+
+    # Defined-owner lookup: like _owner_broad, but only claims made by records
+    # whose id is itself DEFINED anywhere count. Used to repoint an enrich
+    # record keyed by a renamed-away id onto the entity that now carries that
+    # id as an alias (a dead record's self-claim must not keep it alive).
+    _def_exact: dict[str, str] = {}
+    _def_norm: dict[str, str] = {}
+    for path in sources + (CATALOG_OUT_PATH, TIER3_PATH):
+        for e2 in _catalog_load_list(path):
+            cid2 = e2.get("id") if isinstance(e2, dict) else None
+            if not cid2 or cid2 not in owner_defining:
+                continue
+            for form2 in [cid2, e2.get("display_name"), *(e2.get("aliases") or [])]:
+                if form2:
+                    _def_exact.setdefault(form2, cid2)
+                    _def_norm.setdefault(_norm(form2), cid2)
+    for e2 in entries:
+        cid2 = e2.get("id") if isinstance(e2, dict) else None
+        if not cid2 or "display_name" not in e2:
+            continue
+        for form2 in [cid2, e2.get("display_name"), *(e2.get("aliases") or [])]:
+            if form2:
+                _def_exact.setdefault(form2, cid2)
+                _def_norm.setdefault(_norm(form2), cid2)
+
+    def _defined_owner_of(form: str) -> str | None:
+        return _def_exact.get(form) or _def_norm.get(_norm(form))
 
     # ORG-AWARE fold index over the existing sources (+ frozen oracle HF ids): a
     # mint that refers to the SAME model as a real HF repo under a DIFFERENT id
@@ -2505,7 +2556,7 @@ def reconcile_generated_against_existing(
         owner: str | None = None
         if cid and _steals(cid, cid):
             o = _owner_of(cid)
-            if o and o != cid:
+            if o and o != cid and o in owner_defining:
                 owner = o
         # A mint whose id EXACTLY equals an existing canonical id IS that canonical
         # (a re-emit, e.g. an HF-present model models.dev also serves). MERGE its
@@ -2516,7 +2567,7 @@ def reconcile_generated_against_existing(
         # decide_fold on it: decide_fold's fuzzy tier strips variant markers
         # (-instruct/-it/…) and would drag a distinct variant that is itself a real
         # canonical onto the base (e.g. Llama-3.2-1B-Instruct -> the base ...-3.2-1B).
-        if owner is None and cid and existing_exact.get(cid) == cid:
+        if owner is None and cid and cid in defining_ids:
             suppressed.append(e)
             suppressed_owner[cid] = cid   # owner == self: enrich onto the existing id
             continue
@@ -2526,13 +2577,19 @@ def reconcile_generated_against_existing(
             suppressed.append(e)
             suppressed_owner[cid] = owner
             continue
-        # A carried-forward enrich record (no display_name) whose owner id no
-        # longer exists ANYWHERE (existing sources, catalog/tier3, core's
-        # entry/alias surface) would otherwise survive as a bare canonical
-        # (no display_name/org) forever. Enriching nothing is meaningless —
-        # drop it LOUDLY; a real resolution loss then fails the oracle gates
-        # instead of hiding behind a silent bare canonical.
-        if cid and "display_name" not in e and _owner_broad(cid) is None:
+        # A carried-forward enrich record (no display_name) keyed by an id no
+        # source DEFINES would otherwise survive as a bare canonical (no
+        # display_name/org) forever. Repoint it onto the DEFINED entity that
+        # carries the id as an alias (the post-adoption owner) when one
+        # exists; enriching nothing at all is meaningless — drop LOUDLY, so a
+        # real resolution loss fails the oracle gates instead of hiding
+        # behind a silent bare canonical.
+        if cid and "display_name" not in e and cid not in owner_defining:
+            ob = _defined_owner_of(cid)
+            if ob is not None and ob != cid:
+                suppressed.append(e)
+                suppressed_owner[cid] = ob
+                continue
             print(
                 f"[refresh] WARNING: dropping orphaned enrich record {cid!r} "
                 f"(owner vanished from every source); forms dropped: "
@@ -2571,7 +2628,7 @@ def reconcile_generated_against_existing(
         foreign_cid = (
             cid_owner is not None
             and cid_owner != owner
-            and _committed.get(cid_owner) != owner
+            and (cid_owner in owner_defining or _committed.get(cid_owner) != owner)
         )
         if not _steals(cid, owner) or cid != owner:
             # The dropped mint id resolves to the owner: keep it as an alias —
@@ -2601,8 +2658,11 @@ def reconcile_generated_against_existing(
             # COMMITTED file assigns to a third entity (carry-forward keeps it
             # there; donating it here would double-claim).
             other = _owner_broad(a)
-            if other is not None and other != owner and _committed.get(other) != owner:
-                # (stale claim by an id absorbed onto `owner` is not foreign)
+            if other is not None and other != owner and (
+                other in owner_defining or _committed.get(other) != owner
+            ):
+                # (a stale claim by a NON-defined id absorbed onto `owner` is
+                # not foreign; a DEFINED owner always keeps its forms)
                 continue
             if a in sibling_ids:
                 continue
@@ -2647,10 +2707,14 @@ def reconcile_generated_against_existing(
 
         def _foreign(form: str) -> bool:
             o = _owner_broad(form)
-            if o is not None and o != cid and claimed.get(o) != cid:
+            if o is not None and o != cid and (
+                o in owner_defining or claimed.get(o) != cid
+            ):
                 # owned by an established canonical — unless that "owner" id
-                # was itself just absorbed onto cid by the carry-forward (a
-                # stale record in a not-yet-regenerated source file)
+                # is NOT itself a defined canonical and was just absorbed onto
+                # cid by the carry-forward (a stale record in a
+                # not-yet-regenerated source file). A DEFINED owner always
+                # keeps its forms.
                 return True
             if form in sibling_ids and form != cid:
                 return True                       # is a different sibling's id
@@ -2681,7 +2745,37 @@ def reconcile_generated_against_existing(
         if len(rec) > 1:
             enrich_records.append(rec)
     out = survivors + enrich_records
-    return sorted(out, key=lambda e: e.get("id") or "")
+
+    # Consolidate records sharing an id: carried-forward enrich records can
+    # duplicate each other (or a fresh enrich record for the same owner) —
+    # without this merge each regen would carry ONE MORE copy forever. A
+    # display_name-bearing record wins the base slot; aliases set-union; weak
+    # scalars first-wins per field (the loader's tie-break order).
+    by_id: dict[str, dict] = {}
+    consolidated: list[dict] = []
+    for e in out:
+        cid = e.get("id")
+        if not cid:
+            consolidated.append(e)
+            continue
+        cur = by_id.get(cid)
+        if cur is None:
+            by_id[cid] = e
+            consolidated.append(e)
+            continue
+        if "display_name" in e and "display_name" not in cur:
+            # keep the DEFINING record as the base; fold `cur` into it
+            e, cur = cur, e
+            idx = consolidated.index(e)
+            consolidated[idx] = cur
+            by_id[cid] = cur
+        if e.get("aliases"):
+            cur["aliases"] = sorted(set(cur.get("aliases") or []) | set(e["aliases"]))
+        if "display_name" not in cur:
+            # weak scalars only flow between enrich records; a full entry
+            # keeps its own strong fields and never absorbs weak ones.
+            _merge_weak(cur, e.get("weak") or {})
+    return sorted(consolidated, key=lambda e: e.get("id") or "")
 
 _CATALOG_HEADER = """# AUTO-GENERATED by scripts/refresh_from_modelsdev.py (catalog split) — DO NOT HAND-EDIT.
 # models.dev full-catalog seed. Two record kinds:
@@ -2731,10 +2825,20 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
             existing_exact.setdefault(form, cid)
             existing_norm.setdefault(_norm(form), cid)
 
+    # Only DEFINED canonicals (a display_name-bearing record somewhere) may own
+    # forms: an enrich record keyed by a renamed-away id must never become a
+    # fold/donation target — a catalog record keyed by it would materialize a
+    # bare canonical that splits the entity from its adopted definition.
+    defined_anywhere: set[str] = set()
+    for path in _CATALOG_EXISTING_SOURCES:
+        for e in _catalog_load_list(path):
+            if isinstance(e, dict) and e.get("id") and "display_name" in e:
+                defined_anywhere.add(e["id"])
+
     for path in _CATALOG_EXISTING_SOURCES:
         for e in _catalog_load_list(path):
             cid = e.get("id")
-            if not cid:
+            if not cid or cid not in defined_anywhere:
                 continue
             _add_form(cid, cid)
             _add_exact(cid, cid)
@@ -2789,6 +2893,11 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
     for c in committed:
         ccid = c.get("id")
         if not ccid or ccid in core_skip:
+            continue
+        # A committed ENRICH record keyed by an id no source defines is dead
+        # (a renamed-away key) — its claims must not block the forms' real
+        # owners. Committed FULL mints define themselves and always pre-claim.
+        if "display_name" not in c and ccid not in defined_anywhere:
             continue
         fresh_form_owner.setdefault(ccid, ccid)
         for a in (c.get("aliases") or []):

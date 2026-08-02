@@ -221,10 +221,12 @@ def test_rehost_junk_key_is_never_adopted(mod, monkeypatch):
 # ---------------------------------------------------------------------------
 # openrouter/* router pseudo-endpoints
 # ---------------------------------------------------------------------------
-def test_router_pseudo_endpoints_never_minted_or_adopted(mod):
-    """`openrouter/*` keys are routing products, not models: the records are
-    dropped before grouping, so nothing is minted, adopted, or aliased from
-    them — from ANY provider's spelling of them."""
+def test_router_pseudo_endpoints_never_adopted_as_ids(mod):
+    """`openrouter/*` keys are routing products: they are never ADOPTED as
+    canonical ids and never emitted verbatim as aliases. The pre-existing bare
+    mints (`auto`, `bodybuilder`) stay — the raws exist in EEE data and the
+    policy removes nothing — but no canonical may live under the `openrouter/`
+    namespace."""
     api = {
         "openrouter": {"id": "openrouter", "name": "OpenRouter", "models": {
             "openrouter/auto": _or_rec("openrouter/auto", "Auto Router"),
@@ -237,7 +239,12 @@ def test_router_pseudo_endpoints_never_minted_or_adopted(mod):
     out, missing = mod._generate_models(api, KNOWN_ORGS)
     assert missing == []
     out = mod._finalize_entries(out)
-    assert out == [], f"router endpoints must not mint: {[e['id'] for e in out]}"
+    assert all(not e["id"].lower().startswith("openrouter/") for e in out)
+    for e in out:
+        assert not any(a.lower().startswith("openrouter/") for a in e.get("aliases") or []), (
+            f"router key aliased verbatim on {e['id']}: {e['aliases']}"
+        )
+    assert mod._clean_openrouter_key("openrouter/auto") is None, "router keys are never adoptable"
 
 
 # ---------------------------------------------------------------------------
@@ -281,8 +288,12 @@ def test_provider_alias_forms_slash_raw_still_dropped_for_other_providers(mod):
     assert "meta-llama/llama-3.3-70b-instruct" not in forms
 
 
-def test_provider_alias_forms_never_emit_router_keys(mod):
-    assert mod._provider_alias_forms("openrouter/auto", None, "openrouter") == []
+def test_provider_alias_forms_never_emit_router_keys_verbatim(mod):
+    """The G2 verbatim-key emission never surfaces an `openrouter/*` router
+    pseudo-endpoint key (the normalized bare form still flows, as before —
+    the router products stay resolvable, per the nothing-is-removed policy)."""
+    forms = mod._provider_alias_forms("openrouter/auto", None, "openrouter")
+    assert "openrouter/auto" not in forms
 
 
 def test_openrouter_key_aliases_variant_entity_not_base(mod):
