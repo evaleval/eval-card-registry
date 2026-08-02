@@ -1,15 +1,17 @@
-"""Read-only HF id CONFIRMATION via the local hub_stats_index.
+"""HF id CONFIRMATION via the local hub_stats_index (read-only mode).
 
-The read-only resolve path consults a periodically-refreshed local index of HF
-model ids so it can CONFIRM an exact HF model id that was never minted into the
-registry — with NO minting / NO persistence. The confirmation comes back in the
-EXISTING ResolveResponse shape:
+The resolver chain consults the HF id checker (HfIdVerifier, index tier here)
+as a first-class step, so a valid HF model id that was never minted into the
+registry CONFIRMS — in read-only mode with NO minting / NO persistence. The
+confirmation comes back in the EXISTING ResolveResponse shape:
   canonical_id=<HF-true id>, strategy="exact", confidence=1.0, created_new=False,
   resolution_source="hub_stats_index", review_status=None, ancestry=[],
   resolution_detail={"granularity": None, "hf_repo_id": <same id>}.
 
-Mirrors tests/test_d1_hierarchy.py fixture/TestClient style. Synthetic
-hub_stats_index rows are built in-memory — never the real index.
+Write-mode behavior (minting the attested id, alias flagging) is covered in
+tests/test_model_id_policy.py. Mirrors tests/test_d1_hierarchy.py
+fixture/TestClient style. Synthetic hub_stats_index rows are built in-memory —
+never the real index.
 """
 import json
 

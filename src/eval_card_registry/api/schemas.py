@@ -22,11 +22,19 @@ class ParentEdge(BaseModel):
 
 # --- Resolve ---
 
+ResolveMode = Literal["resolve", "exact"]
+
+
 class ResolveRequest(BaseModel):
     raw_value: str
     entity_type: EntityType
     source_config: Optional[str] = None
     source_field: Optional[str] = None
+    # "resolve" (default) runs the full chain incl. fuzzy inference and — in
+    # write mode — auto-creates a draft on no_match. "exact" stops after the
+    # exact/normalized alias and HF-id-check steps: no fuzzy guessing, no
+    # draft creation, no alias writes — a miss is an honest no_match.
+    mode: ResolveMode = "resolve"
 
 
 # --- Lean resolve contract ---

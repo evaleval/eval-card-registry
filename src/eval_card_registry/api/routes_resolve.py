@@ -81,6 +81,7 @@ def resolve(
         entity_type=req.entity_type,
         source_config=req.source_config,
         source_field=req.source_field,
+        mode=req.mode,
     )
     _log_resolve(log_writer, str(uuid.uuid4()), req, result)
     return _project_response(req, result)
@@ -100,6 +101,7 @@ def resolve_batch(
             entity_type=r.entity_type,
             source_config=r.source_config,
             source_field=r.source_field,
+            mode=r.mode,
         )
         _log_resolve(log_writer, request_id, r, result)
         responses.append(_project_response(r, result))

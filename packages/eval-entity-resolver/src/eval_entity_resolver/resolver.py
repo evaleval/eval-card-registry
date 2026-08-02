@@ -10,11 +10,16 @@ get back from `POST /api/v1/resolve`."""
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 from eval_entity_resolver.alias_store import AliasStore
-from eval_entity_resolver.canonical_store import CanonicalStore
-from eval_entity_resolver.models import ResolutionResult, ResolverConfig
+from eval_entity_resolver.canonical_store import CanonicalStore, _hf_repo_id_of
+from eval_entity_resolver.models import (
+    HfIdHit,
+    ResolutionResult,
+    ResolverConfig,
+    looks_like_hf_id,
+)
 from eval_entity_resolver.strategies.exact import exact_match
 from eval_entity_resolver.strategies.normalized import normalized_match
 from eval_entity_resolver.strategies.fuzzy import fuzzy_match
@@ -31,15 +36,24 @@ class Resolver:
         store: AliasStore,
         config: Optional[ResolverConfig] = None,
         canonical_store: Optional[CanonicalStore] = None,
+        hf_id_checker: Optional[Callable[[str], Optional[HfIdHit]]] = None,
     ) -> None:
         """`store` is required (alias matching is the resolver's core job).
         `canonical_store` is optional — when provided, results are
         enriched with parent / lineage / metadata fields. Without it,
         only the basic match fields (canonical_id, strategy, confidence)
-        are populated."""
+        are populated.
+
+        `hf_id_checker` is optional — when provided, HF-shaped model raw
+        values are checked against it as a resolution step: a verbatim
+        (case-insensitive) confirmation outranks any alias match, and a
+        normalized (separator-collapse) confirmation ranks between the
+        normalized-alias and fuzzy steps. Without it, the chain is
+        identical to the classic exact → normalized → fuzzy order."""
         self.store = store
         self.config = config or ResolverConfig()
         self.canonical_store = canonical_store
+        self.hf_id_checker = hf_id_checker
 
     @classmethod
     def from_parquet(
@@ -76,22 +90,71 @@ class Resolver:
         raw_value: str,
         entity_type: str,
         source_config: Optional[str] = None,
+        mode: str = "resolve",
     ) -> ResolutionResult:
         # 1. Exact
         canonical_id = exact_match(raw_value, entity_type, source_config, self.store)
-        if canonical_id is not None:
-            return self._enrich(raw_value, entity_type, source_config, canonical_id, "exact", 1.0)
 
-        # 2. Normalized (confidence 0.95 — only return if above threshold)
+        # 2. HF id check (models only, HF-shaped only, checker injected).
+        # Called at most once per resolve; the hit is reused by the
+        # normalized-tier step below.
+        hf_hit = self._maybe_check_hf_id(raw_value, entity_type, canonical_id)
+        if hf_hit is not None and hf_hit.verbatim:
+            if canonical_id is not None and canonical_id == hf_hit.hf_id:
+                # Agreement — the registry result is richer; stamp the
+                # runtime attestation onto it.
+                result = self._enrich(
+                    raw_value, entity_type, source_config, canonical_id, "exact", 1.0
+                )
+                return self._stamp_hf_attestation(result, hf_hit)
+            # Disagreement or registry miss — the verbatim HF id wins over
+            # any alias mapping (owner decision: a string that IS a real HF
+            # repo id resolves to itself).
+            return self._hf_checker_result(
+                raw_value, entity_type, source_config, hf_hit, "exact", 1.0
+            )
+
+        if canonical_id is not None:
+            result = self._enrich(
+                raw_value, entity_type, source_config, canonical_id, "exact", 1.0
+            )
+            if hf_hit is not None and canonical_id == hf_hit.hf_id:
+                result = self._stamp_hf_attestation(result, hf_hit)
+            return result
+
+        # 3. Normalized alias (confidence 0.95 — only return if above
+        # threshold). A curated normalized alias outranks a merely
+        # separator-collapsed HF index hit.
         if _NORMALIZED_CONFIDENCE >= self.config.threshold:
             canonical_id = normalized_match(raw_value, entity_type, self.store, source_config)
             if canonical_id is not None:
-                return self._enrich(
+                result = self._enrich(
                     raw_value, entity_type, source_config,
                     canonical_id, "normalized", _NORMALIZED_CONFIDENCE,
                 )
+                if hf_hit is not None and canonical_id == hf_hit.hf_id:
+                    result = self._stamp_hf_attestation(result, hf_hit)
+                return result
 
-        # 3. Fuzzy — thread the store-backed curated org map (incl. orgs.yaml
+        # 4. Normalized-tier HF id check hit (separator-collapse match).
+        if hf_hit is not None and not hf_hit.verbatim:
+            return self._hf_checker_result(
+                raw_value, entity_type, source_config,
+                hf_hit, "normalized", _NORMALIZED_CONFIDENCE,
+            )
+
+        # Exact-only mode stops here: no fuzzy inference.
+        if mode == "exact":
+            return ResolutionResult(
+                raw_value=raw_value,
+                entity_type=entity_type,
+                source_config=source_config,
+                canonical_id=None,
+                strategy="no_match",
+                confidence=0.0,
+            )
+
+        # 5. Fuzzy — thread the store-backed curated org map (incl. orgs.yaml
         # alias tier) into the org-agreement guard so org-equivalent namespaces
         # (AlephAlpha/aleph-alpha, MiniMaxAI/minimax, Alibaba-NLP/alibaba) fold
         # and match.
@@ -114,7 +177,7 @@ class Resolver:
                 result.inference_platform = inferred_platform
             return result
 
-        # 4. No match
+        # 6. No match
         return ResolutionResult(
             raw_value=raw_value,
             entity_type=entity_type,
@@ -123,6 +186,89 @@ class Resolver:
             strategy="no_match",
             confidence=0.0,
         )
+
+    # ------------------------------------------------------------------
+    # HF id check (injected)
+    # ------------------------------------------------------------------
+
+    def _maybe_check_hf_id(
+        self,
+        raw_value: str,
+        entity_type: str,
+        exact_canonical_id: Optional[str],
+    ) -> Optional[HfIdHit]:
+        """Run the injected HF id checker when it can change the outcome.
+
+        Skipped when: no checker, non-model, not HF-shaped, or the exact
+        alias hit is byte-equal to the raw value AND that canonical row is
+        already HF-attested (oracle `resolution_source == "hf"` or
+        hub-stats-confirmed) — in that narrow case the checker can only
+        agree, so the (possibly live) call is saved. A case-only or
+        unattested agreement still runs the checker, because the checker is
+        what recovers HF-true casing for lowercased drafts."""
+        if self.hf_id_checker is None or entity_type != "model":
+            return None
+        if not looks_like_hf_id(raw_value):
+            return None
+        if exact_canonical_id is not None and exact_canonical_id == raw_value:
+            if self._is_hf_attested(exact_canonical_id):
+                return None
+        return self.hf_id_checker(raw_value)
+
+    def _is_hf_attested(self, canonical_id: str) -> bool:
+        if self.canonical_store is None:
+            return False
+        ent = self.canonical_store.lookup("model", canonical_id)
+        return _hf_repo_id_of(ent, canonical_id) is not None
+
+    def _hf_checker_result(
+        self,
+        raw_value: str,
+        entity_type: str,
+        source_config: Optional[str],
+        hit: HfIdHit,
+        strategy: str,
+        confidence: float,
+    ) -> ResolutionResult:
+        """Build the result for a winning HF id check hit. A registered
+        canonical gets the full registry enrichment; an unregistered one
+        gets a bare result flagged `hf_attested_unregistered` so the
+        service layer can auto-create it (write mode) or serve it without
+        minting (read-only)."""
+        known = (
+            self.canonical_store is not None
+            and self.canonical_store.lookup("model", hit.hf_id) is not None
+        )
+        if known:
+            result = self._enrich(
+                raw_value, entity_type, source_config, hit.hf_id, strategy, confidence
+            )
+            return self._stamp_hf_attestation(result, hit)
+        return ResolutionResult(
+            raw_value=raw_value,
+            entity_type=entity_type,
+            source_config=source_config,
+            canonical_id=hit.hf_id,
+            strategy=strategy,
+            confidence=confidence,
+            resolution_source=hit.source,
+            ancestry=[],
+            resolution_detail={"granularity": None, "hf_repo_id": hit.hf_id},
+            hf_attestation=hit.hf_id,
+            hf_attested_unregistered=True,
+        )
+
+    @staticmethod
+    def _stamp_hf_attestation(result: ResolutionResult, hit: HfIdHit) -> ResolutionResult:
+        """The checker just runtime-attested the repo id, so surface it in
+        `resolution_detail.hf_repo_id` even when the canonical row itself
+        carries no HF provenance. Only stamped when the response canonical
+        IS the attested id (root-collapse may have moved it)."""
+        if result.canonical_id == hit.hf_id:
+            result.hf_attestation = hit.hf_id
+            if isinstance(result.resolution_detail, dict):
+                result.resolution_detail["hf_repo_id"] = hit.hf_id
+        return result
 
     def _org_fold_map(self) -> dict:
         """The org-fold map threaded into the fuzzy org-agreement guard, built

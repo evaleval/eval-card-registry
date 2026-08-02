@@ -138,7 +138,9 @@ You should now see `eval_results`, `aliases`, and entity counts populated. Each 
 
 ## How it works
 
-Raw strings from EEE (e.g. `"MATH Level 5"`, `"lm-evaluation-harness"`) are resolved to canonical IDs (`math`, `lm-evaluation-harness`) through a strategy chain: exact alias match → normalized match (collapses case + all separators — spaces, hyphens, underscores, and slashes) → fuzzy stem match (strips known suffixes like `-fc`/`-prompt`, normalizes org prefixes) → auto-create draft. Every resolution is logged with its strategy and confidence score.
+Raw strings from EEE (e.g. `"MATH Level 5"`, `"lm-evaluation-harness"`) are resolved to canonical IDs (`math`, `lm-evaluation-harness`) through a strategy chain: exact alias match → HF id check (models only — a raw value that IS a valid HF repo id, per the local hub-stats index or a rate-limited live Hub API check, resolves to itself in HF-true casing and outranks any alias fold) → normalized match (collapses case + all separators — spaces, hyphens, underscores, and slashes) → normalized-tier HF id check → fuzzy stem match (strips known suffixes like `-fc`/`-prompt`, normalizes org prefixes) → auto-create draft. Every resolution is logged with its strategy and confidence score.
+
+Resolve requests accept `mode: "resolve" | "exact"` (default `resolve`). Exact mode stops after the alias and HF-id-check steps: no fuzzy inference, no draft creation, no alias writes — a miss is an honest `no_match`.
 
 **Models** are grounded in a three-tier source-of-truth: HuggingFace (the
 `fixed_hf_model_id` oracle + the hub-stats index) → models.dev catalog →

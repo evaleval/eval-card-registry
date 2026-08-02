@@ -3,6 +3,10 @@ from typing import Literal, Optional
 
 
 ResolutionStrategy = Literal["exact", "normalized", "fuzzy", "no_match"]
+# Resolution mode: "resolve" runs the full chain incl. fuzzy inference;
+# "exact" stops after the exact/normalized alias and HF-id-check steps and
+# returns no_match instead of guessing (and callers must not auto-create).
+ResolveMode = Literal["resolve", "exact"]
 # `composite` and `family` are first-class resolvable entity types
 # (they resolve against canonical_composites / canonical_families).
 # `slice`/subset is deliberately NOT a type — it stays a parent-only
@@ -11,6 +15,34 @@ ResolutionStrategy = Literal["exact", "normalized", "fuzzy", "no_match"]
 EntityType = Literal[
     "model", "benchmark", "metric", "harness", "org", "composite", "family"
 ]
+
+
+def looks_like_hf_id(raw_value: str) -> bool:
+    """HF id heuristic: contains a single `/` with non-empty parts on both
+    sides. Conservative — won't trigger HF-id checks for bare model names or
+    paths with multiple slashes (which are likely malformed)."""
+    if not raw_value or raw_value.count("/") != 1:
+        return False
+    org, name = raw_value.split("/", 1)
+    return bool(org.strip()) and bool(name.strip())
+
+
+@dataclass
+class HfIdHit:
+    """A confirmed HF repo id from an injected `hf_id_checker`.
+
+    - `hf_id`: the repo id in HF-true casing.
+    - `verbatim`: True when the raw value equals `hf_id` case-insensitively
+      (HF repo ids are case-insensitively unique, so this identifies the repo
+      exactly); False when the match was a separator-collapse (normalized).
+    - `source`: where the confirmation came from — `hub_stats_index` (the
+      cron-built local index) or `hf_live` (a live Hub API check). Maps
+      directly onto `resolution_source` when the hit wins for an id the
+      registry doesn't know.
+    """
+    hf_id: str
+    verbatim: bool
+    source: str
 
 
 @dataclass
@@ -122,6 +154,18 @@ class ResolutionResult:
     #                 "matched_subset": str|None}
     #   composite|family|metric|harness|org -> {} (reserved)
     resolution_detail: Optional[dict] = None
+    # The repo id the injected HF id checker confirmed during this resolve
+    # (HF-true casing), when it did. Set on checker-won results AND on
+    # alias-won results the checker agreed with. The service layer uses it to
+    # let checker-backed results outrank a stored alias without guessing from
+    # strategy/source fields. Never serialized over HTTP.
+    hf_attestation: Optional[str] = None
+    # True when the match came from the HF id check and the confirmed repo id
+    # is NOT a registered canonical. The service layer uses this to route the
+    # result into auto-create (adopting the HF-true id) in write mode, and to
+    # avoid emitting FK references (aliases, parent edges, eval_results rows)
+    # to an entity that doesn't exist. Never serialized over HTTP.
+    hf_attested_unregistered: bool = False
 
 
 @dataclass
