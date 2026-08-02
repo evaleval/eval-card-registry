@@ -17442,12 +17442,6 @@
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "meta-llama/Llama-3.2-1B"}'
-- id: meta-llama/Llama-3.2-1B-Instruct
-  display_name: Llama-3.2-1B-Instruct
-  org_id: meta
-  resolution_source: hf
-  review_status: reviewed
-  metadata: '{"hf_id": "meta-llama/Llama-3.2-1B-Instruct"}'
 - id: meta-llama/Llama-3.2-3B
   display_name: Llama-3.2-3B
   org_id: meta
@@ -17556,12 +17550,6 @@
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "microsoft/Phi-3-mini-128k-instruct"}'
-- id: microsoft/Phi-3-mini-4k-instruct
-  display_name: Phi-3-mini-4k-instruct
-  org_id: microsoft
-  resolution_source: hf
-  review_status: reviewed
-  metadata: '{"hf_id": "microsoft/Phi-3-mini-4k-instruct"}'
 - id: microsoft/Phi-3-small-128k-instruct
   display_name: Phi-3-small-128k-instruct
   org_id: microsoft
@@ -19120,12 +19108,6 @@
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "nvidia/Nemotron-Cascade-2-30B-A3B"}'
-- id: nvidia/Nemotron-Mini-4B-Instruct
-  display_name: nvidia/Nemotron-Mini-4B-Instruct
-  org_id: nvidia
-  resolution_source: hf
-  review_status: reviewed
-  metadata: '{"hf_id": "nvidia/Nemotron-Mini-4B-Instruct"}'
 - id: nvidia/OpenMath2-Llama3.1-8B
   display_name: OpenMath2-Llama3.1-8B
   org_id: nvidia
@@ -19398,7 +19380,7 @@
   review_status: reviewed
   metadata: '{"hf_id": "open-thoughts/OpenThinker-7B"}'
 - id: openai-community/gpt2
-  display_name: gpt2
+  display_name: openai-community/gpt2
   org_id: openai-community
   resolution_source: hf
   review_status: reviewed
@@ -19416,7 +19398,7 @@
   review_status: reviewed
   metadata: '{"hf_id": "openai-community/gpt2-medium"}'
 - id: openai-community/gpt2-xl
-  display_name: gpt2-xl
+  display_name: openai-community/gpt2-xl
   org_id: openai-community
   resolution_source: hf
   review_status: reviewed
@@ -21230,13 +21212,13 @@
   review_status: reviewed
   metadata: '{"hf_id": "sarvamai/OpenHathi-7B-Hi-v0.1-Base"}'
 - id: sarvamai/sarvam-105b
-  display_name: sarvam-105b
+  display_name: sarvamai/sarvam-105b
   org_id: sarvam
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "sarvamai/sarvam-105b"}'
 - id: sarvamai/sarvam-30b
-  display_name: sarvam-30b
+  display_name: sarvamai/sarvam-30b
   org_id: sarvam
   resolution_source: hf
   review_status: reviewed
@@ -22610,13 +22592,13 @@
   review_status: reviewed
   metadata: '{"hf_id": "universalml/NepaliGPT-2.0"}'
 - id: unsloth/Llama-3.2-1B-Instruct
-  display_name: unsloth/Llama-3.2-1B-Instruct
+  display_name: Llama-3.2-1B-Instruct
   org_id: unsloth
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "unsloth/Llama-3.2-1B-Instruct"}'
 - id: unsloth/Phi-3-mini-4k-instruct
-  display_name: unsloth/Phi-3-mini-4k-instruct
+  display_name: Phi-3-mini-4k-instruct
   org_id: unsloth
   resolution_source: hf
   review_status: reviewed

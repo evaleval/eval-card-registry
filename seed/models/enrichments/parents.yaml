@@ -186,12 +186,12 @@
     axis: version
 - id: Anthropic/claude-3-opus-20240229
   parents:
-  - id: anthropic/claude-3-opus
+  - id: anthropic/claude-opus-3
     relationship: variant
     axis: version
 - id: Anthropic/claude-3-sonnet-20240229
   parents:
-  - id: anthropic/claude-3-sonnet
+  - id: anthropic/claude-sonnet-3
     relationship: variant
     axis: version
 - id: Artples/L-MChat-Small
@@ -4957,7 +4957,7 @@
     axis: size
 - id: Xkev/Llama-3.2V-11B-cot
   parents:
-  - id: meta/llama-3-2-11b-vision-instruct
+  - id: meta-llama/llama-3.2-11b-vision-instruct
     relationship: finetune
 - id: YOYO-AI/Qwen2.5-14B-YOYO-0505
   parents:
@@ -5469,10 +5469,6 @@
   parents:
   - id: alibaba/qwen-turbo
     relationship: finetune
-- id: alibaba/qwen-3-coder-480b
-  parents:
-  - id: Intel/Qwen3-Coder-480B-A35B-Instruct-int4-mixed-AutoRound
-    relationship: finetune
 - id: alibaba/qwen-8b-chat
   parents:
   - id: alibaba/qwen-turbo
@@ -5845,7 +5841,7 @@
   - id: Qwen/Qwen3-8B
     relationship: variant
     axis: mode
-- id: alibaba/qwen3-coder-30b-a3b-instruct
+- id: qwen/qwen3-coder-30b-a3b-instruct
   parents:
   - id: alibaba/qwen3-coder-30b-a3b
     relationship: variant
@@ -5856,28 +5852,28 @@
     relationship: finetune
 - id: alibaba/qwen3-max-2025-09-23
   parents:
-  - id: alibaba/qwen3-max
+  - id: qwen/qwen3-max
     relationship: variant
     axis: version
 - id: alibaba/qwen3-max-2026-01-23
   parents:
-  - id: alibaba/qwen3-max
+  - id: qwen/qwen3-max
     relationship: variant
     axis: version
 - id: alibaba/qwen3-max-thinking
   parents:
-  - id: alibaba/qwen3-max
+  - id: qwen/qwen3-max
     relationship: finetune
 - id: alibaba/qwen3-max-thinking-preview
   parents:
-  - id: alibaba/qwen3-max
+  - id: qwen/qwen3-max
     relationship: finetune
 - id: alibaba/qwen3-next-80b-a3b-reasoning
   parents:
   - id: alibaba/qwen3-next-80b-a3b
     relationship: variant
     axis: mode
-- id: alibaba/qwen3-omni-30b-a3b-reasoning
+- id: Qwen/Qwen3-Omni-30B-A3B-Thinking
   parents:
   - id: Qwen/Qwen3-Omni-30B-A3B-Thinking
     relationship: finetune
@@ -6374,7 +6370,7 @@
     relationship: finetune
 - id: anthropic/claude-3-5-haiku-20241022
   parents:
-  - id: anthropic/claude-3-5-haiku
+  - id: anthropic/claude-3.5-haiku
     relationship: variant
     axis: version
 - id: anthropic/claude-3-5-sonnet-20241022
@@ -6384,7 +6380,7 @@
     axis: version
 - id: anthropic/claude-3-7-sonnet-20250219
   parents:
-  - id: anthropic/Claude-3.7-Sonnet
+  - id: anthropic/claude-sonnet-3.7
     relationship: variant
     axis: version
 - id: anthropic/claude-3-7-sonnet-20250219-thinking
@@ -6404,11 +6400,11 @@
     axis: version
 - id: anthropic/claude-3.7
   parents:
-  - id: anthropic/Claude-3.7-Sonnet
+  - id: anthropic/claude-sonnet-3.7
     relationship: finetune
 - id: anthropic/claude-3.7-sonnet-thinking
   parents:
-  - id: anthropic/Claude-3.7-Sonnet
+  - id: anthropic/claude-sonnet-3.7
     relationship: variant
     axis: mode
 - id: anthropic/claude-3.7-thinking-16k
@@ -11753,7 +11749,7 @@
   - id: meta/llama-3-2-11b
     relationship: variant
     axis: training_stage
-- id: meta/llama-3-2-11b-vision-instruct
+- id: meta-llama/llama-3.2-11b-vision-instruct
   parents:
   - id: meta-llama/Llama-3.2-11B-Vision
     relationship: variant
@@ -11792,7 +11788,7 @@
     relationship: quantized
 - id: meta/llama-3.2-11b-vision-instruct-turbo
   parents:
-  - id: meta/llama-3-2-11b-vision-instruct
+  - id: meta-llama/llama-3.2-11b-vision-instruct
     relationship: quantized
 - id: meta/llama-3.2-90b-instruct
   parents:
@@ -11885,11 +11881,6 @@
   - id: microsoft/Phi-4-mini-reasoning
     relationship: variant
     axis: training_stage
-- id: microsoft/Phi-4-multimodal-instruct
-  parents:
-  - id: microsoft/phi-4-multimodal
-    relationship: variant
-    axis: training_stage
 - id: microsoft/Phi-4-reasoning
   parents:
   - id: microsoft/phi-4
@@ -11953,7 +11944,7 @@
   - id: mistralai/mistral-small-4
     relationship: variant
     axis: mode
-- id: mistral/open-mistral-nemo
+- id: mistralai/open-mistral-nemo
   parents:
   - id: mistralai/mistral-nemo
     relationship: finetune
@@ -12874,7 +12865,7 @@
   parents:
   - id: meta-llama/Llama-3.1-8B
     relationship: finetune
-- id: nvidia/llama-3.1-nemotron-ultra-253b-v1
+- id: nvidia/Llama-3_1-Nemotron-Ultra-253B-v1
   parents:
   - id: nvidia/llama-3-1-nemotron-ultra-253b
     relationship: variant
@@ -12940,7 +12931,7 @@
   - id: openai/gpt-3.5-turbo
     relationship: variant
     axis: version
-- id: openai/gpt-3-5-turbo-0613
+- id: openai/gpt-3.5-turbo-0613
   parents:
   - id: openai/gpt-3.5-turbo
     relationship: variant
@@ -14914,7 +14905,7 @@
     relationship: finetune
 - id: unknown/tools-claude-3-7-sonnet-2025-02-24
   parents:
-  - id: anthropic/Claude-3.7-Sonnet
+  - id: anthropic/claude-sonnet-3.7
     relationship: finetune
 - id: unsloth/Llama-3.2-1B-Instruct-no-system-message
   parents:
@@ -15167,7 +15158,7 @@
     axis: version
 - id: xiaomi/mimo-v2-5-pro-6bit
   parents:
-  - id: xiaomi/mimo-v2-5-pro
+  - id: xiaomi/mimo-v2.5-pro
     relationship: quantized
 - id: xiaomi/mimo-v2-pro
   parents:
@@ -15315,7 +15306,7 @@
     relationship: finetune
 - id: zai/glm-4-5v-reasoning
   parents:
-  - id: zai/glm-4.5v
+  - id: z-ai/glm-4.5v
     relationship: variant
     axis: mode
 - id: zai/glm-4-6-reasoning
@@ -15325,7 +15316,7 @@
     axis: mode
 - id: zai/glm-4-6v-reasoning
   parents:
-  - id: zai/glm-4.6v
+  - id: z-ai/glm-4.6v
     relationship: variant
     axis: mode
 - id: zai/glm-4-7-non-reasoning
@@ -15340,7 +15331,7 @@
     axis: version
 - id: zai/glm-4.5v-thinking
   parents:
-  - id: zai/glm-4.5v
+  - id: z-ai/glm-4.5v
     relationship: variant
     axis: mode
 - id: zai/glm-5-1-non-reasoning
