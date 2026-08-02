@@ -144,8 +144,12 @@ Resolve requests accept `mode: "resolve" | "exact"` (default `resolve`). Exact m
 
 **Models** are grounded in a three-tier source-of-truth: HuggingFace (the
 `fixed_hf_model_id` oracle + the hub-stats index) → models.dev catalog →
-name-based inference for the off-HF tail. The canonical id is the real HF repo
-id (HF-true casing); `org_id` resolves through a two-tier org model — the HF org
+name-based inference for the off-HF tail. Canonical ids follow one ladder: an
+external id is adopted verbatim — the real HF repo id (HF-true casing) first,
+else the OpenRouter model id for models.dev-only models served there — and only
+a model on neither gets an invented `{org}/{slug}` id. `org_id` stays the
+curated developer for all three rungs, decoupled from the id prefix; it
+resolves through a two-tier org model — the HF org
 spelling is preserved for community uploaders, while curated developer remaps
 fold alternate namespaces into one parent (`meta-llama`/`facebook` → `meta`,
 `qwen`/`THUDM`/`zai-org` → `alibaba`/`zai`, …). Models also carry
