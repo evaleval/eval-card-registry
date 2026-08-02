@@ -833,6 +833,11 @@ _ORACLE_CANON_EXEMPT: frozenset = frozenset({
     # right org, brand moves to a PREFIX, so the same-model-leaf rule can't match
     # the two spellings. Resolving to EVA-UNIT-01/eva-qwen2-5-32b-v0-2 is correct.
     "alibaba/qwen2-5-32b-eva-v0-2",
+    # Lunaris is Sao10K's model; the snapshot's `meta/` attribution was wrong
+    # (same class as the `meta/l3-euryale` example above). The corrected id
+    # also swaps the size token's position, so the same-model-leaf rule can't
+    # auto-detect it. Resolving to sao10k/l3-lunaris-8b is correct.
+    "meta/l3-8b-lunaris",
 })
 
 # Oracle-snapshot aliases intentionally NOT resolved — the snapshot's attribution
@@ -956,6 +961,10 @@ def test_model_display_names_are_humanized(models_df):
 # (same release along the version line) so they fold into the base's group; the
 # old `finetune` tuple intentionally no longer lands.
 _ORACLE_EDGE_EXEMPT: frozenset = frozenset({
+    # The snapshot's tier3 name-inference produced an INVERTED edge (the base
+    # Qwen coder as a "finetune" of Intel's int4 quant). The raw now folds
+    # onto the real HF base repo; the junk edge is deliberately dropped.
+    ("alibaba/qwen-3-coder-480b", "Intel/Qwen3-Coder-480B-A35B-Instruct-int4-mixed-AutoRound"),
     # Snapshot holds the tier3 draft edge; the real parent is
     # deepseek-ai/DeepSeek-Coder-V2-Base (finetune, per hub-stats baseModels).
     ("deepseek-ai/DeepSeek-Coder-V2-Instruct", "deepseek/deepseek-coder-v2"),
@@ -1010,10 +1019,17 @@ def test_phase0_oracle_edges_preserved(resolver, models_df):
                 return []
         return v if isinstance(v, list) else []
 
+    def _edge_key(target, rel, axis):
+        # `axis` is a variant-only concept (the closed enum lives on variant
+        # edges); a stray axis on a finetune/quantized/merge/adapter edge —
+        # e.g. the field-merge of two sources typing the same edge
+        # differently — must not read as a lost edge.
+        return (target, rel, axis if rel == "variant" else None)
+
     cur: dict[str, set] = {}
     for r in models_df.itertuples():
         cur[str(r.id)] = {
-            (e.get("id"), e.get("relationship"), e.get("axis"))
+            _edge_key(e.get("id"), e.get("relationship"), e.get("axis"))
             for e in _edges(getattr(r, "parents", None)) if isinstance(e, dict)
         }
 
@@ -1042,7 +1058,7 @@ def test_phase0_oracle_edges_preserved(resolver, models_df):
                 continue
             if tp == t:
                 continue
-            key = (tp, e.get("relationship"), e.get("axis"))
+            key = _edge_key(tp, e.get("relationship"), e.get("axis"))
             if (str(row.id), str(e["id"])) in _ORACLE_EDGE_EXEMPT:
                 continue
             if key not in tedges:
@@ -1152,6 +1168,21 @@ _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
     # finetune-derived origin on the folded spelling; intentionally dropped.
     ("lineage_origin_model_id", "anthropic/claude-3.5-sonnet-2024-06-20"),
     ("lineage_origin_model_id", "anthropic/claude-3.5-sonnet-2024-10-22"),
+    # The snapshot origin came from the inverted tier3 edge to Intel's quant
+    # (see _ORACLE_EDGE_EXEMPT); the raw now folds onto the real HF base repo,
+    # which is correctly at origin.
+    ("lineage_origin_model_id", "alibaba/qwen-3-coder-480b"),
+    # Bare tier3 scaffolds (`meta/llama4-maverick`, `…-scout`) carried a
+    # finetune edge to the real Llama-4 canonicals; they are now curated
+    # ALIASES of those canonicals (core skip + enrichment bridge), which are
+    # themselves at origin — the scaffold's self-referential origin is
+    # intentionally gone.
+    ("lineage_origin_model_id", "meta/llama4-maverick"),
+    ("lineage_origin_model_id", "meta/llama4-scout"),
+    # The `microsoft/phi-4-multimodal` mint (the API spelling) merged into the
+    # real repo Phi-4-multimodal-instruct; the snapshot's family root WAS that
+    # mint, so the surviving canonical is now correctly its own family root.
+    ("model_family_id", "microsoft/Phi-4-multimodal-instruct"),
     # Curated fold (core.yaml skip_source_ids): the tier3 `…-reasoning` mint and
     # the models.dev slug stub both fold into the real HF repo
     # Qwen/Qwen3-Omni-30B-A3B-Thinking ("reasoning" IS the Thinking repo, not a
@@ -1346,6 +1377,295 @@ def test_every_model_id_is_a_resolvable_raw(models_df, aliases_df):
     )
     missing = [i for i in models_df["id"].astype(str) if i not in raws]
     assert missing == [], f"{len(missing)} model id(s) with no alias row: {missing[:10]}"
+
+
+# --------------------------------------------------------------------------
+# OPENROUTER ID ADOPTION gates (specs/model-id-resolution PLAN.md G3).
+# --------------------------------------------------------------------------
+MODELSDEV_SNAPSHOT = REGISTRY_ROOT / "tests" / "fixtures" / "modelsdev_api.snapshot.json"
+OPENROUTER_BEFORE_SNAPSHOT = REGISTRY_ROOT / "curation" / "openrouter_adoption_before.parquet"
+SEED_MODELS_DIR = REGISTRY_ROOT / "seed" / "models"
+
+
+def _import_refresh_module():
+    scripts_dir = REGISTRY_ROOT / "scripts"
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+    import refresh_from_modelsdev as rfm  # noqa: E402
+
+    return rfm
+
+
+def _load_source_entries() -> list[tuple[str, dict]]:
+    """(source-name, entry) for every record in core.yaml + sources/*.generated.yaml."""
+    out: list[tuple[str, dict]] = []
+    paths = [SEED_MODELS_DIR / "core.yaml"] + sorted(
+        (SEED_MODELS_DIR / "sources").glob("*.generated.yaml")
+    )
+    for p in paths:
+        doc = yaml.safe_load(p.read_text())
+        entries = doc.get("entries", doc) if isinstance(doc, dict) else doc
+        for e in entries or []:
+            if isinstance(e, dict) and e.get("id"):
+                out.append((p.name, e))
+    return out
+
+
+def _core_skip_ids() -> set[str]:
+    doc = yaml.safe_load((SEED_MODELS_DIR / "core.yaml").read_text())
+    if not isinstance(doc, dict):
+        return set()
+    return set(doc.get("skip_ids") or []) | set(doc.get("skip_source_ids") or [])
+
+
+def test_no_parent_edge_names_a_renamed_away_id():
+    """GATE (adoption 1/5): no `parents[].id` in any source or in core names a
+    renamed-away id — every edge target must be a FULL entry's canonical id in
+    the merged source universe, never a form that survives only as an ALIAS on
+    some entry (which is what a renamed-away id becomes)."""
+    recs = _load_source_entries()
+    skip = _core_skip_ids()
+    full_ids = {e["id"] for _, e in recs if "display_name" in e and e["id"] not in skip}
+    alias_owner: dict[str, str] = {}
+    for _, e in recs:
+        for a in e.get("aliases") or []:
+            if a:
+                alias_owner.setdefault(a, e["id"])
+    bad = []
+    for src, e in recs:
+        if e["id"] in skip:
+            continue
+        for edge in e.get("parents") or []:
+            t = edge.get("id") if isinstance(edge, dict) else None
+            if t and t not in full_ids:
+                bad.append((src, e["id"], t, alias_owner.get(t)))
+    assert bad == [], (
+        f"{len(bad)} parent edge(s) point at a non-canonical id (renamed-away "
+        f"ids resolve only as aliases; 4th field = the alias's owner). "
+        f"First few: {bad[:12]}"
+    )
+
+
+def test_no_two_full_entries_share_folded_identity(hf_to_dev):
+    """GATE (adoption 2/5): no ADOPTION-TOUCHED cluster of FULL entries shares
+    the same curated-org-folded, tag-stripped, order-insensitive
+    variant-preserving identity — the duplicate class the carry-forward would
+    otherwise retain forever when an id is renamed (`anthropic/claude-haiku-3`
+    vs the adopted `anthropic/claude-3-haiku`). A cluster counts when at least
+    one member is an OpenRouter-adopted entry (`metadata.openrouter_adopted`);
+    the registry carries a separate pre-existing tail of ~77 non-adoption dup
+    clusters (jamba spelling twins, dashed/dotted gemini twins, …) that
+    predate this gate and are follow-up cleanup, not adoption regressions.
+    Clusters made ONLY of real-HF-attested repos are allowed (two genuinely
+    distinct repos may normalize alike); a size-signature difference also
+    keeps entries apart (opt-1.3b vs opt-13b)."""
+    rfm = _import_refresh_module()
+    from eval_card_registry.lib.collision_fold import _bsizes
+
+    oracle_fixed = set()
+    for v in json.loads(ORACLE_PATH.read_text())["resolutions"].values():
+        fx = v.get("fixed_hf_model_id")
+        if isinstance(fx, str) and "/" in fx:
+            oracle_fixed.add(fx)
+
+    def _attested(src: str, e: dict) -> bool:
+        if src in ("hf_oracle.generated.yaml", "hub_stats.generated.yaml"):
+            return True
+        if e.get("resolution_source") == "hf" or e["id"] in oracle_fixed:
+            return True
+        md = e.get("metadata")
+        if isinstance(md, str):
+            try:
+                m = json.loads(md)
+                if m.get("hf_deferred") or m.get("hf_id") == e["id"]:
+                    return True
+            except (ValueError, TypeError):
+                pass
+        return False
+
+    skip = _core_skip_ids()
+    clusters: dict[tuple, list[tuple[str, dict]]] = defaultdict(list)
+    for src, e in _load_source_entries():
+        if "display_name" not in e or e["id"] in skip or "/" not in e["id"]:
+            continue
+        org, name = e["id"].split("/", 1)
+        dev = hf_to_dev.get(org.lower(), org.lower())
+        clusters[(dev, rfm._identity_sig(name), _bsizes(name))].append((src, e))
+
+    def _adopted(e: dict) -> bool:
+        md = e.get("metadata")
+        if isinstance(md, str):
+            try:
+                return json.loads(md).get("openrouter_adopted") is True
+            except (ValueError, TypeError):
+                return False
+        return False
+
+    dups = []
+    for key, members in clusters.items():
+        ids = sorted({e["id"] for _, e in members})
+        if len(ids) < 2:
+            continue
+        if not any(_adopted(e) for _, e in members):
+            continue  # pre-existing non-adoption dup tail — out of this gate's scope
+        if all(_attested(src, e) for src, e in members):
+            continue  # real-HF cluster — allowed
+        dups.append(ids)
+    assert dups == [], (
+        f"{len(dups)} folded-identity duplicate cluster(s) involving an "
+        f"OpenRouter-adopted entry (adoption id-thrash class): {dups[:10]}"
+    )
+
+
+@pytest.mark.slow
+def test_every_openrouter_snapshot_key_resolves(resolver):
+    """GATE (adoption 3/5): every OpenRouter model key in the frozen snapshot
+    resolves — to an HF canonical through the crossmap, to its own adopted
+    canonical, or to another owning canonical (all count as success).
+    `openrouter/*` router pseudo-endpoints are routing products, excluded."""
+    snap = json.loads(MODELSDEV_SNAPSHOT.read_text())
+    keys = [
+        k for k in (snap.get("openrouter", {}).get("models") or {})
+        if not k.lstrip("~").lower().startswith("openrouter/")
+    ]
+    assert keys, "frozen snapshot lost its openrouter provider"
+    unresolved = [
+        k for k in keys if resolver.resolve(k, "model").canonical_id is None
+    ]
+    assert unresolved == [], (
+        f"{len(unresolved)}/{len(keys)} OpenRouter snapshot key(s) resolve to "
+        f"no_match: {unresolved[:15]}"
+    )
+
+
+def test_canonical_id_prefix_is_external_or_folds_to_org(models_df, hf_to_dev):
+    """GATE (adoption 4/5, the amended id-space rule): every canonical id
+    prefix is a real external namespace adopted verbatim (HF-attested or an
+    OpenRouter catalog key) OR folds through the curated org map to the
+    entry's `org_id` (case/separator-insensitively). Invented ids may only use
+    the curated developer prefix."""
+    from eval_entity_resolver.fold import _norm_org_key
+
+    oracle_fixed = set()
+    for v in json.loads(ORACLE_PATH.read_text())["resolutions"].values():
+        fx = v.get("fixed_hf_model_id")
+        if isinstance(fx, str) and "/" in fx:
+            oracle_fixed.add(fx)
+    snap = json.loads(MODELSDEV_SNAPSHOT.read_text())
+    or_keys = set()
+    for k in (snap.get("openrouter", {}).get("models") or {}):
+        or_keys.add(k)
+        or_keys.add(k.lstrip("~"))
+
+    def fold(o: str) -> str:
+        return hf_to_dev.get(o.lower(), o)
+
+    # Curated core.yaml defs are explicit judgment calls: a curated entry may
+    # deliberately keep a raw's mis-prefixed spelling as its id while carrying
+    # the corrected developer org (e.g. `alibaba/dolphin-2-9.2-qwen2-72b`,
+    # org cognitivecomputations).
+    core_doc = yaml.safe_load((SEED_MODELS_DIR / "core.yaml").read_text())
+    core_defs = {
+        e["id"] for e in (core_doc.get("entries") or [])
+        if isinstance(e, dict) and e.get("id") and "display_name" in e
+    }
+
+    bad = []
+    for row in models_df.itertuples():
+        cid = str(row.id)
+        if "/" not in cid:
+            continue
+        org_id = getattr(row, "org_id", None)
+        org_id = org_id if isinstance(org_id, str) and org_id else None
+        prefix = cid.split("/", 1)[0]
+        # External namespaces adopted verbatim; curated core judgment calls.
+        if cid in oracle_fixed or cid in or_keys or cid in core_defs:
+            continue
+        rsrc = getattr(row, "resolution_source", None)
+        if isinstance(rsrc, str) and rsrc == "hf":
+            continue
+        md = getattr(row, "metadata", None)
+        if isinstance(md, str):
+            try:
+                m = json.loads(md)
+                if m.get("hf_id") == cid or m.get("hf_deferred") or m.get("openrouter_adopted"):
+                    continue
+            except (ValueError, TypeError):
+                pass
+        # Invented / community ids: prefix must fold to the entry's org.
+        if org_id is None:
+            if prefix.lower() == "unknown":
+                continue
+            bad.append((cid, None))
+            continue
+        a, b = fold(prefix), fold(org_id)
+        if a == b or _norm_org_key(a) == _norm_org_key(b):
+            continue
+        bad.append((cid, org_id))
+    assert bad == [], (
+        f"{len(bad)} canonical id(s) whose prefix neither is an adopted external "
+        f"namespace nor folds to the entry's org_id: {bad[:15]}"
+    )
+
+
+# Deliberate curated CORRECTIONS during the adoption migration: raws whose
+# pre-migration resolution was itself a mis-attribution (a turbo serving
+# spelling bridged onto the base product). Reviewed exceptions only.
+_ADOPTION_REGRESSION_EXEMPT: frozenset = frozenset({
+    "z-ai-glm-5-turbo",     # was bridged onto zai-org/GLM-5 (base); turbo is a sibling product
+    "z-ai-glm-5v-turbo",    # was bridged onto the 5V base record; same correction
+    # Sentinel-org scaffold raw: tier3 keeps it on its org-less draft
+    # (`unknown/amazon.nova-premier-v10`); the org-present twin draft
+    # `amazon/nova-premier-v1:0` still resolves by its own id. Same model,
+    # split across the pre-existing tier3 sentinel drafts — reviewed.
+    "unknown/amazon.nova-premier-v1:0",
+})
+
+
+@pytest.mark.slow
+def test_openrouter_adoption_no_resolution_regression(resolver, aliases_df):
+    """GATE (adoption 5/5, no-regression): every canonical id and alias that
+    resolved before the adoption migration (snapshotted in
+    curation/openrouter_adoption_before.parquet) still resolves to the same
+    entity — an identity shift counts as the same entity only when the old
+    canonical id is carried as an alias on the new entry."""
+    before = pd.read_parquet(OPENROUTER_BEFORE_SNAPSHOT)
+    alias_pairs = set(
+        zip(
+            aliases_df[aliases_df["entity_type"] == "model"]["raw_value"].astype(str),
+            aliases_df[aliases_df["entity_type"] == "model"]["canonical_id"].astype(str),
+        )
+    )
+    old_home: dict[str, str | None] = {}
+
+    def _old_home(old: str):
+        if old not in old_home:
+            old_home[old] = resolver.resolve(old, "model").canonical_id
+        return old_home[old]
+
+    no_match, moved = [], []
+    for raw, old in zip(before["raw_value"].astype(str), before["canonical_id"].astype(str)):
+        if raw in _ADOPTION_REGRESSION_EXEMPT:
+            continue
+        got = resolver.resolve(raw, "model").canonical_id
+        if got is None:
+            no_match.append(raw)
+            continue
+        if got == old or (old, got) in alias_pairs:
+            continue
+        # Same entity iff the OLD canonical id itself follows to the entity
+        # the raw now resolves to (rename/fold with the old id resolvable),
+        # via alias or normalized match.
+        if _old_home(old) == got:
+            continue
+        moved.append((raw, old, got))
+    assert no_match == [], (
+        f"{len(no_match)} previously-resolving raw(s) now no_match: {no_match[:15]}"
+    )
+    assert moved == [], (
+        f"{len(moved)} raw(s) resolved to a DIFFERENT entity whose aliases do NOT "
+        f"carry the old id (identity break, not a rename): {moved[:15]}"
+    )
 
 
 def test_prefer_official_pinned_examples(aliases_df):
