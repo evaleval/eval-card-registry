@@ -105,20 +105,25 @@ DERIVATION_MARKERS = [
 ]
 
 
-def _non_tier3_claimed_forms() -> set[str]:
-    """Every surface form (id / display_name / alias) claimed by a NON-tier3
-    seed layer: the other generated sources, core.yaml entries, and
-    enrichments/*.yaml records. The own-forms strip in `_clean_resolver` must
-    exempt these — a form the prior tier3 output carried that ANOTHER source
-    also claims (e.g. models_dev's own entry id `mistral/mistral-large-2402`)
-    is not tier3-originated, and stripping it would blind the residual pass
-    into re-minting a shadow of an existing canonical."""
-    forms: set[str] = set()
+def _non_tier3_claim_owners() -> dict[str, str]:
+    """{surface form -> owning record id} over every id / display_name / alias
+    claimed by a NON-tier3 seed layer: the other generated sources, core.yaml
+    entries, and enrichments/*.yaml records (first writer wins). Consumers:
+    the own-forms strip in `_clean_resolver` exempts these forms (a prior
+    tier3 form ANOTHER source also claims — e.g. models_dev's own entry id
+    `mistral/mistral-large-2402` — is not tier3-originated, and stripping it
+    would blind the residual pass into re-minting a shadow of an existing
+    canonical); the curated-keyed retention pass uses the OWNER to tell a
+    self-claim from a supersession."""
+    owners: dict[str, str] = {}
 
     def _add(rec: dict) -> None:
-        for f in [rec.get("id"), rec.get("display_name"), *(rec.get("aliases") or [])]:
+        rid = rec.get("id")
+        if not isinstance(rid, str) or not rid:
+            return
+        for f in [rid, rec.get("display_name"), *(rec.get("aliases") or [])]:
             if isinstance(f, str) and f:
-                forms.add(f)
+                owners.setdefault(f, rid)
 
     for n in ("hf_oracle", "models_dev", "hub_stats", "models_dev_catalog"):
         p = SOURCES_DIR / f"{n}.generated.yaml"
@@ -139,7 +144,27 @@ def _non_tier3_claimed_forms() -> set[str]:
             for e in doc or []:
                 if isinstance(e, dict):
                     _add(e)
-    return forms
+    return owners
+
+
+def _non_tier3_defining_ids() -> set[str]:
+    """Canonical ids DEFINED (display_name-bearing entry, or any core entry)
+    by a non-tier3 seed layer. The curated-keyed retention pass skips ids
+    another source already defines."""
+    ids: set[str] = set()
+    for n in ("hf_oracle", "models_dev", "hub_stats", "models_dev_catalog"):
+        p = SOURCES_DIR / f"{n}.generated.yaml"
+        if not p.exists():
+            continue
+        d = yaml.safe_load(p.read_text())
+        for e in (d.get("entries") if isinstance(d, dict) else d) or []:
+            if isinstance(e, dict) and e.get("id") and "display_name" in e:
+                ids.add(e["id"])
+    core_doc = yaml.safe_load((MODELS_DIR / "core.yaml").read_text()) or {}
+    for e in _core_entries(core_doc):
+        if e.get("id"):
+            ids.add(e["id"])
+    return ids
 
 
 def _clean_resolver() -> Resolver:
@@ -190,7 +215,7 @@ def _clean_resolver() -> Resolver:
         # tier3-originated — its alias row belongs to that other canonical.
         # Stripping it would blind the residual pass to an existing entity
         # and re-mint a shadow draft (then steal the owner's id as an alias).
-        own_forms -= _non_tier3_claimed_forms()
+        own_forms -= set(_non_tier3_claim_owners())
         if own_forms:
             keep = [str(rv) not in own_forms for rv in aliases_df["raw_value"]]
             aliases_df = aliases_df.loc[keep].reset_index(drop=True)
@@ -279,13 +304,15 @@ def mint_collision_decision(
 ) -> str:
     """Decide what to do with a residual tier-3 mint id `cid`. Returns one of:
 
-    - 'skip'     — `cid` normalized-collides with a CURATED CORE canonical under
-                   a different id (`core_steals`): it is the SAME model already
-                   curated in core (the stale fixtures resolver just missed it).
-                   Do NOT mint — drop the row so the raw resolves to the curated
-                   canonical via normalized match. Minting `{cid}-inferred` here
-                   would split one model into two canonicals and SHADOW the
-                   curated entry (merge into the existing canonical, never dup).
+    - 'skip'     — `cid`'s normalized identity is OWNED by a CURATED CORE
+                   canonical — under a different id (`core_steals`: the SAME
+                   model, already curated; the stale fixtures resolver just
+                   missed it) or under the SAME id (core defines this exact
+                   entity; a tier3 twin would field-merge at seed and
+                   contaminate the curated row with `resolution_source:
+                   inferred`, tripping the Tier-3 honesty gate). Do NOT mint —
+                   the raw resolves to the curated canonical via its id alias
+                   (exact or normalized match).
     - 'inferred' — `cid` clashes with a core `skip_ids` entry (would be silently
                    dropped by the loader) or with a DIFFERENT existing canonical
                    the resolver already owns (a genuine cross-ENTITY clash, two
@@ -295,7 +322,9 @@ def mint_collision_decision(
 
     `resolver_hit` is `resolver.resolve(cid, "model").canonical_id is not None`
     (passed in so this policy is unit-testable without a live resolver)."""
-    if core_steals(cid, core_norm_index):
+    from eval_entity_resolver.normalization import normalize as _rnz
+
+    if core_norm_index.get(_rnz(cid)) is not None:
         return "skip"
     if cid in core_skip_ids or resolver_hit:
         return "inferred"
@@ -411,6 +440,8 @@ def _curated_claim_forms() -> set[str]:
 
 
 def main() -> None:
+    from eval_entity_resolver.normalization import normalize as _rnz_main
+
     oracle = json.loads(ORACLE.read_text())["resolutions"]
     curated_orgs = _load_curated_orgs()
     hf_to_dev = build_hf_to_dev(curated_orgs)
@@ -591,6 +622,51 @@ def main() -> None:
     # rows are stripped as inferred), and a mint would double-claim the raw at
     # seed time. The carry-forward floor applies the same guard.
     curated_claims = _curated_claim_forms()
+
+    # --- curated-keyed entity retention --------------------------------------
+    # A prior committed FULL entry whose id a curated record keys (an
+    # enrichments/*.yaml bridge or edge record) IS an entity by curation's
+    # declaration: enrichment records must never materialize a canonical from
+    # a bare key (gate: test_alias_enrichments_never_mint_canonicals), so the
+    # committed definition is retained verbatim unless another source now
+    # DEFINES the id. Registered as a mint up front so the residual pass
+    # folds the entity's respelled raws onto it (case dedup / dev-org twin
+    # fold) instead of minting duplicates.
+    other_defined = _non_tier3_defining_ids()
+    claim_owner = _non_tier3_claim_owners()
+    core_dropped_ids: set[str] = set(core_skip_ids)
+    if isinstance(core_doc, dict):
+        core_dropped_ids |= set(core_doc.get("skip_source_ids") or [])
+    for rec in prior_records:
+        if "display_name" not in rec:
+            continue
+        rid = rec["id"]
+        if rid not in curated_record_ids or rid in other_defined:
+            continue
+        if rid in core_dropped_ids or rid.lower() in minted_by_id:
+            continue
+        if claim_owner.get(rid, rid) != rid:
+            # The id-string is claimed by a DIFFERENT canonical's record (a
+            # curated fold onto a real repo, or another source's alias) — the
+            # entity was deliberately superseded; resurrecting it would
+            # double-claim the form.
+            continue
+        if r.resolve(rid, "model").canonical_id is None:
+            # The id still no_matches in the clean universe, so the ordinary
+            # residual pass re-mints the entity with FRESH inference (edges,
+            # org) — retention is only for ids the residual pass would DROP
+            # (the raw resolves via a fuzzy stem, a loader-materialized
+            # stand-in, or a family alias) while curation keys them.
+            continue
+        entry = dict(rec)
+        entry["aliases"] = [
+            a for a in (rec.get("aliases") or [])
+            if a == rid or claim_owner.get(a, rid) == rid
+        ]
+        minted.append(entry)
+        minted_by_id[rid.lower()] = entry
+        minted_by_devkey.setdefault(_dev_key(rid), entry)
+        buckets["retained-curated-keyed"] += 1
 
     residual: list[str] = []
     for raw in oracle:
@@ -786,6 +862,15 @@ def main() -> None:
             resolver_hit=r.resolve(cid, "model").canonical_id is not None,
         )
         if decision == "skip":
+            # The curated core canonical owns this identity. A raw whose
+            # normalized form does NOT collapse onto the owner (scaffold raws
+            # with `+`/parens, e.g. `unknown/PatchPilot + Co-PatcheR`) would
+            # go UNRESOLVABLE on a silent skip — union it onto the owner as
+            # an explicit enrich alias instead.
+            skip_owner = core_norm_index[_rnz_main(cid)]
+            if raw != skip_owner and _rnz_main(raw) != _rnz_main(skip_owner):
+                fold_enrich.setdefault(skip_owner, set()).add(raw)
+                buckets["folded-core-owner"] += 1
             continue
         if decision == "inferred":
             cid = f"{cid}-inferred"
@@ -856,11 +941,6 @@ def main() -> None:
     for hf, raws in fold_enrich.items():
         emitted.add(hf)
         emitted.update(raws)
-    from eval_entity_resolver.normalization import normalize as _floor_rnz
-
-    core_dropped_ids: set[str] = set(core_skip_ids)
-    if isinstance(core_doc, dict):
-        core_dropped_ids |= set(core_doc.get("skip_source_ids") or [])
     carried_home: dict[str, str] = {}
     lost_forms: list[str] = []
     for rec in prior_records:
@@ -879,7 +959,7 @@ def main() -> None:
                 # id, so it stays resolvable at 1.0 — and a floor alias claim
                 # on another entity would collide with that id claim.
                 continue
-            if core_norm_index.get(_floor_rnz(form)) is not None:
+            if core_norm_index.get(_rnz_main(form)) is not None:
                 # A core-defined canonical owns the form's normalized identity
                 # (core scaffold entities keep resolution_source=inferred, so
                 # the clean resolver is blind to them) — the real seed universe

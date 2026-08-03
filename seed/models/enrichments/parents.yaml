@@ -6391,8 +6391,6 @@
   parents:
   - id: anthropic/claude-3-7-sonnet-20250219
     relationship: finetune
-- id: anthropic/claude-3.5-sonnet-2024-06-20
-- id: anthropic/claude-3.5-sonnet-2024-10-22
 - id: anthropic/claude-3.5-sonnet-october-2024
   parents:
   - id: anthropic/claude-3.5-sonnet
@@ -11819,14 +11817,6 @@
   parents:
   - id: meta-llama/llama-4
     relationship: finetune
-- id: meta/llama4-maverick
-  parents:
-  - id: meta-llama/Llama-4-Maverick-17B-128E
-    relationship: finetune
-- id: meta/llama4-scout
-  parents:
-  - id: meta-llama/Llama-4-Scout-17B-16E
-    relationship: finetune
 - id: meta/reflection-llama-3.1-70b
   parents:
   - id: meta-llama/Llama-3.1-70B
@@ -11880,11 +11870,11 @@
   - id: microsoft/phi-3.5-vision
     relationship: variant
     axis: training_stage
-- id: microsoft/Phi-4-mini-instruct
+- id: microsoft/Phi-4-mini-reasoning
   parents:
-  - id: microsoft/Phi-4-mini-reasoning
+  - id: microsoft/Phi-4-mini-instruct
     relationship: variant
-    axis: training_stage
+    axis: mode
 - id: microsoft/Phi-4-reasoning
   parents:
   - id: microsoft/phi-4

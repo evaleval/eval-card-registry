@@ -222,6 +222,21 @@
   aliases:
   - Alibaba-AIDC/Algharb
   org_id: alibaba
+- id: Anthropic/claude-3-5-sonnet-20240620
+  display_name: Anthropic/claude-3-5-sonnet-20240620
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - Anthropic/claude-3-5-sonnet-20240620
+  - anthropic/claude-3-5-sonnet-20240620
+  - anthropic/claude-3.5-sonnet-2024-06-20
+  org_id: anthropic
+  parents:
+  - id: anthropic/claude-3.5-sonnet
+    relationship: variant
+    axis: version
 - id: Anthropic/claude-3-haiku-20240307
   display_name: Anthropic/claude-3-haiku-20240307
   resolution_source: inferred
@@ -8727,6 +8742,20 @@
   - id: anthropic/claude-3.5-haiku
     relationship: variant
     axis: version
+- id: anthropic/claude-3-5-sonnet-20241022
+  display_name: anthropic/claude-3-5-sonnet-20241022
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - anthropic/claude-3-5-sonnet-20241022
+  - anthropic/claude-3.5-sonnet-2024-10-22
+  org_id: anthropic
+  parents:
+  - id: anthropic/claude-3.5-sonnet
+    relationship: variant
+    axis: version
 - id: anthropic/claude-3-7-sonnet-20250219
   display_name: anthropic/claude-3-7-sonnet-20250219
   resolution_source: inferred
@@ -15144,6 +15173,78 @@
   - id: openai/gpt-4
     relationship: variant
     axis: version
+- id: openai/gpt-4-1-2025-04-14-fc
+  display_name: openai/gpt-4-1-2025-04-14-fc
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-2025-04-14-fc
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1
+    relationship: finetune
+- id: openai/gpt-4-1-2025-04-14-prompt
+  display_name: openai/gpt-4-1-2025-04-14-prompt
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-2025-04-14-prompt
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1
+    relationship: finetune
+- id: openai/gpt-4-1-mini-2025-04-14-fc
+  display_name: openai/gpt-4-1-mini-2025-04-14-fc
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-mini-2025-04-14-fc
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1-mini
+    relationship: finetune
+- id: openai/gpt-4-1-mini-2025-04-14-prompt
+  display_name: openai/gpt-4-1-mini-2025-04-14-prompt
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-mini-2025-04-14-prompt
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1-mini
+    relationship: finetune
+- id: openai/gpt-4-1-nano-2025-04-14-fc
+  display_name: openai/gpt-4-1-nano-2025-04-14-fc
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-nano-2025-04-14-fc
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1-nano
+    relationship: finetune
+- id: openai/gpt-4-1-nano-2025-04-14-prompt
+  display_name: openai/gpt-4-1-nano-2025-04-14-prompt
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-nano-2025-04-14-prompt
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1-nano
+    relationship: finetune
 - id: openai/gpt-4-mini-high
   display_name: openai/gpt-4-mini-high
   resolution_source: inferred
@@ -15167,6 +15268,45 @@
   org_id: openai
   parents:
   - id: openai/gpt-4-turbo
+    relationship: variant
+    axis: version
+- id: openai/gpt-4.1-2025-04-14
+  display_name: openai/gpt-4.1-2025-04-14
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-2025-04-14
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1
+    relationship: variant
+    axis: version
+- id: openai/gpt-4.1-mini-2025-04-14
+  display_name: openai/gpt-4.1-mini-2025-04-14
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-mini-2025-04-14
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1-mini
+    relationship: variant
+    axis: version
+- id: openai/gpt-4.1-nano-2025-04-14
+  display_name: openai/gpt-4.1-nano-2025-04-14
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - openai/gpt-4-1-nano-2025-04-14
+  org_id: openai
+  parents:
+  - id: openai/gpt-4.1-nano
     relationship: variant
     axis: version
 - id: openai/gpt-4.5
@@ -16262,15 +16402,6 @@
   metadata: '{}'
   aliases:
   - perplexity/r1-1776
-  org_id: perplexity
-- id: perplexity/sonar-reasoning
-  display_name: perplexity/sonar-reasoning
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - perplexity/sonar-reasoning
   org_id: perplexity
 - id: piotr25691/thea-3b-25r
   display_name: piotr25691/thea-3b-25r
@@ -18031,26 +18162,6 @@
   - unknown/OpenHands
   tags:
   - org-unknown
-- id: unknown/openhands-4x-scaled-2024-02-03
-  display_name: unknown/OpenHands + 4x Scaled (2024-02-03)
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - unknown/OpenHands + 4x Scaled (2024-02-03)
-  tags:
-  - org-unknown
-- id: unknown/patchpilot-co-patcher
-  display_name: unknown/PatchPilot + Co-PatcheR
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - unknown/PatchPilot + Co-PatcheR
-  tags:
-  - org-unknown
 - id: unknown/reka-3
   display_name: unknown/reka-3
   resolution_source: inferred
@@ -19406,10 +19517,6 @@
 - id: nvidia/nemotron-3-nano-4b
   aliases:
   - nvidia/nvidia-nemotron-3-nano-4b
-- id: openai/gpt-4.1-mini-2025-04-14
-  aliases:
-  - openai/gpt-4-1-mini-2025-04-14-fc
-  - openai/gpt-4-1-mini-2025-04-14-prompt
 - id: openai/gpt-5-2025-08-07
   aliases:
   - openai/gpt-5-2025-08-07-high
@@ -19472,6 +19579,12 @@
 - id: togethercomputer/RedPajama-INCITE-Instruct-3B-v1
   aliases:
   - together/redpajama-incite-instruct-3b-v1
+- id: unknown/openhands-4x-scaled-2024-02-03
+  aliases:
+  - unknown/OpenHands + 4x Scaled (2024-02-03)
+- id: unknown/patchpilot-co-patcher
+  aliases:
+  - unknown/PatchPilot + Co-PatcheR
 - id: xai/grok-3-beta
   aliases:
   - xai/grok3-beta
