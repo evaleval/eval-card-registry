@@ -84,6 +84,20 @@ metadata on the HuggingFace Hub.
 - **Use:** only repository ids / metadata are referenced; each model remains
   under its own repository license.
 
+## Papers with Code (metric canonicals)
+
+Metric canonical entries in `seed/metrics.yaml` tagged
+`"provenance": "paperswithcode-adapter"` are derived from the
+[nielsr/paperswithcode-backups](https://huggingface.co/datasets/nielsr/paperswithcode-backups)
+dataset, nightly PostgreSQL dumps of paperswithcode.com.
+
+- **Source:** https://huggingface.co/datasets/nielsr/paperswithcode-backups
+- **License:** CC BY-SA
+
+Only metric names and their leaderboard usage are referenced (to derive
+canonical metric ids, aliases, and observed value ranges); bounds and
+direction come from each metric's defining paper.
+
 ## AIR-Bench 2024 (safety taxonomy)
 
 `seed/benchmarks_generated/air_bench.yaml` encodes the AIR-Bench 2024 AI-risk
