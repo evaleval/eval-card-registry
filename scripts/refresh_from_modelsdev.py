@@ -1137,8 +1137,14 @@ def _rehost_junk_ids() -> frozenset[str]:
 
 def _is_router_pseudo_endpoint(raw: str) -> bool:
     """`openrouter/*` keys (`auto`, `free`, `bodybuilder`, `owl-alpha`,
-    `pareto-code`) are routing PRODUCTS, not models: never adopted, never
-    minted, never aliased."""
+    `pareto-code`) are routing PRODUCTS, not models: never ADOPTED as a
+    canonical id (`_clean_openrouter_key` returns None) and never emitted as
+    an `openrouter/*` alias form (`_provider_alias_forms` skips them). The
+    BARE raws behind them stay minted, though: other providers (e.g. kilo)
+    list `auto`/`bodybuilder`/… directly, those are real EEE surface forms,
+    and the nothing-is-removed floor keeps them resolvable as bare org-less
+    mints. Gate 4 (tests/test_gate_invariants.py) pins the bare-id set so
+    growth in that class is visible."""
     return raw.lstrip("~").lower().startswith("openrouter/")
 
 
@@ -1239,7 +1245,17 @@ def _adopt_openrouter_ids(
         if not cid or "/" not in cid:
             continue  # org-less mints keep their invented slug
         if cid in cands:
-            continue  # already carries an OpenRouter spelling verbatim
+            # Already carries an OpenRouter spelling verbatim: no rename, but
+            # still tagged — the duplicate-identity gate scopes "adoption-
+            # touched" clusters by metadata.openrouter_adopted, which must not
+            # depend on whether the invented mint happened to equal the key.
+            # HF-deferred entries stay untagged: their id is rung 1 (HF).
+            if not _entry_meta(e).get("hf_deferred"):
+                meta = _entry_meta(e)
+                if meta.get("openrouter_adopted") is not True:
+                    meta["openrouter_adopted"] = True
+                    e["metadata"] = json.dumps(meta, sort_keys=True)
+            continue
         if _entry_meta(e).get("hf_deferred"):
             continue  # canonical is the real HF id — never demoted
         sigs = _entity_identity_sigs(cid, e.get("org_id"), alias_index)
@@ -3498,6 +3514,11 @@ def main() -> int:
     # --catalog: skip the models_dev source rewrite entirely; only split the
     # full author-lab catalog against the EXISTING on-disk sources.
     if args.catalog:
+        if args.preview_out is not None:
+            p.error(
+                "--preview-out is not supported with --catalog: the catalog "
+                "split always writes the committed catalog + orgs files"
+            )
         generated, skipped_no_org = _generate_models(api, known_orgs)
         if skipped_no_org:
             print(f"[refresh] ERROR: {len(skipped_no_org)} provider(s) -> unknown org_id", file=sys.stderr)
