@@ -3,13 +3,23 @@
 
 - id: accuracy
   display_name: Accuracy
-  aliases: ["Acc", "Macro Accuracy", "Top-1 Accuracy"]
+  aliases: ["Acc", "Top-1 Accuracy"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
   max_score: 1.0
   metadata: '{}'
   review_status: reviewed
+
+- id: macro-accuracy
+  display_name: Macro Accuracy
+  aliases: ["Macro Accuracy"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "class-macro-averaged accuracy; a different aggregation than plain (micro) accuracy, kept separate for the same reason macro-f1 is separate from f1"}'
+  review_status: draft
 
 - id: ast-accuracy
   display_name: AST Accuracy
@@ -33,7 +43,7 @@
 
 - id: f1
   display_name: F1 Score
-  aliases: ["F1", "F1-macro", "Tokenized F1"]
+  aliases: ["F1", "Tokenized F1"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
@@ -93,13 +103,23 @@
 
 - id: win-rate
   display_name: Win Rate
-  aliases: ["Win rate (%)", "win_rate", "Median Win Rate"]
+  aliases: ["Win rate (%)", "win_rate"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
   max_score: 100.0
   metadata: '{}'
   review_status: reviewed
+
+- id: median-win-rate
+  display_name: Median Win Rate
+  aliases: ["Median Win Rate"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"note": "win-rate aggregated across tasks/opponents by median; a different aggregation than mean-win-rate, kept separate like mean-win-rate"}'
+  review_status: draft
 
 - id: harmlessness
   display_name: Harmlessness
@@ -214,13 +234,23 @@
 
 - id: rank
   display_name: Rank
-  aliases: ["Rank", "rank", "Average Rank"]
+  aliases: ["Rank", "rank"]
   score_type: continuous
   lower_is_better: true
   min_score: 1.0
   max_score: null
   metadata: '{}'
   review_status: reviewed
+
+- id: average-rank
+  display_name: Average Rank
+  aliases: ["Average Rank"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 1.0
+  max_score: null
+  metadata: '{"note": "rank aggregated across tasks by mean; a different aggregation than a single rank position"}'
+  review_status: draft
 
 # A refusal rate is one consistent metric concept; only its direction is
 # context-dependent (refusing harmful prompts = higher-better; over-refusing
@@ -2578,6 +2608,7 @@
   display_name: 'Macro F1'
   aliases:
   - 'Macro F1'
+  - 'F1-macro'
   score_type: continuous
   lower_is_better: false
   min_score: 0.0

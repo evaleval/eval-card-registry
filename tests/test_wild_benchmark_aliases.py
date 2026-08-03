@@ -11,7 +11,8 @@ _FIXTURES = _ROOT / "fixtures"
 
 # WILD slug -> expected canonical id. Covers the 8 that previously failed:
 # arc_easy/arc_challenge (alias -> AI2 ARC), race_h (alias -> race), and the five
-# new canonicals (squad, paws, chembench, finance_fundamentals, pre_flight).
+# new canonicals (squad, paws, chembench, finance-fundamentals, pre-flight —
+# WILD's underscore slugs resolve via aliases).
 WILD_BENCHMARKS = {
     "arc_easy": "ai2-reasoning-challenge-arc",
     "arc_challenge": "ai2-reasoning-challenge-arc",
@@ -19,8 +20,8 @@ WILD_BENCHMARKS = {
     "squad": "squad",
     "paws": "paws",
     "chembench": "chembench",
-    "finance_fundamentals": "finance_fundamentals",
-    "pre_flight": "pre_flight",
+    "finance_fundamentals": "finance-fundamentals",
+    "pre_flight": "pre-flight",
 }
 
 pytestmark = pytest.mark.skipif(
