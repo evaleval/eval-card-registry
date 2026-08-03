@@ -2356,11 +2356,17 @@ def _carry_forward_committed(
             and twin["id"] not in stabilized
             and "display_name" in twin
         )
-        if rename_twin and (
-            _entry_meta(twin).get("openrouter_adopted") is True
+        if (
+            twin is not None
+            and not adopt_migration
+            and not promote_twin
+            and _entry_meta(twin).get("openrouter_adopted") is True
             and _entry_meta(c).get("openrouter_adopted") is not True
             and _entry_meta(c).get("hf_deferred") is not True
         ):
+            # Counted for EVERY deferred-debt shape — the plain rename_twin
+            # case, a twin already stabilized onto an earlier committed id,
+            # and a form-level absorb — each one defers a rung-2 promotion.
             pending_rung2 += 1
         owner = (
             cur["id"] if cur is not None
@@ -2423,10 +2429,39 @@ def _carry_forward_committed(
         # that referenced a committed id absorbed onto a surviving fresh id.
         renamed = {old: new for new, old in stabilized.items()}
         renamed.update(promoted)
+        # Path-compress the union: a promote-then-rename chain (committed
+        # invented id -> fresh twin -> committed HF id) must compose to the
+        # FINAL survivor — a one-hop repoint would land edges and claims on
+        # a renamed-away id (a dangling canonical reference).
+        for old in list(renamed):
+            seen = {old}
+            target = renamed[old]
+            while target in renamed and target not in seen:
+                seen.add(target)
+                target = renamed[target]
+            renamed[old] = target
         for e in out:
             for edge in e.get("parents") or []:
                 if isinstance(edge, dict) and edge.get("id") in renamed:
                     edge["id"] = renamed[edge["id"]]
+        # Claims values must name SURVIVING ids — a renamed-away value would
+        # poison the committed_claims escape downstream in reconcile.
+        for k, v in list(claims.items()):
+            if v in renamed:
+                claims[k] = renamed[v]
+        if promoted:
+            # Diagnosability: a rung-1 promotion on a plain cron run demotes
+            # a committed id. If a non-regenerated source (hub_stats/tier3/
+            # curated parents) still references the demoted id, the dedup
+            # gate fails closed and the day's commit aborts — this line
+            # names the ids so the wedge is diagnosable from the cron log.
+            print(
+                "[refresh] carry-forward: promoted higher-rung fresh id(s): "
+                + ", ".join(
+                    f"{old} -> {renamed[old]}" for old in sorted(promoted)
+                ),
+                file=sys.stderr,
+            )
     if stabilized:
         print(
             f"[refresh] carry-forward: kept {len(stabilized)} committed id(s) "
@@ -3280,15 +3315,21 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
                 prior["id"] != ccid
                 and not adopt_migration
                 and not promote
+                and _entry_meta(prior).get("openrouter_adopted") is True
+                and _entry_meta(c).get("openrouter_adopted") is not True
+                and _entry_meta(c).get("hf_deferred") is not True
+            ):
+                # Counted for every deferred-debt shape, incl. a twin that
+                # already stabilized onto an earlier committed id (mirrors
+                # the non-catalog counter).
+                pending_rung2_cat += 1
+            if (
+                prior["id"] != ccid
+                and not adopt_migration
+                and not promote
                 and "display_name" in prior
                 and prior["id"] not in stabilized_cat  # already took a committed id
             ):
-                if (
-                    _entry_meta(prior).get("openrouter_adopted") is True
-                    and _entry_meta(c).get("openrouter_adopted") is not True
-                    and _entry_meta(c).get("hf_deferred") is not True
-                ):
-                    pending_rung2_cat += 1
                 old = prior["id"]
                 prior["id"] = ccid
                 stabilized_cat[ccid] = old
@@ -3340,10 +3381,28 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
     if stabilized_cat or promoted_cat:
         renamed = {old: new for new, old in stabilized_cat.items()}
         renamed.update(promoted_cat)
+        # Path-compress (mirror of _carry_forward_committed): a
+        # promote-then-rename chain must compose to the final survivor.
+        for old in list(renamed):
+            seen = {old}
+            target = renamed[old]
+            while target in renamed and target not in seen:
+                seen.add(target)
+                target = renamed[target]
+            renamed[old] = target
         for e in fresh:
             for edge in e.get("parents") or []:
                 if isinstance(edge, dict) and edge.get("id") in renamed:
                     edge["id"] = renamed[edge["id"]]
+        if promoted_cat:
+            print(
+                "[refresh] catalog carry-forward: promoted higher-rung fresh "
+                "id(s): "
+                + ", ".join(
+                    f"{old} -> {renamed[old]}" for old in sorted(promoted_cat)
+                ),
+                file=sys.stderr,
+            )
     if stabilized_cat:
         print(
             f"[refresh] catalog carry-forward: kept {len(stabilized_cat)} committed "

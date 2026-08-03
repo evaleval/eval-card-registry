@@ -1891,7 +1891,12 @@ def test_suppressed_mint_donates_with_claims_escape(mod, tmp_path, monkeypatch):
 def test_steady_state_absorbed_fresh_forms_survive_hygiene(mod, tmp_path, monkeypatch):
     """V3s, steady-state direction (committed id wins): the stale catalog
     echoes the COMMITTED id (previous cron). The fresh spelling folds in as an
-    alias and every form must survive the hygiene pass."""
+    alias and every form must survive the hygiene pass.
+
+    NOTE: this pin is a DIRECTION pin, not a discriminating regression pin —
+    in this shape the echo's claiming id equals the survivor id, so it passed
+    even before the tiered-evidence fix (the discriminating pins for that fix
+    are P2/V2b/V2c/V3m). Kept for the steady-state contract it documents."""
     src = tmp_path / "src.yaml"
     src.write_text(yaml.safe_dump([]))
     echo = tmp_path / "stale-catalog.yaml"
@@ -2052,6 +2057,38 @@ def test_carry_forward_hf_deferred_twin_never_renamed_back(cf_mod):
     assert claims["zorgx/zmod-3-1"] == "zorgx/ZMod3-1"
     # Parent-edge repointing, mirror of the rename path's.
     assert by_id["zorgx/zmod-3-1-mini"]["parents"][0]["id"] == "zorgx/ZMod3-1"
+
+
+def test_carry_forward_promote_then_rename_chain_composes(cf_mod):
+    """Two committed entries twin-match the SAME fresh entry: the invented
+    one is promoted onto the fresh id, then the committed HF one renames the
+    fresh twin back (same-rung stability). The repoint map must COMPOSE the
+    chain (invented -> fresh -> committed HF) so edges and claims land on
+    the final survivor, never the renamed-away intermediate."""
+    committed = [
+        dict(_cf_entry("zorgx/zmod-3-1"), display_name="ZMod 3.1"),
+        dict(
+            _cf_entry("zorgx/ZMod-3.1"),
+            metadata=json.dumps({"hf_deferred": True}, sort_keys=True),
+        ),
+        dict(_cf_entry("zorgx/zmod-3-1-mini"),
+             parents=[{"id": "zorgx/zmod-3-1", "relationship": "variant",
+                       "axis": "tier"}]),
+    ]
+    fresh = [dict(
+        _cf_entry("zorgx/ZMod3-1"),
+        metadata=json.dumps({"hf_deferred": True}, sort_keys=True),
+    )]
+    batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    by_id = {e["id"]: e for e in batch}
+    assert "zorgx/ZMod-3.1" in by_id, "committed HF id wins the same-rung twin"
+    assert "zorgx/ZMod3-1" not in by_id
+    assert "zorgx/zmod-3-1" not in by_id
+    # The child edge must compose through the chain to the FINAL survivor.
+    edge = by_id["zorgx/zmod-3-1-mini"]["parents"][0]["id"]
+    assert edge == "zorgx/ZMod-3.1", f"edge landed on renamed-away id: {edge}"
+    # Claims too — a renamed-away value poisons the committed_claims escape.
+    assert claims["zorgx/zmod-3-1"] == "zorgx/ZMod-3.1"
 
 
 def test_carry_forward_same_rung_hf_twins_keep_committed_id(cf_mod):
