@@ -105,6 +105,43 @@ DERIVATION_MARKERS = [
 ]
 
 
+def _non_tier3_claimed_forms() -> set[str]:
+    """Every surface form (id / display_name / alias) claimed by a NON-tier3
+    seed layer: the other generated sources, core.yaml entries, and
+    enrichments/*.yaml records. The own-forms strip in `_clean_resolver` must
+    exempt these — a form the prior tier3 output carried that ANOTHER source
+    also claims (e.g. models_dev's own entry id `mistral/mistral-large-2402`)
+    is not tier3-originated, and stripping it would blind the residual pass
+    into re-minting a shadow of an existing canonical."""
+    forms: set[str] = set()
+
+    def _add(rec: dict) -> None:
+        for f in [rec.get("id"), rec.get("display_name"), *(rec.get("aliases") or [])]:
+            if isinstance(f, str) and f:
+                forms.add(f)
+
+    for n in ("hf_oracle", "models_dev", "hub_stats", "models_dev_catalog"):
+        p = SOURCES_DIR / f"{n}.generated.yaml"
+        if not p.exists():
+            continue
+        d = yaml.safe_load(p.read_text())
+        for e in (d.get("entries") if isinstance(d, dict) else d) or []:
+            if isinstance(e, dict):
+                _add(e)
+    core_doc = yaml.safe_load((MODELS_DIR / "core.yaml").read_text()) or {}
+    for e in _core_entries(core_doc):
+        _add(e)
+    enrich_dir = MODELS_DIR / "enrichments"
+    if enrich_dir.exists():
+        for p in sorted(enrich_dir.glob("*.yaml")):
+            doc = yaml.safe_load(p.read_text()) or []
+            doc = doc.get("entries", doc) if isinstance(doc, dict) else doc
+            for e in doc or []:
+                if isinstance(e, dict):
+                    _add(e)
+    return forms
+
+
 def _clean_resolver() -> Resolver:
     """Resolver from fixtures with this generator's own prior output filtered
     out (`canonical_models.resolution_source == 'inferred'` rows AND their alias
@@ -149,6 +186,11 @@ def _clean_resolver() -> Resolver:
             for a in e.get("aliases") or []:
                 if a:
                     own_forms.add(str(a))
+        # A prior-output form that another seed layer ALSO claims is not
+        # tier3-originated — its alias row belongs to that other canonical.
+        # Stripping it would blind the residual pass to an existing entity
+        # and re-mint a shadow draft (then steal the owner's id as an alias).
+        own_forms -= _non_tier3_claimed_forms()
         if own_forms:
             keep = [str(rv) not in own_forms for rv in aliases_df["raw_value"]]
             aliases_df = aliases_df.loc[keep].reset_index(drop=True)
@@ -475,18 +517,37 @@ def main() -> None:
             return (hf_to_dev.get(o.lower(), o.lower()), _ck(n), _ck_bsizes(n))
         return ("", _ck(c), _ck_bsizes(c))
 
+    # Ids the CURATED layers key records by (core entries, enrichments/*.yaml
+    # bridges and edges). When a same-run twin pair contains one, that spelling
+    # must win the id slot — curation attaches aliases/parents to it, and
+    # letting the other spelling win would strand those records on a
+    # loader-materialized stand-in (and collide on the alias claim).
+    curated_record_ids: set[str] = set()
+    for _e in _core_entries(core_doc):
+        if isinstance(_e.get("id"), str):
+            curated_record_ids.add(_e["id"])
+    _enrich_dir = MODELS_DIR / "enrichments"
+    if _enrich_dir.exists():
+        for _p in sorted(_enrich_dir.glob("*.yaml")):
+            _doc = yaml.safe_load(_p.read_text()) or []
+            _doc = _doc.get("entries", _doc) if isinstance(_doc, dict) else _doc
+            for _e in _doc or []:
+                if isinstance(_e, dict) and isinstance(_e.get("id"), str):
+                    curated_record_ids.add(_e["id"])
+
     def _twin_id_wins(challenger: str, incumbent: str, org_id_: Optional[str]) -> bool:
         """True iff `challenger` is the better canonical spelling for a same-run
-        twin pair. Mirrors the seed fold's `_winner_rank` preferences (dotted
-        version spelling, then shorter id), with one extra leading criterion:
-        an id whose org prefix IS the curated developer org (`moonshotai/…`)
-        beats an alias-org respelling (`kimi/…`) — canonical ids should carry
-        the real namespace."""
+        twin pair. A curated-record-keyed id wins outright; then mirrors the
+        seed fold's `_winner_rank` preferences (dotted version spelling, then
+        shorter id), led by: an id whose org prefix IS the curated developer
+        org (`moonshotai/…`) beats an alias-org respelling (`kimi/…`) —
+        canonical ids should carry the real namespace."""
 
         def _score(c: str) -> tuple:
             org = c.split("/", 1)[0].lower() if "/" in c else ""
             name = c.rsplit("/", 1)[-1]
             return (
+                c in curated_record_ids,
                 org == (org_id_ or "").lower(),
                 "." in name,
                 -len(c),
@@ -524,6 +585,13 @@ def main() -> None:
     review: list[dict] = []
     buckets = Counter()
 
+    # Forms the curated layers claim (core entries + enrichments records). A
+    # residual raw curation claims must NEVER mint a draft: the curated target
+    # may be a tier3-defined canonical this clean resolver cannot see (its
+    # rows are stripped as inferred), and a mint would double-claim the raw at
+    # seed time. The carry-forward floor applies the same guard.
+    curated_claims = _curated_claim_forms()
+
     residual: list[str] = []
     for raw in oracle:
         if "/" in raw and raw.split("/", 1)[0].strip().lower() in SENTINEL_ORGS:
@@ -536,6 +604,9 @@ def main() -> None:
             residual.append(raw)
 
     for raw in residual:
+        if raw in curated_claims:
+            buckets["curated-claimed"] += 1
+            continue
         # A placeholder org prefix (`unknown/…`) is NOT a real namespace. The
         # resolvable ones were already aliased onto their true canonical in the
         # residual pass above, so any sentinel id reaching here is genuinely
@@ -785,7 +856,8 @@ def main() -> None:
     for hf, raws in fold_enrich.items():
         emitted.add(hf)
         emitted.update(raws)
-    curated_claims = _curated_claim_forms()
+    from eval_entity_resolver.normalization import normalize as _floor_rnz
+
     core_dropped_ids: set[str] = set(core_skip_ids)
     if isinstance(core_doc, dict):
         core_dropped_ids |= set(core_doc.get("skip_source_ids") or [])
@@ -801,6 +873,18 @@ def main() -> None:
                 continue
             if form in curated_claims:
                 continue  # curation places this form; a floor claim would collide
+            if form in curated_record_ids:
+                # A curated record (core entry / enrichments bridge or edge) is
+                # KEYED by this form: the loader keeps it alive as a canonical
+                # id, so it stays resolvable at 1.0 — and a floor alias claim
+                # on another entity would collide with that id claim.
+                continue
+            if core_norm_index.get(_floor_rnz(form)) is not None:
+                # A core-defined canonical owns the form's normalized identity
+                # (core scaffold entities keep resolution_source=inferred, so
+                # the clean resolver is blind to them) — the real seed universe
+                # resolves the form to that entity via normalized match.
+                continue
             res = r.resolve(form, "model")
             if res.canonical_id and res.strategy in ("exact", "normalized"):
                 continue  # cleanly handed off to another source's claim

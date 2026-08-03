@@ -5465,6 +5465,10 @@
   - id: qwen/codeqwen1.5-7b
     relationship: variant
     axis: training_stage
+- id: alibaba/qwen-3-6-max-preview
+  parents:
+  - id: alibaba/qwen3.6-max
+    relationship: finetune
 - id: alibaba/qwen-3-80b-instruct
   parents:
   - id: alibaba/qwen-turbo
@@ -15304,6 +15308,14 @@
   parents:
   - id: zai-org/glm-4-9b-chat
     relationship: finetune
+- id: z-ai/glm-5-turbo
+  parents:
+  - id: zai-org/GLM-5
+    relationship: quantized
+- id: z-ai/glm-5v-turbo
+  parents:
+  - id: zai/z-ai-glm-5v
+    relationship: quantized
 - id: zai/glm-4-5v-reasoning
   parents:
   - id: z-ai/glm-4.5v
@@ -15462,21 +15474,6 @@
   parents:
   - id: Qwen/Qwen2.5-32B-Instruct
     relationship: finetune
-- id: openai/gpt-4-1-2025-04-14
-  parents:
-  - id: openai/gpt-4.1
-    relationship: variant
-    axis: version
-- id: openai/gpt-4-1-mini-2025-04-14
-  parents:
-  - id: openai/gpt-4.1-mini
-    relationship: variant
-    axis: version
-- id: openai/gpt-4-1-nano-2025-04-14
-  parents:
-  - id: openai/gpt-4.1-nano
-    relationship: variant
-    axis: version
 - id: openai/gpt-5-2025-08-07
   parents:
   - id: openai/gpt-5

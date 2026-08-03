@@ -1245,16 +1245,13 @@ def _adopt_openrouter_ids(
         if not cid or "/" not in cid:
             continue  # org-less mints keep their invented slug
         if cid in cands:
-            # Already carries an OpenRouter spelling verbatim: no rename, but
-            # still tagged — the duplicate-identity gate scopes "adoption-
-            # touched" clusters by metadata.openrouter_adopted, which must not
-            # depend on whether the invented mint happened to equal the key.
-            # HF-deferred entries stay untagged: their id is rung 1 (HF).
-            if not _entry_meta(e).get("hf_deferred"):
-                meta = _entry_meta(e)
-                if meta.get("openrouter_adopted") is not True:
-                    meta["openrouter_adopted"] = True
-                    e["metadata"] = json.dumps(meta, sort_keys=True)
+            # Already carries an OpenRouter spelling verbatim: no rename here.
+            # The entry is still tagged metadata.openrouter_adopted — but by
+            # `_tag_openrouter_key_ids` AFTER the intra-output reconcile, not
+            # here: `_pick_winner` ranks the flag as "renamed to an external
+            # key" (rung 2 beats an invented twin), and tagging an
+            # equal-spelling coincidence at adoption time would flip a
+            # reviewed author-family entry into its re-host shell twin.
             continue
         if _entry_meta(e).get("hf_deferred"):
             continue  # canonical is the real HF id — never demoted
@@ -1282,6 +1279,33 @@ def _adopt_openrouter_ids(
             for edge in e.get("parents") or []:
                 if isinstance(edge, dict) and edge.get("id") in renames:
                     edge["id"] = renames[edge["id"]]
+
+
+def _tag_openrouter_key_ids(entries: list[dict], api_json: dict) -> list[dict]:
+    """Tag `metadata.openrouter_adopted` on every FULL entry whose canonical id
+    IS a cleaned OpenRouter catalog key. `_adopt_openrouter_ids` tags renames at
+    adoption time; a mint whose invented id already EQUALS the key carries the
+    same external-id fact, and the duplicate-identity gate's "adoption-touched"
+    scoping must not depend on that spelling coincidence. Runs AFTER
+    `_generate_models` (so `_pick_winner`, which ranks the flag as a rung-2
+    rename, is not perturbed) and before the write. HF-deferred entries stay
+    untagged: their id is rung 1 (HF). In-place; returns `entries`."""
+    or_keys = {
+        k
+        for m in ((api_json.get(_OPENROUTER_PROVIDER) or {}).get("models") or {})
+        for k in (_clean_openrouter_key(m),)
+        if k
+    }
+    for e in entries:
+        cid = e.get("id")
+        if not cid or "display_name" not in e or cid not in or_keys:
+            continue
+        meta = _entry_meta(e)
+        if meta.get("hf_deferred") or meta.get("openrouter_adopted") is True:
+            continue
+        meta["openrouter_adopted"] = True
+        e["metadata"] = json.dumps(meta, sort_keys=True)
+    return entries
 
 
 def _attach_provider_aliases(
@@ -3524,7 +3548,7 @@ def main() -> int:
             print(f"[refresh] ERROR: {len(skipped_no_org)} provider(s) -> unknown org_id", file=sys.stderr)
             return 1
         regenerate_catalog(
-            _finalize_entries(generated),
+            _tag_openrouter_key_ids(_finalize_entries(generated), api),
             adopt_migration=args.adopt_openrouter_ids_migration,
         )
         return 0
@@ -3553,7 +3577,7 @@ def main() -> int:
     # dedup and only surface — on the wrong canonical — once _write_yaml flattens
     # them, aborting the seed with a base/variant alias collision. Idempotent, so
     # _write_yaml's re-finalize below is a no-op.
-    generated = _finalize_entries(generated)
+    generated = _tag_openrouter_key_ids(_finalize_entries(generated), api)
     # Carry the committed file forward through the wholesale rewrite: an
     # upstream (provider,model) removal retains the committed entry, an
     # alias-level removal unions the committed aliases back, and the returned

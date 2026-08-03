@@ -17,6 +17,15 @@
 # forms bridged here.
 # The served "phi-4-multimodal" IS the HF repo Phi-4-multimodal-instruct (the
 # only multimodal Phi-4 release; API names drop the -instruct suffix).
+# Likewise the served "phi-4-mini" (Azure's non-reasoning record) IS the HF
+# repo Phi-4-mini-instruct — NOT Phi-4-mini-reasoning, a different model.
+# Dated Mistral Small API releases pin to their dated canonicals
+# (mistral-small-2402; mistral-small-2409 = Mistral-Small-Instruct-2409) —
+# never to the catch-all mistral-small-legacy record.
+# DeepSeek V3.2's "thinking" serving spelling names the reasoning/mode leaf
+# (deepseek/deepseek-v3-2-reasoning), not the base — mode leaves keep identity.
+# ai2/* raws are AllenAI spellings: they bridge onto the allenai/* canonical
+# rather than minting an org-respelled twin draft.
 - id: 01-ai/Yi-Coder-9B-Chat
   aliases:
   - unknown/yi-coder-chat-9b
@@ -962,6 +971,9 @@
 - id: allenai/olmo-3-32b
   aliases:
   - OLMo-3 32B
+- id: allenai/olmo-3-32b-think
+  aliases:
+  - ai2/olmo-3-32b-think
 - id: allknowingroger/Ministral-8B-slerp
   aliases:
   - ministral-8b-slerp
@@ -1552,6 +1564,7 @@
 - id: deepseek/deepseek-v3-2-reasoning
   aliases:
   - DeepSeek V3.2 Reasoning
+  - deepseek/deepseek-v3.2-thinking
 - id: deepseek/deepseek-v3-2-reasoning-0925
   aliases:
   - DeepSeek V3.2 Reasoning (0925)
@@ -2309,9 +2322,11 @@
 - id: microsoft/Phi-3.5-vision-instruct
   aliases:
   - unknown/phi-3-5-vision-instruct-32f
-- id: microsoft/Phi-4-mini-reasoning
+- id: microsoft/Phi-4-mini-instruct
   aliases:
   - Phi-4 Mini
+  - azure/phi-4-mini
+  - microsoft/phi-4-mini
 - id: microsoft/Phi-4-multimodal-instruct
   aliases:
   - microsoft/phi-4-multimodal
@@ -2533,6 +2548,9 @@
 - id: mistralai/mistral-small-instruct
   aliases:
   - Mistral Small Instruct
+- id: mistralai/mistral-small-2402
+  aliases:
+  - mistral/mistral-small-2402
 - id: mistralai/mistral-small-legacy
   aliases:
   - Mistral-Small-2402
@@ -3367,13 +3385,13 @@
   - GLM-5.1 Thinking
 - id: z-ai/glm-5v-turbo
   aliases:
-  - glm-5v
   - z-ai-glm-5v-turbo
-  - zai/glm-5v
   - zai/glm-5v-turbo
 - id: zai/z-ai-glm-5v
   aliases:
+  - glm-5v
   - z-ai-glm-5v
+  - zai/glm-5v
 - id: zhipu-ai/glm-4p5
   aliases:
   - zai/glm-4p5
@@ -3445,4 +3463,5 @@
   - mistral/mistral-small-24b-base-2501
 - id: mistralai/Mistral-Small-Instruct-2409
   aliases:
+  - mistral/mistral-small-2409
   - mistralai/mistral-small-instruct-2409

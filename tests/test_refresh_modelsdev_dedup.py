@@ -1017,11 +1017,12 @@ def test_catalog_regen_deterministic_and_no_drop(mod, api, tmp_path, monkeypatch
 # ---------------------------------------------------------------------------
 def test_noncatalog_regen_is_confluent_with_committed(mod, api):
     gen, _ = mod._generate_models(api, mod._load_known_org_ids())
-    gen = mod._finalize_entries([dict(e) for e in gen])
-    # Same pipeline as main(): the carry-forward step runs BETWEEN finalize and
-    # reconcile (an upstream removal retains committed entries/aliases, and the
-    # returned claims stop fresh mints from stealing carried forms) — omitting
-    # it compares fresh-only output against a carried-forward committed file.
+    # Same pipeline as main(): OpenRouter-key-id tagging after finalize, then
+    # the carry-forward step BETWEEN finalize and reconcile (an upstream
+    # removal retains committed entries/aliases, and the returned claims stop
+    # fresh mints from stealing carried forms) — omitting either compares
+    # fresh-only output against a carried-forward committed file.
+    gen = mod._tag_openrouter_key_ids(mod._finalize_entries([dict(e) for e in gen]), api)
     gen, claims = mod._carry_forward_committed(gen, mod._catalog_load_list(mod.SEED_PATH))
     gen = mod.reconcile_generated_against_existing(gen, committed_claims=claims)
     _canon = mod._build_org_canonicalizer()

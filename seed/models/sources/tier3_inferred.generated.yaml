@@ -5,6 +5,10 @@
 # review_status=draft. Base edges are alias-confirmed only (NO invented
 # edges); org-less ids carry org_id=None + tags:[org-unknown] and are
 # surfaced to org_unknown_review.json (never auto-guessed).
+# Enrich records ({id, aliases}) union surface forms onto existing
+# canonicals: org-aware HF folds, collision twins, sentinel-org folds,
+# and the carry-forward floor (a dropped draft's forms pinned onto the
+# entity its raw resolves to — nothing is removed).
 - id: 01-ai/yi-large
   display_name: 01-ai/yi-large
   resolution_source: inferred
@@ -218,20 +222,6 @@
   aliases:
   - Alibaba-AIDC/Algharb
   org_id: alibaba
-- id: Anthropic/claude-3-5-sonnet-20240620
-  display_name: Anthropic/claude-3-5-sonnet-20240620
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - Anthropic/claude-3-5-sonnet-20240620
-  - anthropic/claude-3-5-sonnet-20240620
-  org_id: anthropic
-  parents:
-  - id: anthropic/claude-3.5-sonnet
-    relationship: variant
-    axis: version
 - id: Anthropic/claude-3-haiku-20240307
   display_name: Anthropic/claude-3-haiku-20240307
   resolution_source: inferred
@@ -5938,15 +5928,6 @@
   aliases:
   - ai2/olmo-2-7b
   org_id: allenai
-- id: ai2/olmo-3-32b-think
-  display_name: ai2/olmo-3-32b-think
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - ai2/olmo-3-32b-think
-  org_id: allenai
 - id: ai2/olmo-3-7b-instruct
   display_name: ai2/olmo-3-7b-instruct
   resolution_source: inferred
@@ -6190,15 +6171,6 @@
   aliases:
   - ai21labs/jamba-large-1.6
   org_id: ai21
-- id: ai21labs/jamba-large-1.7
-  display_name: ai21labs/jamba-large-1.7
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - ai21labs/jamba-large-1.7
-  org_id: ai21
 - id: ai21labs/jamba-mini-1.6
   display_name: ai21labs/jamba-mini-1.6
   resolution_source: inferred
@@ -6307,30 +6279,6 @@
   parents:
   - id: alibaba/qwen-14b
     relationship: finetune
-- id: alibaba/qwen-2-5-max
-  display_name: alibaba/qwen-2-5-max
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - alibaba/qwen-2-5-max
-  org_id: alibaba
-  parents:
-  - id: alibaba/qwen-turbo
-    relationship: finetune
-- id: alibaba/qwen-3-4b-instruct
-  display_name: alibaba/qwen-3-4b-instruct
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - alibaba/qwen-3-4b-instruct
-  org_id: alibaba
-  parents:
-  - id: alibaba/qwen-turbo
-    relationship: finetune
 - id: alibaba/qwen-3-80b-instruct
   display_name: alibaba/qwen-3-80b-instruct
   resolution_source: inferred
@@ -6415,15 +6363,6 @@
   parents:
   - id: Qwen/Qwen2-72B
     relationship: finetune
-- id: alibaba/qwen2.5-max
-  display_name: alibaba/qwen2.5-max
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - alibaba/qwen2.5-max
-  org_id: alibaba
 - id: alibaba/qwen2.5-turbo
   display_name: alibaba/qwen2.5-turbo
   resolution_source: inferred
@@ -6636,18 +6575,6 @@
   org_id: alibaba
   parents:
   - id: alibaba/qwen3-4b-2507
-    relationship: finetune
-- id: alibaba/qwen3-4b-instruct
-  display_name: alibaba/qwen3-4b-instruct
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - alibaba/qwen3-4b-instruct
-  org_id: alibaba
-  parents:
-  - id: alibaba/qwen3-4b
     relationship: finetune
 - id: alibaba/qwen3-4b-instruct-reasoning
   display_name: alibaba/qwen3-4b-instruct-reasoning
@@ -8785,14 +8712,6 @@
   metadata: '{}'
   aliases:
   - anthropic/claude-2.1
-  org_id: anthropic
-- id: anthropic/claude-21
-  display_name: anthropic/claude-21
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
   - anthropic/claude-21
   org_id: anthropic
 - id: anthropic/claude-3-5-haiku-20241022
@@ -8806,19 +8725,6 @@
   org_id: anthropic
   parents:
   - id: anthropic/claude-3.5-haiku
-    relationship: variant
-    axis: version
-- id: anthropic/claude-3-5-sonnet-20241022
-  display_name: anthropic/claude-3-5-sonnet-20241022
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - anthropic/claude-3-5-sonnet-20241022
-  org_id: anthropic
-  parents:
-  - id: anthropic/claude-3.5-sonnet
     relationship: variant
     axis: version
 - id: anthropic/claude-3-7-sonnet-20250219
@@ -8846,18 +8752,6 @@
   parents:
   - id: anthropic/claude-sonnet-3.7
     relationship: finetune
-- id: anthropic/claude-3-7-sonnet-thinking
-  display_name: anthropic/claude-3-7-sonnet-thinking
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - anthropic/claude-3-7-sonnet-thinking
-  org_id: anthropic
-  parents:
-  - id: anthropic/claude-sonnet-3.7
-    relationship: finetune
 - id: anthropic/claude-3-haiku
   display_name: anthropic/claude-3-haiku
   resolution_source: inferred
@@ -8867,32 +8761,6 @@
   aliases:
   - anthropic/claude-3-haiku
   org_id: anthropic
-- id: anthropic/claude-3.5-sonnet-2024-06-20
-  display_name: anthropic/claude-3.5-sonnet-2024-06-20
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - anthropic/claude-3.5-sonnet-2024-06-20
-  org_id: anthropic
-  parents:
-  - id: anthropic/claude-3.5-sonnet
-    relationship: variant
-    axis: version
-- id: anthropic/claude-3.5-sonnet-2024-10-22
-  display_name: anthropic/claude-3.5-sonnet-2024-10-22
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - anthropic/claude-3.5-sonnet-2024-10-22
-  org_id: anthropic
-  parents:
-  - id: anthropic/claude-3.5-sonnet
-    relationship: variant
-    axis: version
 - id: anthropic/claude-3.5-sonnet-october-2024
   display_name: anthropic/claude-3.5-sonnet-october-2024
   resolution_source: inferred
@@ -8924,7 +8792,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - anthropic/claude-3.7-sonnet-thinking
+  - anthropic/claude-3-7-sonnet-thinking
   org_id: anthropic
   parents:
   - id: anthropic/claude-sonnet-3.7
@@ -9000,18 +8868,6 @@
   org_id: anthropic
   parents:
   - id: anthropic/claude-haiku-4.5
-    relationship: finetune
-- id: anthropic/claude-4-5-sonnet-thinking
-  display_name: anthropic/claude-4-5-sonnet-thinking
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - anthropic/claude-4-5-sonnet-thinking
-  org_id: anthropic
-  parents:
-  - id: anthropic/claude-sonnet-4.5-thinking
     relationship: finetune
 - id: anthropic/claude-4-opus-20250514
   display_name: anthropic/claude-4-opus-20250514
@@ -9095,7 +8951,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - anthropic/claude-4.5-sonnet-thinking
+  - anthropic/claude-4-5-sonnet-thinking
   org_id: anthropic
   parents:
   - id: anthropic/claude-sonnet-4.5-thinking
@@ -11228,15 +11084,6 @@
   aliases:
   - google/flame-1.0-24B-july-2024
   org_id: google
-- id: google/gemini-1-0-pro
-  display_name: google/gemini-1-0-pro
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - google/gemini-1-0-pro
-  org_id: google
 - id: google/gemini-1-0-ultra
   display_name: google/gemini-1-0-ultra
   resolution_source: inferred
@@ -11246,30 +11093,6 @@
   aliases:
   - google/gemini-1-0-ultra
   org_id: google
-- id: google/gemini-1-5-flash
-  display_name: google/gemini-1-5-flash
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - google/gemini-1-5-flash
-  org_id: google
-  parents:
-  - id: google/gemini-flash-1-5
-    relationship: finetune
-- id: google/gemini-1-5-flash-8b
-  display_name: google/gemini-1-5-flash-8b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - google/gemini-1-5-flash-8b
-  org_id: google
-  parents:
-  - id: google/gemini-flash-1-5
-    relationship: finetune
 - id: google/gemini-1-5-flash-may-2024
   display_name: google/gemini-1-5-flash-may-2024
   resolution_source: inferred
@@ -11282,15 +11105,6 @@
   parents:
   - id: google/gemini-flash-1-5
     relationship: finetune
-- id: google/gemini-1-5-pro
-  display_name: google/gemini-1-5-pro
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - google/gemini-1-5-pro
-  org_id: google
 - id: google/gemini-1-5-pro-may-2024
   display_name: google/gemini-1-5-pro-may-2024
   resolution_source: inferred
@@ -11307,7 +11121,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - google/gemini-1.0-pro
+  - google/gemini-1-0-pro
   org_id: google
 - id: google/gemini-1.0-pro-001
   display_name: google/gemini-1.0-pro-001
@@ -11334,7 +11148,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - google/gemini-1.5-flash
+  - google/gemini-1-5-flash
   org_id: google
   parents:
   - id: google/gemini-flash-1-5
@@ -11382,7 +11196,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - google/gemini-1.5-flash-8b
+  - google/gemini-1-5-flash-8b
   org_id: google
   parents:
   - id: google/gemini-flash-1-5
@@ -11442,7 +11256,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - google/gemini-1.5-pro
+  - google/gemini-1-5-pro
   org_id: google
 - id: google/gemini-1.5-pro-001
   display_name: google/gemini-1.5-pro-001
@@ -11587,18 +11401,6 @@
   org_id: google
   parents:
   - id: google/gemini-2.5-flash-lite
-    relationship: finetune
-- id: google/gemini-2-5-flash-preview-05-20
-  display_name: google/gemini-2-5-flash-preview-05-20
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - google/gemini-2-5-flash-preview-05-20
-  org_id: google
-  parents:
-  - id: google/gemini-2.5-flash
     relationship: finetune
 - id: google/gemini-2-5-flash-preview-05-20-thinking-16k
   display_name: google/gemini-2-5-flash-preview-05-20-thinking-16k
@@ -11859,7 +11661,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - google/gemini-2.5-flash-preview-05-20
+  - google/gemini-2-5-flash-preview-05-20
   org_id: google
   parents:
   - id: google/gemini-2.5-flash
@@ -11960,30 +11762,6 @@
   parents:
   - id: google/gemini-2.5-pro-preview
     relationship: finetune
-- id: google/gemini-3-1-flash-lite-preview
-  display_name: google/gemini-3-1-flash-lite-preview
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - google/gemini-3-1-flash-lite-preview
-  org_id: google
-  parents:
-  - id: google/gemini-3.1-flash-lite
-    relationship: finetune
-- id: google/gemini-3-1-pro-preview
-  display_name: google/gemini-3-1-pro-preview
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - google/gemini-3-1-pro-preview
-  org_id: google
-  parents:
-  - id: google/gemini-3.1-pro
-    relationship: finetune
 - id: google/gemini-3-deep-think
   display_name: google/gemini-3-deep-think
   resolution_source: inferred
@@ -12081,7 +11859,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - google/gemini-3.1-flash-lite-preview
+  - google/gemini-3-1-flash-lite-preview
   org_id: google
   parents:
   - id: google/gemini-3.1-flash-lite
@@ -12093,7 +11871,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - google/gemini-3.1-pro-preview
+  - google/gemini-3-1-pro-preview
   org_id: google
   parents:
   - id: google/gemini-3.1-pro
@@ -12457,15 +12235,6 @@
   aliases:
   - ibm/granite-3-1-8b-instruct-fc
   org_id: ibm
-- id: ibm/granite-3-3-8b-instruct
-  display_name: ibm/granite-3-3-8b-instruct
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - ibm/granite-3-3-8b-instruct
-  org_id: ibm
 - id: ibm/granite-3.3-8b-base
   display_name: ibm/granite-3.3-8b-base
   resolution_source: inferred
@@ -12482,7 +12251,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - ibm/granite-3.3-8b-instruct
+  - ibm/granite-3-3-8b-instruct
   org_id: ibm
 - id: ibm/granite-3.3-8b-instruct-with-guardian
   display_name: ibm/granite-3.3-8b-instruct-with-guardian
@@ -12529,15 +12298,6 @@
   aliases:
   - ibm/granite-4-0-h-nano-1b
   org_id: ibm
-- id: ibm/granite-4-0-h-small
-  display_name: ibm/granite-4-0-h-small
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - ibm/granite-4-0-h-small
-  org_id: ibm
 - id: ibm/granite-4-0-nano-1b
   display_name: ibm/granite-4-0-nano-1b
   resolution_source: inferred
@@ -12554,7 +12314,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - ibm/granite-4.0-h-small
+  - ibm/granite-4-0-h-small
   org_id: ibm
 - id: ibm/granite-4.0-h-small-with-guardian
   display_name: ibm/granite-4.0-h-small-with-guardian
@@ -12985,15 +12745,6 @@
   aliases:
   - kavonalds/Lancer-1-1b-Instruct
   org_id: kavonalds
-- id: kimi/kimi-k2
-  display_name: kimi/kimi-k2
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - kimi/kimi-k2
-  org_id: moonshotai
 - id: korea-telecom/mi-dm-k-2-5-pro-dec28
   display_name: korea-telecom/mi-dm-k-2-5-pro-dec28
   resolution_source: inferred
@@ -13436,42 +13187,6 @@
   aliases:
   - meituan/longcat-flash-thinking
   org_id: meituan
-- id: meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
-  display_name: meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
-  org_id: meta
-  parents:
-  - id: meta-llama/llama-3.2-11b-vision-instruct
-    relationship: finetune
-- id: meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
-  display_name: meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
-  org_id: meta
-  parents:
-  - id: meta-llama/Llama-3.2-90B-Vision-Instruct
-    relationship: finetune
-- id: meta-llama/Llama-3.3-70B-Instruct-Turbo
-  display_name: meta-llama/Llama-3.3-70B-Instruct-Turbo
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta-llama/Llama-3.3-70B-Instruct-Turbo
-  org_id: meta
-  parents:
-  - id: meta-llama/Llama-3.3-70B-Instruct
-    relationship: finetune
 - id: meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
   display_name: meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
   resolution_source: inferred
@@ -13516,6 +13231,7 @@
   metadata: '{}'
   aliases:
   - meta-llama/llama-3
+  - meta/llama3
   org_id: meta
 - id: meta-llama/llama-3.1
   display_name: meta-llama/llama-3.1
@@ -13525,7 +13241,11 @@
   metadata: '{}'
   aliases:
   - meta-llama/llama-3.1
+  - meta/llama3.1
   org_id: meta
+  parents:
+  - id: sabersaleh/Llama3
+    relationship: finetune
 - id: meta-llama/llama-3.2
   display_name: meta-llama/llama-3.2
   resolution_source: inferred
@@ -13534,7 +13254,11 @@
   metadata: '{}'
   aliases:
   - meta-llama/llama-3.2
+  - meta/llama3.2
   org_id: meta
+  parents:
+  - id: sabersaleh/Llama3
+    relationship: finetune
 - id: meta-llama/llama-4
   display_name: meta-llama/llama-4
   resolution_source: inferred
@@ -13543,6 +13267,7 @@
   metadata: '{}'
   aliases:
   - meta-llama/llama-4
+  - meta/llama4
   org_id: meta
 - id: meta-llama/llama3-latest
   display_name: meta-llama/llama3-latest
@@ -13851,15 +13576,6 @@
   parents:
   - id: meta/llama3-8b-instruct
     relationship: finetune
-- id: meta/llama-3-2-instruct-11b-vision
-  display_name: meta/llama-3-2-instruct-11b-vision
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-2-instruct-11b-vision
-  org_id: meta
 - id: meta/llama-3-2-instruct-1b
   display_name: meta/llama-3-2-instruct-1b
   resolution_source: inferred
@@ -14017,7 +13733,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - meta/llama-3.2-11b-vision-instruct-turbo
+  - meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
   org_id: meta
   parents:
   - id: meta-llama/llama-3.2-11b-vision-instruct
@@ -14041,7 +13757,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - meta/llama-3.2-90b-vision-instruct-turbo
+  - meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
   org_id: meta
   parents:
   - id: meta-llama/Llama-3.2-90B-Vision-Instruct
@@ -14053,53 +13769,11 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - meta/llama-3.3-70b-instruct-turbo
+  - meta-llama/Llama-3.3-70B-Instruct-Turbo
   org_id: meta
   parents:
   - id: meta-llama/Llama-3.3-70B-Instruct
     relationship: finetune
-- id: meta/llama3
-  display_name: meta/llama3
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama3
-  org_id: meta
-- id: meta/llama3.1
-  display_name: meta/llama3.1
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama3.1
-  org_id: meta
-  parents:
-  - id: sabersaleh/Llama3
-    relationship: finetune
-- id: meta/llama3.2
-  display_name: meta/llama3.2
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama3.2
-  org_id: meta
-  parents:
-  - id: sabersaleh/Llama3
-    relationship: finetune
-- id: meta/llama4
-  display_name: meta/llama4
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama4
-  org_id: meta
 - id: meta/llama4-behemoth
   display_name: meta/llama4-behemoth
   resolution_source: inferred
@@ -14109,30 +13783,6 @@
   aliases:
   - meta/llama4-behemoth
   org_id: meta
-- id: meta/llama4-maverick
-  display_name: meta/llama4-maverick
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama4-maverick
-  org_id: meta
-  parents:
-  - id: meta-llama/Llama-4-Maverick-17B-128E
-    relationship: finetune
-- id: meta/llama4-scout
-  display_name: meta/llama4-scout
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama4-scout
-  org_id: meta
-  parents:
-  - id: meta-llama/Llama-4-Scout-17B-16E
-    relationship: finetune
 - id: meta/muse-spark
   display_name: meta/muse-spark
   resolution_source: inferred
@@ -14141,14 +13791,6 @@
   metadata: '{}'
   aliases:
   - meta/muse-spark
-  org_id: meta
-- id: meta/muse_spark
-  display_name: meta/muse_spark
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
   - meta/muse_spark
   org_id: meta
 - id: meta/reflection-llama-3.1-70b
@@ -14246,6 +13888,7 @@
   metadata: '{}'
   aliases:
   - mistral/magistral-medium-2509
+  - mistralai/magistral-medium-2509
   org_id: mistralai
 - id: mistral/ministral-14b-latest
   display_name: mistral/ministral-14b-latest
@@ -14318,19 +13961,7 @@
   metadata: '{}'
   aliases:
   - mistral/mistral-large-2402
-  org_id: mistralai
-  parents:
-  - id: mistralai/mistral-large
-    relationship: variant
-    axis: version
-- id: mistral/mistral-large-2411
-  display_name: mistral/mistral-large-2411
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistral/mistral-large-2411
+  - mistralai/mistral-large-2402
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large
@@ -14466,15 +14097,6 @@
   aliases:
   - mistralai/magistral-medium-2506-thinking
   org_id: mistralai
-- id: mistralai/magistral-medium-2509
-  display_name: mistralai/magistral-medium-2509
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistralai/magistral-medium-2509
-  org_id: mistralai
 - id: mistralai/mistral-3.1-small
   display_name: mistralai/mistral-3.1-small
   resolution_source: inferred
@@ -14497,19 +14119,6 @@
   - id: mistralai/mistral-7b
     relationship: variant
     axis: version
-- id: mistralai/mistral-large-2402
-  display_name: mistralai/mistral-large-2402
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistralai/mistral-large-2402
-  org_id: mistralai
-  parents:
-  - id: mistralai/mistral-large
-    relationship: variant
-    axis: version
 - id: mistralai/mistral-large-2411
   display_name: mistralai/mistral-large-2411
   resolution_source: inferred
@@ -14517,7 +14126,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - mistralai/mistral-large-2411
+  - mistral/mistral-large-2411
   org_id: mistralai
   parents:
   - id: mistralai/mistral-large
@@ -14721,7 +14330,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - moonshotai/kimi-k2
+  - kimi/kimi-k2
   org_id: moonshotai
 - id: moonshotai/kimi-k2-thinking-0905
   display_name: moonshotai/kimi-k2-thinking-0905
@@ -15535,129 +15144,6 @@
   - id: openai/gpt-4
     relationship: variant
     axis: version
-- id: openai/gpt-4-1-2025-04-14
-  display_name: openai/gpt-4-1-2025-04-14
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-2025-04-14
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1
-    relationship: variant
-    axis: version
-- id: openai/gpt-4-1-2025-04-14-fc
-  display_name: openai/gpt-4-1-2025-04-14-fc
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-2025-04-14-fc
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1
-    relationship: finetune
-- id: openai/gpt-4-1-2025-04-14-prompt
-  display_name: openai/gpt-4-1-2025-04-14-prompt
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-2025-04-14-prompt
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1
-    relationship: finetune
-- id: openai/gpt-4-1-mini-2025-04-14
-  display_name: openai/gpt-4-1-mini-2025-04-14
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-mini-2025-04-14
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-mini
-    relationship: variant
-    axis: version
-- id: openai/gpt-4-1-mini-2025-04-14-fc
-  display_name: openai/gpt-4-1-mini-2025-04-14-fc
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-mini-2025-04-14-fc
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-mini
-    relationship: finetune
-- id: openai/gpt-4-1-mini-2025-04-14-prompt
-  display_name: openai/gpt-4-1-mini-2025-04-14-prompt
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-mini-2025-04-14-prompt
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-mini
-    relationship: finetune
-- id: openai/gpt-4-1-nano-2025-04-14
-  display_name: openai/gpt-4-1-nano-2025-04-14
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-nano-2025-04-14
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-nano
-    relationship: variant
-    axis: version
-- id: openai/gpt-4-1-nano-2025-04-14-fc
-  display_name: openai/gpt-4-1-nano-2025-04-14-fc
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-nano-2025-04-14-fc
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-nano
-    relationship: finetune
-- id: openai/gpt-4-1-nano-2025-04-14-prompt
-  display_name: openai/gpt-4-1-nano-2025-04-14-prompt
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-1-nano-2025-04-14-prompt
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-nano
-    relationship: finetune
-- id: openai/gpt-4-5
-  display_name: openai/gpt-4-5
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4-5
-  org_id: openai
-  parents:
-  - id: openai/gpt-4
-    relationship: finetune
 - id: openai/gpt-4-mini-high
   display_name: openai/gpt-4-mini-high
   resolution_source: inferred
@@ -15683,45 +15169,6 @@
   - id: openai/gpt-4-turbo
     relationship: variant
     axis: version
-- id: openai/gpt-4.1-2025-04-14
-  display_name: openai/gpt-4.1-2025-04-14
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4.1-2025-04-14
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1
-    relationship: variant
-    axis: version
-- id: openai/gpt-4.1-mini-2025-04-14
-  display_name: openai/gpt-4.1-mini-2025-04-14
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4.1-mini-2025-04-14
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-mini
-    relationship: variant
-    axis: version
-- id: openai/gpt-4.1-nano-2025-04-14
-  display_name: openai/gpt-4.1-nano-2025-04-14
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - openai/gpt-4.1-nano-2025-04-14
-  org_id: openai
-  parents:
-  - id: openai/gpt-4.1-nano
-    relationship: variant
-    axis: version
 - id: openai/gpt-4.5
   display_name: openai/gpt-4.5
   resolution_source: inferred
@@ -15729,7 +15176,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - openai/gpt-4.5
+  - openai/gpt-4-5
   org_id: openai
   parents:
   - id: openai/gpt-4
@@ -16816,6 +16263,15 @@
   aliases:
   - perplexity/r1-1776
   org_id: perplexity
+- id: perplexity/sonar-reasoning
+  display_name: perplexity/sonar-reasoning
+  resolution_source: inferred
+  review_status: draft
+  resolution_granularity: variant
+  metadata: '{}'
+  aliases:
+  - perplexity/sonar-reasoning
+  org_id: perplexity
 - id: piotr25691/thea-3b-25r
   display_name: piotr25691/thea-3b-25r
   resolution_source: inferred
@@ -17024,8 +16480,12 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - qwen/qwen2.5-max
+  - alibaba/qwen-2-5-max
+  - alibaba/qwen2.5-max
   org_id: alibaba
+  parents:
+  - id: alibaba/qwen-turbo
+    relationship: finetune
 - id: qwen/qwen3-4b-instruct
   display_name: qwen/qwen3-4b-instruct
   resolution_source: inferred
@@ -17033,10 +16493,11 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - qwen/qwen3-4b-instruct
+  - alibaba/qwen-3-4b-instruct
+  - alibaba/qwen3-4b-instruct
   org_id: alibaba
   parents:
-  - id: alibaba/qwen3-4b
+  - id: alibaba/qwen-turbo
     relationship: finetune
 - id: qwen/qwen3.5-35b
   display_name: qwen/qwen3.5-35b
@@ -17780,14 +17241,6 @@
   metadata: '{}'
   aliases:
   - stepfun/step-3-vl-10b
-  org_id: stepfun
-- id: stepfun/step3-vl-10b
-  display_name: stepfun/step3-vl-10b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
   - stepfun/step3-vl-10b
   org_id: stepfun
 - id: sthenno-com/miscii-14b-0130
@@ -19072,15 +18525,6 @@
   aliases:
   - xai/grok-4-1-fast
   org_id: xai
-- id: xai/grok-4-1-fast-non-reasoning
-  display_name: xai/grok-4-1-fast-non-reasoning
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - xai/grok-4-1-fast-non-reasoning
-  org_id: xai
 - id: xai/grok-4-1-fast-non-reasoning-fc
   display_name: xai/grok-4-1-fast-non-reasoning-fc
   resolution_source: inferred
@@ -19089,15 +18533,6 @@
   metadata: '{}'
   aliases:
   - xai/grok-4-1-fast-non-reasoning-fc
-  org_id: xai
-- id: xai/grok-4-1-fast-reasoning
-  display_name: xai/grok-4-1-fast-reasoning
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - xai/grok-4-1-fast-reasoning
   org_id: xai
 - id: xai/grok-4-1-fast-reasoning-fc
   display_name: xai/grok-4-1-fast-reasoning-fc
@@ -19187,7 +18622,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - xai/grok-4.1-fast-non-reasoning
+  - xai/grok-4-1-fast-non-reasoning
   org_id: xai
 - id: xai/grok-4.1-fast-reasoning
   display_name: xai/grok-4.1-fast-reasoning
@@ -19196,7 +18631,7 @@
   resolution_granularity: variant
   metadata: '{}'
   aliases:
-  - xai/grok-4.1-fast-reasoning
+  - xai/grok-4-1-fast-reasoning
   org_id: xai
 - id: xai/grok-4.1-thinking-2025-11-17
   display_name: xai/grok-4.1-thinking-2025-11-17
@@ -19624,6 +19059,18 @@
 - id: HuggingFaceTB/SmolLM2-360M
   aliases:
   - unknown/smollm2-360m
+- id: MadeAgents/Hammer2.1-0.5b
+  aliases:
+  - madeagents/hammer2-1-0-5b-fc
+- id: MadeAgents/Hammer2.1-1.5b
+  aliases:
+  - madeagents/hammer2-1-1-5b-fc
+- id: MadeAgents/Hammer2.1-3b
+  aliases:
+  - madeagents/hammer2-1-3b-fc
+- id: MadeAgents/Hammer2.1-7b
+  aliases:
+  - madeagents/hammer2-1-7b-fc
 - id: MiniMaxAI/MiniMax-M2.1
   aliases:
   - unknown/minimax-m2.1
@@ -19636,6 +19083,12 @@
 - id: Qwen/QwQ-32B-Preview
   aliases:
   - unknown/qwq-32b-preview
+- id: Qwen/Qwen1.5-0.5B-Chat
+  aliases:
+  - alibaba/qwen-1.5-0.5b-chat
+- id: Qwen/Qwen1.5-1.8B-Chat
+  aliases:
+  - alibaba/qwen-1.5-1.8b-chat
 - id: Qwen/Qwen1.5-110B
   aliases:
   - alibaba/qwen1.5-110b
@@ -19646,6 +19099,12 @@
   aliases:
   - alibaba/qwen-1.5-14b-chat
   - alibaba/qwen1.5-14b-chat
+- id: Qwen/Qwen1.5-32B-Chat
+  aliases:
+  - alibaba/qwen-1.5-32b-chat
+- id: Qwen/Qwen1.5-4B-Chat
+  aliases:
+  - alibaba/qwen-1.5-4b-chat
 - id: Qwen/Qwen1.5-72B-Chat
   aliases:
   - alibaba/qwen1.5-72b-chat
@@ -19680,12 +19139,36 @@
 - id: Qwen/Qwen2.5-0.5B
   aliases:
   - alibaba/qwen2.5-0.5b
+- id: Qwen/Qwen2.5-0.5B-Instruct
+  aliases:
+  - alibaba/qwen-2.5-0.5b-instruct
 - id: Qwen/Qwen2.5-1.5B
   aliases:
   - alibaba/qwen2.5-1.5b
+- id: Qwen/Qwen2.5-1.5B-Instruct
+  aliases:
+  - alibaba/qwen-2.5-1.5b-instruct
 - id: Qwen/Qwen2.5-3B
   aliases:
   - alibaba/qwen2.5-3b
+- id: Qwen/Qwen2.5-3B-Instruct
+  aliases:
+  - alibaba/qwen-2.5-3b-instruct
+- id: Qwen/Qwen2.5-Coder-7B-Instruct
+  aliases:
+  - qwen/qwen-2.5-coder-7b-instruct
+- id: Qwen/Qwen2.5-VL-72B-Instruct
+  aliases:
+  - qwen/qwen-2.5-vl-72b-instruct
+- id: Qwen/Qwen3-1.7B
+  aliases:
+  - qwen/qwen3-1-7b-fc
+- id: Qwen/Qwen3-235B-A22B
+  aliases:
+  - fireworks/qwen3-235b-a22b
+- id: Qwen/Qwen3-30B-A3B
+  aliases:
+  - qwen/qwen3-30b
 - id: Qwen/Qwen3-VL-4B-Instruct
   aliases:
   - alibaba/qwen3-vl-4b-instruct
@@ -19697,21 +19180,51 @@
   aliases:
   - alibaba/qwen3-5-2b
   - alibaba/qwen3.5-2b
+- id: Salesforce/xLAM-2-1b-fc-r
+  aliases:
+  - salesforce/xlam-2-1b-fc-r-fc
+- id: Salesforce/xLAM-2-32b-fc-r
+  aliases:
+  - salesforce/xlam-2-32b-fc-r-fc
+- id: Salesforce/xLAM-2-3b-fc-r
+  aliases:
+  - salesforce/xlam-2-3b-fc-r-fc
+- id: Salesforce/xlam-2-70b-fc-r
+  aliases:
+  - salesforce/xlam-2-70b-fc-r-fc
+- id: Salesforce/xlam-2-8b-fc-r
+  aliases:
+  - salesforce/xlam-2-8b-fc-r-fc
 - id: abacusai/Llama-3-Smaug-8B
   aliases:
   - abacus-ai/llama3-smaug-8b
 - id: alibaba/qwen-3-6-max-preview
   aliases:
   - alibaba/qwen3.6-max-preview
+- id: alibaba/qwen2.5-vl-32b
+  aliases:
+  - qwen/qwen2.5-vl-32b
+- id: alibaba/qwen3-30b-instruct
+  aliases:
+  - alibaba/qwen-3-30b-instruct
 - id: allenai/Olmo-3.1-32B-Instruct
   aliases:
   - ai2/olmo-3-1-32b-instruct
 - id: allenai/Olmo-3.1-32B-Think
   aliases:
   - ai2/olmo-3-1-32b-think
+- id: amazon/nova-2-lite
+  aliases:
+  - amazon/amazon-nova-2-lite-v1-0-fc
+- id: amazon/nova-micro
+  aliases:
+  - amazon/amazon-nova-micro-v1-0-fc
 - id: amazon/nova-premier
   aliases:
   - unknown/amazon.nova-premier-v1:0
+- id: amazon/nova-pro
+  aliases:
+  - amazon/amazon-nova-pro-v1-0-fc
 - id: baidu/ernie-4-5-300b-a47b
   aliases:
   - unknown/ernie-4.5-300b-a47b
@@ -19725,9 +19238,41 @@
 - id: bytedance/doubao-seed-code
   aliases:
   - unknown/Doubao-Seed-Code
+- id: cohere/cohere-large-2022
+  aliases:
+  - cohere/Cohere-large-v20220720-13.1B
+- id: cohere/cohere-medium-2022
+  aliases:
+  - cohere/Cohere-medium-v20220720-6.1B
+  - cohere/Cohere-medium-v20221108-6.1B
+- id: cohere/cohere-small-2022
+  aliases:
+  - cohere/Cohere-small-v20220720-410M
+- id: cohere/cohere-xlarge-2022
+  aliases:
+  - cohere/Cohere-xlarge-v20220609-52.4B
+  - cohere/Cohere-xlarge-v20221108-52.4B
 - id: cohere/command-a
   aliases:
   - cohere/CommandA
+- id: cohere/command-beta-52b
+  aliases:
+  - cohere/Cohere-Command-beta-52.4B
+- id: cohere/command-beta-6b
+  aliases:
+  - cohere/Cohere-Command-beta-6.1B
+- id: deepseek-ai/DeepSeek-R1
+  aliases:
+  - fireworks/deepseek-r1
+- id: deepseek-ai/DeepSeek-V2-Lite
+  aliases:
+  - deepseek/deepseek-v2-16b
+- id: deepseek-ai/DeepSeek-V3
+  aliases:
+  - fireworks/deepseek-v3
+- id: deepseek/deepseek-v3-0324
+  aliases:
+  - fireworks/deepseek-v3-0324
 - id: google/gemini-2-0-flash-thinking-exp-01-21
   aliases:
   - google/gemini-2-0-flash-thinking-exp-0121
@@ -19737,6 +19282,12 @@
 - id: google/gemma-4-E4B
   aliases:
   - google/gemma4-e4b
+- id: huawei-noah-ustc/toolace-2-8b
+  aliases:
+  - huawei-noah-ustc/toolace-2-8b-fc
+- id: ibm-granite/granite-20b-functioncalling
+  aliases:
+  - ibm/granite-20b-functioncalling-fc
 - id: ibm-granite/granite-3.0-2b-base
   aliases:
   - ibm/granite-3.0-2b-base
@@ -19767,6 +19318,9 @@
 - id: ibm-granite/granite-3.1-8b-instruct
   aliases:
   - ibm/granite-3.1-8b-instruct
+- id: ibm-granite/granite-3.2-8b-instruct
+  aliases:
+  - ibm/granite-3-2-8b-instruct-fc
 - id: internlm/intern-s1
   aliases:
   - unknown/intern-s1
@@ -19782,11 +19336,21 @@
 - id: meta-llama/Llama-2-7b-hf
   aliases:
   - meta/llama-2-7b-hf
+- id: microsoft/Phi-4-multimodal-instruct
+  aliases:
+  - azure/phi-4-multimodal
 - id: microsoft/Phi-4-reasoning-plus
   aliases:
   - microsoft/phi4-reasoning-plus
+- id: microsoft/phi-3-mini-4k
+  aliases:
+  - azure/phi-3-mini
+- id: microsoft/phi-4
+  aliases:
+  - azure/phi-4
 - id: minimax/minimax-m1
   aliases:
+  - minimax/minimax-m1-40k
   - unknown/minimax-m1
 - id: minimax/minimax-m2
   aliases:
@@ -19800,12 +19364,123 @@
 - id: mistralai/Ministral-8B-Instruct-2410
   aliases:
   - unknown/ministral-8b-instruct-2410
+- id: mistralai/Mistral-Large-Instruct-2407
+  aliases:
+  - mistral/mistral-large-2
+- id: mistralai/Mistral-Small-3.2-24B-Instruct-2506
+  aliases:
+  - mistralai/mistral-small-2506-fc
+  - mistralai/mistral-small-2506-prompt
+- id: mistralai/mistral-large-2407
+  aliases:
+  - mistral/mistral-large-2-2407
+- id: mistralai/open-mistral-nemo
+  aliases:
+  - mistral/open-mistral-nemo
+- id: moonshotai/Kimi-K2-Instruct-0905
+  aliases:
+  - fireworks/kimi-k2-instruct-0905
+- id: moonshotai/Kimi-K2-Thinking
+  aliases:
+  - kimi/kimi-k2-thinking
+- id: moonshotai/Kimi-K2.5
+  aliases:
+  - kimi/kimi-k2-5
+  - moonshot/kimi-k2.5-cloud
+- id: moonshotai/kimi-k2-0905
+  aliases:
+  - kimi/kimi-k2-0905
+- id: moonshotai/kimi-k2.5-non-reasoning
+  aliases:
+  - kimi/kimi-k2-5-non-reasoning
+- id: nvidia/Llama-3_1-Nemotron-Ultra-253B-v1
+  aliases:
+  - nvidia/llama-3-1-nemotron-ultra-253b-v1-fc
+- id: nvidia/nemotron-3-nano-30b-a3b
+  aliases:
+  - unknown/nemotron-3-nano-30b-a3b-bf16
+  - unknown/nemotron-3-nano-30b-a3b-fp8
+- id: nvidia/nemotron-3-nano-30b-a3b-reasoning
+  aliases:
+  - nvidia/nvidia-nemotron-3-nano-30b-a3b-reasoning
+- id: nvidia/nemotron-3-nano-4b
+  aliases:
+  - nvidia/nvidia-nemotron-3-nano-4b
+- id: openai/gpt-4.1-mini-2025-04-14
+  aliases:
+  - openai/gpt-4-1-mini-2025-04-14-fc
+  - openai/gpt-4-1-mini-2025-04-14-prompt
+- id: openai/gpt-5-2025-08-07
+  aliases:
+  - openai/gpt-5-2025-08-07-high
+  - openai/gpt-5-2025-08-07-low
+  - openai/gpt-5-2025-08-07-medium
+  - openai/gpt-5-2025-08-07-minimal
+- id: openai/gpt-oss-120b
+  aliases:
+  - fireworks/gpt-oss-120b
+- id: openai/gpt-oss-20b
+  aliases:
+  - fireworks/gpt-oss-20b
+- id: openai/o3-pro-2025-06-10
+  aliases:
+  - openai/o3-pro-2025-06-10-high
+  - openai/o3-pro-2025-06-10-low
+  - openai/o3-pro-2025-06-10-medium
+- id: openbmb/minicpm3-4b
+  aliases:
+  - openbmb/minicpm3-4b-fc-fc
+  - openbmb/minicpm3-4b-prompt
+- id: openchat/openchat_3.5
+  aliases:
+  - openchat/openchat-35
+- id: phronetic-ai/rzn-t
+  aliases:
+  - phronetic-ai/rzn-t-prompt
+- id: qwen/qwen3-0.6b
+  aliases:
+  - qwen/qwen3-0-6b-fc
+  - qwen/qwen3-0-6b-prompt
+- id: qwen/qwen3-235b-a22b-fp8
+  aliases:
+  - qwen/qwen3-235b-a22b-fp8-tput
+- id: qwen/qwen3-4b-instruct-2507
+  aliases:
+  - qwen/qwen3-4b-instruct-2507-fc
+  - qwen/qwen3-4b-instruct-2507-prompt
 - id: tencent/hunyuan-t1
   aliases:
   - unknown/hunyuan-t1
+- id: thudm/glm-130b
+  aliases:
+  - zhipu-ai/GLM-130B
+- id: together/redpajama-incite-7b
+  aliases:
+  - together/RedPajama-INCITE-Base-7B
+  - together/RedPajama-INCITE-Instruct-7B
+  - together/redpajama-incite-base-7b
+  - together/redpajama-incite-instruct-7b
+- id: togethercomputer/RedPajama-INCITE-7B-Chat
+  aliases:
+  - together/redpajama-incite-7b-chat
+- id: togethercomputer/RedPajama-INCITE-7B-Instruct
+  aliases:
+  - together/redpajama-incite-7b-instruct
+- id: togethercomputer/RedPajama-INCITE-Base-3B-v1
+  aliases:
+  - together/redpajama-incite-base-3b-v1
+- id: togethercomputer/RedPajama-INCITE-Instruct-3B-v1
+  aliases:
+  - together/redpajama-incite-instruct-3b-v1
 - id: xai/grok-3-beta
   aliases:
   - xai/grok3-beta
 - id: xai/grok-3-mini-beta
   aliases:
   - xai/grok3-mini-beta
+- id: zai-org/glm-4-9b
+  aliases:
+  - zhipu-ai/glm-4-9b
+- id: zai-org/glm-4-9b-chat
+  aliases:
+  - zhipu-ai/glm-4-9b-chat

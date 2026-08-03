@@ -5805,7 +5805,6 @@
 - id: microsoft/Phi-4-mini-reasoning
   aliases:
   - Phi-4-mini-reasoning
-  - microsoft/phi-4-mini
   - microsoft/phi-4-mini-reasoning
   - phi-4-mini-reasoning
   metadata: '{"alias_platforms": {"microsoft/phi-4-mini-reasoning": "azure-cognitive-services", "phi-4-mini-reasoning": "azure-cognitive-services"}}'
