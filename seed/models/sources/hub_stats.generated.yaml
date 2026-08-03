@@ -43019,8 +43019,12 @@
   - vi
   aliases: []
   metadata: '{"downloads_all_time": 5894539, "hf_id": "meta-llama/Llama-4-Scout-17B-16E-Instruct", "library_name": "transformers", "license": "other", "likes": 1287, "pipeline_tag": "image-text-to-text",
-    "source": "hub_stats", "upstream_status": "removed"}'
+    "source": "hub_stats"}'
   review_status: reviewed
+  parents:
+  - id: meta-llama/Llama-4-Scout-17B-16E
+    relationship: finetune
+  lineage_origin_model_org_id: meta
 - id: meta-llama/Meta-Llama-3-70B
   release_date: '2024-04-17'
   tags:

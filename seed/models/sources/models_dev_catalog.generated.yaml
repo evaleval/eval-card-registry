@@ -5103,7 +5103,6 @@
     open_weights: true
 - id: meta-llama/Llama-4-Scout-17B-16E-Instruct
   aliases:
-  - Llama-4-Scout-17B-16E-Instruct-FP8
   - llama-4-scout-17b-16e-instruct
   - meta/llama-4-scout-17b-16e-instruct
   metadata: '{"alias_platforms": {"llama-4-scout-17b-16e-instruct": "novita-ai", "meta/llama-4-scout-17b-16e-instruct": "novita-ai"}}'

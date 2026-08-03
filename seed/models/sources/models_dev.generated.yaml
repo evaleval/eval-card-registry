@@ -451,7 +451,7 @@
   tags:
   - open-weight
   aliases: []
-  metadata: '{"alias_platforms": {"deephermes-3-mistral-24b-preview": "nano-gpt"}, "providers": ["chutes", "nano-gpt"], "underlying_key": "deephermes-3-mistral-24b-preview"}'
+  metadata: '{"providers": ["chutes", "nano-gpt"], "underlying_key": "deephermes-3-mistral-24b-preview"}'
   review_status: draft
   resolution_source: models_dev
 - id: NousResearch/DeepHermes-3-Mistral-24B-Preview
@@ -4936,9 +4936,8 @@
   aliases:
   - anthropic/claude-sonnet-3-5
   - claude-sonnet-3-5
-  metadata: '{"alias_platforms": {"anthropic--claude-3.5-sonnet": "sap-ai-core", "anthropic-claude-3.5-sonnet": "digitalocean", "anthropic/claude-3-5-sonnet": "digitalocean", "anthropic/claude-sonnet-3-5":
-    "poe", "claude-3-5-sonnet": "digitalocean", "claude-3.5-sonnet": "qiniu-ai", "claude-sonnet-3-5": "poe"}, "knowledge_cutoffs": ["2024-04-30"], "release_dates": ["2024-06-20", "2024-10-22"], "snapshots":
-    ["claude-3-5-sonnet-20240620", "claude-3-5-sonnet-20241022"]}'
+  metadata: '{"alias_platforms": {"anthropic/claude-sonnet-3-5": "poe", "claude-sonnet-3-5": "poe"}, "knowledge_cutoffs": ["2024-04-30"], "release_dates": ["2024-06-20", "2024-10-22"], "snapshots": ["claude-3-5-sonnet-20240620",
+    "claude-3-5-sonnet-20241022"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-3.7
   display_name: Claude Sonnet 3.7
@@ -12530,8 +12529,8 @@
   aliases:
   - meta-llama/llama-3.2-1b-instruct
   - meta/llama-3-2-1b-instruct
-  metadata: '{"alias_platforms": {"llama-3-2-1b-instruct": "kilo", "meta-llama/llama-3.2-1b-instruct": "openrouter", "meta/llama-3-2-1b-instruct": "kilo"}, "hf_deferred": true, "providers": ["chutes", "cloudflare-ai-gateway",
-    "cloudflare-workers-ai", "inference", "kilo", "nvidia", "openrouter"], "underlying_key": "llama-3-2-1b-instruct"}'
+  metadata: '{"alias_platforms": {"meta-llama/llama-3.2-1b-instruct": "openrouter", "meta/llama-3-2-1b-instruct": "kilo"}, "hf_deferred": true, "providers": ["chutes", "cloudflare-ai-gateway", "cloudflare-workers-ai",
+    "inference", "kilo", "nvidia", "openrouter"], "underlying_key": "llama-3-2-1b-instruct"}'
   review_status: reviewed
   resolution_source: models_dev
 - id: meta-llama/Llama-3.2-3B
@@ -12613,7 +12612,6 @@
     open_weights: true
 - id: meta-llama/Llama-4-Scout-17B-16E-Instruct
   aliases:
-  - Llama-4-Scout-17B-16E-Instruct-FP8
   - llama-4-scout-17b-16e-instruct
   - meta/llama-4-scout-17b-16e-instruct
   weak:
@@ -12884,9 +12882,7 @@
   tags: []
   aliases:
   - llama-3-3+
-  metadata: '{"alias_platforms": {"Llama-3.3+(3.1v3.3)-70B-Hanami-x1": "nano-gpt", "Llama-3.3+(3.1v3.3)-70B-New-Dawn-v1.1": "nano-gpt", "Llama-3.3+(3v3.3)-70B-TenyxChat-DaybreakStorywriter": "nano-gpt",
-    "llama-3-3+": "nano-gpt", "llama-3.3+3.1v3.3-70b-hanami-x1": "nano-gpt", "llama-3.3+3.1v3.3-70b-new-dawn-v1.1": "nano-gpt", "llama-3.3+3v3.3-70b-tenyxchat-daybreakstorywriter": "nano-gpt"}, "providers":
-    ["nano-gpt"], "underlying_key": "llama-3-3+"}'
+  metadata: '{"alias_platforms": {"llama-3-3+": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "llama-3-3+"}'
   review_status: draft
   resolution_source: models_dev
 - id: meta/llama-3-3-70b
@@ -14004,8 +14000,8 @@
   aliases:
   - Phi-3-mini-instruct (4k)
   - microsoft/phi-3-mini-4k-instruct
-  metadata: '{"alias_platforms": {"microsoft/phi-3-mini-4k-instruct": "azure-cognitive-services", "phi-3-mini-4k-instruct": "azure-cognitive-services"}, "hf_deferred": true, "providers": ["azure", "azure-cognitive-services",
-    "github-models"], "underlying_key": "phi-3-mini-4k-instruct"}'
+  metadata: '{"alias_platforms": {"microsoft/phi-3-mini-4k-instruct": "azure-cognitive-services"}, "hf_deferred": true, "providers": ["azure", "azure-cognitive-services", "github-models"], "underlying_key":
+    "phi-3-mini-4k-instruct"}'
   review_status: reviewed
   resolution_source: models_dev
 - id: microsoft/Phi-3-small-128k-instruct
@@ -15541,7 +15537,7 @@
   - open-weight
   aliases:
   - mistral-large-3:675b
-  metadata: '{"alias_platforms": {"mistral-large-3-675b": "ollama-cloud", "mistral-large-3:675b": "ollama-cloud"}, "providers": ["ollama-cloud"], "underlying_key": "mistral-large-3-675b"}'
+  metadata: '{"alias_platforms": {"mistral-large-3:675b": "ollama-cloud"}, "providers": ["ollama-cloud"], "underlying_key": "mistral-large-3-675b"}'
   review_status: draft
   resolution_source: models_dev
 - id: mistralai/mistral-large-3-675b-instruct
@@ -16064,7 +16060,7 @@
   tags:
   - open-weight
   aliases: []
-  metadata: '{"alias_platforms": {"open-mistral-nemo": "mistral"}, "knowledge_cutoffs": ["2024-07"], "release_dates": ["2024-07-01"], "snapshots": ["open-mistral-nemo"], "upstream_status": "removed"}'
+  metadata: '{"knowledge_cutoffs": ["2024-07"], "release_dates": ["2024-07-01"], "snapshots": ["open-mistral-nemo"], "upstream_status": "removed"}'
   review_status: reviewed
 - id: mistralai/pixtral-12b
   display_name: Pixtral 12B
@@ -16883,8 +16879,7 @@
   tags:
   - open-weight
   aliases: []
-  metadata: '{"alias_platforms": {"meta-llama-3-1-8b-instruct": "github-models", "meta-llama-3.1-8b-instruct": "azure"}, "providers": ["abacus", "azure", "azure-cognitive-services", "github-models", "nano-gpt",
-    "stackit"], "underlying_key": "meta-llama-3-1-8b-instruct", "upstream_status": "removed"}'
+  metadata: '{"providers": ["abacus", "azure", "azure-cognitive-services", "github-models", "nano-gpt", "stackit"], "underlying_key": "meta-llama-3-1-8b-instruct", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: nex-agi/deepseek-v3.1-nex-n1
@@ -17279,7 +17274,7 @@
   - open-weight
   aliases:
   - nvidia/nemotron-mini-4b-instruct
-  metadata: '{"alias_platforms": {"nemotron-mini-4b-instruct": "nvidia", "nvidia/nemotron-mini-4b-instruct": "nvidia"}, "hf_deferred": true, "providers": ["nvidia"], "underlying_key": "nemotron-mini-4b-instruct"}'
+  metadata: '{"alias_platforms": {"nvidia/nemotron-mini-4b-instruct": "nvidia"}, "hf_deferred": true, "providers": ["nvidia"], "underlying_key": "nemotron-mini-4b-instruct"}'
   review_status: reviewed
   resolution_source: models_dev
 - id: nvidia/active-speaker-detection
@@ -22164,7 +22159,7 @@
   tags:
   - open-weight
   aliases: []
-  metadata: '{"alias_platforms": {"gemma-3-1b-it": "nano-gpt"}, "providers": ["llmgateway", "nano-gpt"], "underlying_key": "gemma-3-1b-it"}'
+  metadata: '{"providers": ["llmgateway", "nano-gpt"], "underlying_key": "gemma-3-1b-it"}'
   review_status: draft
   resolution_source: models_dev
 - id: upstage/solar-10-7b-instruct
@@ -23334,8 +23329,8 @@
   - open-weight
   aliases:
   - mimo-v2-omni
-  metadata: '{"alias_platforms": {"mimo-v2-omni": "kilo", "mimo-v2-omni-free": "opencode"}, "providers": ["kilo", "llmgateway", "opencode", "opencode-go", "xiaomi", "xiaomi-token-plan-ams", "xiaomi-token-plan-cn",
-    "xiaomi-token-plan-sgp", "zenmux"], "underlying_key": "mimo-v2-omni"}'
+  metadata: '{"alias_platforms": {"mimo-v2-omni": "kilo"}, "providers": ["kilo", "llmgateway", "opencode", "opencode-go", "xiaomi", "xiaomi-token-plan-ams", "xiaomi-token-plan-cn", "xiaomi-token-plan-sgp",
+    "zenmux"], "underlying_key": "mimo-v2-omni"}'
   review_status: reviewed
   resolution_source: models_dev
 - id: xiaomi/mimo-v2-pro
