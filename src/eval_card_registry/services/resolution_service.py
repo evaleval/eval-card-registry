@@ -296,14 +296,30 @@ class ResolutionService:
                         strategy=existing["strategy"],
                         confidence=existing["confidence"],
                     )
+                elif (
+                    checker_backed
+                    and fresh.canonical_id.lower() == existing["canonical_id"].lower()
+                ):
+                    # Case-only disagreement — the same repo (HF ids are
+                    # case-insensitively unique). Keep the registered row;
+                    # no flag, no mint.
+                    enriched = resolver.build_result(
+                        raw_value, entity_type, source_config,
+                        existing["canonical_id"], fresh.strategy, fresh.confidence,
+                    )
                 elif checker_backed:
-                    # A runtime HF attestation disagrees with the stored
-                    # alias. The verbatim HF id wins (owner decision); the
-                    # alias is flagged for review, never silently
-                    # repointed. Fall through to the main path so an
-                    # unregistered attested id still gets minted.
-                    self._flag_alias_hf_disagreement(existing, fresh.hf_attestation)
-                    prefetched = fresh
+                    if mode == "exact":
+                        # Exact mode is side-effect-free: serve the
+                        # attestation, no flag, no mint.
+                        enriched = fresh
+                    else:
+                        # A runtime HF attestation disagrees with the stored
+                        # alias. The verbatim HF id wins (owner decision);
+                        # the alias is flagged for review, never silently
+                        # repointed. Fall through to the main path so an
+                        # unregistered attested id still gets minted.
+                        self._flag_alias_hf_disagreement(existing, fresh.hf_attestation)
+                        prefetched = fresh
                 else:
                     # Rare: registry restructure has moved the canonical
                     # for this raw_value since the alias was written.
@@ -324,26 +340,45 @@ class ResolutionService:
             else resolver.resolve(raw_value, entity_type, source_config, mode=mode)
         )
 
+        # Exact-only mode is fully side-effect-free: no drafts, no org
+        # mints, no alias writes, no store log rows — on a match AND on a
+        # miss. (An unregistered attestation is served as-is, read-only
+        # style.)
+        if mode == "exact":
+            result_dict = (
+                _result_to_dict(result, created_new=False)
+                if result.canonical_id is not None else _no_match_result()
+            )
+            self._memoize(cache_key, result_dict)
+            return result_dict
+
         created_new = False
         alias_status = "auto"
 
         if result.canonical_id is not None and result.hf_attested_unregistered:
-            # HF-attested but not a registered entity: mint it, adopting the
-            # checker's HF-true id (never a slugified re-derivation), so no
-            # alias / eval_results row ever points at a nonexistent canonical.
-            canonical_id = self._auto_create_entity(
-                entity_type, raw_value, preset_hf_id=result.canonical_id
-            )
-            created_new = True
+            # HF-attested but not a registered entity. If a case-variant
+            # canonical already exists (e.g. a lowercased draft minted
+            # before the index knew the repo), reuse it instead of minting
+            # a shadow duplicate — HF ids are case-insensitively unique.
+            case_variant = self._find_case_variant_model(result.canonical_id)
+            if case_variant is not None:
+                canonical_id = case_variant
+                result = resolver.build_result(
+                    raw_value, entity_type, source_config,
+                    case_variant, result.strategy, result.confidence,
+                )
+            else:
+                # Mint it, adopting the checker's HF-true id (never a
+                # slugified re-derivation), so no alias / eval_results row
+                # ever points at a nonexistent canonical.
+                canonical_id = self._auto_create_entity(
+                    entity_type, raw_value, preset_hf_id=result.canonical_id
+                )
+                created_new = True
         elif result.canonical_id is not None:
             # Match found above threshold
             canonical_id = result.canonical_id
             alias_status = "auto"
-        elif mode == "exact":
-            # Exact-only mode: an honest no_match — no draft, no alias write.
-            result_dict = _no_match_result()
-            self._memoize(cache_key, result_dict)
-            return result_dict
         else:
             # No match — auto-create draft entity
             canonical_id = self._auto_create_entity(entity_type, raw_value)
@@ -475,6 +510,19 @@ class ResolutionService:
         ):
             return
         self._resolve_cache[cache_key] = result_dict
+
+    def _find_case_variant_model(self, hf_id: str) -> Optional[str]:
+        """A registered canonical model id equal to `hf_id` up to casing,
+        or None. Linear scan — only reached on the rare attested-but-
+        unregistered mint path."""
+        df = self.store.table("canonical_models")
+        if df is None or df.empty:
+            return None
+        lower = hf_id.lower()
+        for existing_id in df["id"]:
+            if isinstance(existing_id, str) and existing_id.lower() == lower:
+                return existing_id
+        return None
 
     def _flag_alias_hf_disagreement(self, existing: dict, hf_id: str) -> None:
         """A runtime HF attestation disagreed with a stored alias. The alias
@@ -744,7 +792,10 @@ class ResolutionService:
                 if cand in seen or _nz(cand) == _nz(raw_value):
                     continue
                 seen.add(cand)
-                res = resolver.resolve(cand, "model")
+                # check_hf=False: stem candidates are alias-index probes;
+                # routing them through the HF checker would draw live-lookup
+                # budget per stem AND could attest an unregistered repo.
+                res = resolver.resolve(cand, "model", check_hf=False)
                 hit = res.canonical_id
                 if not hit or res.strategy not in ("exact", "normalized"):
                     continue
@@ -900,8 +951,22 @@ class ResolutionService:
                 key = row.get("id_norm") if has_norm else None
                 if not isinstance(key, str) or not key:
                     key = _hsnorm(hf_id)
-                # First-loaded wins — keeps the build deterministic on dup norms.
-                index.setdefault(key, hf_id)
+                # Two DISTINCT repos collapsing to one id_norm make
+                # normalized matching ambiguous — the entry degrades to a
+                # verbatim-only dict {lower_id: true_id} that the verifier
+                # answers only case-insensitively (anything else falls
+                # through to the live tier).
+                existing = index.get(key)
+                if existing is None:
+                    index[key] = hf_id
+                elif isinstance(existing, str):
+                    if existing.lower() != hf_id.lower():
+                        index[key] = {
+                            existing.lower(): existing,
+                            hf_id.lower(): hf_id,
+                        }
+                else:
+                    existing.setdefault(hf_id.lower(), hf_id)
             self._hf_id_index = index
             return index
 

@@ -29,7 +29,14 @@ class _FakeRepoNotFound(Exception):
     pass
 
 
-class _FakeGated(Exception):
+class _FakeGated(_FakeRepoNotFound):
+    # Mirrors the REAL hierarchy: GatedRepoError subclasses
+    # RepositoryNotFoundError. The except-clause order in _live_lookup
+    # depends on this, so the fakes must not flatten it.
+    pass
+
+
+class _FakeValidation(Exception):
     pass
 
 
@@ -47,6 +54,7 @@ def _patch_live(verifier, side_effect=None, return_id=None):
     errors = MagicMock()
     errors.RepositoryNotFoundError = _FakeRepoNotFound
     errors.GatedRepoError = _FakeGated
+    errors.HFValidationError = _FakeValidation
     patches = patch.dict(
         "sys.modules",
         {"huggingface_hub.errors": errors},
@@ -165,6 +173,9 @@ def test_single_flight_duplicate_answers_unknown(live_enabled):
 
 
 def test_gated_repo_counts_as_existing(live_enabled):
+    # _FakeGated subclasses _FakeRepoNotFound (like the real classes), so
+    # this also proves the except-clause ORDER: gated must be caught before
+    # not-found, else every gated repo is negative-cached as a miss.
     v, _ = _verifier(index={})
     api, patches = _patch_live(v, side_effect=_FakeGated())
     with patches:
@@ -172,6 +183,50 @@ def test_gated_repo_counts_as_existing(live_enabled):
     assert hit is not None
     assert hit.hf_id == "meta-llama/Llama-Gated"
     assert hit.source == "hf_live"
+    # Positive-cached, NOT negative-cached.
+    with patches:
+        assert v.check("meta-llama/Llama-Gated") is not None
+    assert api.model_info.call_count == 1
+
+
+def test_validation_error_does_not_poison_breaker(live_enabled):
+    v, _ = _verifier(index={}, breaker_threshold=3)
+    api, patches = _patch_live(v, side_effect=_FakeValidation())
+    with patches:
+        for i in range(5):
+            assert v.check(f"acme/bad value {i}") is None
+    # All 5 went to the API (breaker never opened) and were cached as
+    # misses, not failures.
+    assert api.model_info.call_count == 5
+    assert v._breaker_open_until == 0.0
+    with patches:
+        assert v.check("acme/bad value 0") is None
+    assert api.model_info.call_count == 5  # served from negative cache
+
+
+def test_single_flight_duplicate_does_not_burn_budget(live_enabled):
+    v, _ = _verifier(index={}, budget_per_minute=1)
+    v._in_flight.add("org/dup")
+    api, patches = _patch_live(v, return_id="Org/Other")
+    with patches:
+        assert v.check("org/dup") is None       # single-flight: unknown
+        assert v.check("org/other") is not None  # budget still available
+    assert api.model_info.call_count == 1
+
+
+def test_index_collision_verbatim_only():
+    # Two distinct repos share an id_norm: only case-insensitive-exact raws
+    # may answer from the index; others fall through (None with live off).
+    collided = {"acme-widget-7b": {
+        "acme/widget-7b": "acme/Widget-7B",
+        "acme/widget.7b": "acme/Widget.7B",
+    }}
+    v, _ = _verifier(index=collided)
+    hit = v.check("acme/widget-7b")
+    assert hit is not None and hit.hf_id == "acme/Widget-7B" and hit.verbatim
+    hit2 = v.check("ACME/WIDGET.7B")
+    assert hit2 is not None and hit2.hf_id == "acme/Widget.7B"
+    assert v.check("acme/widget_7b") is None
 
 
 def test_index_error_degrades_to_live_or_none():

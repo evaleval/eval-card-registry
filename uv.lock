@@ -401,7 +401,7 @@ requires-dist = [
     { name = "duckdb", specifier = ">=1.5.2" },
     { name = "eval-entity-resolver", editable = "packages/eval-entity-resolver" },
     { name = "fastapi", specifier = ">=0.111.0" },
-    { name = "huggingface-hub", specifier = ">=0.23.0" },
+    { name = "huggingface-hub", specifier = ">=0.26.0" },
     { name = "pandas", specifier = ">=2.2.0" },
     { name = "pyarrow", specifier = ">=16.0.0" },
     { name = "pydantic", specifier = ">=2.7.0" },
@@ -430,7 +430,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "huggingface-hub", specifier = ">=0.23.0" },
+    { name = "huggingface-hub", specifier = ">=0.26.0" },
     { name = "pandas", specifier = ">=2.2.0" },
     { name = "pyarrow", specifier = ">=16.0.0" },
 ]

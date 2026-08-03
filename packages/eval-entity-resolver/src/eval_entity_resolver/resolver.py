@@ -91,14 +91,21 @@ class Resolver:
         entity_type: str,
         source_config: Optional[str] = None,
         mode: str = "resolve",
+        check_hf: bool = True,
     ) -> ResolutionResult:
+        """`check_hf=False` disables the injected HF id check for this call.
+        Internal inference resolves (e.g. tier-3 stem probing) use it so a
+        batch of stem candidates never draws live-lookup budget."""
         # 1. Exact
         canonical_id = exact_match(raw_value, entity_type, source_config, self.store)
 
         # 2. HF id check (models only, HF-shaped only, checker injected).
         # Called at most once per resolve; the hit is reused by the
         # normalized-tier step below.
-        hf_hit = self._maybe_check_hf_id(raw_value, entity_type, canonical_id)
+        hf_hit = (
+            self._maybe_check_hf_id(raw_value, entity_type, canonical_id)
+            if check_hf else None
+        )
         if hf_hit is not None and hf_hit.verbatim:
             if canonical_id is not None and canonical_id == hf_hit.hf_id:
                 # Agreement — the registry result is richer; stamp the
@@ -200,26 +207,34 @@ class Resolver:
         """Run the injected HF id checker when it can change the outcome.
 
         Skipped when: no checker, non-model, not HF-shaped, or the exact
-        alias hit is byte-equal to the raw value AND that canonical row is
-        already HF-attested (oracle `resolution_source == "hf"` or
-        hub-stats-confirmed) — in that narrow case the checker can only
-        agree, so the (possibly live) call is saved. A case-only or
-        unattested agreement still runs the checker, because the checker is
-        what recovers HF-true casing for lowercased drafts."""
+        alias hit is byte-equal to the raw value AND that canonical row
+        either is already HF-attested (oracle `resolution_source == "hf"`
+        or hub-stats-confirmed — the checker could only agree) or carries a
+        curated/models.dev provenance claim (`models_dev`/`NA`/`curated` —
+        a registered off-HF canonical like an OpenRouter or closed-API id,
+        where a live check would just 404 on every resolve). A case-only or
+        name-inferred (tier-3) agreement still runs the checker, because
+        the checker is what recovers HF-true casing for lowercased
+        drafts."""
         if self.hf_id_checker is None or entity_type != "model":
             return None
         if not looks_like_hf_id(raw_value):
             return None
         if exact_canonical_id is not None and exact_canonical_id == raw_value:
-            if self._is_hf_attested(exact_canonical_id):
+            if self._hf_check_skippable(exact_canonical_id):
                 return None
         return self.hf_id_checker(raw_value)
 
-    def _is_hf_attested(self, canonical_id: str) -> bool:
+    def _hf_check_skippable(self, canonical_id: str) -> bool:
         if self.canonical_store is None:
             return False
         ent = self.canonical_store.lookup("model", canonical_id)
-        return _hf_repo_id_of(ent, canonical_id) is not None
+        if ent is None:
+            return False
+        if _hf_repo_id_of(ent, canonical_id) is not None:
+            return True
+        src = ent.get("resolution_source")
+        return isinstance(src, str) and src in ("models_dev", "NA", "curated")
 
     def _hf_checker_result(
         self,

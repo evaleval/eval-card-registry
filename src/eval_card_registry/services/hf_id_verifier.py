@@ -49,6 +49,10 @@ BREAKER_COOLDOWN_SECONDS = 300.0
 # Sentinel stored in the cache for an authoritative "not on the Hub".
 _MISS = ""
 
+# Soft cap on cached results; oldest tenth evicted past it, so a long-lived
+# process scanning unique never-repeated ids can't grow the dict unboundedly.
+_MAX_CACHE_ENTRIES = 100_000
+
 
 class HfIdVerifier:
     """Checks whether a raw string is a valid HF model repo id.
@@ -124,22 +128,28 @@ class HfIdVerifier:
             return None
         from eval_card_registry.services.hub_stats import normalize as _hsnorm
 
-        hf_id = index.get(_hsnorm(raw_value))
-        if not hf_id:
+        entry = index.get(_hsnorm(raw_value))
+        if not entry:
             return None
-        return self._hit(raw_value, hf_id, "hub_stats_index")
+        if isinstance(entry, dict):
+            # Two distinct repos collapse to this id_norm — normalized
+            # matching is ambiguous here, so only a verbatim
+            # (case-insensitive) match may answer; anything else falls
+            # through to the live tier, which can disambiguate.
+            hf_id = entry.get(raw_value.lower())
+            if not hf_id:
+                return None
+            return self._hit(raw_value, hf_id, "hub_stats_index")
+        return self._hit(raw_value, entry, "hub_stats_index")
 
     def _check_live(self, raw_value: str, key: str) -> Optional[HfIdHit]:
         from eval_card_registry.config import settings
 
         if not settings.hf_live_id_check_enabled:
             return None
-        now = self._clock()
         with self._breaker_lock:
-            if now < self._breaker_open_until:
+            if self._clock() < self._breaker_open_until:
                 return None
-        if not self._budget_take(now):
-            return None
         # Single-flight: a concurrent duplicate answers unknown immediately.
         with self._in_flight_lock:
             if key in self._in_flight:
@@ -148,6 +158,11 @@ class HfIdVerifier:
         acquired = self._live_semaphore.acquire(blocking=False)
         try:
             if not acquired:
+                return None
+            # Budget is taken LAST, inside the acquired region, so a
+            # single-flight duplicate or a semaphore miss never burns a
+            # token that a genuine lookup could have used.
+            if not self._budget_take(self._clock()):
                 return None
             return self._live_lookup(raw_value, key)
         finally:
@@ -163,28 +178,39 @@ class HfIdVerifier:
             from huggingface_hub import HfApi
             from huggingface_hub.errors import (
                 GatedRepoError,
+                HFValidationError,
                 RepositoryNotFoundError,
             )
         except Exception:
             return None
         try:
             if self._hf_api is None:
-                self._hf_api = HfApi(token=settings.hf_token or None)
+                with self._cache_lock:
+                    if self._hf_api is None:
+                        self._hf_api = HfApi(token=settings.hf_token or None)
             info = self._hf_api.model_info(
                 raw_value, timeout=settings.hf_live_id_check_timeout
             )
+        except GatedRepoError:
+            # Gated repos exist; metadata may be withheld, so fall back to
+            # the raw spelling for casing. MUST be caught before
+            # RepositoryNotFoundError — GatedRepoError subclasses it, and
+            # the wrong order would negative-cache every gated repo.
+            self._record_success()
+            self._cache_put(key, raw_value, self._positive_ttl)
+            return self._hit(raw_value, raw_value, "hf_live")
         except RepositoryNotFoundError:
             # Authoritative miss (includes private repos we can't see, which
             # is the right answer for resolution purposes).
             self._record_success()
             self._cache_put(key, _MISS, self._negative_ttl)
             return None
-        except GatedRepoError:
-            # Gated repos exist; metadata may be withheld, so fall back to
-            # the raw spelling for casing.
-            self._record_success()
-            self._cache_put(key, raw_value, self._positive_ttl)
-            return self._hit(raw_value, raw_value, "hf_live")
+        except HFValidationError:
+            # Client-side rejection of a malformed-but-HF-shaped value
+            # (e.g. an inner space). Not a transport failure — must not
+            # poison the breaker; cache as a miss so it isn't retried.
+            self._cache_put(key, _MISS, self._negative_ttl)
+            return None
         except Exception:
             self._record_failure()
             return None
@@ -221,6 +247,10 @@ class HfIdVerifier:
 
     def _cache_put(self, key: str, value: str, ttl: float) -> None:
         with self._cache_lock:
+            if len(self._cache) >= _MAX_CACHE_ENTRIES:
+                # Dict preserves insertion order — drop the oldest tenth.
+                for stale in list(self._cache)[: _MAX_CACHE_ENTRIES // 10]:
+                    del self._cache[stale]
             self._cache[key] = (self._clock() + ttl, value)
 
     def _budget_take(self, now: float) -> bool:

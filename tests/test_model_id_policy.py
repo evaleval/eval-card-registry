@@ -165,6 +165,49 @@ def test_exact_mode_no_fuzzy_but_resolver_mode_fuzzy(monkeypatch):
     assert fuzzy["strategy"] == "fuzzy"
 
 
+def test_exact_mode_match_writes_nothing(monkeypatch):
+    # A normalized alias hit in exact mode must NOT write an alias row for
+    # the new raw spelling — exact mode is side-effect-free on match too.
+    store, svc = _store(
+        monkeypatch,
+        models=["acme/widget-7b"],
+        aliases=[("Widget 7B", "acme/widget-7b", "confirmed")],
+    )
+    d = svc.resolve("widget-7b", "model", None, None, mode="exact")
+    assert d["canonical_id"] == "acme/widget-7b"
+    assert d["strategy"] == "normalized"
+    queries.flush_pending(store)
+    assert len(store.table("aliases")) == 1  # only the seeded row
+
+
+def test_exact_mode_checker_hit_serves_attestation_without_minting(monkeypatch):
+    store, svc = _store(monkeypatch, index_ids=["NousResearch/Hermes-4-70B"])
+    d = svc.resolve(
+        "NousResearch/Hermes-4-70B", "model", None, None, mode="exact")
+    assert d["canonical_id"] == "NousResearch/Hermes-4-70B"
+    assert d["created_new"] is False
+    queries.flush_pending(store)
+    assert store.table("canonical_models").empty
+    assert store.table("aliases").empty
+    assert store.table("canonical_orgs").empty
+
+
+def test_attested_unregistered_reuses_case_variant_canonical(monkeypatch):
+    # A lowercased draft exists; the index later learns the HF-true casing.
+    # Resolving must reuse the existing row, not mint a shadow duplicate.
+    store, svc = _store(
+        monkeypatch,
+        index_ids=["acme/Widget-7B"],
+        models=["acme/widget-7b"],
+        aliases=[("acme/widget-7b", "acme/widget-7b", "auto")],
+    )
+    d = svc.resolve("acme/widget-7b", "model", None, None)
+    assert d["canonical_id"] == "acme/widget-7b"
+    assert d["created_new"] is False
+    ids = _model_ids(store)
+    assert ids == {"acme/widget-7b"}  # no second canonical minted
+
+
 def test_rerun_never_repoints_confirmed_alias(monkeypatch):
     store, svc = _store(
         monkeypatch,

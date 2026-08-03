@@ -159,6 +159,17 @@ def test_checker_miss_falls_through_to_no_match():
     assert r.strategy == "no_match"
 
 
+def test_check_hf_false_disables_checker():
+    checker = CountingChecker({
+        "acme/Widget-7B": HfIdHit(
+            hf_id="acme/Widget-7B", verbatim=True, source="hub_stats_index"),
+    })
+    resolver = Resolver(_store_with_aliases(), hf_id_checker=checker)
+    r = resolver.resolve("acme/Widget-7B", "model", check_hf=False)
+    assert checker.calls == []
+    assert r.canonical_id is None
+
+
 class TestExactMode:
     def test_exact_mode_skips_fuzzy(self):
         # Quant-suffix stem strip would fuzzy-match in resolver mode.
