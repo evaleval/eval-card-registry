@@ -633,7 +633,10 @@ def test_reconciliation_rewrites_surviving_parent_edges_off_suppressed_mints(mod
     canonical), a SURVIVING entry whose parents[].id pointed at that suppressed
     mint must be repointed to the owner — never left dangling."""
     core = tmp_path / "core.yaml"
-    core.write_text(yaml.safe_dump([{"id": "Acme/Base-7B", "aliases": ["acme-base-7b"]}]))
+    core.write_text(yaml.safe_dump([{
+        "id": "Acme/Base-7B", "display_name": "Acme Base 7B",
+        "aliases": ["acme-base-7b"],
+    }]))
     generated = [
         # Collides (normalized) with the curated Acme/Base-7B -> suppressed.
         {"id": "acme/base-7b", "display_name": "Acme Base 7B v0", "aliases": []},
@@ -732,8 +735,9 @@ def test_reconciliation_no_op_when_no_collision(mod, tmp_path):
     core = tmp_path / "core.yaml"
     core.write_text(yaml.safe_dump([{"id": "Acme/Widget-3B", "aliases": []}]))
     generated = [
-        {"id": "openai/gpt-4o", "aliases": ["gpt-4o"]},
-        {"id": "anthropic/claude-opus-4-5", "aliases": ["claude-opus-4-5"]},
+        {"id": "openai/gpt-4o", "display_name": "GPT-4o", "aliases": ["gpt-4o"]},
+        {"id": "anthropic/claude-opus-4-5", "display_name": "Claude Opus 4.5",
+         "aliases": ["claude-opus-4-5"]},
     ]
     out = mod.reconcile_generated_against_existing(generated, sources=(core,))
     assert [e["id"] for e in out] == sorted(e["id"] for e in generated)
@@ -1012,9 +1016,19 @@ def test_catalog_regen_deterministic_and_no_drop(mod, api, tmp_path, monkeypatch
 # above.
 # ---------------------------------------------------------------------------
 def test_noncatalog_regen_is_confluent_with_committed(mod, api):
+    # Hermetic reset: the module-scoped `mod` caches the HF authority index
+    # across tests; an earlier test that primed it against a monkeypatched
+    # source would leak in and change which mints defer. Rebuild from disk.
+    mod._HF_AUTHORITY = None
     gen, _ = mod._generate_models(api, mod._load_known_org_ids())
-    gen = mod._finalize_entries([dict(e) for e in gen])
-    gen = mod.reconcile_generated_against_existing(gen)
+    # Same pipeline as main(): OpenRouter-key-id tagging after finalize, then
+    # the carry-forward step BETWEEN finalize and reconcile (an upstream
+    # removal retains committed entries/aliases, and the returned claims stop
+    # fresh mints from stealing carried forms) — omitting either compares
+    # fresh-only output against a carried-forward committed file.
+    gen = mod._tag_openrouter_key_ids(mod._finalize_entries([dict(e) for e in gen]), api)
+    gen, claims = mod._carry_forward_committed(gen, mod._catalog_load_list(mod.SEED_PATH))
+    gen = mod.reconcile_generated_against_existing(gen, committed_claims=claims)
     _canon = mod._build_org_canonicalizer()
     for e in gen:
         for f in ("org_id", "lineage_origin_model_org_id"):
@@ -1241,31 +1255,78 @@ def test_carry_forward_reappearing_id_clears_removed_tag(cf_mod):
     assert claims["llama3-9b-9192"] == "groq/llama3-9b-9192"
 
 
-def test_carry_forward_absorbs_respelled_reappearance(cf_mod, tmp_path):
-    """The Veo class: upstream drops `zorgvid/Zeo-3-1` and re-emits the model
-    respelled (`zorgvid/zeo3-1`). The fresh spelling wins; the committed id,
-    display_name AND aliases all become aliases on it — never a normalized
-    twin for the seed's collision_fold / gate to trip on. Deterministic."""
+def test_carry_forward_respelled_reappearance_committed_id_wins(cf_mod, tmp_path):
+    """The Veo class under the STABILITY RULE: upstream drops
+    `zorgvid/Zeo-3-1` and re-emits the model respelled (`zorgvid/zeo3-1`).
+    The COMMITTED id wins — the fresh entry is renamed back and today's
+    spelling becomes an alias — so the daily cron can never thrash canonical
+    ids on upstream respells. Never a normalized twin for the seed's
+    collision_fold / gate to trip on. Deterministic."""
     core = tmp_path / "sources-core.yaml"
     core.write_text("entries: []\n")
     committed = [dict(_cf_entry("zorgvid/Zeo-3-1", ["zeo-3-1-alias"]),
                       display_name="Zeo-3.1-Fast")]
     fresh = [_cf_entry("zorgvid/zeo3-1")]
     batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    assert [e["id"] for e in batch] == ["zorgvid/Zeo-3-1"], "expected a single survivor"
+    (e,) = batch
+    assert {"zorgvid/zeo3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(e["aliases"])
+    assert "upstream_status" not in json.loads(e["metadata"])
+    # Claims point at the SURVIVOR, so reconcile's hygiene keeps the donated forms.
+    assert claims["zorgvid/Zeo-3-1"] == "zorgvid/Zeo-3-1"
+    assert claims["Zeo-3.1-Fast"] == "zorgvid/Zeo-3-1"
+    out = cf_mod.reconcile_generated_against_existing(
+        batch, sources=(core,), committed_claims=claims
+    )
+    (surv,) = [x for x in out if x["id"] == "zorgvid/Zeo-3-1"]
+    assert {"zorgvid/zeo3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(surv["aliases"])
+    batch2, claims2 = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    assert batch2 == batch and claims2 == claims
+
+
+def test_carry_forward_respelled_reappearance_migration_flag_inverts(cf_mod, tmp_path):
+    """With the one-shot `--adopt-openrouter-ids-migration` flag the FRESH
+    (externally-adopted) spelling wins the twin match and the committed id,
+    display_name AND aliases all become aliases on it — the pre-stability
+    behavior, reserved for the deliberate migration run. The absorbed forms
+    must then survive THROUGH the reconcile hygiene pass too (never delete a
+    resolvable surface form on a migration run)."""
+    core = tmp_path / "sources-core.yaml"
+    core.write_text("entries: []\n")
+    committed = [dict(_cf_entry("zorgvid/Zeo-3-1", ["zeo-3-1-alias"]),
+                      display_name="Zeo-3.1-Fast")]
+    fresh = [_cf_entry("zorgvid/zeo3-1")]
+    batch, claims = cf_mod._carry_forward_committed(
+        [dict(e) for e in fresh], committed, adopt_migration=True
+    )
     assert [e["id"] for e in batch] == ["zorgvid/zeo3-1"], "expected a single survivor"
     (e,) = batch
     assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(e["aliases"])
-    assert "upstream_status" not in json.loads(e["metadata"])
-    # Claims point at the SURVIVOR, so reconcile's hygiene keeps the donated forms.
     assert claims["zorgvid/Zeo-3-1"] == "zorgvid/zeo3-1"
     assert claims["Zeo-3.1-Fast"] == "zorgvid/zeo3-1"
     out = cf_mod.reconcile_generated_against_existing(
         batch, sources=(core,), committed_claims=claims
     )
     (surv,) = [x for x in out if x["id"] == "zorgvid/zeo3-1"]
-    assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(surv["aliases"])
-    batch2, claims2 = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
-    assert batch2 == batch and claims2 == claims
+    assert {"zorgvid/Zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1-alias"} <= set(surv["aliases"]), (
+        f"absorbed committed forms must survive migration hygiene: {surv['aliases']}"
+    )
+
+
+def test_carry_forward_stability_repoints_parent_edges(cf_mod):
+    """When the stability rule renames a fresh twin back to the committed id,
+    sibling entries' parent edges that pointed at the fresh spelling are
+    repointed to the surviving committed id (no dangling edge)."""
+    committed = [dict(_cf_entry("zorgvid/Zeo-3-1"), display_name="Zeo 3.1")]
+    child = dict(_cf_entry("zorgvid/zeo3-1-mini"))
+    child["parents"] = [{"id": "zorgvid/zeo3-1", "relationship": "variant", "axis": "tier"}]
+    fresh = [_cf_entry("zorgvid/zeo3-1"), child]
+    batch, _claims = cf_mod._carry_forward_committed(
+        [dict(e) for e in fresh], committed
+    )
+    by_id = {e["id"]: e for e in batch}
+    assert "zorgvid/Zeo-3-1" in by_id and "zorgvid/zeo3-1" not in by_id
+    assert by_id["zorgvid/zeo3-1-mini"]["parents"][0]["id"] == "zorgvid/Zeo-3-1"
 
 
 def test_carry_forward_size_guard_blocks_false_absorb(cf_mod):
@@ -1298,7 +1359,9 @@ def test_carry_forward_does_not_absorb_enrich_record_onto_mint(cf_mod):
 # ---------------------------------------------------------------------------
 def test_reconcile_drops_orphaned_enrich_record_loudly(mod, tmp_path, capsys):
     core = tmp_path / "core.yaml"
-    core.write_text(yaml.safe_dump({"entries": [{"id": "Kept/Owner-X", "aliases": []}]}))
+    core.write_text(yaml.safe_dump({"entries": [{
+        "id": "Kept/Owner-X", "display_name": "Owner X", "aliases": [],
+    }]}))
     generated = [
         # Owner id exists nowhere (sources, catalog, tier3, core) -> drop + warn.
         {"id": "ghostorg/vanished-owner-xyz", "aliases": ["ghost-form-1"]},
@@ -1320,11 +1383,11 @@ def test_reconcile_drops_orphaned_enrich_record_loudly(mod, tmp_path, capsys):
 # dup-record consolidation, and idempotence over its own output.
 # ---------------------------------------------------------------------------
 def test_catalog_carry_forward_donates_display_name_on_respelled_fold(mod, tmp_path, monkeypatch):
-    """The Veo regression shape: the committed catalog mint `…/zeo-3-1`
-    (display_name `Zeo-3.1-Fast`) vanished upstream and reappeared respelled
-    as `…/zeo3-1`. The committed id, display_name AND aliases must all stay
-    resolvable as aliases on the fresh spelling — display_name was the one
-    form the fold deleted."""
+    """The Veo regression shape under the STABILITY RULE: the committed
+    catalog mint `…/zeo-3-1` (display_name `Zeo-3.1-Fast`) vanished upstream
+    and reappeared respelled as `…/zeo3-1`. The COMMITTED id wins — the fresh
+    spelling and its display all stay resolvable as aliases on it — and no
+    normalized twin survives."""
     committed = [{
         "id": "zorgvid/zeo-3-1", "display_name": "Zeo-3.1-Fast", "org_id": None,
         "aliases": ["zeo-3-1"],
@@ -1340,14 +1403,43 @@ def test_catalog_carry_forward_donates_display_name_on_respelled_fold(mod, tmp_p
         "aliases": [], "metadata": "{}",
         "review_status": "draft", "resolution_source": "models_dev",
     }]
-    mod.regenerate_catalog(fresh)
+    mod.regenerate_catalog([dict(e) for e in fresh])
+    out = yaml.safe_load(cat.read_text()) or []
+    assert "zorgvid/zeo3-1" not in {e["id"] for e in out}, "respelled twin must not survive"
+    (surv,) = [e for e in out if e["id"] == "zorgvid/zeo-3-1"]
+    assert {"zorgvid/zeo3-1", "zeo-3-1"} <= set(surv["aliases"]), (
+        f"surface forms lost on fold: {surv['aliases']}"
+    )
+    # Platform provenance for the re-added committed alias survives too.
+    assert json.loads(surv["metadata"])["alias_platforms"]["zeo-3-1"] == "poe"
+
+
+def test_catalog_carry_forward_respelled_fold_migration_flag_inverts(mod, tmp_path, monkeypatch):
+    """Same shape with `adopt_migration=True` (the one-shot adoption run): the
+    FRESH spelling wins and the committed id + display_name become aliases —
+    display_name was the one form the fold used to delete."""
+    committed = [{
+        "id": "zorgvid/zeo-3-1", "display_name": "Zeo-3.1-Fast", "org_id": None,
+        "aliases": ["zeo-3-1"],
+        "metadata": json.dumps({"alias_platforms": {"zeo-3-1": "poe"}}, sort_keys=True),
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    cat = tmp_path / "cat.yaml"
+    cat.write_text(yaml.safe_dump(committed, sort_keys=False))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", tmp_path / "orgs.yaml")
+    fresh = [{
+        "id": "zorgvid/zeo3-1", "display_name": "Zeo 3.1", "org_id": None,
+        "aliases": [], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    mod.regenerate_catalog([dict(e) for e in fresh], adopt_migration=True)
     out = yaml.safe_load(cat.read_text()) or []
     assert "zorgvid/zeo-3-1" not in {e["id"] for e in out}, "respelled twin must not survive"
     (surv,) = [e for e in out if e["id"] == "zorgvid/zeo3-1"]
     assert {"zorgvid/zeo-3-1", "Zeo-3.1-Fast", "zeo-3-1"} <= set(surv["aliases"]), (
         f"committed surface forms lost on fold: {surv['aliases']}"
     )
-    # Platform provenance for the re-added committed alias survives too.
     assert json.loads(surv["metadata"])["alias_platforms"]["zeo-3-1"] == "poe"
 
 
@@ -1659,3 +1751,432 @@ def test_catalog_committed_skip_donates_scalars(mod, tmp_path, monkeypatch):
         {"id": "alibaba/zzz-wan-v9",
          "weak": {"release_date": "2025-11-30", "open_weights": True}}
     ], "skipped committed mint's scalars must flow weakly onto the owner, aliases suppressed"
+
+
+# ---------------------------------------------------------------------------
+# Idempotence / donation-hole pins (P0 alignment pass): the sites that made
+# the non-catalog pipeline lose forms or desync provenance, each pinned in
+# isolation. Ownership evidence is TIERED — independent sources (hf_oracle /
+# hub_stats / core / enrichments) are authoritative; a claim whose only
+# evidence is a derived file (catalog / tier3), made by the suppressed mint
+# itself or by an id committed_claims assigns to the owner, is the previous
+# cron's echo and never vetoes a donation.
+# ---------------------------------------------------------------------------
+
+def test_hygiene_strips_metadata_alias_platforms_with_foreign_alias(mod, tmp_path, monkeypatch):
+    """Metadata/alias desync pin: when the survivor hygiene strips a
+    foreign-owned alias, the matching metadata.alias_platforms key must go
+    with it. Persisting an ap key without its alias violates the
+    `ap keys SUBSET-OF aliases` invariant and made run N+1 differ from run N
+    (the next carry-forward unions provenance only for forms in `aliases`)."""
+    src = tmp_path / "src.yaml"
+    src.write_text(yaml.safe_dump([
+        {"id": "zother/ZOwner-1B", "display_name": "ZOwner 1B",
+         "aliases": ["zshared-form"]},
+    ]))
+    batch = [{
+        "id": "zorg/zmine-model", "display_name": "ZMine Model", "org_id": "zorg",
+        "aliases": ["zmine-a", "zshared-form"],
+        "metadata": json.dumps(
+            {"alias_platforms": {"zmine-a": "kilo", "zshared-form": "poe"}},
+            sort_keys=True),
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    out = mod.reconcile_generated_against_existing(batch, sources=(src,))
+    (surv,) = [e for e in out if e["id"] == "zorg/zmine-model"]
+    assert surv["aliases"] == ["zmine-a"], "foreign alias must be stripped"
+    ap = json.loads(surv["metadata"])["alias_platforms"]
+    assert ap == {"zmine-a": "kilo"}, (
+        f"metadata.alias_platforms must stay in lockstep with aliases: {ap}"
+    )
+    assert set(ap) <= set(surv["aliases"])
+
+
+def test_suppressed_mint_donates_forms_despite_stale_catalog_echo(mod, tmp_path, monkeypatch):
+    """Donation-hole pin (the `deepseek-chat-v3-1` regression shape): a mint
+    suppressed onto an independent-source canonical must donate its surface
+    forms EVEN WHEN the stale committed catalog still echoes the mint under
+    its own id (the previous cron's output, rewritten right after). Under the
+    un-tiered guard the echo read as a foreign owner, nothing was donated, and
+    the subsequent catalog rewrite dropped its own orphaned record — deleting
+    the forms from every source."""
+    src = tmp_path / "src.yaml"
+    src.write_text(yaml.safe_dump([
+        {"id": "zorg/zchat-v3.1", "display_name": "ZChat v3.1"},
+    ]))
+    echo = tmp_path / "stale-catalog.yaml"
+    echo.write_text(yaml.safe_dump([
+        {"id": "zorg/zchat-v3-1", "aliases": ["zchat-v3-1"]},
+    ]))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", echo)
+    batch = [{
+        "id": "zorg/zchat-v3-1", "display_name": "zchat-v3-1", "org_id": "zorg",
+        "aliases": ["zchat-v3-1"], "metadata": "{}",
+        "release_date": "2026-05-28", "open_weights": False,
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    out = mod.reconcile_generated_against_existing(batch, sources=(src,))
+    ids = {e["id"] for e in out}
+    assert "zorg/zchat-v3-1" not in ids, "normalized-colliding mint must be suppressed"
+    (rec,) = [e for e in out if e["id"] == "zorg/zchat-v3.1"]
+    assert "zchat-v3-1" in (rec.get("aliases") or []), (
+        "suppressed mint's forms must be donated onto the owner despite the "
+        f"stale catalog echo: {rec}"
+    )
+    assert (rec.get("weak") or {}).get("release_date") == "2026-05-28", (
+        "suppressed mint's scalars must flow weakly onto the owner"
+    )
+
+
+def test_suppressed_mint_donates_despite_full_stale_catalog_echo(mod, tmp_path, monkeypatch):
+    """V2b: same as the donation-hole pin but the stale echo is a FULL record
+    (display_name-bearing) — a full echo lands in `owner_defining`, which is
+    exactly the poisoned evidence the tiered guard must ignore."""
+    src = tmp_path / "src.yaml"
+    src.write_text(yaml.safe_dump([
+        {"id": "zorg/zchat-v3.1", "display_name": "ZChat v3.1"},
+    ]))
+    echo = tmp_path / "stale-catalog.yaml"
+    echo.write_text(yaml.safe_dump([
+        {"id": "zorg/zchat-v3-1", "display_name": "zchat-v3-1",
+         "aliases": ["zchat-v3-1"]},
+    ]))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", echo)
+    batch = [{
+        "id": "zorg/zchat-v3-1", "display_name": "zchat-v3-1", "org_id": "zorg",
+        "aliases": ["zchat-v3-1"], "metadata": "{}",
+        "release_date": "2026-05-28", "open_weights": False,
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    out = mod.reconcile_generated_against_existing(batch, sources=(src,))
+    ids = {e["id"] for e in out}
+    assert "zorg/zchat-v3-1" not in ids, "normalized-colliding mint must be suppressed"
+    (rec,) = [e for e in out if e["id"] == "zorg/zchat-v3.1"]
+    assert "zchat-v3-1" in (rec.get("aliases") or []), (
+        f"donation must survive a FULL stale echo: {rec}"
+    )
+
+
+def test_suppressed_mint_donates_with_claims_escape(mod, tmp_path, monkeypatch):
+    """V2c: committed_claims maps the echoed id onto the owner (the
+    carry-forward absorbed it this run) — the claims escape hatch must be
+    reachable, not short-circuited by `owner_defining`."""
+    src = tmp_path / "src.yaml"
+    src.write_text(yaml.safe_dump([
+        {"id": "zorg/zchat-v3.1", "display_name": "ZChat v3.1"},
+    ]))
+    echo = tmp_path / "stale-catalog.yaml"
+    echo.write_text(yaml.safe_dump([
+        {"id": "zorg/zchat-v3-1", "aliases": ["zchat-v3-1"]},
+    ]))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", echo)
+    batch = [{
+        "id": "zorg/zchat-v3-1", "display_name": "zchat-v3-1", "org_id": "zorg",
+        "aliases": ["zchat-v3-1"], "metadata": "{}",
+        "release_date": "2026-05-28", "open_weights": False,
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    claims = {"zorg/zchat-v3-1": "zorg/zchat-v3.1", "zchat-v3-1": "zorg/zchat-v3.1"}
+    out = mod.reconcile_generated_against_existing(
+        batch, sources=(src,), committed_claims=claims
+    )
+    ids = {e["id"] for e in out}
+    assert "zorg/zchat-v3-1" not in ids
+    (rec,) = [e for e in out if e["id"] == "zorg/zchat-v3.1"]
+    assert "zchat-v3-1" in (rec.get("aliases") or []), (
+        f"claims escape hatch must allow donation: {rec}"
+    )
+
+
+def test_steady_state_absorbed_fresh_forms_survive_hygiene(mod, tmp_path, monkeypatch):
+    """V3s, steady-state direction (committed id wins): the stale catalog
+    echoes the COMMITTED id (previous cron). The fresh spelling folds in as an
+    alias and every form must survive the hygiene pass.
+
+    NOTE: this pin is a DIRECTION pin, not a discriminating regression pin —
+    in this shape the echo's claiming id equals the survivor id, so it passed
+    even before the tiered-evidence fix (the discriminating pins for that fix
+    are P2/V2b/V2c/V3m). Kept for the steady-state contract it documents."""
+    src = tmp_path / "src.yaml"
+    src.write_text(yaml.safe_dump([]))
+    echo = tmp_path / "stale-catalog.yaml"
+    echo.write_text(yaml.safe_dump([
+        {"id": "zorgvid/zeo3-1", "aliases": ["zeo3-1", "zeo3-1-x"]},
+    ]))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", echo)
+    committed = [{
+        "id": "zorgvid/zeo3-1", "display_name": "zeo3-1", "org_id": None,
+        "aliases": ["zeo3-1-x"],
+        "metadata": json.dumps({"alias_platforms": {"zeo3-1-x": "fastrouter"}},
+                               sort_keys=True),
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    fresh = [{
+        "id": "zorgvid/zeo-3-1", "display_name": "Zeo 3.1", "org_id": None,
+        "aliases": ["zeo-3-1"], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    batch, claims = mod._carry_forward_committed(
+        [dict(e) for e in fresh], committed
+    )
+    assert claims.get("zorgvid/zeo3-1") == "zorgvid/zeo3-1", (
+        f"steady state: committed id must win: {claims}"
+    )
+    out = mod.reconcile_generated_against_existing(
+        batch, sources=(src,), committed_claims=claims
+    )
+    (surv,) = [e for e in out if e["id"] == "zorgvid/zeo3-1"]
+    assert {"zorgvid/zeo-3-1", "zeo-3-1", "zeo3-1-x"} <= set(surv["aliases"]), (
+        f"fresh spelling + committed aliases must survive: {surv['aliases']}"
+    )
+    ap = json.loads(surv["metadata"])["alias_platforms"]
+    assert ap.get("zeo3-1-x") == "fastrouter", "platform provenance must survive"
+    assert set(ap) <= set(surv["aliases"])
+
+
+def test_migration_absorbed_committed_forms_survive_hygiene(mod, tmp_path, monkeypatch):
+    """V3m, migration direction (adopt_migration=True; fresh id wins): the
+    stale catalog carries a FULL echo of the committed id. The absorbed
+    committed forms must survive hygiene on any FUTURE migration run — the
+    `owner_defining` veto must not short-circuit the claims escape."""
+    src = tmp_path / "src.yaml"
+    src.write_text(yaml.safe_dump([]))
+    echo = tmp_path / "stale-catalog.yaml"
+    echo.write_text(yaml.safe_dump([
+        {"id": "zorgvid/zeo3-1", "display_name": "zeo3-1",
+         "aliases": ["zeo3-1-x"]},
+    ]))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", echo)
+    committed = [{
+        "id": "zorgvid/zeo3-1", "display_name": "zeo3-1", "org_id": None,
+        "aliases": ["zeo3-1-x"],
+        "metadata": json.dumps({"alias_platforms": {"zeo3-1-x": "fastrouter"}},
+                               sort_keys=True),
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    fresh = [{
+        "id": "zorgvid/zeo-3-1", "display_name": "Zeo 3.1", "org_id": None,
+        "aliases": ["zeo-3-1"], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    batch, claims = mod._carry_forward_committed(
+        [dict(e) for e in fresh], committed, adopt_migration=True
+    )
+    assert claims.get("zorgvid/zeo3-1") == "zorgvid/zeo-3-1", (
+        f"migration: fresh id must win: {claims}"
+    )
+    out = mod.reconcile_generated_against_existing(
+        batch, sources=(src,), committed_claims=claims
+    )
+    (surv,) = [e for e in out if e["id"] == "zorgvid/zeo-3-1"]
+    assert {"zorgvid/zeo3-1", "zeo3-1-x"} <= set(surv["aliases"]), (
+        f"absorbed committed forms must survive migration hygiene: {surv['aliases']}"
+    )
+    ap = json.loads(surv["metadata"])["alias_platforms"]
+    assert ap.get("zeo3-1-x") == "fastrouter", "platform provenance must survive"
+
+
+# ---------------------------------------------------------------------------
+# Pure-generator alias emission (synthetic snapshot): the fixpoint/confluence
+# contract lets committed aliases self-ratify through carry-forward, so an
+# alias-EMISSION regression in the generator would not fail it. Pin the
+# emission itself: provider spellings of a grouped serving land as aliases
+# with platform provenance, without any carry-forward in the loop. The leaf
+# canonical is the ADOPTED OpenRouter key (rung 2 — this generator adopts
+# external ids); the invented spelling stays a resolvable alias.
+# ---------------------------------------------------------------------------
+
+def test_generator_emits_provider_alias_forms_from_snapshot(mod):
+    api = {
+        "mistral": {"id": "mistral", "name": "Mistral", "models": {
+            "mistral-7b-instruct-v0.2": {
+                "id": "mistral-7b-instruct-v0.2", "name": "Mistral 7B Instruct v0.2",
+                "release_date": "2023-12-11", "open_weights": True, "family": "mistral",
+            },
+        }},
+        "openrouter": {"id": "openrouter", "name": "OpenRouter", "models": {
+            "mistralai/mistral-7b-instruct-v0.2": {
+                "id": "mistralai/mistral-7b-instruct-v0.2",
+                "name": "Mistral 7B Instruct v0.2",
+                "release_date": "2023-12-11", "open_weights": True,
+            },
+        }},
+    }
+    out, missing = mod._generate_models(api, {"mistralai"})
+    assert missing == []
+    out = mod._finalize_entries(out)
+    by_id = {e["id"]: e for e in out}
+    leaf = by_id["mistralai/mistral-7b-instruct-v0.2"]
+    # Every provider spelling of the grouped serving survives as an alias:
+    # the slugified bare form, the dotted raw key, and the invented
+    # org-prefixed id the adoption renamed away.
+    assert leaf["aliases"] == [
+        "mistral-7b-instruct-v0-2",
+        "mistral-7b-instruct-v0.2",
+        "mistralai/mistral-7b-instruct-v0-2",
+    ]
+    meta = json.loads(leaf["metadata"])
+    assert meta["openrouter_adopted"] is True
+    ap = meta["alias_platforms"]
+    assert ap == {
+        "mistral-7b-instruct-v0-2": "mistral",
+        "mistral-7b-instruct-v0.2": "mistral",
+        "mistralai/mistral-7b-instruct-v0-2": "mistral",
+    }
+
+
+# ---------------------------------------------------------------------------
+# RUNG-MONOTONE stability: a fresh twin from a strictly higher rung of the id
+# ladder (hf_deferred = real HF id, rung 1) is never renamed back to a
+# committed non-HF id; same-rung twins keep the committed id. Both carry-
+# forward paths (non-catalog + catalog) enforce it; rung 2 over 3 (OpenRouter
+# key over invented) stays migration-gated with a visible pending counter.
+# ---------------------------------------------------------------------------
+
+def test_carry_forward_hf_deferred_twin_never_renamed_back(cf_mod):
+    committed = [
+        dict(_cf_entry("zorgx/zmod-3-1"), display_name="ZMod 3.1"),
+        # A retained committed child pointing at the absorbed id: its parent
+        # edge must be repointed onto the surviving HF id.
+        dict(_cf_entry("zorgx/zmod-3-1-mini"),
+             parents=[{"id": "zorgx/zmod-3-1", "relationship": "variant",
+                       "axis": "tier"}]),
+    ]
+    fresh = [dict(
+        _cf_entry("zorgx/ZMod3-1"),
+        aliases=["zmod3-1"],
+        metadata=json.dumps({"hf_deferred": True}, sort_keys=True),
+    )]
+    batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    by_id = {e["id"]: e for e in batch}
+    assert "zorgx/ZMod3-1" in by_id, "HF-deferred id must survive as canonical"
+    assert "zorgx/zmod-3-1" not in by_id, "committed invented twin must be absorbed"
+    surv = by_id["zorgx/ZMod3-1"]
+    assert "zorgx/zmod-3-1" in surv["aliases"], "absorbed committed id stays resolvable"
+    assert json.loads(surv["metadata"])["hf_deferred"] is True
+    assert claims["zorgx/zmod-3-1"] == "zorgx/ZMod3-1"
+    # Parent-edge repointing, mirror of the rename path's.
+    assert by_id["zorgx/zmod-3-1-mini"]["parents"][0]["id"] == "zorgx/ZMod3-1"
+
+
+def test_carry_forward_promote_then_rename_chain_composes(cf_mod):
+    """Two committed entries twin-match the SAME fresh entry: the invented
+    one is promoted onto the fresh id, then the committed HF one renames the
+    fresh twin back (same-rung stability). The repoint map must COMPOSE the
+    chain (invented -> fresh -> committed HF) so edges and claims land on
+    the final survivor, never the renamed-away intermediate."""
+    committed = [
+        dict(_cf_entry("zorgx/zmod-3-1"), display_name="ZMod 3.1"),
+        dict(
+            _cf_entry("zorgx/ZMod-3.1"),
+            metadata=json.dumps({"hf_deferred": True}, sort_keys=True),
+        ),
+        dict(_cf_entry("zorgx/zmod-3-1-mini"),
+             parents=[{"id": "zorgx/zmod-3-1", "relationship": "variant",
+                       "axis": "tier"}]),
+    ]
+    fresh = [dict(
+        _cf_entry("zorgx/ZMod3-1"),
+        metadata=json.dumps({"hf_deferred": True}, sort_keys=True),
+    )]
+    batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    by_id = {e["id"]: e for e in batch}
+    assert "zorgx/ZMod-3.1" in by_id, "committed HF id wins the same-rung twin"
+    assert "zorgx/ZMod3-1" not in by_id
+    assert "zorgx/zmod-3-1" not in by_id
+    # The child edge must compose through the chain to the FINAL survivor.
+    edge = by_id["zorgx/zmod-3-1-mini"]["parents"][0]["id"]
+    assert edge == "zorgx/ZMod-3.1", f"edge landed on renamed-away id: {edge}"
+    # Claims too — a renamed-away value poisons the committed_claims escape.
+    assert claims["zorgx/zmod-3-1"] == "zorgx/ZMod-3.1"
+
+
+def test_carry_forward_same_rung_hf_twins_keep_committed_id(cf_mod):
+    """Two hf_deferred twins (both rung 1): the stability rule holds — the
+    committed id wins and today's respelling becomes an alias."""
+    committed = [dict(
+        _cf_entry("zorgx/ZMod-1B"),
+        metadata=json.dumps({"hf_deferred": True}, sort_keys=True),
+    )]
+    fresh = [dict(
+        _cf_entry("zorgx/Z-Mod-1B"),
+        metadata=json.dumps({"hf_deferred": True}, sort_keys=True),
+    )]
+    batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    assert [e["id"] for e in batch] == ["zorgx/ZMod-1B"]
+    assert "zorgx/Z-Mod-1B" in batch[0]["aliases"]
+    assert claims["zorgx/ZMod-1B"] == "zorgx/ZMod-1B"
+
+
+def test_carry_forward_pending_rung2_counter_logged(cf_mod, capsys):
+    """A fresh OpenRouter-key twin (rung 2) deferred by the stability rule is
+    counted and the debt line prints on a plain (non-migration) run."""
+    committed = [dict(_cf_entry("zorgx/zmod-large"), display_name="ZMod Large")]
+    fresh = [dict(
+        _cf_entry("zorgx/zmodlarge"),
+        metadata=json.dumps({"openrouter_adopted": True}, sort_keys=True),
+    )]
+    batch, _claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    by_id = {e["id"]: e for e in batch}
+    assert "zorgx/zmod-large" in by_id and "zorgx/zmodlarge" not in by_id, (
+        "rung-2 promotion must stay migration-gated (committed id wins)"
+    )
+    err = capsys.readouterr().err
+    assert "1 pending rung-2 id promotion(s)" in err, (
+        f"pending rung-2 debt must be visible in the cron log: {err!r}"
+    )
+
+
+def test_catalog_carry_forward_hf_deferred_twin_not_renamed_back(mod, tmp_path, monkeypatch):
+    """Catalog mirror of the rung-monotone rule: a committed invented catalog
+    mint whose model reappears as a fresh hf_deferred entry (real HF id) is
+    absorbed onto the HF id — never the reverse."""
+    committed = [{
+        "id": "zorgvid/zeo-9", "display_name": "Zeo 9", "org_id": None,
+        "aliases": ["zeo-9"], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    cat = tmp_path / "cat.yaml"
+    cat.write_text(yaml.safe_dump(committed, sort_keys=False))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", tmp_path / "orgs.yaml")
+    fresh = [{
+        "id": "zorgvid/Zeo9", "display_name": "Zeo 9", "org_id": None,
+        "aliases": [], "metadata": json.dumps({"hf_deferred": True}, sort_keys=True),
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    mod.regenerate_catalog([dict(e) for e in fresh])
+    out = yaml.safe_load(cat.read_text()) or []
+    by_id = {e["id"]: e for e in out}
+    assert "zorgvid/Zeo9" in by_id, "HF-deferred id must survive as canonical"
+    assert "zorgvid/zeo-9" not in by_id, "committed invented twin must be absorbed"
+    surv = by_id["zorgvid/Zeo9"]
+    assert {"zorgvid/zeo-9", "zeo-9"} <= set(surv.get("aliases") or []), (
+        f"absorbed committed forms must stay resolvable: {surv.get('aliases')}"
+    )
+
+
+def test_catalog_carry_forward_case_only_respell_keeps_committed_casing(mod, tmp_path, monkeypatch):
+    """Case-only respell, SAME rung: the committed casing wins in the catalog
+    path too (unified with the non-catalog path's behavior); the fresh casing
+    stays resolvable as an alias."""
+    committed = [{
+        "id": "zorgvid/zeo-x1", "display_name": "Zeo X1", "org_id": None,
+        "aliases": [], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    cat = tmp_path / "cat.yaml"
+    cat.write_text(yaml.safe_dump(committed, sort_keys=False))
+    monkeypatch.setattr(mod, "CATALOG_OUT_PATH", cat)
+    monkeypatch.setattr(mod, "ORGS_GENERATED_PATH", tmp_path / "orgs.yaml")
+    fresh = [{
+        "id": "zorgvid/Zeo-X1", "display_name": "Zeo X1", "org_id": None,
+        "aliases": [], "metadata": "{}",
+        "review_status": "draft", "resolution_source": "models_dev",
+    }]
+    mod.regenerate_catalog([dict(e) for e in fresh])
+    out = yaml.safe_load(cat.read_text()) or []
+    by_id = {e["id"]: e for e in out}
+    assert "zorgvid/zeo-x1" in by_id, "committed casing must win among equals"
+    assert "zorgvid/Zeo-X1" not in by_id
+    assert "zorgvid/Zeo-X1" in (by_id["zorgvid/zeo-x1"].get("aliases") or [])

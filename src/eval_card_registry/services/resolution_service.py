@@ -178,12 +178,16 @@ class ResolutionService:
         self._hub_stats_client = None
         self._hub_stats_indices: Optional[tuple[dict[str, str], dict[str, str]]] = None
         self._hub_stats_indices_lock = threading.Lock()
-        # Read-only HF id confirmation index: normalized HF id -> HF-true id,
-        # built lazily from the `hub_stats_index` table. Lets the read-only
-        # resolve path confirm an exact HF model id that was never minted into
-        # the registry (no minting / persistence). Invalidated alongside the
-        # hub-stats indices.
+        # HF id confirmation index: normalized HF id -> HF-true id, built
+        # lazily from the `hub_stats_index` table (both store modes). Feeds
+        # the HfIdVerifier, which the resolver consults as the HF-id-check
+        # step of the chain. Invalidated alongside the hub-stats indices.
         self._hf_id_index: Optional[dict[str, str]] = None
+        # The runtime HF repo-id verifier (index + rate-limit-guarded live
+        # Hub API fallback). Outlives resolver invalidations so its result
+        # caches and breaker state survive entity churn within the process.
+        from eval_card_registry.services.hf_id_verifier import HfIdVerifier
+        self._hf_id_verifier = HfIdVerifier(index_provider=self._build_hf_id_index)
 
     def _get_resolver(self) -> Resolver:
         if self._resolver is None:
@@ -195,7 +199,10 @@ class ResolutionService:
             # metadata lookup all live in the resolver; this service just
             # converts the dataclass to a dict and adds `created_new`
             # (auto-draft state the resolver doesn't track).
-            self._resolver = Resolver(alias_store, config, canonical_store=canonical_store)
+            self._resolver = Resolver(
+                alias_store, config, canonical_store=canonical_store,
+                hf_id_checker=self._hf_id_verifier.check,
+            )
         return self._resolver
 
     def invalidate_resolver(self) -> None:
@@ -217,6 +224,7 @@ class ResolutionService:
         source_field: Optional[str],
         sync_run_id: Optional[str] = None,
         rerun: bool = False,
+        mode: str = "resolve",
     ) -> dict:
         """Resolve a raw value to a canonical entity. Returns a dict with
         the full enriched response shape — same fields as
@@ -225,41 +233,36 @@ class ResolutionService:
         every match (including auto-drafts and no_match) emits the same
         shape so callers don't need to branch on missing keys.
 
+        `mode="exact"` disables fuzzy inference AND all side effects on
+        entity data (no auto-created drafts, no alias writes) — a miss is
+        an honest no_match.
+
         See `api/schemas.py::ResolveResponse` for the field documentation
         and the README "API" section for an example response."""
         if not raw_value or not raw_value.strip():
             return _no_match_result()
 
-        # Fast path: return cached result for duplicate (raw_value, entity_type, source_config)
-        cache_key = (raw_value, entity_type, source_config)
+        # Fast path: return cached result for duplicate
+        # (raw_value, entity_type, source_config, mode).
+        cache_key = (raw_value, entity_type, source_config, mode)
         if not rerun and cache_key in self._resolve_cache:
             return self._resolve_cache[cache_key]
 
-        # Read-only mode: resolve only, no side effects on entity data
+        # Read-only mode: resolve only, no side effects on entity data.
+        # The HF id check runs inside the resolver chain (injected checker),
+        # so a real-but-unminted HF id resolves to itself with no minting —
+        # verbatim confirmations outrank alias hits, normalized ones rank
+        # between the normalized-alias and fuzzy steps.
         if settings.read_only:
             resolver = self._get_resolver()
-            result: ResolutionResult = resolver.resolve(raw_value, entity_type, source_config)
-            registry_dict = (
-                _result_to_dict(result, created_new=False)
-                if result.canonical_id is not None else None
+            result: ResolutionResult = resolver.resolve(
+                raw_value, entity_type, source_config, mode=mode
             )
-            # Precedence: an EXACT/normalized registry match is authoritative.
-            # But a bare no_match OR only a FUZZY registry match for a model is
-            # overridable by an EXACT HF-id confirmation from the local hub-stats
-            # index — an exact HF repo id beats a fuzzy registry stem-guess, and
-            # otherwise a real-but-unminted HF id would be shadowed by a slug
-            # canonical it happens to fuzzy-collide with. No minting/persistence.
-            if registry_dict is not None and result.strategy in ("exact", "normalized"):
-                result_dict = registry_dict
-            elif entity_type == "model":
-                result_dict = (
-                    self._confirm_hf_index(raw_value)
-                    or registry_dict           # keep the fuzzy registry match if no index hit
-                    or _no_match_result()
-                )
-            else:
-                result_dict = registry_dict or _no_match_result()
-            self._resolve_cache[cache_key] = result_dict
+            result_dict = (
+                _result_to_dict(result, created_new=False)
+                if result.canonical_id is not None else _no_match_result()
+            )
+            self._memoize(cache_key, result_dict)
             return result_dict
 
         # Check if alias already exists (skip resolver on rerun=False).
@@ -273,17 +276,50 @@ class ResolutionService:
         # lookup since exact-match hits in O(1) for already-aliased
         # values. Audit fields are overlaid from the alias entry so
         # callers still see the original strategy/confidence.
+        prefetched: Optional[ResolutionResult] = None
         if not rerun:
             existing = queries.get_alias(self.store, raw_value, entity_type, source_config)
             if existing:
                 resolver = self._get_resolver()
-                fresh = resolver.resolve(raw_value, entity_type, source_config)
+                fresh = resolver.resolve(raw_value, entity_type, source_config, mode=mode)
+                checker_backed = (
+                    fresh.hf_attestation is not None
+                    and fresh.canonical_id == fresh.hf_attestation
+                )
                 if fresh.canonical_id == existing["canonical_id"]:
-                    enriched = _dc_replace(
+                    # Agreement. Overlay the stored audit fields — unless
+                    # the fresh result is checker-backed, whose runtime
+                    # attestation (strategy/confidence/detail) must never
+                    # be overwritten by stale stored audit fields.
+                    enriched = fresh if checker_backed else _dc_replace(
                         fresh,
                         strategy=existing["strategy"],
                         confidence=existing["confidence"],
                     )
+                elif (
+                    checker_backed
+                    and fresh.canonical_id.lower() == existing["canonical_id"].lower()
+                ):
+                    # Case-only disagreement — the same repo (HF ids are
+                    # case-insensitively unique). Keep the registered row;
+                    # no flag, no mint.
+                    enriched = resolver.build_result(
+                        raw_value, entity_type, source_config,
+                        existing["canonical_id"], fresh.strategy, fresh.confidence,
+                    )
+                elif checker_backed:
+                    if mode == "exact":
+                        # Exact mode is side-effect-free: serve the
+                        # attestation, no flag, no mint.
+                        enriched = fresh
+                    else:
+                        # A runtime HF attestation disagrees with the stored
+                        # alias. The verbatim HF id wins (owner decision);
+                        # the alias is flagged for review, never silently
+                        # repointed. Fall through to the main path so an
+                        # unregistered attested id still gets minted.
+                        self._flag_alias_hf_disagreement(existing, fresh.hf_attestation)
+                        prefetched = fresh
                 else:
                     # Rare: registry restructure has moved the canonical
                     # for this raw_value since the alias was written.
@@ -293,17 +329,53 @@ class ResolutionService:
                         raw_value, entity_type, source_config,
                         existing["canonical_id"], existing["strategy"], existing["confidence"],
                     )
-                result_dict = _result_to_dict(enriched, created_new=False)
-                self._resolve_cache[cache_key] = result_dict
-                return result_dict
+                if prefetched is None:
+                    result_dict = _result_to_dict(enriched, created_new=False)
+                    self._memoize(cache_key, result_dict)
+                    return result_dict
 
         resolver = self._get_resolver()
-        result = resolver.resolve(raw_value, entity_type, source_config)
+        result = (
+            prefetched if prefetched is not None
+            else resolver.resolve(raw_value, entity_type, source_config, mode=mode)
+        )
+
+        # Exact-only mode is fully side-effect-free: no drafts, no org
+        # mints, no alias writes, no store log rows — on a match AND on a
+        # miss. (An unregistered attestation is served as-is, read-only
+        # style.)
+        if mode == "exact":
+            result_dict = (
+                _result_to_dict(result, created_new=False)
+                if result.canonical_id is not None else _no_match_result()
+            )
+            self._memoize(cache_key, result_dict)
+            return result_dict
 
         created_new = False
         alias_status = "auto"
 
-        if result.canonical_id is not None:
+        if result.canonical_id is not None and result.hf_attested_unregistered:
+            # HF-attested but not a registered entity. If a case-variant
+            # canonical already exists (e.g. a lowercased draft minted
+            # before the index knew the repo), reuse it instead of minting
+            # a shadow duplicate — HF ids are case-insensitively unique.
+            case_variant = self._find_case_variant_model(result.canonical_id)
+            if case_variant is not None:
+                canonical_id = case_variant
+                result = resolver.build_result(
+                    raw_value, entity_type, source_config,
+                    case_variant, result.strategy, result.confidence,
+                )
+            else:
+                # Mint it, adopting the checker's HF-true id (never a
+                # slugified re-derivation), so no alias / eval_results row
+                # ever points at a nonexistent canonical.
+                canonical_id = self._auto_create_entity(
+                    entity_type, raw_value, preset_hf_id=result.canonical_id
+                )
+                created_new = True
+        elif result.canonical_id is not None:
             # Match found above threshold
             canonical_id = result.canonical_id
             alias_status = "auto"
@@ -328,8 +400,26 @@ class ResolutionService:
             "notes": None,
         }
         if rerun:
-            existing_alias_id = self._find_alias_id(raw_value, entity_type, source_config)
-            if existing_alias_id:
+            existing_row = queries.get_alias(self.store, raw_value, entity_type, source_config)
+            existing_alias_id = existing_row.get("id") if existing_row else None
+            if existing_alias_id and (
+                existing_row.get("status") == "confirmed"
+                and existing_row.get("canonical_id") != canonical_id
+            ):
+                # Never auto-repoint or demote a CONFIRMED alias, even on a
+                # rerun. Record the disagreement for review instead; the
+                # response still carries the fresh resolution.
+                queries.update_alias(
+                    self.store,
+                    alias_id=existing_alias_id,
+                    updates={
+                        "notes": (
+                            f"rerun disagreement: resolver returned "
+                            f"{canonical_id} ({strategy_used})"
+                        ),
+                    },
+                )
+            elif existing_alias_id:
                 queries.update_alias(
                     self.store,
                     alias_id=existing_alias_id,
@@ -403,10 +493,53 @@ class ResolutionService:
         result_dict = _result_to_dict(enriched, created_new=created_new)
         if created_new and result_dict.get("review_status") is None:
             result_dict["review_status"] = "draft"
-        self._resolve_cache[cache_key] = result_dict
+        self._memoize(cache_key, result_dict)
         return result_dict
 
-    def _auto_create_entity(self, entity_type: str, raw_value: str) -> str:
+    def _memoize(self, cache_key: tuple, result_dict: dict) -> None:
+        """Memoize a resolve result for duplicate raw values within the
+        process. A no_match for an HF-shaped model value is NOT memoized:
+        the HF id checker may confirm it later (negative-TTL expiry, index
+        refresh, circuit-breaker close), and a permanent memo would pin the
+        miss for the process lifetime."""
+        raw_value, entity_type = cache_key[0], cache_key[1]
+        if (
+            result_dict.get("canonical_id") is None
+            and entity_type == "model"
+            and self._looks_like_hf_id(raw_value)
+        ):
+            return
+        self._resolve_cache[cache_key] = result_dict
+
+    def _find_case_variant_model(self, hf_id: str) -> Optional[str]:
+        """A registered canonical model id equal to `hf_id` up to casing,
+        or None. Linear scan — only reached on the rare attested-but-
+        unregistered mint path."""
+        df = self.store.table("canonical_models")
+        if df is None or df.empty:
+            return None
+        lower = hf_id.lower()
+        for existing_id in df["id"]:
+            if isinstance(existing_id, str) and existing_id.lower() == lower:
+                return existing_id
+        return None
+
+    def _flag_alias_hf_disagreement(self, existing: dict, hf_id: str) -> None:
+        """A runtime HF attestation disagreed with a stored alias. The alias
+        is never silently repointed: a non-confirmed row drops to `uncertain`
+        so it lands in the review bucket; a confirmed row keeps its status.
+        Both get a note recording the disagreement."""
+        alias_id = existing.get("id")
+        if not alias_id:
+            return
+        updates: dict = {"notes": f"hf-id-check disagreement: attested {hf_id}"}
+        if existing.get("status") != "confirmed":
+            updates["status"] = "uncertain"
+        queries.update_alias(self.store, alias_id=alias_id, updates=updates)
+
+    def _auto_create_entity(
+        self, entity_type: str, raw_value: str, preset_hf_id: Optional[str] = None,
+    ) -> str:
         table = _ENTITY_TABLE[entity_type]
 
         # Hub-stats live enrichment: when a model raw value looks like an
@@ -421,12 +554,19 @@ class ResolutionService:
         # name) and mark `resolution_source="hf"`, `review_status="reviewed"`.
         # Otherwise fall back to the lowercase slug as before.
         enrichment: dict = {}
-        if entity_type == "model" and self._looks_like_hf_id(raw_value):
+        if entity_type == "model" and (preset_hf_id or self._looks_like_hf_id(raw_value)):
             # Provisional id only for the hub-stats family-version self-edge
             # suppression; the real id is finalised from `hf_id` below.
             enrichment = self._lookup_hub_stats(
-                raw_value, target_canonical=_slugify(raw_value)
+                preset_hf_id or raw_value, target_canonical=_slugify(raw_value)
             ) or {}
+        if preset_hf_id and not (
+            isinstance(enrichment.get("hf_id"), str) and enrichment["hf_id"].strip()
+        ):
+            # The runtime HF id checker already attested this repo id — adopt
+            # it even when the (shard-0-limited) hub-stats parquet misses it.
+            # Metadata enrichment stays best-effort; existence is settled.
+            enrichment["hf_id"] = preset_hf_id
 
         hf_confirmed = entity_type == "model" and isinstance(
             enrichment.get("hf_id"), str
@@ -652,9 +792,17 @@ class ResolutionService:
                 if cand in seen or _nz(cand) == _nz(raw_value):
                     continue
                 seen.add(cand)
-                res = resolver.resolve(cand, "model")
+                # check_hf=False: stem candidates are alias-index probes;
+                # routing them through the HF checker would draw live-lookup
+                # budget per stem AND could attest an unregistered repo.
+                res = resolver.resolve(cand, "model", check_hf=False)
                 hit = res.canonical_id
                 if not hit or res.strategy not in ("exact", "normalized"):
+                    continue
+                # Never emit an edge to an HF-attested-but-unregistered id —
+                # that would be a dangling parent FK (the checker confirms
+                # existence on the Hub, not existence in the registry).
+                if res.hf_attested_unregistered:
                     continue
                 hit_name = hit.split("/", 1)[1] if "/" in hit else hit
                 # Reject a "base" that is really the same identity as the draft.
@@ -803,48 +951,24 @@ class ResolutionService:
                 key = row.get("id_norm") if has_norm else None
                 if not isinstance(key, str) or not key:
                     key = _hsnorm(hf_id)
-                # First-loaded wins — keeps the build deterministic on dup norms.
-                index.setdefault(key, hf_id)
+                # Two DISTINCT repos collapsing to one id_norm make
+                # normalized matching ambiguous — the entry degrades to a
+                # verbatim-only dict {lower_id: true_id} that the verifier
+                # answers only case-insensitively (anything else falls
+                # through to the live tier).
+                existing = index.get(key)
+                if existing is None:
+                    index[key] = hf_id
+                elif isinstance(existing, str):
+                    if existing.lower() != hf_id.lower():
+                        index[key] = {
+                            existing.lower(): existing,
+                            hf_id.lower(): hf_id,
+                        }
+                else:
+                    existing.setdefault(hf_id.lower(), hf_id)
             self._hf_id_index = index
             return index
-
-    def _confirm_hf_index(self, raw_value: str) -> Optional[dict]:
-        """Confirm an exact HF model id against the local hub-stats index.
-
-        Returns a response dict (the lean ResolveResponse shape, type-agnostic
-        core + ancestry/resolution_detail) when `raw_value` is HF-shaped and its
-        normalized form is present in the index; otherwise None. NO minting, NO
-        persistence — this is an HF-confirmation, not a registry entity, so
-        `review_status` is None and `resolution_source` is `hub_stats_index`.
-
-        Built as a plain dict override on `_no_match_result()` — NOT routed
-        through `resolver.build_result` (an id absent from canonical_models
-        yields `hf_repo_id=None` via the all-None matched_entity branch)."""
-        if not self._looks_like_hf_id(raw_value):
-            return None
-        from eval_card_registry.services.hub_stats import normalize as _hsnorm
-
-        index = self._build_hf_id_index()
-        hit = index.get(_hsnorm(raw_value))
-        if not hit:
-            return None
-        # Honest strategy label: only a byte-for-byte id match is "exact"; a
-        # case/separator variant that matched via the normalized key is
-        # "normalized" (conf 0.95) — mirrors the registry resolver's own
-        # exact-vs-normalized distinction rather than overclaiming "exact".
-        exact = raw_value == hit
-        result_dict = _no_match_result()
-        result_dict.update({
-            "canonical_id": hit,
-            "strategy": "exact" if exact else "normalized",
-            "confidence": 1.0 if exact else 0.95,
-            "review_status": None,
-            "resolution_source": "hub_stats_index",
-            "ancestry": [],
-            "resolution_detail": {"granularity": None, "hf_repo_id": hit},
-            "created_new": False,
-        })
-        return result_dict
 
     def _build_hf_to_dev(self) -> dict[str, str]:
         """Two-tier org map (HF-org-lowercase -> developer/community slug) for live

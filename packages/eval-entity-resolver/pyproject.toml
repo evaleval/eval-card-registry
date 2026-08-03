@@ -9,7 +9,7 @@ requires-python = ">=3.11"
 dependencies = [
     "pandas>=2.2.0",
     "pyarrow>=16.0.0",
-    "huggingface-hub>=0.23.0",
+    "huggingface-hub>=0.26.0",
 ]
 
 [tool.hatch.build.targets.wheel]

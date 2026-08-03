@@ -105,6 +105,68 @@ DERIVATION_MARKERS = [
 ]
 
 
+def _non_tier3_claim_owners() -> dict[str, str]:
+    """{surface form -> owning record id} over every id / display_name / alias
+    claimed by a NON-tier3 seed layer: the other generated sources, core.yaml
+    entries, and enrichments/*.yaml records (first writer wins). Consumers:
+    the own-forms strip in `_clean_resolver` exempts these forms (a prior
+    tier3 form ANOTHER source also claims — e.g. models_dev's own entry id
+    `mistral/mistral-large-2402` — is not tier3-originated, and stripping it
+    would blind the residual pass into re-minting a shadow of an existing
+    canonical); the curated-keyed retention pass uses the OWNER to tell a
+    self-claim from a supersession."""
+    owners: dict[str, str] = {}
+
+    def _add(rec: dict) -> None:
+        rid = rec.get("id")
+        if not isinstance(rid, str) or not rid:
+            return
+        for f in [rid, rec.get("display_name"), *(rec.get("aliases") or [])]:
+            if isinstance(f, str) and f:
+                owners.setdefault(f, rid)
+
+    for n in ("hf_oracle", "models_dev", "hub_stats", "models_dev_catalog"):
+        p = SOURCES_DIR / f"{n}.generated.yaml"
+        if not p.exists():
+            continue
+        d = yaml.safe_load(p.read_text())
+        for e in (d.get("entries") if isinstance(d, dict) else d) or []:
+            if isinstance(e, dict):
+                _add(e)
+    core_doc = yaml.safe_load((MODELS_DIR / "core.yaml").read_text()) or {}
+    for e in _core_entries(core_doc):
+        _add(e)
+    enrich_dir = MODELS_DIR / "enrichments"
+    if enrich_dir.exists():
+        for p in sorted(enrich_dir.glob("*.yaml")):
+            doc = yaml.safe_load(p.read_text()) or []
+            doc = doc.get("entries", doc) if isinstance(doc, dict) else doc
+            for e in doc or []:
+                if isinstance(e, dict):
+                    _add(e)
+    return owners
+
+
+def _non_tier3_defining_ids() -> set[str]:
+    """Canonical ids DEFINED (display_name-bearing entry, or any core entry)
+    by a non-tier3 seed layer. The curated-keyed retention pass skips ids
+    another source already defines."""
+    ids: set[str] = set()
+    for n in ("hf_oracle", "models_dev", "hub_stats", "models_dev_catalog"):
+        p = SOURCES_DIR / f"{n}.generated.yaml"
+        if not p.exists():
+            continue
+        d = yaml.safe_load(p.read_text())
+        for e in (d.get("entries") if isinstance(d, dict) else d) or []:
+            if isinstance(e, dict) and e.get("id") and "display_name" in e:
+                ids.add(e["id"])
+    core_doc = yaml.safe_load((MODELS_DIR / "core.yaml").read_text()) or {}
+    for e in _core_entries(core_doc):
+        if e.get("id"):
+            ids.add(e["id"])
+    return ids
+
+
 def _clean_resolver() -> Resolver:
     """Resolver from fixtures with this generator's own prior output filtered
     out (`canonical_models.resolution_source == 'inferred'` rows AND their alias
@@ -129,6 +191,34 @@ def _clean_resolver() -> Resolver:
         aliases_df = aliases_df[
             ~aliases_df["canonical_id"].astype(str).isin(inferred_ids)
         ].reset_index(drop=True)
+    # ALSO strip every alias row whose raw form ORIGINATED from this
+    # generator's own committed output — enrich-record aliases (folded-to-HF
+    # `{id, aliases}` rows put raws on NON-inferred canonicals) AND full-draft
+    # ids/aliases that the seed's collision_fold moved onto a twin canonical.
+    # The inferred-row filter above misses both classes. Leaving them in flips
+    # the residual tail run-to-run: with the alias seeded the raw resolves
+    # (record dropped), without it the raw is no_match again (record
+    # re-minted) — a two-state oscillation.
+    if TIER3_YAML.exists():
+        prior = yaml.safe_load(TIER3_YAML.read_text()) or []
+        prior = prior.get("entries", prior) if isinstance(prior, dict) else prior
+        own_forms: set[str] = set()
+        for e in prior:
+            if not isinstance(e, dict) or not e.get("id"):
+                continue
+            if "display_name" in e:
+                own_forms.add(str(e["id"]))
+            for a in e.get("aliases") or []:
+                if a:
+                    own_forms.add(str(a))
+        # A prior-output form that another seed layer ALSO claims is not
+        # tier3-originated — its alias row belongs to that other canonical.
+        # Stripping it would blind the residual pass to an existing entity
+        # and re-mint a shadow draft (then steal the owner's id as an alias).
+        own_forms -= set(_non_tier3_claim_owners())
+        if own_forms:
+            keep = [str(rv) not in own_forms for rv in aliases_df["raw_value"]]
+            aliases_df = aliases_df.loc[keep].reset_index(drop=True)
     alias_store = AliasStore(aliases_df, read_only=True)
     return Resolver(alias_store, canonical_store=cs)
 
@@ -214,13 +304,15 @@ def mint_collision_decision(
 ) -> str:
     """Decide what to do with a residual tier-3 mint id `cid`. Returns one of:
 
-    - 'skip'     — `cid` normalized-collides with a CURATED CORE canonical under
-                   a different id (`core_steals`): it is the SAME model already
-                   curated in core (the stale fixtures resolver just missed it).
-                   Do NOT mint — drop the row so the raw resolves to the curated
-                   canonical via normalized match. Minting `{cid}-inferred` here
-                   would split one model into two canonicals and SHADOW the
-                   curated entry (merge into the existing canonical, never dup).
+    - 'skip'     — `cid`'s normalized identity is OWNED by a CURATED CORE
+                   canonical — under a different id (`core_steals`: the SAME
+                   model, already curated; the stale fixtures resolver just
+                   missed it) or under the SAME id (core defines this exact
+                   entity; a tier3 twin would field-merge at seed and
+                   contaminate the curated row with `resolution_source:
+                   inferred`, tripping the Tier-3 honesty gate). Do NOT mint —
+                   the raw resolves to the curated canonical via its id alias
+                   (exact or normalized match).
     - 'inferred' — `cid` clashes with a core `skip_ids` entry (would be silently
                    dropped by the loader) or with a DIFFERENT existing canonical
                    the resolver already owns (a genuine cross-ENTITY clash, two
@@ -230,7 +322,9 @@ def mint_collision_decision(
 
     `resolver_hit` is `resolver.resolve(cid, "model").canonical_id is not None`
     (passed in so this policy is unit-testable without a live resolver)."""
-    if core_steals(cid, core_norm_index):
+    from eval_entity_resolver.normalization import normalize as _rnz
+
+    if core_norm_index.get(_rnz(cid)) is not None:
         return "skip"
     if cid in core_skip_ids or resolver_hit:
         return "inferred"
@@ -305,10 +399,53 @@ def _is_pure_version_suffix(tokens: list[str]) -> bool:
     return False
 
 
+def _prior_committed_records() -> list[dict]:
+    """The previously-committed tier3 output (full entries AND enrich records),
+    read before this run overwrites the file. Input to the carry-forward floor:
+    every surface form the committed file made resolvable must stay resolvable
+    at exact/normalized confidence after a regen ("nothing is removed")."""
+    if not TIER3_YAML.exists():
+        return []
+    prior = yaml.safe_load(TIER3_YAML.read_text()) or []
+    prior = prior.get("entries", prior) if isinstance(prior, dict) else prior
+    return [e for e in prior if isinstance(e, dict) and e.get("id")]
+
+
+def _curated_claim_forms() -> set[str]:
+    """Surface forms the CURATED layers (core.yaml entries + enrichments/*.yaml)
+    explicitly claim. The carry-forward floor must never re-carry one of these:
+    curation already places the form (possibly on a tier3-minted canonical the
+    generator's clean resolver cannot see, because it strips its own inferred
+    rows), and a second claim from a floor enrich record would be an ambiguous
+    alias collision at seed time."""
+    forms: set[str] = set()
+
+    def _add(rec: dict) -> None:
+        for f in [rec.get("display_name"), *(rec.get("aliases") or [])]:
+            if isinstance(f, str) and f:
+                forms.add(f)
+
+    core_doc = yaml.safe_load((MODELS_DIR / "core.yaml").read_text()) or {}
+    for e in _core_entries(core_doc):
+        _add(e)
+    enrich_dir = MODELS_DIR / "enrichments"
+    if enrich_dir.exists():
+        for p in sorted(enrich_dir.glob("*.yaml")):
+            doc = yaml.safe_load(p.read_text()) or []
+            doc = doc.get("entries", doc) if isinstance(doc, dict) else doc
+            for e in doc or []:
+                if isinstance(e, dict):
+                    _add(e)
+    return forms
+
+
 def main() -> None:
+    from eval_entity_resolver.normalization import normalize as _rnz_main
+
     oracle = json.loads(ORACLE.read_text())["resolutions"]
     curated_orgs = _load_curated_orgs()
     hf_to_dev = build_hf_to_dev(curated_orgs)
+    prior_records = _prior_committed_records()
 
     # core.yaml `skip_ids` are intentionally-dropped canonical ids — a tier3
     # mint colliding with one would be silently removed by the seed loader and
@@ -372,6 +509,84 @@ def main() -> None:
     # so the seed loader unions the raw onto the existing HF canonical.
     fold_enrich: dict[str, set[str]] = {}
 
+    # Seed-time collision-fold parity: the seed's fold_collisions merges any
+    # canonical whose separator/case-stripped id key matches an existing one
+    # (`cohere/CommandA` -> `cohere/command-a`). Minting such a draft here
+    # would create a one-run row the NEXT seed folds away (its raw then
+    # resolves via the fold alias, the run after re-mints it — a two-state
+    # oscillation). Detect the fold up front and emit the stable enrich
+    # record instead. Same `_bsizes` guard as fold_collisions.
+    from eval_card_registry.lib.collision_fold import _bsizes as _ck_bsizes
+    from eval_card_registry.lib.collision_fold import collision_key as _ck
+
+    ck_index: dict[str, str] = {}
+    _clean_models = r.canonical_store._tables.get("model")
+    if _clean_models is not None and not _clean_models.empty:
+        for _cid in _clean_models["id"].astype(str):
+            ck_index.setdefault(_ck(_cid), _cid)
+
+    def fold_to_collision_twin(cid: str) -> Optional[str]:
+        hit = ck_index.get(_ck(cid))
+        if hit is not None and hit != cid and _ck_bsizes(hit) == _ck_bsizes(cid):
+            return hit
+        return None
+
+    # SAME-RUN dev-org twin dedup. Two residual raws can name the SAME model
+    # under a curated-org respelling (`kimi/kimi-k2` vs `moonshotai/kimi-k2`)
+    # or a separator respelling the case-insensitive `_fold_dup` misses
+    # (`google/gemini-3-1-pro-preview` vs `google/gemini-3.1-pro-preview`).
+    # Minting both emits two FULL entries with one folded identity — the
+    # duplicate class the adoption gate rejects (and for the cross-org-spelling
+    # case, the seed's fold_collisions cannot merge either, so both would go
+    # live). Key: (curated dev org, separator/case-stripped name, b-size
+    # signature) — the same org fold + `_bsizes` guard the seed fold uses.
+    minted_by_devkey: dict[tuple, dict] = {}
+
+    def _dev_key(c: str) -> tuple:
+        if "/" in c:
+            o, n = c.split("/", 1)
+            return (hf_to_dev.get(o.lower(), o.lower()), _ck(n), _ck_bsizes(n))
+        return ("", _ck(c), _ck_bsizes(c))
+
+    # Ids the CURATED layers key records by (core entries, enrichments/*.yaml
+    # bridges and edges). When a same-run twin pair contains one, that spelling
+    # must win the id slot — curation attaches aliases/parents to it, and
+    # letting the other spelling win would strand those records on a
+    # loader-materialized stand-in (and collide on the alias claim).
+    curated_record_ids: set[str] = set()
+    for _e in _core_entries(core_doc):
+        if isinstance(_e.get("id"), str):
+            curated_record_ids.add(_e["id"])
+    _enrich_dir = MODELS_DIR / "enrichments"
+    if _enrich_dir.exists():
+        for _p in sorted(_enrich_dir.glob("*.yaml")):
+            _doc = yaml.safe_load(_p.read_text()) or []
+            _doc = _doc.get("entries", _doc) if isinstance(_doc, dict) else _doc
+            for _e in _doc or []:
+                if isinstance(_e, dict) and isinstance(_e.get("id"), str):
+                    curated_record_ids.add(_e["id"])
+
+    def _twin_id_wins(challenger: str, incumbent: str, org_id_: Optional[str]) -> bool:
+        """True iff `challenger` is the better canonical spelling for a same-run
+        twin pair. A curated-record-keyed id wins outright; then mirrors the
+        seed fold's `_winner_rank` preferences (dotted version spelling, then
+        shorter id), led by: an id whose org prefix IS the curated developer
+        org (`moonshotai/…`) beats an alias-org respelling (`kimi/…`) —
+        canonical ids should carry the real namespace."""
+
+        def _score(c: str) -> tuple:
+            org = c.split("/", 1)[0].lower() if "/" in c else ""
+            name = c.rsplit("/", 1)[-1]
+            return (
+                c in curated_record_ids,
+                org == (org_id_ or "").lower(),
+                "." in name,
+                -len(c),
+                c,
+            )
+
+        return _score(challenger) > _score(incumbent)
+
     # --- alias-confirmation index: normalized base candidate -> canonical id.
     # Built from the resolver's own alias/canonical universe so an inferred base
     # only yields an edge when it alias-confirms to something that exists.
@@ -401,6 +616,58 @@ def main() -> None:
     review: list[dict] = []
     buckets = Counter()
 
+    # Forms the curated layers claim (core entries + enrichments records). A
+    # residual raw curation claims must NEVER mint a draft: the curated target
+    # may be a tier3-defined canonical this clean resolver cannot see (its
+    # rows are stripped as inferred), and a mint would double-claim the raw at
+    # seed time. The carry-forward floor applies the same guard.
+    curated_claims = _curated_claim_forms()
+
+    # --- curated-keyed entity retention --------------------------------------
+    # A prior committed FULL entry whose id a curated record keys (an
+    # enrichments/*.yaml bridge or edge record) IS an entity by curation's
+    # declaration: enrichment records must never materialize a canonical from
+    # a bare key (gate: test_alias_enrichments_never_mint_canonicals), so the
+    # committed definition is retained verbatim unless another source now
+    # DEFINES the id. Registered as a mint up front so the residual pass
+    # folds the entity's respelled raws onto it (case dedup / dev-org twin
+    # fold) instead of minting duplicates.
+    other_defined = _non_tier3_defining_ids()
+    claim_owner = _non_tier3_claim_owners()
+    core_dropped_ids: set[str] = set(core_skip_ids)
+    if isinstance(core_doc, dict):
+        core_dropped_ids |= set(core_doc.get("skip_source_ids") or [])
+    for rec in prior_records:
+        if "display_name" not in rec:
+            continue
+        rid = rec["id"]
+        if rid not in curated_record_ids or rid in other_defined:
+            continue
+        if rid in core_dropped_ids or rid.lower() in minted_by_id:
+            continue
+        if claim_owner.get(rid, rid) != rid:
+            # The id-string is claimed by a DIFFERENT canonical's record (a
+            # curated fold onto a real repo, or another source's alias) — the
+            # entity was deliberately superseded; resurrecting it would
+            # double-claim the form.
+            continue
+        if r.resolve(rid, "model").canonical_id is None:
+            # The id still no_matches in the clean universe, so the ordinary
+            # residual pass re-mints the entity with FRESH inference (edges,
+            # org) — retention is only for ids the residual pass would DROP
+            # (the raw resolves via a fuzzy stem, a loader-materialized
+            # stand-in, or a family alias) while curation keys them.
+            continue
+        entry = dict(rec)
+        entry["aliases"] = [
+            a for a in (rec.get("aliases") or [])
+            if a == rid or claim_owner.get(a, rid) == rid
+        ]
+        minted.append(entry)
+        minted_by_id[rid.lower()] = entry
+        minted_by_devkey.setdefault(_dev_key(rid), entry)
+        buckets["retained-curated-keyed"] += 1
+
     residual: list[str] = []
     for raw in oracle:
         if "/" in raw and raw.split("/", 1)[0].strip().lower() in SENTINEL_ORGS:
@@ -413,6 +680,9 @@ def main() -> None:
             residual.append(raw)
 
     for raw in residual:
+        if raw in curated_claims:
+            buckets["curated-claimed"] += 1
+            continue
         # A placeholder org prefix (`unknown/…`) is NOT a real namespace. The
         # resolvable ones were already aliased onto their true canonical in the
         # residual pass above, so any sentinel id reaching here is genuinely
@@ -530,6 +800,15 @@ def main() -> None:
             buckets["folded-to-hf"] += 1
             continue
 
+        # --- DEFER to a seed-time collision twin ---------------------------
+        # A mint the seed's fold_collisions would merge anyway (case/separator
+        # twin of an existing canonical) becomes a stable enrich record here.
+        fold_ck = fold_to_collision_twin(cid)
+        if fold_ck is not None:
+            fold_enrich.setdefault(fold_ck, set()).add(raw)
+            buckets["folded-collision"] += 1
+            continue
+
         # id-collision guard (CASE-INSENSITIVE). Two distinct raw ids can mint to
         # the SAME canonical (modulo case) only when they are the same model
         # under different casing — `Dracarys2-72B-Instruct` vs
@@ -549,6 +828,27 @@ def main() -> None:
 
         if _fold_dup(cid):
             continue
+        # Same-run dev-org twin (see minted_by_devkey above): fold this raw
+        # onto the already-minted twin instead of emitting a second FULL entry
+        # with the same folded identity. The better spelling wins the id slot;
+        # the loser id + raw stay as aliases, so every surface form resolves.
+        twin = minted_by_devkey.get(_dev_key(cid))
+        if twin is not None:
+            for f in (raw, cid):
+                if f != twin["id"] and f not in twin["aliases"]:
+                    twin["aliases"].append(f)
+            if _twin_id_wins(cid, twin["id"], org_id):
+                old_id = twin["id"]
+                twin["id"] = cid
+                twin["display_name"] = raw
+                if old_id not in twin["aliases"]:
+                    twin["aliases"].append(old_id)
+                twin["aliases"] = [a for a in twin["aliases"] if a != cid]
+                minted_by_id[cid.lower()] = twin
+            if parent_edge is not None and not twin.get("parents"):
+                twin["parents"] = [parent_edge]
+            buckets["folded-same-run-twin"] += 1
+            continue
         # Collision policy (see mint_collision_decision): a mint that is the SAME
         # model as a curated core canonical (normalized-collides under a different
         # id) is SKIPPED so the raw resolves to the curated entry — NOT minted as
@@ -562,6 +862,15 @@ def main() -> None:
             resolver_hit=r.resolve(cid, "model").canonical_id is not None,
         )
         if decision == "skip":
+            # The curated core canonical owns this identity. A raw whose
+            # normalized form does NOT collapse onto the owner (scaffold raws
+            # with `+`/parens, e.g. `unknown/PatchPilot + Co-PatcheR`) would
+            # go UNRESOLVABLE on a silent skip — union it onto the owner as
+            # an explicit enrich alias instead.
+            skip_owner = core_norm_index[_rnz_main(cid)]
+            if raw != skip_owner and _rnz_main(raw) != _rnz_main(skip_owner):
+                fold_enrich.setdefault(skip_owner, set()).add(raw)
+                buckets["folded-core-owner"] += 1
             continue
         if decision == "inferred":
             cid = f"{cid}-inferred"
@@ -593,6 +902,7 @@ def main() -> None:
 
         minted.append(entry)
         minted_by_id[cid.lower()] = entry   # case-insensitive dedup key
+        minted_by_devkey.setdefault(_dev_key(cid), entry)
         buckets[bucket] += 1
 
         if org_id is None:
@@ -612,6 +922,83 @@ def main() -> None:
                 "status": "unreviewed",
             })
 
+    # --- carry-forward floor ("nothing is removed") --------------------------
+    # A regen DROPS a previously-committed draft whenever its raw now resolves
+    # against the Tier-1/2 + curation universe. When that resolution is only
+    # FUZZY, the drop silently degrades the raw from an exact alias hit
+    # (confidence 1.0) to a fuzzy stem hit (0.9) and deletes the draft's other
+    # surface forms outright. Floor rule: every id/alias the committed file
+    # carried either (a) resolves exact/normalized in the new universe, (b) is
+    # re-emitted by this run, (c) is explicitly claimed by a curated layer
+    # (core/enrichments — possibly onto a tier3 canonical this generator's
+    # clean resolver cannot see), or (d) gets carried as an enrich alias onto
+    # the entity its raw now fuzzy-resolves to, together with the dropped
+    # draft's canonical id. Dropping must never lose a resolvable surface form.
+    emitted: set[str] = set()
+    for e in minted:
+        emitted.add(e["id"])
+        emitted.update(e.get("aliases") or [])
+    for hf, raws in fold_enrich.items():
+        emitted.add(hf)
+        emitted.update(raws)
+    carried_home: dict[str, str] = {}
+    lost_forms: list[str] = []
+    for rec in prior_records:
+        home = rec["id"]
+        if home in core_dropped_ids:
+            continue  # curation removed the record on purpose — do not resurrect
+        forms = ([home] if "display_name" in rec else []) + list(rec.get("aliases") or [])
+        for form in forms:
+            if not isinstance(form, str) or not form or form in emitted:
+                continue
+            if form in curated_claims:
+                continue  # curation places this form; a floor claim would collide
+            if form in curated_record_ids:
+                # A curated record (core entry / enrichments bridge or edge) is
+                # KEYED by this form: the loader keeps it alive as a canonical
+                # id, so it stays resolvable at 1.0 — and a floor alias claim
+                # on another entity would collide with that id claim.
+                continue
+            if core_norm_index.get(_rnz_main(form)) is not None:
+                # A core-defined canonical owns the form's normalized identity
+                # (core scaffold entities keep resolution_source=inferred, so
+                # the clean resolver is blind to them) — the real seed universe
+                # resolves the form to that entity via normalized match.
+                continue
+            res = r.resolve(form, "model")
+            if res.canonical_id and res.strategy in ("exact", "normalized"):
+                continue  # cleanly handed off to another source's claim
+            if res.canonical_id:
+                target = res.canonical_id  # fuzzy-only: pin the form as an alias
+            elif home in carried_home:
+                target = carried_home[home]  # keep the record's forms together
+            else:
+                hres = r.resolve(home, "model")
+                if hres.canonical_id and hres.strategy in ("exact", "normalized"):
+                    target = hres.canonical_id
+                elif home.lower() in minted_by_id:
+                    ent = minted_by_id[home.lower()]
+                    if form != ent["id"] and form not in ent["aliases"]:
+                        ent["aliases"].append(form)
+                    emitted.add(form)
+                    buckets["carried-committed-floor"] += 1
+                    continue
+                else:
+                    lost_forms.append(form)
+                    continue
+            if form != target:
+                fold_enrich.setdefault(target, set()).add(form)
+            carried_home.setdefault(home, target)
+            emitted.add(form)
+            buckets["carried-committed-floor"] += 1
+    if lost_forms:
+        print(
+            f"WARNING: {len(lost_forms)} previously-committed form(s) have no "
+            f"surviving owner and were NOT carried (floor violation — fix the "
+            f"drop): {lost_forms[:10]}",
+            file=sys.stderr,
+        )
+
     # --- write outputs -------------------------------------------------------
     header = (
         "# AUTO-GENERATED by scripts/generate_tier3_inferred_seed.py — DO NOT HAND-EDIT.\n"
@@ -621,6 +1008,10 @@ def main() -> None:
         "# review_status=draft. Base edges are alias-confirmed only (NO invented\n"
         "# edges); org-less ids carry org_id=None + tags:[org-unknown] and are\n"
         "# surfaced to org_unknown_review.json (never auto-guessed).\n"
+        "# Enrich records ({id, aliases}) union surface forms onto existing\n"
+        "# canonicals: org-aware HF folds, collision twins, sentinel-org folds,\n"
+        "# and the carry-forward floor (a dropped draft's forms pinned onto the\n"
+        "# entity its raw resolves to — nothing is removed).\n"
     )
     # Enrich records for residuals that folded onto a real HF repo: {id: hf,
     # aliases: [raw...]} — the seed loader unions these onto the existing HF

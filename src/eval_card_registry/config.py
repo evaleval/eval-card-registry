@@ -20,6 +20,15 @@ class Settings(BaseSettings):
     # draft entity with release_date / params / parents / lineage_origin.
     # Disable for tests and offline dev — every lookup hits HF.
     hub_stats_lookup_enabled: bool = True
+    # Live HF repo-id existence check (the `hf_live` tier of HfIdVerifier).
+    # When True (default, incl. the deployed Space), an HF-shaped model raw
+    # value that misses the local hub_stats_index is confirmed against the
+    # Hub API (one small GET per unknown id, cached, budgeted, and behind a
+    # circuit breaker). With it off the checker answers from the index and
+    # cache only. Auto-disabled in tests via conftest.
+    hf_live_id_check_enabled: bool = True
+    # Timeout (seconds) for a single live Hub API id check.
+    hf_live_id_check_timeout: float = 5.0
 
 
 settings = Settings()

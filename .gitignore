@@ -21,6 +21,9 @@ output/
 # ...and the durable offline hub-stats enrichment cache (reproducible lineage
 # regen without live HF — refreshed by scripts/freeze_hub_stats_cache.py).
 !curation/hub_stats_frozen.parquet
+# ...and the pre-OpenRouter-adoption resolution snapshot (powers the
+# no-regression gate in tests/test_gate_invariants.py).
+!curation/openrouter_adoption_before.parquet
 
 # Claude Code — personal/local config stays out of the repo; SHARED skills ship.
 # (add `!.claude/settings.json` here too if the team later shares one.)

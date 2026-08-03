@@ -911,13 +911,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: LGAI-EXAONE
-  display_name: LGAI-EXAONE
-  hf_org: LGAI-EXAONE
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: LLM360
   display_name: LLM360
   hf_org: LLM360
@@ -984,13 +977,6 @@
 - id: LimYeri
   display_name: LimYeri
   hf_org: LimYeri
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: LiquidAI
-  display_name: LiquidAI
-  hf_org: LiquidAI
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -1555,13 +1541,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: Salesforce
-  display_name: Salesforce
-  hf_org: Salesforce
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: SanjiWatsuki
   display_name: SanjiWatsuki
   hf_org: SanjiWatsuki
@@ -1646,20 +1625,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: Skywork
-  display_name: Skywork
-  hf_org: Skywork
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: Snowflake
-  display_name: Snowflake
-  hf_org: Snowflake
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: Solshine
   display_name: Solshine
   hf_org: Solshine
@@ -1733,13 +1698,6 @@
 - id: T145
   display_name: T145
   hf_org: T145
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: TIGER-Lab
-  display_name: TIGER-Lab
-  hf_org: TIGER-Lab
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -2153,13 +2111,6 @@
 - id: anthracite-org
   display_name: anthracite-org
   hf_org: anthracite-org
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: apple
-  display_name: apple
-  hf_org: apple
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -2878,13 +2829,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: internlm
-  display_name: internlm
-  hf_org: internlm
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: intervitens
   display_name: intervitens
   hf_org: intervitens
@@ -3095,13 +3039,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: kyutai
-  display_name: kyutai
-  hf_org: kyutai
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: kz919
   display_name: kz919
   hf_org: kz919
@@ -3217,13 +3154,6 @@
 - id: llnYou
   display_name: llnYou
   hf_org: llnYou
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: lmsys
-  display_name: lmsys
-  hf_org: lmsys
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -3651,13 +3581,6 @@
 - id: openai-community
   display_name: openai-community
   hf_org: openai-community
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: openbmb
-  display_name: openbmb
-  hf_org: openbmb
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -4789,6 +4712,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: HuggingFaceM4
+  display_name: HuggingFaceM4
+  hf_org: HuggingFaceM4
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: IIT-Patna
   display_name: IIT-Patna
   hf_org: IIT-Patna
@@ -4841,6 +4771,13 @@
 - id: LightningRodLabs
   display_name: LightningRodLabs
   hf_org: LightningRodLabs
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: MadeAgents
+  display_name: MadeAgents
+  hf_org: MadeAgents
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5020,13 +4957,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: TEE
-  display_name: TEE
-  hf_org: TEE
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: TheHierophant
   display_name: TheHierophant
   hf_org: TheHierophant
@@ -5139,6 +5069,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: adept
+  display_name: adept
+  hf_org: adept
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: aevalone
   display_name: aevalone
   hf_org: aevalone
@@ -5181,6 +5118,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: alpha-vllm
+  display_name: alpha-vllm
+  hf_org: alpha-vllm
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: applied-compute
   display_name: applied-compute
   hf_org: applied-compute
@@ -5191,13 +5135,6 @@
 - id: arcee
   display_name: arcee
   hf_org: arcee
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: arcprize
-  display_name: arcprize
-  hf_org: arcprize
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5226,20 +5163,6 @@
 - id: ascend-tribe
   display_name: ascend-tribe
   hf_org: ascend-tribe
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: azure
-  display_name: azure
-  hf_org: azure
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: baidu
-  display_name: baidu
-  hf_org: baidu
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5307,6 +5230,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: damo-nlp-sg
+  display_name: damo-nlp-sg
+  hf_org: damo-nlp-sg
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: darkc0de
   display_name: darkc0de
   hf_org: darkc0de
@@ -5317,6 +5247,13 @@
 - id: deepcogito
   display_name: deepcogito
   hf_org: deepcogito
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: deepfloyd
+  display_name: deepfloyd
+  hf_org: deepfloyd
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5338,6 +5275,27 @@
 - id: dzakwan
   display_name: dzakwan
   hf_org: dzakwan
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: echo840
+  display_name: echo840
+  hf_org: echo840
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: eci-io
+  display_name: eci-io
+  hf_org: eci-io
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: efficient-large-model
+  display_name: efficient-large-model
+  hf_org: efficient-large-model
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5412,6 +5370,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: hidream
+  display_name: hidream
+  hf_org: hidream
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: hongbai12
   display_name: hongbai12
   hf_org: hongbai12
@@ -5426,9 +5391,23 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: huazhong-university-of-science-and-technology
+  display_name: huazhong-university-of-science-and-technology
+  hf_org: huazhong-university-of-science-and-technology
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: huu-ontocord
   display_name: huu-ontocord
   hf_org: huu-ontocord
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: ideogram
+  display_name: ideogram
+  hf_org: ideogram
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5468,9 +5447,23 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: ise-uiuc
+  display_name: ise-uiuc
+  hf_org: ise-uiuc
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: jiangxinyang-shanda
   display_name: jiangxinyang-shanda
   hf_org: jiangxinyang-shanda
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: jimeng
+  display_name: jimeng
+  hf_org: jimeng
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5489,13 +5482,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: kuaishou
-  display_name: kuaishou
-  hf_org: kuaishou
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: kwaikat
   display_name: kwaikat
   hf_org: kwaikat
@@ -5506,6 +5492,13 @@
 - id: langston
   display_name: langston
   hf_org: langston
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: languagebind
+  display_name: languagebind
+  hf_org: languagebind
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5524,9 +5517,23 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: liquid
-  display_name: liquid
-  hf_org: liquid
+- id: lin-chen
+  display_name: lin-chen
+  hf_org: lin-chen
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: liuhaotian
+  display_name: liuhaotian
+  hf_org: liuhaotian
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: lmms-lab
+  display_name: lmms-lab
+  hf_org: lmms-lab
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5541,6 +5548,20 @@
 - id: lumalabs
   display_name: lumalabs
   hf_org: lumalabs
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: luodian
+  display_name: luodian
+  hf_org: luodian
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: m-a-p
+  display_name: m-a-p
+  hf_org: m-a-p
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5566,6 +5587,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: mbzuai-oryx
+  display_name: mbzuai-oryx
+  hf_org: mbzuai-oryx
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: meganova-ai
   display_name: meganova-ai
   hf_org: meganova-ai
@@ -5576,6 +5604,13 @@
 - id: meituan
   display_name: meituan
   hf_org: meituan
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: midjourney
+  display_name: midjourney
+  hf_org: midjourney
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5615,6 +5650,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: mplug
+  display_name: mplug
+  hf_org: mplug
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: mrdayl
   display_name: mrdayl
   hf_org: mrdayl
@@ -5636,9 +5678,23 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: nanogpt
+  display_name: nanogpt
+  hf_org: nanogpt
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: naver
   display_name: naver
   hf_org: naver
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: neuralmagic
+  display_name: neuralmagic
+  hf_org: neuralmagic
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5671,6 +5727,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: nyu-vlm
+  display_name: nyu-vlm
+  hf_org: nyu-vlm
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: odyssey-labs
   display_name: odyssey-labs
   hf_org: odyssey-labs
@@ -5685,9 +5748,30 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: open-mmlab
+  display_name: open-mmlab
+  hf_org: open-mmlab
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: open-neo
   display_name: open-neo
   hf_org: open-neo
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: openflamingo
+  display_name: openflamingo
+  hf_org: openflamingo
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: openllmplayground
+  display_name: openllmplayground
+  hf_org: openllmplayground
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5720,6 +5804,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: phind
+  display_name: phind
+  hf_org: phind
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: phronetic-ai
   display_name: phronetic-ai
   hf_org: phronetic-ai
@@ -5734,6 +5825,27 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: pixart
+  display_name: pixart
+  hf_org: pixart
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: pixart-alpha
+  display_name: pixart-alpha
+  hf_org: pixart-alpha
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: playgroundai
+  display_name: playgroundai
+  hf_org: playgroundai
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: poetools
   display_name: poetools
   hf_org: poetools
@@ -5744,6 +5856,13 @@
 - id: poolside
   display_name: poolside
   hf_org: poolside
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: prodia
+  display_name: prodia
+  hf_org: prodia
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5846,6 +5965,13 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: shanghai-artificial-intelligence-laboratory
+  display_name: shanghai-artificial-intelligence-laboratory
+  hf_org: shanghai-artificial-intelligence-laboratory
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: shastraai
   display_name: shastraai
   hf_org: shastraai
@@ -5856,6 +5982,13 @@
 - id: shisa-ai
   display_name: shisa-ai
   hf_org: shisa-ai
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: showlab
+  display_name: showlab
+  hf_org: showlab
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5944,9 +6077,44 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: vectara
+  display_name: vectara
+  hf_org: vectara
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: vision-cair
+  display_name: vision-cair
+  hf_org: vision-cair
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: vita-mllm
+  display_name: vita-mllm
+  hf_org: vita-mllm
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
 - id: voyage
   display_name: voyage
   hf_org: voyage
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: voyageai
+  display_name: voyageai
+  hf_org: voyageai
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: vpgtrans
+  display_name: vpgtrans
+  hf_org: vpgtrans
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -5972,9 +6140,9 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: xiaomi
-  display_name: xiaomi
-  hf_org: xiaomi
+- id: xverse
+  display_name: xverse
+  hf_org: xverse
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -6003,300 +6171,6 @@
 - id: zhengr
   display_name: zhengr
   hf_org: zhengr
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: HuggingFaceM4
-  display_name: HuggingFaceM4
-  hf_org: HuggingFaceM4
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: MadeAgents
-  display_name: MadeAgents
-  hf_org: MadeAgents
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: adept
-  display_name: adept
-  hf_org: adept
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: alpha-vllm
-  display_name: alpha-vllm
-  hf_org: alpha-vllm
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: damo-nlp-sg
-  display_name: damo-nlp-sg
-  hf_org: damo-nlp-sg
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: deepfloyd
-  display_name: deepfloyd
-  hf_org: deepfloyd
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: echo840
-  display_name: echo840
-  hf_org: echo840
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: eci-io
-  display_name: eci-io
-  hf_org: eci-io
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: efficient-large-model
-  display_name: efficient-large-model
-  hf_org: efficient-large-model
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: hidream
-  display_name: hidream
-  hf_org: hidream
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: huazhong-university-of-science-and-technology
-  display_name: huazhong-university-of-science-and-technology
-  hf_org: huazhong-university-of-science-and-technology
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: ideogram
-  display_name: ideogram
-  hf_org: ideogram
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: ise-uiuc
-  display_name: ise-uiuc
-  hf_org: ise-uiuc
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: jimeng
-  display_name: jimeng
-  hf_org: jimeng
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: languagebind
-  display_name: languagebind
-  hf_org: languagebind
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: lin-chen
-  display_name: lin-chen
-  hf_org: lin-chen
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: liuhaotian
-  display_name: liuhaotian
-  hf_org: liuhaotian
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: lmms-lab
-  display_name: lmms-lab
-  hf_org: lmms-lab
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: luodian
-  display_name: luodian
-  hf_org: luodian
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: m-a-p
-  display_name: m-a-p
-  hf_org: m-a-p
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: mbzuai-oryx
-  display_name: mbzuai-oryx
-  hf_org: mbzuai-oryx
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: midjourney
-  display_name: midjourney
-  hf_org: midjourney
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: mplug
-  display_name: mplug
-  hf_org: mplug
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: nyu-vlm
-  display_name: nyu-vlm
-  hf_org: nyu-vlm
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: open-mmlab
-  display_name: open-mmlab
-  hf_org: open-mmlab
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: openflamingo
-  display_name: openflamingo
-  hf_org: openflamingo
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: openllmplayground
-  display_name: openllmplayground
-  hf_org: openllmplayground
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: phind
-  display_name: phind
-  hf_org: phind
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: pixart
-  display_name: pixart
-  hf_org: pixart
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: pixart-alpha
-  display_name: pixart-alpha
-  hf_org: pixart-alpha
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: playgroundai
-  display_name: playgroundai
-  hf_org: playgroundai
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: shanghai-artificial-intelligence-laboratory
-  display_name: shanghai-artificial-intelligence-laboratory
-  hf_org: shanghai-artificial-intelligence-laboratory
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: showlab
-  display_name: showlab
-  hf_org: showlab
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: vectara
-  display_name: vectara
-  hf_org: vectara
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: vision-cair
-  display_name: vision-cair
-  hf_org: vision-cair
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: vita-mllm
-  display_name: vita-mllm
-  hf_org: vita-mllm
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: voyageai
-  display_name: voyageai
-  hf_org: voyageai
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: vpgtrans
-  display_name: vpgtrans
-  hf_org: vpgtrans
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: xverse
-  display_name: xverse
-  hf_org: xverse
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: nanogpt
-  display_name: nanogpt
-  hf_org: nanogpt
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: neuralmagic
-  display_name: neuralmagic
-  hf_org: neuralmagic
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: prodia
-  display_name: prodia
-  hf_org: prodia
   kind: community
   tags: '[]'
   metadata: '{}'

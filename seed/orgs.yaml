@@ -608,7 +608,7 @@
   display_name: Liquid AI
   website: https://www.liquid.ai
   hf_org: LiquidAI
-  aliases: ["Liquid AI"]
+  aliases: ["Liquid AI", "liquid"]
   tags: '["lab", "open-weight"]'
   kind: lab
   metadata: '{}'

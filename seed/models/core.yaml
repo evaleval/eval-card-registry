@@ -10,6 +10,16 @@
 # value fill it.
 skip_ids: []
 skip_source_ids:
+# Dashed/respelled twins of adopted OpenRouter family roots + bare enrichment
+# materializations of folded families — each one's surface forms are bridged
+# onto the surviving canonical in enrichments/aliases.yaml.
+- alibaba/qwen-3-6-plus
+- alibaba/qwen-3-7-max
+- xai/grok-4-20-non
+- meta/llama4-maverick
+- meta/llama4-scout
+- ai21labs/jamba-large-1.7
+- meta/llama-3-2-instruct-11b-vision
 - alibaba/qwen3-235b-a22b-instruct
 - alibaba/qwen3-omni-30b-a3b
 - alibaba/qwen3-omni-30b-a3b-reasoning
@@ -407,7 +417,32 @@ entries:
   - open-weight
   metadata: '{}'
   review_status: reviewed
-  aliases: []
+  aliases:
+  - liquid/lfm-2.5-1.2b-thinking
+  - liquid/lfm-2.5-1.2b-thinking:free
+# OpenRouter-listed reasoning sibling of the Nemotron-3 Nano Omni base; not on
+# HF and not in the frozen oracle, so per the id ladder the canonical id is the
+# OpenRouter key.
+- id: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+  display_name: Nemotron 3 Nano Omni 30B A3B Reasoning
+  org_id: nvidia
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: nvidia/nemotron-3-nano-omni-30b-a3b
+    relationship: variant
+    axis: mode
+  open_weights: true
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+  - nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free
 - id: LGAI-EXAONE/EXAONE-Deep-32B
   display_name: EXAONE Deep 32B
   org_id: LGAI-EXAONE
@@ -2859,10 +2894,10 @@ entries:
   metadata: '{"alias_platforms": {"jamba-mini-1.6": "nano-gpt"}}'
   review_status: reviewed
   aliases: []
-- id: ai21/jamba-1.7-large
+- id: ai21/jamba-large-1.7
   display_name: Jamba 1.7 Large
   org_id: ai21
-  family: jamba-1.7-large
+  family: jamba-large-1.7
   architecture: null
   params_billions: null
   parents: []
@@ -2876,6 +2911,7 @@ entries:
   review_status: reviewed
   aliases:
   - jamba-1.7-large
+  - ai21/jamba-1.7-large
 - id: ai21/jamba-1.7-mini
   display_name: Jamba 1.7 Mini
   org_id: ai21
@@ -4082,7 +4118,7 @@ entries:
   architecture: null
   params_billions: null
   parents:
-  - id: alibaba/qwen3-max
+  - id: qwen/qwen3-max
     relationship: variant
     axis: version
   open_weights: false
@@ -10952,6 +10988,24 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/gpt-5-2025-08
+- id: openai/gpt-5-2025-08-07
+  display_name: GPT-5 (2025-08-07)
+  org_id: openai
+  family: null
+  architecture: null
+  params_billions: null
+  parents:
+  - id: openai/gpt-5
+    relationship: variant
+    axis: version
+  open_weights: false
+  release_date: '2025-08-07'
+  input_modalities: null
+  output_modalities: null
+  tags: null
+  metadata: null
+  review_status: reviewed
+  aliases: []
 - id: openai/gpt-5-chat-2025
   display_name: GPT-5 Chat (2025)
   org_id: openai
@@ -12722,6 +12776,23 @@ entries:
   resolution_granularity: variant
   review_status: draft
   aliases: []
+- id: unknown/20251127_openhands_claude-opus-4-5
+  display_name: 20251127_openhands_claude-opus-4-5
+  org_id: unknown
+  family: null
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: null
+  release_date: null
+  input_modalities: null
+  output_modalities: null
+  tags: null
+  metadata: '{}'
+  resolution_source: inferred
+  resolution_granularity: variant
+  review_status: draft
+  aliases: []
 - id: unknown/patchpilot-co-patcher
   display_name: patchpilot-co-patcher
   org_id: unknown
@@ -12739,25 +12810,23 @@ entries:
   resolution_granularity: variant
   review_status: draft
   aliases: []
-- id: unknown/perplexity-sonar-reasoning
-  display_name: unknown/perplexity-sonar-reasoning
-  org_id: null
+- id: perplexity/sonar-reasoning
+  display_name: Sonar Reasoning
+  org_id: perplexity
   family: null
   architecture: null
   params_billions: null
   parents: []
-  open_weights: null
+  open_weights: false
   release_date: null
   input_modalities: null
   output_modalities: null
-  tags:
-  - org-unknown
+  tags: []
   metadata: '{}'
-  resolution_source: inferred
-  resolution_granularity: variant
-  review_status: draft
+  review_status: reviewed
   aliases:
   - perplexity-sonar-reasoning
+  - unknown/perplexity-sonar-reasoning
 - id: unknown/r1-0528-qwen3-8b-thinking
   display_name: unknown/r1-0528-qwen3-8b-thinking
   org_id: null
@@ -12903,7 +12972,7 @@ entries:
   architecture: null
   params_billions: null
   parents:
-  - id: anthropic/Claude-3.7-Sonnet
+  - id: anthropic/claude-sonnet-3.7
     relationship: finetune
   open_weights: null
   release_date: null
@@ -13437,7 +13506,7 @@ entries:
   architecture: null
   params_billions: null
   parents:
-  - id: zai/glm-4.5v
+  - id: z-ai/glm-4.5v
     relationship: variant
     axis: mode
   open_weights: true

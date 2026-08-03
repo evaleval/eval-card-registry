@@ -50,3 +50,14 @@ def _disable_hub_stats_lookup():
     settings.hub_stats_lookup_enabled = False
     yield
     settings.hub_stats_lookup_enabled = original
+
+
+@pytest.fixture(autouse=True)
+def _disable_live_hf_id_check():
+    """The HF id verifier's live tier hits the Hub API — disable globally
+    for tests so the offline suite never makes network calls. Tests that
+    exercise the live tier re-enable + mock (see test_hf_id_verifier.py)."""
+    original = settings.hf_live_id_check_enabled
+    settings.hf_live_id_check_enabled = False
+    yield
+    settings.hf_live_id_check_enabled = original
