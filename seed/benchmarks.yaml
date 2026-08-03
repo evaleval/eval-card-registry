@@ -1999,7 +1999,7 @@
 
 - id: race
   display_name: RACE
-  aliases: ["RACE", "race"]
+  aliases: ["RACE", "race", "race_h", "race_m", "race-h", "race-m"]
   description: Reading comprehension benchmark from English exams (RACE-H, RACE-M).
   dataset_repo: ehovy/race
   parent_benchmark_id: null
@@ -2774,7 +2774,7 @@
 
 - id: ai2-reasoning-challenge-arc
   display_name: AI2 Reasoning Challenge Arc
-  dataset_repo: null
+  dataset_repo: allenai/ai2_arc
   parent_benchmark_id: null
   tags: '["reasoning"]'
   metadata: '{}'
@@ -2784,6 +2784,10 @@
     - ai2-reasoning-challenge-arc
     - ai2_reasoning_challenge_arc
     - llm_stats_ai2_reasoning_challenge_arc
+    - arc_easy
+    - arc_challenge
+    - arc-easy
+    - arc-challenge
 
 - id: ai2d
   display_name: Ai2d
@@ -25028,5 +25032,51 @@
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["coding"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: squad
+  display_name: SQuAD
+  aliases: ["SQuAD", "squad", "squad_v1", "squad_v2"]
+  description: Stanford Question Answering Dataset (reading comprehension).
+  dataset_repo: rajpurkar/squad
+  parent_benchmark_id: null
+  tags: '["reading-comprehension"]'
+  metadata: '{}'
+  review_status: reviewed
+- id: paws
+  display_name: PAWS
+  aliases: ["PAWS", "paws"]
+  description: Paraphrase Adversaries from Word Scrambling.
+  dataset_repo: google-research-datasets/paws
+  parent_benchmark_id: null
+  tags: '["paraphrase"]'
+  metadata: '{}'
+  review_status: reviewed
+- id: chembench
+  display_name: ChemBench
+  aliases: ["ChemBench", "chembench"]
+  description: Chemistry knowledge and reasoning benchmark.
+  dataset_repo: jablonkagroup/ChemBench
+  parent_benchmark_id: null
+  tags: '["chemistry", "knowledge"]'
+  metadata: '{}'
+  review_status: reviewed
+- id: finance_fundamentals
+  display_name: Finance Fundamentals
+  aliases: ["Finance Fundamentals", "finance_fundamentals"]
+  description: Finance reasoning subset derived from Kensho BizBench.
+  dataset_repo: kensho/bizbench
+  parent_benchmark_id: null
+  tags: '["finance", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+- id: pre_flight
+  display_name: Pre-Flight
+  aliases: ["Pre-Flight", "pre_flight", "pre-flight"]
+  description: Aviation operations knowledge (Inspect Evals task by Airside Labs).
+  dataset_repo: AirsideLabs/pre-flight-06
+  parent_benchmark_id: null
+  tags: '["knowledge"]'
   metadata: '{}'
   review_status: reviewed
