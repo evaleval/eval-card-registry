@@ -174,13 +174,22 @@ Canonical entities start as `draft` and can be promoted to `reviewed`. Aliases t
 The rules a canonical id and its aliases follow. (Resolution *mechanics* are in
 "How it works" above; the contribution *workflow* is in `CONTRIBUTING.md`.)
 
-**Models** — the canonical id is the **real HuggingFace repo id, in HF-true
-casing** (`Qwen/Qwen2.5-7B-Instruct`, not `qwen/qwen2.5-7b-instruct`). It is
-grounded in a three-tier source of truth, HF first — **HuggingFace → models.dev →
-name-based inference** — and when they disagree, HF casing wins.
+**Models** — the canonical id follows one ladder, and an external id is
+adopted **verbatim**: the **real HuggingFace repo id, in HF-true casing**
+(`Qwen/Qwen2.5-7B-Instruct`, not `qwen/qwen2.5-7b-instruct`) → else the
+**OpenRouter model id** for a models.dev-only model served there
+(`anthropic/claude-3-haiku`, `z-ai/glm-4-32b` — upstream org prefix kept) →
+else an invented `{org}/{slug}`. The ladder is rung-monotone: a fresh id from
+a strictly higher rung always wins over a committed lower-rung id (the loser
+survives as an alias); OpenRouter-over-invented promotions run only in a
+deliberate migration pass. `org_id` stays the curated developer org on every
+rung, decoupled from the id prefix. Sources are grounded HF-first —
+**HuggingFace → models.dev → name-based inference** — and when they disagree,
+HF casing wins.
 
-- **Closed / off-HF models** use `{org}/{name}` with a lowercase org
-  (e.g. `anthropic/claude-opus-4.6`).
+- **Closed / off-HF models** therefore carry their OpenRouter id when served
+  there, and an invented lowercase `{org}/{name}` (e.g.
+  `anthropic/claude-opus-4.6`) only when on neither HF nor OpenRouter.
 - **Dated snapshots are legitimate identity** (`gpt-5.4-2026-03-05`); date
   suffixes are deliberately **not** stripped. A new dated slug gets its **own
   canonical** with a `{relationship: variant, axis: version}` parent edge to the
