@@ -22,9 +22,11 @@ output/
 # regen without live HF — refreshed by scripts/freeze_hub_stats_cache.py).
 !curation/hub_stats_frozen.parquet
 
-# Claude Code
+# Claude Code — personal/local config stays out of the repo; SHARED skills ship.
+# (add `!.claude/settings.json` here too if the team later shares one.)
 CLAUDE.md
-.claude/
+.claude/*
+!.claude/skills/
 
 # macOS
 .DS_Store
@@ -40,7 +42,6 @@ deploy/.ipynb_checkpoints/
 # Design specs (local-only)
 specs/
 deprecated_refs/
-AGENTS.md
 dep
 # Resolution curation: inputs (denylist/index/proposed/rescues) are tracked;
 # regenerable outputs (review + analysis artifacts) are not.
