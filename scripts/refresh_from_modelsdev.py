@@ -2290,6 +2290,8 @@ def _carry_forward_committed(
     retained = 0
     absorbed = 0
     stabilized: dict[str, str] = {}  # fresh-spelling id -> committed id it took
+    promoted: dict[str, str] = {}    # committed id absorbed -> fresh id that outranked it
+    pending_rung2 = 0                # OpenRouter-key twins deferred by the stability rule
     skip_owner: Callable[[str], str | None] | None = None
     for c in committed:
         cid = c.get("id")
@@ -2322,19 +2324,44 @@ def _carry_forward_committed(
                 twin_via_form = t is not None
             if t is not None and _bsizes(cid) == _bsizes(t["id"]):
                 twin = t
-        # STABILITY RULE: on a twin match the COMMITTED id wins (the fresh
-        # entry will be renamed below), so the cron never thrashes ids on an
-        # upstream respell/relisting. The one-shot migration flag inverts it
-        # (the fresh externally-adopted id wins). A twin that already took an
-        # earlier committed id this run is never renamed twice — later
-        # committed twins absorb onto it instead.
+        # STABILITY RULE, RUNG-MONOTONE: on a twin match the COMMITTED id wins
+        # among EQUAL rungs of the id ladder (the fresh entry is renamed
+        # below), so the cron never thrashes ids on an upstream
+        # respell/relisting. A fresh twin from a STRICTLY HIGHER rung
+        # overrides it: an hf_deferred twin (a REAL HF repo id, rung 1) is
+        # never renamed back to a committed non-HF id — that would demote the
+        # HF id to an alias, violating the adoption path's own "canonical is
+        # the real HF id — never demoted" rule. The committed id + forms
+        # become aliases on the HF id instead (the absorb branch below), with
+        # parent-edge repointing like the rename path's. Rung 2 over 3
+        # (a fresh OpenRouter-key twin over a committed invented id) stays
+        # gated behind the one-shot migration flag per PLAN G3; the deferred
+        # debt is counted and logged so the daily cron shows it. The one-shot
+        # migration flag inverts the rule wholesale (the fresh
+        # externally-adopted id wins). A twin that already took an earlier
+        # committed id this run is never renamed twice — later committed
+        # twins absorb onto it instead.
+        promote_twin = (
+            twin is not None
+            and not twin_via_form
+            and "display_name" in twin
+            and _entry_meta(twin).get("hf_deferred") is True
+            and _entry_meta(c).get("hf_deferred") is not True
+        )
         rename_twin = (
             twin is not None
             and not adopt_migration
+            and not promote_twin
             and not twin_via_form
             and twin["id"] not in stabilized
             and "display_name" in twin
         )
+        if rename_twin and (
+            _entry_meta(twin).get("openrouter_adopted") is True
+            and _entry_meta(c).get("openrouter_adopted") is not True
+            and _entry_meta(c).get("hf_deferred") is not True
+        ):
+            pending_rung2 += 1
         owner = (
             cur["id"] if cur is not None
             else (cid if rename_twin else (twin["id"] if twin is not None else cid))
@@ -2370,6 +2397,12 @@ def _carry_forward_committed(
                 by_id[cid] = twin
                 back = (set(c.get("aliases") or []) | {fresh_spelling}) - {cid}
             else:
+                # The committed id lost the twin match (migration run, a
+                # higher-rung fresh id, or an already-stabilized twin): it
+                # becomes an alias below, so any parent edge naming it must
+                # be repointed onto the surviving fresh id (mirror of the
+                # `stabilized` repoint for the opposite direction).
+                promoted[cid] = twin["id"]
                 back = (set(c.get("aliases") or []) | {cid}) - {twin["id"]}
             if isinstance(dn, str) and dn and dn not in (twin["id"], twin.get("display_name")):
                 back.add(dn)
@@ -2384,17 +2417,32 @@ def _carry_forward_committed(
             rc["metadata"] = json.dumps(meta, sort_keys=True)
             retained += 1  # enrich records are carried too but not counted here
         out.append(rc)
-    if stabilized:
+    if stabilized or promoted:
         # Repoint parent edges that referenced a fresh spelling the stability
-        # rule renamed back to its committed id.
+        # rule renamed back to its committed id — and, symmetrically, edges
+        # that referenced a committed id absorbed onto a surviving fresh id.
         renamed = {old: new for new, old in stabilized.items()}
+        renamed.update(promoted)
         for e in out:
             for edge in e.get("parents") or []:
                 if isinstance(edge, dict) and edge.get("id") in renamed:
                     edge["id"] = renamed[edge["id"]]
+    if stabilized:
         print(
             f"[refresh] carry-forward: kept {len(stabilized)} committed id(s) "
             f"over a respelled fresh twin (stability rule)",
+            file=sys.stderr,
+        )
+    if not adopt_migration:
+        # Owner-visible debt line (always printed on a plain cron run): how
+        # many rung-2 promotions — a fresh OpenRouter-key twin outranking a
+        # committed invented id — the stability rule deferred. Promoting them
+        # is a DELIBERATE `--adopt-openrouter-ids-migration` run, never
+        # automatic (PLAN G3).
+        print(
+            f"[refresh] stability rule: {pending_rung2} pending rung-2 id "
+            f"promotion(s) (OpenRouter key over invented id) awaiting the next "
+            f"--adopt-openrouter-ids-migration run",
             file=sys.stderr,
         )
     if retained:
@@ -2660,15 +2708,35 @@ def reconcile_generated_against_existing(
         # model an org-aware fold wrongly dragged here (e.g. the base repo
         # `google/gemma-2-9b` folded onto the variant `…-9b-it` via a mangled
         # models.dev key alias) — donating its id OR its scalars would attach
-        # one model's identity/metadata to another. EXCEPTION: a stale claim
-        # by an id the carry-forward just absorbed onto `owner` (recorded in
-        # committed_claims — e.g. the not-yet-regenerated catalog still keys a
-        # record by the pre-adoption id) is not foreign.
+        # one model's identity/metadata to another.
+        #
+        # Ownership evidence is TIERED. The INDEPENDENT sources (`_owner_of`:
+        # hf_oracle / hub_stats / core / enrichments) are authoritative — a
+        # claim there vetoes the donation, with the one standing exception of
+        # a stale claim by a non-defined id the carry-forward absorbed onto
+        # `owner` (recorded in committed_claims). The DERIVED files (catalog /
+        # tier3 — the extra layers in `_owner_broad`) are NOT authoritative
+        # about the suppressed mint itself: a derived record keyed by cid, or
+        # by an id committed_claims assigns to this owner, is the PREVIOUS
+        # cron's echo of the very mint being suppressed/absorbed (the catalog
+        # is rewritten right after this step). Treating that echo as a
+        # foreign owner blocks the donation, and the subsequent catalog
+        # rewrite then drops its own orphaned record — deleting the surface
+        # forms from every source (the `deepseek-chat-v3-1` regression
+        # class). A derived claim by any OTHER id still vetoes: if tier3
+        # genuinely defines the mint id as its own canonical, the donation
+        # goes ahead and the seed's collision fold / gate suite fails LOUDLY
+        # on a wrong merge rather than silently dropping forms.
+        ind_cid = _owner_of(cid)
         cid_owner = _owner_broad(cid)
         foreign_cid = (
+            ind_cid is not None
+            and ind_cid != owner
+            and (ind_cid in owner_defining or _committed.get(ind_cid) != owner)
+        ) or (
             cid_owner is not None
-            and cid_owner != owner
-            and (cid_owner in owner_defining or _committed.get(cid_owner) != owner)
+            and cid_owner not in (owner, cid)
+            and _committed.get(cid_owner) != owner
         )
         if not _steals(cid, owner) or cid != owner:
             # The dropped mint id resolves to the owner: keep it as an alias —
@@ -2696,13 +2764,22 @@ def reconcile_generated_against_existing(
             # A surviving batch mint's id counts as such an owner too — donating
             # it would alias-claim a sibling canonical's id. Likewise a form the
             # COMMITTED file assigns to a third entity (carry-forward keeps it
-            # there; donating it here would double-claim).
-            other = _owner_broad(a)
-            if other is not None and other != owner and (
-                other in owner_defining or _committed.get(other) != owner
+            # there; donating it here would double-claim). Same TIERED evidence
+            # as `foreign_cid` above: an INDEPENDENT-source claim is
+            # authoritative (with the absorbed-non-defined-id escape); a claim
+            # that exists only in the DERIVED catalog/tier3 layer, made by the
+            # suppressed mint itself (cid) or by an id committed_claims
+            # assigns to this owner, is the previous cron's echo — its forms
+            # transfer with the merge.
+            other_ind = _owner_of(a)
+            if other_ind is not None and other_ind != owner and (
+                other_ind in owner_defining or _committed.get(other_ind) != owner
             ):
-                # (a stale claim by a NON-defined id absorbed onto `owner` is
-                # not foreign; a DEFINED owner always keeps its forms)
+                continue
+            other = _owner_broad(a)
+            if other is not None and other not in (owner, cid) and (
+                _committed.get(other) != owner
+            ):
                 continue
             if a in sibling_ids:
                 continue
@@ -2746,16 +2823,31 @@ def reconcile_generated_against_existing(
         cid = e["id"]
 
         def _foreign(form: str) -> bool:
+            # INDEPENDENT-source claim (hf_oracle / hub_stats / core /
+            # enrichments): authoritative — a veto, unless the claiming id is
+            # NOT itself a defined canonical and was just absorbed onto cid by
+            # the carry-forward (a stale record in a not-yet-regenerated
+            # source file). A DEFINED owner always keeps its forms.
+            o_ind = _owner_of(form)
+            if o_ind is not None and o_ind != cid and (
+                o_ind in owner_defining or claimed.get(o_ind) != cid
+            ):
+                return True
+            # Claim exists only in the DERIVED layer (catalog / tier3). When
+            # the carry-forward assigned this form — or the claiming id
+            # itself — to THIS survivor (committed_claims: a twin-absorbed
+            # respelling like committed `google/veo3-1` absorbed onto fresh
+            # `google/veo-3-1`, in either stability direction), the derived
+            # claim is the PREVIOUS cron's echo of the absorbed id: the
+            # catalog is rewritten right after this step, so stripping on its
+            # strength deletes the absorbed forms from every source
+            # (normalize does not equate letter-digit-boundary twins, so
+            # `veo3-1`-class forms exist ONLY as explicit aliases).
             o = _owner_broad(form)
             if o is not None and o != cid and (
-                o in owner_defining or claimed.get(o) != cid
+                claimed.get(o) != cid and claimed.get(form) != cid
             ):
-                # owned by an established canonical — unless that "owner" id
-                # is NOT itself a defined canonical and was just absorbed onto
-                # cid by the carry-forward (a stale record in a
-                # not-yet-regenerated source file). A DEFINED owner always
-                # keeps its forms.
-                return True
+                return True                       # owned by an established canonical
             if form in sibling_ids and form != cid:
                 return True                       # is a different sibling's id
             c = claimed.get(form)
@@ -2771,6 +2863,24 @@ def reconcile_generated_against_existing(
         ap = e.get("alias_platforms")
         if isinstance(ap, dict):
             e["alias_platforms"] = {k: v for k, v in ap.items() if k != cid and not _foreign(k)}
+        # Post-finalize entries carry alias_platforms in METADATA (the working
+        # key is gone). Keep that map in lockstep with the alias drop above —
+        # a key whose alias form was just stripped as foreign must not survive
+        # in metadata, or the NEXT run's carry-forward (which unions provenance
+        # only for forms still in `aliases`) silently drops it: the persisted
+        # output would violate its own `ap keys ⊆ aliases` invariant and the
+        # pipeline would not be idempotent over its own output.
+        meta_ap = _entry_alias_platforms(e)
+        if meta_ap:
+            alias_set = set(e["aliases"])
+            kept_ap = {k: v for k, v in meta_ap.items() if k in alias_set}
+            if kept_ap != meta_ap:
+                meta = _entry_meta(e)
+                if kept_ap:
+                    meta["alias_platforms"] = dict(sorted(kept_ap.items()))
+                else:
+                    meta.pop("alias_platforms", None)
+                e["metadata"] = json.dumps(meta, sort_keys=True)
         dn = e.get("display_name")
         if isinstance(dn, str) and _foreign(dn):
             cand = cid.split("/", 1)[-1]
@@ -3120,6 +3230,8 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
 
     retained = 0
     stabilized_cat: dict[str, str] = {}  # committed id kept -> fresh spelling renamed away
+    promoted_cat: dict[str, str] = {}    # committed id absorbed -> higher-rung fresh id
+    pending_rung2_cat = 0                # OpenRouter-key twins deferred by the stability rule
     for c in committed:
         ccid = c.get("id")
         if not ccid:
@@ -3148,16 +3260,35 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
             if t is not None and _bsizes(ccid) == _bsizes(t["id"]):
                 prior = t
         if prior is not None:
-            # STABILITY RULE (same as _carry_forward_committed): a committed
-            # id beats a respelled fresh twin, except during the one-shot
-            # adoption migration. Renamed spellings are repointed below.
+            # STABILITY RULE, RUNG-MONOTONE (same as _carry_forward_committed):
+            # a committed id beats a respelled fresh twin among EQUAL rungs —
+            # including a CASE-ONLY respell (committed casing wins, matching
+            # the non-catalog path) — except during the one-shot adoption
+            # migration. A fresh hf_deferred twin (a REAL HF repo id, rung 1)
+            # is never renamed back to a committed non-HF id: the committed id
+            # is absorbed as an alias instead (`_union_back` with donor) and
+            # its parent-edge references are repointed below. Rung 2 over 3
+            # (OpenRouter key over invented) stays migration-gated; the
+            # deferred debt is counted and logged. Renamed spellings are
+            # repointed below.
+            promote = (
+                prior["id"] != ccid
+                and _entry_meta(prior).get("hf_deferred") is True
+                and _entry_meta(c).get("hf_deferred") is not True
+            )
             if (
                 prior["id"] != ccid
                 and not adopt_migration
+                and not promote
                 and "display_name" in prior
                 and prior["id"] not in stabilized_cat  # already took a committed id
-                and prior["id"].lower() != ccid.lower()  # case-respell keeps fresh casing path
             ):
+                if (
+                    _entry_meta(prior).get("openrouter_adopted") is True
+                    and _entry_meta(c).get("openrouter_adopted") is not True
+                    and _entry_meta(c).get("hf_deferred") is not True
+                ):
+                    pending_rung2_cat += 1
                 old = prior["id"]
                 prior["id"] = ccid
                 stabilized_cat[ccid] = old
@@ -3174,6 +3305,12 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
                 fresh_form_owner[old] = ccid
                 _union_back(prior, c, donor_id=old)
                 continue
+            if prior["id"] != ccid:
+                # The committed id lost the twin match (migration run, a
+                # higher-rung fresh id, or an already-stabilized twin): it
+                # becomes an alias via `_union_back`, so parent edges naming
+                # it are repointed below (mirror of the stabilized repoint).
+                promoted_cat[ccid] = prior["id"]
             _union_back(prior, c, donor_id=ccid if prior["id"] != ccid else None)
             continue
         target = enrich_by_id.get(ccid)
@@ -3200,15 +3337,27 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
             for form in _forms_of(rc):
                 fresh_form_owner.setdefault(form, ccid)
             retained += 1
-    if stabilized_cat:
+    if stabilized_cat or promoted_cat:
         renamed = {old: new for new, old in stabilized_cat.items()}
+        renamed.update(promoted_cat)
         for e in fresh:
             for edge in e.get("parents") or []:
                 if isinstance(edge, dict) and edge.get("id") in renamed:
                     edge["id"] = renamed[edge["id"]]
+    if stabilized_cat:
         print(
             f"[refresh] catalog carry-forward: kept {len(stabilized_cat)} committed "
             f"id(s) over a respelled fresh twin (stability rule)",
+            file=sys.stderr,
+        )
+    if not adopt_migration:
+        # Owner-visible debt line (always printed on a plain cron run): rung-2
+        # promotions (OpenRouter key over invented id) the stability rule
+        # deferred to the next deliberate migration run (PLAN G3).
+        print(
+            f"[refresh] catalog stability rule: {pending_rung2_cat} pending "
+            f"rung-2 id promotion(s) (OpenRouter key over invented id) awaiting "
+            f"the next --adopt-openrouter-ids-migration run",
             file=sys.stderr,
         )
     if retained:

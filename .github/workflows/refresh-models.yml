@@ -110,8 +110,14 @@ jobs:
       # step failed: a smoke-step failure is infra; this step failing means
       # "today's upstream would regress data, so nothing was committed." A failure
       # here halts the job before Detect, so the commit/deploy steps never run.
+      # The dedup/confluence suite is part of the gate: the committed
+      # models_dev sources must stay a FIXPOINT of the pipeline under the
+      # PINNED snapshot (tests/fixtures/modelsdev_api.snapshot.json). A live
+      # pull that diverges from the pinned baseline therefore ABORTS here
+      # instead of committing files that red the suite on main — until the
+      # snapshot-refreeze-in-commit design lands, the cron fails closed.
       - name: Regression gate (blocks commit on data regression)
-        run: LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py -q
+        run: LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py tests/test_refresh_modelsdev_dedup.py -q
 
       - name: Detect changes
         id: diff

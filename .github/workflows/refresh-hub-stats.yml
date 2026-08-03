@@ -78,8 +78,14 @@ jobs:
       # failure is infra; this step failing means "today's upstream would regress
       # data, so nothing was committed." A failure here halts the job before
       # Detect, so the commit/deploy steps never run.
+      # The models.dev dedup/confluence suite is part of this gate too:
+      # hub_stats.generated.yaml is an INPUT to the models_dev reconcile, so a
+      # hub-stats refresh that changes which models_dev mints are suppressed /
+      # donated would silently break the committed models_dev fixpoint (the
+      # confluence tests) while this cron stays green. Gate on it so such a
+      # refresh ABORTS (skips the day) instead of committing incoherence.
       - name: Regression gate (blocks commit on data regression)
-        run: LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py -q
+        run: LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py tests/test_refresh_modelsdev_dedup.py -q
 
       - name: Detect changes
         id: diff
