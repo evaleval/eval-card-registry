@@ -2773,7 +2773,7 @@
     - agri_query
 
 - id: ai2-reasoning-challenge-arc
-  display_name: AI2 Reasoning Challenge Arc
+  display_name: AI2 Reasoning Challenge (ARC)
   dataset_repo: allenai/ai2_arc
   parent_benchmark_id: null
   tags: '["reasoning"]'
@@ -25037,13 +25037,14 @@
 
 - id: squad
   display_name: SQuAD
-  aliases: ["SQuAD", "squad", "squad_v1", "squad_v2"]
+  aliases: ["SQuAD", "squad"]
   description: Stanford Question Answering Dataset (reading comprehension).
   dataset_repo: rajpurkar/squad
   parent_benchmark_id: null
   tags: '["reading-comprehension"]'
   metadata: '{}'
   review_status: reviewed
+
 - id: paws
   display_name: PAWS
   aliases: ["PAWS", "paws"]
@@ -25053,6 +25054,7 @@
   tags: '["paraphrase"]'
   metadata: '{}'
   review_status: reviewed
+
 - id: chembench
   display_name: ChemBench
   aliases: ["ChemBench", "chembench"]
@@ -25062,7 +25064,8 @@
   tags: '["chemistry", "knowledge"]'
   metadata: '{}'
   review_status: reviewed
-- id: finance_fundamentals
+
+- id: finance-fundamentals
   display_name: Finance Fundamentals
   aliases: ["Finance Fundamentals", "finance_fundamentals"]
   description: Finance reasoning subset derived from Kensho BizBench.
@@ -25071,7 +25074,8 @@
   tags: '["finance", "reasoning"]'
   metadata: '{}'
   review_status: reviewed
-- id: pre_flight
+
+- id: pre-flight
   display_name: Pre-Flight
   aliases: ["Pre-Flight", "pre_flight", "pre-flight"]
   description: Aviation operations knowledge (Inspect Evals task by Airside Labs).
