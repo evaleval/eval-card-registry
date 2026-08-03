@@ -1183,6 +1183,12 @@ _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
     # real repo Phi-4-multimodal-instruct; the snapshot's family root WAS that
     # mint, so the surviving canonical is now correctly its own family root.
     ("model_family_id", "microsoft/Phi-4-multimodal-instruct"),
+    # The curated edge between the Phi-4-mini siblings now points the right
+    # way: Phi-4-mini-REASONING is the mode variant derived from
+    # Phi-4-mini-instruct (the served "phi-4-mini"), not vice versa. The
+    # snapshot's family root on instruct walked the inverted edge; instruct is
+    # correctly its own family root now.
+    ("model_family_id", "microsoft/Phi-4-mini-instruct"),
     # Curated fold (core.yaml skip_source_ids): the tier3 `…-reasoning` mint and
     # the models.dev slug stub both fold into the real HF repo
     # Qwen/Qwen3-Omni-30B-A3B-Thinking ("reasoning" IS the Thinking repo, not a
@@ -1446,19 +1452,79 @@ def test_no_parent_edge_names_a_renamed_away_id():
     )
 
 
+# Pinned PRE-EXISTING non-adoption duplicate-identity clusters (gate 2's
+# ratchet baseline): spelling twins that predate the adoption gates and are
+# follow-up curation, not adoption regressions. The tail may only SHRINK —
+# any cluster not listed here fails the gate as a NEW duplicate.
+_PREEXISTING_DUP_TAIL: frozenset = frozenset({
+    ("ai2/molmo-7b-d", "allenai/molmo-7b-d"),
+    ("ai2/olmo-3-7b-instruct", "allenai/olmo-3-7b-instruct"),
+    ("ai2/olmo-3-7b-think", "allenai/olmo-3-7b-think"),
+    ("ai21-labs/ai21-jamba-1-5-large", "ai21-labs/jamba-1-5-large"),
+    ("ai21-labs/ai21-jamba-1-5-mini", "ai21-labs/jamba-1-5-mini"),
+    ("ai21/jamba-1.6-large", "ai21/jamba-large-1-6", "ai21labs/jamba-large-1.6"),
+    ("ai21/jamba-1.6-mini", "ai21/jamba-mini-1-6", "ai21labs/jamba-mini-1.6"),
+    ("ai21/jamba-1.7-mini", "ai21/jamba-mini-1-7"),
+    ("alibaba/qwen-14b-chat", "alibaba/qwen-chat-14b"),
+    ("alibaba/qwen-72b-chat", "alibaba/qwen-chat-72b"),
+    ("alibaba/qwen3-4b-2507-instruct", "qwen/qwen3-4b-instruct-2507"),
+    ("amazon/amazon.nova-lite-v1:0", "amazon/nova-lite", "amazon/nova-lite-v1:0", "aws/nova-lite"),
+    ("amazon/amazon.nova-micro-v1:0", "amazon/nova-micro", "amazon/nova-micro-v1:0", "aws/nova-micro"),
+    ("amazon/amazon.nova-pro-v1:0", "amazon/nova-pro", "amazon/nova-pro-v1:0", "aws/nova-pro"),
+    ("amazon/nova-premier", "amazon/nova-premier-v1:0", "aws/nova-premier"),
+    ("anthropic/Claude-3.5-Sonnet(Oct)", "anthropic/claude-3.5-sonnet", "anthropic/claude-sonnet-3.5"),
+    ("anthropic/anthropic/claude-3-7-sonnet-20250219", "anthropic/claude-3-7-sonnet-20250219"),
+    ("anthropic/claude-4-opus-20250514", "anthropic/claude-opus-4-20250514"),
+    ("anthropic/claude-4-opus-thinking", "anthropic/claude-opus-4-thinking"),
+    ("anthropic/claude-4-sonnet-20250514", "anthropic/claude-sonnet-4-20250514"),
+    ("anthropic/claude-4-sonnet-thinking", "anthropic/claude-sonnet-4-thinking"),
+    ("anthropic/claude-4.5-opus-thinking", "anthropic/claude-opus-4-5-thinking"),
+    ("anthropic/claude-4.5-sonnet-thinking", "anthropic/claude-sonnet-4.5-thinking"),
+    ("anthropic/claude-4.6-opus-thinking", "anthropic/claude-opus-4-6-thinking"),
+    ("google/gemini-1.5-flash", "google/gemini-flash-1-5"),
+    ("google/text-bison", "google/text-bison@001"),
+    ("google/text-unicorn", "google/text-unicorn@001"),
+    ("lmms-lab/llava-video-7b", "lmms-lab/video-llava-7b"),
+    ("meta-llama/Llama-3.1-70B-Instruct", "meta/llama-3-1-instruct-70b"),
+    ("meta-llama/Llama-3.1-8B-Instruct", "meta/llama-3-1-instruct-8b"),
+    ("meta-llama/Llama-3.2-1B-Instruct", "meta/llama-3-2-instruct-1b"),
+    ("meta-llama/Llama-3.2-3B-Instruct", "meta/llama-3-2-instruct-3b"),
+    ("meta-llama/Llama-3.2-90B-Vision-Instruct", "meta/llama-3-2-instruct-90b-vision"),
+    ("meta-llama/Llama-3.3-70B-Instruct", "meta/llama-3-3-instruct-70b"),
+    ("meta-llama/llama-3.1", "meta/Llama 3.1"),
+    ("meta/Llama-2-13b-chat", "meta/llama-2-chat-13b"),
+    ("meta/Llama-2-70b-chat", "meta/llama-2-chat-70b"),
+    ("meta/Llama-2-7b-chat", "meta/llama-2-chat-7b"),
+    ("meta/llama-3-1-405b-instruct", "meta/llama-3-1-instruct-405b"),
+    ("mosaicml/MPT-Instruct-30B", "mosaicml/mpt-30b-instruct"),
+    ("nvidia/Llama-3.1-Nemotron-70B-Instruct", "nvidia/llama-3-1-nemotron-instruct-70b"),
+    ("openai/Lingma Agent + Lingma SWE-GPT 72b (v0918)", "openai/Lingma Agent + Lingma SWE-GPT 72b (v0925)"),
+    ("openai/Lingma Agent + Lingma SWE-GPT 7b (v0918)", "openai/Lingma Agent + Lingma SWE-GPT 7b (v0925)"),
+    ("tiiuae/Falcon-Instruct-40B", "tiiuae/falcon-40b-instruct"),
+    ("tiiuae/Falcon-Instruct-7B", "tiiuae/falcon-7b-instruct"),
+    ("xai/grok-3-mini", "xai/grok-3-mini-fast"),
+    ("xai/grok-4", "xai/grok-4-fast"),
+    ("xai/grok-4-1", "xai/grok-4-1-fast"),
+})
+
+
 def test_no_two_full_entries_share_folded_identity(hf_to_dev):
     """GATE (adoption 2/5): no ADOPTION-TOUCHED cluster of FULL entries shares
     the same curated-org-folded, tag-stripped, order-insensitive
     variant-preserving identity — the duplicate class the carry-forward would
     otherwise retain forever when an id is renamed (`anthropic/claude-haiku-3`
-    vs the adopted `anthropic/claude-3-haiku`). A cluster counts when at least
-    one member is an OpenRouter-adopted entry (`metadata.openrouter_adopted`);
-    the registry carries a separate pre-existing tail of ~77 non-adoption dup
-    clusters (jamba spelling twins, dashed/dotted gemini twins, …) that
-    predate this gate and are follow-up cleanup, not adoption regressions.
-    Clusters made ONLY of real-HF-attested repos are allowed (two genuinely
-    distinct repos may normalize alike); a size-signature difference also
-    keeps entries apart (opt-1.3b vs opt-13b)."""
+    vs the adopted `anthropic/claude-3-haiku`). A cluster counts as
+    adoption-touched when at least one member is an OpenRouter-adopted entry
+    (`metadata.openrouter_adopted`) OR carries an id present in the frozen
+    OpenRouter snapshot key set — the flag alone must not scope the gate,
+    because an invented mint that already EQUALS the key is the same id-thrash
+    class. The registry carries a separate pre-existing tail of non-adoption
+    dup clusters (jamba spelling twins, nova sentinel twins, …) that predate
+    this gate: that tail is PINNED below and may only SHRINK — a new
+    non-adoption dup cluster fails the gate too. Clusters made ONLY of
+    real-HF-attested repos are allowed (two genuinely distinct repos may
+    normalize alike); a size-signature difference also keeps entries apart
+    (opt-1.3b vs opt-13b)."""
     rfm = _import_refresh_module()
     from eval_card_registry.lib.collision_fold import _bsizes
 
@@ -1483,6 +1549,12 @@ def test_no_two_full_entries_share_folded_identity(hf_to_dev):
                 pass
         return False
 
+    snap = json.loads(MODELSDEV_SNAPSHOT.read_text())
+    or_keys: set = set()
+    for k in (snap.get("openrouter", {}).get("models") or {}):
+        or_keys.add(k)
+        or_keys.add(k.lstrip("~"))
+
     skip = _core_skip_ids()
     clusters: dict[tuple, list[tuple[str, dict]]] = defaultdict(list)
     for src, e in _load_source_entries():
@@ -1501,19 +1573,33 @@ def test_no_two_full_entries_share_folded_identity(hf_to_dev):
                 return False
         return False
 
-    dups = []
+    dups, tail = [], []
     for key, members in clusters.items():
         ids = sorted({e["id"] for _, e in members})
         if len(ids) < 2:
             continue
-        if not any(_adopted(e) for _, e in members):
-            continue  # pre-existing non-adoption dup tail — out of this gate's scope
         if all(_attested(src, e) for src, e in members):
             continue  # real-HF cluster — allowed
-        dups.append(ids)
+        touched = any(_adopted(e) for _, e in members) or any(
+            i in or_keys for i in ids
+        )
+        (dups if touched else tail).append(ids)
     assert dups == [], (
         f"{len(dups)} folded-identity duplicate cluster(s) involving an "
-        f"OpenRouter-adopted entry (adoption id-thrash class): {dups[:10]}"
+        f"OpenRouter-adopted / OpenRouter-key id (adoption id-thrash class): "
+        f"{dups[:10]}"
+    )
+    # RATCHET on the pre-existing non-adoption dup tail: it may only SHRINK.
+    # A cluster not in the pinned set is a NEW duplicate (fails, visible); a
+    # pinned cluster that disappears just shrinks the tail (fine). Re-pin
+    # deliberately when curating one away.
+    new_tail = [c for c in sorted(map(tuple, tail)) if c not in _PREEXISTING_DUP_TAIL]
+    assert new_tail == [], (
+        f"{len(new_tail)} NEW non-adoption folded-identity dup cluster(s) not in "
+        f"the pinned pre-existing tail: {new_tail[:10]}"
+    )
+    assert len(tail) <= len(_PREEXISTING_DUP_TAIL), (
+        f"pre-existing dup tail grew: {len(tail)} > {len(_PREEXISTING_DUP_TAIL)}"
     )
 
 
@@ -1538,12 +1624,24 @@ def test_every_openrouter_snapshot_key_resolves(resolver):
     )
 
 
+# Ratchet ceiling for BARE (org-less, no `/`) canonical ids — the class gate 4
+# otherwise skips entirely. Includes the router pseudo-endpoint raws
+# (`auto`/`free`/`bodybuilder`/`owl-alpha`/`pareto-code`), which deliberately
+# REMAIN bare mints (real EEE raws; nothing-is-removed floor) even though they
+# are never adopted or aliased under `openrouter/*`. Growth here must be a
+# conscious re-pin, not silent drift.
+_BARE_ID_CEILING = 167
+
+
 def test_canonical_id_prefix_is_external_or_folds_to_org(models_df, hf_to_dev):
     """GATE (adoption 4/5, the amended id-space rule): every canonical id
     prefix is a real external namespace adopted verbatim (HF-attested or an
-    OpenRouter catalog key) OR folds through the curated org map to the
+    OpenRouter catalog key whose prefix org AGREES with the entry's curated
+    developer — the same `_openrouter_org_agrees` fold the generator's
+    adoption guard applies) OR folds through the curated org map to the
     entry's `org_id` (case/separator-insensitively). Invented ids may only use
-    the curated developer prefix."""
+    the curated developer prefix. Bare (org-less) ids are outside the prefix
+    rule but PINNED by count (`_BARE_ID_CEILING`) so the class stays visible."""
     from eval_entity_resolver.fold import _norm_org_key
 
     oracle_fixed = set()
@@ -1570,6 +1668,13 @@ def test_canonical_id_prefix_is_external_or_folds_to_org(models_df, hf_to_dev):
         if isinstance(e, dict) and e.get("id") and "display_name" in e
     }
 
+    bare = sorted(str(i) for i in models_df["id"].astype(str) if "/" not in str(i))
+    assert len(bare) <= _BARE_ID_CEILING, (
+        f"bare (org-less) canonical id count grew: {len(bare)} > "
+        f"{_BARE_ID_CEILING}. New bare mints must be a conscious re-pin — "
+        f"inspect the tail: {bare[-15:]}"
+    )
+
     bad = []
     for row in models_df.itertuples():
         cid = str(row.id)
@@ -1579,8 +1684,15 @@ def test_canonical_id_prefix_is_external_or_folds_to_org(models_df, hf_to_dev):
         org_id = org_id if isinstance(org_id, str) and org_id else None
         prefix = cid.split("/", 1)[0]
         # External namespaces adopted verbatim; curated core judgment calls.
-        if cid in oracle_fixed or cid in or_keys or cid in core_defs:
+        if cid in oracle_fixed or cid in core_defs:
             continue
+        if cid in or_keys:
+            # or_keys exemption requires prefix-org agreement (the generator's
+            # `_openrouter_org_agrees` fold): a key under a different
+            # developer's namespace must not launder a mis-attributed row.
+            a0, b0 = fold(prefix), fold(org_id) if org_id else None
+            if org_id and (a0 == b0 or _norm_org_key(a0) == _norm_org_key(b0)):
+                continue
         rsrc = getattr(row, "resolution_source", None)
         if isinstance(rsrc, str) and rsrc == "hf":
             continue
@@ -1610,7 +1722,8 @@ def test_canonical_id_prefix_is_external_or_folds_to_org(models_df, hf_to_dev):
 
 # Deliberate curated CORRECTIONS during the adoption migration: raws whose
 # pre-migration resolution was itself a mis-attribution (a turbo serving
-# spelling bridged onto the base product). Reviewed exceptions only.
+# spelling bridged onto the base product, a base spelling bridged onto a
+# sibling variant). Reviewed exceptions only.
 _ADOPTION_REGRESSION_EXEMPT: frozenset = frozenset({
     "z-ai-glm-5-turbo",     # was bridged onto zai-org/GLM-5 (base); turbo is a sibling product
     "z-ai-glm-5v-turbo",    # was bridged onto the 5V base record; same correction
@@ -1619,6 +1732,14 @@ _ADOPTION_REGRESSION_EXEMPT: frozenset = frozenset({
     # `amazon/nova-premier-v1:0` still resolves by its own id. Same model,
     # split across the pre-existing tier3 sentinel drafts — reviewed.
     "unknown/amazon.nova-premier-v1:0",
+    # The 5V-Turbo split's inverse leg: the BASE spellings had been absorbed
+    # by the turbo entity; both now resolve to the 5V base `zai/z-ai-glm-5v`.
+    "glm-5v",
+    "zai/glm-5v",
+    # The served "phi-4-mini" IS microsoft/Phi-4-mini-instruct (API names
+    # drop -instruct); the reasoning attribution named a different model.
+    "Phi-4 Mini",
+    "microsoft/phi-4-mini",
 })
 
 
@@ -1628,7 +1749,12 @@ def test_openrouter_adoption_no_resolution_regression(resolver, aliases_df):
     resolved before the adoption migration (snapshotted in
     curation/openrouter_adoption_before.parquet) still resolves to the same
     entity — an identity shift counts as the same entity only when the old
-    canonical id is carried as an alias on the new entry."""
+    canonical id is carried as an alias on the new entry.
+
+    Provenance of the snapshot: a one-shot resolve sweep over ALL seeded
+    aliases + canonical ids (18,999 raws) at the pre-adoption state — the
+    parent of commit 1104fc5 ("chore(gates): snapshot pre-OpenRouter-adoption
+    model resolution state"), which committed the parquet."""
     before = pd.read_parquet(OPENROUTER_BEFORE_SNAPSHOT)
     alias_pairs = set(
         zip(
@@ -1639,8 +1765,18 @@ def test_openrouter_adoption_no_resolution_regression(resolver, aliases_df):
     old_home: dict[str, str | None] = {}
 
     def _old_home(old: str):
+        # The old-id-follows rescue accepts EXACT/NORMALIZED resolution ONLY.
+        # A fuzzy hit must not count: it would launder a dropped draft whose
+        # raw degraded from an exact alias (1.0) to a fuzzy stem match (0.9)
+        # as a "rename" — the tier3 carry-forward floor exists precisely so
+        # every dropped draft's forms stay exact/normalized-resolvable.
         if old not in old_home:
-            old_home[old] = resolver.resolve(old, "model").canonical_id
+            res = resolver.resolve(old, "model")
+            old_home[old] = (
+                res.canonical_id
+                if res.strategy in ("exact", "normalized")
+                else None
+            )
         return old_home[old]
 
     no_match, moved = [], []
