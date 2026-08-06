@@ -1,8 +1,0 @@
-# Slice grouping overrides. With suffix stripping disabled (2026-05),
-# this list only needs entries that override a registry-authored
-# parent_benchmark_id — i.e. cases where benchmarks.yaml sets a parent
-# but the benchmark should actually be standalone.
-
-promote_to_benchmark:
-  - gpqa-diamond
-  - mmlu-pro
