@@ -304,6 +304,15 @@
   metadata: '{}'
   review_status: reviewed
 
+- id: l2-bench.mean
+  display_name: l2-bench.mean
+  score_type: continuous
+  lower_is_better: null
+  min_score: null
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+
 - id: codegolf.score
   display_name: codegolf.score
   score_type: continuous

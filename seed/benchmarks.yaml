@@ -25084,3 +25084,13 @@
   tags: '["knowledge"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: l2-bench
+  display_name: L2-Bench
+  aliases: ["l2-bench", "l2_bench", "OUP/l2-bench"]
+  description: OUP's l2-bench (dataset OUP/l2-bench; third-party inspect_ai runs submitted to EEE).
+  dataset_repo: OUP/l2-bench
+  parent_benchmark_id: null
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
