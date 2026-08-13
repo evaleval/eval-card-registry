@@ -10290,7 +10290,7 @@
   metadata: '{}'
   aliases:
   - contextual-ai/llama-3-glm-v2
-  org_id: ContextualAI
+  org_id: contextual-ai
 - id: darkc0de/BuddyGlassNeverSleeps
   display_name: darkc0de/BuddyGlassNeverSleeps
   resolution_source: inferred
@@ -14696,7 +14696,7 @@
   metadata: '{}'
   aliases:
   - nexusflow/athene-v2-chat-0-shot
-  org_id: Nexusflow
+  org_id: nexusflow
 - id: nidum/Nidum-Limitless-Gemma-2B
   display_name: nidum/Nidum-Limitless-Gemma-2B
   resolution_source: inferred
@@ -16366,7 +16366,7 @@
   metadata: '{}'
   aliases:
   - openassistant/oasst-sft-4-pythia-12b
-  org_id: OpenAssistant
+  org_id: openassistant
 - id: openassistant/oasst-sft-7-llama-30b
   display_name: openassistant/oasst-sft-7-llama-30b
   resolution_source: inferred
@@ -16375,7 +16375,7 @@
   metadata: '{}'
   aliases:
   - openassistant/oasst-sft-7-llama-30b
-  org_id: OpenAssistant
+  org_id: openassistant
 - id: ozone-ai/0x-lite
   display_name: ozone-ai/0x-lite
   resolution_source: inferred
@@ -16714,7 +16714,7 @@
   metadata: '{}'
   aliases:
   - rwkv/rwkv-4-raven-14b
-  org_id: RWKV
+  org_id: rwkv
 - id: sabersaleh/Llama2-7B-SPO
   display_name: sabersaleh/Llama2-7B-SPO
   resolution_source: inferred
@@ -17620,7 +17620,7 @@
   metadata: '{}'
   aliases:
   - unbabel/EuroLLM-22B
-  org_id: Unbabel
+  org_id: unbabel
 - id: unbabel/EuroLLM-9B
   display_name: unbabel/EuroLLM-9B
   resolution_source: inferred
@@ -17629,7 +17629,7 @@
   metadata: '{}'
   aliases:
   - unbabel/EuroLLM-9B
-  org_id: Unbabel
+  org_id: unbabel
 - id: unbabel/TowerPlus-72B
   display_name: unbabel/TowerPlus-72B
   resolution_source: inferred
@@ -17638,7 +17638,7 @@
   metadata: '{}'
   aliases:
   - unbabel/TowerPlus-72B
-  org_id: Unbabel
+  org_id: unbabel
 - id: unbabel/TowerPlus-9B
   display_name: unbabel/TowerPlus-9B
   resolution_source: inferred
@@ -17647,7 +17647,7 @@
   metadata: '{}'
   aliases:
   - unbabel/TowerPlus-9B
-  org_id: Unbabel
+  org_id: unbabel
 - id: unknown/amazon-q-developer-agent-v20240430-dev
   display_name: unknown/Amazon Q Developer Agent (v20240430-dev)
   resolution_source: inferred

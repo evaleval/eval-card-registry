@@ -1015,97 +1015,97 @@
   metadata: '{"hf_id": "ContactDoctor/Bio-Medical-Llama-3-8B"}'
 - id: ContextualAI/LMUnit-llama3.1-70b
   display_name: LMUnit-llama3.1-70b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/LMUnit-llama3.1-70b"}'
 - id: ContextualAI/LMUnit-qwen2.5-72b
   display_name: LMUnit-qwen2.5-72b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/LMUnit-qwen2.5-72b"}'
 - id: ContextualAI/archangel_sft-dpo_llama13b
   display_name: archangel_sft-dpo_llama13b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-dpo_llama13b"}'
 - id: ContextualAI/archangel_sft-dpo_llama30b
   display_name: archangel_sft-dpo_llama30b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-dpo_llama30b"}'
 - id: ContextualAI/archangel_sft-dpo_llama7b
   display_name: archangel_sft-dpo_llama7b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-dpo_llama7b"}'
 - id: ContextualAI/archangel_sft-dpo_pythia1-4b
   display_name: archangel_sft-dpo_pythia1-4b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-dpo_pythia1-4b"}'
 - id: ContextualAI/archangel_sft-dpo_pythia12-0b
   display_name: archangel_sft-dpo_pythia12-0b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-dpo_pythia12-0b"}'
 - id: ContextualAI/archangel_sft-dpo_pythia2-8b
   display_name: archangel_sft-dpo_pythia2-8b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-dpo_pythia2-8b"}'
 - id: ContextualAI/archangel_sft-dpo_pythia6-9b
   display_name: archangel_sft-dpo_pythia6-9b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-dpo_pythia6-9b"}'
 - id: ContextualAI/archangel_sft-kto_llama13b
   display_name: archangel_sft-kto_llama13b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-kto_llama13b"}'
 - id: ContextualAI/archangel_sft-kto_llama30b
   display_name: archangel_sft-kto_llama30b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-kto_llama30b"}'
 - id: ContextualAI/archangel_sft-kto_llama7b
   display_name: archangel_sft-kto_llama7b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-kto_llama7b"}'
 - id: ContextualAI/archangel_sft-kto_pythia1-4b
   display_name: archangel_sft-kto_pythia1-4b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-kto_pythia1-4b"}'
 - id: ContextualAI/archangel_sft-kto_pythia12-0b
   display_name: archangel_sft-kto_pythia12-0b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-kto_pythia12-0b"}'
 - id: ContextualAI/archangel_sft-kto_pythia2-8b
   display_name: archangel_sft-kto_pythia2-8b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-kto_pythia2-8b"}'
 - id: ContextualAI/archangel_sft-kto_pythia6-9b
   display_name: archangel_sft-kto_pythia6-9b
-  org_id: ContextualAI
+  org_id: contextual-ai
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "ContextualAI/archangel_sft-kto_pythia6-9b"}'
@@ -5947,19 +5947,19 @@
   metadata: '{"hf_id": "Nexesenex/pankajmathur_orca_mini_v9_6_1B-instruct-Abliterated-LPL"}'
 - id: Nexusflow/Athene-V2-Chat
   display_name: Athene-V2-Chat
-  org_id: Nexusflow
+  org_id: nexusflow
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "Nexusflow/Athene-V2-Chat"}'
 - id: Nexusflow/NexusRaven-V2-13B
   display_name: NexusRaven-V2-13B
-  org_id: Nexusflow
+  org_id: nexusflow
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "Nexusflow/NexusRaven-V2-13B"}'
 - id: Nexusflow/Starling-RM-34B
   display_name: Starling-RM-34B
-  org_id: Nexusflow
+  org_id: nexusflow
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "Nexusflow/Starling-RM-34B"}'
@@ -6307,25 +6307,25 @@
   metadata: '{"hf_id": "Open-Orca/Mistral-7B-OpenOrca"}'
 - id: OpenAssistant/oasst-rm-2-pythia-6.9b-epoch-1
   display_name: oasst-rm-2-pythia-6.9b-epoch-1
-  org_id: OpenAssistant
+  org_id: openassistant
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "OpenAssistant/oasst-rm-2-pythia-6.9b-epoch-1"}'
 - id: OpenAssistant/oasst-rm-2.1-pythia-1.4b-epoch-2.5
   display_name: oasst-rm-2.1-pythia-1.4b-epoch-2.5
-  org_id: OpenAssistant
+  org_id: openassistant
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "OpenAssistant/oasst-rm-2.1-pythia-1.4b-epoch-2.5"}'
 - id: OpenAssistant/oasst-sft-1-pythia-12b
   display_name: oasst-sft-1-pythia-12b
-  org_id: OpenAssistant
+  org_id: openassistant
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "OpenAssistant/oasst-sft-1-pythia-12b"}'
 - id: OpenAssistant/reward-model-deberta-v3-large-v2
   display_name: reward-model-deberta-v3-large-v2
-  org_id: OpenAssistant
+  org_id: openassistant
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "OpenAssistant/reward-model-deberta-v3-large-v2"}'
@@ -7387,7 +7387,7 @@
   metadata: '{"hf_id": "RLHFlow/pair-preference-model-LLaMA3-8B"}'
 - id: RWKV/rwkv-raven-14b
   display_name: rwkv-raven-14b
-  org_id: RWKV
+  org_id: rwkv
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "RWKV/rwkv-raven-14b"}'
@@ -9183,7 +9183,7 @@
   metadata: '{"hf_id": "UKzExecution/LlamaExecutor-8B-3.0.5"}'
 - id: Unbabel/TowerInstruct-Mistral-7B-v0.2
   display_name: TowerInstruct-Mistral-7B-v0.2
-  org_id: Unbabel
+  org_id: unbabel
   resolution_source: hf
   review_status: reviewed
   metadata: '{"hf_id": "Unbabel/TowerInstruct-Mistral-7B-v0.2"}'

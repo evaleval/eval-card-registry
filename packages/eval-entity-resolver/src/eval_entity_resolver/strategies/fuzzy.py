@@ -66,12 +66,27 @@ _STRIP_SUFFIXES = [
     # are NOT stripped here — they live in `_SUFFIX_PLATFORM_MAP` below so the
     # platform is CAPTURED as an `inference_platform` side-value rather than
     # discarded. The same stem is produced and matched either way.
-    # Reasoning-effort suffixes
+    # Reasoning-effort suffixes. Longer compound forms first. `-max` IS an
+    # effort tier in the wild (arc-agi's low/high/max ladder); genuine "-max"
+    # PRODUCTS (qwen3-max, qwen3.8-max) are safe because exact/normalized
+    # matching wins before fuzzy ever strips — only an uncatalogued new -max
+    # product could transiently fold onto its base, and that beats a broken
+    # no_match entity for the same gap window.
+    "-xhigh-effort",
+    "-high-effort",
+    "-medium-effort",
+    "-low-effort",
+    "-minimal-effort",
+    "-non-reasoning",
+    "-xhigh",
     "-high",
     "-medium",
     "-low",
     "-minimal",
+    "-max",
     # Thinking-style suffixes
+    "-highthinking",
+    "-nothinking",
     "-nothink",
     "-thinking-none",
     # HuggingFace re-upload variants — same weights as official release.

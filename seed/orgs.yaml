@@ -93,7 +93,7 @@
   website: https://ai.meta.com
   hf_org: meta-llama
   aliases: ["Meta AI", "Meta Platforms", "meta-llama", "Facebook AI Research", "FAIR"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -103,7 +103,7 @@
   website: https://mistral.ai
   hf_org: mistralai
   aliases: ["Mistral", "mistral-ai", "Mistral.AI"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -113,7 +113,7 @@
   website: https://www.deepseek.com
   hf_org: deepseek-ai
   aliases: ["deepseek-ai", "DeepSeek AI", "DeepSeek-AI"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -123,7 +123,7 @@
   website: https://qwen.ai
   hf_org: qwen
   aliases: ["Alibaba Cloud", "Qwen", "qwen", "Qwen Team", "Alibaba DAMO Academy", "Alibaba-NLP"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -153,7 +153,7 @@
   website: https://www.tii.ae
   hf_org: tiiuae
   aliases: ["TII", "tii-uae", "Technology Innovation Institute UAE"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -163,7 +163,7 @@
   website: https://www.01.ai
   hf_org: 01-ai
   aliases: ["01.AI", "01 AI", "Yi"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -172,7 +172,7 @@
   display_name: IBM
   website: https://www.ibm.com
   aliases: ["IBM Corp.", "International Business Machines", "IBM Research", "IBM Granite", "Granite", "Granite Team"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -182,7 +182,7 @@
   website: https://www.bytedance.com
   hf_org: ByteDance-Seed
   aliases: ["ByteDance Seed", "Bytedance", "bytedance-seed", "ByteDance-Seed", "Seed"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -192,7 +192,7 @@
   website: https://www.sarvam.ai
   hf_org: sarvamai
   aliases: ["Sarvam", "Sarvam AI", "sarvamai", "sarvam-ai"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -202,7 +202,7 @@
   website: https://stability.ai
   hf_org: stabilityai
   aliases: ["Stability", "stability-ai"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -261,7 +261,7 @@
   website: https://nousresearch.com
   hf_org: nousresearch
   aliases: ["Nous", "NousResearch"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -312,7 +312,7 @@
   website: https://allenai.org
   hf_org: allenai
   aliases: ["AI2", "Ai2", "Allen AI", "Allen Institute"]
-  tags: '["lab", "academic", "open-weight"]'
+  tags: '["lab", "academic"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -322,7 +322,7 @@
   website: https://www.eleuther.ai
   hf_org: eleutherai
   aliases: ["Eleuther", "EleutherAI Research"]
-  tags: '["lab", "academic", "open-weight"]'
+  tags: '["lab", "academic"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -519,7 +519,7 @@
   website: https://www.shlab.org.cn
   hf_org: internlm
   aliases: ["InternLM", "Shanghai AI Lab", "Shanghai AI Laboratory"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -529,7 +529,7 @@
   website: https://www.lgresearch.ai
   hf_org: LGAI-EXAONE
   aliases: ["LG AI Research", "LG AI", "EXAONE"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -539,7 +539,7 @@
   website: https://ernie.baidu.com
   hf_org: baidu
   aliases: ["Baidu Inc.", "ERNIE"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -549,7 +549,7 @@
   website: https://www.openbmb.cn
   hf_org: openbmb
   aliases: ["OpenBMB"]
-  tags: '["lab", "academic", "open-weight"]'
+  tags: '["lab", "academic"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -559,7 +559,7 @@
   website: https://skywork.ai
   hf_org: Skywork
   aliases: ["Skywork AI"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -569,7 +569,7 @@
   website: https://kyutai.org
   hf_org: kyutai
   aliases: ["Kyutai Labs"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -579,7 +579,7 @@
   website: https://machinelearning.apple.com
   hf_org: apple
   aliases: ["Apple Inc.", "Apple Machine Learning Research"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -589,7 +589,7 @@
   website: https://www.salesforceairesearch.com
   hf_org: Salesforce
   aliases: ["Salesforce AI Research", "Salesforce Research"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -599,7 +599,7 @@
   website: https://www.snowflake.com
   hf_org: Snowflake
   aliases: ["Snowflake AI Research"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -609,7 +609,7 @@
   website: https://www.liquid.ai
   hf_org: LiquidAI
   aliases: ["Liquid AI", "liquid"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -628,7 +628,7 @@
   display_name: BigScience
   hf_org: bigscience
   aliases: ["BigScience Workshop"]
-  tags: '["academic", "open-weight"]'
+  tags: '["academic"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -658,7 +658,7 @@
   website: https://www.databricks.com
   hf_org: databricks
   aliases: ["Databricks Inc.", "Databricks Mosaic"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -678,7 +678,7 @@
   website: https://hunyuan.tencent.com
   hf_org: tencent
   aliases: ["Tencent", "Tencent Hunyuan", "Hunyuan"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -688,7 +688,7 @@
   website: https://blackforestlabs.ai
   hf_org: black-forest-labs
   aliases: ["bfl", "BFL", "Black Forest Labs", "black-forest-labs"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -698,7 +698,7 @@
   website: https://www.primeintellect.ai
   hf_org: PrimeIntellect
   aliases: ["prime-intellect", "Prime Intellect", "prime intellect"]
-  tags: '["lab", "open-weight"]'
+  tags: '["lab"]'
   kind: lab
   metadata: '{}'
   review_status: reviewed
@@ -769,6 +769,51 @@
   website: https://drchangliu.github.io/
   hf_org: drchangliu
   aliases: ["Dr. Chang Liu's Lab", "Dr Chang Liu's Lab", "Chang Liu's Lab", "Wordle Arena Project"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+- id: contextual-ai
+  display_name: Contextual AI
+  website: https://contextual.ai
+  hf_org: ContextualAI
+  aliases: ["ContextualAI"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+- id: nexusflow
+  display_name: Nexusflow
+  website: https://nexusflow.ai
+  hf_org: Nexusflow
+  aliases: ["Nexusflow.ai"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+- id: openassistant
+  display_name: OpenAssistant
+  website: https://open-assistant.io
+  hf_org: OpenAssistant
+  aliases: ["Open Assistant", "Open-Assistant"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+- id: rwkv
+  display_name: RWKV
+  website: https://rwkv.com
+  hf_org: RWKV
+  aliases: ["BlinkDL/RWKV"]
+  tags: '["lab"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+- id: unbabel
+  display_name: Unbabel
+  website: https://unbabel.com
+  hf_org: Unbabel
+  aliases: []
   tags: '["lab"]'
   kind: lab
   metadata: '{}'

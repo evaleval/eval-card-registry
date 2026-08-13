@@ -1207,6 +1207,9 @@
 - id: arcee-ai/Trinity-Large-Thinking
   aliases:
   - trinity-large
+- id: arcee-ai/trinity-large-preview
+  aliases:
+  - trinity-large-preview
 - id: arcee-ai/maestro
   aliases:
   - maestro
@@ -1504,9 +1507,18 @@
 - id: deepseek-ai/DeepSeek-V4-Pro
   aliases:
   - deepseek-v4-pro-precision
+  # artificial-analysis date LABEL for the launch build; no catalogue lists a
+  # 0424 snapshot (base released 2026-04-22/24). Label-not-snapshot fold,
+  # per the deepseek-v2.5-0905 precedent class.
+  - deepseek/deepseek-v4-pro-0424
 - id: deepseek-ai/deepseek-r1-hide-reasoning
   aliases:
   - deepseek/deepseek-r1-hide-reasoning
+- id: deepseek/deepseek-v4-flash
+  aliases:
+  # artificial-analysis date LABEL for the launch build; no catalogue lists a
+  # 0420 snapshot (base released 2026-04-23/24). Label-not-snapshot fold.
+  - deepseek/deepseek-v4-flash-0420
 - id: deepseek-ai/DeepSeek-Coder-V2-Instruct
   aliases:
   - deepseek/deepseek-coder-v2
@@ -2068,6 +2080,16 @@
   - qwen-3.7-max
   - qwen3-7-max
   - qwen3.7-max:thinking
+- id: qwen/qwen3.7-plus
+  aliases:
+  - Qwen 3.7 Plus
+  - Qwen3.7 Plus
+  - alibaba/qwen3.7-plus
+  - alibaba/qwen3-7-plus
+  - qwen-3-7-plus
+  - qwen3-7-plus
+  - qwen3.7-plus
+  - qwen3.7-plus:thinking
 - id: ai21/jamba-large-1.7
   aliases:
   - ai21labs/jamba-large-1.7
@@ -2316,6 +2338,10 @@
 - id: meta/llama-3.3-70b-instruct-turbo
   aliases:
   - Llama 3.3 70B Instruct Turbo
+- id: meta/muse-glimmer-30b
+  aliases:
+  # AA drops the size token; nothing normalizes muse-glimmer to the 30B leaf.
+  - meta/muse-glimmer
 - id: meta/muse-spark
   aliases:
   - Muse Spark
@@ -2380,9 +2406,10 @@
   aliases:
   - Ministral 3 8B Base (2512)
   - mistralai/ministral-3-8b-base-2512
-- id: mistral/mistral-large-2402
+- id: mistralai/mistral-large-2402
   aliases:
   - Mistral Large (2402)
+  - mistral/mistral-large-2402
 - id: mistral/mistral-large-3-2509
   aliases:
   - Mistral Large 3 (2509)
@@ -2602,6 +2629,12 @@
   - k2p6
   - kimi-k2.6-precision
   - umans-kimi-k2-6
+- id: moonshotai/kimi-k3
+  aliases:
+  # arc-agi doubles the org into the slug; effort tiers (-low/-high/-max)
+  # strip in the resolver, leaving this stem, which normalized matching
+  # cannot reach (moonshotaimoonshotkimik3 != moonshotaikimik3).
+  - moonshotai/moonshot-kimi-k3
 - id: moonshotai/kimi-k2
   aliases:
   - Kimi K2
@@ -3264,6 +3297,11 @@
 - id: xai/grok-4-heavy
   aliases:
   - Grok 4 Heavy
+- id: x-ai/grok-4.5
+  aliases:
+  # vals-ai date LABEL: 0708 IS grok-4.5's release date (2026-07-08) and no
+  # catalogue lists a 0708 build. Label-not-snapshot fold.
+  - xai/grok-4.5-0708
 - id: x-ai/grok-4.20-multi-agent
   aliases:
   - grok-4-20-multi-agent-0309

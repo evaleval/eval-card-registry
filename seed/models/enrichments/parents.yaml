@@ -11923,7 +11923,7 @@
   - id: mistralai/ministral-3-8b-base
     relationship: variant
     axis: version
-- id: mistral/mistral-large-2402
+- id: mistralai/mistral-large-2402
   parents:
   - id: mistralai/mistral-large
     relationship: variant

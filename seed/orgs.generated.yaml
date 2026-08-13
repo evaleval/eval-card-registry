@@ -344,13 +344,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: ContextualAI
-  display_name: ContextualAI
-  hf_org: ContextualAI
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: CoolSpring
   display_name: CoolSpring
   hf_org: CoolSpring
@@ -1219,13 +1212,6 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
-- id: Nexusflow
-  display_name: Nexusflow
-  hf_org: Nexusflow
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
 - id: NikolaSigmoid
   display_name: NikolaSigmoid
   hf_org: NikolaSigmoid
@@ -1313,13 +1299,6 @@
 - id: Open-Orca
   display_name: Open-Orca
   hf_org: Open-Orca
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: OpenAssistant
-  display_name: OpenAssistant
-  hf_org: OpenAssistant
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -1481,13 +1460,6 @@
 - id: RLHFlow
   display_name: RLHFlow
   hf_org: RLHFlow
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: RWKV
-  display_name: RWKV
-  hf_org: RWKV
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -1824,13 +1796,6 @@
 - id: UKzExecution
   display_name: UKzExecution
   hf_org: UKzExecution
-  kind: community
-  tags: '[]'
-  metadata: '{}'
-  review_status: reviewed
-- id: Unbabel
-  display_name: Unbabel
-  hf_org: Unbabel
   kind: community
   tags: '[]'
   metadata: '{}'
@@ -6171,6 +6136,48 @@
 - id: zhengr
   display_name: zhengr
   hf_org: zhengr
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: JetBrains
+  display_name: JetBrains
+  hf_org: JetBrains
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: crofai
+  display_name: crofai
+  hf_org: crofai
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: fish-audio
+  display_name: fish-audio
+  hf_org: fish-audio
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: quiverai
+  display_name: quiverai
+  hf_org: quiverai
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: sakana
+  display_name: sakana
+  hf_org: sakana
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: thinkingmachines
+  display_name: thinkingmachines
+  hf_org: thinkingmachines
   kind: community
   tags: '[]'
   metadata: '{}'

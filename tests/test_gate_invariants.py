@@ -823,6 +823,7 @@ _ORACLE_CANON_EXEMPT: frozenset = frozenset({
     "openai/aion-labs-aion-2-0",           # oracle embedded the org in the leaf -> aion-labs/aion-2-0
     "unknown/perplexity-sonar-reasoning",  # `unknown/` placeholder host -> perplexity/sonar-reasoning
     "unknown/cohere-embed-v-4-0",          # `unknown/` placeholder host -> cohere/embed-v4-0 (collision fold)
+    "unknown/writer.palmyra-x4",           # `unknown/` placeholder host, org in the leaf -> writer/palmyra-x4
     # ai21 == ai21-labs (same developer; HF org is ai21-labs). The leaf also
     # gains an `ai21-` brand prefix in the real repo so the same-model-leaf rule
     # can't auto-detect it; resolving to ai21-labs/ai21-jamba-* is correct.
@@ -1482,6 +1483,10 @@ _PREEXISTING_DUP_TAIL: frozenset = frozenset({
     ("anthropic/claude-4.5-sonnet-thinking", "anthropic/claude-sonnet-4.5-thinking"),
     ("anthropic/claude-4.6-opus-thinking", "anthropic/claude-opus-4-6-thinking"),
     ("google/gemini-1.5-flash", "google/gemini-flash-1-5"),
+    # Veo 3.1 vs Veo 3.1 Fast are DISTINCT video products; they cluster only
+    # because the tag-strip fold eats the `fast` token. False positive, kept
+    # apart deliberately (2026-08-13 models.dev catch-up).
+    ("google/veo-3-1", "google/veo-3.1-fast"),
     ("google/text-bison", "google/text-bison@001"),
     ("google/text-unicorn", "google/text-unicorn@001"),
     ("lmms-lab/llava-video-7b", "lmms-lab/video-llava-7b"),
@@ -1630,7 +1635,12 @@ def test_every_openrouter_snapshot_key_resolves(resolver):
 # REMAIN bare mints (real EEE raws; nothing-is-removed floor) even though they
 # are never adopted or aliased under `openrouter/*`. Growth here must be a
 # conscious re-pin, not silent drift.
-_BARE_ID_CEILING = 167
+# 2026-08-13 re-pin 167 -> 196: 57-day models.dev catch-up (cron stalled since
+# 06-17) minted 29 bare ids from unprefixed provider entries (venice-*, v0-*,
+# voxtral-*, wan2-*, yi-*, writer.palmyra-x4, ...). Inspected: all are real
+# provider entries; several deserve org folds (voxtral->mistralai, wan->alibaba,
+# yi->01-ai) as generator org-mapping follow-ups, which will SHRINK this back.
+_BARE_ID_CEILING = 196
 
 
 def test_canonical_id_prefix_is_external_or_folds_to_org(models_df, hf_to_dev):
@@ -1727,6 +1737,11 @@ def test_canonical_id_prefix_is_external_or_folds_to_org(models_df, hf_to_dev):
 _ADOPTION_REGRESSION_EXEMPT: frozenset = frozenset({
     "z-ai-glm-5-turbo",     # was bridged onto zai-org/GLM-5 (base); turbo is a sibling product
     "z-ai-glm-5v-turbo",    # was bridged onto the 5V base record; same correction
+    # 2026-08-13 catch-up corrections: raw now reaches the TRUE product entity
+    # that didn't exist before the refresh (previous home was a normalized/
+    # fuzzy near-miss, not this model).
+    "Veo-3.1-Fast",                        # was google/veo3-1; now the real google/veo-3.1-fast
+    "deepseek/deepseek-v4-pro-lightning",  # was fuzzy-folded onto DeepSeek-V4-Pro; Lightning is its own product
     # Sentinel-org scaffold raw: tier3 keeps it on its org-less draft
     # (`unknown/amazon.nova-premier-v10`); the org-present twin draft
     # `amazon/nova-premier-v1:0` still resolves by its own id. Same model,

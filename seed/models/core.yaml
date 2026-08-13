@@ -15,6 +15,14 @@ skip_source_ids:
 # onto the surviving canonical in enrichments/aliases.yaml.
 - alibaba/qwen-3-6-plus
 - alibaba/qwen-3-7-max
+- alibaba/qwen3.7-plus
+# Stale tier3 name-inference twin of the models.dev mint mistralai/mistral-large-2402;
+# its alias claim on that id stalled the refresh-models cron (alias-collision abort).
+- mistral/mistral-large-2402
+# Bare fresh mint shadowing the committed arcee-ai/trinity-large-preview
+# (identity break caught by the adoption-regression gate); surface form
+# bridged back onto the arcee entity in enrichments/aliases.yaml.
+- trinity-large-preview
 - xai/grok-4-20-non
 - meta/llama4-maverick
 - meta/llama4-scout
@@ -1250,7 +1258,7 @@ entries:
   - unknown/hammer2-1-7b
 - id: Nexusflow/starling-rm
   display_name: Starling-RM
-  org_id: Nexusflow
+  org_id: nexusflow
   family: starling-rm
   architecture: null
   params_billions: null
@@ -1301,7 +1309,7 @@ entries:
   - nous-research/hermes-3
 - id: OpenAssistant/oasst-rm-pythia
   display_name: OASST RM Pythia
-  org_id: OpenAssistant
+  org_id: openassistant
   family: oasst-rm-pythia
   architecture: null
   params_billions: null
