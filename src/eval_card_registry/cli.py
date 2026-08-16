@@ -1254,9 +1254,14 @@ def seed(
             if (b, fm) in seen_pairs:
                 raise typer.BadParameter(f"metric_folds: duplicate fold for ({b}, {fm})")
             seen_pairs.add((b, fm))
+            factor = e.get("scale_factor")
+            if factor is not None and (not isinstance(factor, (int, float)) or factor <= 0):
+                raise typer.BadParameter(
+                    f"metric_folds ({b}): scale_factor must be a positive number, got {factor!r}"
+                )
             fold_rows.append({
                 "benchmark_id": b, "from_metric_id": fm,
-                "to_metric_id": tm, "note": e.get("note"),
+                "to_metric_id": tm, "scale_factor": factor, "note": e.get("note"),
             })
         # No chains: a fold target must not itself be folded on the same benchmark.
         targets = {(r["benchmark_id"], r["to_metric_id"]) for r in fold_rows}

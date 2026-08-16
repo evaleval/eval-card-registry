@@ -192,6 +192,10 @@ _SCHEMAS: dict[str, dict] = {
         "benchmark_id": pd.StringDtype(),
         "from_metric_id": pd.StringDtype(),
         "to_metric_id": pd.StringDtype(),
+        # Optional curated published-scale -> registry-scale multiplier
+        # (e.g. 0.1 for a raw 1-10 score folding onto a [0,1] metric).
+        # Null = scales already agree; detection-based conversion applies.
+        "scale_factor": "float64",
         "note": pd.StringDtype(),
     },
     "eval_harnesses": {

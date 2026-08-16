@@ -54,6 +54,11 @@
 # accuracy variants, while the warehouse `accuracy` bucket is strict-only
 # (verified 1.5-2.3pt systematic offset) — folding would merge protocols.
 
+# WildBench: openeval publishes the raw 1-10 WB score; wb-score's
+# registry scale is normalized 0-1. scale_factor states the known
+# published-to-registry conversion as curated fact (never detected).
+- {benchmark: wildbench, from_metric: score, to_metric: wb-score, scale_factor: 0.1}
+
 # HealthBench: harness primary `bootstrap_score` (minted bootstrap-score)
 # and llm-stats `score` are both the HealthBench overall score:
 - {benchmark: healthbench, from_metric: bootstrap-score, to_metric: healthbench-score}

@@ -4225,3 +4225,12 @@
   max_score: 1.0
   metadata: '{}'
   review_status: reviewed
+- id: scicode.main
+  display_name: SciCode Main-Problem Solve Rate
+  aliases: []
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed

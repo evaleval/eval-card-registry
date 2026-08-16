@@ -639,10 +639,12 @@ def test_metric_folds_loaded_and_validated(fresh_seed_env):
     ]))
     _seed(seed_dir)
     df = pd.read_parquet(fixtures_dir / "benchmark_metric_folds.parquet")
-    assert df.iloc[0].to_dict() == {
-        "benchmark_id": "foo-bench", "from_metric_id": "score",
-        "to_metric_id": "accuracy", "note": None,
-    }
+    row = df.iloc[0].to_dict()
+    assert row["benchmark_id"] == "foo-bench"
+    assert row["from_metric_id"] == "score"
+    assert row["to_metric_id"] == "accuracy"
+    assert row["note"] is None
+    assert row["scale_factor"] is None or pd.isna(row["scale_factor"])
 
     (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
         {"benchmark": "nope-bench", "from_metric": "score", "to_metric": "accuracy"},
