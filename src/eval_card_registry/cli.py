@@ -532,7 +532,50 @@ def seed(
                 by_id[entry["id"]] = _merge_benchmark(by_id[entry["id"]], entry)
             else:
                 by_id[entry["id"]] = entry
+        _check_benchmark_collisions(list(by_id.values()))
         return list(by_id.values())
+
+    def _check_benchmark_collisions(entries: list[dict]) -> None:
+        """Seed-time guard: two benchmark ids (or their global aliases)
+        that differ only by separators/case are one entity split in two —
+        fold them per specs/benchmark-relationships-audit.md §4. Flag-only,
+        never auto-folds. Pairs verified genuinely distinct go in
+        seed/benchmarks_distinct_allowlist.yaml (a list of id groups).
+        Residual: semantic dupes with different normalized keys
+        (mmmu-val vs mmmu-validation) are invisible to this check.
+        Also rejects '/' in benchmark ids — reserved by the merged-view
+        URL scheme (single-segment merged eval ids stay collision-free
+        with two-segment per-source ids only while benchmark ids are
+        slash-free)."""
+        allow_path = seed_path / "benchmarks_distinct_allowlist.yaml"
+        allowed: list[frozenset[str]] = []
+        if allow_path.exists():
+            with open(allow_path) as f:
+                for group in yaml.safe_load(f) or []:
+                    allowed.append(frozenset(group))
+        key_owners: dict[str, set[str]] = {}
+        for e in entries:
+            bid = str(e["id"])
+            if "/" in bid:
+                raise typer.BadParameter(
+                    f"benchmark id {bid!r} contains '/' (reserved for merged-view routing)"
+                )
+            keys = {collision_fold.collision_key(bid)}
+            keys |= {collision_fold.collision_key(a) for a in (e.get("aliases") or []) if a}
+            for k in keys:
+                key_owners.setdefault(k, set()).add(bid)
+        conflicts = [
+            sorted(ids)
+            for ids in key_owners.values()
+            if len(ids) > 1 and not any(ids <= grp for grp in allowed)
+        ]
+        if conflicts:
+            listing = "; ".join(str(g) for g in sorted(conflicts))
+            raise typer.BadParameter(
+                f"{len(conflicts)} separator/case-collision group(s) among benchmark "
+                f"ids+aliases — fold them (audit spec §4) or allowlist in "
+                f"benchmarks_distinct_allowlist.yaml: {listing}"
+            )
 
     # ------------------------------------------------------------------
     # Families — translate seed/families.yaml's nested {slug: {fields}}

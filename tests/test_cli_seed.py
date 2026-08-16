@@ -527,3 +527,65 @@ def test_two_weak_values_tiebreak_first_file_first_record(fresh_seed_env):
     df = _read_models(fixtures_dir)
     row = df[df["id"] == "lab/model-d"].iloc[0]
     assert row["release_date"] == "2024-03-03"
+
+
+def _seed_expect_fail(seed_dir: Path) -> str:
+    runner = CliRunner()
+    result = runner.invoke(app, ["seed", "--seed-dir", str(seed_dir)])
+    assert result.exit_code != 0, "seed unexpectedly succeeded"
+    return result.output
+
+
+def test_benchmark_separator_collision_rejected(fresh_seed_env):
+    """Two benchmark ids differing only by separators must fail the seed
+    with both ids named in the error (R4 collision guard)."""
+    seed_dir, _ = fresh_seed_env
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+        {"id": "foobench", "display_name": "FooBench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+    ])
+    out = _seed_expect_fail(seed_dir)
+    assert "foo-bench" in out and "foobench" in out
+
+
+def test_benchmark_alias_collision_rejected(fresh_seed_env):
+    """A global alias colliding (normalized) with another benchmark's id
+    is flagged too."""
+    seed_dir, _ = fresh_seed_env
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+        {"id": "bar-bench", "display_name": "Bar Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed",
+         "aliases": ["Foo_Bench"]},
+    ])
+    out = _seed_expect_fail(seed_dir)
+    assert "bar-bench" in out and "foo-bench" in out
+
+
+def test_benchmark_collision_allowlist(fresh_seed_env):
+    """A group listed in seed/benchmarks_distinct_allowlist.yaml passes."""
+    seed_dir, _ = fresh_seed_env
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+        {"id": "foobench", "display_name": "FooBench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+    ])
+    (seed_dir / "benchmarks_distinct_allowlist.yaml").write_text(
+        yaml.safe_dump([["foo-bench", "foobench"]])
+    )
+    _seed(seed_dir)
+
+
+def test_benchmark_id_with_slash_rejected(fresh_seed_env):
+    """'/' is reserved for merged-view routing; ids carrying it fail."""
+    seed_dir, _ = fresh_seed_env
+    _write_benchmarks(seed_dir, [
+        {"id": "foo/bar", "display_name": "Foo Bar", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+    ])
+    out = _seed_expect_fail(seed_dir)
+    assert "foo/bar" in out

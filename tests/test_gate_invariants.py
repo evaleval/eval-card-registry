@@ -1853,3 +1853,45 @@ def test_prefer_official_pinned_examples(aliases_df):
         f"disappeared from the seed (upstream refresh dropped it?), not an "
         f"ownership regression: {gone}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Benchmark entity invariants
+# ---------------------------------------------------------------------------
+
+@pytest.fixture(scope="module")
+def benchmarks_df() -> pd.DataFrame:
+    path = REGISTRY_ROOT / "fixtures" / "canonical_benchmarks.parquet"
+    if not path.exists():
+        pytest.skip("fixtures/canonical_benchmarks.parquet not present (run seed --local)")
+    return pd.read_parquet(path)
+
+
+def test_no_separator_split_benchmarks(benchmarks_df):
+    """No two benchmark ids differ only by separators/case (`wild-bench` vs
+    `wildbench`) — each such pair fragments one benchmark's results across
+    two entities and two eval pages. The seed loader enforces the same rule
+    at seed time (incl. aliases); this gate keeps the committed fixtures
+    honest. Genuinely distinct pairs go in
+    seed/benchmarks_distinct_allowlist.yaml."""
+    allow_path = REGISTRY_ROOT / "seed" / "benchmarks_distinct_allowlist.yaml"
+    allow: list[set] = []
+    if allow_path.exists():
+        for group in yaml.safe_load(allow_path.read_text()) or []:
+            allow.append(set(group))
+    norm = lambda x: re.sub(r"[^a-z0-9]", "", str(x).lower())
+    by: dict = defaultdict(list)
+    for bid in benchmarks_df["id"]:
+        by[norm(bid)].append(str(bid))
+    split = {
+        k: v for k, v in by.items()
+        if len(v) > 1 and not any(set(v) <= grp for grp in allow)
+    }
+    assert split == {}, f"{len(split)} separator/case-split benchmark group(s): {list(split.values())[:8]}"
+
+
+def test_no_slash_in_benchmark_ids(benchmarks_df):
+    """'/' in a benchmark id would let a merged-view single-segment eval id
+    collide with per-source composite/benchmark ids."""
+    bad = [b for b in benchmarks_df["id"] if "/" in str(b)]
+    assert bad == [], f"benchmark ids containing '/': {bad[:8]}"
