@@ -78,7 +78,6 @@ benchmark_display_names:
   apex-agents: "APEX Agents"
   apex-v1: "APEX v1"
   appworld: "AppWorld"
-  browsecompplus: "BrowseComp+"
   livecodebenchpro: "LiveCodeBench Pro"
   sciarena: "SciArena"
   terminal-bench-2-0: "Terminal Bench 2.0"
