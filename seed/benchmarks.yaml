@@ -221,7 +221,7 @@
   review_status: reviewed
 
 - id: gsm8k
-  preferred_metric: accuracy
+  preferred_metric: exact-match
   display_name: GSM8K
   description: Grade School Math 8K — grade school math word problems.
   dataset_repo: openai/gsm8k
@@ -1269,7 +1269,7 @@
 # --- Atomic NLP benchmarks (often reported in HELM Classic / HELM Lite / other suites) ---
 
 - id: boolq
-  preferred_metric: accuracy
+  preferred_metric: exact-match
   display_name: BoolQ
   aliases: ["boolq", "BoolQ"]
   description: BoolQ — yes/no question answering benchmark from naturally occurring web queries (Clark et al. 2019).
