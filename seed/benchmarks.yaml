@@ -182,8 +182,19 @@
 
 - id: naturalquestions
   display_name: NaturalQuestions
-  aliases: ["NaturalQuestions (closed-book)", "NaturalQuestions (open-book)", "Natural Questions (Open Book)", "naturalquestions_open_book", "naturalquestions_closed_book"]
-  description: Google Natural Questions — QA dataset of real Google search queries with Wikipedia-sourced answers (Kwiatkowski et al. 2019). Reported in evaluations under both closed-book (Roberts et al. 2020 formulation) and open-book setups.
+  aliases:
+    - NaturalQuestions (closed-book)
+    - NaturalQuestions (open-book)
+    - Natural Questions (Open Book)
+    - naturalquestions_open_book
+    - naturalquestions_closed_book
+    - Natural Questions
+    - llm_stats_natural_questions
+    - natural-questions
+    - natural_questions
+  description: Google Natural Questions — QA dataset of real Google search queries with
+    Wikipedia-sourced answers (Kwiatkowski et al. 2019). Reported in evaluations under
+    both closed-book (Roberts et al. 2020 formulation) and open-book setups.
   dataset_repo: google-research-datasets/natural_questions
   parent_benchmark_id: null
   tags: '["qa", "knowledge"]'
@@ -365,8 +376,8 @@
   review_status: reviewed
 
 - id: browsecompplus
-  display_name: BrowseCompPlus
-  aliases: ["browsecompplus"]
+  display_name: BrowseComp-Plus
+  aliases: ["browsecompplus", "BrowseCompPlus", "BrowseComp-Plus", "browsecomp plus", "browsecomp_plus", "browsecomp-plus"]
   description: Web browsing comprehension benchmark (extended version).
   dataset_repo: null
   parent_benchmark_id: null
@@ -447,6 +458,7 @@
 
 - id: wildbench
   display_name: WildBench
+  aliases: ["Wild Bench", "wild-bench", "wild_bench", "llm_stats_wild_bench"]
   description: Evaluates LLMs on challenging real-world user queries.
   dataset_repo: allenai/WildBench
   parent_benchmark_id: null
@@ -456,7 +468,11 @@
 
 - id: omni-math
   display_name: Omni-MATH
-  aliases: ["Omni-MATH"]
+  aliases:
+    - Omni-MATH
+    - Omnimath
+    - omnimath
+    - llm_stats_omnimath
   description: Comprehensive math benchmark spanning diverse mathematical domains.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1479,6 +1495,10 @@
     - artificial_analysis.hle
     - "Humanity's Last Exam (accuracy)"
     - "Humanity's Last Exam (calibration error)"
+    - Humanity S Last Exam
+    - humanity-s-last-exam
+    - humanity_s_last_exam
+    - llm_stats_humanity_s_last_exam
   description: Humanity's Last Exam — broad-coverage frontier evaluation curated as an "exam-of-last-resort" for top models.
   dataset_repo: null
   parent_benchmark_id: null
@@ -4228,18 +4248,6 @@
     - browsecomp-long-256k
     - browsecomp_long_256k
     - llm_stats_browsecomp_long_256k
-
-- id: browsecomp-plus
-  display_name: BrowseComp-Plus
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["agentic"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - BrowseComp-Plus
-    - browsecomp plus
-    - browsecomp_plus
 
 - id: browsecomp-small
   display_name: BrowseComp-Small
@@ -9799,19 +9807,6 @@
   aliases:
     - halluqa
 
-- id: hallusion-bench
-  display_name: Hallusion Bench
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["safety"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Hallusion Bench
-    - hallusion-bench
-    - hallusion_bench
-    - llm_stats_hallusion_bench
-
 - id: hallusionbench
   display_name: HallusionBench
   dataset_repo: null
@@ -9821,6 +9816,10 @@
   review_status: reviewed
   aliases:
     - hallusionbench
+    - Hallusion Bench
+    - hallusion-bench
+    - hallusion_bench
+    - llm_stats_hallusion_bench
 
 - id: halubench
   display_name: HaluBench
@@ -10260,19 +10259,6 @@
   review_status: reviewed
   aliases:
     - humanevo
-
-- id: humanity-s-last-exam
-  display_name: Humanity S Last Exam
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Humanity S Last Exam
-    - humanity-s-last-exam
-    - humanity_s_last_exam
-    - llm_stats_humanity_s_last_exam
 
 - id: humanvbench
   display_name: HumanVBench
@@ -12881,19 +12867,6 @@
     - mcp-bench
     - mcp_bench
 
-- id: mcp-mark
-  display_name: Mcp Mark
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["agentic"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - llm_stats_mcp_mark
-    - mcp mark
-    - mcp-mark
-    - mcp_mark
-
 - id: mcp-universe
   display_name: MCP-Universe
   dataset_repo: null
@@ -12911,11 +12884,16 @@
   display_name: MCPMark
   dataset_repo: null
   parent_benchmark_id: null
-  tags: '["general"]'
+  tags: '["agentic"]'
   metadata: '{}'
   review_status: reviewed
   aliases:
     - MCPMark
+    - Mcp Mark
+    - llm_stats_mcp_mark
+    - mcp mark
+    - mcp-mark
+    - mcp_mark
 
 - id: mcptoolbench
   display_name: MCPToolBench++
@@ -13710,18 +13688,6 @@
     - mm-mt-bench
     - mm_mt_bench
 
-- id: mm-vet
-  display_name: MM-Vet
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["multimodal"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - mm vet
-    - mm-vet
-    - mm_vet
-
 - id: mm-vet-v2
   display_name: MM-Vet v2
   dataset_repo: null
@@ -14187,10 +14153,10 @@
     - llm_stats_mmmlu
 
 - id: mmmu-val
-  display_name: Mmmu Val
+  display_name: MMMU (val)
   dataset_repo: null
   parent_benchmark_id: null
-  tags: '["general"]'
+  tags: '["multimodal"]'
   metadata: '{}'
   review_status: reviewed
   aliases:
@@ -14198,30 +14164,15 @@
     - mmmu val
     - mmmu-val
     - mmmu_val
-
-- id: mmmu-validation
-  display_name: Mmmu Validation
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
+    - Mmmu Val
     - llm_stats_mmmu_validation
     - mmmu validation
     - mmmu-validation
     - mmmu_validation
-
-- id: mmmuval
-  display_name: Mmmuval
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
+    - Mmmu Validation
     - llm_stats_mmmuval
     - mmmuval
+    - Mmmuval
 
 - id: mmot
   display_name: MMOT
@@ -14398,15 +14349,20 @@
     - mmtutorbench
 
 - id: mmvet
-  display_name: Mmvet
+  display_name: MM-Vet
   dataset_repo: null
   parent_benchmark_id: null
-  tags: '["general"]'
+  tags: '["multimodal"]'
   metadata: '{}'
   review_status: reviewed
   aliases:
     - llm_stats_mmvet
     - mmvet
+    - Mmvet
+    - MM-Vet
+    - mm vet
+    - mm-vet
+    - mm_vet
 
 - id: mmvetgpt4turbo
   display_name: Mmvetgpt4turbo
@@ -15361,19 +15317,6 @@
     - llm_stats_natural2code
     - natural2code
 
-- id: natural-questions
-  display_name: Natural Questions
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Natural Questions
-    - llm_stats_natural_questions
-    - natural-questions
-    - natural_questions
-
 - id: naturalcc
   display_name: NaturalCC
   dataset_repo: null
@@ -16138,17 +16081,6 @@
   aliases:
     - omnigenbench
 
-- id: omnimath
-  display_name: Omnimath
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["math"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - llm_stats_omnimath
-    - omnimath
-
 - id: omniobject3d
   display_name: OmniObject3D
   dataset_repo: null
@@ -16748,17 +16680,9 @@
     - perception test
     - perception-test
     - perception_test
-
-- id: perceptiontest
-  display_name: Perceptiontest
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - llm_stats_perceptiontest
+    - Perceptiontest
     - perceptiontest
+    - llm_stats_perceptiontest
 
 - id: perfbench
   display_name: PerfBench
@@ -19466,7 +19390,7 @@
     - social_genome
 
 - id: social-iqa
-  display_name: Social Iqa
+  display_name: SocialIQA
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["language-understanding"]'
@@ -19477,15 +19401,8 @@
     - social iqa
     - social-iqa
     - social_iqa
-
-- id: socialiqa
-  display_name: SocialIQA
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["language-understanding"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
+    - Social Iqa
+    - socialiqa
     - SocialIQA
 
 - id: socratic-prmbench
@@ -22243,7 +22160,7 @@
     - video_holmes
 
 - id: video-mme
-  display_name: Video Mme
+  display_name: Video-MME
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["multimodal"]'
@@ -22254,6 +22171,9 @@
     - llm_stats_video_mme
     - video-mme
     - video_mme
+    - videomme
+    - Videomme
+    - llm_stats_videomme
 
 - id: video-mme-long-no-subtitles
   display_name: Video Mme Long No Subtitles
@@ -22291,6 +22211,9 @@
     - video mmmu
     - video-mmmu
     - video_mmmu
+    - Videommmu
+    - videommmu
+    - llm_stats_videommmu
 
 - id: video-ocr-bench
   display_name: Video-OCR Bench
@@ -22416,17 +22339,6 @@
     - llm_stats_videomme_w_sub
     - videomme-w-sub
     - videomme_w_sub
-
-- id: videommmu
-  display_name: Videommmu
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["multimodal"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - llm_stats_videommmu
-    - videommmu
 
 - id: videoreasonbench
   display_name: VideoReasonBench
@@ -22755,19 +22667,6 @@
     - Visulogic
     - llm_stats_visulogic
 
-- id: vita-bench
-  display_name: Vita Bench
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Vita Bench
-    - llm_stats_vita_bench
-    - vita-bench
-    - vita_bench
-
 - id: vitabench
   display_name: VitaBench
   dataset_repo: null
@@ -22777,6 +22676,10 @@
   review_status: reviewed
   aliases:
     - vitabench
+    - Vita Bench
+    - llm_stats_vita_bench
+    - vita-bench
+    - vita_bench
 
 - id: vitextvqa
   display_name: ViTextVQA
@@ -23349,19 +23252,6 @@
   review_status: reviewed
   aliases:
     - WikiSeek
-
-- id: wild-bench
-  display_name: Wild Bench
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Wild Bench
-    - llm_stats_wild_bench
-    - wild-bench
-    - wild_bench
 
 - id: wildhallucinations
   display_name: WildHallucinations

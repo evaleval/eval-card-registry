@@ -210,7 +210,7 @@ relationships:
     is_confirmed: true
 
   - entity_a: mm-vet-v2
-    entity_b: mm-vet
+    entity_b: mmvet
     relationship_type: version_of
     is_confirmed: true
 
@@ -249,7 +249,7 @@ relationships:
     relationship_type: subset_of
     is_confirmed: true
 
-  - entity_a: browsecomp-plus
+  - entity_a: browsecompplus
     entity_b: browsecomp
     relationship_type: extended_from
     is_confirmed: true
