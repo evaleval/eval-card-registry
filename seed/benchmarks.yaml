@@ -5,6 +5,7 @@
 # --- Core leaderboard benchmarks (hfopenllm_v2, la_leaderboard) ---
 
 - id: ifeval
+  preferred_metric: accuracy
   display_name: IFEval
   description: Instruction Following Evaluation — tests instruction-following with verifiable constraints.
   dataset_repo: HuggingFaceH4/ifeval
@@ -14,6 +15,7 @@
   review_status: reviewed
 
 - id: bbh
+  preferred_metric: accuracy
   display_name: BBH
   description: BIG-Bench Hard — subset of BIG-Bench tasks where prior models performed below human average.
   dataset_repo: lukaemon/bbh
@@ -23,6 +25,7 @@
   review_status: reviewed
 
 - id: gpqa
+  preferred_metric: accuracy
   display_name: GPQA
   aliases: ["artificial_analysis.gpqa", "vals ai gpqa"]
   description: Graduate-Level Google-Proof Q&A — expert-level science questions.
@@ -33,6 +36,7 @@
   review_status: reviewed
 
 - id: musr
+  preferred_metric: accuracy
   display_name: MuSR
   aliases: ["MUSR"]
   description: Multistep Soft Reasoning — evaluates multi-step reasoning over long narratives.
@@ -43,6 +47,7 @@
   review_status: reviewed
 
 - id: mmlu-pro
+  preferred_metric: accuracy
   display_name: MMLU-Pro
   aliases:
     - MMLU-PRO
@@ -90,6 +95,7 @@
   review_status: reviewed
 
 - id: math
+  preferred_metric: accuracy
   display_name: MATH
   aliases: ["artificial_analysis.math"]
   description: MATH dataset — competition mathematics problems at various difficulty levels. The `math_500` 500-problem subset has its own canonical (math-500, parent=math).
@@ -102,6 +108,7 @@
 # --- HELM benchmarks ---
 
 - id: mmlu
+  preferred_metric: exact-match
   display_name: MMLU
   aliases: ["MMLU All Subjects", "mmlu-base", "Mmlu Base", "mmlu_base", "llm_stats_mmlu_base"]
   scoped_aliases:
@@ -172,6 +179,7 @@
   review_status: reviewed
 
 - id: narrativeqa
+  preferred_metric: f1
   display_name: NarrativeQA
   description: Reading comprehension over full-length books and movie scripts.
   dataset_repo: deepmind/narrativeqa
@@ -181,6 +189,7 @@
   review_status: reviewed
 
 - id: naturalquestions
+  preferred_metric: f1
   display_name: NaturalQuestions
   aliases:
     - NaturalQuestions (closed-book)
@@ -202,6 +211,7 @@
   review_status: reviewed
 
 - id: openbookqa
+  preferred_metric: exact-match
   display_name: OpenbookQA
   description: Elementary science QA requiring multi-hop reasoning with open book facts.
   dataset_repo: allenai/openbookqa
@@ -211,6 +221,7 @@
   review_status: reviewed
 
 - id: gsm8k
+  preferred_metric: accuracy
   display_name: GSM8K
   description: Grade School Math 8K — grade school math word problems.
   dataset_repo: openai/gsm8k
@@ -220,6 +231,7 @@
   review_status: reviewed
 
 - id: legalbench
+  preferred_metric: accuracy
   aliases:
     - "Legal bench conclusion tasks"
     - "Legal bench interpretation tasks"
@@ -244,6 +256,7 @@
   review_status: reviewed
 
 - id: medqa
+  preferred_metric: accuracy
   aliases:
     - "Medqa asian"
     - "Medqa black"
@@ -327,6 +340,7 @@
   review_status: reviewed
 
 - id: rewardbench-reasoning
+  preferred_metric: accuracy
   display_name: RewardBench Reasoning
   aliases: ["Reasoning"]
   description: RewardBench sub-category — reasoning prompts.
@@ -339,6 +353,7 @@
 # --- Agent / coding benchmarks ---
 
 - id: swe-bench
+  preferred_metric: accuracy
   display_name: SWE-bench
   aliases:
     - swe-bench
@@ -366,6 +381,7 @@
   review_status: reviewed
 
 - id: appworld-test-normal
+  preferred_metric: score
   display_name: AppWorld Test Normal
   aliases: ["appworld/test_normal"]
   description: AppWorld benchmark — tests LLM agents on realistic app-based tasks (normal subset).
@@ -376,6 +392,7 @@
   review_status: reviewed
 
 - id: browsecompplus
+  preferred_metric: score
   display_name: BrowseComp-Plus
   aliases: ["browsecompplus", "BrowseCompPlus", "BrowseComp-Plus", "browsecomp plus", "browsecomp_plus", "browsecomp-plus"]
   description: Web browsing comprehension benchmark (extended version).
@@ -402,6 +419,7 @@
 # --- Function calling ---
 
 - id: bfcl
+  preferred_metric: accuracy
   display_name: BFCL
   description: Berkeley Function Calling Leaderboard — evaluates LLM function calling capabilities.
   dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
@@ -416,6 +434,7 @@
 # --- Multilingual ---
 
 - id: global-mmlu-lite
+  preferred_metric: accuracy
   display_name: Global MMLU Lite
   scoped_aliases:
     global-mmlu-lite:
@@ -457,6 +476,7 @@
 # --- Other well-known benchmarks ---
 
 - id: wildbench
+  preferred_metric: wb-score
   display_name: WildBench
   aliases: ["Wild Bench", "wild-bench", "wild_bench", "llm_stats_wild_bench"]
   description: Evaluates LLMs on challenging real-world user queries.
@@ -467,6 +487,7 @@
   review_status: reviewed
 
 - id: omni-math
+  preferred_metric: accuracy
   display_name: Omni-MATH
   aliases:
     - Omni-MATH
@@ -502,6 +523,7 @@
   review_status: reviewed
 
 - id: livecodebench
+  preferred_metric: pass-at-1
   display_name: LiveCodeBench
   aliases: ["artificial_analysis.livecodebench"]
   description: Live code generation benchmark with continuously updated problems. Distinct from LiveCodeBench Pro — do not alias Pro into this entry.
@@ -512,6 +534,7 @@
   review_status: reviewed
 
 - id: livecodebench-pro
+  preferred_metric: pass-at-1
   display_name: LiveCodeBench Pro
   aliases:
     - livecodebenchpro
@@ -747,6 +770,7 @@
   review_status: reviewed
 
 - id: apex-agents
+  preferred_metric: mean-score
   display_name: APEX Agents
   aliases: ["apex-agents"]
   scoped_aliases:
@@ -991,6 +1015,7 @@
   review_status: reviewed
 
 - id: gaia
+  preferred_metric: accuracy
   display_name: GAIA
   aliases: ["gaia", "GAIA", "hal-gaia"]
   description: GAIA — 466 real-world questions for general AI assistants requiring reasoning, multimodality, web browsing, and tool use. Mialon et al. 2023, arXiv2311.12983, ICLR 2024.
@@ -1011,6 +1036,7 @@
   review_status: reviewed
 
 - id: scicode
+  preferred_metric: score
   display_name: SciCode
   aliases: ["scicode", "SciCode", "hal-scicode", "artificial_analysis.scicode"]
   description: SciCode — 80 main scientific coding problems decomposed into 338 subproblems across 16 subdomains in physics, math, materials science, biology, and chemistry; gold solutions and tests authored by scientists. Tian et al. 2024, arXiv2407.13168, NeurIPS 2024. Data on GitHub at scicode-bench/SciCode (no canonical HF dataset).
@@ -1083,6 +1109,7 @@
 # --- SWE-bench Verified family (genuine decomposition: Verified ⊂ SWE-bench, Mini ⊂ Verified) ---
 
 - id: swe-bench-verified
+  preferred_metric: accuracy
   display_name: SWE-bench Verified
   aliases: ["SWE-bench Verified", "swe-bench-verified", "swe-bench-verified-leaderboard", "swe_bench_verified"]
   description: 500-task human-filtered subset of SWE-bench, created jointly with OpenAI to ensure problem descriptions are clear, test patches are correct, and tasks are solvable. Note that OpenAI's later audit found contamination in frontier models — Verified scores have caveats.
@@ -1242,6 +1269,7 @@
 # --- Atomic NLP benchmarks (often reported in HELM Classic / HELM Lite / other suites) ---
 
 - id: boolq
+  preferred_metric: accuracy
   display_name: BoolQ
   aliases: ["boolq", "BoolQ"]
   description: BoolQ — yes/no question answering benchmark from naturally occurring web queries (Clark et al. 2019).
@@ -1262,6 +1290,7 @@
   review_status: reviewed
 
 - id: cnn-dailymail
+  preferred_metric: rouge-2
   display_name: CNN/DailyMail
   aliases:
     - cnn_dailymail
@@ -1278,6 +1307,7 @@
   review_status: reviewed
 
 - id: hellaswag
+  preferred_metric: accuracy
   display_name: HellaSwag
   aliases: ["hellaswag", "HellaSwag"]
   description: HellaSwag — commonsense natural language inference benchmark (Zellers et al. 2019).
@@ -1288,6 +1318,7 @@
   review_status: reviewed
 
 - id: imdb
+  preferred_metric: exact-match
   display_name: IMDb
   aliases: ["imdb", "IMDb", "IMDB"]
   description: IMDb — sentiment classification on movie reviews.
@@ -1328,6 +1359,7 @@
   review_status: reviewed
 
 - id: truthfulqa
+  preferred_metric: exact-match
   display_name: TruthfulQA
   aliases: ["truthfulqa", "TruthfulQA"]
   description: TruthfulQA — measures whether language models generate truthful answers (Lin et al. 2022).
@@ -1338,6 +1370,7 @@
   review_status: reviewed
 
 - id: xsum
+  preferred_metric: rouge-2
   display_name: XSum
   aliases: ["xsum", "XSum"]
   description: XSum — extreme summarization benchmark on BBC news articles.
@@ -1380,6 +1413,7 @@
   review_status: reviewed
 
 - id: artificial-analysis-llms
+  preferred_metric: score
   display_name: Artificial Analysis LLMs
   aliases: ["artificial-analysis-llms", "artificial_analysis_llms", "Artificial Analysis", "Artificial Analysis LLMs", "artificial_analysis_llm_api", "artificial-analysis-llm-api", "Artificial Analysis LLM API"]
   description: Artificial Analysis — third-party LLM leaderboard at artificialanalysis.ai.
@@ -1444,6 +1478,7 @@
   review_status: reviewed
 
 - id: terminal-bench-2
+  preferred_metric: accuracy
   display_name: Terminal-Bench 2.0
   aliases:
     - terminal-bench-2.0
@@ -1487,6 +1522,7 @@
 # ============================================================
 
 - id: hle
+  preferred_metric: accuracy
   display_name: Humanity's Last Exam
   aliases:
     - HLE
@@ -1507,6 +1543,7 @@
   review_status: reviewed
 
 - id: aime
+  preferred_metric: accuracy
   display_name: AIME
   aliases:
     - AIME
@@ -1524,6 +1561,7 @@
   review_status: reviewed
 
 - id: aime-2025
+  preferred_metric: accuracy
   display_name: AIME 2025
   aliases: ["AIME-25", "Aime 25", "aime_25", "aime-25", "AIME 2025", "aime-2025", "aime_2025", "aime 2025", "artificial_analysis.aime_25", "artificial_analysis_aime_25", "Aime aime 2025", "vals_ai_aime_aime_2025", "llm_stats_aime_2025"]
   description: AIME 2025 problem set — used by AA and others as a frontier math reasoning benchmark distinct from earlier AIME years.
@@ -1534,6 +1572,7 @@
   review_status: reviewed
 
 - id: math-500
+  preferred_metric: accuracy
   display_name: MATH-500
   aliases:
     - MATH-500
@@ -1557,6 +1596,7 @@
   review_status: reviewed
 
 - id: ifbench
+  preferred_metric: accuracy
   display_name: IFBench
   aliases: ["IFBench", "artificial_analysis.ifbench"]
   description: IFBench (Instruction Following Benchmark) — distinct from IFEval. AA includes it as a separate instruction-following column on its leaderboard.
@@ -1567,6 +1607,7 @@
   review_status: reviewed
 
 - id: terminalbench-hard
+  preferred_metric: accuracy
   display_name: TerminalBench Hard
   aliases: ["TerminalBench-Hard", "Terminalbench Hard", "terminal-bench-hard", "terminalbench_hard", "artificial_analysis.terminalbench_hard"]
   description: TerminalBench Hard — the hard split of TerminalBench. Distinct from terminal-bench-2 (which is a different benchmark).
@@ -1615,6 +1656,7 @@
 # --- Multimodal benchmarks ---
 
 - id: mmmu
+  preferred_metric: accuracy
   display_name: MMMU
   aliases:
     - MMMU
@@ -1853,6 +1895,7 @@
 # --- Text benchmarks ---
 
 - id: livebench
+  preferred_metric: accuracy
   display_name: LiveBench
   aliases: ["LiveBench", "livebench", "livebench/overall", "live_bench", "live-bench"]
   description: LiveBench — continuously refreshed benchmark to avoid contamination, covering math/coding/data-analysis/reasoning/language/instruction-following.
@@ -2227,6 +2270,7 @@
 # ============================================================
 
 - id: humaneval
+  preferred_metric: accuracy
   display_name: HumanEval
   aliases:
     - HumanEval
@@ -2519,6 +2563,7 @@
     - llm_stats_aa_index
 
 - id: aa-lcr
+  preferred_metric: accuracy
   display_name: AA-LCR
   description: Artificial Analysis Long-Context Reasoning column.
   dataset_repo: null
@@ -2868,6 +2913,7 @@
     - llm_stats_aider_polyglot_edit
 
 - id: aime-2024
+  preferred_metric: accuracy
   display_name: AIME 2024
   description: AIME 2024 problem set — frontier math reasoning benchmark for the 2024 American Invitational Mathematics Examination year.
   dataset_repo: null
@@ -3041,6 +3087,7 @@
     - alm_bench
 
 - id: alpacaeval-2-0
+  preferred_metric: win-rate
   display_name: AlpacaEval 2.0
   dataset_repo: null
   parent_benchmark_id: null
@@ -3960,6 +4007,7 @@
     - llm_stats_big_bench_extra_hard
 
 - id: big-bench-hard
+  preferred_metric: accuracy
   display_name: BIG-Bench Hard
   dataset_repo: null
   parent_benchmark_id: null
@@ -5640,6 +5688,7 @@
     - llm_stats_common_voice_15
 
 - id: commonsenseqa
+  preferred_metric: accuracy
   display_name: CommonsenseQA
   dataset_repo: null
   parent_benchmark_id: null
@@ -6424,6 +6473,7 @@
     - cweval
 
 - id: cybench
+  preferred_metric: accuracy
   display_name: Cybench
   dataset_repo: null
   parent_benchmark_id: null
@@ -8178,6 +8228,7 @@
     - FACTORY
 
 - id: facts-grounding
+  preferred_metric: accuracy
   display_name: Facts Grounding
   dataset_repo: null
   parent_benchmark_id: null
@@ -8469,6 +8520,7 @@
     - FigureQA
 
 - id: finance-agent
+  preferred_metric: accuracy
   display_name: Finance Agent
   dataset_repo: null
   parent_benchmark_id: null
@@ -8902,6 +8954,7 @@
     - FreshStack
 
 - id: frontiermath
+  preferred_metric: accuracy
   display_name: FrontierMath
   dataset_repo: null
   parent_benchmark_id: null
@@ -9936,6 +9989,7 @@
     - head_to_tail
 
 - id: healthbench
+  preferred_metric: healthbench-score
   display_name: Healthbench
   dataset_repo: null
   parent_benchmark_id: null
@@ -12684,6 +12738,7 @@
     - llm_stats_mathvision
 
 - id: mathvista
+  preferred_metric: accuracy
   display_name: MathVista
   dataset_repo: null
   parent_benchmark_id: null
@@ -13283,6 +13338,7 @@
     - mft25
 
 - id: mgsm
+  preferred_metric: accuracy
   display_name: MGSM
   dataset_repo: null
   parent_benchmark_id: null
@@ -16820,6 +16876,7 @@
     - pinchbench
 
 - id: piqa
+  preferred_metric: accuracy
   display_name: Piqa
   dataset_repo: null
   parent_benchmark_id: null
@@ -20059,6 +20116,7 @@
     - swe_bench_multimodal
 
 - id: swe-bench-pro
+  preferred_metric: accuracy
   display_name: SWE-Bench Pro
   dataset_repo: null
   parent_benchmark_id: null
@@ -20678,6 +20736,7 @@
     - tempreason
 
 - id: terminal-bench
+  preferred_metric: accuracy
   display_name: Terminal Bench
   dataset_repo: null
   parent_benchmark_id: null
@@ -23510,6 +23569,7 @@
     - xlsum_english
 
 - id: xstest
+  preferred_metric: score
   display_name: Xstest
   dataset_repo: null
   parent_benchmark_id: null
@@ -23683,6 +23743,7 @@
     - corpfin
 
 - id: gpqa-diamond
+  preferred_metric: accuracy
   display_name: GPQA Diamond
   description: GPQA Diamond subset — graduate-level science Q&A (high-difficulty).
   dataset_repo: null
@@ -23949,6 +24010,7 @@
     - vals_ai_gpqa_overall
 
 - id: bbq
+  preferred_metric: accuracy
   display_name: BBQ
   description: BBQ — Bias Benchmark for QA.
   dataset_repo: null
@@ -23960,6 +24022,7 @@
     - bbq
     - openeval_bbq
 - id: disinformation
+  preferred_metric: score
   display_name: Disinformation
   description: Disinformation evaluation — measures susceptibility to producing disinformation.
   dataset_repo: null
@@ -24062,6 +24125,7 @@
     - openeval_moralbench
 
 - id: simplesafetytests
+  preferred_metric: score
   display_name: SimpleSafetyTests
   description: SimpleSafetyTests — small probe suite for catastrophic safety failures.
   dataset_repo: null
@@ -24088,6 +24152,7 @@
     - helm_safety_anthropic_red_team
 
 - id: harmbench
+  preferred_metric: score
   display_name: HarmBench
   description: HarmBench — automated red-teaming evaluation of LLM behaviors against a taxonomy of harms.
   dataset_repo: null
@@ -24402,6 +24467,7 @@
     - llm_stats_humaneval_plus
 
 - id: mbpp-plus
+  preferred_metric: accuracy
   display_name: MBPP+
   description: MBPP+ — EvalPlus's enhanced-test-suite version of MBPP (more rigorous correctness tests).
   dataset_repo: evalplus/evalplus

@@ -103,6 +103,9 @@ _SCHEMAS: dict[str, dict] = {
         "description": pd.StringDtype(),
         "dataset_repo": pd.StringDtype(),
         "parent_benchmark_id": pd.StringDtype(),
+        # Registry-declared default metric for the merged benchmark view
+        # (seed key `preferred_metric`). Null → consumer fallback rules.
+        "preferred_metric_id": pd.StringDtype(),
         "tags": pd.StringDtype(),
         "metadata": pd.StringDtype(),
         "review_status": pd.StringDtype(),
@@ -179,6 +182,17 @@ _SCHEMAS: dict[str, dict] = {
         "review_status": pd.StringDtype(),
         "created_at": pd.StringDtype(),
         "updated_at": pd.StringDtype(),
+    },
+    # Curated per-benchmark metric naming folds (seed/metric_folds.yaml):
+    # `from_metric_id` on `benchmark_id` is the same measurement as
+    # `to_metric_id` under a generic name. Naming folds ONLY — protocol
+    # variants (cot-correct vs accuracy) never fold. Consumed by the
+    # producer to compute `metric_id_effective` for the merged view.
+    "benchmark_metric_folds": {
+        "benchmark_id": pd.StringDtype(),
+        "from_metric_id": pd.StringDtype(),
+        "to_metric_id": pd.StringDtype(),
+        "note": pd.StringDtype(),
     },
     "eval_harnesses": {
         "id": pd.StringDtype(),

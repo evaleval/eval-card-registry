@@ -185,8 +185,8 @@
   aliases: ["Mean score"]
   score_type: continuous
   lower_is_better: false
-  min_score: null
-  max_score: null
+  min_score: 0.0
+  max_score: 1.0
   metadata: '{}'
   review_status: reviewed
 
@@ -4168,3 +4168,60 @@
   max_score: 100.0
   metadata: '{"kind": "real", "confidence": "high", "family": "bespoke-paper", "source": "0-100 scale. Each dimension score is linearly normalized to [0,1] using empirical bounds and then scaled by 100; WorldScore-Static is the arithmetic mean of th\u2026", "provenance": "paperswithcode-adapter", "paper": "https://arxiv.org/html/2504.00983v2"}'
   review_status: draft
+
+# --- Merged-benchmark-view mints (2026-08-16): canonical homes for
+# --- generically-labelled source primaries, so metric folds are expressible.
+- id: wb-score
+  display_name: WildBench Score
+  aliases: ["WB Score", "wb score", "wb_score"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+- id: final-acc
+  display_name: Final Accuracy
+  aliases: ["final_acc", "Final Acc"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+- id: bootstrap-score
+  display_name: Bootstrap Score
+  aliases: ["bootstrap_score", "Bootstrap score"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: null
+  max_score: null
+  metadata: '{}'
+  review_status: reviewed
+- id: healthbench-score
+  display_name: HealthBench Score
+  aliases: ["HealthBench Score", "healthbench_score"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+- id: calibration-error
+  display_name: Calibration Error
+  aliases: ["Calibration Error", "calibration_error", "RMS Calibration Error"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{}'
+  review_status: reviewed
+- id: task-success-rate
+  display_name: Task Success Rate
+  aliases: ["Task success rate", "task_success_rate", "Success rate", "Success Rate"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed

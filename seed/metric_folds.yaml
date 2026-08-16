@@ -1,0 +1,59 @@
+# Per-benchmark metric naming folds (merged-benchmark-view spec, R2).
+# An entry states: `from_metric` reported on `benchmark` IS the same
+# measurement as `to_metric`, published under a generic name. Folds apply
+# to every source reporting from_metric on that benchmark — so an entry is
+# only valid when NO source uses that metric name for a different
+# measurement on the same benchmark (that conflict is why hle needed a
+# producer hotfix first, and why alpacaeval-2-0 / math / truthfulqa /
+# scicode carry no score fold at all).
+# NAMING FOLDS ONLY — protocol variants (cot-correct, exact-match under a
+# different elicitation) never fold.
+# Verified against warehouse snapshot 2026-08-13T22-02-24Z score ranges.
+
+# Aggregator/source `score` == accuracy fraction (range- and
+# semantics-checked per benchmark):
+- {benchmark: aa-lcr, from_metric: score, to_metric: accuracy}
+- {benchmark: aime, from_metric: score, to_metric: accuracy}
+- {benchmark: aime-2024, from_metric: score, to_metric: accuracy}
+- {benchmark: aime-2025, from_metric: score, to_metric: accuracy}
+- {benchmark: bfcl, from_metric: score, to_metric: accuracy}
+- {benchmark: boolq, from_metric: score, to_metric: accuracy}
+- {benchmark: commonsenseqa, from_metric: score, to_metric: accuracy}
+- {benchmark: facts-grounding, from_metric: score, to_metric: accuracy}
+- {benchmark: finance-agent, from_metric: score, to_metric: accuracy}
+- {benchmark: frontiermath, from_metric: score, to_metric: accuracy}
+- {benchmark: global-mmlu-lite, from_metric: score, to_metric: accuracy}
+- {benchmark: gpqa, from_metric: score, to_metric: accuracy}
+- {benchmark: gsm8k, from_metric: score, to_metric: accuracy}
+- {benchmark: hle, from_metric: score, to_metric: accuracy,
+   note: "safe only with the producer hotfix that re-keys hle-source calibration rows off `score`"}
+- {benchmark: humaneval, from_metric: score, to_metric: accuracy}
+- {benchmark: ifbench, from_metric: score, to_metric: accuracy}
+- {benchmark: ifeval, from_metric: score, to_metric: accuracy}
+- {benchmark: livebench, from_metric: score, to_metric: accuracy}
+- {benchmark: math-500, from_metric: score, to_metric: accuracy}
+- {benchmark: mathvista, from_metric: score, to_metric: accuracy}
+- {benchmark: mbpp-plus, from_metric: score, to_metric: accuracy}
+- {benchmark: mgsm, from_metric: score, to_metric: accuracy}
+- {benchmark: mmlu-pro, from_metric: score, to_metric: accuracy}
+- {benchmark: mmmu, from_metric: score, to_metric: accuracy}
+- {benchmark: musr, from_metric: score, to_metric: accuracy}
+- {benchmark: omni-math, from_metric: score, to_metric: accuracy}
+- {benchmark: piqa, from_metric: score, to_metric: accuracy}
+- {benchmark: swe-bench, from_metric: score, to_metric: accuracy}
+- {benchmark: swe-bench-pro, from_metric: score, to_metric: accuracy}
+- {benchmark: swe-bench-verified, from_metric: score, to_metric: accuracy}
+- {benchmark: terminal-bench, from_metric: score, to_metric: accuracy}
+- {benchmark: terminal-bench-2, from_metric: score, to_metric: accuracy}
+- {benchmark: terminalbench-hard, from_metric: score, to_metric: accuracy}
+
+# LiveCodeBench sources report pass@1 as `score`:
+- {benchmark: livecodebench, from_metric: score, to_metric: pass-at-1}
+
+# ifeval harness raw `final_acc` (minted as final-acc) == prompt-level accuracy:
+- {benchmark: ifeval, from_metric: final-acc, to_metric: accuracy}
+
+# HealthBench: harness primary `bootstrap_score` (minted bootstrap-score)
+# and llm-stats `score` are both the HealthBench overall score:
+- {benchmark: healthbench, from_metric: bootstrap-score, to_metric: healthbench-score}
+- {benchmark: healthbench, from_metric: score, to_metric: healthbench-score}

@@ -49,7 +49,9 @@ from typing import Callable, Optional, TypeVar
 # Bump minor when ADDING columns (backward-compatible). The producer
 # asserts the major matches what it expects.
 # 3.1: added canonical_orgs.logo_url (org brand-mark pointer).
-SCHEMA_VERSION = "registry.3.1"
+# 3.2: added canonical_benchmarks.preferred_metric_id + the
+#      benchmark_metric_folds table (merged benchmark view).
+SCHEMA_VERSION = "registry.3.2"
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SEED_DIR = REPO_ROOT / "seed"

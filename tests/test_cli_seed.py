@@ -589,3 +589,70 @@ def test_benchmark_id_with_slash_rejected(fresh_seed_env):
     ])
     out = _seed_expect_fail(seed_dir)
     assert "foo/bar" in out
+
+
+def test_preferred_metric_validated_and_renamed(fresh_seed_env):
+    """`preferred_metric` seed key lands as `preferred_metric_id` column;
+    an unknown metric id fails the seed."""
+    import pandas as pd
+    seed_dir, fixtures_dir = fresh_seed_env
+    (seed_dir / "metrics.yaml").write_text(yaml.safe_dump([
+        {"id": "accuracy", "display_name": "Accuracy", "score_type": "continuous",
+         "lower_is_better": False, "min_score": 0.0, "max_score": 1.0,
+         "metadata": "{}", "review_status": "reviewed"},
+    ]))
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed", "preferred_metric": "accuracy"},
+    ])
+    _seed(seed_dir)
+    df = pd.read_parquet(fixtures_dir / "canonical_benchmarks.parquet")
+    assert df.set_index("id").loc["foo-bench", "preferred_metric_id"] == "accuracy"
+
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed", "preferred_metric": "acuracy"},
+    ])
+    out = _seed_expect_fail(seed_dir)
+    assert "acuracy" in out
+
+
+def test_metric_folds_loaded_and_validated(fresh_seed_env):
+    """metric_folds.yaml lands as the benchmark_metric_folds table; unknown
+    benchmark ids and chained folds fail the seed."""
+    import pandas as pd
+    seed_dir, fixtures_dir = fresh_seed_env
+    (seed_dir / "metrics.yaml").write_text(yaml.safe_dump([
+        {"id": "accuracy", "display_name": "Accuracy", "score_type": "continuous",
+         "lower_is_better": False, "min_score": 0.0, "max_score": 1.0,
+         "metadata": "{}", "review_status": "reviewed"},
+        {"id": "score", "display_name": "Score", "score_type": "continuous",
+         "lower_is_better": False, "min_score": None, "max_score": None,
+         "metadata": "{}", "review_status": "reviewed"},
+    ]))
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+    ])
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+    ]))
+    _seed(seed_dir)
+    df = pd.read_parquet(fixtures_dir / "benchmark_metric_folds.parquet")
+    assert df.iloc[0].to_dict() == {
+        "benchmark_id": "foo-bench", "from_metric_id": "score",
+        "to_metric_id": "accuracy", "note": None,
+    }
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "nope-bench", "from_metric": "score", "to_metric": "accuracy"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "nope-bench" in out
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+        {"benchmark": "foo-bench", "from_metric": "accuracy", "to_metric": "score"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "chained" in out

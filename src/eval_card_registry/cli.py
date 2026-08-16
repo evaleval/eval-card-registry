@@ -532,6 +532,24 @@ def seed(
                 by_id[entry["id"]] = _merge_benchmark(by_id[entry["id"]], entry)
             else:
                 by_id[entry["id"]] = entry
+        # `preferred_metric` (seed key) -> `preferred_metric_id` (column),
+        # validated against metrics.yaml so a typo can't silently null the
+        # merged-view default.
+        metrics_path = seed_path / "metrics.yaml"
+        metric_ids: set[str] = set()
+        if metrics_path.exists():
+            with open(metrics_path) as f:
+                metric_ids = {m["id"] for m in (yaml.safe_load(f) or [])}
+        for entry in by_id.values():
+            pm = entry.pop("preferred_metric", None)
+            if pm is not None:
+                if pm not in metric_ids:
+                    raise typer.BadParameter(
+                        f"benchmark {entry['id']!r}: preferred_metric {pm!r} "
+                        f"is not a canonical metric id"
+                    )
+                entry["preferred_metric_id"] = pm
+
         _check_benchmark_collisions(list(by_id.values()))
         return list(by_id.values())
 
@@ -1186,6 +1204,56 @@ def seed(
         inf_plat_df = inf_plat_df[inf_cols]
         store.set_table("canonical_inference_platforms", inf_plat_df)
         typer.echo(f"  inference_platforms: {len(inf_plat_rows)}")
+
+    # ------------------------------------------------------------------
+    # Benchmark metric folds — flat dim table (no entity ids, so it skips
+    # the seed_specs/upsert path). Entries state that `from_metric` on
+    # `benchmark` is the preferred measurement under a generic name.
+    # ------------------------------------------------------------------
+    folds_path = seed_path / "metric_folds.yaml"
+    if folds_path.exists():
+        import pandas as pd
+
+        with open(folds_path) as f:
+            fold_entries = yaml.safe_load(f) or []
+        if not isinstance(fold_entries, list):
+            raise typer.BadParameter(f"{folds_path} must be a flat list")
+        bench_ids = {e["id"] for e in _load_benchmarks_merged()}
+        fold_metrics_path = seed_path / "metrics.yaml"
+        metric_ids = set()
+        if fold_metrics_path.exists():
+            with open(fold_metrics_path) as f:
+                metric_ids = {m["id"] for m in (yaml.safe_load(f) or [])}
+        seen_pairs: set[tuple[str, str]] = set()
+        fold_rows = []
+        for e in fold_entries:
+            b, fm, tm = e.get("benchmark"), e.get("from_metric"), e.get("to_metric")
+            if not (b and fm and tm):
+                raise typer.BadParameter(f"metric_folds entry needs benchmark/from_metric/to_metric: {e!r}")
+            if b not in bench_ids:
+                raise typer.BadParameter(f"metric_folds: unknown benchmark {b!r}")
+            missing = [m for m in (fm, tm) if m not in metric_ids]
+            if missing:
+                raise typer.BadParameter(f"metric_folds ({b}): unknown metric id(s) {missing}")
+            if fm == tm:
+                raise typer.BadParameter(f"metric_folds ({b}): self-fold {fm!r}")
+            if (b, fm) in seen_pairs:
+                raise typer.BadParameter(f"metric_folds: duplicate fold for ({b}, {fm})")
+            seen_pairs.add((b, fm))
+            fold_rows.append({
+                "benchmark_id": b, "from_metric_id": fm,
+                "to_metric_id": tm, "note": e.get("note"),
+            })
+        # No chains: a fold target must not itself be folded on the same benchmark.
+        targets = {(r["benchmark_id"], r["to_metric_id"]) for r in fold_rows}
+        chained = sorted(targets & seen_pairs)
+        if chained:
+            raise typer.BadParameter(f"metric_folds: chained folds {chained}")
+        folds_df = pd.DataFrame(
+            fold_rows, columns=list(schemas._SCHEMAS["benchmark_metric_folds"].keys())
+        )
+        store.set_table("benchmark_metric_folds", folds_df)
+        typer.echo(f"  metric_folds: {len(fold_rows)}")
 
     # Derive denormalized parent-walk caches now that all canonical_models
     # rows are present. `model_group_id` and `lineage_origin_model_org_id`

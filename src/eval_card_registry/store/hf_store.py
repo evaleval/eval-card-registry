@@ -34,6 +34,7 @@ TABLE_NAMES = [
     "canonical_families",
     "canonical_composites",
     "canonical_metrics",
+    "benchmark_metric_folds",
     "eval_harnesses",
     "canonical_inference_platforms",
     "aliases",
