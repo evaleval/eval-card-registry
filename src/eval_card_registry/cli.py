@@ -8,6 +8,7 @@ Commands:
 """
 import json
 import re
+import unicodedata
 from pathlib import Path
 from typing import Optional
 
@@ -577,7 +578,22 @@ def seed(
                     allowed.append(frozenset(group))
 
         def _norm(s: str) -> str:
-            return re.sub(r"[^a-z0-9]", "", str(s).casefold())
+            # NFKD + combining-mark strip folds accent variants ("racé" vs
+            # "race") into one key before the alphanumeric strip would
+            # silently delete the accented char and miss the collision.
+            # Residual: cross-script confusables (Cyrillic 'а') still evade.
+            decomposed = unicodedata.normalize("NFKD", str(s))
+            base = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+            return re.sub(r"[^a-z0-9]", "", base.casefold())
+
+        # Typo guard: every allowlisted id must name a real benchmark,
+        # else a stale/misspelled allowlist entry silently stops guarding.
+        all_ids = {str(e["id"]) for e in entries}
+        stale = sorted({bid for grp in allowed for bid in grp} - all_ids)
+        if stale:
+            raise typer.BadParameter(
+                f"benchmarks_distinct_allowlist.yaml names unknown benchmark id(s): {stale}"
+            )
 
         key_owners: dict[str, set[str]] = {}
         for e in entries:
