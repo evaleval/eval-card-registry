@@ -4218,7 +4218,7 @@
   review_status: reviewed
 - id: task-success-rate
   display_name: Task Success Rate
-  aliases: ["Task success rate", "task_success_rate", "Success rate", "Success Rate"]
+  aliases: ["Task success rate", "task_success_rate"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0

@@ -7,6 +7,7 @@ Commands:
   sync      Batch sync one or all EEE configs → eval_results table
 """
 import json
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -554,10 +555,13 @@ def seed(
         return list(by_id.values())
 
     def _check_benchmark_collisions(entries: list[dict]) -> None:
-        """Seed-time guard: two benchmark ids (or their global aliases)
-        that differ only by separators/case are one entity split in two —
-        fold them per specs/benchmark-relationships-audit.md §4. Flag-only,
-        never auto-folds. Pairs verified genuinely distinct go in
+        """Seed-time guard: two benchmarks whose ids, display names, or
+        global aliases collapse to the same normalized key (casefold +
+        strip non-alphanumerics — stricter than collision_fold's
+        separator-only key, so spaced llm-stats-mint aliases like
+        "Vita Bench" are covered) are one entity split in two — fold them
+        per specs/benchmark-relationships-audit.md §4. Flag-only, never
+        auto-folds. Groups verified genuinely distinct go in
         seed/benchmarks_distinct_allowlist.yaml (a list of id groups).
         Residual: semantic dupes with different normalized keys
         (mmmu-val vs mmmu-validation) are invisible to this check.
@@ -571,6 +575,10 @@ def seed(
             with open(allow_path) as f:
                 for group in yaml.safe_load(f) or []:
                     allowed.append(frozenset(group))
+
+        def _norm(s: str) -> str:
+            return re.sub(r"[^a-z0-9]", "", str(s).casefold())
+
         key_owners: dict[str, set[str]] = {}
         for e in entries:
             bid = str(e["id"])
@@ -578,8 +586,14 @@ def seed(
                 raise typer.BadParameter(
                     f"benchmark id {bid!r} contains '/' (reserved for merged-view routing)"
                 )
-            keys = {collision_fold.collision_key(bid)}
-            keys |= {collision_fold.collision_key(a) for a in (e.get("aliases") or []) if a}
+            # id + display_name + aliases: all three become resolver
+            # aliases at seed time (display_name is auto-promoted), so all
+            # three can carry a dupe in.
+            keys = {_norm(bid)}
+            if e.get("display_name"):
+                keys.add(_norm(e["display_name"]))
+            keys |= {_norm(a) for a in (e.get("aliases") or []) if a}
+            keys.discard("")
             for k in keys:
                 key_owners.setdefault(k, set()).add(bid)
         conflicts = [

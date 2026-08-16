@@ -9860,7 +9860,7 @@
   aliases:
     - halluqa
 
-- id: hallusionbench
+- id: hallusion-bench
   display_name: HallusionBench
   dataset_repo: null
   parent_benchmark_id: null
@@ -9868,11 +9868,11 @@
   metadata: '{}'
   review_status: reviewed
   aliases:
-    - hallusionbench
     - Hallusion Bench
     - hallusion-bench
     - hallusion_bench
     - llm_stats_hallusion_bench
+    - hallusionbench
 
 - id: halubench
   display_name: HaluBench
@@ -12935,7 +12935,7 @@
     - llm_stats_mcp_universe
     - mcp_universe
 
-- id: mcpmark
+- id: mcp-mark
   display_name: MCPMark
   dataset_repo: null
   parent_benchmark_id: null
@@ -12943,12 +12943,13 @@
   metadata: '{}'
   review_status: reviewed
   aliases:
-    - MCPMark
     - Mcp Mark
     - llm_stats_mcp_mark
     - mcp mark
     - mcp-mark
     - mcp_mark
+    - mcpmark
+    - MCPMark
 
 - id: mcptoolbench
   display_name: MCPToolBench++
@@ -16725,7 +16726,7 @@
   aliases:
     - PEOPLEJOIN
 
-- id: perception-test
+- id: perceptiontest
   display_name: Perception Test
   dataset_repo: null
   parent_benchmark_id: null
@@ -22259,7 +22260,7 @@
     - video mmlu
     - video_mmlu
 
-- id: video-mmmu
+- id: videommmu
   display_name: Video-MMMU
   dataset_repo: null
   parent_benchmark_id: null
@@ -22726,7 +22727,7 @@
     - Visulogic
     - llm_stats_visulogic
 
-- id: vitabench
+- id: vita-bench
   display_name: VitaBench
   dataset_repo: null
   parent_benchmark_id: null
@@ -22734,11 +22735,11 @@
   metadata: '{}'
   review_status: reviewed
   aliases:
-    - vitabench
     - Vita Bench
     - llm_stats_vita_bench
     - vita-bench
     - vita_bench
+    - vitabench
 
 - id: vitextvqa
   display_name: ViTextVQA

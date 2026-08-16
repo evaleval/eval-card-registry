@@ -50,8 +50,9 @@
 # LiveCodeBench sources report pass@1 as `score`:
 - {benchmark: livecodebench, from_metric: score, to_metric: pass-at-1}
 
-# ifeval harness raw `final_acc` (minted as final-acc) == prompt-level accuracy:
-- {benchmark: ifeval, from_metric: final-acc, to_metric: accuracy}
+# NO ifeval final-acc fold: final_acc is the mean of all four strict/loose
+# accuracy variants, while the warehouse `accuracy` bucket is strict-only
+# (verified 1.5-2.3pt systematic offset) — folding would merge protocols.
 
 # HealthBench: harness primary `bootstrap_score` (minted bootstrap-score)
 # and llm-stats `score` are both the HealthBench overall score:

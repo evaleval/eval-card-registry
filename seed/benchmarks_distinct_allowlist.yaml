@@ -1,0 +1,10 @@
+# Benchmark groups whose ids/display names/aliases collide under the
+# seed-time normalized-key guard (casefold + strip non-alphanumerics) but
+# are verified GENUINELY DISTINCT benchmarks. A pair that is actually the
+# same benchmark is folded per specs/benchmark-relationships-audit.md §4,
+# never allowlisted.
+- [air-bench-2024-14-12-race, race]            # AIR-Bench "Race" category vs the RACE reading benchmark
+- [humaneval, humaneval-plus]                  # "HumanEval+" alias strips to humaneval
+- [mbpp, mbpp-plus]                            # "MBPP+" alias strips to mbpp
+- [multi-swe-bench-c, multi-swe-bench-cpp]     # "C++" alias strips to c
+- [swe-bench-verified-mini-hal, swebench-verified-mini-mariushobbhahn]  # two distinct mini-split runs
