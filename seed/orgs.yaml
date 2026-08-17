@@ -287,6 +287,19 @@
 
 # --- Research orgs / academic groups commonly seen as evaluators ---
 
+# "UK AI Security Initiative" is the misspelled source_organization_name in
+# the EEE UKAISI inference-scaling dumps (PRs #184/#185/#187); alias until
+# the upstream correction lands. Renamed from "AI Safety Institute" to
+# "AI Security Institute" in 2025 — the Safety spelling covers older data.
+- id: uk-aisi
+  display_name: UK AI Security Institute
+  website: https://www.aisi.gov.uk
+  aliases: ["UK AI Security Initiative", "UK AISI", "AI Security Institute", "UK AI Safety Institute"]
+  tags: '["government", "evaluator"]'
+  kind: lab
+  metadata: '{}'
+  review_status: reviewed
+
 - id: stanford-crfm
   display_name: Stanford CRFM
   parent_org_id: stanford
