@@ -119,3 +119,23 @@ class TestCleanEvalName:
 
     def test_empty(self):
         assert clean_eval_name("") == ""
+
+
+class TestMidSentenceOnTruncation:
+    """The "X on Y" pattern must not truncate prose sentences — keywords
+    disclosed after a mid-sentence " on " were previously never seen."""
+
+    def test_prose_with_mid_sentence_on_keeps_late_keyword(self):
+        desc = (
+            "GDPval-AA evaluates AI agents on economically valuable "
+            "professional knowledge-work tasks and reports performance "
+            "as an Elo score."
+        )
+        assert extract_metric(desc) == "Elo Rating"
+
+    def test_short_metric_on_benchmark_still_truncates(self):
+        assert extract_metric("Accuracy on IFEval") == "Accuracy"
+        assert (
+            extract_metric("Exact match accuracy on mmlu_clinical_knowledge_af (5-shot)")
+            == "Exact Match"
+        )

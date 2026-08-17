@@ -78,7 +78,11 @@
   lower_is_better: false
   min_score: null
   max_score: null
-  metadata: '{}'
+  # catch_all: the no-information bucket — extract_metric's verbose fallback
+  # and raw score-field names land here. Structured metric-id resolution
+  # treats a catch-all hit as "no disclosure" and defers to the description
+  # path rather than letting a field name outrank prose.
+  metadata: '{"catch_all": true}'
   review_status: reviewed
 
 - id: bleu-4
@@ -187,7 +191,9 @@
   lower_is_better: false
   min_score: 0.0
   max_score: 1.0
-  metadata: '{}'
+  # catch_all: "mean_score" in a structured metric id is "the average of an
+  # unlabeled number" — no more of a disclosure than "score" itself.
+  metadata: '{"catch_all": true}'
   review_status: reviewed
 
 # --- Added from evaleval/card_backend (BFCL leaderboard metric_config) ---
@@ -1225,7 +1231,11 @@
   lower_is_better: true
   min_score: 0.0
   max_score: 1.0
-  metadata: '{"kind": "dataset_specific", "confidence": "low"}'
+  # catch_all: "overall" in a structured metric id is an aggregate-position
+  # label (bfcl.overall.latency_p95_s, mmlu_pro/overall), not a metric
+  # disclosure — without the flag it hijacks structured resolution whenever
+  # the true metric segment is outside the registry vocabulary.
+  metadata: '{"kind": "dataset_specific", "confidence": "low", "catch_all": true}'
   review_status: draft
 - id: rra-at-15
   display_name: RRA@15

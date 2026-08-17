@@ -510,3 +510,113 @@ class TestSnakeCaseEquivalence:
         result = resolver.resolve(raw, "benchmark", source_config="livecodebenchpro")
         assert result.canonical_id == expected_canonical
         assert result.strategy == "normalized"
+
+
+class TestResolveStructuredMetricId:
+    """Positionless, registry-driven segment resolution for namespaced
+    metric_config ids, with catch-all deferral."""
+
+    CATCH_ALL = frozenset({"score"})
+
+    def _resolver(self):
+        return Resolver(
+            _store_with_aliases(
+                ("elo", "metric", "elo", None, "confirmed"),
+                ("accuracy", "metric", "accuracy", None, "confirmed"),
+                ("exact-match", "metric", "exact-match", None, "confirmed"),
+                ("score", "metric", "score", None, "confirmed"),
+            )
+        )
+
+    def test_metric_in_last_segment(self):
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "vals_ai.mgsm.mgsm_de.accuracy", catch_all_ids=self.CATCH_ALL
+            )
+            == "accuracy"
+        )
+
+    def test_metric_in_middle_segment(self):
+        # lmarena.elo.overall — the metric is NOT last; position must not matter.
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "lmarena.elo.overall", catch_all_ids=self.CATCH_ALL
+            )
+            == "elo"
+        )
+
+    def test_slash_separator(self):
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "openeval/bbq/exact-match", catch_all_ids=self.CATCH_ALL
+            )
+            == "exact-match"
+        )
+
+    def test_catch_all_hit_defers(self):
+        # llm_stats.gdpval-aa.score — "score" is a raw field name, not a
+        # disclosure; the catch-all flag makes this defer to the prose path.
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "llm_stats.gdpval-aa.score", catch_all_ids=self.CATCH_ALL
+            )
+            is None
+        )
+
+    def test_catch_all_unflagged_wins(self):
+        # Without the registry flag, "score" is an ordinary vocabulary hit.
+        assert (
+            self._resolver().resolve_structured_metric_id("llm_stats.gdpval-aa.score")
+            == "score"
+        )
+
+    def test_no_segment_resolves(self):
+        # artificial_analysis.mmlu_pro — no segment is a metric; falls through.
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "artificial_analysis.mmlu_pro", catch_all_ids=self.CATCH_ALL
+            )
+            is None
+        )
+
+    def test_conflicting_specific_hits_defer(self):
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "adapter.elo.accuracy", catch_all_ids=self.CATCH_ALL
+            )
+            is None
+        )
+
+    def test_adapter_namespace_segment_excluded(self):
+        # First segment never contributes, even when it matches the vocabulary.
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "elo.some-benchmark", catch_all_ids=self.CATCH_ALL
+            )
+            is None
+        )
+
+    def test_duplicate_hits_are_one_disclosure(self):
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "adapter.accuracy.accuracy", catch_all_ids=self.CATCH_ALL
+            )
+            == "accuracy"
+        )
+
+    def test_bare_id_never_routes_through(self):
+        assert self._resolver().resolve_structured_metric_id("accuracy") is None
+
+    def test_whitespace_text_never_routes_through(self):
+        # Prose containing a dot (a sentence) must not be parsed as an id.
+        assert (
+            self._resolver().resolve_structured_metric_id(
+                "reports performance as an Elo score."
+            )
+            is None
+        )
+
+    def test_none_and_blank_inputs(self):
+        r = self._resolver()
+        assert r.resolve_structured_metric_id(None) is None
+        assert r.resolve_structured_metric_id("  ") is None

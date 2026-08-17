@@ -49,10 +49,14 @@ def extract_metric(metric_desc: str) -> str:
         text = text.rsplit(".", 1)[1].replace("_", " ").strip()
         from_dot = True
 
-    # 2. "X on Y" pattern: "Accuracy on IFEval" → "Accuracy"
+    # 2. "X on Y" pattern: "Accuracy on IFEval" → "Accuracy". Only when the
+    #    prefix is a short metric-like phrase — a prose sentence with a
+    #    mid-sentence " on " ("GDPval-AA evaluates AI agents on …") must NOT
+    #    be truncated there, or keywords disclosed later in the sentence
+    #    ("… reports performance as an Elo score.") are never seen.
     if not from_dot:
         m = re.match(r"^(.+?)\s+on\s+\S+", text, re.IGNORECASE)
-        if m:
+        if m and len(m.group(1).split()) <= 3:
             text = m.group(1).strip()
 
     # 3. Try keyword extraction on any multi-word text or dot-notation segment.

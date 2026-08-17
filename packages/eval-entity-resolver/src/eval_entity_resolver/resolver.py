@@ -9,6 +9,7 @@ using the resolver standalone get the same `ResolutionResult` they'd
 get back from `POST /api/v1/resolve`."""
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -193,6 +194,56 @@ class Resolver:
             strategy="no_match",
             confidence=0.0,
         )
+
+    def resolve_structured_metric_id(
+        self,
+        raw_id: Optional[str],
+        source_config: Optional[str] = None,
+        catch_all_ids: frozenset = frozenset(),
+    ) -> Optional[str]:
+        """Positionless structural resolution for a namespaced
+        `metric_config.metric_id` (`lmarena.elo.overall`,
+        `vals_ai.mgsm.mgsm_de.accuracy`, `openeval.bbq.exact-match`).
+
+        Segment roles vary by adapter — the metric can sit last
+        (vals_ai), in the middle (lmarena), or be absent entirely
+        (artificial_analysis) — so no positional parse is trusted.
+        Instead every segment after the adapter namespace is resolved
+        against the registry's metric vocabulary (exact → normalized
+        tiers only; a fuzzy near-miss on a short token means a different
+        metric, not a spelling variant), and registry membership decides
+        which segment is the metric.
+
+        `catch_all_ids` marks no-information buckets (registry metric
+        entries whose metadata carries `"catch_all": true`, e.g. the
+        generic `score` that raw score-field names resolve to). A
+        catch-all hit is treated as "no disclosure" so a field name never
+        outranks prose that names the real metric.
+
+        Returns the canonical id when exactly one distinct non-catch-all
+        metric is disclosed; None otherwise (no hits, only catch-all
+        hits, or conflicting hits) — callers fall back to their existing
+        description/name path unchanged.
+        """
+        if not raw_id or not isinstance(raw_id, str):
+            return None
+        raw_id = raw_id.strip()
+        if ("." not in raw_id and "/" not in raw_id) or any(c.isspace() for c in raw_id):
+            return None
+        segments = [s for s in re.split(r"[./]", raw_id) if s]
+        if len(segments) < 2:
+            return None
+        hits: list[str] = []
+        for segment in segments[1:]:  # segments[0] is the adapter namespace
+            canonical = exact_match(
+                segment, "metric", source_config, self.store
+            ) or normalized_match(segment, "metric", self.store, source_config)
+            if canonical is not None:
+                hits.append(canonical)
+        specific = {h for h in hits if h not in catch_all_ids}
+        if len(specific) == 1:
+            return next(iter(specific))
+        return None
 
     # ------------------------------------------------------------------
     # HF id check (injected)
