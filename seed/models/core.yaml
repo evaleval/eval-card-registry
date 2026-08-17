@@ -15,6 +15,7 @@ skip_source_ids:
 # onto the surviving canonical in enrichments/aliases.yaml.
 - alibaba/qwen-3-6-plus
 - alibaba/qwen-3-7-max
+- alibaba/qwen-3-7-plus
 - alibaba/qwen3.7-plus
 # Stale tier3 name-inference twin of the models.dev mint mistralai/mistral-large-2402;
 # its alias claim on that id stalled the refresh-models cron (alias-collision abort).

@@ -2084,6 +2084,7 @@
   aliases:
   - Qwen 3.7 Plus
   - Qwen3.7 Plus
+  - alibaba/qwen-3-7-plus
   - alibaba/qwen3.7-plus
   - alibaba/qwen3-7-plus
   - qwen-3-7-plus
