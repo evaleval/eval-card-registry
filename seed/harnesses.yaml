@@ -84,3 +84,13 @@
   fork_url: null
   metadata: '{}'
   review_status: reviewed
+
+# Polistemics evaluation pipeline (org cordademocracy; no org field in the
+# harness schema, so it lives in metadata). Minted for the pending
+# EEE_datastore submission; review_status draft -> maintainer promotes.
+- id: polistemics
+  display_name: Polistemics
+  version: null
+  fork_url: null
+  metadata: '{"org": "cordademocracy", "code_repo": "https://github.com/cordademocracy/Polistemics"}'
+  review_status: draft
