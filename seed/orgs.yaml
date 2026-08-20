@@ -294,6 +294,7 @@
 - id: uk-aisi
   display_name: UK AI Security Institute
   website: https://www.aisi.gov.uk
+  logo_url: /org-logos/uk-aisi.svg
   aliases: ["UK AI Security Initiative", "UK AISI", "AI Security Institute", "UK AI Safety Institute"]
   tags: '["government", "evaluator"]'
   kind: lab
