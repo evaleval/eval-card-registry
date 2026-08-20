@@ -150,7 +150,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -159,8 +159,8 @@
   aliases: ["elo", "overall_elo"]
   score_type: continuous
   lower_is_better: false
-  min_score: null
-  max_score: null
+  min_score: -.inf
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -170,7 +170,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 1.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -180,7 +180,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -204,7 +204,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -214,7 +214,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -224,7 +224,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -234,7 +234,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 0.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
@@ -244,7 +244,7 @@
   score_type: continuous
   lower_is_better: true
   min_score: 1.0
-  max_score: null
+  max_score: .inf
   metadata: '{}'
   review_status: reviewed
 
