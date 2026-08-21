@@ -175,3 +175,21 @@ hf-open-llm-v2:
   display: HF Open LLM v2
   configs:
     - hfopenllm_v2
+
+# Scoped members ({config, org[, source]}) claim only the matching org
+# partition of a config (composite-partition spec). `org` is the
+# org_token: registry org id, or kebab of the raw org string when
+# unresolved.
+aisi-inference-scaling:
+  display: AISI inference-scaling study
+  configs:
+    - {config: hle,           org: uk-aisi}
+    - {config: healthbench,   org: uk-aisi}
+    - {config: terminalbench, org: uk-aisi}
+    - {config: swebenchpro,   org: uk-aisi}
+    - {config: frontiermath,  org: uk-aisi}
+
+scale-seal-hle:
+  display: Scale SEAL HLE Leaderboard
+  configs:
+    - {config: hle, org: scale-ai}

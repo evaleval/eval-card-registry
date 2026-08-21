@@ -561,7 +561,7 @@ def seed(
         strip non-alphanumerics — stricter than collision_fold's
         separator-only key, so spaced llm-stats-mint aliases like
         "Vita Bench" are covered) are one entity split in two — fold them
-        per specs/benchmark-relationships-audit.md §4. Flag-only, never
+        (specs/benchmark-relationships-audit.md). Flag-only, never
         auto-folds. Groups verified genuinely distinct go in
         seed/benchmarks_distinct_allowlist.yaml (a list of id groups).
         Residual: semantic dupes with different normalized keys
@@ -621,7 +621,7 @@ def seed(
             listing = "; ".join(str(g) for g in sorted(conflicts))
             raise typer.BadParameter(
                 f"{len(conflicts)} separator/case-collision group(s) among benchmark "
-                f"ids+aliases — fold them (audit spec §4) or allowlist in "
+                f"ids+aliases — fold them in the seed or allowlist in "
                 f"benchmarks_distinct_allowlist.yaml: {listing}"
             )
 
@@ -703,7 +703,33 @@ def seed(
                 snake = slug.replace("-", "_")
                 source_configs = [kebab] if kebab == snake else [kebab, snake]
             else:
-                source_configs = [str(c) for c in raw_configs]
+                # Members are bare config strings or scoped mappings
+                # {config, org[, source]} (composite-partition spec).
+                # Scoped mappings pass through as objects — the mixed
+                # list is JSON-encoded below by _json_encode_if_needed;
+                # str() would ship Python-repr garbage.
+                source_configs = []
+                for c in raw_configs:
+                    if isinstance(c, dict):
+                        unknown = sorted(set(c) - {"config", "org", "source"})
+                        if unknown or "config" not in c:
+                            raise typer.BadParameter(
+                                f"composite {slug!r}: scoped configs member "
+                                f"{c!r} must have keys {{config, org[, source]}}"
+                            )
+                        if c.get("source") is not None and c.get("org") is None:
+                            raise typer.BadParameter(
+                                f"composite {slug!r}: scoped member {c!r} "
+                                f"sets `source` without `org`"
+                            )
+                        member = {"config": str(c["config"])}
+                        if c.get("org") is not None:
+                            member["org"] = str(c["org"])
+                        if c.get("source") is not None:
+                            member["source"] = str(c["source"])
+                        source_configs.append(member)
+                    else:
+                        source_configs.append(str(c))
             entry = {
                 "id": slug,
                 "display_name": fields.get("display") or slug,
