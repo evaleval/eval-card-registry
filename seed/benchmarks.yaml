@@ -23,11 +23,47 @@
   tags: '["reasoning", "multi-task"]'
   metadata: '{}'
   review_status: reviewed
+  aliases:
+    - BIG-Bench Hard
+    - Big Bench Hard
+    - bbh_boolean_expressions
+    - bbh_causal_judgement
+    - bbh_date_understanding
+    - bbh_disambiguation_qa
+    - bbh_dyck_languages
+    - bbh_formal_fallacies
+    - bbh_geometric_shapes
+    - bbh_hyperbaton
+    - bbh_logical_deduction_five_objects
+    - bbh_logical_deduction_seven_objects
+    - bbh_logical_deduction_three_objects
+    - bbh_movie_recommendation
+    - bbh_multistep_arithmetic_two
+    - bbh_navigate
+    - bbh_object_counting
+    - bbh_penguins_in_a_table
+    - bbh_reasoning_about_colored_objects
+    - bbh_ruin_names
+    - bbh_salient_translation_error_detection
+    - bbh_snarks
+    - bbh_sports_understanding
+    - bbh_temporal_sequences
+    - bbh_tracking_shuffled_objects_five_objects
+    - bbh_tracking_shuffled_objects_seven_objects
+    - bbh_tracking_shuffled_objects_three_objects
+    - bbh_web_of_lies
+    - bbh_word_sorting
+    - big-bench-hard
+    - big_bench_hard
+    - llm_stats_big_bench_hard
 
 - id: gpqa
   preferred_metric: accuracy
   display_name: GPQA
-  aliases: ["artificial_analysis.gpqa", "vals ai gpqa"]
+  aliases:
+    - artificial_analysis.gpqa
+    - vals ai gpqa
+    - gpqa_main
   description: Graduate-Level Google-Proof Q&A — expert-level science questions.
   dataset_repo: Idavidrein/gpqa
   parent_benchmark_id: null
@@ -97,7 +133,25 @@
 - id: math
   preferred_metric: accuracy
   display_name: MATH
-  aliases: ["artificial_analysis.math"]
+  aliases:
+    - artificial_analysis.math
+    - hendrycks_math
+    - hendrycks_math_algebra
+    - hendrycks_math_counting_and_prob
+    - hendrycks_math_geometry
+    - hendrycks_math_intermediate_algebra
+    - hendrycks_math_num_theory
+    - hendrycks_math_prealgebra
+    - hendrycks_math_precalc
+    - minerva
+    - minerva_math
+    - minerva_math_algebra
+    - minerva_math_counting_and_prob
+    - minerva_math_geometry
+    - minerva_math_intermediate_algebra
+    - minerva_math_num_theory
+    - minerva_math_prealgebra
+    - minerva_math_precalc
   description: MATH dataset — competition mathematics problems at various difficulty levels. The `math_500` 500-problem subset has its own canonical (math-500, parent=math).
   dataset_repo: hendrycks/math
   parent_benchmark_id: null
@@ -110,7 +164,76 @@
 - id: mmlu
   preferred_metric: exact-match
   display_name: MMLU
-  aliases: ["MMLU All Subjects", "mmlu-base", "Mmlu Base", "mmlu_base", "llm_stats_mmlu_base"]
+  aliases:
+    - MMLU All Subjects
+    - mmlu-base
+    - Mmlu Base
+    - mmlu_base
+    - llm_stats_mmlu_base
+    - Mmlu Cot
+    - llm_stats_mmlu_cot
+    - mmlu-cot
+    - mmlu_abstract_algebra
+    - mmlu_anatomy
+    - mmlu_astronomy
+    - mmlu_business_ethics
+    - mmlu_clinical_knowledge
+    - mmlu_college_biology
+    - mmlu_college_chemistry
+    - mmlu_college_computer_science
+    - mmlu_college_mathematics
+    - mmlu_college_medicine
+    - mmlu_college_physics
+    - mmlu_computer_security
+    - mmlu_conceptual_physics
+    - mmlu_cot
+    - mmlu_econometrics
+    - mmlu_electrical_engineering
+    - mmlu_elementary_mathematics
+    - mmlu_formal_logic
+    - mmlu_global_facts
+    - mmlu_high_school_biology
+    - mmlu_high_school_chemistry
+    - mmlu_high_school_computer_science
+    - mmlu_high_school_european_history
+    - mmlu_high_school_geography
+    - mmlu_high_school_government_and_politics
+    - mmlu_high_school_macroeconomics
+    - mmlu_high_school_mathematics
+    - mmlu_high_school_microeconomics
+    - mmlu_high_school_physics
+    - mmlu_high_school_psychology
+    - mmlu_high_school_statistics
+    - mmlu_high_school_us_history
+    - mmlu_high_school_world_history
+    - mmlu_human_aging
+    - mmlu_human_sexuality
+    - mmlu_humanities
+    - mmlu_international_law
+    - mmlu_jurisprudence
+    - mmlu_logical_fallacies
+    - mmlu_machine_learning
+    - mmlu_management
+    - mmlu_marketing
+    - mmlu_medical_genetics
+    - mmlu_miscellaneous
+    - mmlu_moral_disputes
+    - mmlu_moral_scenarios
+    - mmlu_nutrition
+    - mmlu_other
+    - mmlu_philosophy
+    - mmlu_prehistory
+    - mmlu_professional_accounting
+    - mmlu_professional_law
+    - mmlu_professional_medicine
+    - mmlu_professional_psychology
+    - mmlu_public_relations
+    - mmlu_security_studies
+    - mmlu_social_sciences
+    - mmlu_sociology
+    - mmlu_us_foreign_policy
+    - mmlu_virology
+    - mmlu_world_religions
   scoped_aliases:
     helm_mmlu:
       - "helm_mmlu"
@@ -1361,7 +1484,10 @@
 - id: truthfulqa
   preferred_metric: exact-match
   display_name: TruthfulQA
-  aliases: ["truthfulqa", "TruthfulQA"]
+  aliases:
+    - truthfulqa
+    - TruthfulQA
+    - truthfulqa_mc2
   description: TruthfulQA — measures whether language models generate truthful answers (Lin et al. 2022).
   dataset_repo: truthfulqa/truthful_qa
   parent_benchmark_id: null
@@ -1531,6 +1657,7 @@
     - artificial_analysis.hle
     - "Humanity's Last Exam (accuracy)"
     - "Humanity's Last Exam (calibration error)"
+    - "Humanity's Last Exam (HLE)"
     - Humanity S Last Exam
     - humanity-s-last-exam
     - humanity_s_last_exam
@@ -1563,7 +1690,21 @@
 - id: aime-2025
   preferred_metric: accuracy
   display_name: AIME 2025
-  aliases: ["AIME-25", "Aime 25", "aime_25", "aime-25", "AIME 2025", "aime-2025", "aime_2025", "aime 2025", "artificial_analysis.aime_25", "artificial_analysis_aime_25", "Aime aime 2025", "vals_ai_aime_aime_2025", "llm_stats_aime_2025"]
+  aliases:
+    - AIME-25
+    - Aime 25
+    - aime_25
+    - aime-25
+    - AIME 2025
+    - aime-2025
+    - aime_2025
+    - aime 2025
+    - artificial_analysis.aime_25
+    - artificial_analysis_aime_25
+    - Aime aime 2025
+    - vals_ai_aime_aime_2025
+    - llm_stats_aime_2025
+    - aime25
   description: AIME 2025 problem set — used by AA and others as a frontier math reasoning benchmark distinct from earlier AIME years.
   dataset_repo: null
   parent_benchmark_id: null
@@ -1588,6 +1729,7 @@
     - "artificial_analysis.math_500"
     - math_500_overall
     - math-500-overall
+    - minerva_math500
   description: MATH-500 — 500-problem subset of Hendrycks MATH released by OpenAI for evaluating math reasoning. Distinct slug from the full MATH set; some leaderboards report this subset specifically.
   dataset_repo: null
   parent_benchmark_id: null
@@ -2264,7 +2406,6 @@
   metadata: '{}'
   review_status: reviewed
 
-
 # ============================================================
 # Benchmarks that were absent from the registry entirely.
 # ============================================================
@@ -2674,6 +2815,23 @@
   review_status: reviewed
   aliases:
     - ACPBench
+    - acp_app_bool
+    - acp_app_mcq
+    - acp_areach_bool
+    - acp_areach_mcq
+    - acp_bench
+    - acp_bench_bool
+    - acp_bench_mcq
+    - acp_just_bool
+    - acp_just_mcq
+    - acp_land_bool
+    - acp_land_mcq
+    - acp_prog_bool
+    - acp_prog_mcq
+    - acp_reach_bool
+    - acp_reach_mcq
+    - acp_val_bool
+    - acp_val_mcq
 
 - id: act2cap
   display_name: Act2Cap
@@ -2812,6 +2970,27 @@
   aliases:
     - Agieval
     - llm_stats_agieval
+    - agieval_aqua_rat
+    - agieval_gaokao_biology
+    - agieval_gaokao_chemistry
+    - agieval_gaokao_chinese
+    - agieval_gaokao_english
+    - agieval_gaokao_geography
+    - agieval_gaokao_history
+    - agieval_gaokao_mathcloze
+    - agieval_gaokao_mathqa
+    - agieval_gaokao_physics
+    - agieval_jec_qa_ca
+    - agieval_jec_qa_kd
+    - agieval_logiqa_en
+    - agieval_logiqa_zh
+    - agieval_lsat_ar
+    - agieval_lsat_lr
+    - agieval_lsat_rc
+    - agieval_math
+    - agieval_sat_en
+    - agieval_sat_en_without_passage
+    - agieval_sat_math
 
 - id: agiqa-3k
   display_name: AGIQA-3K
@@ -2853,6 +3032,17 @@
     - arc_challenge
     - arc-easy
     - arc-challenge
+    - Arc C
+    - Arc E
+    - arc
+    - arc-c
+    - arc-e
+    - arc_c
+    - arc_challenge_chat
+    - arc_e
+    - llm_stats_arc
+    - llm_stats_arc_c
+    - llm_stats_arc_e
 
 - id: ai2d
   display_name: Ai2d
@@ -2933,6 +3123,7 @@
     - Aime aime 2024
     - vals_ai_aime_aime_2024
     - llm_stats_aime_2024
+    - aime24
 
 - id: aime-2026
   display_name: AIME 2026
@@ -3103,6 +3294,7 @@
     - llm stats alpacaeval-2
     - alpacaeval-2
     - alpacaeval 2
+    - alpaca_eval_v2
 
 - id: alvorada-bench
   display_name: Alvorada-Bench
@@ -3372,43 +3564,6 @@
   aliases:
     - ARB
 
-- id: arc
-  display_name: Arc
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["reasoning"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - arc
-    - llm_stats_arc
-
-- id: arc-c
-  display_name: Arc C
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["reasoning"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - arc c
-    - arc-c
-    - arc_c
-    - llm_stats_arc_c
-
-- id: arc-e
-  display_name: Arc E
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["reasoning"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Arc E
-    - arc-e
-    - arc_e
-    - llm_stats_arc_e
-
 - id: arcade
   display_name: ARCADE
   dataset_repo: null
@@ -3441,6 +3596,7 @@
     - arena-hard
     - arena_hard
     - llm_stats_arena_hard
+    - arena_hard_v01
 
 - id: arena-hard-v2
   display_name: Arena Hard v2
@@ -3941,6 +4097,20 @@
     - bfcl-v3
     - bfcl_v3
     - llm_stats_bfcl_v3
+    - bfcl_v3_irrelevance
+    - bfcl_v3_java
+    - bfcl_v3_javascript
+    - bfcl_v3_live_irrelevance
+    - bfcl_v3_live_multiple
+    - bfcl_v3_live_parallel
+    - bfcl_v3_live_parallel_multiple
+    - bfcl_v3_live_relevance
+    - bfcl_v3_live_simple
+    - bfcl_v3_multiple
+    - bfcl_v3_parallel
+    - bfcl_v3_parallel_multiple
+    - bfcl_v3_simple
+    - bfcl_v3_single_turn
 
 - id: bfcl-v3-multiturn
   display_name: Bfcl v3 Multiturn
@@ -4005,21 +4175,6 @@
     - big-bench-extra-hard
     - big_bench_extra_hard
     - llm_stats_big_bench_extra_hard
-
-- id: big-bench-hard
-  preferred_metric: accuracy
-  display_name: BIG-Bench Hard
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["reasoning"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Big Bench Hard
-    - big-bench hard
-    - big-bench-hard
-    - big_bench_hard
-    - llm_stats_big_bench_hard
 
 - id: bigcodebench-hard
   display_name: Bigcodebench Hard
@@ -6676,7 +6831,6 @@
     - deepmath creative
     - deepmath-creative
     - deepmath_creative
-
 
 - id: deepresearch-reporteval
   display_name: DeepResearch-ReportEval
@@ -10620,6 +10774,8 @@
   aliases:
     - Include
     - llm_stats_include
+    - include_base_44
+    - include_base_new_45
 
 - id: indicvisionbench
   display_name: IndicVisionBench
@@ -13350,6 +13506,22 @@
     - llm_stats_mgsm
     - vals ai mgsm
     - mgsm
+    - Multilingual Mgsm Cot
+    - llm_stats_multilingual_mgsm_cot
+    - mgsm_en_cot
+    - mgsm_en_cot_bn
+    - mgsm_en_cot_de
+    - mgsm_en_cot_en
+    - mgsm_en_cot_es
+    - mgsm_en_cot_fr
+    - mgsm_en_cot_ja
+    - mgsm_en_cot_ru
+    - mgsm_en_cot_sw
+    - mgsm_en_cot_te
+    - mgsm_en_cot_th
+    - mgsm_en_cot_zh
+    - multilingual-mgsm-cot
+    - multilingual_mgsm_cot
   scoped_aliases:
     vals-ai:
       - "Mgsm mgsm bn"
@@ -13440,16 +13612,6 @@
   review_status: reviewed
   aliases:
     - mined
-
-- id: minerva
-  display_name: MINERVA
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - MINERVA
 
 - id: minicode
   display_name: MINICODE
@@ -14106,19 +14268,6 @@
     - mmlu chat
     - mmlu-chat
     - mmlu_chat
-
-- id: mmlu-cot
-  display_name: Mmlu Cot
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["reasoning"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - Mmlu Cot
-    - llm_stats_mmlu_cot
-    - mmlu-cot
-    - mmlu_cot
 
 - id: mmlu-french
   display_name: Mmlu French
@@ -15172,19 +15321,6 @@
     - multilingual compositional wikidata questions
     - multilingual-compositional-wikidata-questions
     - multilingual_compositional_wikidata_questions
-
-- id: multilingual-mgsm-cot
-  display_name: Multilingual Mgsm Cot
-  dataset_repo: null
-  parent_benchmark_id: null
-  tags: '["math"]'
-  metadata: '{}'
-  review_status: reviewed
-  aliases:
-    - llm_stats_multilingual_mgsm_cot
-    - multilingual mgsm cot
-    - multilingual-mgsm-cot
-    - multilingual_mgsm_cot
 
 - id: multilingual-mmlu
   display_name: Multilingual Mmlu
@@ -23379,6 +23515,9 @@
   aliases:
     - llm_stats_wmdp
     - wmdp
+    - wmdp_bio
+    - wmdp_chem
+    - wmdp_cyber
 
 - id: wmt23
   display_name: Wmt23
@@ -24098,6 +24237,99 @@
   aliases:
     - Culturalbench
     - openeval_culturalbench
+    - cultural_bench
+    - cultural_bench_easy
+    - cultural_bench_easy_argentina
+    - cultural_bench_easy_australia
+    - cultural_bench_easy_bangladesh
+    - cultural_bench_easy_brazil
+    - cultural_bench_easy_canada
+    - cultural_bench_easy_chile
+    - cultural_bench_easy_china
+    - cultural_bench_easy_czech_republic
+    - cultural_bench_easy_egypt
+    - cultural_bench_easy_france
+    - cultural_bench_easy_germany
+    - cultural_bench_easy_hong_kong
+    - cultural_bench_easy_india
+    - cultural_bench_easy_indonesia
+    - cultural_bench_easy_iran
+    - cultural_bench_easy_israel
+    - cultural_bench_easy_italy
+    - cultural_bench_easy_japan
+    - cultural_bench_easy_lebanon
+    - cultural_bench_easy_malaysia
+    - cultural_bench_easy_mexico
+    - cultural_bench_easy_morocco
+    - cultural_bench_easy_nepal
+    - cultural_bench_easy_netherlands
+    - cultural_bench_easy_new_zealand
+    - cultural_bench_easy_nigeria
+    - cultural_bench_easy_pakistan
+    - cultural_bench_easy_peru
+    - cultural_bench_easy_philippines
+    - cultural_bench_easy_poland
+    - cultural_bench_easy_romania
+    - cultural_bench_easy_russia
+    - cultural_bench_easy_saudi_arabia
+    - cultural_bench_easy_singapore
+    - cultural_bench_easy_south_africa
+    - cultural_bench_easy_south_korea
+    - cultural_bench_easy_spain
+    - cultural_bench_easy_taiwan
+    - cultural_bench_easy_thailand
+    - cultural_bench_easy_turkey
+    - cultural_bench_easy_ukraine
+    - cultural_bench_easy_united_kingdom
+    - cultural_bench_easy_united_states
+    - cultural_bench_easy_vietnam
+    - cultural_bench_easy_zimbabwe
+    - cultural_bench_hard
+    - cultural_bench_hard_argentina
+    - cultural_bench_hard_australia
+    - cultural_bench_hard_bangladesh
+    - cultural_bench_hard_brazil
+    - cultural_bench_hard_canada
+    - cultural_bench_hard_chile
+    - cultural_bench_hard_china
+    - cultural_bench_hard_czech_republic
+    - cultural_bench_hard_egypt
+    - cultural_bench_hard_france
+    - cultural_bench_hard_germany
+    - cultural_bench_hard_hong_kong
+    - cultural_bench_hard_india
+    - cultural_bench_hard_indonesia
+    - cultural_bench_hard_iran
+    - cultural_bench_hard_israel
+    - cultural_bench_hard_italy
+    - cultural_bench_hard_japan
+    - cultural_bench_hard_lebanon
+    - cultural_bench_hard_malaysia
+    - cultural_bench_hard_mexico
+    - cultural_bench_hard_morocco
+    - cultural_bench_hard_nepal
+    - cultural_bench_hard_netherlands
+    - cultural_bench_hard_new_zealand
+    - cultural_bench_hard_nigeria
+    - cultural_bench_hard_pakistan
+    - cultural_bench_hard_peru
+    - cultural_bench_hard_philippines
+    - cultural_bench_hard_poland
+    - cultural_bench_hard_romania
+    - cultural_bench_hard_russia
+    - cultural_bench_hard_saudi_arabia
+    - cultural_bench_hard_singapore
+    - cultural_bench_hard_south_africa
+    - cultural_bench_hard_south_korea
+    - cultural_bench_hard_spain
+    - cultural_bench_hard_taiwan
+    - cultural_bench_hard_thailand
+    - cultural_bench_hard_turkey
+    - cultural_bench_hard_ukraine
+    - cultural_bench_hard_united_kingdom
+    - cultural_bench_hard_united_states
+    - cultural_bench_hard_vietnam
+    - cultural_bench_hard_zimbabwe
 
 - id: hi-tom
   display_name: Hi-ToM
@@ -24164,6 +24396,8 @@
   aliases:
     - harmbench
     - helm_safety_harmbench
+    - harmbench_direct_request
+    - harmbench_human_jailbreaks
 
 - id: helm-classic-leaderboard
   display_name: HELM Classic
@@ -25051,3 +25285,322 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+
+# --- lm_eval task vocabulary (SwissAI Apertus submission, 2026-08-21) ---
+
+- id: xnli
+  display_name: XNLI
+  description: Cross-lingual Natural Language Inference, MultiNLI premises and hypotheses translated into 15 languages. Per-language cuts fold to this parent.
+  dataset_repo: facebook/xnli
+  parent_benchmark_id: null
+  tags: '["multilingual", "language-understanding"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - xnli_ar
+    - xnli_bg
+    - xnli_de
+    - xnli_el
+    - xnli_en
+    - xnli_es
+    - xnli_fr
+    - xnli_hi
+    - xnli_ru
+    - xnli_sw
+    - xnli_th
+    - xnli_tr
+    - xnli_ur
+    - xnli_vi
+    - xnli_zh
+
+- id: blend
+  display_name: BLEnD
+  description: BLEnD (Myung et al. 2024) measures everyday knowledge grounded in 16 local cultures. Distinct from BlendQA (multi-hop RAG); the name similarity is coincidental.
+  dataset_repo: nayeon212/BLEnD
+  parent_benchmark_id: null
+  tags: '["knowledge", "multilingual"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - blend_algeria_sample
+    - blend_assam_sample
+    - blend_azerbaijan_sample
+    - blend_china_sample
+    - blend_ethiopia_sample
+    - blend_greece_sample
+    - blend_indonesia_sample
+    - blend_iran_sample
+    - blend_mexico_sample
+    - blend_north_korea_sample
+    - blend_northern_nigeria_sample
+    - blend_sample
+    - blend_south_korea_sample
+    - blend_spain_sample
+    - blend_uk_sample
+    - blend_us_sample
+    - blend_west_java_sample
+
+- id: realguardrails
+  display_name: RealGuardrails
+  description: RealGuardrails (Geng et al. 2025) tests whether a model keeps to its system-prompt guardrails under benign and adversarial user turns. Dataset repo now published as normster/SystemCheck.
+  dataset_repo: normster/SystemCheck
+  parent_benchmark_id: null
+  tags: '["safety", "instruction-following"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - realguardrails_s_ifeval
+    - realguardrails_s_rules
+    - realguardrails_s_rules_basic_harmless
+    - realguardrails_s_rules_basic_helpful
+    - realguardrails_s_rules_benign
+    - realguardrails_s_rules_benign_harmless
+    - realguardrails_s_rules_benign_helpful
+    - realguardrails_s_rules_br
+    - realguardrails_s_rules_redteam_harmless
+    - realguardrails_s_rules_redteam_helpful
+    - realguardrails_tensortrust
+    - realguardrails_tensortrust_extraction
+    - realguardrails_tensortrust_helpful
+    - realguardrails_tensortrust_hijacking
+
+- id: mlogiqa
+  display_name: MLogiQA
+  description: Multilingual LogiQA, logical reading-comprehension questions in 10 languages. No standalone LogiQA canonical exists yet; add one when a source reports it directly.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["multilingual", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - mlogiqa_ar
+    - mlogiqa_en
+    - mlogiqa_es
+    - mlogiqa_fr
+    - mlogiqa_ja
+    - mlogiqa_ko
+    - mlogiqa_pt
+    - mlogiqa_th
+    - mlogiqa_vi
+    - mlogiqa_zh
+
+- id: multijail
+  display_name: MultiJail
+  description: MultiJail (Deng et al. 2024), multilingual jailbreak prompts across high-, medium- and low-resource languages.
+  dataset_repo: DAMO-NLP-SG/MultiJail
+  parent_benchmark_id: null
+  tags: '["safety", "multilingual"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - multijail_ar
+    - multijail_bn
+    - multijail_en
+    - multijail_it
+    - multijail_jv
+    - multijail_ko
+    - multijail_sw
+    - multijail_th
+    - multijail_vi
+    - multijail_zh
+
+- id: polyglotoxicityprompts
+  display_name: PolygloToxicityPrompts
+  description: PolygloToxicityPrompts (Jain et al. 2024), naturally occurring toxicity-eliciting prompts in 17 languages.
+  dataset_repo: ToxicityPrompts/PolygloToxicityPrompts
+  parent_benchmark_id: null
+  tags: '["safety", "multilingual"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - polyglotoxicitypromptsllama_small
+    - polyglotoxicitypromptsllama_small_english
+    - polyglotoxicitypromptsllama_small_french
+    - polyglotoxicitypromptsllama_small_german
+    - polyglotoxicitypromptsllama_small_hindi
+    - polyglotoxicitypromptsllama_small_italian
+    - polyglotoxicitypromptsllama_small_portuguese
+    - polyglotoxicitypromptsllama_small_spanish
+
+- id: realtoxicityprompts
+  display_name: RealToxicityPrompts
+  description: RealToxicityPrompts (Gehman et al. 2020), English prompts measuring toxic degeneration.
+  dataset_repo: allenai/real-toxicity-prompts
+  parent_benchmark_id: null
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - realtoxicitypromptsllama_small
+
+- id: toxigen
+  display_name: ToxiGen
+  description: ToxiGen (Hartvigsen et al. 2022), machine-generated implicit hate speech across 13 minority groups.
+  dataset_repo: toxigen/toxigen-data
+  parent_benchmark_id: null
+  tags: '["safety", "bias"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: mathqa
+  display_name: MathQA
+  description: MathQA (Amini et al. 2019), math word problems with operation-program annotations.
+  dataset_repo: allenai/math_qa
+  parent_benchmark_id: null
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: or-bench
+  display_name: OR-Bench
+  description: OR-Bench (Cui et al. 2024) measures over-refusal on seemingly toxic but benign prompts. Unrelated to KOR-Bench and FaVOR-Bench.
+  dataset_repo: bench-llm/or-bench
+  parent_benchmark_id: null
+  tags: '["safety"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - orbench
+
+- id: squad-v2
+  display_name: SQuAD 2.0
+  description: SQuAD 2.0 extends SQuAD 1.1 with unanswerable questions. A distinct dataset from squad; scores are not comparable.
+  dataset_repo: rajpurkar/squad_v2
+  parent_benchmark_id: null
+  tags: '["reading-comprehension"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - squadv2
+
+- id: gsm8k-platinum
+  display_name: GSM8K-Platinum
+  description: GSM8K-Platinum (MadryLab) revises the mislabelled items in GSM8K's test set. A distinct label set from gsm8k; scores are not comparable.
+  dataset_repo: madrylab/gsm8k-platinum
+  parent_benchmark_id: null
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: arc-multilingual
+  display_name: ARC (multilingual)
+  description: Machine-translated re-creations of the AI2 Reasoning Challenge in 31 languages (Okapi / m_arc). Its own entity because translated scores are not comparable with the English original, and per-language cuts attach here rather than to ai2-reasoning-challenge-arc.
+  dataset_repo: alexandrainst/m_arc
+  parent_benchmark_id: null
+  tags: '["multilingual", "reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - arc_ar
+    - arc_bn
+    - arc_ca
+    - arc_da
+    - arc_de
+    - arc_es
+    - arc_eu
+    - arc_fr
+    - arc_gu
+    - arc_hi
+    - arc_hr
+    - arc_hu
+    - arc_hy
+    - arc_id
+    - arc_it
+    - arc_kn
+    - arc_ml
+    - arc_mr
+    - arc_ne
+    - arc_nl
+    - arc_pt
+    - arc_ro
+    - arc_ru
+    - arc_sk
+    - arc_sr
+    - arc_sv
+    - arc_ta
+    - arc_te
+    - arc_uk
+    - arc_vi
+    - arc_zh
+
+- id: truthfulqa-multilingual
+  display_name: TruthfulQA (multilingual)
+  description: Machine-translated re-creations of TruthfulQA in 31 languages (Okapi / m_truthfulqa). Its own entity for the same reason as arc-multilingual; the `_mc2` in the task names is metric identity, not a separate benchmark.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: null
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_ar_mc2
+    - truthfulqa_bn_mc2
+    - truthfulqa_ca_mc2
+    - truthfulqa_da_mc2
+    - truthfulqa_de_mc2
+    - truthfulqa_es_mc2
+    - truthfulqa_eu_mc2
+    - truthfulqa_fr_mc2
+    - truthfulqa_gu_mc2
+    - truthfulqa_hi_mc2
+    - truthfulqa_hr_mc2
+    - truthfulqa_hu_mc2
+    - truthfulqa_hy_mc2
+    - truthfulqa_id_mc2
+    - truthfulqa_it_mc2
+    - truthfulqa_kn_mc2
+    - truthfulqa_ml_mc2
+    - truthfulqa_mr_mc2
+    - truthfulqa_multilingual_mc2
+    - truthfulqa_ne_mc2
+    - truthfulqa_nl_mc2
+    - truthfulqa_pt_mc2
+    - truthfulqa_ro_mc2
+    - truthfulqa_ru_mc2
+    - truthfulqa_sk_mc2
+    - truthfulqa_sr_mc2
+    - truthfulqa_sv_mc2
+    - truthfulqa_ta_mc2
+    - truthfulqa_te_mc2
+    - truthfulqa_uk_mc2
+    - truthfulqa_vi_mc2
+    - truthfulqa_zh_mc2
+
+- id: switzerland-qa
+  display_name: Switzerland-QA
+  description: Switzerland knowledge QA authored by the Swiss AI Initiative, 5 languages (de/en/fr/it/rm) across geography, history, insurance, political life and social life. Dataset provenance pending from the submitter.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["knowledge", "multilingual"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - switzerland_qa_de
+    - switzerland_qa_de_geography
+    - switzerland_qa_de_history
+    - switzerland_qa_de_insurance
+    - switzerland_qa_de_political_life
+    - switzerland_qa_de_social_life
+    - switzerland_qa_en
+    - switzerland_qa_en_geography
+    - switzerland_qa_en_history
+    - switzerland_qa_en_insurance
+    - switzerland_qa_en_political_life
+    - switzerland_qa_en_social_life
+    - switzerland_qa_fr
+    - switzerland_qa_fr_geography
+    - switzerland_qa_fr_history
+    - switzerland_qa_fr_insurance
+    - switzerland_qa_fr_political_life
+    - switzerland_qa_fr_social_life
+    - switzerland_qa_it
+    - switzerland_qa_it_geography
+    - switzerland_qa_it_history
+    - switzerland_qa_it_insurance
+    - switzerland_qa_it_political_life
+    - switzerland_qa_it_social_life
+    - switzerland_qa_rm
+    - switzerland_qa_rm_geography
+    - switzerland_qa_rm_history
+    - switzerland_qa_rm_insurance
+    - switzerland_qa_rm_political_life
+    - switzerland_qa_rm_social_life
