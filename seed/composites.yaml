@@ -181,7 +181,7 @@ hf-open-llm-v2:
 # org_token: registry org id, or kebab of the raw org string when
 # unresolved.
 aisi-inference-scaling:
-  display: AISI inference-scaling study
+  display: How Inference Compute Shapes Frontier LLM Evaluation
   configs:
     - {config: hle,           org: uk-aisi}
     - {config: healthbench,   org: uk-aisi}
