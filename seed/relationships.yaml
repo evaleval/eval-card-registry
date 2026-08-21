@@ -12,7 +12,7 @@ relationships:
 
   # --- Lineage relationships (moved FROM parent_benchmark_id) ---
 
-  - entity_a: big-bench-hard
+  - entity_a: bbh
     entity_b: big-bench
     relationship_type: subset_of
     is_confirmed: true
@@ -334,4 +334,33 @@ relationships:
   - entity_a: bfcl-format-sensitivity
     entity_b: bfcl
     relationship_type: split_of
+    is_confirmed: true
+
+  # --- lm_eval task vocabulary (SwissAI Apertus submission, 2026-08-21) ---
+  # Translated re-creations are their own entities, related to the English
+  # original rather than folded into it.
+
+  - entity_a: arc-multilingual
+    entity_b: ai2-reasoning-challenge-arc
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: truthfulqa-multilingual
+    entity_b: truthfulqa
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: polyglotoxicityprompts
+    entity_b: realtoxicityprompts
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: gsm8k-platinum
+    entity_b: gsm8k
+    relationship_type: extended_from
+    is_confirmed: true
+
+  - entity_a: squad-v2
+    entity_b: squad
+    relationship_type: version_of
     is_confirmed: true

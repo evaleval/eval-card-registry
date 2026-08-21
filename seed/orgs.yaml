@@ -833,3 +833,15 @@
   kind: lab
   metadata: '{}'
   review_status: reviewed
+# Curated override of the generated `swiss-ai-initiative` row: the HF-true
+# namespace is `swiss-ai`, so models published as `swiss-ai/...` fold to this
+# developer. Id kept as-is pending the rung-promotion decision.
+- id: swiss-ai-initiative
+  display_name: swiss-ai-initiative
+  website: https://www.swiss-ai.org
+  hf_org: swiss-ai
+  aliases: ["swiss-ai", "Swiss AI Initiative"]
+  tags: '[]'
+  kind: community
+  metadata: '{}'
+  review_status: reviewed

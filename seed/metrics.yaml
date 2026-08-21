@@ -33,7 +33,7 @@
 
 - id: exact-match
   display_name: Exact Match
-  aliases: ["EM", "EM-1"]
+  aliases: ["EM", "EM-1", "exact"]
   score_type: continuous
   lower_is_better: false
   min_score: 0.0
@@ -265,7 +265,7 @@
 # benchmark (metric_meta_hotfix chain registry -> eee_record -> default).
 - id: refusal-rate
   display_name: Refusal Rate
-  aliases: ["Refusal Rate"]
+  aliases: ["Refusal Rate", "refusal"]
   score_type: continuous
   lower_is_better: null
   min_score: 0.0
@@ -4240,6 +4240,146 @@
   aliases: []
   score_type: continuous
   lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+
+# --- lm-eval-harness metric vocabulary (2026-08-21): the metric labels an
+# --- lm_eval submission emits that had no canonical home.
+- id: normalized-accuracy
+  display_name: Normalized Accuracy
+  aliases: ["acc_norm", "normalized_accuracy", "Normalized accuracy"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "length/byte-normalized accuracy over multiple-choice continuations (lm-eval acc_norm); a different computation than plain accuracy, kept separate for the same reason macro-accuracy is"}'
+  review_status: reviewed
+- id: lenient-accuracy
+  display_name: Lenient Accuracy
+  aliases: ["acc_lenient"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "accuracy under a relaxed answer-matching rule (lm-eval acc_lenient)"}'
+  review_status: reviewed
+- id: math-verify
+  display_name: Math-Verify
+  aliases: ["math_verify"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "fraction of answers judged equivalent to the reference by the math-verify symbolic checker"}'
+  review_status: reviewed
+- id: prompt-level-strict-accuracy
+  display_name: Prompt-Level Strict Accuracy
+  aliases: ["prompt_level_strict_acc"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "IFEval: share of prompts where every instruction is satisfied under strict matching"}'
+  review_status: reviewed
+- id: inst-level-strict-accuracy
+  display_name: Instruction-Level Strict Accuracy
+  aliases: ["inst_level_strict_acc"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "IFEval: share of individual instructions satisfied under strict matching"}'
+  review_status: reviewed
+- id: prompt-level-loose-accuracy
+  display_name: Prompt-Level Loose Accuracy
+  aliases: ["prompt_level_loose_acc"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "IFEval: share of prompts where every instruction is satisfied under loose matching"}'
+  review_status: reviewed
+- id: inst-level-loose-accuracy
+  display_name: Instruction-Level Loose Accuracy
+  aliases: ["inst_level_loose_acc"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "IFEval: share of individual instructions satisfied under loose matching"}'
+  review_status: reviewed
+- id: degeneration
+  display_name: Degeneration
+  aliases: []
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{"note": "share of generations that degenerate (repetition loops / empty output)"}'
+  review_status: reviewed
+- id: average-word-count
+  display_name: Average Word Count
+  aliases: ["avg_word_count"]
+  score_type: continuous
+  lower_is_better: null
+  min_score: 0.0
+  max_score: null
+  metadata: '{"note": "descriptive response-length statistic; direction is not meaningful, so lower_is_better stays unset"}'
+  review_status: reviewed
+- id: arena-hard-score
+  display_name: Arena-Hard Score
+  aliases: ["arena_hard_score"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"note": "Arena-Hard judge score against the baseline model, reported on a 0-100 scale"}'
+  review_status: reviewed
+- id: length-controlled-win-rate
+  display_name: Length-Controlled Win Rate
+  aliases: ["length_controlled_winrate"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 100.0
+  metadata: '{"note": "AlpacaEval 2.0 length-debiased win rate; a different computation than the raw win-rate canonical, kept separate"}'
+  review_status: reviewed
+- id: pass-at-10
+  display_name: Pass@10
+  aliases: ["Pass@10", "pass_at_10"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+# Response-class rates for safety suites (HarmBench / MultiJail): the source
+# labels the three classes with the bare words `safe` / `unsafe` / `invalid`.
+- id: safe-rate
+  display_name: Safe Rate
+  aliases: ["safe"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+- id: unsafe-rate
+  display_name: Unsafe Rate
+  aliases: ["unsafe"]
+  score_type: continuous
+  lower_is_better: true
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed
+- id: invalid-rate
+  display_name: Invalid Rate
+  aliases: ["invalid"]
+  score_type: continuous
+  lower_is_better: true
   min_score: 0.0
   max_score: 1.0
   metadata: '{}'

@@ -1,5 +1,9 @@
 """Tests for EEE-specific preprocessing: metric extraction and benchmark name cleaning."""
-from eval_entity_resolver.eee import clean_eval_name, extract_metric
+from eval_entity_resolver.eee import (
+    clean_eval_name,
+    extract_metric,
+    prepare_eval_name_segments,
+)
 
 
 class TestExtractMetric:
@@ -66,6 +70,28 @@ class TestExtractMetric:
 
     def test_no_keyword_description_falls_back_to_score(self):
         assert extract_metric("Global MMLU Lite - Arabic") == "score"
+
+    def test_normalized_accuracy_not_swallowed_by_generic_accuracy(self):
+        assert extract_metric("Normalized accuracy") == "Normalized Accuracy"
+        assert extract_metric("Normalised accuracy on HellaSwag") == "Normalized Accuracy"
+
+    # --- pass@N family ---
+
+    def test_pass_at_1_extracted(self):
+        assert extract_metric("pass@1 (filter: create_test)") == "Pass@1"
+
+    def test_pass_at_10_not_truncated_to_pass_at_1(self):
+        assert extract_metric("pass@10 (filter: create_test)") == "Pass@10"
+
+    def test_uncovered_pass_at_n_does_not_fall_back_to_pass_at_1(self):
+        assert extract_metric("pass@100 (filter: create_test)") != "Pass@1"
+        assert extract_metric("pass@16 (filter: create_test)") != "Pass@1"
+
+    def test_underscore_pass_at_1_extracted(self):
+        assert extract_metric("pass_at_1 (filter: extract_code)") == "Pass@1"
+
+    def test_underscore_pass_at_10_extracted(self):
+        assert extract_metric("pass_at_10 (filter: extract_code)") == "Pass@10"
 
     def test_first_keyword_wins_by_position(self):
         # "score" appears before "accuracy" in this description
@@ -139,3 +165,26 @@ class TestMidSentenceOnTruncation:
             extract_metric("Exact match accuracy on mmlu_clinical_knowledge_af (5-shot)")
             == "Exact Match"
         )
+
+
+class TestPrepareEvalNameSegments:
+    """Registry-free preparation of a dotted evaluation_name."""
+
+    def test_collapses_identical_adjacent_segments(self):
+        assert prepare_eval_name_segments("bbq.bbq.overall") == ["bbq"]
+
+    def test_drops_terminal_aggregate_marker(self):
+        assert prepare_eval_name_segments("MMLU.MMLU-Pro.overall") == ["MMLU", "MMLU-Pro"]
+
+    def test_keeps_distinct_segments(self):
+        assert prepare_eval_name_segments("vals_ai.mmlu_pro.biology") == [
+            "vals_ai", "mmlu_pro", "biology",
+        ]
+
+    def test_drops_numeric_version_fragment(self):
+        assert prepare_eval_name_segments("terminal-bench-2.0") == ["terminal-bench-2"]
+
+    def test_bare_and_spaced_names_are_not_split(self):
+        assert prepare_eval_name_segments("gsm8k") is None
+        assert prepare_eval_name_segments("MMLU-Pro (Biology)") is None
+        assert prepare_eval_name_segments(None) is None

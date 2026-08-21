@@ -82,8 +82,14 @@ def extract_metric(metric_desc: str) -> str:
 # _keyword_extract).
 _METRIC_KEYWORDS: list[tuple[str, str]] = [
     # Multi-word / compound patterns
-    (r"pass@8",                          "Pass@8"),
-    (r"pass@1",                          "Pass@1"),
+    # pass@N: the trailing (?!\d) is load-bearing. Without it `pass@1`
+    # matches inside `pass@10` and a pass@10 score is stored as pass@1.
+    (r"pass@10(?!\d)",                   "Pass@10"),
+    (r"pass@8(?!\d)",                    "Pass@8"),
+    (r"pass@1(?!\d)",                    "Pass@1"),
+    (r"pass[\s_-]*at[\s_-]*10(?!\d)",    "Pass@10"),
+    (r"pass[\s_-]*at[\s_-]*8(?!\d)",     "Pass@8"),
+    (r"pass[\s_-]*at[\s_-]*1(?!\d)",     "Pass@1"),
     (r"mean[\s_-]*win[\s_-]*rate",       "Mean Win Rate"),
     (r"win[\s_-]*rate",                  "Win Rate"),
     (r"mean[\s_-]*response[\s_-]*time",  "Mean Response Time"),
@@ -102,6 +108,7 @@ _METRIC_KEYWORDS: list[tuple[str, str]] = [
     # Compound accuracy types (before generic accuracy)
     # Patterns sourced from metric_names in evaleval/card_backend eval-list.
     (r"ast[\s_-]*accuracy",              "AST Accuracy"),
+    (r"normali[sz]ed[\s_-]*accuracy",    "Normalized Accuracy"),
     (r"overall[\s_-]*accuracy",          "Accuracy"),
     (r"(?:ir)?relevance[\s_-]*detection[\s_-]*accuracy", "Accuracy"),
     (r"no[\s_-]*snippet[\s_-]*accuracy", "Accuracy"),
@@ -157,6 +164,41 @@ _TRAILING_METRIC_RE: list[str] = [
     r"pass@\d+$",
     r"\b(?:score|accuracy|acc|elo|rank|f1|em)$",
 ]
+
+
+# Segments that never carry benchmark identity in a dotted
+# ``evaluation_name``: the aggregate marker sources use for the
+# whole-benchmark rollup, and bare version fragments left behind by
+# splitting a dotted version (``terminal-bench-2.0`` → ``2``, ``0``).
+_AGGREGATE_SEGMENTS = {"overall"}
+
+
+def prepare_eval_name_segments(eval_name: str | None) -> list[str] | None:
+    """Split a dotted ``evaluation_name`` into candidate identity segments.
+
+    Applies only the rewrites that need no registry knowledge: collapse
+    identical adjacent segments (``bbq.bbq.overall`` → ``bbq.overall``),
+    drop aggregate markers and numeric fragments. Returns None for names
+    ``clean_eval_name`` would not dot-split, so the structured path and the
+    legacy path see exactly the same set of names.
+    """
+    if not eval_name or not isinstance(eval_name, str):
+        return None
+    name = eval_name.strip()
+    if "." not in name or " " in name:
+        return None
+
+    segments: list[str] = []
+    for part in name.split("."):
+        part = part.strip()
+        if not part or part.isdigit():
+            continue
+        if part.lower() in _AGGREGATE_SEGMENTS:
+            continue
+        if segments and segments[-1].lower() == part.lower():
+            continue
+        segments.append(part)
+    return segments or None
 
 
 def clean_eval_name(eval_name: str) -> str:
