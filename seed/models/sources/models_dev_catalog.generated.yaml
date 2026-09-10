@@ -761,6 +761,13 @@
   weak:
     release_date: '2026-05-04'
     open_weights: false
+- id: agnes-3-0-flash
+  aliases:
+  - agnes-3.0-flash
+  metadata: '{"alias_platforms": {"agnes-3.0-flash": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-09'
+    open_weights: false
 - id: aion-labs/aion-2-0
   aliases:
   - aion-2-0
@@ -913,6 +920,13 @@
   weak:
     release_date: '2026-08-14'
     open_weights: true
+- id: alibaba/qwen-3-8-flash
+  aliases:
+  - qwen-3-8-flash
+  metadata: '{"alias_platforms": {"qwen-3-8-flash": "venice"}}'
+  weak:
+    release_date: '2026-09-10'
+    open_weights: false
 - id: alibaba/qwen-3-8-max
   aliases:
   - qwen-3-8-max
@@ -3685,6 +3699,13 @@
   weak:
     release_date: '2025-08-21'
     open_weights: true
+- id: deepseek/deepseek-flash
+  aliases:
+  - deepseek-flash
+  metadata: '{"alias_platforms": {"deepseek-flash": "opencode-go"}}'
+  weak:
+    release_date: '2026-09-10'
+    open_weights: true
 - id: deepseek/deepseek-math-v2
   aliases:
   - deepseek-math-v2
@@ -3753,13 +3774,6 @@
   weak:
     release_date: '2024-01-01'
     open_weights: true
-- id: deepseek/deepseek-v4-1-flash
-  aliases:
-  - deepseek-v4-1-flash
-  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt"}}'
-  weak:
-    release_date: '2026-09-08'
-    open_weights: false
 - id: deepseek/deepseek-v4-1-flash-beta
   aliases:
   - deepseek-v4-1-flash-beta
@@ -3829,6 +3843,14 @@
   metadata: '{"alias_platforms": {"deepseek-v4-pro-0813": "nano-gpt", "deepseek-v4-pro-0813@eu": "requesty"}}'
   weak:
     release_date: '2026-08-12'
+    open_weights: true
+- id: deepseek/deepseek-v4-1-flash
+  aliases:
+  - deepseek-v4-1-flash
+  - deepseek-v4.1-flash
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "llmgateway"}}'
+  weak:
+    release_date: '2026-09-10'
     open_weights: true
 - id: deepseek/umans-deepseek-v4-flash-0731
   aliases:
@@ -5524,6 +5546,13 @@
   weak:
     release_date: '2026-04-21'
     open_weights: true
+- id: inclusionai/ling-3-0-flash-vl
+  aliases:
+  - ling-3-0-flash-vl
+  metadata: '{"alias_platforms": {"ling-3-0-flash-vl": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-09'
+    open_weights: true
 - id: inclusionai/ling-3.0-flash
   aliases:
   - inclusionai/ling-3-0-flash
@@ -5596,6 +5625,10 @@
   metadata: '{"alias_platforms": {"multilingual-e5-large-instruct": "evroc"}}'
   weak:
     release_date: '2024-06-01'
+    open_weights: true
+- id: k2-horizon-7b
+  weak:
+    release_date: '2026-09-09'
     open_weights: true
 - id: kimi-k2-0711
   weak:
@@ -7729,14 +7762,6 @@
   weak:
     release_date: '2024-01-01'
     open_weights: true
-- id: nousresearch/hermes-4-70b
-  aliases:
-  - hermes-4-70b
-  - nous-research/hermes-4-70b
-  metadata: '{"alias_platforms": {"hermes-4-70b": "kilo", "nous-research/hermes-4-70b": "kilo"}}'
-  weak:
-    release_date: '2025-08-26'
-    open_weights: true
 - id: novita/glm-4-7-n
   aliases:
   - glm-4-7-n
@@ -9619,13 +9644,6 @@
   weak:
     release_date: '2026-07-29'
     open_weights: true
-- id: ornith-ai/ornith-1-5-9b
-  aliases:
-  - ornith-1-5-9b
-  metadata: '{"alias_platforms": {"ornith-1-5-9b": "nano-gpt"}}'
-  weak:
-    release_date: '2026-07-29'
-    open_weights: true
 - id: osmosis/osmosis-structure-0-6b
   aliases:
   - osmosis-structure-0-6b
@@ -10333,10 +10351,6 @@
     release_date: '2026-01-28'
     open_weights: false
 - id: spacexai/grok-imagine-video-1-5
-  weak:
-    release_date: '2026-05-30'
-    open_weights: false
-- id: spacexai/grok-imagine-video-1-5-preview
   weak:
     release_date: '2026-05-30'
     open_weights: false
@@ -11854,6 +11868,25 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: nousresearch/hermes-4-70b
+  aliases:
+  - hermes-4-70b
+  - nous-research/hermes-4-70b
+  metadata: '{"alias_platforms": {"hermes-4-70b": "kilo", "nous-research/hermes-4-70b": "kilo"}}'
+  weak:
+    release_date: '2025-08-26'
+    open_weights: true
+- id: ornith-ai/ornith-1-5-9b
+  aliases:
+  - ornith-1-5-9b
+  metadata: '{"alias_platforms": {"ornith-1-5-9b": "nano-gpt"}}'
+  weak:
+    release_date: '2026-07-29'
+    open_weights: true
+- id: spacexai/grok-imagine-video-1-5-preview
+  weak:
+    release_date: '2026-05-30'
+    open_weights: false
 - id: bytedance/doubao-seed-code-preview-251028
   aliases:
   - doubao-seed-code-preview-251028

@@ -1688,6 +1688,24 @@
   metadata: '{"providers": ["the-grid-ai"], "underlying_key": "agent-standard"}'
   review_status: draft
   resolution_source: models_dev
+- id: agnes-3-0-flash
+  display_name: Agnes 3.0 Flash
+  org_id: null
+  family: agnes-3-0-flash
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-09'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - org-unknown
+  aliases:
+  - agnes-3.0-flash
+  metadata: '{"alias_platforms": {"agnes-3.0-flash": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "agnes-3-0-flash"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: ai21-labs/ai21-jamba-1-5-large
   display_name: AI21 Jamba 1.5 Large
   org_id: ai21-labs
@@ -2058,6 +2076,23 @@
   - qwen-3-8-27b
   - qwen-3.8-27b
   metadata: '{"alias_platforms": {"qwen-3-8-27b": "neuralwatt", "qwen-3.8-27b": "neuralwatt"}, "providers": ["cerebras", "neuralwatt", "venice"], "underlying_key": "qwen-3-8-27b"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen-3-8-flash
+  display_name: Qwen 3.8 Flash
+  org_id: alibaba
+  family: qwen-3-8-flash
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-10'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - qwen-3-8-flash
+  metadata: '{"alias_platforms": {"qwen-3-8-flash": "venice"}, "providers": ["venice"], "underlying_key": "qwen-3-8-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen-3-8-max
@@ -3375,7 +3410,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-6-35b-a3b-uncensored
-  display_name: Qwen 3.6 35B A3B Uncensored Thinking
+  display_name: Qwen3.6 35B A3B Uncensored TEE
   org_id: alibaba
   family: qwen3-6-35b-a3b-uncensored
   architecture: null
@@ -3388,6 +3423,7 @@
   tags:
   - open-weight
   aliases:
+  - Qwen 3.6 35B A3B Uncensored Thinking
   - Qwen3.6 35B A3B Uncensored TEE
   - TEE/qwen3.6-35b-a3b-uncensored
   - qwen3-6-35b-a3b-uncensored
@@ -9135,6 +9171,24 @@
   metadata: '{"alias_platforms": {"deepseek-chat-v3-0324": "kilo"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter"], "underlying_key": "deepseek-chat-v3-0324"}'
   review_status: draft
   resolution_source: models_dev
+- id: deepseek/deepseek-flash
+  display_name: deepseek-flash
+  org_id: deepseek
+  family: deepseek-flash
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-10'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - deepseek-flash
+  metadata: '{"alias_platforms": {"deepseek-flash": "opencode-go"}, "providers": ["opencode-go"], "underlying_key": "deepseek-flash"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: deepseek/deepseek-math-v2
   display_name: Deepseek/Deepseek-Math-V2
   org_id: deepseek
@@ -9347,14 +9401,18 @@
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2026-09-08'
+  open_weights: true
+  release_date: '2026-09-10'
   input_modalities: null
   output_modalities: null
-  tags: []
+  tags:
+  - open-weight
   aliases:
   - deepseek-v4-1-flash
-  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "deepseek-v4-1-flash"}'
+  - deepseek-v4.1-flash
+  - deepseek/deepseek-v4.1-flash
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "llmgateway"}, "openrouter_adopted": true, "providers": ["kilo", "llmgateway", "nano-gpt", "openrouter", "venice"],
+    "underlying_key": "deepseek-v4-1-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-v4-1-flash-beta
@@ -11552,7 +11610,7 @@
   metadata: '{"alias_platforms": {"gemini-3-flash-preview": "nano-gpt"}, "openrouter_adopted": true}'
   review_status: reviewed
 - id: google/gemini-3-pro
-  display_name: gemini-3-pro
+  display_name: Gemini-3-Pro
   org_id: google
   family: gemini-3-pro
   architecture: null
@@ -11566,7 +11624,7 @@
   aliases:
   - databricks-gemini-3-pro
   - gemini-3-pro
-  metadata: '{"alias_platforms": {"databricks-gemini-3-pro": "databricks", "gemini-3-pro": "poe"}, "providers": ["databricks", "nearai", "opencode", "poe"], "underlying_key": "gemini-3-pro"}'
+  metadata: '{"alias_platforms": {"databricks-gemini-3-pro": "databricks", "gemini-3-pro": "poe"}, "providers": ["databricks", "opencode", "poe"], "underlying_key": "gemini-3-pro"}'
   review_status: draft
   resolution_source: models_dev
 - id: google/gemini-3-pro-image
@@ -14180,6 +14238,24 @@
     "requesty"], "underlying_key": "ling-2-6-flash"}'
   review_status: draft
   resolution_source: models_dev
+- id: inclusionai/ling-3-0-flash-vl
+  display_name: Ling 3.0 Flash VL
+  org_id: inclusionAI
+  family: ling-3-0-flash-vl
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-09'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - ling-3-0-flash-vl
+  metadata: '{"alias_platforms": {"ling-3-0-flash-vl": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "ling-3-0-flash-vl"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: inclusionai/ling-3-0-tiny
   display_name: Ling-3.0-tiny Free
   org_id: inclusionAI
@@ -14413,6 +14489,24 @@
   - E5 Multi-Lingual Large Embeddings 0.6B
   - multilingual-e5-large-instruct
   metadata: '{"alias_platforms": {"multilingual-e5-large-instruct": "evroc"}, "providers": ["evroc"], "underlying_key": "multilingual-e5-large-instruct"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: k2-horizon-7b
+  display_name: K2-Horizon-7B
+  org_id: null
+  family: k2-horizon-7b
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-09'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - org-unknown
+  aliases: []
+  metadata: '{"providers": ["nano-gpt"], "underlying_key": "k2-horizon-7b"}'
   review_status: draft
   resolution_source: models_dev
 - id: kat-coder-air-v1
@@ -19107,7 +19201,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: mistralai/pixtral-large-2502
-  display_name: Pixtral Large (25.02) (EU)
+  display_name: Pixtral Large (25.02)
   org_id: mistralai
   family: pixtral-large-2502
   architecture: null
@@ -19120,6 +19214,7 @@
   tags: []
   aliases:
   - Pixtral Large (25.02)
+  - Pixtral Large (25.02) (EU)
   - eu.mistral.pixtral-large-2502-v1:0
   - mistral.pixtral-large-2502-v1:0
   - pixtral-large-2502
@@ -20474,7 +20569,8 @@
   - Hermes 4 70B
   - hermes-4-70b
   - nous-research/hermes-4-70b
-  metadata: '{"alias_platforms": {"hermes-4-70b": "kilo", "nous-research/hermes-4-70b": "kilo"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter"], "underlying_key": "hermes-4-70b"}'
+  metadata: '{"alias_platforms": {"hermes-4-70b": "kilo", "nous-research/hermes-4-70b": "kilo"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter"], "underlying_key": "hermes-4-70b", "upstream_status":
+    "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: nova-3
@@ -24501,7 +24597,7 @@
   - open-weight
   aliases:
   - ornith-1-5-9b
-  metadata: '{"alias_platforms": {"ornith-1-5-9b": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "ornith-1-5-9b"}'
+  metadata: '{"alias_platforms": {"ornith-1-5-9b": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "ornith-1-5-9b", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: osmosis/osmosis-structure-0-6b
@@ -26294,7 +26390,7 @@
   output_modalities: null
   tags: []
   aliases: []
-  metadata: '{"providers": ["vercel"], "underlying_key": "grok-imagine-video-1-5-preview"}'
+  metadata: '{"providers": ["vercel"], "underlying_key": "grok-imagine-video-1-5-preview", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: spacexai/grok-stt
