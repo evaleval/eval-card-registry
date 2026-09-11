@@ -6203,3 +6203,10 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: lightonai
+  display_name: lightonai
+  hf_org: lightonai
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
