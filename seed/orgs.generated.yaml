@@ -6210,3 +6210,10 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: inference-net
+  display_name: inference-net
+  hf_org: inference-net
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed

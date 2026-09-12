@@ -898,6 +898,7 @@
 - id: Qwen/Qwen3-Coder-480B-A35B-Instruct
   aliases:
   - Qwen3 Coder 480B A35B Instruct
+  - Qwen3-Coder 480B-A35B Instruct
   - alibaba/qwen3-coder-480b-a35b-instruct
   - qwen3-coder-480b-a35b-instruct
   weak:
@@ -4920,7 +4921,7 @@
     "amazon-bedrock", "jp.anthropic.claude-haiku-4-5-20251001-v1:0": "amazon-bedrock", "us.anthropic.claude-haiku-4-5-20251001-v1:0": "amazon-bedrock"}}'
   review_status: reviewed
 - id: anthropic/claude-haiku-latest
-  display_name: Anthropic Claude Haiku Latest
+  display_name: Claude Haiku Latest
   org_id: anthropic
   family: claude-haiku-latest
   architecture: null
@@ -4932,6 +4933,7 @@
   output_modalities: null
   tags: []
   aliases:
+  - Anthropic Claude Haiku Latest
   - 'Anthropic: Claude Haiku Latest'
   - claude-haiku-latest
   - ~anthropic/claude-haiku-latest
@@ -5703,7 +5705,7 @@
     true, "release_dates": ["2026-06-29"], "snapshots": ["claude-sonnet-5"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-latest
-  display_name: Anthropic Claude Sonnet Latest
+  display_name: Claude Sonnet Latest
   org_id: anthropic
   family: claude-sonnet-latest
   architecture: null
@@ -5715,6 +5717,7 @@
   output_modalities: null
   tags: []
   aliases:
+  - Anthropic Claude Sonnet Latest
   - 'Anthropic: Claude Sonnet Latest'
   - claude-sonnet-latest
   - ~anthropic/claude-sonnet-latest
@@ -9421,8 +9424,8 @@
   - deepseek-v4-1-flash
   - deepseek-v4.1-flash
   - deepseek/deepseek-v4.1-flash
-  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "requesty"}, "knowledge_cutoffs": ["2025-05"], "openrouter_adopted": true, "release_dates": ["2026-09-10"], "snapshots":
-    ["deepseek-flash"]}'
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "ollama-cloud"}, "knowledge_cutoffs": ["2025-05"], "openrouter_adopted": true, "release_dates": ["2026-09-10"],
+    "snapshots": ["deepseek-flash"]}'
   review_status: reviewed
 - id: deepseek/deepseek-v4-1-flash-beta
   display_name: DeepSeek V4.1 Flash Beta
@@ -14449,6 +14452,41 @@
   metadata: '{"providers": ["cloudflare-ai-gateway"], "underlying_key": "indictrans2-en-indic-1b", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
+- id: inference-net/schematron-v2
+  display_name: 'Inference.net: Schematron V2 Turbo'
+  org_id: inference-net
+  family: schematron-v2
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-12'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases: []
+  metadata: '{"providers": ["kilo", "openrouter"], "underlying_key": "schematron"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: inference-net/schematron-v2-small
+  display_name: 'Inference.net: Schematron V2 Small'
+  org_id: inference-net
+  family: schematron-v2-small
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-12'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - schematron-v2-small
+  metadata: '{"alias_platforms": {"schematron-v2-small": "kilo"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter"], "underlying_key": "schematron-v2-small"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: inflatebot/MN-12B-Mag-Mell-R1
   aliases:
   - Mag Mell R1
@@ -17654,7 +17692,7 @@
   - mistral.magistral-small-2509
   - mistralai/magistral-small-2509
   weak:
-    release_date: '2025-12-02'
+    release_date: '2025-09-18'
     open_weights: true
 - id: mistralai/Mistral-7B-Instruct-v0.1
   aliases:
@@ -17911,7 +17949,7 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2026-02-17'
+  release_date: '2025-12-09'
   input_modalities: null
   output_modalities: null
   tags:
@@ -18220,11 +18258,12 @@
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2024-12-01'
+  open_weights: true
+  release_date: '2025-12-02'
   input_modalities: null
   output_modalities: null
-  tags: []
+  tags:
+  - open-weight
   aliases:
   - ministral-3-14b-instruct
   - mistral.ministral-3-14b-instruct
@@ -18331,11 +18370,12 @@
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2024-12-01'
+  open_weights: true
+  release_date: '2025-12-02'
   input_modalities: null
   output_modalities: null
-  tags: []
+  tags:
+  - open-weight
   aliases:
   - ministral-3-8b-instruct
   - mistral.ministral-3-8b-instruct
@@ -20197,7 +20237,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: moonshotai/kimi-latest
-  display_name: MoonshotAI Kimi Latest
+  display_name: Kimi Latest
   org_id: moonshotai
   family: kimi-latest
   architecture: null
@@ -20210,6 +20250,7 @@
   tags:
   - open-weight
   aliases:
+  - MoonshotAI Kimi Latest
   - 'MoonshotAI: Kimi Latest'
   - kimi-latest
   - ~moonshotai/kimi-latest
@@ -20707,11 +20748,12 @@
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2024-12-01'
+  open_weights: true
+  release_date: '2025-10-28'
   input_modalities: null
   output_modalities: null
   tags:
+  - open-weight
   - org-unknown
   aliases:
   - NVIDIA Nemotron Nano 12B v2 VL BF16
@@ -20726,7 +20768,7 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2025-12-23'
+  release_date: '2025-12-15'
   input_modalities: null
   output_modalities: null
   tags:
@@ -20744,11 +20786,12 @@
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2024-12-01'
+  open_weights: true
+  release_date: '2025-08-18'
   input_modalities: null
   output_modalities: null
   tags:
+  - open-weight
   - org-unknown
   aliases: []
   metadata: '{"providers": ["amazon-bedrock"], "underlying_key": "nvidia.nemotron-nano-9b"}'
@@ -21463,12 +21506,13 @@
   tags:
   - open-weight
   aliases:
+  - TEE/nemotron-3.5-lightning
   - nemotron-3-5-lightning
   - nemotron-3.5-lightning-free
   - nvidia/nemotron-3-5-lightning
   - nvidia/nemotron-3.5-lightning:free
-  metadata: '{"alias_platforms": {"nemotron-3-5-lightning": "nano-gpt", "nemotron-3.5-lightning-free": "opencode", "nvidia/nemotron-3-5-lightning": "nano-gpt", "nvidia/nemotron-3.5-lightning:free": "openrouter"},
-    "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "nebius", "opencode", "openrouter", "vercel"], "underlying_key": "nemotron-3-5-lightning"}'
+  metadata: '{"alias_platforms": {"TEE/nemotron-3.5-lightning": "nano-gpt", "nemotron-3-5-lightning": "nano-gpt", "nemotron-3.5-lightning-free": "opencode", "nvidia/nemotron-3-5-lightning": "nano-gpt",
+    "nvidia/nemotron-3.5-lightning:free": "openrouter"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "nebius", "opencode", "openrouter", "vercel"], "underlying_key": "nemotron-3-5-lightning"}'
   review_status: draft
   resolution_source: models_dev
 - id: nvidia/nemotron-content-safety-reasoning-4b
@@ -23663,6 +23707,24 @@
     "gpt-6-astra-pro"}'
   review_status: draft
   resolution_source: models_dev
+- id: openai/gpt-astra-latest
+  display_name: GPT Astra Latest
+  org_id: openai
+  family: gpt-astra-latest
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-11'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gpt-astra-latest
+  - ~openai/gpt-astra-latest
+  metadata: '{"alias_platforms": {"gpt-astra-latest": "nano-gpt", "~openai/gpt-astra-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "gpt-astra"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: openai/gpt-audio
   display_name: 'OpenAI: GPT Audio'
   org_id: openai
@@ -23840,7 +23902,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-latest
-  display_name: OpenAI GPT Latest
+  display_name: GPT Latest
   org_id: openai
   family: gpt-latest
   architecture: null
@@ -23852,14 +23914,33 @@
   output_modalities: null
   tags: []
   aliases:
+  - OpenAI GPT Latest
   - 'OpenAI: GPT Latest'
   - gpt-latest
   - ~openai/gpt-latest
-  metadata: '{"alias_platforms": {"gpt-latest": "nano-gpt", "~openai/gpt-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "gpt"}'
+  metadata: '{"alias_platforms": {"gpt-latest": "nano-gpt", "~openai/gpt-latest": "openrouter"}, "providers": ["nano-gpt"], "underlying_key": "gpt"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: openai/gpt-luna-latest
+  display_name: GPT Luna Latest
+  org_id: openai
+  family: gpt-luna-latest
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-11'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gpt-luna-latest
+  - ~openai/gpt-luna-latest
+  metadata: '{"alias_platforms": {"gpt-luna-latest": "nano-gpt", "~openai/gpt-luna-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "gpt-luna"}'
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-mini-latest
-  display_name: OpenAI GPT Mini Latest
+  display_name: 'OpenAI: GPT Mini Latest'
   org_id: openai
   family: gpt-mini-latest
   architecture: null
@@ -23871,6 +23952,7 @@
   output_modalities: null
   tags: []
   aliases:
+  - OpenAI GPT Mini Latest
   - 'OpenAI: GPT Mini Latest'
   - gpt-mini-latest
   - ~openai/gpt-mini-latest
@@ -24068,6 +24150,42 @@
   aliases:
   - gpt-realtime-whisper
   metadata: '{"alias_platforms": {"gpt-realtime-whisper": "vercel"}, "providers": ["vercel"], "underlying_key": "gpt-realtime-whisper"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: openai/gpt-sol-latest
+  display_name: GPT Sol Latest
+  org_id: openai
+  family: gpt-sol-latest
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-11'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gpt-sol-latest
+  - ~openai/gpt-sol-latest
+  metadata: '{"alias_platforms": {"gpt-sol-latest": "nano-gpt", "~openai/gpt-sol-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "gpt-sol"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: openai/gpt-terra-latest
+  display_name: GPT Terra Latest
+  org_id: openai
+  family: gpt-terra-latest
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-11'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gpt-terra-latest
+  - ~openai/gpt-terra-latest
+  metadata: '{"alias_platforms": {"gpt-terra-latest": "nano-gpt", "~openai/gpt-terra-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "gpt-terra"}'
   review_status: draft
   resolution_source: models_dev
 - id: openai/in.openai.gpt-5-6-luna
@@ -27892,11 +28010,12 @@
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2024-12-01'
+  open_weights: true
+  release_date: '2025-07-15'
   input_modalities: null
   output_modalities: null
   tags:
+  - open-weight
   - org-unknown
   aliases:
   - Voxtral Mini 3B 2507
@@ -28073,7 +28192,7 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2025-04-28'
+  release_date: '2024-10-09'
   input_modalities: null
   output_modalities: null
   tags:

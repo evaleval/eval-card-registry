@@ -422,6 +422,7 @@
 - id: Qwen/Qwen3-Coder-480B-A35B-Instruct
   aliases:
   - Qwen3 Coder 480B A35B Instruct
+  - Qwen3-Coder 480B-A35B Instruct
   - alibaba/qwen3-coder-480b-a35b-instruct
   - qwen3-coder-480b-a35b-instruct
   metadata: '{"alias_platforms": {"qwen3-coder-480b-a35b-instruct": "qiniu-ai"}}'
@@ -3836,7 +3837,7 @@
   aliases:
   - deepseek-v4-1-flash
   - deepseek-v4.1-flash
-  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "requesty"}}'
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "ollama-cloud"}}'
   weak:
     release_date: '2026-09-10'
     open_weights: true
@@ -5627,6 +5628,17 @@
   weak:
     release_date: '2026-05-07'
     open_weights: true
+- id: inference-net/schematron-v2
+  weak:
+    release_date: '2026-09-12'
+    open_weights: true
+- id: inference-net/schematron-v2-small
+  aliases:
+  - schematron-v2-small
+  metadata: '{"alias_platforms": {"schematron-v2-small": "kilo"}}'
+  weak:
+    release_date: '2026-09-12'
+    open_weights: true
 - id: inflatebot/MN-12B-Mag-Mell-R1
   aliases:
   - Mag Mell R1
@@ -6564,7 +6576,7 @@
   - mistralai/magistral-small-2509
   metadata: '{"alias_platforms": {"magistral-small-2509": "amazon-bedrock", "mistral.magistral-small-2509": "amazon-bedrock", "mistralai/magistral-small-2509": "amazon-bedrock"}}'
   weak:
-    release_date: '2025-12-02'
+    release_date: '2025-09-18'
     open_weights: true
 - id: mistralai/Mistral-7B-Instruct-v0.2
   aliases:
@@ -6705,7 +6717,7 @@
   - mistral.devstral-2-123b
   metadata: '{"alias_platforms": {"devstral-2-123b": "amazon-bedrock", "devstral-2:123b": "ollama-cloud", "mistral.devstral-2-123b": "amazon-bedrock"}}'
   weak:
-    release_date: '2026-02-17'
+    release_date: '2025-12-09'
     open_weights: true
 - id: mistralai/devstral-2-123b-instruct-2512
   aliases:
@@ -6833,8 +6845,8 @@
   - mistral.ministral-3-14b-instruct
   metadata: '{"alias_platforms": {"ministral-3-14b-instruct": "amazon-bedrock", "mistral.ministral-3-14b-instruct": "amazon-bedrock"}}'
   weak:
-    release_date: '2024-12-01'
-    open_weights: false
+    release_date: '2025-12-02'
+    open_weights: true
 - id: mistralai/ministral-3-14b-reasoning-2512
   aliases:
   - ministral-3-14b-reasoning-2512
@@ -6863,8 +6875,8 @@
   - mistral.ministral-3-8b-instruct
   metadata: '{"alias_platforms": {"ministral-3-8b-instruct": "amazon-bedrock", "mistral.ministral-3-8b-instruct": "amazon-bedrock"}}'
   weak:
-    release_date: '2024-12-01'
-    open_weights: false
+    release_date: '2025-12-02'
+    open_weights: true
 - id: mistralai/ministral-3-8b-instruct-2512
   aliases:
   - ministral-3-8b-instruct-2512
@@ -7823,16 +7835,16 @@
     open_weights: true
 - id: nvidia.nemotron-nano-12b-v2
   weak:
-    release_date: '2024-12-01'
-    open_weights: false
+    release_date: '2025-10-28'
+    open_weights: true
 - id: nvidia.nemotron-nano-3-30b
   weak:
-    release_date: '2025-12-23'
+    release_date: '2025-12-15'
     open_weights: true
 - id: nvidia.nemotron-nano-9b-v2
   weak:
-    release_date: '2024-12-01'
-    open_weights: false
+    release_date: '2025-08-18'
+    open_weights: true
 - id: nvidia.nemotron-super-3-120b
   weak:
     release_date: '2026-03-11'
@@ -8132,11 +8144,13 @@
     open_weights: true
 - id: nvidia/nemotron-3.5-lightning
   aliases:
+  - TEE/nemotron-3.5-lightning
   - nemotron-3-5-lightning
   - nemotron-3.5-lightning-free
   - nvidia/nemotron-3-5-lightning
   - nvidia/nemotron-3.5-lightning:free
-  metadata: '{"alias_platforms": {"nemotron-3-5-lightning": "nano-gpt", "nemotron-3.5-lightning-free": "opencode", "nvidia/nemotron-3-5-lightning": "nano-gpt", "nvidia/nemotron-3.5-lightning:free": "openrouter"}}'
+  metadata: '{"alias_platforms": {"TEE/nemotron-3.5-lightning": "nano-gpt", "nemotron-3-5-lightning": "nano-gpt", "nemotron-3.5-lightning-free": "opencode", "nvidia/nemotron-3-5-lightning": "nano-gpt",
+    "nvidia/nemotron-3.5-lightning:free": "openrouter"}}'
   weak:
     release_date: '2026-08-11'
     open_weights: true
@@ -9189,6 +9203,14 @@
   weak:
     release_date: '2026-09-04'
     open_weights: false
+- id: openai/gpt-astra-latest
+  aliases:
+  - gpt-astra-latest
+  - ~openai/gpt-astra-latest
+  metadata: '{"alias_platforms": {"gpt-astra-latest": "nano-gpt", "~openai/gpt-astra-latest": "openrouter"}}'
+  weak:
+    release_date: '2026-09-11'
+    open_weights: false
 - id: openai/gpt-audio
   aliases:
   - gpt-audio
@@ -9286,6 +9308,14 @@
   metadata: '{"alias_platforms": {"gpt-latest": "nano-gpt", "~openai/gpt-latest": "openrouter"}}'
   weak:
     release_date: '2026-03-29'
+    open_weights: false
+- id: openai/gpt-luna-latest
+  aliases:
+  - gpt-luna-latest
+  - ~openai/gpt-luna-latest
+  metadata: '{"alias_platforms": {"gpt-luna-latest": "nano-gpt", "~openai/gpt-luna-latest": "openrouter"}}'
+  weak:
+    release_date: '2026-09-11'
     open_weights: false
 - id: openai/gpt-mini-latest
   aliases:
@@ -9398,6 +9428,22 @@
   metadata: '{"alias_platforms": {"gpt-realtime-whisper": "vercel"}}'
   weak:
     release_date: '2026-05-07'
+    open_weights: false
+- id: openai/gpt-sol-latest
+  aliases:
+  - gpt-sol-latest
+  - ~openai/gpt-sol-latest
+  metadata: '{"alias_platforms": {"gpt-sol-latest": "nano-gpt", "~openai/gpt-sol-latest": "openrouter"}}'
+  weak:
+    release_date: '2026-09-11'
+    open_weights: false
+- id: openai/gpt-terra-latest
+  aliases:
+  - gpt-terra-latest
+  - ~openai/gpt-terra-latest
+  metadata: '{"alias_platforms": {"gpt-terra-latest": "nano-gpt", "~openai/gpt-terra-latest": "openrouter"}}'
+  weak:
+    release_date: '2026-09-11'
     open_weights: false
 - id: openai/in.openai.gpt-5-6-luna
   aliases:
@@ -10885,8 +10931,8 @@
   - mistral.voxtral-mini-3b-2507
   metadata: '{"alias_platforms": {"mistral.voxtral-mini-3b-2507": "amazon-bedrock"}}'
   weak:
-    release_date: '2024-12-01'
-    open_weights: false
+    release_date: '2025-07-15'
+    open_weights: true
 - id: voxtral-small-2507
   weak:
     release_date: '2026-02-02'
@@ -10992,7 +11038,7 @@
   - writer.palmyra-x4-v1:0
   metadata: '{"alias_platforms": {"us.writer.palmyra-x4-v1:0": "amazon-bedrock", "writer.palmyra-x4-v1:0": "amazon-bedrock"}}'
   weak:
-    release_date: '2025-04-28'
+    release_date: '2024-10-09'
     open_weights: false
 - id: writer.palmyra-x5
   aliases:
