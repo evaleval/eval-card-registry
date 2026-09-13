@@ -9003,6 +9003,7 @@
   - TEE/deepseek-v4-pro
   - TEE/deepseek-v4-pro:thinking
   - deepseek-v4-pro
+  - deepseek-v4-pro:0813
   - deepseek-v4-pro@eu
   - deepseek/deepseek-v4-pro
   - deepseek/umans-deepseek-v4-pro-0813
@@ -9423,9 +9424,10 @@
   aliases:
   - deepseek-v4-1-flash
   - deepseek-v4.1-flash
+  - deepseek-v4.1-flash@eu
   - deepseek/deepseek-v4.1-flash
-  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "ollama-cloud"}, "knowledge_cutoffs": ["2025-05"], "openrouter_adopted": true, "release_dates": ["2026-09-10"],
-    "snapshots": ["deepseek-flash"]}'
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "ollama-cloud", "deepseek-v4.1-flash@eu": "requesty"}, "knowledge_cutoffs": ["2025-05"], "openrouter_adopted":
+    true, "release_dates": ["2026-09-10"], "snapshots": ["deepseek-flash"]}'
   review_status: reviewed
 - id: deepseek/deepseek-v4-1-flash-beta
   display_name: DeepSeek V4.1 Flash Beta
@@ -27291,13 +27293,13 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2026-06-12'
+  release_date: '2026-05-21'
   input_modalities: null
   output_modalities: null
   tags: []
   aliases:
   - hy-mt2-plus
-  metadata: '{"alias_platforms": {"hy-mt2-plus": "vercel"}, "providers": ["vercel"], "underlying_key": "hy-mt2-plus"}'
+  metadata: '{"alias_platforms": {"hy-mt2-plus": "vercel"}, "providers": ["llmgateway", "vercel"], "underlying_key": "hy-mt2-plus"}'
   review_status: draft
   resolution_source: models_dev
 - id: tencent/hy-mt2-pro
@@ -27373,7 +27375,7 @@
   - open-weight
   aliases:
   - hy4-preview
-  metadata: '{"alias_platforms": {"hy4-preview": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "opencode-go", "openrouter", "tencent-tokenhub", "vercel"], "underlying_key":
+  metadata: '{"alias_platforms": {"hy4-preview": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "llmgateway", "nano-gpt", "opencode-go", "openrouter", "tencent-tokenhub", "vercel"], "underlying_key":
     "hy4-preview"}'
   review_status: draft
   resolution_source: models_dev
@@ -27547,7 +27549,8 @@
   aliases:
   - thinkingcap-qwen3.6-27b
   - thinkingcap-qwen3.6-27b@eu
-  metadata: '{"alias_platforms": {"thinkingcap-qwen3.6-27b": "requesty", "thinkingcap-qwen3.6-27b@eu": "requesty"}, "providers": ["requesty"], "underlying_key": "thinkingcap-qwen3-6-27b"}'
+  metadata: '{"alias_platforms": {"thinkingcap-qwen3.6-27b": "requesty", "thinkingcap-qwen3.6-27b@eu": "requesty"}, "providers": ["requesty"], "underlying_key": "thinkingcap-qwen3-6-27b", "upstream_status":
+    "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: thinkingmachines/inkling

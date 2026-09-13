@@ -3618,10 +3618,12 @@
   - TEE/deepseek-v4-pro
   - TEE/deepseek-v4-pro:thinking
   - deepseek-v4-pro
+  - deepseek-v4-pro:0813
   - deepseek-v4-pro@eu
   - deepseek/deepseek-v4-pro
   - deepseek/umans-deepseek-v4-pro-0813
-  metadata: '{"alias_platforms": {"TEE/deepseek-v4-pro": "nano-gpt", "TEE/deepseek-v4-pro:thinking": "nano-gpt", "deepseek-v4-pro": "nano-gpt", "deepseek-v4-pro@eu": "requesty"}}'
+  metadata: '{"alias_platforms": {"TEE/deepseek-v4-pro": "nano-gpt", "TEE/deepseek-v4-pro:thinking": "nano-gpt", "deepseek-v4-pro": "nano-gpt", "deepseek-v4-pro:0813": "ollama-cloud", "deepseek-v4-pro@eu":
+    "requesty"}}'
   weak:
     release_date: '2026-08-12'
     open_weights: true
@@ -3837,7 +3839,8 @@
   aliases:
   - deepseek-v4-1-flash
   - deepseek-v4.1-flash
-  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "ollama-cloud"}}'
+  - deepseek-v4.1-flash@eu
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash": "nano-gpt", "deepseek-v4.1-flash": "ollama-cloud", "deepseek-v4.1-flash@eu": "requesty"}}'
   weak:
     release_date: '2026-09-10'
     open_weights: true
@@ -10690,7 +10693,7 @@
   - hy-mt2-plus
   metadata: '{"alias_platforms": {"hy-mt2-plus": "vercel"}}'
   weak:
-    release_date: '2026-06-12'
+    release_date: '2026-05-21'
     open_weights: false
 - id: tencent/hy-mt2-pro
   aliases:
@@ -10763,14 +10766,6 @@
   weak:
     release_date: '2024-11-08'
     open_weights: true
-- id: thinkingcap-qwen3-6-27b
-  aliases:
-  - thinkingcap-qwen3.6-27b
-  - thinkingcap-qwen3.6-27b@eu
-  metadata: '{"alias_platforms": {"thinkingcap-qwen3.6-27b": "requesty", "thinkingcap-qwen3.6-27b@eu": "requesty"}}'
-  weak:
-    release_date: '2026-07-13'
-    open_weights: false
 - id: thinkingmachines/inkling
   aliases:
   - inkling
@@ -11987,6 +11982,14 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: thinkingcap-qwen3-6-27b
+  aliases:
+  - thinkingcap-qwen3.6-27b
+  - thinkingcap-qwen3.6-27b@eu
+  metadata: '{"alias_platforms": {"thinkingcap-qwen3.6-27b": "requesty", "thinkingcap-qwen3.6-27b@eu": "requesty"}}'
+  weak:
+    release_date: '2026-07-13'
+    open_weights: false
 - id: amazon/nova-premier-v1
   aliases:
   - nova-premier-v1
