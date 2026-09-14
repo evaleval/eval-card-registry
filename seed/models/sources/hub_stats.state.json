@@ -1,5 +1,5 @@
 {
-  "parquet_etag": "6fae9a104c3d9b5c81bca8fea082e1a4c01e6aae70b4996df2d585a196051c52",
+  "parquet_etag": "5174a8e49f09484ce6ad97ce9f4373a281e2792ab1450b0188224be3a4ca9cb0",
   "rows_checked_at_etag": [
     "0-hero/Matter-0.1-7B-DPO-preview",
     "0-hero/Matter-0.1-7B-boost-DPO-preview",
@@ -4560,6 +4560,7 @@
     "deepseek ai/deepseek-math-v2",
     "deepseek ai/deepseek-ocr",
     "deepseek ai/deepseek-ocr-2",
+    "deepseek ai/deepseek-pro-latest",
     "deepseek ai/deepseek-prover-v1.5",
     "deepseek ai/deepseek-prover-v2-671b",
     "deepseek ai/deepseek-r1-0528-qwen3-8b",
@@ -4647,6 +4648,7 @@
     "deepseek-ai/deepseek-moe-16b-chat",
     "deepseek-ai/deepseek-ocr",
     "deepseek-ai/deepseek-ocr-2",
+    "deepseek-ai/deepseek-pro-latest",
     "deepseek-ai/deepseek-prover-v1.5",
     "deepseek-ai/deepseek-prover-v2-671b",
     "deepseek-ai/deepseek-r1-0528-qwen3-8b",
@@ -4711,6 +4713,7 @@
     "deepseek/deepseek-math-v2",
     "deepseek/deepseek-ocr",
     "deepseek/deepseek-ocr-2",
+    "deepseek/deepseek-pro-latest",
     "deepseek/deepseek-prover-v1.5",
     "deepseek/deepseek-prover-v2-671b",
     "deepseek/deepseek-r1",
@@ -13657,6 +13660,7 @@
     "~anthropic/claude-haiku-latest",
     "~anthropic/claude-opus-latest",
     "~anthropic/claude-sonnet-latest",
+    "~deepseek/deepseek-pro-latest",
     "~google/gemini-flash-latest",
     "~google/gemini-pro-latest",
     "~moonshotai/kimi-latest",
