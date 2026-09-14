@@ -9257,6 +9257,24 @@
   metadata: '{"alias_platforms": {"deepseek-ocr-2": "regolo-ai"}, "providers": ["novita-ai", "privatemode-ai", "regolo-ai"], "underlying_key": "deepseek-ocr-2"}'
   review_status: draft
   resolution_source: models_dev
+- id: deepseek/deepseek-pro-latest
+  display_name: DeepSeek Pro Latest
+  org_id: deepseek
+  family: deepseek-pro-latest
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-14'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - deepseek-pro-latest
+  - ~deepseek/deepseek-pro-latest
+  metadata: '{"alias_platforms": {"deepseek-pro-latest": "openrouter", "~deepseek/deepseek-pro-latest": "openrouter"}, "providers": ["openrouter"], "underlying_key": "deepseek-pro"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: deepseek/deepseek-prover-v2-671b
   display_name: Deepseek Prover V2 671B
   org_id: deepseek

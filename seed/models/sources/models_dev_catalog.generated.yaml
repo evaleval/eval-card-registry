@@ -3724,6 +3724,14 @@
   weak:
     release_date: '2026-01-27'
     open_weights: true
+- id: deepseek/deepseek-pro-latest
+  aliases:
+  - deepseek-pro-latest
+  - ~deepseek/deepseek-pro-latest
+  metadata: '{"alias_platforms": {"deepseek-pro-latest": "openrouter", "~deepseek/deepseek-pro-latest": "openrouter"}}'
+  weak:
+    release_date: '2026-09-14'
+    open_weights: false
 - id: deepseek/deepseek-prover-v2-671b
   aliases:
   - deepseek-prover-v2-671b
