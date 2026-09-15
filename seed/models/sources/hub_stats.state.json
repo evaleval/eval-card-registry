@@ -1,5 +1,5 @@
 {
-  "parquet_etag": "5174a8e49f09484ce6ad97ce9f4373a281e2792ab1450b0188224be3a4ca9cb0",
+  "parquet_etag": "93be09c8de0edaea8836dd91998743996d3f4150f1322d51d8b797eb033af86c",
   "rows_checked_at_etag": [
     "0-hero/Matter-0.1-7B-DPO-preview",
     "0-hero/Matter-0.1-7B-boost-DPO-preview",
@@ -1709,6 +1709,7 @@
     "TEE/deepseek-v4-flash",
     "TEE/deepseek-v4-pro",
     "TEE/deepseek-v4-pro:thinking",
+    "TEE/deepseek-v4.1-flash",
     "TEE/gemma-3-27b-it",
     "TEE/gemma-4-26b-a4b-uncensored",
     "TEE/gemma-4-31b-it",
@@ -13017,6 +13018,7 @@
     "z-ai/glm-5-turbo",
     "z-ai/glm-5.1",
     "z-ai/glm-5.2",
+    "z-ai/glm-5.2:free",
     "z-ai/glm-5.3",
     "z-ai/glm-5.3-flash",
     "z-ai/glm-5p2",
