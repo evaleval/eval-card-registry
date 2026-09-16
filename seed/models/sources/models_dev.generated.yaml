@@ -1048,7 +1048,7 @@
   - qwen3.5-2b
   weak:
     release_date: '2026-03-10'
-    open_weights: true
+    open_weights: false
 - id: Qwen/Qwen3.5-35B-A3B
   aliases:
   - Qwen3.5 35B-A3B
@@ -5516,9 +5516,9 @@
   - claude-sonnet-4@eu
   - databricks-claude-sonnet-4
   metadata: '{"alias_platforms": {"anthropic--claude-4-sonnet": "sap-ai-core", "anthropic-claude-4-sonnet": "sap-ai-core", "anthropic-claude-sonnet-4": "digitalocean", "anthropic/claude-4-sonnet": "sap-ai-core",
-    "claude-4-sonnet": "sap-ai-core", "claude-sonnet-4": "nano-gpt", "claude-sonnet-4@eu": "requesty", "databricks-claude-sonnet-4": "databricks"}, "openrouter_adopted": true, "providers": ["abacus", "cortecs",
-    "databricks", "digitalocean", "fastrouter", "google-vertex", "google-vertex-anthropic", "helicone", "jiekou", "kilo", "merge-gateway", "nano-gpt", "opencode", "openrouter", "poe", "requesty", "sap-ai-core",
-    "vercel", "zenmux"], "underlying_key": "claude-4-sonnet"}'
+    "claude-4-sonnet": "sap-ai-core", "claude-sonnet-4": "nano-gpt", "claude-sonnet-4@eu": "requesty", "databricks-claude-sonnet-4": "databricks"}, "openrouter_adopted": true, "providers": ["abacus", "amazon-bedrock",
+    "cortecs", "databricks", "digitalocean", "fastrouter", "google-vertex", "google-vertex-anthropic", "helicone", "jiekou", "kilo", "merge-gateway", "nano-gpt", "opencode", "openrouter", "poe", "requesty",
+    "sap-ai-core", "vercel", "zenmux"], "underlying_key": "claude-4-sonnet"}'
   review_status: draft
   resolution_source: models_dev
 - id: anthropic/claude-sonnet-4-0
@@ -9272,22 +9272,24 @@
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-pro-latest
-  display_name: 'DeepSeek: DeepSeek Pro Latest'
+  display_name: DeepSeek Pro Latest
   org_id: deepseek
   family: deepseek-pro-latest
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2026-09-14'
+  open_weights: true
+  release_date: '2026-08-12'
   input_modalities: null
   output_modalities: null
-  tags: []
+  tags:
+  - open-weight
   aliases:
   - DeepSeek Pro Latest
+  - 'DeepSeek: DeepSeek Pro Latest'
   - deepseek-pro-latest
   - ~deepseek/deepseek-pro-latest
-  metadata: '{"alias_platforms": {"deepseek-pro-latest": "kilo", "~deepseek/deepseek-pro-latest": "openrouter"}, "providers": ["kilo", "openrouter"], "underlying_key": "deepseek-pro"}'
+  metadata: '{"alias_platforms": {"deepseek-pro-latest": "fireworks-ai", "~deepseek/deepseek-pro-latest": "openrouter"}, "providers": ["fireworks-ai", "kilo", "openrouter"], "underlying_key": "deepseek-pro"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-prover-v2-671b
@@ -11668,6 +11670,39 @@
   aliases:
   - gemini-3-5-transcribe-live
   metadata: '{"alias_platforms": {"gemini-3-5-transcribe-live": "vercel"}, "providers": ["vercel"], "underlying_key": "gemini-3-5-transcribe-live"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: google/gemini-3-8-live
+  display_name: Gemini 3.8 Live
+  org_id: google
+  family: gemini-3-8-live
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-15'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gemini-3-8-live
+  metadata: '{"alias_platforms": {"gemini-3-8-live": "vercel"}, "providers": ["vercel"], "underlying_key": "gemini-3-8-live"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: google/gemini-3-8-live-extended
+  display_name: Gemini 3.8 Live Extended Thinking
+  org_id: google
+  family: gemini-3-8-live-extended
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-15'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases: []
+  metadata: '{"providers": ["vercel"], "underlying_key": "gemini-3-8-live-extended"}'
   review_status: draft
   resolution_source: models_dev
 - id: google/gemini-3-flash
@@ -14530,14 +14565,14 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2026-09-12'
+  release_date: '2026-04-16'
   input_modalities: null
   output_modalities: null
   tags:
   - open-weight
   aliases:
   - 'Inference.net: Schematron V2 Turbo'
-  metadata: '{"providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "schematron"}'
+  metadata: '{"providers": ["kilo", "nano-gpt", "openrouter", "vercel"], "underlying_key": "schematron"}'
   review_status: draft
   resolution_source: models_dev
 - id: inference-net/schematron-v2-small
@@ -14548,7 +14583,7 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2026-09-12'
+  release_date: '2026-04-16'
   input_modalities: null
   output_modalities: null
   tags:
@@ -14556,7 +14591,7 @@
   aliases:
   - 'Inference.net: Schematron V2 Small'
   - schematron-v2-small
-  metadata: '{"alias_platforms": {"schematron-v2-small": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "schematron-v2-small"}'
+  metadata: '{"alias_platforms": {"schematron-v2-small": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter", "vercel"], "underlying_key": "schematron-v2-small"}'
   review_status: draft
   resolution_source: models_dev
 - id: inflatebot/MN-12B-Mag-Mell-R1
@@ -17336,7 +17371,7 @@
   - open-weight
   aliases:
   - minimax-latest
-  metadata: '{"alias_platforms": {"minimax-latest": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "minimax"}'
+  metadata: '{"alias_platforms": {"minimax-latest": "nano-gpt"}, "providers": ["fireworks-ai", "nano-gpt"], "underlying_key": "minimax"}'
   review_status: draft
   resolution_source: models_dev
 - id: minimax/minimax-m1
@@ -17565,14 +17600,14 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2026-04-12'
+  release_date: '2026-03-18'
   input_modalities: null
   output_modalities: null
   tags:
   - open-weight
   aliases:
   - minimax-m2p7
-  metadata: '{"alias_platforms": {"minimax-m2p7": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "minimax-m2p7", "upstream_status": "removed"}'
+  metadata: '{"alias_platforms": {"minimax-m2p7": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "minimax-m2p7"}'
   review_status: draft
   resolution_source: models_dev
 - id: minimax/minimax-m3
@@ -18126,16 +18161,18 @@
   parents: []
   open_weights: true
   release_date: '2025-12-09'
-  input_modalities: null
-  output_modalities: null
+  input_modalities:
+  - image
+  - text
+  output_modalities:
+  - text
   tags:
   - open-weight
   aliases:
   - Devstral Small 2
   - devstral-small-2
-  metadata: '{"alias_platforms": {"devstral-small-2": "vercel"}, "providers": ["vercel"], "underlying_key": "devstral-small-2"}'
+  metadata: '{"alias_platforms": {"devstral-small-2": "vercel"}, "knowledge_cutoffs": ["2025-12"], "release_dates": ["2025-12-09"], "snapshots": ["labs-devstral-small-2512"]}'
   review_status: reviewed
-  resolution_source: models_dev
 - id: mistralai/devstral-small-2-24b
   display_name: devstral-small-2:24b
   org_id: mistralai
@@ -19347,7 +19384,7 @@
   aliases:
   - Pixtral 12B
   - pixtral-12b
-  metadata: '{"alias_platforms": {"pixtral-12b": "vercel"}, "knowledge_cutoffs": ["2024-09"], "release_dates": ["2024-09-01"], "snapshots": ["pixtral-12b"]}'
+  metadata: '{"alias_platforms": {"pixtral-12b": "mistral"}, "knowledge_cutoffs": ["2024-09"], "release_dates": ["2024-09-01"], "snapshots": ["pixtral-12b"]}'
   review_status: reviewed
 - id: mistralai/pixtral-12b-2409
   display_name: Pixtral 12B 2409
@@ -19752,6 +19789,24 @@
   aliases:
   - kimi-dev-72b
   metadata: '{"alias_platforms": {"kimi-dev-72b": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "kimi-dev-72b", "upstream_status": "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: moonshotai/kimi-fast-latest
+  display_name: Kimi Fast Latest
+  org_id: moonshotai
+  family: kimi-fast-latest
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-07-27'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - kimi-fast-latest
+  metadata: '{"alias_platforms": {"kimi-fast-latest": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "kimi-fast"}'
   review_status: draft
   resolution_source: models_dev
 - id: moonshotai/kimi-for-coding
@@ -20328,7 +20383,8 @@
   - 'MoonshotAI: Kimi Latest'
   - kimi-latest
   - ~moonshotai/kimi-latest
-  metadata: '{"alias_platforms": {"kimi-latest": "nano-gpt", "~moonshotai/kimi-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter", "privatemode-ai"], "underlying_key": "kimi"}'
+  metadata: '{"alias_platforms": {"kimi-latest": "nano-gpt", "~moonshotai/kimi-latest": "openrouter"}, "providers": ["fireworks-ai", "kilo", "nano-gpt", "openrouter", "privatemode-ai"], "underlying_key":
+    "kimi"}'
   review_status: draft
   resolution_source: models_dev
 - id: moonshotai/kimi-thinking-preview
@@ -23053,26 +23109,6 @@
   metadata: '{"alias_platforms": {"databricks-gpt-5-2": "databricks", "gpt-5-2": "qiniu-ai", "gpt-5.2": "aihubmix", "openai-gpt-5.2": "digitalocean", "openai/gpt-5-2": "qiniu-ai"}, "knowledge_cutoffs":
     ["2025-08-31"], "openrouter_adopted": true, "release_dates": ["2025-12-11"], "snapshots": ["gpt-5.2"]}'
   review_status: reviewed
-- id: openai/gpt-5.2-codex
-  display_name: GPT-5.2 Codex
-  org_id: openai
-  family: gpt-5-2-codex
-  architecture: null
-  params_billions: null
-  parents: []
-  open_weights: false
-  release_date: '2025-12-11'
-  input_modalities: null
-  output_modalities: null
-  tags: []
-  aliases:
-  - gpt-5-2-codex
-  - gpt-5.2-codex
-  - openai/gpt-5-2-codex
-  metadata: '{"alias_platforms": {"gpt-5-2-codex": "nano-gpt", "gpt-5.2-codex": "vivgrid", "openai/gpt-5-2-codex": "nano-gpt"}, "openrouter_adopted": true, "providers": ["abacus", "aihubmix", "azure", "azure-cognitive-services",
-    "jiekou", "kilo", "llmgateway", "nano-gpt", "opencode", "openrouter", "orcarouter", "poe", "qihang-ai", "vercel", "vivgrid", "zenmux"], "underlying_key": "gpt-5-2-codex"}'
-  review_status: draft
-  resolution_source: models_dev
 - id: openai/gpt-5.2-pro
   display_name: GPT-5.2 Pro
   org_id: openai
@@ -23507,21 +23543,27 @@
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-52-codex
-  display_name: gpt-52-codex
+  display_name: GPT-5.2 Codex
   org_id: openai
-  family: gpt-52-codex
+  family: gpt-5-2-codex
   architecture: null
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2025-01-15'
+  release_date: '2025-12-11'
   input_modalities: null
   output_modalities: null
   tags: []
   aliases:
+  - gpt-5-2-codex
+  - gpt-5.2-codex
   - gpt-52-codex
   - openai-gpt-52-codex
-  metadata: '{"alias_platforms": {"gpt-52-codex": "venice", "openai-gpt-52-codex": "venice"}, "providers": ["venice"], "underlying_key": "gpt-52-codex"}'
+  - openai/gpt-5-2-codex
+  - openai/gpt-5.2-codex
+  metadata: '{"alias_platforms": {"gpt-5-2-codex": "nano-gpt", "gpt-5.2-codex": "vivgrid", "gpt-52-codex": "venice", "openai-gpt-52-codex": "venice", "openai/gpt-5-2-codex": "nano-gpt"}, "openrouter_adopted":
+    true, "providers": ["abacus", "aihubmix", "azure", "azure-cognitive-services", "jiekou", "kilo", "llmgateway", "nano-gpt", "opencode", "openrouter", "orcarouter", "poe", "qihang-ai", "vercel", "vivgrid",
+    "zenmux"], "underlying_key": "gpt-5-2-codex"}'
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-53-codex
@@ -23993,6 +24035,23 @@
   - gpt-latest
   - ~openai/gpt-latest
   metadata: '{"alias_platforms": {"gpt-latest": "nano-gpt", "~openai/gpt-latest": "openrouter"}, "providers": ["nano-gpt"], "underlying_key": "gpt"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: openai/gpt-live-1
+  display_name: GPT-Live 1
+  org_id: openai
+  family: gpt-live-1
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-10'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gpt-live-1
+  metadata: '{"alias_platforms": {"gpt-live-1": "vercel"}, "providers": ["vercel"], "underlying_key": "gpt-live-1"}'
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-luna-latest
@@ -30763,22 +30822,42 @@
   metadata: '{"alias_platforms": {"glm-5p3-flash": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "glm-5p3-flash"}'
   review_status: draft
   resolution_source: models_dev
+- id: zai/glm-fast-latest
+  display_name: GLM 5.3 Fast (Latest)
+  org_id: zai
+  family: glm-fast-latest
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-08-28'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-fast-latest
+  metadata: '{"alias_platforms": {"glm-fast-latest": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "glm-fast"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: zai/glm-flash-latest
-  display_name: 'Z.ai: GLM Flash Latest'
+  display_name: GLM Flash Latest (GLM 5.3 Flash)
   org_id: zai
   family: glm-flash-latest
   architecture: null
   params_billions: null
   parents: []
-  open_weights: false
-  release_date: '2026-08-27'
+  open_weights: true
+  release_date: '2026-08-26'
   input_modalities: null
   output_modalities: null
-  tags: []
+  tags:
+  - open-weight
   aliases:
+  - 'Z.ai: GLM Flash Latest'
   - glm-flash-latest
   - ~z-ai/glm-flash-latest
-  metadata: '{"alias_platforms": {"glm-flash-latest": "kilo", "~z-ai/glm-flash-latest": "openrouter"}, "providers": ["kilo", "openrouter"], "underlying_key": "glm-flash"}'
+  metadata: '{"alias_platforms": {"glm-flash-latest": "fireworks-ai", "~z-ai/glm-flash-latest": "openrouter"}, "providers": ["fireworks-ai", "kilo", "openrouter"], "underlying_key": "glm-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-for-coding
@@ -30814,7 +30893,7 @@
   aliases:
   - glm-latest
   - ~z-ai/glm-latest
-  metadata: '{"alias_platforms": {"glm-latest": "nano-gpt", "~z-ai/glm-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter", "privatemode-ai"], "underlying_key": "glm"}'
+  metadata: '{"alias_platforms": {"glm-latest": "nano-gpt", "~z-ai/glm-latest": "openrouter"}, "providers": ["fireworks-ai", "kilo", "nano-gpt", "openrouter", "privatemode-ai"], "underlying_key": "glm"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-z1-32b-0414
