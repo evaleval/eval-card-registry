@@ -258,3 +258,7 @@ aixamine-safety-alignment:
   configs:
     - aixamine_safety_alignment
   review_status: draft
+swissai-apertus-evals:
+  display: Apertus 1.5 evaluation suite
+  configs:
+    - swissai_apertus_evals

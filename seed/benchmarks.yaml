@@ -123,6 +123,7 @@
     - vals_ai_mmlu_pro_philosophy
     - vals_ai_mmlu_pro_physics
     - vals_ai_mmlu_pro_psychology
+    - "MMLU-Pro (overall)"  # total-row spelling, source MMLU-Pro, 2026-09-16
   description: Massive Multitask Language Understanding Pro — harder version with more answer choices.
   dataset_repo: TIGER-Lab/MMLU-Pro
   parent_benchmark_id: null
@@ -131,7 +132,7 @@
   review_status: reviewed
 
 - id: math
-  preferred_metric: accuracy
+  preferred_metric: math-verify
   display_name: MATH
   aliases:
     - artificial_analysis.math
@@ -173,133 +174,874 @@
     - Mmlu Cot
     - llm_stats_mmlu_cot
     - mmlu-cot
-    - mmlu_abstract_algebra
-    - mmlu_anatomy
-    - mmlu_astronomy
-    - mmlu_business_ethics
-    - mmlu_clinical_knowledge
-    - mmlu_college_biology
-    - mmlu_college_chemistry
-    - mmlu_college_computer_science
-    - mmlu_college_mathematics
-    - mmlu_college_medicine
-    - mmlu_college_physics
-    - mmlu_computer_security
-    - mmlu_conceptual_physics
     - mmlu_cot
-    - mmlu_econometrics
-    - mmlu_electrical_engineering
-    - mmlu_elementary_mathematics
-    - mmlu_formal_logic
-    - mmlu_global_facts
-    - mmlu_high_school_biology
-    - mmlu_high_school_chemistry
-    - mmlu_high_school_computer_science
-    - mmlu_high_school_european_history
-    - mmlu_high_school_geography
-    - mmlu_high_school_government_and_politics
-    - mmlu_high_school_macroeconomics
-    - mmlu_high_school_mathematics
-    - mmlu_high_school_microeconomics
-    - mmlu_high_school_physics
-    - mmlu_high_school_psychology
-    - mmlu_high_school_statistics
-    - mmlu_high_school_us_history
-    - mmlu_high_school_world_history
-    - mmlu_human_aging
-    - mmlu_human_sexuality
     - mmlu_humanities
-    - mmlu_international_law
-    - mmlu_jurisprudence
-    - mmlu_logical_fallacies
-    - mmlu_machine_learning
-    - mmlu_management
-    - mmlu_marketing
-    - mmlu_medical_genetics
-    - mmlu_miscellaneous
-    - mmlu_moral_disputes
-    - mmlu_moral_scenarios
-    - mmlu_nutrition
     - mmlu_other
-    - mmlu_philosophy
-    - mmlu_prehistory
-    - mmlu_professional_accounting
-    - mmlu_professional_law
-    - mmlu_professional_medicine
-    - mmlu_professional_psychology
-    - mmlu_public_relations
-    - mmlu_security_studies
     - mmlu_social_sciences
-    - mmlu_sociology
-    - mmlu_us_foreign_policy
-    - mmlu_virology
-    - mmlu_world_religions
   scoped_aliases:
     helm_mmlu:
       - "helm_mmlu"
-      - "Abstract Algebra"
-      - "Anatomy"
-      - "Astronomy"
-      - "Business Ethics"
-      - "Clinical Knowledge"
-      - "College Biology"
-      - "College Chemistry"
-      - "College Computer Science"
-      - "College Mathematics"
-      - "College Medicine"
-      - "College Physics"
-      - "Computer Security"
-      - "Conceptual Physics"
-      - "Econometrics"
-      - "Electrical Engineering"
-      - "Elementary Mathematics"
-      - "Formal Logic"
-      - "Global Facts"
-      - "High School Biology"
-      - "High School Chemistry"
-      - "High School Computer Science"
-      - "High School European History"
-      - "High School Geography"
-      - "High School Government And Politics"
-      - "High School Macroeconomics"
-      - "High School Mathematics"
-      - "High School Microeconomics"
-      - "High School Physics"
-      - "High School Psychology"
-      - "High School Statistics"
-      - "High School Us History"
-      - "High School World History"
-      - "Human Aging"
-      - "Human Sexuality"
-      - "International Law"
-      - "Jurisprudence"
-      - "Logical Fallacies"
-      - "Machine Learning"
-      - "Management"
-      - "Marketing"
-      - "Medical Genetics"
-      - "Miscellaneous"
-      - "Moral Disputes"
-      - "Moral Scenarios"
-      - "Nutrition"
-      - "Philosophy"
-      - "Prehistory"
-      - "Professional Accounting"
-      - "Professional Law"
-      - "Professional Medicine"
-      - "Professional Psychology"
-      - "Public Relations"
-      - "Security Studies"
-      - "Sociology"
-      - "Us Foreign Policy"
-      - "Virology"
-      - "World Religions"
-  description: Massive Multitask Language Understanding — 57-subject multiple-choice benchmark. Subject names under helm_mmlu scope to this parent.
+  description: Massive Multitask Language Understanding — 57-subject multiple-choice benchmark. The 57 subjects are slice children (mmlu-<subject>); the parent keeps only whole-benchmark spellings (MMLU All Subjects, helm_mmlu) plus the humanities / other / social_sciences super-category aggregates.
   dataset_repo: cais/mmlu
   parent_benchmark_id: null
   tags: '["multi-task", "knowledge"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: mmlu-abstract-algebra
+  display_name: MMLU Abstract Algebra
+  description: MMLU subject "Abstract Algebra". Slice child of mmlu; HELM spelling `Abstract Algebra` (helm_mmlu), lm-eval task mmlu_abstract_algebra.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_abstract_algebra
+    - mmlu abstract algebra  # joined spelling of the dotted lm-eval name mmlu.mmlu.abstract_algebra, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Abstract Algebra"
+
+- id: mmlu-anatomy
+  display_name: MMLU Anatomy
+  description: MMLU subject "Anatomy". Slice child of mmlu; HELM spelling `Anatomy` (helm_mmlu), lm-eval task mmlu_anatomy.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_anatomy
+    - mmlu anatomy  # joined spelling of the dotted lm-eval name mmlu.mmlu.anatomy, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Anatomy"
+
+- id: mmlu-astronomy
+  display_name: MMLU Astronomy
+  description: MMLU subject "Astronomy". Slice child of mmlu; HELM spelling `Astronomy` (helm_mmlu), lm-eval task mmlu_astronomy.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_astronomy
+    - mmlu astronomy  # joined spelling of the dotted lm-eval name mmlu.mmlu.astronomy, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Astronomy"
+
+- id: mmlu-business-ethics
+  display_name: MMLU Business Ethics
+  description: MMLU subject "Business Ethics". Slice child of mmlu; HELM spelling `Business Ethics` (helm_mmlu), lm-eval task mmlu_business_ethics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_business_ethics
+    - mmlu business ethics  # joined spelling of the dotted lm-eval name mmlu.mmlu.business_ethics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Business Ethics"
+
+- id: mmlu-clinical-knowledge
+  display_name: MMLU Clinical Knowledge
+  description: MMLU subject "Clinical Knowledge". Slice child of mmlu; HELM spelling `Clinical Knowledge` (helm_mmlu), lm-eval task mmlu_clinical_knowledge.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_clinical_knowledge
+    - mmlu clinical knowledge  # joined spelling of the dotted lm-eval name mmlu.mmlu.clinical_knowledge, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Clinical Knowledge"
+
+- id: mmlu-college-biology
+  display_name: MMLU College Biology
+  description: MMLU subject "College Biology". Slice child of mmlu; HELM spelling `College Biology` (helm_mmlu), lm-eval task mmlu_college_biology.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_college_biology
+    - mmlu college biology  # joined spelling of the dotted lm-eval name mmlu.mmlu.college_biology, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "College Biology"
+
+- id: mmlu-college-chemistry
+  display_name: MMLU College Chemistry
+  description: MMLU subject "College Chemistry". Slice child of mmlu; HELM spelling `College Chemistry` (helm_mmlu), lm-eval task mmlu_college_chemistry.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_college_chemistry
+    - mmlu college chemistry  # joined spelling of the dotted lm-eval name mmlu.mmlu.college_chemistry, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "College Chemistry"
+
+- id: mmlu-college-computer-science
+  display_name: MMLU College Computer Science
+  description: MMLU subject "College Computer Science". Slice child of mmlu; HELM spelling `College Computer Science` (helm_mmlu), lm-eval task mmlu_college_computer_science.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_college_computer_science
+    - mmlu college computer science  # joined spelling of the dotted lm-eval name mmlu.mmlu.college_computer_science, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "College Computer Science"
+
+- id: mmlu-college-mathematics
+  display_name: MMLU College Mathematics
+  description: MMLU subject "College Mathematics". Slice child of mmlu; HELM spelling `College Mathematics` (helm_mmlu), lm-eval task mmlu_college_mathematics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_college_mathematics
+    - mmlu college mathematics  # joined spelling of the dotted lm-eval name mmlu.mmlu.college_mathematics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "College Mathematics"
+
+- id: mmlu-college-medicine
+  display_name: MMLU College Medicine
+  description: MMLU subject "College Medicine". Slice child of mmlu; HELM spelling `College Medicine` (helm_mmlu), lm-eval task mmlu_college_medicine.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_college_medicine
+    - mmlu college medicine  # joined spelling of the dotted lm-eval name mmlu.mmlu.college_medicine, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "College Medicine"
+
+- id: mmlu-college-physics
+  display_name: MMLU College Physics
+  description: MMLU subject "College Physics". Slice child of mmlu; HELM spelling `College Physics` (helm_mmlu), lm-eval task mmlu_college_physics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_college_physics
+    - mmlu college physics  # joined spelling of the dotted lm-eval name mmlu.mmlu.college_physics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "College Physics"
+
+- id: mmlu-computer-security
+  display_name: MMLU Computer Security
+  description: MMLU subject "Computer Security". Slice child of mmlu; HELM spelling `Computer Security` (helm_mmlu), lm-eval task mmlu_computer_security.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_computer_security
+    - mmlu computer security  # joined spelling of the dotted lm-eval name mmlu.mmlu.computer_security, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Computer Security"
+
+- id: mmlu-conceptual-physics
+  display_name: MMLU Conceptual Physics
+  description: MMLU subject "Conceptual Physics". Slice child of mmlu; HELM spelling `Conceptual Physics` (helm_mmlu), lm-eval task mmlu_conceptual_physics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_conceptual_physics
+    - mmlu conceptual physics  # joined spelling of the dotted lm-eval name mmlu.mmlu.conceptual_physics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Conceptual Physics"
+
+- id: mmlu-econometrics
+  display_name: MMLU Econometrics
+  description: MMLU subject "Econometrics". Slice child of mmlu; HELM spelling `Econometrics` (helm_mmlu), lm-eval task mmlu_econometrics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_econometrics
+    - mmlu econometrics  # joined spelling of the dotted lm-eval name mmlu.mmlu.econometrics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Econometrics"
+
+- id: mmlu-electrical-engineering
+  display_name: MMLU Electrical Engineering
+  description: MMLU subject "Electrical Engineering". Slice child of mmlu; HELM spelling `Electrical Engineering` (helm_mmlu), lm-eval task mmlu_electrical_engineering.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_electrical_engineering
+    - mmlu electrical engineering  # joined spelling of the dotted lm-eval name mmlu.mmlu.electrical_engineering, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Electrical Engineering"
+
+- id: mmlu-elementary-mathematics
+  display_name: MMLU Elementary Mathematics
+  description: MMLU subject "Elementary Mathematics". Slice child of mmlu; HELM spelling `Elementary Mathematics` (helm_mmlu), lm-eval task mmlu_elementary_mathematics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_elementary_mathematics
+    - mmlu elementary mathematics  # joined spelling of the dotted lm-eval name mmlu.mmlu.elementary_mathematics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Elementary Mathematics"
+
+- id: mmlu-formal-logic
+  display_name: MMLU Formal Logic
+  description: MMLU subject "Formal Logic". Slice child of mmlu; HELM spelling `Formal Logic` (helm_mmlu), lm-eval task mmlu_formal_logic.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_formal_logic
+    - mmlu formal logic  # joined spelling of the dotted lm-eval name mmlu.mmlu.formal_logic, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Formal Logic"
+
+- id: mmlu-global-facts
+  display_name: MMLU Global Facts
+  description: MMLU subject "Global Facts". Slice child of mmlu; HELM spelling `Global Facts` (helm_mmlu), lm-eval task mmlu_global_facts.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_global_facts
+    - mmlu global facts  # joined spelling of the dotted lm-eval name mmlu.mmlu.global_facts, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Global Facts"
+
+- id: mmlu-high-school-biology
+  display_name: MMLU High School Biology
+  description: MMLU subject "High School Biology". Slice child of mmlu; HELM spelling `High School Biology` (helm_mmlu), lm-eval task mmlu_high_school_biology.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_biology
+    - mmlu high school biology  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_biology, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Biology"
+
+- id: mmlu-high-school-chemistry
+  display_name: MMLU High School Chemistry
+  description: MMLU subject "High School Chemistry". Slice child of mmlu; HELM spelling `High School Chemistry` (helm_mmlu), lm-eval task mmlu_high_school_chemistry.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_chemistry
+    - mmlu high school chemistry  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_chemistry, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Chemistry"
+
+- id: mmlu-high-school-computer-science
+  display_name: MMLU High School Computer Science
+  description: MMLU subject "High School Computer Science". Slice child of mmlu; HELM spelling `High School Computer Science` (helm_mmlu), lm-eval task mmlu_high_school_computer_science.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_computer_science
+    - mmlu high school computer science  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_computer_science, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Computer Science"
+
+- id: mmlu-high-school-european-history
+  display_name: MMLU High School European History
+  description: MMLU subject "High School European History". Slice child of mmlu; HELM spelling `High School European History` (helm_mmlu), lm-eval task mmlu_high_school_european_history.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_european_history
+    - mmlu high school european history  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_european_history, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School European History"
+
+- id: mmlu-high-school-geography
+  display_name: MMLU High School Geography
+  description: MMLU subject "High School Geography". Slice child of mmlu; HELM spelling `High School Geography` (helm_mmlu), lm-eval task mmlu_high_school_geography.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_geography
+    - mmlu high school geography  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_geography, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Geography"
+
+- id: mmlu-high-school-government-and-politics
+  display_name: MMLU High School Government And Politics
+  description: MMLU subject "High School Government And Politics". Slice child of mmlu; HELM spelling `High School Government And Politics` (helm_mmlu), lm-eval task mmlu_high_school_government_and_politics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_government_and_politics
+    - mmlu high school government and politics  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_government_and_politics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Government And Politics"
+
+- id: mmlu-high-school-macroeconomics
+  display_name: MMLU High School Macroeconomics
+  description: MMLU subject "High School Macroeconomics". Slice child of mmlu; HELM spelling `High School Macroeconomics` (helm_mmlu), lm-eval task mmlu_high_school_macroeconomics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_macroeconomics
+    - mmlu high school macroeconomics  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_macroeconomics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Macroeconomics"
+
+- id: mmlu-high-school-mathematics
+  display_name: MMLU High School Mathematics
+  description: MMLU subject "High School Mathematics". Slice child of mmlu; HELM spelling `High School Mathematics` (helm_mmlu), lm-eval task mmlu_high_school_mathematics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_mathematics
+    - mmlu high school mathematics  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_mathematics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Mathematics"
+
+- id: mmlu-high-school-microeconomics
+  display_name: MMLU High School Microeconomics
+  description: MMLU subject "High School Microeconomics". Slice child of mmlu; HELM spelling `High School Microeconomics` (helm_mmlu), lm-eval task mmlu_high_school_microeconomics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_microeconomics
+    - mmlu high school microeconomics  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_microeconomics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Microeconomics"
+
+- id: mmlu-high-school-physics
+  display_name: MMLU High School Physics
+  description: MMLU subject "High School Physics". Slice child of mmlu; HELM spelling `High School Physics` (helm_mmlu), lm-eval task mmlu_high_school_physics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_physics
+    - mmlu high school physics  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_physics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Physics"
+
+- id: mmlu-high-school-psychology
+  display_name: MMLU High School Psychology
+  description: MMLU subject "High School Psychology". Slice child of mmlu; HELM spelling `High School Psychology` (helm_mmlu), lm-eval task mmlu_high_school_psychology.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_psychology
+    - mmlu high school psychology  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_psychology, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Psychology"
+
+- id: mmlu-high-school-statistics
+  display_name: MMLU High School Statistics
+  description: MMLU subject "High School Statistics". Slice child of mmlu; HELM spelling `High School Statistics` (helm_mmlu), lm-eval task mmlu_high_school_statistics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_statistics
+    - mmlu high school statistics  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_statistics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Statistics"
+
+- id: mmlu-high-school-us-history
+  display_name: MMLU High School Us History
+  description: MMLU subject "High School Us History". Slice child of mmlu; HELM spelling `High School Us History` (helm_mmlu), lm-eval task mmlu_high_school_us_history.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_us_history
+    - mmlu high school us history  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_us_history, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School Us History"
+
+- id: mmlu-high-school-world-history
+  display_name: MMLU High School World History
+  description: MMLU subject "High School World History". Slice child of mmlu; HELM spelling `High School World History` (helm_mmlu), lm-eval task mmlu_high_school_world_history.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_high_school_world_history
+    - mmlu high school world history  # joined spelling of the dotted lm-eval name mmlu.mmlu.high_school_world_history, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "High School World History"
+
+- id: mmlu-human-aging
+  display_name: MMLU Human Aging
+  description: MMLU subject "Human Aging". Slice child of mmlu; HELM spelling `Human Aging` (helm_mmlu), lm-eval task mmlu_human_aging.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_human_aging
+    - mmlu human aging  # joined spelling of the dotted lm-eval name mmlu.mmlu.human_aging, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Human Aging"
+
+- id: mmlu-human-sexuality
+  display_name: MMLU Human Sexuality
+  description: MMLU subject "Human Sexuality". Slice child of mmlu; HELM spelling `Human Sexuality` (helm_mmlu), lm-eval task mmlu_human_sexuality.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_human_sexuality
+    - mmlu human sexuality  # joined spelling of the dotted lm-eval name mmlu.mmlu.human_sexuality, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Human Sexuality"
+
+- id: mmlu-international-law
+  display_name: MMLU International Law
+  description: MMLU subject "International Law". Slice child of mmlu; HELM spelling `International Law` (helm_mmlu), lm-eval task mmlu_international_law.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_international_law
+    - mmlu international law  # joined spelling of the dotted lm-eval name mmlu.mmlu.international_law, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "International Law"
+
+- id: mmlu-jurisprudence
+  display_name: MMLU Jurisprudence
+  description: MMLU subject "Jurisprudence". Slice child of mmlu; HELM spelling `Jurisprudence` (helm_mmlu), lm-eval task mmlu_jurisprudence.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_jurisprudence
+    - mmlu jurisprudence  # joined spelling of the dotted lm-eval name mmlu.mmlu.jurisprudence, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Jurisprudence"
+
+- id: mmlu-logical-fallacies
+  display_name: MMLU Logical Fallacies
+  description: MMLU subject "Logical Fallacies". Slice child of mmlu; HELM spelling `Logical Fallacies` (helm_mmlu), lm-eval task mmlu_logical_fallacies.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_logical_fallacies
+    - mmlu logical fallacies  # joined spelling of the dotted lm-eval name mmlu.mmlu.logical_fallacies, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Logical Fallacies"
+
+- id: mmlu-machine-learning
+  display_name: MMLU Machine Learning
+  description: MMLU subject "Machine Learning". Slice child of mmlu; HELM spelling `Machine Learning` (helm_mmlu), lm-eval task mmlu_machine_learning.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_machine_learning
+    - mmlu machine learning  # joined spelling of the dotted lm-eval name mmlu.mmlu.machine_learning, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Machine Learning"
+
+- id: mmlu-management
+  display_name: MMLU Management
+  description: MMLU subject "Management". Slice child of mmlu; HELM spelling `Management` (helm_mmlu), lm-eval task mmlu_management.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_management
+    - mmlu management  # joined spelling of the dotted lm-eval name mmlu.mmlu.management, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Management"
+
+- id: mmlu-marketing
+  display_name: MMLU Marketing
+  description: MMLU subject "Marketing". Slice child of mmlu; HELM spelling `Marketing` (helm_mmlu), lm-eval task mmlu_marketing.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_marketing
+    - mmlu marketing  # joined spelling of the dotted lm-eval name mmlu.mmlu.marketing, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Marketing"
+
+- id: mmlu-medical-genetics
+  display_name: MMLU Medical Genetics
+  description: MMLU subject "Medical Genetics". Slice child of mmlu; HELM spelling `Medical Genetics` (helm_mmlu), lm-eval task mmlu_medical_genetics.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_medical_genetics
+    - mmlu medical genetics  # joined spelling of the dotted lm-eval name mmlu.mmlu.medical_genetics, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Medical Genetics"
+
+- id: mmlu-miscellaneous
+  display_name: MMLU Miscellaneous
+  description: MMLU subject "Miscellaneous". Slice child of mmlu; HELM spelling `Miscellaneous` (helm_mmlu), lm-eval task mmlu_miscellaneous.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_miscellaneous
+    - mmlu miscellaneous  # joined spelling of the dotted lm-eval name mmlu.mmlu.miscellaneous, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Miscellaneous"
+
+- id: mmlu-moral-disputes
+  display_name: MMLU Moral Disputes
+  description: MMLU subject "Moral Disputes". Slice child of mmlu; HELM spelling `Moral Disputes` (helm_mmlu), lm-eval task mmlu_moral_disputes.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_moral_disputes
+    - mmlu moral disputes  # joined spelling of the dotted lm-eval name mmlu.mmlu.moral_disputes, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Moral Disputes"
+
+- id: mmlu-moral-scenarios
+  display_name: MMLU Moral Scenarios
+  description: MMLU subject "Moral Scenarios". Slice child of mmlu; HELM spelling `Moral Scenarios` (helm_mmlu), lm-eval task mmlu_moral_scenarios.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_moral_scenarios
+    - mmlu moral scenarios  # joined spelling of the dotted lm-eval name mmlu.mmlu.moral_scenarios, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Moral Scenarios"
+
+- id: mmlu-nutrition
+  display_name: MMLU Nutrition
+  description: MMLU subject "Nutrition". Slice child of mmlu; HELM spelling `Nutrition` (helm_mmlu), lm-eval task mmlu_nutrition.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_nutrition
+    - mmlu nutrition  # joined spelling of the dotted lm-eval name mmlu.mmlu.nutrition, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Nutrition"
+
+- id: mmlu-philosophy
+  display_name: MMLU Philosophy
+  description: MMLU subject "Philosophy". Slice child of mmlu; HELM spelling `Philosophy` (helm_mmlu), lm-eval task mmlu_philosophy.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_philosophy
+    - mmlu philosophy  # joined spelling of the dotted lm-eval name mmlu.mmlu.philosophy, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Philosophy"
+
+- id: mmlu-prehistory
+  display_name: MMLU Prehistory
+  description: MMLU subject "Prehistory". Slice child of mmlu; HELM spelling `Prehistory` (helm_mmlu), lm-eval task mmlu_prehistory.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_prehistory
+    - mmlu prehistory  # joined spelling of the dotted lm-eval name mmlu.mmlu.prehistory, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Prehistory"
+
+- id: mmlu-professional-accounting
+  display_name: MMLU Professional Accounting
+  description: MMLU subject "Professional Accounting". Slice child of mmlu; HELM spelling `Professional Accounting` (helm_mmlu), lm-eval task mmlu_professional_accounting.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_professional_accounting
+    - mmlu professional accounting  # joined spelling of the dotted lm-eval name mmlu.mmlu.professional_accounting, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Professional Accounting"
+
+- id: mmlu-professional-law
+  display_name: MMLU Professional Law
+  description: MMLU subject "Professional Law". Slice child of mmlu; HELM spelling `Professional Law` (helm_mmlu), lm-eval task mmlu_professional_law.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_professional_law
+    - mmlu professional law  # joined spelling of the dotted lm-eval name mmlu.mmlu.professional_law, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Professional Law"
+
+- id: mmlu-professional-medicine
+  display_name: MMLU Professional Medicine
+  description: MMLU subject "Professional Medicine". Slice child of mmlu; HELM spelling `Professional Medicine` (helm_mmlu), lm-eval task mmlu_professional_medicine.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_professional_medicine
+    - mmlu professional medicine  # joined spelling of the dotted lm-eval name mmlu.mmlu.professional_medicine, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Professional Medicine"
+
+- id: mmlu-professional-psychology
+  display_name: MMLU Professional Psychology
+  description: MMLU subject "Professional Psychology". Slice child of mmlu; HELM spelling `Professional Psychology` (helm_mmlu), lm-eval task mmlu_professional_psychology.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_professional_psychology
+    - mmlu professional psychology  # joined spelling of the dotted lm-eval name mmlu.mmlu.professional_psychology, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Professional Psychology"
+
+- id: mmlu-public-relations
+  display_name: MMLU Public Relations
+  description: MMLU subject "Public Relations". Slice child of mmlu; HELM spelling `Public Relations` (helm_mmlu), lm-eval task mmlu_public_relations.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_public_relations
+    - mmlu public relations  # joined spelling of the dotted lm-eval name mmlu.mmlu.public_relations, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Public Relations"
+
+- id: mmlu-security-studies
+  display_name: MMLU Security Studies
+  description: MMLU subject "Security Studies". Slice child of mmlu; HELM spelling `Security Studies` (helm_mmlu), lm-eval task mmlu_security_studies.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_security_studies
+    - mmlu security studies  # joined spelling of the dotted lm-eval name mmlu.mmlu.security_studies, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Security Studies"
+
+- id: mmlu-sociology
+  display_name: MMLU Sociology
+  description: MMLU subject "Sociology". Slice child of mmlu; HELM spelling `Sociology` (helm_mmlu), lm-eval task mmlu_sociology.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_sociology
+    - mmlu sociology  # joined spelling of the dotted lm-eval name mmlu.mmlu.sociology, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Sociology"
+
+- id: mmlu-us-foreign-policy
+  display_name: MMLU Us Foreign Policy
+  description: MMLU subject "Us Foreign Policy". Slice child of mmlu; HELM spelling `Us Foreign Policy` (helm_mmlu), lm-eval task mmlu_us_foreign_policy.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_us_foreign_policy
+    - mmlu us foreign policy  # joined spelling of the dotted lm-eval name mmlu.mmlu.us_foreign_policy, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Us Foreign Policy"
+
+- id: mmlu-virology
+  display_name: MMLU Virology
+  description: MMLU subject "Virology". Slice child of mmlu; HELM spelling `Virology` (helm_mmlu), lm-eval task mmlu_virology.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_virology
+    - mmlu virology  # joined spelling of the dotted lm-eval name mmlu.mmlu.virology, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "Virology"
+
+- id: mmlu-world-religions
+  display_name: MMLU World Religions
+  description: MMLU subject "World Religions". Slice child of mmlu; HELM spelling `World Religions` (helm_mmlu), lm-eval task mmlu_world_religions.
+  dataset_repo: cais/mmlu
+  parent_benchmark_id: mmlu
+  tags: '["multi-task", "knowledge"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - mmlu_world_religions
+    - mmlu world religions  # joined spelling of the dotted lm-eval name mmlu.mmlu.world_religions, source swissai_apertus_evals, 2026-09-16
+  scoped_aliases:
+    helm_mmlu:
+      - "World Religions"
 
 - id: narrativeqa
   preferred_metric: f1
@@ -328,6 +1070,7 @@
     - nq
     - Nq
     - llm_stats_nq
+    - llm stats nq
   description: Google Natural Questions — QA dataset of real Google search queries with
     Wikipedia-sourced answers (Kwiatkowski et al. 2019). Reported in evaluations under
     both closed-book (Roberts et al. 2020 formulation) and open-book setups.
@@ -484,21 +1227,9 @@
   display_name: SWE-bench
   aliases:
     - swe-bench
-    - "vals_ai.swebench.<15 min fix"
-    - "vals_ai.swebench.15 min - 1 hour"
-    - "vals_ai.swebench.1-4 hours"
-    - "vals_ai.swebench.>4 hours"
-    - "Swebench 1 4 hours"
-    - "Swebench 15 min   1 hour"
-    - "Swebench <15 min fix"
-    - "Swebench >4 hours"
     - "Swebench overall"
     - "vals.ai/swebench"
     - vals_ai_swebench
-    - vals_ai_swebench_15_min_1_hour
-    - vals_ai_swebench_15_min_fix
-    - vals_ai_swebench_1_4_hours
-    - vals_ai_swebench_4_hours
     - vals_ai_swebench_overall
   description: Software Engineering Benchmark — evaluates LLMs on real GitHub issue resolution.
   dataset_repo: princeton-nlp/SWE-bench
@@ -506,6 +1237,59 @@
   tags: '["coding", "software-engineering"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: swe-bench-15-min-fix
+  display_name: "SWE-bench <15 min fix"
+  description: Vals.ai SWE-bench time-to-fix bucket,issues a human fixes in under 15 minutes. Slice child of swe-bench; the source total is vals_ai.swebench.overall.
+  dataset_repo: princeton-nlp/SWE-bench
+  parent_benchmark_id: swe-bench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a global alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - "vals_ai.swebench.<15 min fix"
+    - "Swebench <15 min fix"
+    - vals_ai_swebench_15_min_fix
+
+- id: swe-bench-15-min-1-hour
+  display_name: SWE-bench 15 min - 1 hour
+  description: Vals.ai SWE-bench time-to-fix bucket,15 minutes to 1 hour. Slice child of swe-bench; the source total is vals_ai.swebench.overall.
+  dataset_repo: princeton-nlp/SWE-bench
+  parent_benchmark_id: swe-bench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a global alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - vals_ai.swebench.15 min - 1 hour
+    - Swebench 15 min   1 hour
+    - vals_ai_swebench_15_min_1_hour
+
+- id: swe-bench-1-4-hours
+  display_name: SWE-bench 1-4 hours
+  description: Vals.ai SWE-bench time-to-fix bucket,1 to 4 hours. Slice child of swe-bench; the source total is vals_ai.swebench.overall.
+  dataset_repo: princeton-nlp/SWE-bench
+  parent_benchmark_id: swe-bench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a global alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - vals_ai.swebench.1-4 hours
+    - Swebench 1 4 hours
+    - vals_ai_swebench_1_4_hours
+
+- id: swe-bench-4-hours
+  display_name: "SWE-bench >4 hours"
+  description: Vals.ai SWE-bench time-to-fix bucket,over 4 hours. Slice child of swe-bench; the source total is vals_ai.swebench.overall.
+  dataset_repo: princeton-nlp/SWE-bench
+  parent_benchmark_id: swe-bench
+  tags: '["coding", "software-engineering"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a global alias on the parent"}'
+  review_status: reviewed
+  aliases:
+    - "vals_ai.swebench.>4 hours"
+    - "Swebench >4 hours"
+    - vals_ai_swebench_4_hours
+
 
 - id: appworld-test-normal
   preferred_metric: score
@@ -565,30 +1349,228 @@
   display_name: Global MMLU Lite
   scoped_aliases:
     global-mmlu-lite:
-      - "Culturally Sensitive"
-      - "Culturally Agnostic"
-      - "Arabic"
-      - "English"
-      - "Bengali"
-      - "German"
-      - "French"
-      - "Hindi"
-      - "Indonesian"
-      - "Italian"
-      - "Japanese"
-      - "Korean"
-      - "Portuguese"
-      - "Spanish"
-      - "Swahili"
-      - "Yoruba"
-      - "Chinese"
-      - "Burmese"
   description: Lightweight multilingual MMLU covering 16 languages plus culturally-sensitive / culturally-agnostic cuts.
   dataset_repo: CohereForAI/Global-MMLU-Lite
   parent_benchmark_id: null
   tags: '["multi-task", "multilingual"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: global-mmlu-lite-culturally-sensitive
+  display_name: Global MMLU Lite Culturally Sensitive
+  description: Global MMLU Lite cut "Culturally Sensitive". Slice child of global-mmlu-lite (leaderboard spelling `Culturally Sensitive`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Culturally Sensitive"
+
+- id: global-mmlu-lite-culturally-agnostic
+  display_name: Global MMLU Lite Culturally Agnostic
+  description: Global MMLU Lite cut "Culturally Agnostic". Slice child of global-mmlu-lite (leaderboard spelling `Culturally Agnostic`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Culturally Agnostic"
+
+- id: global-mmlu-lite-arabic
+  display_name: Global MMLU Lite Arabic
+  description: Global MMLU Lite language "Arabic". Slice child of global-mmlu-lite (leaderboard spelling `Arabic`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Arabic"
+
+- id: global-mmlu-lite-english
+  display_name: Global MMLU Lite English
+  description: Global MMLU Lite language "English". Slice child of global-mmlu-lite (leaderboard spelling `English`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "English"
+
+- id: global-mmlu-lite-bengali
+  display_name: Global MMLU Lite Bengali
+  description: Global MMLU Lite language "Bengali". Slice child of global-mmlu-lite (leaderboard spelling `Bengali`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Bengali"
+
+- id: global-mmlu-lite-german
+  display_name: Global MMLU Lite German
+  description: Global MMLU Lite language "German". Slice child of global-mmlu-lite (leaderboard spelling `German`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "German"
+
+- id: global-mmlu-lite-french
+  display_name: Global MMLU Lite French
+  description: Global MMLU Lite language "French". Slice child of global-mmlu-lite (leaderboard spelling `French`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "French"
+
+- id: global-mmlu-lite-hindi
+  display_name: Global MMLU Lite Hindi
+  description: Global MMLU Lite language "Hindi". Slice child of global-mmlu-lite (leaderboard spelling `Hindi`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Hindi"
+
+- id: global-mmlu-lite-indonesian
+  display_name: Global MMLU Lite Indonesian
+  description: Global MMLU Lite language "Indonesian". Slice child of global-mmlu-lite (leaderboard spelling `Indonesian`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Indonesian"
+
+- id: global-mmlu-lite-italian
+  display_name: Global MMLU Lite Italian
+  description: Global MMLU Lite language "Italian". Slice child of global-mmlu-lite (leaderboard spelling `Italian`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Italian"
+
+- id: global-mmlu-lite-japanese
+  display_name: Global MMLU Lite Japanese
+  description: Global MMLU Lite language "Japanese". Slice child of global-mmlu-lite (leaderboard spelling `Japanese`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Japanese"
+
+- id: global-mmlu-lite-korean
+  display_name: Global MMLU Lite Korean
+  description: Global MMLU Lite language "Korean". Slice child of global-mmlu-lite (leaderboard spelling `Korean`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Korean"
+
+- id: global-mmlu-lite-portuguese
+  display_name: Global MMLU Lite Portuguese
+  description: Global MMLU Lite language "Portuguese". Slice child of global-mmlu-lite (leaderboard spelling `Portuguese`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Portuguese"
+
+- id: global-mmlu-lite-spanish
+  display_name: Global MMLU Lite Spanish
+  description: Global MMLU Lite language "Spanish". Slice child of global-mmlu-lite (leaderboard spelling `Spanish`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Spanish"
+
+- id: global-mmlu-lite-swahili
+  display_name: Global MMLU Lite Swahili
+  description: Global MMLU Lite language "Swahili". Slice child of global-mmlu-lite (leaderboard spelling `Swahili`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Swahili"
+
+- id: global-mmlu-lite-yoruba
+  display_name: Global MMLU Lite Yoruba
+  description: Global MMLU Lite language "Yoruba". Slice child of global-mmlu-lite (leaderboard spelling `Yoruba`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Yoruba"
+
+- id: global-mmlu-lite-chinese
+  display_name: Global MMLU Lite Chinese
+  description: Global MMLU Lite language "Chinese". Slice child of global-mmlu-lite (leaderboard spelling `Chinese`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Chinese"
+
+- id: global-mmlu-lite-burmese
+  display_name: Global MMLU Lite Burmese
+  description: Global MMLU Lite language "Burmese". Slice child of global-mmlu-lite (leaderboard spelling `Burmese`).
+  dataset_repo: CohereForAI/Global-MMLU-Lite
+  parent_benchmark_id: global-mmlu-lite
+  tags: '["multi-task", "multilingual"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    global-mmlu-lite:
+      - "Burmese"
 
 - id: la-leaderboard
   display_name: LA Leaderboard
@@ -604,6 +1586,7 @@
 
 - id: wildbench
   preferred_metric: wb-score
+  preferred_metric_llm_judged: true
   display_name: WildBench
   aliases: ["Wild Bench", "wild-bench", "wild_bench", "llm_stats_wild_bench"]
   description: Evaluates LLMs on challenging real-world user queries.
@@ -615,6 +1598,7 @@
 
 - id: omni-math
   preferred_metric: accuracy
+  preferred_metric_llm_judged: true
   display_name: Omni-MATH
   aliases:
     - Omni-MATH
@@ -669,17 +1653,49 @@
     - LiveCodeBench-Pro
     - livecodebench-pro
     - livecodebench_pro
-  description: LiveCodeBench Pro — separately curated coding benchmark partitioned into Easy/Medium/Hard problems. Distinct benchmark from LiveCodeBench (different curation, different paper); do not merge. The three difficulty splits currently fold into this parent canonical.
+  description: LiveCodeBench Pro — separately curated coding benchmark partitioned into Easy/Medium/Hard problems. Distinct benchmark from LiveCodeBench (different curation, different paper); do not merge. The three difficulty splits are slice children (livecodebench-pro-easy / -medium / -hard); the source publishes no per-model total row.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["coding"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: livecodebench-pro-easy
+  display_name: LiveCodeBench Pro Easy
+  description: LiveCodeBench Pro easy-difficulty problems. Slice child of livecodebench-pro (leaderboard spelling `Easy Problems`); the source publishes no per-model total row.
+  dataset_repo: null
+  parent_benchmark_id: livecodebench-pro
+  tags: '["coding"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
   scoped_aliases:
     livecodebenchpro:
       - "Easy Problems"
+
+- id: livecodebench-pro-medium
+  display_name: LiveCodeBench Pro Medium
+  description: LiveCodeBench Pro medium-difficulty problems. Slice child of livecodebench-pro (leaderboard spelling `Medium Problems`); the source publishes no per-model total row.
+  dataset_repo: null
+  parent_benchmark_id: livecodebench-pro
+  tags: '["coding"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    livecodebenchpro:
       - "Medium Problems"
+
+- id: livecodebench-pro-hard
+  display_name: LiveCodeBench Pro Hard
+  description: LiveCodeBench Pro hard-difficulty problems. Slice child of livecodebench-pro (leaderboard spelling `Hard Problems`); the source publishes no per-model total row.
+  dataset_repo: null
+  parent_benchmark_id: livecodebench-pro
+  tags: '["coding"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    livecodebenchpro:
       - "Hard Problems"
+
 
 # --- Added from evaleval/card_backend eval-list (sub-benchmarks & families) ---
 
@@ -732,6 +1748,7 @@
   display_name: RewardBench 2 Math
   scoped_aliases:
     reward-bench: ["Math"]
+    reward-bench-2: ["Math"]
   description: RewardBench 2 sub-category — math prompts.
   dataset_repo: allenai/reward-bench-2-results
   parent_benchmark_id: rewardbench-2
@@ -751,6 +1768,8 @@
 
 - id: rewardbench-2-safety
   display_name: RewardBench 2 Safety
+  scoped_aliases:
+    reward-bench-2: ["Safety"]
   description: RewardBench 2 sub-category — safety prompts.
   dataset_repo: allenai/reward-bench-2-results
   parent_benchmark_id: rewardbench-2
@@ -879,16 +1898,8 @@
   display_name: ACE
   scoped_aliases:
     ace:
-      - "Gaming"
       - "Overall"
-      - "DIY"
-      - "Shopping"
-      - "Food"
-      - "Gaming Score"
       - "Overall Score"
-      - "DIY Score"
-      - "Shopping Score"
-      - "Food Score"
   description: ACE consumer-task domain evaluation (archipelago harness) — overall and per-domain scores.
   dataset_repo: null
   parent_benchmark_id: null
@@ -896,30 +1907,115 @@
   metadata: '{}'
   review_status: reviewed
 
+- id: ace-gaming
+  display_name: ACE Gaming
+  description: ACE consumer-task domain "Gaming". Slice child of ace (leaderboard spellings `Gaming`, `Gaming Score`).
+  dataset_repo: null
+  parent_benchmark_id: ace
+  tags: '["consumer-tasks"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    ace:
+      - "Gaming"
+      - "Gaming Score"
+
+- id: ace-diy
+  display_name: ACE DIY
+  description: ACE consumer-task domain "DIY". Slice child of ace (leaderboard spellings `DIY`, `DIY Score`).
+  dataset_repo: null
+  parent_benchmark_id: ace
+  tags: '["consumer-tasks"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    ace:
+      - "DIY"
+      - "DIY Score"
+
+- id: ace-shopping
+  display_name: ACE Shopping
+  description: ACE consumer-task domain "Shopping". Slice child of ace (leaderboard spellings `Shopping`, `Shopping Score`).
+  dataset_repo: null
+  parent_benchmark_id: ace
+  tags: '["consumer-tasks"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    ace:
+      - "Shopping"
+      - "Shopping Score"
+
+- id: ace-food
+  display_name: ACE Food
+  description: ACE consumer-task domain "Food". Slice child of ace (leaderboard spellings `Food`, `Food Score`).
+  dataset_repo: null
+  parent_benchmark_id: ace
+  tags: '["consumer-tasks"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    ace:
+      - "Food"
+      - "Food Score"
+
 - id: apex-agents
   preferred_metric: mean-score
   display_name: APEX Agents
   aliases: ["apex-agents"]
   scoped_aliases:
     apex-agents:
-      - "Corporate Lawyer"
-      - "Corporate Lawyer Mean Score"
       - "Overall"
       - "Overall Pass@1"
       - "Overall Pass@8"
       - "Overall Mean Score"
-      - "Corporate Law"
-      - "Corporate Law Pass@1"
-      - "Investment Banking"
-      - "Investment Banking Pass@1"
-      - "Management Consulting"
-      - "Management Consulting Pass@1"
   description: APEX long-horizon professional-services agent benchmark — mean scores and Pass@k across legal / finance / consulting tasks.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["agent", "professional-services"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: apex-agents-corporate-law
+  display_name: APEX Agents Corporate Law
+  description: APEX Agents corporate-law job category. Slice child of apex-agents; the leaderboard spells the mean score as `Corporate Lawyer` and Pass@1 as `Corporate Law` for the same category.
+  dataset_repo: null
+  parent_benchmark_id: apex-agents
+  tags: '["agent", "professional-services"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    apex-agents:
+      - "Corporate Lawyer"
+      - "Corporate Lawyer Mean Score"
+      - "Corporate Law"
+      - "Corporate Law Pass@1"
+
+- id: apex-agents-investment-banking
+  display_name: APEX Agents Investment Banking
+  description: APEX Agents investment-banking job category. Slice child of apex-agents.
+  dataset_repo: null
+  parent_benchmark_id: apex-agents
+  tags: '["agent", "professional-services"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    apex-agents:
+      - "Investment Banking"
+      - "Investment Banking Pass@1"
+
+- id: apex-agents-management-consulting
+  display_name: APEX Agents Management Consulting
+  description: APEX Agents management-consulting job category. Slice child of apex-agents.
+  dataset_repo: null
+  parent_benchmark_id: apex-agents
+  tags: '["agent", "professional-services"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    apex-agents:
+      - "Management Consulting"
+      - "Management Consulting Pass@1"
 
 - id: apex-v1
   display_name: APEX v1
@@ -928,20 +2024,64 @@
     apex-v1:
       - "Overall"
       - "Overall Score"
-      - "Medicine (MD)"
-      - "Medicine (MD) Score"
-      - "Consulting"
-      - "Consulting Score"
-      - "Investment Banking"
-      - "Investment Banking Score"
-      - "Big Law"
-      - "Big Law Score"
   description: APEX v1 professional-work benchmark — overall and per-job scores (MD / consulting / finance / legal).
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["agent", "professional-services"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: apex-v1-medicine-md
+  display_name: APEX v1 Medicine (MD)
+  description: APEX v1 job category "Medicine (MD)". Slice child of apex-v1 (leaderboard spellings `Medicine (MD)`, `Medicine (MD) Score`).
+  dataset_repo: null
+  parent_benchmark_id: apex-v1
+  tags: '["agent", "professional-services"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    apex-v1:
+      - "Medicine (MD)"
+      - "Medicine (MD) Score"
+
+- id: apex-v1-consulting
+  display_name: APEX v1 Consulting
+  description: APEX v1 job category "Consulting". Slice child of apex-v1 (leaderboard spellings `Consulting`, `Consulting Score`).
+  dataset_repo: null
+  parent_benchmark_id: apex-v1
+  tags: '["agent", "professional-services"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    apex-v1:
+      - "Consulting"
+      - "Consulting Score"
+
+- id: apex-v1-investment-banking
+  display_name: APEX v1 Investment Banking
+  description: APEX v1 job category "Investment Banking". Slice child of apex-v1 (leaderboard spellings `Investment Banking`, `Investment Banking Score`).
+  dataset_repo: null
+  parent_benchmark_id: apex-v1
+  tags: '["agent", "professional-services"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    apex-v1:
+      - "Investment Banking"
+      - "Investment Banking Score"
+
+- id: apex-v1-big-law
+  display_name: APEX v1 Big Law
+  description: APEX v1 job category "Big Law". Slice child of apex-v1 (leaderboard spellings `Big Law`, `Big Law Score`).
+  dataset_repo: null
+  parent_benchmark_id: apex-v1
+  tags: '["agent", "professional-services"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    apex-v1:
+      - "Big Law"
+      - "Big Law Score"
 
 - id: journalistic-bias
   display_name: Journalistic Bias
@@ -1038,19 +2178,86 @@
   aliases: ["HELM Instruct", "helm-instruct-leaderboard", "helm_instruct"]
   scoped_aliases:
     helm_instruct:
-      - "Anthropic RLHF dataset"
-      - "Best ChatGPT Prompts"
-      - "Koala test dataset"
-      - "Open Assistant"
-      - "Self Instruct"
-      - "Vicuna"
       - "Instruct"
-  description: HELM-Instruct evaluation across multiple instruction-following prompt datasets (Anthropic RLHF, Koala, Open Assistant, Self Instruct, Vicuna, Best ChatGPT Prompts). The per-dataset splits currently fold into this parent canonical.
+  description: HELM-Instruct evaluation across multiple instruction-following prompt datasets (Anthropic RLHF, Koala, Open Assistant, Self Instruct, Vicuna, Best ChatGPT Prompts). The per-dataset splits are slice children (helm-instruct-<dataset>); the parent keeps only whole-benchmark spellings.
   dataset_repo: null
   parent_benchmark_id: null
   tags: '["instruction-following", "harmlessness"]'
   metadata: '{}'
   review_status: reviewed
+
+- id: helm-instruct-anthropic-rlhf-dataset
+  display_name: HELM Instruct Anthropic RLHF dataset
+  description: HELM Instruct prompt dataset `Anthropic RLHF dataset`. Slice child of helm-instruct (helm_instruct spelling); the source aggregate is the Mean win rate row.
+  dataset_repo: null
+  parent_benchmark_id: helm-instruct
+  tags: '["instruction-following", "harmlessness"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    helm_instruct:
+      - "Anthropic RLHF dataset"
+
+- id: helm-instruct-best-chatgpt-prompts
+  display_name: HELM Instruct Best ChatGPT Prompts
+  description: HELM Instruct prompt dataset `Best ChatGPT Prompts`. Slice child of helm-instruct (helm_instruct spelling); the source aggregate is the Mean win rate row.
+  dataset_repo: null
+  parent_benchmark_id: helm-instruct
+  tags: '["instruction-following", "harmlessness"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    helm_instruct:
+      - "Best ChatGPT Prompts"
+
+- id: helm-instruct-koala-test-dataset
+  display_name: HELM Instruct Koala test dataset
+  description: HELM Instruct prompt dataset `Koala test dataset`. Slice child of helm-instruct (helm_instruct spelling); the source aggregate is the Mean win rate row.
+  dataset_repo: null
+  parent_benchmark_id: helm-instruct
+  tags: '["instruction-following", "harmlessness"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    helm_instruct:
+      - "Koala test dataset"
+
+- id: helm-instruct-open-assistant
+  display_name: HELM Instruct Open Assistant
+  description: HELM Instruct prompt dataset `Open Assistant`. Slice child of helm-instruct (helm_instruct spelling); the source aggregate is the Mean win rate row.
+  dataset_repo: null
+  parent_benchmark_id: helm-instruct
+  tags: '["instruction-following", "harmlessness"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    helm_instruct:
+      - "Open Assistant"
+
+- id: helm-instruct-self-instruct
+  display_name: HELM Instruct Self Instruct
+  description: HELM Instruct prompt dataset `Self Instruct`. Slice child of helm-instruct (helm_instruct spelling); the source aggregate is the Mean win rate row.
+  dataset_repo: null
+  parent_benchmark_id: helm-instruct
+  tags: '["instruction-following", "harmlessness"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    helm_instruct:
+      - "Self Instruct"
+
+- id: helm-instruct-vicuna
+  display_name: HELM Instruct Vicuna
+  description: HELM Instruct prompt dataset `Vicuna`. Slice child of helm-instruct (helm_instruct spelling); the source aggregate is the Mean win rate row.
+  dataset_repo: null
+  parent_benchmark_id: helm-instruct
+  tags: '["instruction-following", "harmlessness"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a scoped alias on the parent"}'
+  review_status: reviewed
+  scoped_aliases:
+    helm_instruct:
+      - "Vicuna"
+
 
 # =====================================================================
 # HELM / HAL / SWE-Verified / NQ / ToM benchmarks
@@ -1580,11 +2787,11 @@
   aliases: ["bfcl_format_sensitivity", "BFCL Format Sensitivity"]
   scoped_aliases:
     bfcl: ["format_sensitivity"]
-  description: BFCL subset evaluating sensitivity to function-call format variations.
+  description: BFCL format-sensitivity diagnostic over BFCL runs. Its score is the standard deviation of accuracy across function-call format variations (published on a 0-34 scale), a statistic about the runs rather than a slice of the BFCL data; do not treat it as an accuracy channel.
   dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
   parent_benchmark_id: bfcl
   tags: '["function-calling"]'
-  metadata: '{}'
+  metadata: '{"role": "diagnostic", "note": "measures variance across function-call format variations, not a slice of BFCL data; marked 2026-09-16"}'
   review_status: reviewed
 
 - id: cocoabench
@@ -1705,6 +2912,9 @@
     - aime 2025
     - artificial_analysis.aime_25
     - artificial_analysis_aime_25
+    # joined spelling of the dotted source name; byte-exact so the structured
+    # parser reads `artificial_analysis.aime_25.<x>` rows as the whole benchmark
+    - artificial analysis aime 25
     - Aime aime 2025
     - vals_ai_aime_aime_2025
     - llm_stats_aime_2025
@@ -2415,7 +3625,7 @@
 # ============================================================
 
 - id: humaneval
-  preferred_metric: accuracy
+  preferred_metric: pass-at-1
   display_name: HumanEval
   aliases:
     - HumanEval
@@ -2431,6 +3641,7 @@
   review_status: reviewed
 
 - id: mbpp
+  preferred_metric: pass-at-1
   display_name: MBPP
   aliases:
     - MBPP
@@ -3032,21 +4243,41 @@
     - ai2-reasoning-challenge-arc
     - ai2_reasoning_challenge_arc
     - llm_stats_ai2_reasoning_challenge_arc
-    - arc_easy
+    - arc
+    - llm_stats_arc
+
+- id: ai2-reasoning-challenge-arc-challenge
+  display_name: ARC-Challenge
+  aliases:
     - arc_challenge
-    - arc-easy
     - arc-challenge
     - Arc C
-    - Arc E
-    - arc
     - arc-c
-    - arc-e
     - arc_c
     - arc_challenge_chat
-    - arc_e
-    - llm_stats_arc
     - llm_stats_arc_c
+  description: AI2 Reasoning Challenge — the Challenge question set (allenai/ai2_arc config ARC-Challenge).
+  dataset_repo: allenai/ai2_arc
+  parent_benchmark_id: ai2-reasoning-challenge-arc
+  tags: '["reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+
+- id: ai2-reasoning-challenge-arc-easy
+  display_name: ARC-Easy
+  aliases:
+    - arc_easy
+    - arc-easy
+    - Arc E
+    - arc-e
+    - arc_e
     - llm_stats_arc_e
+  description: AI2 Reasoning Challenge — the Easy question set (allenai/ai2_arc config ARC-Easy).
+  dataset_repo: allenai/ai2_arc
+  parent_benchmark_id: ai2-reasoning-challenge-arc
+  tags: '["reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
 
 - id: ai2d
   display_name: Ai2d
@@ -3602,6 +4833,7 @@
     - arcmmlu
 
 - id: arena-hard
+  preferred_metric: arena-hard-score
   display_name: Arena Hard
   dataset_repo: null
   parent_benchmark_id: null
@@ -3616,6 +4848,7 @@
     - arena_hard_v01
 
 - id: arena-hard-v2
+  preferred_metric: arena-hard-score
   display_name: Arena Hard v2
   dataset_repo: null
   parent_benchmark_id: null
@@ -4114,25 +5347,166 @@
     - bfcl-v3
     - bfcl_v3
     - llm_stats_bfcl_v3
+
+- id: bfcl-v3-irrelevance
+  display_name: BFCL v3 irrelevance
+  description: BFCL v3 irrelevance category, lm-eval task bfcl_v3_irrelevance. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_irrelevance
+
+- id: bfcl-v3-java
+  display_name: BFCL v3 java
+  description: BFCL v3 java category, lm-eval task bfcl_v3_java. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_java
+
+- id: bfcl-v3-javascript
+  display_name: BFCL v3 javascript
+  description: BFCL v3 javascript category, lm-eval task bfcl_v3_javascript. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_javascript
+
+- id: bfcl-v3-live-irrelevance
+  display_name: BFCL v3 live irrelevance
+  description: BFCL v3 live irrelevance category, lm-eval task bfcl_v3_live_irrelevance. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_live_irrelevance
+
+- id: bfcl-v3-live-multiple
+  display_name: BFCL v3 live multiple
+  description: BFCL v3 live multiple category, lm-eval task bfcl_v3_live_multiple. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_live_multiple
+
+- id: bfcl-v3-live-parallel
+  display_name: BFCL v3 live parallel
+  description: BFCL v3 live parallel category, lm-eval task bfcl_v3_live_parallel. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_live_parallel
+
+- id: bfcl-v3-live-parallel-multiple
+  display_name: BFCL v3 live parallel multiple
+  description: BFCL v3 live parallel multiple category, lm-eval task bfcl_v3_live_parallel_multiple. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_live_parallel_multiple
+
+- id: bfcl-v3-live-relevance
+  display_name: BFCL v3 live relevance
+  description: BFCL v3 live relevance category, lm-eval task bfcl_v3_live_relevance. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_live_relevance
+
+- id: bfcl-v3-live-simple
+  display_name: BFCL v3 live simple
+  description: BFCL v3 live simple category, lm-eval task bfcl_v3_live_simple. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_live_simple
+
+- id: bfcl-v3-multiple
+  display_name: BFCL v3 multiple
+  description: BFCL v3 multiple category, lm-eval task bfcl_v3_multiple. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_multiple
+
+- id: bfcl-v3-parallel
+  display_name: BFCL v3 parallel
+  description: BFCL v3 parallel category, lm-eval task bfcl_v3_parallel. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_parallel
+
+- id: bfcl-v3-parallel-multiple
+  display_name: BFCL v3 parallel multiple
+  description: BFCL v3 parallel multiple category, lm-eval task bfcl_v3_parallel_multiple. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_parallel_multiple
+
+- id: bfcl-v3-simple
+  display_name: BFCL v3 simple
+  description: BFCL v3 simple category, lm-eval task bfcl_v3_simple. Slice child of bfcl-v3 (mirrors the bfcl-* category children of the BFCL leaderboard canonical).
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_simple
+
+- id: bfcl-v3-single-turn
+  display_name: BFCL v3 single-turn (aggregate)
+  description: BFCL v3 single-turn aggregate over the 13 single-turn categories (lm-eval task bfcl_v3_single_turn; Apertus 1.5 8B reports 0.6116, which is neither the mean 0.593 nor the median 0.640 of the categories, so it carries the official weighting). Child of bfcl-v3 with role aggregate, so it is shown but never averaged with its sibling categories and does not count toward the suite's expected task set.
+  dataset_repo: gorilla-llm/Berkeley-Function-Calling-Leaderboard
+  parent_benchmark_id: bfcl-v3
+  tags: '["function-calling"]'
+  metadata: '{"role": "aggregate", "aggregates": "sibling single-turn categories", "note": "minted 2026-09-16; was a flat alias of bfcl-v3"}'
+  review_status: reviewed
+  aliases:
     - bfcl_v3_single_turn
 
 - id: bfcl-v3-multiturn
-  display_name: Bfcl v3 Multiturn
+  display_name: BFCL v3 Multi-turn
+  description: BFCL v3 multi-turn function-calling categories. Child of bfcl-v3 so the suite's expected task set is single-turn + multi-turn; a source that ran only one half gets no BFCL-v3 total.
   dataset_repo: null
-  parent_benchmark_id: null
+  parent_benchmark_id: bfcl-v3
   tags: '["general"]'
   metadata: '{}'
   review_status: reviewed
@@ -7441,6 +8815,7 @@
     - droidcall
 
 - id: drop
+  preferred_metric: f1
   display_name: DROP
   dataset_repo: null
   parent_benchmark_id: null
@@ -8411,6 +9786,9 @@
     - facts-grounding
     - facts_grounding
     - llm_stats_facts_grounding
+  scoped_aliases:
+    facts-grounding:
+      - "Score"  # total-row spelling, source facts-grounding, 2026-09-16
 
 - id: factscore
   display_name: Factscore
@@ -10814,16 +12192,27 @@
     - imo_bench
 
 - id: include
-  display_name: Include
-  dataset_repo: null
+  display_name: INCLUDE
+  description: INCLUDE (Cohere Labs), regional-knowledge multiple-choice benchmark in 44 languages (include-base-44). The Swiss AI 45-language extension is the separate canonical include-base-new-45 (relationships.yaml, extended_from).
+  dataset_repo: CohereLabs/include-base-44
   parent_benchmark_id: null
-  tags: '["general"]'
+  tags: '["general", "multilingual"]'
   metadata: '{}'
   review_status: reviewed
   aliases:
     - Include
     - llm_stats_include
     - include_base_44
+
+- id: include-base-new-45
+  display_name: INCLUDE base-new-45 (Swiss AI extension)
+  description: Swiss AI Initiative's 45-language extension of INCLUDE, evaluated in the Apertus 1.5 suite as lm-eval task include_base_new_45. Dataset repo is not public as of 2026-09-16. Kept separate from include because it is a different dataset and values are not comparable (Apertus 1.5 8B scores 0.569 on include-base-44 vs 0.395 here).
+  dataset_repo: swiss-ai/include-base-new-45
+  parent_benchmark_id: null
+  tags: '["general", "multilingual"]'
+  metadata: '{"note": "minted 2026-09-16; previously a blind alias of include"}'
+  review_status: draft
+  aliases:
     - include_base_new_45
 
 - id: indicvisionbench
@@ -15022,6 +16411,10 @@
     - llm_stats_mt_bench
     - mt-bench
     - mt_bench
+    # The suite total is the parent's own row, not a child: folded 2026-09-16
+    # (the former child entity mt-bench-overall kept as aliases).
+    - MT-Bench (overall)
+    - mt-bench-overall
 
 - id: mt-raig
   display_name: MT-RAIG
@@ -23750,7 +25143,8 @@
     - xlsum_english
 
 - id: xstest
-  preferred_metric: score
+  preferred_metric: xstest-appropriateness-score
+  preferred_metric_llm_judged: true
   display_name: Xstest
   dataset_repo: null
   parent_benchmark_id: null
@@ -24399,7 +25793,8 @@
     - openeval_moralbench
 
 - id: simplesafetytests
-  preferred_metric: score
+  preferred_metric: simplesafetytests-safety-score
+  preferred_metric_llm_judged: true
   display_name: SimpleSafetyTests
   description: SimpleSafetyTests — small probe suite for catastrophic safety failures.
   dataset_repo: null
@@ -24412,6 +25807,8 @@
     - helm_safety_simplesafetytests
 
 - id: anthropic-red-team
+  preferred_metric: anthropic-red-team-harmlessness-score
+  preferred_metric_llm_judged: true
   display_name: Anthropic Red Team
   description: Anthropic Red Team prompts — stress-test for harmful behaviors.
   dataset_repo: null
@@ -24422,11 +25819,13 @@
   aliases:
     - Anthropic Red Team
     - anthropic-red-team
+    - anthropic-red-teaming
     - anthropic_red_team
     - helm_safety_anthropic_red_team
 
 - id: harmbench
-  preferred_metric: score
+  preferred_metric: harmbench-refusal-score
+  preferred_metric_llm_judged: true
   display_name: HarmBench
   description: HarmBench — automated red-teaming evaluation of LLM behaviors against a taxonomy of harms.
   dataset_repo: null
@@ -24543,6 +25942,36 @@
     - JudgeBench Coding
     - judgebench-coding
     - judgebench_coding
+
+- id: judgebench-math
+  display_name: JudgeBench Math
+  description: JudgeBench — math sub-category.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["math"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - JudgeBench Math
+    - judgebench-math
+    - judgebench_math
+  scoped_aliases:
+    judgebench: ["Math"]
+
+- id: judgebench-reasoning
+  display_name: JudgeBench Reasoning
+  description: JudgeBench — reasoning sub-category.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["reasoning"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - JudgeBench Reasoning
+    - judgebench-reasoning
+    - judgebench_reasoning
+  scoped_aliases:
+    judgebench: ["Reasoning"]
 
 - id: gaia-level-2
   display_name: GAIA Level 2
@@ -24963,17 +26392,7 @@
   metadata: '{}'
   review_status: reviewed
 
-# --- MT-Bench: 3 children of existing mt-bench ---
-
-- id: mt-bench-overall
-  display_name: MT-Bench (overall)
-  aliases: ["MT-Bench (overall)"]
-  description: MT-Bench overall score across all categories.
-  dataset_repo: null
-  parent_benchmark_id: mt-bench
-  tags: '["general"]'
-  metadata: '{}'
-  review_status: reviewed
+# --- MT-Bench: 2 turn children of existing mt-bench (the overall row is the parent itself) ---
 
 - id: mt-bench-turn-1
   display_name: MT-Bench (turn 1)
@@ -25390,7 +26809,18 @@
   metadata: '{}'
   review_status: reviewed
   aliases:
-    - realguardrails_s_ifeval
+    - realguardrails
+    - RealGuardrails
+
+- id: realguardrails-s-rules
+  display_name: RealGuardrails System-prompt rules
+  description: RealGuardrails System-prompt rules sub-benchmark (lm-eval tasks realguardrails_s_rules*). Slice child of realguardrails so the three sub-benchmarks keep their identity.
+  dataset_repo: normster/SystemCheck
+  parent_benchmark_id: realguardrails
+  tags: '["safety", "instruction-following"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of realguardrails"}'
+  review_status: reviewed
+  aliases:
     - realguardrails_s_rules
     - realguardrails_s_rules_basic_harmless
     - realguardrails_s_rules_basic_helpful
@@ -25400,6 +26830,27 @@
     - realguardrails_s_rules_br
     - realguardrails_s_rules_redteam_harmless
     - realguardrails_s_rules_redteam_helpful
+
+- id: realguardrails-s-ifeval
+  display_name: RealGuardrails System-prompt IFEval
+  description: RealGuardrails System-prompt IFEval sub-benchmark (lm-eval tasks realguardrails_s_ifeval*). Slice child of realguardrails so the three sub-benchmarks keep their identity.
+  dataset_repo: normster/SystemCheck
+  parent_benchmark_id: realguardrails
+  tags: '["safety", "instruction-following"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of realguardrails"}'
+  review_status: reviewed
+  aliases:
+    - realguardrails_s_ifeval
+
+- id: realguardrails-tensortrust
+  display_name: RealGuardrails TensorTrust
+  description: RealGuardrails TensorTrust sub-benchmark (lm-eval tasks realguardrails_tensortrust*). Slice child of realguardrails so the three sub-benchmarks keep their identity.
+  dataset_repo: normster/SystemCheck
+  parent_benchmark_id: realguardrails
+  tags: '["safety", "instruction-following"]'
+  metadata: '{"note": "slice child minted 2026-09-16; was a flat alias of realguardrails"}'
+  review_status: reviewed
+  aliases:
     - realguardrails_tensortrust
     - realguardrails_tensortrust_extraction
     - realguardrails_tensortrust_helpful
@@ -25426,6 +26877,7 @@
     - mlogiqa_zh
 
 - id: multijail
+  preferred_metric: unsafe-rate
   display_name: MultiJail
   description: MultiJail (Deng et al. 2024), multilingual jailbreak prompts across high-, medium- and low-resource languages.
   dataset_repo: DAMO-NLP-SG/MultiJail
@@ -25446,6 +26898,7 @@
     - multijail_zh
 
 - id: polyglotoxicityprompts
+  preferred_metric: unsafe-continuation-rate
   display_name: PolygloToxicityPrompts
   description: PolygloToxicityPrompts (Jain et al. 2024), naturally occurring toxicity-eliciting prompts in 17 languages.
   dataset_repo: ToxicityPrompts/PolygloToxicityPrompts
@@ -25454,6 +26907,10 @@
   metadata: '{}'
   review_status: reviewed
   aliases:
+    # `polyglotoxicityprompts.polyglotoxicityprompts.small_overall`: the run's own
+    # aggregate over the small split; the spelling denotes the whole benchmark
+    # (split lives in source_data.hf_split), so it is an alias of the canonical.
+    - polyglotoxicityprompts small overall
     - polyglotoxicitypromptsllama_small
     - polyglotoxicitypromptsllama_small_english
     - polyglotoxicitypromptsllama_small_french
@@ -25464,6 +26921,7 @@
     - polyglotoxicitypromptsllama_small_spanish
 
 - id: realtoxicityprompts
+  preferred_metric: unsafe-continuation-rate
   display_name: RealToxicityPrompts
   description: RealToxicityPrompts (Gehman et al. 2020), English prompts measuring toxic degeneration.
   dataset_repo: allenai/real-toxicity-prompts
@@ -25472,6 +26930,9 @@
   metadata: '{}'
   review_status: reviewed
   aliases:
+    # `realtoxicityprompts.realtoxicityprompts.small`: 10k-prompt sample of the
+    # whole benchmark (split in source_data), an alias of the canonical.
+    - realtoxicityprompts small
     - realtoxicitypromptsllama_small
 
 - id: toxigen
@@ -25493,6 +26954,7 @@
   review_status: reviewed
 
 - id: or-bench
+  preferred_metric: refusal-rate
   display_name: OR-Bench
   description: OR-Bench (Cui et al. 2024) measures over-refusal on seemingly toxic but benign prompts. Unrelated to KOR-Bench and FaVOR-Bench.
   dataset_repo: bench-llm/or-bench
@@ -25573,37 +27035,349 @@
   metadata: '{}'
   review_status: reviewed
   aliases:
-    - truthfulqa_ar_mc2
-    - truthfulqa_bn_mc2
-    - truthfulqa_ca_mc2
-    - truthfulqa_da_mc2
-    - truthfulqa_de_mc2
-    - truthfulqa_es_mc2
-    - truthfulqa_eu_mc2
-    - truthfulqa_fr_mc2
-    - truthfulqa_gu_mc2
-    - truthfulqa_hi_mc2
-    - truthfulqa_hr_mc2
-    - truthfulqa_hu_mc2
-    - truthfulqa_hy_mc2
-    - truthfulqa_id_mc2
-    - truthfulqa_it_mc2
-    - truthfulqa_kn_mc2
-    - truthfulqa_ml_mc2
-    - truthfulqa_mr_mc2
     - truthfulqa_multilingual_mc2
+    - truthfulqa multilingual
+    - m_truthfulqa
+
+- id: truthfulqa-multilingual-ar
+  display_name: TruthfulQA (multilingual) Arabic
+  description: Arabic (ar) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_ar_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "ar", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_ar_mc2
+
+- id: truthfulqa-multilingual-bn
+  display_name: TruthfulQA (multilingual) Bengali
+  description: Bengali (bn) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_bn_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "bn", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_bn_mc2
+
+- id: truthfulqa-multilingual-ca
+  display_name: TruthfulQA (multilingual) Catalan
+  description: Catalan (ca) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_ca_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "ca", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_ca_mc2
+
+- id: truthfulqa-multilingual-da
+  display_name: TruthfulQA (multilingual) Danish
+  description: Danish (da) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_da_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "da", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_da_mc2
+
+- id: truthfulqa-multilingual-de
+  display_name: TruthfulQA (multilingual) German
+  description: German (de) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_de_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "de", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_de_mc2
+
+- id: truthfulqa-multilingual-es
+  display_name: TruthfulQA (multilingual) Spanish
+  description: Spanish (es) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_es_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "es", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_es_mc2
+
+- id: truthfulqa-multilingual-eu
+  display_name: TruthfulQA (multilingual) Basque
+  description: Basque (eu) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_eu_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "eu", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_eu_mc2
+
+- id: truthfulqa-multilingual-fr
+  display_name: TruthfulQA (multilingual) French
+  description: French (fr) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_fr_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "fr", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_fr_mc2
+
+- id: truthfulqa-multilingual-gu
+  display_name: TruthfulQA (multilingual) Gujarati
+  description: Gujarati (gu) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_gu_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "gu", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_gu_mc2
+
+- id: truthfulqa-multilingual-hi
+  display_name: TruthfulQA (multilingual) Hindi
+  description: Hindi (hi) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_hi_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "hi", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_hi_mc2
+
+- id: truthfulqa-multilingual-hr
+  display_name: TruthfulQA (multilingual) Croatian
+  description: Croatian (hr) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_hr_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "hr", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_hr_mc2
+
+- id: truthfulqa-multilingual-hu
+  display_name: TruthfulQA (multilingual) Hungarian
+  description: Hungarian (hu) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_hu_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "hu", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_hu_mc2
+
+- id: truthfulqa-multilingual-hy
+  display_name: TruthfulQA (multilingual) Armenian
+  description: Armenian (hy) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_hy_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "hy", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_hy_mc2
+
+- id: truthfulqa-multilingual-id
+  display_name: TruthfulQA (multilingual) Indonesian
+  description: Indonesian (id) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_id_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "id", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_id_mc2
+
+- id: truthfulqa-multilingual-it
+  display_name: TruthfulQA (multilingual) Italian
+  description: Italian (it) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_it_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "it", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_it_mc2
+
+- id: truthfulqa-multilingual-kn
+  display_name: TruthfulQA (multilingual) Kannada
+  description: Kannada (kn) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_kn_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "kn", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_kn_mc2
+
+- id: truthfulqa-multilingual-ml
+  display_name: TruthfulQA (multilingual) Malayalam
+  description: Malayalam (ml) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_ml_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "ml", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_ml_mc2
+
+- id: truthfulqa-multilingual-mr
+  display_name: TruthfulQA (multilingual) Marathi
+  description: Marathi (mr) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_mr_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "mr", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
+    - truthfulqa_mr_mc2
+
+- id: truthfulqa-multilingual-ne
+  display_name: TruthfulQA (multilingual) Nepali
+  description: Nepali (ne) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_ne_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "ne", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_ne_mc2
+
+- id: truthfulqa-multilingual-nl
+  display_name: TruthfulQA (multilingual) Dutch
+  description: Dutch (nl) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_nl_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "nl", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_nl_mc2
+
+- id: truthfulqa-multilingual-pt
+  display_name: TruthfulQA (multilingual) Portuguese
+  description: Portuguese (pt) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_pt_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "pt", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_pt_mc2
+
+- id: truthfulqa-multilingual-ro
+  display_name: TruthfulQA (multilingual) Romanian
+  description: Romanian (ro) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_ro_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "ro", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_ro_mc2
+
+- id: truthfulqa-multilingual-ru
+  display_name: TruthfulQA (multilingual) Russian
+  description: Russian (ru) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_ru_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "ru", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_ru_mc2
+
+- id: truthfulqa-multilingual-sk
+  display_name: TruthfulQA (multilingual) Slovak
+  description: Slovak (sk) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_sk_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "sk", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_sk_mc2
+
+- id: truthfulqa-multilingual-sr
+  display_name: TruthfulQA (multilingual) Serbian
+  description: Serbian (sr) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_sr_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "sr", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_sr_mc2
+
+- id: truthfulqa-multilingual-sv
+  display_name: TruthfulQA (multilingual) Swedish
+  description: Swedish (sv) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_sv_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "sv", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_sv_mc2
+
+- id: truthfulqa-multilingual-ta
+  display_name: TruthfulQA (multilingual) Tamil
+  description: Tamil (ta) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_ta_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "ta", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_ta_mc2
+
+- id: truthfulqa-multilingual-te
+  display_name: TruthfulQA (multilingual) Telugu
+  description: Telugu (te) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_te_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "te", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_te_mc2
+
+- id: truthfulqa-multilingual-uk
+  display_name: TruthfulQA (multilingual) Ukrainian
+  description: Ukrainian (uk) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_uk_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "uk", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_uk_mc2
+
+- id: truthfulqa-multilingual-vi
+  display_name: TruthfulQA (multilingual) Vietnamese
+  description: Vietnamese (vi) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_vi_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "vi", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_vi_mc2
+
+- id: truthfulqa-multilingual-zh
+  display_name: TruthfulQA (multilingual) Chinese
+  description: Chinese (zh) language slice of TruthfulQA (multilingual), lm-eval task truthfulqa_zh_mc2 (MC2). Slice child so per-language runs keep their identity instead of pooling into the suite value.
+  dataset_repo: alexandrainst/m_truthfulqa
+  parent_benchmark_id: truthfulqa-multilingual
+  tags: '["multilingual", "truthfulness"]'
+  metadata: '{"language": "zh", "note": "slice child minted 2026-09-16; was a flat alias of truthfulqa-multilingual"}'
+  review_status: reviewed
+  aliases:
     - truthfulqa_zh_mc2
 
 - id: switzerland-qa

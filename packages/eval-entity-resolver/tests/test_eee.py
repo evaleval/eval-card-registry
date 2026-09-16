@@ -80,6 +80,47 @@ class TestExtractMetric:
         assert extract_metric("Mean Win Rate") == "Mean Win Rate"
         assert extract_metric("Tokenized F1") == "F1"
 
+    def test_benchmark_scoped_safety_rubrics_keep_their_own_canonical(self):
+        """Each of these is a benchmark-scoped rubric with its own scale, not a
+        generic score, so the trailing "Score"/"Harmlessness" must not win."""
+        assert extract_metric("HarmBench Refusal Score") == "HarmBench Refusal Score"
+        assert (
+            extract_metric("openeval.harmbench_refusal_score")
+            == "HarmBench Refusal Score"
+        )
+        assert (
+            extract_metric("XSTest Appropriateness Score")
+            == "XSTest Appropriateness Score"
+        )
+        assert (
+            extract_metric("SimpleSafetyTests Safety Score")
+            == "SimpleSafetyTests Safety Score"
+        )
+        assert (
+            extract_metric("Anthropic Red Team Harmlessness Score")
+            == "Anthropic Red Team Harmlessness Score"
+        )
+        assert (
+            extract_metric("Anthropic Red Teaming Harmlessness Score")
+            == "Anthropic Red Team Harmlessness Score"
+        )
+        # The generic forms the compound patterns sit in front of are unchanged.
+        assert extract_metric("LM Evaluated Safety score") == "score"
+        assert extract_metric("Harmlessness rating") == "harmlessness"
+
+    def test_model_scored_generation_metrics_keep_their_variant_tail(self):
+        """BERTScore and BLEURT variants end in "F1"/"Precision"/"Recall"/
+        "Accuracy"; without their own patterns each lands on the plain f1 or
+        accuracy canonical and three variants merge into one."""
+        assert extract_metric("BERTScore F1") == "BERTScore-F"
+        assert extract_metric("openeval.cnndm.bertscore_f") == "BERTScore-F"
+        assert extract_metric("BERTScore Precision") == "BERTScore-P"
+        assert extract_metric("BERTScore Recall") == "BERTScore-R"
+        assert extract_metric("BLEURT Accuracy") == "BLEURT_acc"
+        assert extract_metric("openeval.truthfulqa.bleurt_acc") == "BLEURT_acc"
+        assert extract_metric("BLEURT diff") == "BLEURT_diff"
+        assert extract_metric("BLEURT max") == "BLEURT_max"
+
     def test_dot_notation_extracts_win_rate(self):
         assert extract_metric("fibble1_arena.win_rate") == "Win Rate"
 

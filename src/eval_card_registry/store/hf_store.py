@@ -100,6 +100,10 @@ QUERY_TABLE_NAMES = [
     "canonical_families",
     "canonical_composites",
     "canonical_metrics",
+    # Read-only curated dim table: no CRUD route, but the query-only Space
+    # loads it so a consumer can read the folds alongside the benchmarks
+    # they apply to.
+    "benchmark_metric_folds",
     "eval_harnesses",
     "canonical_inference_platforms",
     "aliases",

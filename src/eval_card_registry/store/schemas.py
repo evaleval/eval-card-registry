@@ -106,6 +106,11 @@ _SCHEMAS: dict[str, dict] = {
         # Registry-declared default metric for the merged benchmark view
         # (seed key `preferred_metric`). Null → consumer fallback rules.
         "preferred_metric_id": pd.StringDtype(),
+        # Is `preferred_metric_id` produced by an LLM judge? True = yes,
+        # false = no, null = unstated. Non-null only when
+        # `preferred_metric_id` is set. Says nothing about the benchmark's
+        # other metrics.
+        "preferred_metric_llm_judged": pd.BooleanDtype(),
         "tags": pd.StringDtype(),
         "metadata": pd.StringDtype(),
         "review_status": pd.StringDtype(),
@@ -183,19 +188,27 @@ _SCHEMAS: dict[str, dict] = {
         "created_at": pd.StringDtype(),
         "updated_at": pd.StringDtype(),
     },
-    # Curated per-benchmark metric naming folds (seed/metric_folds.yaml):
+    # Curated per-benchmark metric folds (seed/metric_folds.yaml):
     # `from_metric_id` on `benchmark_id` is the same measurement as
     # `to_metric_id` under a generic name. Naming folds ONLY — protocol
     # variants (cot-correct vs accuracy) never fold. Consumed by the
     # producer to compute `metric_id_effective` for the merged view.
+    # A naming fold is benchmark-wide (`source_config` null). A scoped row
+    # (`source_config` set to an EEE dataset config name) carries the
+    # published-scale conversion for that one source, and may leave the
+    # metric unchanged (`from_metric_id == to_metric_id`) when the source
+    # differs only in scale.
     "benchmark_metric_folds": {
         "benchmark_id": pd.StringDtype(),
         "from_metric_id": pd.StringDtype(),
         "to_metric_id": pd.StringDtype(),
-        # Optional curated published-scale -> registry-scale multiplier
-        # (e.g. 0.1 for a raw 1-10 score folding onto a [0,1] metric).
-        # Null = scales already agree; detection-based conversion applies.
+        "source_config": pd.StringDtype(),
+        # Optional curated published-scale -> registry-scale affine conversion:
+        # canonical = published * scale_factor + scale_offset (e.g. 1/9 and
+        # -1/9 for a raw 1-10 score folding onto a [0,1] metric). Scoped rows
+        # only. Null = no curated conversion declared.
         "scale_factor": "float64",
+        "scale_offset": "float64",
         "note": pd.StringDtype(),
     },
     "eval_harnesses": {

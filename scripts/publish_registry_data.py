@@ -51,7 +51,9 @@ from typing import Callable, Optional, TypeVar
 # 3.1: added canonical_orgs.logo_url (org brand-mark pointer).
 # 3.2: added canonical_benchmarks.preferred_metric_id + the
 #      benchmark_metric_folds table (merged benchmark view).
-SCHEMA_VERSION = "registry.3.2"
+# 3.3: added canonical_benchmarks.preferred_metric_llm_judged +
+#      benchmark_metric_folds.source_config and scale_offset.
+SCHEMA_VERSION = "registry.3.3"
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SEED_DIR = REPO_ROOT / "seed"

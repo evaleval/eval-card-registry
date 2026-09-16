@@ -163,12 +163,29 @@ class ModelPatch(BaseModel):
     review_status: Optional[str] = None
 
 
+_PREFERRED_METRIC_DESCRIPTION = (
+    "Registry-declared default metric for the merged benchmark view "
+    "(canonical_metrics.id). Null = no default declared."
+)
+_PREFERRED_METRIC_JUDGED_DESCRIPTION = (
+    "Is preferred_metric_id produced by an LLM judge? true = yes, "
+    "false = no, null = unstated. Says nothing about the benchmark's "
+    "other metrics."
+)
+
+
 class BenchmarkCreate(BaseModel):
     id: str
     display_name: str
     description: Optional[str] = None
     dataset_repo: Optional[str] = None
     parent_benchmark_id: Optional[str] = None
+    preferred_metric_id: Optional[str] = Field(
+        default=None, description=_PREFERRED_METRIC_DESCRIPTION
+    )
+    preferred_metric_llm_judged: Optional[bool] = Field(
+        default=None, description=_PREFERRED_METRIC_JUDGED_DESCRIPTION
+    )
     tags: list[str] = []
     metadata: dict[str, Any] = {}
     review_status: str = "draft"
@@ -179,6 +196,12 @@ class BenchmarkPatch(BaseModel):
     description: Optional[str] = None
     dataset_repo: Optional[str] = None
     parent_benchmark_id: Optional[str] = None
+    preferred_metric_id: Optional[str] = Field(
+        default=None, description=_PREFERRED_METRIC_DESCRIPTION
+    )
+    preferred_metric_llm_judged: Optional[bool] = Field(
+        default=None, description=_PREFERRED_METRIC_JUDGED_DESCRIPTION
+    )
     tags: Optional[list[str]] = None
     metadata: Optional[dict[str, Any]] = None
     review_status: Optional[str] = None

@@ -143,6 +143,26 @@ _METRIC_KEYWORDS: list[tuple[str, str]] = [
     # Class-averaged F1 (before generic F1, which would swallow both)
     (r"macro[\s_-]*f1",                  "Macro F1"),
     (r"micro[\s_-]*f1",                  "Micro F1"),
+    # Benchmark-scoped safety rubrics. Each is its own canonical with its own
+    # rubric and direction, so the generic tail ("Score", "Harmlessness") must
+    # not swallow them onto `score` / `harmlessness`.
+    (r"harmbench[\s_-]*refusal[\s_-]*score",
+     "HarmBench Refusal Score"),
+    (r"xstest[\s_-]*appropriateness[\s_-]*score",
+     "XSTest Appropriateness Score"),
+    (r"simple[\s_-]*safety[\s_-]*tests?[\s_-]*safety[\s_-]*score",
+     "SimpleSafetyTests Safety Score"),
+    (r"anthropic[\s_-]*red[\s_-]*team(?:ing)?[\s_-]*harmlessness[\s_-]*score",
+     "Anthropic Red Team Harmlessness Score"),
+    # Model-scored generation metrics whose variant tail ("F1", "Accuracy")
+    # the single-word patterns below would otherwise swallow onto the plain
+    # f1 / accuracy canonicals.
+    (r"bertscore[\s_-]*f1?\b",            "BERTScore-F"),
+    (r"bertscore[\s_-]*p(?:recision)?\b", "BERTScore-P"),
+    (r"bertscore[\s_-]*r(?:ecall)?\b",    "BERTScore-R"),
+    (r"bleurt[\s_-]*acc(?:uracy)?\b",     "BLEURT_acc"),
+    (r"bleurt[\s_-]*diff\b",              "BLEURT_diff"),
+    (r"bleurt[\s_-]*max\b",               "BLEURT_max"),
     # Single-word patterns (generic, checked last by position)
     (r"\baccuracy\b",                    "Accuracy"),
     (r"\bacc\b",                         "Accuracy"),

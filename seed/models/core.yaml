@@ -139,6 +139,14 @@ skip_source_ids:
 - unknown/smollm2-135m
 - unknown/smollm2-360m
 - unknown/zephyr-7b-beta
+# Invented Apertus ids (HF API 401 for all four); the real repos are
+# swiss-ai/Apertus-{8B,70B}[-Instruct]-2509, curated below with these
+# spellings kept as aliases. Drops the models.dev weak stubs and the tier3
+# name-inference mints so they cannot re-shadow the real repos.
+- swiss-ai-initiative/apertus-70b
+- swiss-ai-initiative/apertus-8b
+- swiss-ai-initiative/apertus-70b-instruct
+- swiss-ai-initiative/apertus-8b-instruct
 entries:
 # HF-true canonical; the lowercase models.dev spelling folds in via
 # collision_overrides.yaml `prefer:`.
@@ -12123,7 +12131,7 @@ entries:
   review_status: reviewed
   aliases:
   - unknown/alpaca
-- id: swiss-ai-initiative/apertus-70b
+- id: swiss-ai/Apertus-70B-2509
   display_name: Apertus 70B
   org_id: swiss-ai-initiative
   family: apertus-70b
@@ -12131,17 +12139,19 @@ entries:
   params_billions: 70.0
   parents: []
   open_weights: true
-  release_date: null
+  release_date: '2025-09-02'
   input_modalities: null
   output_modalities: null
   tags:
   - open-weight
-  metadata: '{}'
+  metadata: '{"hf_repo_id": "swiss-ai/Apertus-70B-2509", "hf_created_at": "2025-09-02", "hf_sha": "379311a08b6e691f7b5cfbc1c408e8fc0c172981", "license": "apache-2.0", "note": "Re-keyed 2026-09-16 from the invented id swiss-ai-initiative/apertus-70b (HF API 401) to the real public HF repo; the old id and its aliases are kept as aliases."}'
   review_status: reviewed
   aliases:
+  - swiss-ai-initiative/apertus-70b
   - swissai/apertus-70b
   - apertus-70b
-- id: swiss-ai-initiative/apertus-8b
+  - Apertus 70B
+- id: swiss-ai/Apertus-8B-2509
   display_name: Apertus 8B
   org_id: swiss-ai-initiative
   family: apertus-8b
@@ -12149,16 +12159,110 @@ entries:
   params_billions: 8.0
   parents: []
   open_weights: true
-  release_date: null
+  release_date: '2025-09-02'
   input_modalities: null
   output_modalities: null
   tags:
   - open-weight
-  metadata: '{}'
+  metadata: '{"hf_repo_id": "swiss-ai/Apertus-8B-2509", "hf_created_at": "2025-09-02", "hf_sha": "3162c99675aa588097cecd4a24b9aa1f712af477", "license": "apache-2.0", "note": "Re-keyed 2026-09-16 from the invented id swiss-ai-initiative/apertus-8b (HF API 401) to the real public HF repo; the old id and its aliases are kept as aliases."}'
   review_status: reviewed
   aliases:
+  - swiss-ai-initiative/apertus-8b
   - apertus-8b
   - swissai/apertus-8b
+  - Apertus 8B
+- id: swiss-ai/Apertus-70B-Instruct-2509
+  display_name: Apertus 70B Instruct
+  org_id: swiss-ai-initiative
+  family: apertus-70b
+  architecture: null
+  params_billions: 70.0
+  parents:
+  - id: swiss-ai/Apertus-70B-2509
+    relationship: variant
+    axis: training_stage
+  open_weights: true
+  release_date: '2025-09-01'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - chat
+  metadata: '{"hf_repo_id": "swiss-ai/Apertus-70B-Instruct-2509", "hf_created_at": "2025-09-01", "hf_sha": "0f2767662a013c0fb631079cea883155252bc3b6", "license": "apache-2.0", "note": "Re-keyed 2026-09-16 from the invented tier3 id swiss-ai-initiative/apertus-70b-instruct (HF API 401) to the real public HF repo; the old id is kept as an alias."}'
+  review_status: reviewed
+  aliases:
+  - swiss-ai-initiative/apertus-70b-instruct
+  - apertus-70b-instruct
+- id: swiss-ai/Apertus-8B-Instruct-2509
+  display_name: Apertus 8B Instruct
+  org_id: swiss-ai-initiative
+  family: apertus-8b
+  architecture: null
+  params_billions: 8.0
+  parents:
+  - id: swiss-ai/Apertus-8B-2509
+    relationship: variant
+    axis: training_stage
+  open_weights: true
+  release_date: '2025-08-13'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  - chat
+  metadata: '{"hf_repo_id": "swiss-ai/Apertus-8B-Instruct-2509", "hf_created_at": "2025-08-13", "hf_sha": "b946d40447b2b597999b9c86d44bee0b452c919f", "license": "apache-2.0", "note": "Re-keyed 2026-09-16 from the invented tier3 id swiss-ai-initiative/apertus-8b-instruct (HF API 401) to the real public HF repo; the old id is kept as an alias."}'
+  review_status: reviewed
+  aliases:
+  - swiss-ai-initiative/apertus-8b-instruct
+  - apertus-8b-instruct
+- id: swiss-ai/Apertus-v1.5-8B
+  display_name: Apertus 1.5 8B
+  org_id: swiss-ai-initiative
+  family: apertus-1.5
+  architecture: null
+  params_billions: 8.0
+  parents: []
+  open_weights: true
+  release_date: '2026-07-24'
+  input_modalities:
+  - text
+  - image
+  output_modalities:
+  - text
+  tags:
+  - open-weight
+  - chat
+  - multimodal
+  metadata: '{"hf_repo_id": "swiss-ai/Apertus-v1.5-8B", "hf_created_at": "2026-07-24", "hf_sha": "a411d838600baf0e3635a3daf66fb7c55fc97bb6", "license": "apache-2.0", "note": "Minted by hand 2026-09-16 for the Swiss AI Apertus 1.5 EEE submission (data/swissai_apertus_evals). Real public HF repo (gated weights). Lineage to the v1 rows not asserted: model card is gated, no evidence collected."}'
+  review_status: reviewed
+  aliases:
+  - Apertus-v1.5-8B
+  - apertus-v1.5-8b
+  - apertus-1.5-8b
+- id: swiss-ai/Apertus-v1.5-70B
+  display_name: Apertus 1.5 70B
+  org_id: swiss-ai-initiative
+  family: apertus-1.5
+  architecture: null
+  params_billions: 70.0
+  parents: []
+  open_weights: true
+  release_date: '2026-07-24'
+  input_modalities:
+  - text
+  - image
+  output_modalities:
+  - text
+  tags:
+  - open-weight
+  - chat
+  - multimodal
+  metadata: '{"hf_repo_id": "swiss-ai/Apertus-v1.5-70B", "hf_created_at": "2026-07-24", "hf_sha": "aeba489e0809b4d72f8fc69701af66cd545f7ec3", "license": "apache-2.0", "note": "Minted by hand 2026-09-16 for the Swiss AI Apertus 1.5 EEE submission (data/swissai_apertus_evals). Real public HF repo (gated weights). Lineage to the v1 rows not asserted: model card is gated, no evidence collected."}'
+  review_status: reviewed
+  aliases:
+  - Apertus-v1.5-70B
+  - apertus-v1.5-70b
+  - apertus-1.5-70b
 - id: thudm/chatglm2-6b
   display_name: ChatGLM2 6B
   org_id: zai

@@ -617,6 +617,60 @@ def test_preferred_metric_validated_and_renamed(fresh_seed_env):
     assert "acuracy" in out
 
 
+def test_preferred_metric_llm_judged_validated(fresh_seed_env):
+    import pandas as pd
+
+    seed_dir, fixtures_dir = fresh_seed_env
+    (seed_dir / "metrics.yaml").write_text(yaml.safe_dump([
+        {"id": "accuracy", "display_name": "Accuracy", "score_type": "continuous",
+         "lower_is_better": False, "min_score": 0.0, "max_score": 1.0,
+         "metadata": "{}", "review_status": "reviewed"},
+    ]))
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed", "preferred_metric": "accuracy",
+         "preferred_metric_llm_judged": True},
+    ])
+    _seed(seed_dir)
+    df = pd.read_parquet(fixtures_dir / "canonical_benchmarks.parquet")
+    assert bool(df.set_index("id").loc["foo-bench", "preferred_metric_llm_judged"]) is True
+
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed", "preferred_metric": "accuracy",
+         "preferred_metric_llm_judged": "true"},
+    ])
+    out = _seed_expect_fail(seed_dir)
+    assert "preferred_metric_llm_judged" in out
+
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed", "preferred_metric_llm_judged": True},
+    ])
+    out = _seed_expect_fail(seed_dir)
+    assert "preferred_metric" in out
+
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed", "preferred_metric_llm_judged": False},
+    ])
+    out = _seed_expect_fail(seed_dir)
+    assert "preferred_metric" in out
+
+    for spelling in ("yes", "on", "off"):
+        (seed_dir / "benchmarks.yaml").write_text(
+            "- id: foo-bench\n"
+            "  display_name: Foo Bench\n"
+            "  metadata: '{}'\n"
+            "  tags: '[]'\n"
+            "  review_status: reviewed\n"
+            "  preferred_metric: accuracy\n"
+            f"  preferred_metric_llm_judged: {spelling}\n"
+        )
+        out = _seed_expect_fail(seed_dir)
+        assert spelling in out
+
+
 def test_metric_folds_loaded_and_validated(fresh_seed_env):
     """metric_folds.yaml lands as the benchmark_metric_folds table; unknown
     benchmark ids and chained folds fail the seed."""
@@ -629,6 +683,9 @@ def test_metric_folds_loaded_and_validated(fresh_seed_env):
         {"id": "score", "display_name": "Score", "score_type": "continuous",
          "lower_is_better": False, "min_score": None, "max_score": None,
          "metadata": "{}", "review_status": "reviewed"},
+        {"id": "f1", "display_name": "F1", "score_type": "continuous",
+         "lower_is_better": False, "min_score": 0.0, "max_score": 1.0,
+         "metadata": "{}", "review_status": "reviewed"},
     ]))
     _write_benchmarks(seed_dir, [
         {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
@@ -636,15 +693,105 @@ def test_metric_folds_loaded_and_validated(fresh_seed_env):
     ])
     (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
         {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+         "source_config": "openeval", "scale_factor": 0.5, "scale_offset": -0.25},
     ]))
     _seed(seed_dir)
     df = pd.read_parquet(fixtures_dir / "benchmark_metric_folds.parquet")
-    row = df.iloc[0].to_dict()
+    row = df[df["source_config"] == "openeval"].iloc[0].to_dict()
     assert row["benchmark_id"] == "foo-bench"
     assert row["from_metric_id"] == "score"
     assert row["to_metric_id"] == "accuracy"
+    assert row["source_config"] == "openeval"
     assert row["note"] is None
-    assert row["scale_factor"] is None or pd.isna(row["scale_factor"])
+    assert row["scale_factor"] == 0.5
+    assert row["scale_offset"] == -0.25
+
+    for key, value in [
+        ("scale_factor", True), ("scale_factor", float("nan")),
+        ("scale_factor", float("inf")), ("scale_offset", True),
+        ("scale_offset", float("nan")), ("scale_offset", float("inf")),
+    ]:
+        (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+            {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+            {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+             "source_config": "openeval", key: value},
+        ]))
+        out = _seed_expect_fail(seed_dir)
+        assert key in out
+
+    for key in ("scale_factor", "scale_offset"):
+        for value in ("1e400", ".inf"):
+            (seed_dir / "metric_folds.yaml").write_text(
+                "- benchmark: foo-bench\n"
+                "  from_metric: score\n"
+                "  to_metric: accuracy\n"
+                "- benchmark: foo-bench\n"
+                "  from_metric: score\n"
+                "  to_metric: accuracy\n"
+                "  source_config: openeval\n"
+                f"  {key}: {value}\n"
+            )
+            out = _seed_expect_fail(seed_dir)
+            assert key in out
+
+    for value in (0, -0.5):
+        (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+            {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+            {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+             "source_config": "openeval", "scale_factor": value},
+        ]))
+        out = _seed_expect_fail(seed_dir)
+        assert "positive" in out
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "accuracy", "to_metric": "score"},
+        {"benchmark": "foo-bench", "from_metric": "accuracy", "to_metric": "score",
+         "source_config": "openeval", "scale_offset": 0.1},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "must have finite" in out
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+         "scale_factor": 0.5},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "require source_config" in out
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+         "source_config": "openeval"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "scoped row" in out and "unscoped" in out
+
+    # A scoped row with an invalid config name is a typo, not a scope.
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+         "source_config": "data/openeval"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "dataset config name" in out
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "f1",
+         "source_config": "openeval"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "to_metric" in out and "unscoped" in out
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+         "source_config": "openeval"},
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+         "source_config": "openeval"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "duplicate fold" in out
 
     (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
         {"benchmark": "nope-bench", "from_metric": "score", "to_metric": "accuracy"},
@@ -658,6 +805,77 @@ def test_metric_folds_loaded_and_validated(fresh_seed_env):
     ]))
     out = _seed_expect_fail(seed_dir)
     assert "chained" in out
+
+
+def test_metric_folds_pure_published_scale_conversion(fresh_seed_env):
+    """A source that publishes the RIGHT metric on the WRONG scale needs a
+    conversion and no rename, so a scoped row may stand alone with
+    from_metric == to_metric. The unscoped naming row it would otherwise
+    need does not exist, because nothing is being renamed."""
+    import pandas as pd
+    seed_dir, fixtures_dir = fresh_seed_env
+    (seed_dir / "metrics.yaml").write_text(yaml.safe_dump([
+        {"id": "accuracy", "display_name": "Accuracy", "score_type": "continuous",
+         "lower_is_better": False, "min_score": 0.0, "max_score": 1.0,
+         "metadata": "{}", "review_status": "reviewed"},
+        {"id": "score", "display_name": "Score", "score_type": "continuous",
+         "lower_is_better": False, "min_score": None, "max_score": None,
+         "metadata": "{}", "review_status": "reviewed"},
+        {"id": "f1", "display_name": "F1", "score_type": "continuous",
+         "lower_is_better": False, "min_score": 0.0, "max_score": 1.0,
+         "metadata": "{}", "review_status": "reviewed"},
+    ]))
+    _write_benchmarks(seed_dir, [
+        {"id": "foo-bench", "display_name": "Foo Bench", "metadata": "{}",
+         "tags": "[]", "review_status": "reviewed"},
+    ])
+
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "accuracy", "to_metric": "accuracy",
+         "source_config": "openeval", "scale_factor": 0.01},
+    ]))
+    _seed(seed_dir)
+    df = pd.read_parquet(fixtures_dir / "benchmark_metric_folds.parquet")
+    assert len(df) == 1
+    row = df.iloc[0].to_dict()
+    assert row["from_metric_id"] == "accuracy"
+    assert row["to_metric_id"] == "accuracy"
+    assert row["source_config"] == "openeval"
+    assert row["scale_factor"] == 0.01
+
+    # Still rejected: an unscoped self-fold says nothing.
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "accuracy", "to_metric": "accuracy"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "self-fold" in out
+
+    # Still rejected: a scoped row with no conversion and no unscoped row
+    # renames nothing and converts nothing.
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "accuracy", "to_metric": "accuracy",
+         "source_config": "openeval"},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "pure published-scale conversion" in out
+
+    # Still rejected: a scoped row may not contradict the benchmark-wide row.
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy"},
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "f1",
+         "source_config": "openeval", "scale_factor": 0.01},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "to_metric" in out and "unscoped" in out
+
+    # Still rejected: an unscoped row may not carry a conversion, so the
+    # pure-conversion shape has no unscoped counterpart at all.
+    (seed_dir / "metric_folds.yaml").write_text(yaml.safe_dump([
+        {"benchmark": "foo-bench", "from_metric": "score", "to_metric": "accuracy",
+         "scale_factor": 0.01},
+    ]))
+    out = _seed_expect_fail(seed_dir)
+    assert "require source_config" in out
 
 
 def test_composites_scoped_members_json_encode(fresh_seed_env):
@@ -705,3 +923,40 @@ def test_composites_scoped_member_validation(fresh_seed_env):
     }))
     out = _seed_expect_fail(seed_dir)
     assert "config, org" in out
+
+
+def test_seeded_wildbench_folds_carry_both_source_conversions():
+    """The real seed ships one benchmark-wide wildbench naming row plus two
+    per-source published-scale conversions: OpenEval's raw 1-10 judge score
+    and BenchPress's OpenCompass WB-Score on -100..100. Both land on
+    `wb-score`, so the conversions are what keeps them comparable."""
+    import pandas as pd
+
+    repo_root = Path(__file__).resolve().parent.parent
+    folds_parquet = repo_root / "fixtures" / "benchmark_metric_folds.parquet"
+    if not folds_parquet.exists():
+        pytest.skip("fixtures not built; run `eval-card-registry seed --local`")
+
+    df = pd.read_parquet(folds_parquet)
+    wb = df[(df["benchmark_id"] == "wildbench") & (df["from_metric_id"] == "score")]
+    assert set(wb["to_metric_id"]) == {"wb-score"}
+
+    unscoped = wb[wb["source_config"].isna()]
+    assert len(unscoped) == 1
+    assert pd.isna(unscoped.iloc[0]["scale_factor"])
+    assert pd.isna(unscoped.iloc[0]["scale_offset"])
+
+    scoped = wb[wb["source_config"].notna()]
+    assert sorted(scoped["source_config"]) == ["benchpress", "openeval"]
+
+    bp = scoped[scoped["source_config"] == "benchpress"].iloc[0]
+
+    def convert(published):
+        return published * bp["scale_factor"] + bp["scale_offset"]
+
+    assert convert(68.5) == pytest.approx(0.8250, abs=1e-4)
+    assert convert(33.1) == pytest.approx(0.6283, abs=1e-4)
+    # The published scale runs (rating-5)*20, so the 1/10 and 10/10 endpoints
+    # (-80 and 100) must land on the wb-score bounds.
+    assert convert(-80.0) == pytest.approx(0.0, abs=1e-9)
+    assert convert(100.0) == pytest.approx(1.0, abs=1e-9)

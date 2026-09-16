@@ -14634,14 +14634,14 @@
   parents:
   - id: meta-llama/Meta-Llama-3-8B-Instruct
     relationship: finetune
-- id: swiss-ai-initiative/apertus-70b-instruct
+- id: swiss-ai/Apertus-70B-Instruct-2509
   parents:
-  - id: swiss-ai-initiative/apertus-70b
+  - id: swiss-ai/Apertus-70B-2509
     relationship: variant
     axis: training_stage
-- id: swiss-ai-initiative/apertus-8b-instruct
+- id: swiss-ai/Apertus-8B-Instruct-2509
   parents:
-  - id: swiss-ai-initiative/apertus-8b
+  - id: swiss-ai/Apertus-8B-2509
     relationship: variant
     axis: training_stage
 - id: synergetic/FrankenQwen2.5-14B

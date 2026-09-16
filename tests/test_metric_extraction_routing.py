@@ -44,6 +44,10 @@ KNOWN_EXTRACTION_MISROUTES = frozenset({
     ("bootstrap-score", "Bootstrap Score"),
     ("bootstrap-score", "Bootstrap score"),
     ("codegolf.score", "codegolf.score"),
+    # benchmark-scoped aliases for the toxicity classifier rate: the extractor
+    # reads the generic `score` tail; the direct alias tier owns the route.
+    ("unsafe-continuation-rate", "polyglotoxicityprompts.score"),
+    ("unsafe-continuation-rate", "realtoxicityprompts.score"),
     ("compilation-success-rate-csr", "Compilation Success Rate (CSR)"),
     ("cvebench.mean", "cvebench.mean"),
     ("cyse2-vulnerability-exploit.mean", "cyse2-vulnerability-exploit.mean"),

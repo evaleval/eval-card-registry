@@ -724,6 +724,140 @@ class TestResolveStructuredMetricId:
         )
 
 
+class TestResolveStructuredMetricQualifier:
+    """The same match, with the span reported: which segment named the
+    metric and what tail narrows it to a scoring variant."""
+
+    CATCH_ALL = frozenset({"score"})
+
+    def _resolver(self):
+        return Resolver(
+            _store_with_aliases(
+                ("accuracy", "metric", "accuracy", None, "confirmed"),
+                ("f1", "metric", "f1", None, "confirmed"),
+                ("elo", "metric", "elo", None, "confirmed"),
+                ("live_accuracy", "metric", "lenient-accuracy", None, "confirmed"),
+                ("score", "metric", "score", None, "confirmed"),
+                (
+                    "polyglotoxicityprompts.score",
+                    "metric",
+                    "unsafe-continuation-rate",
+                    None,
+                    "confirmed",
+                ),
+            )
+        )
+
+    def test_trailing_qualifier_is_reported(self):
+        m = self._resolver().resolve_structured_metric(
+            "gpqa.accuracy.strict", catch_all_ids=self.CATCH_ALL
+        )
+        assert (m.canonical_id, m.matched_segment, m.qualifier) == (
+            "accuracy", "accuracy", "strict",
+        )
+
+    def test_squad_answerability_qualifier(self):
+        m = self._resolver().resolve_structured_metric(
+            "squadv2.f1.has_ans", catch_all_ids=self.CATCH_ALL
+        )
+        assert (m.canonical_id, m.matched_segment, m.qualifier) == (
+            "f1", "f1", "has_ans",
+        )
+
+    def test_aggregate_marker_tail_is_not_a_qualifier(self):
+        # The corpus case the gate protects: chatbot_arena's
+        # `lmarena.elo.overall` must not split into an `elo::overall` key.
+        m = self._resolver().resolve_structured_metric(
+            "lmarena.elo.overall", catch_all_ids=self.CATCH_ALL
+        )
+        assert (m.canonical_id, m.matched_segment, m.qualifier) == ("elo", "elo", None)
+
+    def test_subgroup_aggregate_marker_tail_is_not_a_qualifier(self):
+        m = self._resolver().resolve_structured_metric(
+            "global_mmlu.accuracy.fr_overall", catch_all_ids=self.CATCH_ALL
+        )
+        assert m.qualifier is None
+
+    def test_numeric_tail_is_a_qualifier(self):
+        # A number after the metric is a scoring variant, not a level:
+        # `bench.accuracy.1` and `bench.accuracy.5` are k-shot readings the
+        # source reports separately, and pooling them on the bare metric id
+        # medians unrelated numbers. Only aggregate markers are excluded.
+        m = self._resolver().resolve_structured_metric(
+            "bench.accuracy.5", catch_all_ids=self.CATCH_ALL
+        )
+        assert m.qualifier == "5"
+
+    def test_numeric_qualifiers_stay_distinct(self):
+        r = self._resolver()
+        one = r.resolve_structured_metric(
+            "bench.accuracy.1", catch_all_ids=self.CATCH_ALL
+        )
+        five = r.resolve_structured_metric(
+            "bench.accuracy.5", catch_all_ids=self.CATCH_ALL
+        )
+        assert one.canonical_id == five.canonical_id == "accuracy"
+        assert (one.qualifier, five.qualifier) == ("1", "5")
+
+    def test_metric_in_last_segment_has_no_qualifier(self):
+        m = self._resolver().resolve_structured_metric(
+            "bfcl.live.live_accuracy", catch_all_ids=self.CATCH_ALL
+        )
+        assert (m.canonical_id, m.matched_segment, m.qualifier) == (
+            "lenient-accuracy", "live_accuracy", None,
+        )
+
+    def test_leading_namespace_segments_are_never_the_qualifier(self):
+        m = self._resolver().resolve_structured_metric(
+            "vals_ai.mgsm.mgsm_de.accuracy", catch_all_ids=self.CATCH_ALL
+        )
+        assert (m.canonical_id, m.matched_segment, m.qualifier) == (
+            "accuracy", "accuracy", None,
+        )
+
+    def test_whole_id_alias_yields_no_qualifier(self):
+        m = self._resolver().resolve_structured_metric(
+            "polyglotoxicityprompts.score", catch_all_ids=self.CATCH_ALL
+        )
+        assert (m.canonical_id, m.matched_segment, m.qualifier) == (
+            "unsafe-continuation-rate", "polyglotoxicityprompts.score", None,
+        )
+
+    def test_no_metric_segment_returns_none(self):
+        assert (
+            self._resolver().resolve_structured_metric(
+                "mmlu_pro.biology", catch_all_ids=self.CATCH_ALL
+            )
+            is None
+        )
+
+    def test_multi_segment_tail_joins(self):
+        m = self._resolver().resolve_structured_metric(
+            "bench.accuracy.strict.has_ans", catch_all_ids=self.CATCH_ALL
+        )
+        assert m.qualifier == "strict.has_ans"
+
+    def test_repeated_metric_segment_ends_the_identity(self):
+        # A later restatement of the same metric is not a qualifier of itself.
+        m = self._resolver().resolve_structured_metric(
+            "adapter.accuracy.accuracy", catch_all_ids=self.CATCH_ALL
+        )
+        assert m.qualifier is None
+
+    def test_id_resolution_is_unchanged_by_the_new_return(self):
+        r = self._resolver()
+        for raw in (
+            "gpqa.accuracy.strict",
+            "lmarena.elo.overall",
+            "mmlu_pro.biology",
+            "polyglotoxicityprompts.score",
+        ):
+            structured = r.resolve_structured_metric(raw, catch_all_ids=self.CATCH_ALL)
+            assert r.resolve_structured_metric_id(raw, catch_all_ids=self.CATCH_ALL) == (
+                structured.canonical_id if structured is not None else None
+            )
+
+
 class TestResolveStructuredBenchmark:
     """Segment-wise, registry-driven resolution for dotted evaluation_names."""
 
@@ -746,6 +880,7 @@ class TestResolveStructuredBenchmark:
     def test_doubled_segments_collapse(self):
         match = self._resolver().resolve_structured_benchmark("bbq.bbq.overall")
         assert (match.canonical_id, match.benchmark_raw, match.subset) == ("bbq", "bbq", None)
+
 
     def test_doubled_segments_collapse_with_underscores(self):
         match = self._resolver().resolve_structured_benchmark(
@@ -1107,3 +1242,250 @@ class TestHarnessVersionFallback:
             == "scoped-harness"
         )
         assert resolver.resolve("myharness 1.0", "harness").canonical_id is None
+
+
+class TestStructuredBenchmarkSubsetIsIdentity:
+    """Whether the subset names a PART of the benchmark or just spells the
+    benchmark itself at greater length.
+
+    The two are indistinguishable in `subset` and mean opposite things to the
+    consumer deciding what a row measured, so the flag is what separates a
+    whole-benchmark observation from one task inside it.
+    """
+
+    def _resolver(self):
+        return Resolver(
+            _store_with_aliases(
+                ("mmlu", "benchmark", "mmlu", None, "confirmed"),
+                # every MMLU subject reaches `mmlu` through the NORMALIZED
+                # tier, exactly as the production registry has it
+                ("mmlu_anatomy", "benchmark", "mmlu", None, "confirmed"),
+                ("polyglotoxicityprompts", "benchmark",
+                 "polyglotoxicityprompts", None, "confirmed"),
+                # the curated alias that says "this spelling IS the benchmark"
+                ("polyglotoxicityprompts small overall", "benchmark",
+                 "polyglotoxicityprompts", None, "confirmed"),
+                ("realtoxicityprompts", "benchmark",
+                 "realtoxicityprompts", None, "confirmed"),
+                ("realtoxicityprompts small", "benchmark",
+                 "realtoxicityprompts", None, "confirmed"),
+            )
+        )
+
+    def test_curated_whole_spelling_is_identity_not_a_part(self):
+        m = self._resolver().resolve_structured_benchmark(
+            "polyglotoxicityprompts.polyglotoxicityprompts.small_overall"
+        )
+        assert m.canonical_id == "polyglotoxicityprompts"
+        assert m.subset == "small overall"
+        assert m.subset_is_identity is True
+
+    def test_a_sibling_without_that_alias_is_a_part(self):
+        m = self._resolver().resolve_structured_benchmark(
+            "polyglotoxicityprompts.polyglotoxicityprompts.small_english"
+        )
+        assert m.canonical_id == "polyglotoxicityprompts"
+        assert m.subset == "small english"
+        assert m.subset_is_identity is False
+
+    def test_realtoxicityprompts_small_is_the_whole_benchmark(self):
+        m = self._resolver().resolve_structured_benchmark(
+            "realtoxicityprompts.realtoxicityprompts.small"
+        )
+        assert (m.canonical_id, m.subset, m.subset_is_identity) == (
+            "realtoxicityprompts", "small", True,
+        )
+
+    def test_a_normalized_alias_hit_is_not_an_identity_claim(self):
+        """The line that keeps MMLU honest. `mmlu anatomy` reaches `mmlu`
+        through the spelling-insensitive tier, which absorbs every subject
+        name; treating that as an identity would make all 183 subject rows
+        whole-benchmark observations and hand the page a median over its own
+        parts."""
+        m = self._resolver().resolve_structured_benchmark("mmlu.mmlu.anatomy")
+        assert m.canonical_id == "mmlu"
+        assert m.subset == "anatomy"
+        assert m.subset_is_identity is False
+
+    def test_an_aggregate_marker_leaves_no_subset_at_all(self):
+        m = self._resolver().resolve_structured_benchmark("mmlu.mmlu.overall")
+        assert (m.canonical_id, m.subset, m.subset_is_identity) == (
+            "mmlu", None, False,
+        )
+
+    def test_a_real_member_name_is_still_a_part(self):
+        """The guard: only a subset that names the benchmark itself is
+        identity. `anatomy` names something inside MMLU."""
+        r = Resolver(
+            _store_with_aliases(
+                ("mmlu", "benchmark", "mmlu", None, "confirmed"),
+                ("mmlu_anatomy", "benchmark", "mmlu", None, "confirmed"),
+            )
+        )
+        m = r.resolve_structured_benchmark("mmlu.mmlu.anatomy")
+        assert (m.subset, m.subset_is_identity) == ("anatomy", False)
+
+    def test_subset_naming_the_benchmark_is_detected_space_insensitively(self):
+        """The predicate behind the Vals SWE-Bench fix, tested directly.
+
+        `normalize` maps separators to spaces, so the canonical `swe-bench`
+        becomes `swe bench` while the source spells the subset `swebench`.
+        Comparing on alphanumerics is what makes the two the same benchmark.
+        """
+        r = Resolver(_store_with_aliases(("mmlu", "benchmark", "mmlu", None,
+                                          "confirmed")))
+        assert r._subset_names_the_benchmark("swebench", "swe-bench") is True
+        assert r._subset_names_the_benchmark("SWE_Bench", "swe-bench") is True
+        assert r._subset_names_the_benchmark("anatomy", "mmlu") is False
+        assert r._subset_names_the_benchmark(None, "mmlu") is False
+
+    def test_resolving_to_the_same_canonical_is_not_identity(self):
+        """The predicate asks whether the subset SPELLS the benchmark, and
+        nothing else.
+
+        Every alias of a benchmark resolves to that benchmark — including the
+        aliases that name its PARTS. Vals LegalBench is the live case: the
+        registry aliases `conclusion_tasks` and its four siblings to
+        `legalbench`, so an identity test built on resolution called each of
+        the five category aggregates a whole-benchmark reading and left the
+        source's own `.overall` unable to win its own cell.
+        """
+        r = Resolver(
+            _store_with_aliases(
+                ("legalbench", "benchmark", "legalbench", None, "confirmed"),
+                ("conclusion_tasks", "benchmark", "legalbench", None, "confirmed"),
+            )
+        )
+        assert r.resolve(
+            "conclusion_tasks", "benchmark", None, check_hf=False
+        ).canonical_id == "legalbench"
+        assert r._subset_names_the_benchmark(
+            "legal bench conclusion tasks", "legalbench"
+        ) is False
+        assert r._subset_names_the_benchmark("conclusion tasks", "legalbench") is False
+        # the benchmark's own name, however it is spaced, still is identity
+        assert r._subset_names_the_benchmark("legal bench", "legalbench") is True
+
+
+class TestValsLegalBenchObservationRoles:
+    """The six real Vals LegalBench names, end to end.
+
+    The alias set is the registry's own (`seed/benchmarks.yaml`, `legalbench`):
+    the benchmark, its `.overall` total and its five category aggregates are
+    ALL aliases of one canonical, because the registry models LegalBench as a
+    single benchmark. That makes resolution useless as an identity test —
+    every one of the six resolves to `legalbench` — and the roles have to come
+    from what each name SAYS.
+
+    The shape matters as much as the aliases: only the leading `vals_ai`
+    segment resolves on its own, so the identity path lands on the folder and
+    the JOINED spelling is what carries the benchmark. That is the branch the
+    defect lived in.
+    """
+
+    ALIASES = (
+        "vals_ai_legal_bench",
+        "vals_ai_legal_bench_overall",
+        "vals_ai_legal_bench_conclusion_tasks",
+        "vals_ai_legal_bench_interpretation_tasks",
+        "vals_ai_legal_bench_issue_tasks",
+        "vals_ai_legal_bench_rhetoric_tasks",
+        "vals_ai_legal_bench_rule_tasks",
+        "Legal bench overall",
+        "Legal bench conclusion tasks",
+        "Legal bench interpretation tasks",
+        "Legal bench issue tasks",
+        "Legal bench rhetoric tasks",
+        "Legal bench rule tasks",
+    )
+    GROUPS = ("conclusion_tasks", "interpretation_tasks", "issue_tasks",
+              "rhetoric_tasks", "rule_tasks")
+
+    def _resolver(self):
+        return Resolver(
+            _store_with_aliases(
+                ("legalbench", "benchmark", "legalbench", None, "confirmed"),
+                # the source folder is itself a registered benchmark, which is
+                # why the segment scan stops on it
+                ("vals_ai", "benchmark", "vals-ai", None, "confirmed"),
+                *((a, "benchmark", "legalbench", None, "confirmed")
+                  for a in self.ALIASES),
+            )
+        )
+
+    def test_only_the_folder_segment_resolves_on_its_own(self):
+        r = self._resolver()
+        assert r.resolve(
+            "vals_ai", "benchmark", "vals-ai", check_hf=False
+        ).canonical_id == "vals-ai"
+        for segment in ("legal_bench", *self.GROUPS):
+            assert r.resolve(
+                segment, "benchmark", "vals-ai", check_hf=False
+            ).canonical_id is None, segment
+
+    def test_the_submitted_total_is_a_whole(self):
+        m = self._resolver().resolve_structured_benchmark(
+            "vals_ai.legal_bench.overall", "vals-ai"
+        )
+        assert m.canonical_id == "legalbench"
+        assert m.observation_role == "whole"
+
+    def test_every_category_aggregate_is_a_part(self):
+        r = self._resolver()
+        roles = {
+            g: r.resolve_structured_benchmark(
+                f"vals_ai.legal_bench.{g}", "vals-ai"
+            ).observation_role
+            for g in self.GROUPS
+        }
+        assert roles == dict.fromkeys(self.GROUPS, "part"), roles
+
+
+class TestBenchmarkObservationRole:
+    """`observation_role` — the same match read as what the row OBSERVED.
+
+    Two of the three answers live on the match: a real subset is a `part`,
+    anything else is a `whole`. The third, `unknown`, is the absence of a
+    match, and belongs to the caller: a name the structured path declines to
+    read was never checked, and calling it a whole is the claim that let a
+    benchmark's own subjects outvote the total published beside them.
+    """
+
+    def _resolver(self):
+        return Resolver(
+            _store_with_aliases(
+                ("mmlu", "benchmark", "mmlu", None, "confirmed"),
+                ("mmlu_anatomy", "benchmark", "mmlu", None, "confirmed"),
+                ("realtoxicityprompts", "benchmark",
+                 "realtoxicityprompts", None, "confirmed"),
+                ("realtoxicityprompts small", "benchmark",
+                 "realtoxicityprompts", None, "confirmed"),
+            )
+        )
+
+    def test_a_real_subset_is_a_part(self):
+        m = self._resolver().resolve_structured_benchmark("mmlu.mmlu.anatomy")
+        assert m.observation_role == "part"
+
+    def test_no_subset_is_a_whole(self):
+        m = self._resolver().resolve_structured_benchmark("mmlu.mmlu.overall")
+        assert m.observation_role == "whole"
+
+    def test_a_subset_that_names_the_benchmark_is_a_whole(self):
+        m = self._resolver().resolve_structured_benchmark(
+            "realtoxicityprompts.realtoxicityprompts.small"
+        )
+        assert (m.subset, m.subset_is_identity, m.observation_role) == (
+            "small", True, "whole",
+        )
+
+    def test_a_flat_or_spaced_name_yields_no_match_at_all(self):
+        """HELM's shape. `prepare_eval_name_segments` declines anything
+        without a dot or with a space in it, so there is no match to carry a
+        role — the caller has to supply `unknown`, and must not substitute
+        `whole`. `MMLU All Subjects` and its 34 sibling subject rows are
+        equally unread; the difference between them is not in this answer."""
+        r = self._resolver()
+        assert r.resolve_structured_benchmark("MMLU All Subjects") is None
+        assert r.resolve_structured_benchmark("mmlu") is None
+

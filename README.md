@@ -232,6 +232,108 @@ drop ids from the merge:
 
 ---
 
+## Data dictionary
+
+Field-level notes for the parts of the published tables whose meaning is not
+obvious from the column name. The full column list per table lives in
+`src/eval_card_registry/store/schemas.py`.
+
+### Source scope keys
+
+Several places key a value by *which upstream source published it*:
+`benchmark_metric_folds.source_config`, the `scoped_aliases` blocks in
+`seed/metrics.yaml` and `seed/benchmarks.yaml`, and the `source_config` column
+on `aliases`. In every one of them the key is the **upstream dataset config
+name as published in the EEE datastore** (`data/<config>/`): `openeval`,
+`llm-stats`, `helm_capabilities`, and so on.
+
+A scope key is not a registry id and it is not normalised: `llm-stats` and
+`llm_stats` name two different configs, and only an exact match scopes.
+The loader checks each key against `^[A-Za-z0-9][A-Za-z0-9_.-]*$` and prints
+the distinct keys it saw in the seed summary, so a typo fails the seed or
+shows up as a new key rather than silently scoping an alias to a config that
+never calls.
+
+### `canonical_benchmarks.preferred_metric_id`
+
+The registry-declared default metric for the benchmark: the one a consumer
+should show when a benchmark reports several. Seed key is `preferred_metric`
+(singular, in `seed/benchmarks.yaml`); the loader validates it against
+`seed/metrics.yaml` and stores it as `preferred_metric_id`. Null means the
+registry states no default and the consumer falls back to its own rules.
+
+### `canonical_benchmarks.preferred_metric_llm_judged`
+
+Whether **`preferred_metric_id`** is produced by an LLM judge.
+
+| value | meaning |
+| --- | --- |
+| `true` | the benchmark's preferred metric is produced by an LLM judge |
+| `false` | the benchmark's preferred metric is not produced by an LLM judge |
+| `null` | unstated; the registry has not made the call |
+
+It is a statement about that one metric, not about the benchmark: a benchmark
+whose preferred metric is judged may also report unjudged metrics, and the
+flag says nothing about them. A non-null value is only accepted alongside a
+`preferred_metric`, and only as a real YAML boolean. The loader rejects `1`,
+`"true"`, and the YAML 1.1 spellings `yes` / `on` / `off` before parsing, so a
+malformed flag fails the seed rather than reading as unstated.
+
+### `benchmark_metric_folds`
+
+Curated per-benchmark metric folds, from `seed/metric_folds.yaml`. A row says:
+`from_metric_id` reported on `benchmark_id` is the same measurement as
+`to_metric_id`, published under a different name, a different scale, or both.
+Naming folds only: protocol variants (`cot-correct` vs `accuracy`) are
+different measurements and never fold. The producer consumes the table to
+compute the merged view's effective metric.
+
+| column | meaning |
+| --- | --- |
+| `benchmark_id` | benchmark the fold applies to (FK → `canonical_benchmarks.id`) |
+| `from_metric_id` | metric as published (FK → `canonical_metrics.id`) |
+| `to_metric_id` | metric it folds onto |
+| `source_config` | source scope; null = benchmark-wide |
+| `scale_factor` | affine multiplier, scoped rows only |
+| `scale_offset` | affine addend, scoped rows only |
+| `note` | free text: why the fold is safe, or what is still unverified |
+
+Two row shapes:
+
+- **Naming row** (`source_config` null): benchmark-wide, applies to every
+  source reporting `from_metric_id` on that benchmark. It never carries a
+  conversion, and there is at most one per (benchmark, from_metric).
+- **Conversion row** (`source_config` set): the published-scale conversion for
+  one source: `canonical = published * scale_factor + scale_offset`. It either
+  attaches to a naming row, in which case it must name that row's
+  `to_metric_id`, or it stands alone as a pure scale conversion with
+  `from_metric_id == to_metric_id`, for a source that publishes the right
+  metric on the wrong scale.
+
+Null `scale_factor` / `scale_offset` mean **no curated conversion is
+declared** for that row. They are not an assertion that the scales agree, and
+they are not an instruction to detect a conversion.
+
+### Recognised `metadata` keys on `canonical_metrics`
+
+`metadata` is a JSON object. Any key is stored, but these are the ones in use,
+and a new metric should reach for them before inventing a synonym:
+
+| key | meaning |
+| --- | --- |
+| `kind` | what sort of quantity it is (`real`, `catch_all`, …) |
+| `confidence` | how sure the curation is of the definition below |
+| `source` | where the definition was read from |
+| `definition` | what the number measures, in one sentence |
+| `scoring_model` | the model that produces the score, when one does (a judge or a scoring backbone) |
+| `rubric` | the scale a judge applies, stated value by value |
+| `note` | caveats: unverified formulas, direction quirks, uncurated bounds |
+| `provenance` | which curation pass or upstream annotator set the entry came from |
+| `paper` | URL of the paper defining the metric |
+| `code` | URL of the reference implementation |
+
+---
+
 ## Project layout
 
 ```

@@ -89,8 +89,8 @@ def test_bare_alpacaeval_is_not_a_benchmark_alias(resolver):
         # (src/alpaca_eval/metrics/{helpers,glm_winrate}.py); the
         # length-controlled one stays inside [0,100] because the GLM
         # prediction passes through a logistic before scaling.
-        ("win-rate", False, 0.0, 100.0),
-        ("length-controlled-win-rate", False, 0.0, 100.0),
+        ("win-rate", False, 0.0, 1.0),
+        ("length-controlled-win-rate", False, 0.0, 1.0),
         ("discrete-win-rate", False, 0.0, 100.0),
         # `avg_length` is int(model_outputs["output"].str.len().mean()) —
         # unbounded characters (`.inf` in the seed: unbounded by definition,

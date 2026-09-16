@@ -7,13 +7,25 @@ Commands:
   sync      Batch sync one or all EEE configs → eval_results table
 """
 import json
+import math
 import re
 import unicodedata
+from numbers import Real
 from pathlib import Path
 from typing import Optional
 
 import typer
 import yaml
+
+
+# Source scope keys — the `source_config` on a scoped alias or a scoped
+# metric fold. A key is an UPSTREAM DATASET CONFIG NAME exactly as published
+# in the EEE datastore (`data/<config>/`): `openeval`, `llm-stats`,
+# `helm_capabilities`, … Registry ids are never scope keys, and the spelling
+# is not normalised — `llm-stats` and `llm_stats` are different configs. This
+# pattern is the shape the datastore uses, so a typo'd or path-like key fails
+# the seed instead of silently scoping an alias to a config that never calls.
+_SOURCE_SCOPE_KEY_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]*$")
 
 
 def seed_collision_key(s: str) -> str:
@@ -499,22 +511,32 @@ def seed(
         curated_path = seed_path / "benchmarks.yaml"
         generated_dir = seed_path / "benchmarks_generated"
 
+        def _load_benchmarks_yaml(path: Path) -> list[dict]:
+            raw_yaml = path.read_text()
+            invalid_judge_flag = re.search(
+                r"^\s*preferred_metric_llm_judged:\s*(?!true\b|false\b|null\b|~)(?P<value>\S+)",
+                raw_yaml,
+                re.MULTILINE,
+            )
+            if invalid_judge_flag:
+                raise typer.BadParameter(
+                    f"{path}: invalid preferred_metric_llm_judged value "
+                    f"{invalid_judge_flag.group('value')!r}; "
+                    "use true, false, null, or ~"
+                )
+            loaded = yaml.safe_load(raw_yaml) or []
+            if not isinstance(loaded, list):
+                raise typer.BadParameter(f"{path} must be a flat list")
+            return loaded
+
         generated_entries: list[dict] = []
         if generated_dir.is_dir():
             for src_path in sorted(generated_dir.glob("*.yaml")):
-                with open(src_path) as f:
-                    loaded = yaml.safe_load(f) or []
-                if not isinstance(loaded, list):
-                    raise typer.BadParameter(f"{src_path} must be a flat list")
-                generated_entries.extend(loaded)
+                generated_entries.extend(_load_benchmarks_yaml(src_path))
 
         curated_entries: list[dict] = []
         if curated_path.exists():
-            with open(curated_path) as f:
-                loaded = yaml.safe_load(f) or []
-            if not isinstance(loaded, list):
-                raise typer.BadParameter(f"{curated_path} must be a flat list")
-            curated_entries = loaded
+            curated_entries = _load_benchmarks_yaml(curated_path)
 
         def _merge_benchmark(generated: dict, curated: dict) -> dict:
             """Curated wins on every field it specifies; aliases are
@@ -556,6 +578,17 @@ def seed(
                 metric_ids = {m["id"] for m in (yaml.safe_load(f) or [])}
         for entry in by_id.values():
             pm = entry.pop("preferred_metric", None)
+            judged = entry.get("preferred_metric_llm_judged")
+            if judged is not None and type(judged) is not bool:
+                raise typer.BadParameter(
+                    f"benchmark {entry['id']!r}: preferred_metric_llm_judged "
+                    "must be a boolean or null"
+                )
+            if judged is not None and pm is None:
+                raise typer.BadParameter(
+                    f"benchmark {entry['id']!r}: preferred_metric_llm_judged "
+                    "requires preferred_metric"
+                )
             if pm is not None:
                 if pm not in metric_ids:
                     raise typer.BadParameter(
@@ -815,6 +848,10 @@ def seed(
     ]
 
     alias_count = 0
+    # Distinct source scope keys (EEE dataset config names) seen across
+    # scoped aliases and scoped metric folds — reported in the seed summary
+    # so a typo'd config shows up as a new key rather than a silent no-op.
+    source_scope_keys: set[str] = set()
     # Track all seed entity IDs and alias keys so we can remove stale ones.
     # Alias key: (raw_value, entity_type, canonical_id, source_config)
     seed_snapshot: list[tuple[str, str, set[str], set[tuple[str, str, str, Optional[str]]]]] = []
@@ -1063,6 +1100,12 @@ def seed(
                 (raw, None) for raw in global_aliases if raw
             ]
             for source_cfg, raw_values in scoped_aliases.items():
+                if not isinstance(source_cfg, str) or not _SOURCE_SCOPE_KEY_RE.match(source_cfg):
+                    raise typer.BadParameter(
+                        f"{label} entry {canonical_id!r}: scoped_aliases key "
+                        f"{source_cfg!r} is not a valid EEE dataset config name"
+                    )
+                source_scope_keys.add(source_cfg)
                 for raw in raw_values or []:
                     if raw:
                         alias_specs.append((raw, source_cfg))
@@ -1280,14 +1323,17 @@ def seed(
             raise typer.BadParameter(f"{folds_path} must be a flat list")
         bench_ids = {e["id"] for e in _load_benchmarks_merged()}
         fold_metrics_path = seed_path / "metrics.yaml"
-        metric_ids = set()
+        metrics_by_id = {}
         if fold_metrics_path.exists():
             with open(fold_metrics_path) as f:
-                metric_ids = {m["id"] for m in (yaml.safe_load(f) or [])}
-        seen_pairs: set[tuple[str, str]] = set()
+                metrics_by_id = {m["id"]: m for m in (yaml.safe_load(f) or [])}
+        metric_ids = set(metrics_by_id)
+        seen_rows: set[tuple[str, str, Optional[str]]] = set()
+        unscoped_pairs: dict[tuple[str, str], str] = {}
         fold_rows = []
         for e in fold_entries:
             b, fm, tm = e.get("benchmark"), e.get("from_metric"), e.get("to_metric")
+            source_config = e.get("source_config")
             if not (b and fm and tm):
                 raise typer.BadParameter(f"metric_folds entry needs benchmark/from_metric/to_metric: {e!r}")
             if b not in bench_ids:
@@ -1295,23 +1341,101 @@ def seed(
             missing = [m for m in (fm, tm) if m not in metric_ids]
             if missing:
                 raise typer.BadParameter(f"metric_folds ({b}): unknown metric id(s) {missing}")
-            if fm == tm:
+            if source_config is not None and not isinstance(source_config, str):
+                raise typer.BadParameter(
+                    f"metric_folds ({b}): source_config must be a string or null"
+                )
+            if source_config is not None and not _SOURCE_SCOPE_KEY_RE.match(source_config):
+                raise typer.BadParameter(
+                    f"metric_folds ({b}): source_config {source_config!r} is not a "
+                    "valid EEE dataset config name"
+                )
+            if source_config is not None:
+                source_scope_keys.add(source_config)
+            # A scoped row may fold a metric onto ITSELF: that is a pure
+            # published-scale conversion for one source, not a rename. An
+            # unscoped row saying `x is x` carries no information.
+            if fm == tm and source_config is None:
                 raise typer.BadParameter(f"metric_folds ({b}): self-fold {fm!r}")
-            if (b, fm) in seen_pairs:
-                raise typer.BadParameter(f"metric_folds: duplicate fold for ({b}, {fm})")
-            seen_pairs.add((b, fm))
+            row_key = (b, fm, source_config)
+            if row_key in seen_rows:
+                raise typer.BadParameter(
+                    f"metric_folds: duplicate fold for ({b}, {fm}, {source_config!r})"
+                )
+            seen_rows.add(row_key)
+            if source_config is None:
+                unscoped_pairs[(b, fm)] = tm
             factor = e.get("scale_factor")
-            if factor is not None and (not isinstance(factor, (int, float)) or factor <= 0):
+            offset = e.get("scale_offset")
+            if source_config is None and (factor is not None or offset is not None):
+                raise typer.BadParameter(
+                    f"metric_folds ({b}): scale_factor/scale_offset conversions require source_config"
+                )
+            for name, value in (("scale_factor", factor), ("scale_offset", offset)):
+                if value is not None and (
+                    not isinstance(value, Real)
+                    or isinstance(value, bool)
+                    or not math.isfinite(value)
+                ):
+                    raise typer.BadParameter(
+                        f"metric_folds ({b}): {name} must be a finite real number, got {value!r}"
+                    )
+            if factor is not None and factor <= 0:
                 raise typer.BadParameter(
                     f"metric_folds ({b}): scale_factor must be a positive number, got {factor!r}"
                 )
+            if factor is not None or offset is not None:
+                target = metrics_by_id[tm]
+                min_score, max_score = target.get("min_score"), target.get("max_score")
+                if (
+                    not isinstance(min_score, Real)
+                    or isinstance(min_score, bool)
+                    or not math.isfinite(min_score)
+                    or not isinstance(max_score, Real)
+                    or isinstance(max_score, bool)
+                    or not math.isfinite(max_score)
+                    or max_score <= min_score
+                ):
+                    raise typer.BadParameter(
+                        f"metric_folds ({b}): {tm!r} must have finite ordered numeric bounds "
+                        "when scale_factor or scale_offset is set"
+                    )
             fold_rows.append({
                 "benchmark_id": b, "from_metric_id": fm,
-                "to_metric_id": tm, "scale_factor": factor, "note": e.get("note"),
+                "to_metric_id": tm, "source_config": source_config,
+                "scale_factor": factor, "scale_offset": offset,
+                "note": e.get("note"),
             })
+        # A scoped row is either (a) the per-source conversion attached to a
+        # benchmark-wide naming fold — then it must name that fold's target —
+        # or (b) a standalone published-scale conversion, which renames
+        # nothing (from_metric == to_metric) and must actually carry a
+        # conversion. Naming a DIFFERENT target than the benchmark-wide row
+        # would make one source's metric mean something else, so it is
+        # rejected either way.
+        for row in fold_rows:
+            source_config = row["source_config"]
+            if source_config is None:
+                continue
+            pair = (row["benchmark_id"], row["from_metric_id"])
+            unscoped_target = unscoped_pairs.get(pair)
+            if unscoped_target is not None:
+                if row["to_metric_id"] != unscoped_target:
+                    raise typer.BadParameter(
+                        f"metric_folds ({pair[0]}): scoped to_metric must match unscoped row"
+                    )
+            elif not (
+                row["to_metric_id"] == row["from_metric_id"]
+                and (row["scale_factor"] is not None or row["scale_offset"] is not None)
+            ):
+                raise typer.BadParameter(
+                    f"metric_folds ({pair[0]}): scoped row requires unscoped row for "
+                    f"{pair[1]!r}, unless it is a pure published-scale conversion "
+                    "(from_metric == to_metric with scale_factor/scale_offset)"
+                )
         # No chains: a fold target must not itself be folded on the same benchmark.
         targets = {(r["benchmark_id"], r["to_metric_id"]) for r in fold_rows}
-        chained = sorted(targets & seen_pairs)
+        chained = sorted(targets & set(unscoped_pairs))
         if chained:
             raise typer.BadParameter(f"metric_folds: chained folds {chained}")
         folds_df = pd.DataFrame(
@@ -1408,6 +1532,10 @@ def seed(
                 store.set_table("aliases", current_aliases.reset_index(drop=True))
 
     typer.echo(f"  aliases: {alias_count} added, {removed_aliases} removed")
+    typer.echo(
+        "  source scope keys: "
+        + (", ".join(sorted(source_scope_keys)) if source_scope_keys else "(none)")
+    )
     if removed_entities:
         typer.echo(f"  stale entities removed: {removed_entities}")
 

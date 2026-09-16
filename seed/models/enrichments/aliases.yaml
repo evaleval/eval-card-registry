@@ -3115,10 +3115,10 @@
 - id: sthenno/tempestissimo-14b-0309
   aliases:
   - tempestissimo-14b-0309
-- id: swiss-ai-initiative/apertus-70b-instruct
+- id: swiss-ai/Apertus-70B-Instruct-2509
   aliases:
   - Apertus 70B Instruct
-- id: swiss-ai-initiative/apertus-8b-instruct
+- id: swiss-ai/Apertus-8B-Instruct-2509
   aliases:
   - Apertus 8B Instruct
 - id: tencent/hunyuan-t1

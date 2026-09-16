@@ -8,14 +8,30 @@
 # scicode carry no score fold at all).
 # NAMING FOLDS ONLY — protocol variants (cot-correct, exact-match under a
 # different elicitation) never fold.
+#
+# A row with no `source_config` is the benchmark-wide naming fold and never
+# carries a conversion. A row WITH `source_config` carries the published-scale
+# conversion for that one source: affine, canonical = published *
+# scale_factor + scale_offset. A scoped row may leave the metric unchanged
+# (from_metric == to_metric) when a source differs only in scale; otherwise it
+# must name the same to_metric as the benchmark-wide row.
+#
+# `source_config` is the UPSTREAM DATASET CONFIG NAME as published in the EEE
+# datastore (`data/<config>/`) — `openeval`, `llm-stats`, `helm_capabilities`,
+# … It is not a registry id and it is not normalised: `llm-stats` and
+# `llm_stats` name different configs.
+#
 # Verified against warehouse snapshot 2026-08-13T22-02-24Z score ranges.
 
 # Aggregator/source `score` == accuracy fraction (range- and
 # semantics-checked per benchmark):
 - {benchmark: aa-lcr, from_metric: score, to_metric: accuracy}
 - {benchmark: aime, from_metric: score, to_metric: accuracy}
+- {benchmark: aime, from_metric: exact-match, to_metric: accuracy}
 - {benchmark: aime-2024, from_metric: score, to_metric: accuracy}
+- {benchmark: aime-2024, from_metric: exact-match, to_metric: accuracy}
 - {benchmark: aime-2025, from_metric: score, to_metric: accuracy}
+- {benchmark: aime-2025, from_metric: exact-match, to_metric: accuracy}
 - {benchmark: bfcl, from_metric: score, to_metric: accuracy}
 - {benchmark: boolq, from_metric: score, to_metric: accuracy}
 - {benchmark: commonsenseqa, from_metric: score, to_metric: accuracy}
@@ -27,7 +43,8 @@
 - {benchmark: gsm8k, from_metric: score, to_metric: accuracy}
 - {benchmark: hle, from_metric: score, to_metric: accuracy,
    note: "safe only with the producer hotfix that re-keys hle-source calibration rows off `score`"}
-- {benchmark: humaneval, from_metric: score, to_metric: accuracy}
+- {benchmark: humaneval, from_metric: score, to_metric: pass-at-1}
+- {benchmark: humaneval, from_metric: accuracy, to_metric: pass-at-1}
 - {benchmark: ifbench, from_metric: score, to_metric: accuracy}
 - {benchmark: ifeval, from_metric: score, to_metric: accuracy}
 - {benchmark: livebench, from_metric: score, to_metric: accuracy}
@@ -36,6 +53,7 @@
 - {benchmark: mbpp-plus, from_metric: score, to_metric: accuracy}
 - {benchmark: mgsm, from_metric: score, to_metric: accuracy}
 - {benchmark: mmlu-pro, from_metric: score, to_metric: accuracy}
+- {benchmark: mmlu-pro, from_metric: exact-match, to_metric: accuracy}
 - {benchmark: mmmu, from_metric: score, to_metric: accuracy}
 - {benchmark: musr, from_metric: score, to_metric: accuracy}
 - {benchmark: omni-math, from_metric: score, to_metric: accuracy}
@@ -54,10 +72,20 @@
 # accuracy variants, while the warehouse `accuracy` bucket is strict-only
 # (verified 1.5-2.3pt systematic offset) — folding would merge protocols.
 
-# WildBench: openeval publishes the raw 1-10 WB score; wb-score's
-# registry scale is normalized 0-1. scale_factor states the known
-# published-to-registry conversion as curated fact (never detected).
-- {benchmark: wildbench, from_metric: score, to_metric: wb-score, scale_factor: 0.1}
+# HELM safety_metrics.py: score is the mean of GPT-4o and Llama-3.1-405B judge
+# ratings on [0,1], higher is better; OpenEval publishes the two per-judge components.
+- {benchmark: harmbench, from_metric: score, to_metric: harmbench-refusal-score}
+- {benchmark: xstest, from_metric: score, to_metric: xstest-appropriateness-score}
+- {benchmark: simplesafetytests, from_metric: score, to_metric: simplesafetytests-safety-score}
+- {benchmark: anthropic-red-team, from_metric: score, to_metric: anthropic-red-team-harmlessness-score}
+
+# WildBench: OpenEval's raw 1-10 judge channels → (x-1)/9; BenchPress
+# (OpenCompass) single-answer WB-Score on -100..100 → s/180 + 4/9.
+- {benchmark: wildbench, from_metric: score, to_metric: wb-score}
+- {benchmark: wildbench, from_metric: score, to_metric: wb-score, source_config: openeval, scale_factor: 0.1111111111111111, scale_offset: -0.1111111111111111}
+- {benchmark: wildbench, from_metric: score, to_metric: wb-score, source_config: benchpress,
+   scale_factor: 0.005555555555555556, scale_offset: 0.4444444444444444,
+   note: "OpenCompass single-answer WB-Score = (mean 1-10 rating - 5) x 20 on -100..100; wb-score = s/180 + 4/9. Evidence: BenchPress labels the number 'WildBench (Raw Score)' from OpenCompass (InternLM README: InternLM3-8B 33.1, Qwen2.5-7B 23.3, Llama3.1-8B 1.5, GPT-4o-mini 40.3, i.e. 1-10 ratings 6.7/6.2/5.1/7.0), and OpenCompass's single-answer summarizer emits exactly that scale (opencompass/summarizers/subjective/wildbench.py). The pairwise 'reward' variant shares the range but is not labelled 'score'; confidence medium — revisit if BenchPress documents the variant."}
 
 # HealthBench: harness primary `bootstrap_score` (minted bootstrap-score)
 # and llm-stats `score` are both the HealthBench overall score:

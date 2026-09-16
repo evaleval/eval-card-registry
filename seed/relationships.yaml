@@ -541,3 +541,10 @@ relationships:
     entity_b: lexam
     relationship_type: split_of
     is_confirmed: true
+
+  # --- Swiss AI Apertus 1.5 submission (2026-09-16) ---
+
+  - entity_a: include-base-new-45
+    entity_b: include
+    relationship_type: extended_from
+    is_confirmed: true

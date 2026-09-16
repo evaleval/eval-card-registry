@@ -37,6 +37,7 @@ _NORMALIZED_CONFIDENCE = 0.95
 # benchmark, and the registry does hold a handful of two-letter canonicals
 # (`if`, `mc`, `nq`) a bare segment would otherwise collide with.
 _MIN_BENCHMARK_SEGMENT_LEN = 3
+_MIN_METRIC_SEGMENT_LEN = 3
 
 # A trailing version token on a harness string (`lm_eval 0.4.12`,
 # `inspect_ai inspect_ai:0.3.80.dev25+g91a50728.d20250331`). Whitespace-
@@ -74,11 +75,64 @@ class StructuredBenchmark:
     """One dotted `evaluation_name` resolved against the benchmark
     vocabulary. `benchmark_raw` is the surface form to record downstream:
     the winning segment plus any subset segments, which is what the
-    producer's slice machinery reads."""
+    producer's slice machinery reads.
+
+    `subset_is_identity` says whether `subset` names a PART of the benchmark
+    or merely spells the benchmark itself at greater length. The two look
+    identical in `subset` and mean opposite things to a consumer deciding
+    what a row measured:
+
+      * `mmlu.mmlu.anatomy` — the registry knows `mmlu`, not
+        `mmlu anatomy`, so `anatomy` is a real subset. The row measured one
+        subject, a PART of MMLU. `subset_is_identity` False.
+      * `polyglotoxicityprompts.polyglotoxicityprompts.small_overall` — the
+        registry aliases the whole joined spelling to the benchmark, so the
+        trailing segments belong to the identity, not to a subset of it. The
+        row measured the benchmark. `subset_is_identity` True.
+
+    `subset` is kept in both cases because the producer's slice machinery
+    spells its display axis from it either way."""
 
     canonical_id: str
     benchmark_raw: str
     subset: Optional[str]
+    subset_is_identity: bool = False
+
+    @property
+    def observation_role(self) -> str:
+        """What this match VERIFIED the row observed, relative to the
+        benchmark it resolved to: `"whole"` or `"part"`.
+
+        There is a third answer this class cannot express — `"unknown"`,
+        the row whose name the structured path could not read at all
+        (flat/spaced names such as HELM's `MMLU All Subjects`, which
+        `prepare_eval_name_segments` declines). That answer is the ABSENCE
+        of a `StructuredBenchmark`, and callers must map `None` to it
+        rather than assuming a whole: a name nobody parsed is not a
+        verified observation of anything, and labelling it `whole` is the
+        claim that made a page pool 34 subjects into their own total."""
+        return "part" if (self.subset and not self.subset_is_identity) else "whole"
+
+
+@dataclass
+class StructuredMetric:
+    """One namespaced `metric_config.metric_id` resolved against the metric
+    vocabulary. `matched_segment` is the surface form that carried the
+    identity (the whole id when a whole-id alias won); `qualifier` is the
+    tail spelled after it, which narrows the same metric to a scoring
+    variant (`gpqa.accuracy.strict`, `squadv2.f1.has_ans`) and is None when
+    the tail carries no information."""
+
+    canonical_id: str
+    matched_segment: str
+    qualifier: Optional[str]
+
+
+def _is_aggregate_marker(segment: str) -> bool:
+    """`overall` and `<group>_overall` mark an aggregation level, not a
+    variant of the metric, so they never become a qualifier."""
+    lowered = segment.lower()
+    return lowered == "overall" or lowered.endswith("_overall")
 
 
 class Resolver:
@@ -329,6 +383,39 @@ class Resolver:
         (no hits, only catch-all hits, or conflicting hits) — callers fall
         back to their existing description/name path unchanged.
         """
+        match = self.resolve_structured_metric(raw_id, source_config, catch_all_ids)
+        return match.canonical_id if match is not None else None
+
+    def resolve_structured_metric(
+        self,
+        raw_id: Optional[str],
+        source_config: Optional[str] = None,
+        catch_all_ids: frozenset = frozenset(),
+    ) -> Optional["StructuredMetric"]:
+        """`resolve_structured_metric_id` with the match span reported.
+
+        Same identity decision, plus the two pieces a consumer needs to keep
+        distinct observations apart: `matched_segment`, the surface form that
+        disclosed the metric, and `qualifier`, the tail spelled after it.
+
+        The tail is what narrows one metric to a scoring variant the source
+        reports separately — `gpqa.accuracy.strict` next to
+        `gpqa.accuracy.diamond`, `squadv2.f1.has_ans` next to
+        `squadv2.f1.no_ans` — so a consumer that pools on the canonical id
+        alone would median unrelated numbers together. Excluded from the
+        tail: aggregate markers (`overall`, `<group>_overall`) and nothing
+        else, because those state a level rather than a variant. A numeric
+        segment IS a variant and is kept — `bench.accuracy.1` and
+        `bench.accuracy.5` are k-shot readings of one metric that a source
+        reports separately, exactly the case the tail exists for. Segments
+        BEFORE the match are never part of it: those are the adapter
+        namespace, the source config and the benchmark. A whole-id alias
+        match reports the whole id as the matched segment and no qualifier,
+        because the registry has claimed that exact string and there is no
+        residue to interpret.
+
+        Returns None exactly when `resolve_structured_metric_id` returns None.
+        """
         if not raw_id or not isinstance(raw_id, str):
             return None
         raw_id = raw_id.strip()
@@ -346,18 +433,28 @@ class Resolver:
         # normalized whole-id lookup could equate distinct ids.
         whole = exact_match(raw_id, "metric", source_config, self.store)
         if whole is not None and whole not in catch_all_ids:
-            return whole
-        hits: list[str] = []
-        for segment in segments[1:]:  # segments[0] is the adapter namespace
+            return StructuredMetric(whole, raw_id, None)
+        hits: list[tuple[int, str]] = []
+        for index, segment in enumerate(segments[1:], start=1):
+            # segments[0] is the adapter namespace
             canonical = exact_match(
                 segment, "metric", source_config, self.store
             ) or normalized_match(segment, "metric", self.store, source_config)
             if canonical is not None:
-                hits.append(canonical)
-        specific = {h for h in hits if h not in catch_all_ids}
-        if len(specific) == 1:
-            return next(iter(specific))
-        return None
+                hits.append((index, canonical))
+        specific = {c for _, c in hits if c not in catch_all_ids}
+        if len(specific) != 1:
+            return None
+        canonical_id = next(iter(specific))
+        # The LAST segment naming the winning metric ends the identity: a
+        # later restatement of the same metric is not a qualifier of itself.
+        matched_index = max(i for i, c in hits if c == canonical_id)
+        tail = [
+            s for s in segments[matched_index + 1:] if not _is_aggregate_marker(s)
+        ]
+        return StructuredMetric(
+            canonical_id, segments[matched_index], ".".join(tail) or None
+        )
 
     def resolve_structured_benchmark(
         self,
@@ -408,9 +505,12 @@ class Resolver:
         `paperswithcode` (64) sit in that position and stay unresolved only
         because neither is a benchmark alias.
 
-        `subset` is only meaningful when the winning canonical is the segment
-        hit itself; when the joined form won, the trailing segments belong to
-        the identity and `subset` is informational.
+        `subset` is only a real subset when the winning canonical is the
+        segment hit itself; when the JOINED form won, the trailing segments
+        belong to the identity and `subset` is informational. The two cases
+        are told apart by `subset_is_identity`, because a consumer asking
+        "did this row measure the whole benchmark or a part of it?" gets
+        opposite answers from the same `subset` string.
 
         Returns None when no segment resolves, so callers fall back to
         `clean_eval_name` unchanged.
@@ -496,14 +596,93 @@ class Resolver:
                 benchmark_raw, "benchmark", source_config, check_hf=False
             )
             if joined.canonical_id is not None:
+                # Resolution is unchanged: the joined spelling wins whenever
+                # it resolves at all, fuzzy tier included.
+                #
+                # The identity flag is stricter, and deliberately so: EXACT
+                # alias only. An exact alias is the registry spelling this
+                # surface form, as written, as the benchmark — a statement
+                # that the trailing segments are part of its name.
+                #
+                # The looser tiers are not that statement. `mmlu anatomy`
+                # reaches `mmlu` through the normalized tier, which is
+                # spelling-insensitive and absorbs every subject name; the
+                # fuzzy tier reduces further still by stripping
+                # run-configuration tokens. Accepting either would turn all
+                # 183 MMLU subject rows into whole-benchmark observations and
+                # hand the page a median over its own parts — the number this
+                # whole workstream exists to stop publishing.
+                claimed = exact_match(
+                    benchmark_raw, "benchmark", source_config, self.store
+                )
+                joined_subset = _spell(segments[index + 1:]) or None
                 return StructuredBenchmark(
-                    joined.canonical_id, benchmark_raw, _spell(segments[index + 1:])
+                    joined.canonical_id, benchmark_raw, joined_subset,
+                    subset_is_identity=(
+                        claimed is not None
+                        or self._subset_names_the_benchmark(
+                            joined_subset, joined.canonical_id
+                        )
+                    ),
                 )
 
         index, canonical = hits[-1]
+        subset = _spell(segments[index + 1:]) or None
         return StructuredBenchmark(
-            canonical, _spell(segments[index:]), _spell(segments[index + 1:]) or None
+            canonical, _spell(segments[index:]), subset,
+            subset_is_identity=self._subset_names_the_benchmark(subset, canonical),
         )
+
+    @staticmethod
+    def _subset_names_the_benchmark(
+        subset: Optional[str],
+        canonical: str,
+    ) -> bool:
+        """True when the reported subset is just the benchmark again.
+
+        A subset only narrows the observation when it names something INSIDE
+        the benchmark. When it names the benchmark itself it narrows nothing,
+        and treating it as a part excludes the source's own total from its own
+        page.
+
+        `vals_ai.swebench.overall` is the live case. The leading segment names
+        the source folder, so the identity path lands on it and reports
+        `swebench` as the subset — which is SWE-Bench. Meanwhile the sibling
+        time buckets (`vals_ai.swebench.<15 min fix>`) hit exact aliases and
+        report no subset at all, so the roles came out exactly backwards: the
+        submitted total was excluded from its own cell and the page moved
+        0.70731 -> 0.58718.
+
+        The test is SELF-SPELLING, not resolution. A subset names the
+        benchmark when it is the benchmark's own name written differently —
+        nothing more. Asking the general resolver "does this subset resolve
+        to the same canonical?" answers a different question and answers it
+        wrongly: every alias of a benchmark resolves to that benchmark,
+        including the aliases that name its PARTS. Vals LegalBench is the
+        live case — `conclusion_tasks`, `interpretation_tasks`,
+        `issue_tasks`, `rhetoric_tasks` and `rule_tasks` are all registry
+        aliases of `legalbench`, so resolution called each of the five
+        category aggregates a whole-benchmark reading and left the source's
+        own `vals_ai.legal_bench.overall` unable to win its own cell.
+
+        This is the same line the joined-spelling branch draws (see
+        `_probe_benchmark_segments`): an EXACT alias is the registry
+        spelling a surface form, as written, as the benchmark; the
+        normalized and fuzzy tiers are spelling-insensitive and absorb
+        member names. Exact identity of the joined spelling is checked
+        there; this predicate adds only self-spelling.
+        """
+        if not subset:
+            return False
+
+        def _squash(value: str) -> str:
+            # `normalize` maps separators to spaces, so `swe-bench` becomes
+            # `swe bench` while the source spells it `swebench`. Squashing to
+            # alphanumerics makes the two comparable without loosening
+            # `normalize` itself, which other callers depend on.
+            return "".join(ch for ch in normalize(value) if ch.isalnum())
+
+        return _squash(subset) == _squash(canonical)
 
     def _is_namespace_segment(
         self, segment: str, next_segment: Optional[str], source_config: Optional[str]
@@ -527,9 +706,16 @@ class Resolver:
         resolves as a metric or reads as one to the metric extractor, so a
         metric tail is never mistaken for a subset."""
         spelled = segment.replace("_", " ")
-        if exact_match(segment, "metric", source_config, self.store) or normalized_match(
-            segment, "metric", self.store, source_config
-        ):
+        if exact_match(segment, "metric", source_config, self.store):
+            return True
+        if len(segment) < _MIN_METRIC_SEGMENT_LEN:
+            # A one- or two-character tail is ambiguous: `mr` is a Marathi
+            # language slice (`arc.arc_multilingual.mr`) as much as the
+            # case-folded mean-recall alias `mR`. Only a byte-exact alias hit
+            # (above) may claim it; the case-insensitive and keyword tiers
+            # need a longer token, mirroring `_MIN_BENCHMARK_SEGMENT_LEN`.
+            return False
+        if normalized_match(segment, "metric", self.store, source_config):
             return True
         return _keyword_extract(spelled.lower()) is not None
 
