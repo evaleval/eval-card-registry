@@ -2438,7 +2438,7 @@
   weak:
     release_date: '2026-03-01'
     open_weights: false
-- id: swiss-ai-initiative/apertus-70b
+- id: swiss-ai/Apertus-70B-2509
   weak:
     release_date: '2025-09-02'
     open_weights: true
@@ -5693,26 +5693,18 @@
   weak:
     release_date: '2026-02-05'
     open_weights: false
-- id: kwaipilot/kat-coder-air-v2.5
-  aliases:
-  - kat-coder-air-v2-5
-  - kwaipilot/kat-coder-air-v2-5
-  metadata: '{"alias_platforms": {"kat-coder-air-v2-5": "vercel", "kwaipilot/kat-coder-air-v2-5": "nano-gpt"}}'
-  weak:
-    release_date: '2026-07-10'
-    open_weights: false
 - id: kwaikat/kat-coder-pro
   aliases:
   - kat-coder-pro
   metadata: '{"alias_platforms": {"kat-coder-pro": "novita-ai"}}'
   weak:
-    release_date: '2025-11-09'
+    release_date: '2026-01-05'
     open_weights: true
 - id: kwaipilot/kat-coder-pro-v2.5
   aliases:
   - kat-coder-pro-v2-5
   - kwaipilot/kat-coder-pro-v2-5
-  metadata: '{"alias_platforms": {"kat-coder-pro-v2-5": "vercel", "kwaipilot/kat-coder-pro-v2-5": "vercel"}}'
+  metadata: '{"alias_platforms": {"kat-coder-pro-v2-5": "kilo", "kwaipilot/kat-coder-pro-v2-5": "kilo"}}'
   weak:
     release_date: '2026-07-10'
     open_weights: false
@@ -7674,14 +7666,6 @@
   metadata: '{"alias_platforms": {"kimi-latest": "nano-gpt", "~moonshotai/kimi-latest": "openrouter"}}'
   weak:
     release_date: '2026-04-21'
-    open_weights: true
-- id: moonshotai/umans-kimi-k2-7
-  aliases:
-  - umans-kimi-k2-7
-  - umans-kimi-k2.7
-  metadata: '{"alias_platforms": {"umans-kimi-k2-7": "umans-ai-coding-plan", "umans-kimi-k2.7": "umans-ai-coding-plan"}}'
-  weak:
-    release_date: '2026-06-12'
     open_weights: true
 - id: moonshotai/umans-kimi-k3
   aliases:
@@ -10790,7 +10774,7 @@
     open_weights: false
 - id: umans-coder
   weak:
-    release_date: '2026-06-12'
+    release_date: '2026-08-26'
     open_weights: true
 - id: umans-flash
   weak:
@@ -10803,6 +10787,13 @@
   weak:
     release_date: '2023-07-22'
     open_weights: true
+- id: union-alpha
+  aliases:
+  - stealth/union-alpha
+  metadata: '{"alias_platforms": {"stealth/union-alpha": "openrouter"}}'
+  weak:
+    release_date: '2026-09-16'
+    open_weights: false
 - id: universal-summarizer
   weak:
     release_date: '2025-12-23'
@@ -11930,13 +11921,13 @@
   weak:
     release_date: '2026-02-04'
     open_weights: true
-- id: zai/umans-glm-5-2
+- id: zai/umans-glm-5-3-flash
   aliases:
-  - umans-glm-5-2
-  - umans-glm-5.2
-  metadata: '{"alias_platforms": {"umans-glm-5-2": "umans-ai-coding-plan", "umans-glm-5.2": "umans-ai-coding-plan"}}'
+  - umans-glm-5-3-flash
+  - umans-glm-5.3-flash
+  metadata: '{"alias_platforms": {"umans-glm-5-3-flash": "umans-ai-coding-plan", "umans-glm-5.3-flash": "umans-ai-coding-plan"}}'
   weak:
-    release_date: '2026-06-13'
+    release_date: '2026-08-26'
     open_weights: true
 - id: zai/z-ai-glm-5-3
   weak:
@@ -11963,6 +11954,30 @@
   metadata: '{"alias_platforms": {"zai-org-glm-5-2": "venice"}}'
   weak:
     release_date: '2026-06-16'
+    open_weights: true
+- id: kwaipilot/kat-coder-air-v2.5
+  aliases:
+  - kat-coder-air-v2-5
+  - kwaipilot/kat-coder-air-v2-5
+  metadata: '{"alias_platforms": {"kat-coder-air-v2-5": "vercel", "kwaipilot/kat-coder-air-v2-5": "nano-gpt"}}'
+  weak:
+    release_date: '2026-07-10'
+    open_weights: false
+- id: moonshotai/umans-kimi-k2-7
+  aliases:
+  - umans-kimi-k2-7
+  - umans-kimi-k2.7
+  metadata: '{"alias_platforms": {"umans-kimi-k2-7": "umans-ai-coding-plan", "umans-kimi-k2.7": "umans-ai-coding-plan"}}'
+  weak:
+    release_date: '2026-06-12'
+    open_weights: true
+- id: zai/umans-glm-5-2
+  aliases:
+  - umans-glm-5-2
+  - umans-glm-5.2
+  metadata: '{"alias_platforms": {"umans-glm-5-2": "umans-ai-coding-plan", "umans-glm-5.2": "umans-ai-coding-plan"}}'
+  weak:
+    release_date: '2026-06-13'
     open_weights: true
 - id: Qwen/Qwen3.5-0.8B
   aliases:

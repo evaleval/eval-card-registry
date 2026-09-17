@@ -14960,11 +14960,11 @@
   - KAT Coder Air V2.5
   - kat-coder-air-v2-5
   - kwaipilot/kat-coder-air-v2-5
-  metadata: '{"alias_platforms": {"kat-coder-air-v2-5": "vercel", "kwaipilot/kat-coder-air-v2-5": "nano-gpt"}, "providers": ["vercel"], "underlying_key": "kat-coder-air-v2-5"}'
+  metadata: '{"alias_platforms": {"kat-coder-air-v2-5": "vercel", "kwaipilot/kat-coder-air-v2-5": "nano-gpt"}, "providers": ["vercel"], "underlying_key": "kat-coder-air-v2-5", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: kwaipilot/kat-coder-pro-v2.5
-  display_name: Kat Coder Pro V2.5
+  display_name: 'Kwaipilot: KAT-Coder-Pro V2.5'
   org_id: Kwaipilot
   family: kat-coder-pro-v2-5
   architecture: null
@@ -14977,10 +14977,10 @@
   tags: []
   aliases:
   - KAT Coder Pro V2.5
+  - Kat Coder Pro V2.5
   - kat-coder-pro-v2-5
   - kwaipilot/kat-coder-pro-v2-5
-  metadata: '{"alias_platforms": {"kat-coder-pro-v2-5": "vercel", "kwaipilot/kat-coder-pro-v2-5": "vercel"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter", "vercel"], "underlying_key":
-    "kat-coder-pro-v2-5"}'
+  metadata: '{"alias_platforms": {"kat-coder-pro-v2-5": "kilo", "kwaipilot/kat-coder-pro-v2-5": "kilo"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter"], "underlying_key": "kat-coder-pro-v2-5"}'
   review_status: draft
   resolution_source: models_dev
 - id: laguna-xs.2
@@ -15826,7 +15826,7 @@
   - meta-llama-3.1-405b-instruct
   - meta/meta-llama-3-1-405b-instruct
   metadata: '{"alias_platforms": {"llama-3-1-405b-instruct": "nano-gpt", "llama-3.1-405b-instruct": "cortecs", "meta-llama-3-1-405b-instruct": "azure-cognitive-services", "meta-llama-3.1-405b-instruct":
-    "azure-cognitive-services"}, "providers": ["cortecs", "nano-gpt"], "underlying_key": "llama-3-1-405b-instruct"}'
+    "azure-cognitive-services"}, "providers": ["nano-gpt"], "underlying_key": "llama-3-1-405b-instruct"}'
   review_status: draft
   resolution_source: models_dev
 - id: meta/llama-3-1-8b-cs
@@ -20420,7 +20420,8 @@
   aliases:
   - umans-kimi-k2-7
   - umans-kimi-k2.7
-  metadata: '{"alias_platforms": {"umans-kimi-k2-7": "umans-ai-coding-plan", "umans-kimi-k2.7": "umans-ai-coding-plan"}, "providers": ["umans-ai-coding-plan"], "underlying_key": "umans-kimi-k2-7"}'
+  metadata: '{"alias_platforms": {"umans-kimi-k2-7": "umans-ai-coding-plan", "umans-kimi-k2.7": "umans-ai-coding-plan"}, "providers": ["umans-ai-coding-plan"], "underlying_key": "umans-kimi-k2-7", "upstream_status":
+    "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: moonshotai/umans-kimi-k3
@@ -27229,7 +27230,7 @@
   metadata: '{"alias_platforms": {"study_gpt-chatgpt-4o-latest": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "study-gpt-chatgpt-4o", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
-- id: swiss-ai-initiative/apertus-70b
+- id: swiss-ai/Apertus-70B-2509
   aliases:
   - Apertus 70B
   - apertus-70b
@@ -27818,7 +27819,7 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2026-06-12'
+  release_date: '2026-08-26'
   input_modalities: null
   output_modalities: null
   tags:
@@ -27865,6 +27866,24 @@
   - ReMM SLERP 13B
   - remm-slerp-l2-13b
   metadata: '{"alias_platforms": {"remm-slerp-l2-13b": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "remm-slerp-l2-13b"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: union-alpha
+  display_name: Union Alpha
+  org_id: null
+  family: union-alpha
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-16'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - org-unknown
+  aliases:
+  - stealth/union-alpha
+  metadata: '{"alias_platforms": {"stealth/union-alpha": "openrouter"}, "providers": ["kilo", "opencode", "opencode-go", "openrouter"], "underlying_key": "union-alpha"}'
   review_status: draft
   resolution_source: models_dev
 - id: universal-summarizer
@@ -30857,7 +30876,7 @@
   - 'Z.ai: GLM Flash Latest'
   - glm-flash-latest
   - ~z-ai/glm-flash-latest
-  metadata: '{"alias_platforms": {"glm-flash-latest": "fireworks-ai", "~z-ai/glm-flash-latest": "openrouter"}, "providers": ["fireworks-ai", "kilo", "openrouter"], "underlying_key": "glm-flash"}'
+  metadata: '{"alias_platforms": {"glm-flash-latest": "fireworks-ai", "~z-ai/glm-flash-latest": "openrouter"}, "providers": ["fireworks-ai", "kilo", "openrouter", "privatemode-ai"], "underlying_key": "glm-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-for-coding
@@ -31055,7 +31074,27 @@
   aliases:
   - umans-glm-5-2
   - umans-glm-5.2
-  metadata: '{"alias_platforms": {"umans-glm-5-2": "umans-ai-coding-plan", "umans-glm-5.2": "umans-ai-coding-plan"}, "providers": ["umans-ai-coding-plan"], "underlying_key": "umans-glm-5-2"}'
+  metadata: '{"alias_platforms": {"umans-glm-5-2": "umans-ai-coding-plan", "umans-glm-5.2": "umans-ai-coding-plan"}, "providers": ["umans-ai-coding-plan"], "underlying_key": "umans-glm-5-2", "upstream_status":
+    "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: zai/umans-glm-5-3-flash
+  display_name: umans-glm-5-3-flash
+  org_id: zai
+  family: umans-glm-5-3-flash
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-08-26'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - umans-glm-5-3-flash
+  - umans-glm-5.3-flash
+  metadata: '{"alias_platforms": {"umans-glm-5-3-flash": "umans-ai-coding-plan", "umans-glm-5.3-flash": "umans-ai-coding-plan"}, "providers": ["umans-ai-coding-plan"], "underlying_key": "umans-glm-5-3-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/z-ai-glm-5-3
