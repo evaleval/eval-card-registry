@@ -6238,3 +6238,10 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: prism-ml
+  display_name: prism-ml
+  hf_org: prism-ml
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
