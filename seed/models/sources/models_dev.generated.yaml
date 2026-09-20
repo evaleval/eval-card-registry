@@ -9711,8 +9711,8 @@
   - deepseek-v4-pro-0813
   - deepseek-v4-pro-0813@eu
   metadata: '{"alias_platforms": {"deepseek-v4-pro-0813": "nano-gpt", "deepseek-v4-pro-0813@eu": "requesty"}, "openrouter_adopted": true, "providers": ["aihubmix", "baseten", "cloudflare-workers-ai", "cortecs",
-    "crof", "deepinfra", "digitalocean", "fireworks-ai", "huggingface", "kilo", "merge-gateway", "nano-gpt", "nvidia", "openrouter", "orcarouter", "requesty", "togetherai", "venice", "vercel", "vivgrid",
-    "wandb"], "underlying_key": "deepseek-v4-pro-0813"}'
+    "crof", "deepinfra", "digitalocean", "fireworks-ai", "huggingface", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "requesty", "togetherai", "venice", "vercel",
+    "vivgrid", "wandb"], "underlying_key": "deepseek-v4-pro-0813"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-v4-pro-6bit
@@ -11066,6 +11066,24 @@
   aliases: []
   metadata: '{"knowledge_cutoffs": ["2025-01"], "release_dates": ["2026-04-21"], "snapshots": ["deep-research-preview-04-2026"]}'
   review_status: reviewed
+- id: google/diffusiongemma
+  display_name: DiffusionGemma
+  org_id: google
+  family: diffusiongemma
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-19'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - diffusiongemma
+  metadata: '{"alias_platforms": {"diffusiongemma": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "diffusiongemma"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: google/gemini-2-0-flash-001
   display_name: gemini-2-0-flash-001
   org_id: google
@@ -19723,6 +19741,23 @@
   - voxtral-small-latest
   metadata: '{"alias_platforms": {"voxtral-small-latest": "mistral"}}'
   review_status: reviewed
+- id: mixedbread/toast-1
+  display_name: Toast 1
+  org_id: mixedbread
+  family: toast-1
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-08-13'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - toast-1
+  metadata: '{"alias_platforms": {"toast-1": "vercel"}, "providers": ["vercel"], "underlying_key": "toast-1"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: mlabonne/NeuralDaredevil-8B-abliterated
   aliases:
   - Neural Daredevil 8B abliterated
@@ -25591,6 +25626,40 @@
   metadata: '{"alias_platforms": {"arrow-1-1": "vercel"}, "providers": ["vercel"], "underlying_key": "arrow-1-1"}'
   review_status: draft
   resolution_source: models_dev
+- id: quiverai/arrow-2
+  display_name: Arrow 2
+  org_id: quiverai
+  family: arrow-2
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-16'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - arrow-2
+  metadata: '{"alias_platforms": {"arrow-2": "vercel"}, "providers": ["vercel"], "underlying_key": "arrow-2"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: quiverai/arrow-2-telos
+  display_name: Arrow 2 Telos
+  org_id: quiverai
+  family: arrow-2-telos
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-16'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - arrow-2-telos
+  metadata: '{"alias_platforms": {"arrow-2-telos": "vercel"}, "providers": ["vercel"], "underlying_key": "arrow-2-telos"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: qwen/qwen-plus
   display_name: Qwen Plus
   org_id: alibaba
@@ -26914,7 +26983,7 @@
   output_modalities: null
   tags: []
   aliases: []
-  metadata: '{"providers": ["vercel"], "underlying_key": "grok-imagine-image-2-0"}'
+  metadata: '{"providers": ["vercel", "zenmux"], "underlying_key": "grok-imagine-image-2-0"}'
   review_status: draft
   resolution_source: models_dev
 - id: spacexai/grok-imagine-video
@@ -27290,6 +27359,23 @@
   metadata: '{"alias_platforms": {"step-3-7-flash": "ambient", "step-3.7-flash": "stepfun-ai", "stepfun/step-3-7-flash": "ambient"}, "knowledge_cutoffs": ["2026-03-01"], "openrouter_adopted": true, "release_dates":
     ["2026-05-29"], "snapshots": ["step-3.7-flash"]}'
   review_status: reviewed
+- id: stepfun/step-5-preview
+  display_name: Step 5 Preview
+  org_id: stepfun
+  family: step-5-preview
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-20'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - step-5-preview
+  metadata: '{"alias_platforms": {"step-5-preview": "nano-gpt"}, "providers": ["nano-gpt", "vercel"], "underlying_key": "step-5-preview"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: stepfun/step-tts-2
   display_name: Step TTS 2
   org_id: stepfun
@@ -27961,7 +28047,23 @@
   tags: []
   aliases:
   - jev
-  metadata: '{"alias_platforms": {"jev": "vivgrid"}, "providers": ["cloudflare-ai-gateway", "opencode", "vercel", "vivgrid"], "underlying_key": "jev"}'
+  metadata: '{"alias_platforms": {"jev": "vivgrid"}, "providers": ["cloudflare-ai-gateway", "opencode", "vercel", "vivgrid"], "underlying_key": "jev", "upstream_status": "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: typesafe/jev
+  display_name: typesafe/jev
+  org_id: typesafe
+  family: jev
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-15'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases: []
+  metadata: '{"providers": ["cloudflare-ai-gateway", "nano-gpt", "opencode", "vercel", "vivgrid"], "underlying_key": "jev"}'
   review_status: draft
   resolution_source: models_dev
 - id: umans-coder
@@ -28844,7 +28946,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: xai/grok-4
-  display_name: Grok 4
+  display_name: grok-4-fast-reasoning
   org_id: xai
   family: grok-4
   architecture: null
@@ -28858,7 +28960,7 @@
   aliases:
   - Grok 4
   - grok-4
-  metadata: '{"alias_platforms": {"grok-4": "qiniu-ai"}, "providers": ["302ai", "fastrouter", "helicone", "jiekou", "llmgateway", "poe", "qiniu-ai", "zenmux"], "underlying_key": "grok-4"}'
+  metadata: '{"alias_platforms": {"grok-4": "qiniu-ai"}, "providers": ["302ai", "fastrouter", "helicone", "jiekou", "llmgateway", "poe", "qiniu-ai"], "underlying_key": "grok-4"}'
   review_status: draft
   resolution_source: models_dev
 - id: xai/grok-4-0709
@@ -28896,8 +28998,8 @@
   - grok-4-1
   - grok-4-1-fast-reasoning
   - grok-4.1
-  metadata: '{"alias_platforms": {"grok-4-1": "qiniu-ai", "grok-4.1": "302ai"}, "providers": ["302ai", "azure", "frogbot", "google-vertex", "helicone", "jiekou", "llmgateway", "poe", "qiniu-ai", "vercel",
-    "zenmux"], "underlying_key": "grok-4-1"}'
+  metadata: '{"alias_platforms": {"grok-4-1": "qiniu-ai", "grok-4.1": "302ai"}, "providers": ["302ai", "azure", "frogbot", "google-vertex", "helicone", "jiekou", "llmgateway", "poe", "qiniu-ai", "vercel"],
+    "underlying_key": "grok-4-1"}'
   review_status: draft
   resolution_source: models_dev
 - id: xai/grok-4-1-fast-non
@@ -28914,7 +29016,7 @@
   tags: []
   aliases:
   - Grok 4.1 Fast (Non-Reasoning)
-  metadata: '{"providers": ["abacus", "azure", "frogbot", "google-vertex", "helicone", "jiekou", "llmgateway", "perplexity-agent", "poe", "qiniu-ai", "vercel", "zenmux"], "underlying_key": "grok-4-1-fast-non"}'
+  metadata: '{"providers": ["abacus", "azure", "frogbot", "google-vertex", "helicone", "jiekou", "llmgateway", "perplexity-agent", "poe", "qiniu-ai", "vercel"], "underlying_key": "grok-4-1-fast-non"}'
   review_status: draft
   resolution_source: models_dev
 - id: xai/grok-4-2
@@ -28925,7 +29027,7 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2026-03-20'
+  release_date: '2026-03-09'
   input_modalities: null
   output_modalities: null
   tags: []
@@ -28960,7 +29062,7 @@
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2026-03-20'
+  release_date: '2026-03-09'
   input_modalities: null
   output_modalities: null
   tags: []
@@ -29164,7 +29266,7 @@
   tags: []
   aliases:
   - grok-code-fast-1
-  metadata: '{"alias_platforms": {"grok-code-fast-1": "qiniu-ai"}, "providers": ["abacus", "frogbot", "helicone", "jiekou", "poe", "qiniu-ai", "zenmux"], "underlying_key": "grok-code-fast-1"}'
+  metadata: '{"alias_platforms": {"grok-code-fast-1": "qiniu-ai"}, "providers": ["abacus", "frogbot", "helicone", "jiekou", "poe", "qiniu-ai"], "underlying_key": "grok-code-fast-1"}'
   review_status: draft
   resolution_source: models_dev
 - id: xai/grok-imagine-image
@@ -29357,6 +29459,23 @@
   metadata: '{"alias_platforms": {"grok-tts": "vercel"}, "providers": ["vercel"], "underlying_key": "grok-tts", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
+- id: xai/grok-voice-stt-1-0
+  display_name: Grok Voice STT 1.0
+  org_id: xai
+  family: grok-voice-stt-1-0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-08-04'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - grok-voice-stt-1-0
+  metadata: '{"alias_platforms": {"grok-voice-stt-1-0": "zenmux"}, "providers": ["zenmux"], "underlying_key": "grok-voice-stt-1-0"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: xai/grok-voice-think-fast-1-0
   display_name: Grok Voice Think Fast 1.0
   org_id: xai
@@ -29389,6 +29508,23 @@
   aliases:
   - grok-voice-think-fast-2-0
   metadata: '{"alias_platforms": {"grok-voice-think-fast-2-0": "vercel"}, "providers": ["vercel"], "underlying_key": "grok-voice-think-fast-2-0", "upstream_status": "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: xai/grok-voice-tts-1-0
+  display_name: Grok Voice TTS 1.0
+  org_id: xai
+  family: grok-voice-tts-1-0
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-07-31'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - grok-voice-tts-1-0
+  metadata: '{"alias_platforms": {"grok-voice-tts-1-0": "zenmux"}, "providers": ["zenmux"], "underlying_key": "grok-voice-tts-1-0"}'
   review_status: draft
   resolution_source: models_dev
 - id: xai/xai.grok-4-3
@@ -31109,6 +31245,24 @@
   aliases:
   - glm-for-coding
   metadata: '{"alias_platforms": {"glm-for-coding": "302ai"}, "providers": ["302ai"], "underlying_key": "glm-for-coding", "upstream_status": "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: zai/glm-image
+  display_name: GLM-Image
+  org_id: zai
+  family: glm-image
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-01-19'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-image
+  metadata: '{"alias_platforms": {"glm-image": "zenmux"}, "providers": ["zenmux"], "underlying_key": "glm-image"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-latest

@@ -4150,6 +4150,13 @@
     output_modalities:
     - image
     - text
+- id: google/diffusiongemma
+  aliases:
+  - diffusiongemma
+  metadata: '{"alias_platforms": {"diffusiongemma": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-19'
+    open_weights: true
 - id: google/gemini-2.0-flash
   aliases:
   - gemini-2-0-flash
@@ -7401,6 +7408,13 @@
     - text
     output_modalities:
     - text
+- id: mixedbread/toast-1
+  aliases:
+  - toast-1
+  metadata: '{"alias_platforms": {"toast-1": "vercel"}}'
+  weak:
+    release_date: '2026-08-13'
+    open_weights: false
 - id: mlabonne/NeuralDaredevil-8B-abliterated
   aliases:
   - Neural Daredevil 8B abliterated
@@ -9887,6 +9901,20 @@
   weak:
     release_date: '2026-04-16'
     open_weights: false
+- id: quiverai/arrow-2
+  aliases:
+  - arrow-2
+  metadata: '{"alias_platforms": {"arrow-2": "vercel"}}'
+  weak:
+    release_date: '2026-09-16'
+    open_weights: false
+- id: quiverai/arrow-2-telos
+  aliases:
+  - arrow-2-telos
+  metadata: '{"alias_platforms": {"arrow-2-telos": "vercel"}}'
+  weak:
+    release_date: '2026-09-16'
+    open_weights: false
 - id: qwen/qwen-plus
   aliases:
   - alibaba/qwen-plus
@@ -10570,6 +10598,13 @@
     - video
     output_modalities:
     - text
+- id: stepfun/step-5-preview
+  aliases:
+  - step-5-preview
+  metadata: '{"alias_platforms": {"step-5-preview": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-20'
+    open_weights: false
 - id: stepfun/step-tts-2
   aliases:
   - step-tts-2
@@ -10780,10 +10815,7 @@
   weak:
     release_date: '2024-08-15'
     open_weights: false
-- id: typesafe-ai/jev
-  aliases:
-  - jev
-  metadata: '{"alias_platforms": {"jev": "vivgrid"}}'
+- id: typesafe/jev
   weak:
     release_date: '2026-09-15'
     open_weights: false
@@ -11177,7 +11209,7 @@
   - grok-4-2
   metadata: '{"alias_platforms": {"grok-4-2": "zenmux"}}'
   weak:
-    release_date: '2026-03-20'
+    release_date: '2026-03-09'
     open_weights: false
 - id: xai/grok-4-2-beta
   aliases:
@@ -11189,7 +11221,7 @@
     open_weights: false
 - id: xai/grok-4-2-fast-non
   weak:
-    release_date: '2026-03-20'
+    release_date: '2026-03-09'
     open_weights: false
 - id: xai/grok-4-20-beta-0309
   weak:
@@ -11244,6 +11276,20 @@
   metadata: '{"alias_platforms": {"grok-latest": "nano-gpt", "~x-ai/grok-latest": "openrouter"}}'
   weak:
     release_date: '2026-05-03'
+    open_weights: false
+- id: xai/grok-voice-stt-1-0
+  aliases:
+  - grok-voice-stt-1-0
+  metadata: '{"alias_platforms": {"grok-voice-stt-1-0": "zenmux"}}'
+  weak:
+    release_date: '2026-08-04'
+    open_weights: false
+- id: xai/grok-voice-tts-1-0
+  aliases:
+  - grok-voice-tts-1-0
+  metadata: '{"alias_platforms": {"grok-voice-tts-1-0": "zenmux"}}'
+  weak:
+    release_date: '2026-07-31'
     open_weights: false
 - id: xai/xai.grok-4-3
   aliases:
@@ -11909,6 +11955,13 @@
   weak:
     release_date: '2026-08-26'
     open_weights: true
+- id: zai/glm-image
+  aliases:
+  - glm-image
+  metadata: '{"alias_platforms": {"glm-image": "zenmux"}}'
+  weak:
+    release_date: '2026-01-19'
+    open_weights: true
 - id: zai/glm-latest
   aliases:
   - glm-latest
@@ -11982,6 +12035,13 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: typesafe-ai/jev
+  aliases:
+  - jev
+  metadata: '{"alias_platforms": {"jev": "vivgrid"}}'
+  weak:
+    release_date: '2026-09-15'
+    open_weights: false
 - id: openai/gpt-5-6-sol-discounted
   aliases:
   - gpt-5-6-sol-discounted

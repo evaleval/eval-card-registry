@@ -6245,3 +6245,17 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: mixedbread
+  display_name: mixedbread
+  hf_org: mixedbread
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
+- id: typesafe
+  display_name: typesafe
+  hf_org: typesafe
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
