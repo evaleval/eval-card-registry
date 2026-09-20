@@ -7,6 +7,8 @@ _with_backoff adds a longer outer retry that distinguishes transient errors
 """
 from __future__ import annotations
 
+import sys
+
 import httpx
 import pytest
 from huggingface_hub.errors import HfHubHTTPError
@@ -95,3 +97,45 @@ def test_production_freshness_guard_rejects_stale_or_unverifiable(
     monkeypatch.setattr(mod, "_origin_main_sha", lambda: None)
     with pytest.raises(RuntimeError, match="cannot verify"):
         mod._assert_checkout_is_current_main()
+
+
+def test_expected_head_guard_accepts_matching_checkout(mod, monkeypatch):
+    monkeypatch.setattr(mod, "_git_sha", lambda: "a" * 40)
+
+    mod._assert_checkout_is_expected("a" * 40)
+
+
+def test_expected_head_guard_rejects_mismatch_or_unknown_head(mod, monkeypatch):
+    monkeypatch.setattr(mod, "_git_sha", lambda: "b" * 40)
+    with pytest.raises(RuntimeError, match="is not the expected head"):
+        mod._assert_checkout_is_expected("a" * 40)
+
+    monkeypatch.setattr(mod, "_git_sha", lambda: None)
+    with pytest.raises(RuntimeError, match="cannot read checkout HEAD"):
+        mod._assert_checkout_is_expected("a" * 40)
+
+
+def _main_with_argv(mod, monkeypatch, *argv: str) -> int:
+    monkeypatch.setattr(sys, "argv", ["publish_registry_data.py", *argv])
+    return mod.main()
+
+
+def test_cli_rejects_malformed_expected_head(mod, monkeypatch):
+    with pytest.raises(SystemExit) as exc:
+        _main_with_argv(
+            mod,
+            monkeypatch,
+            "--skip-seed",
+            "--require-origin-main-head",
+            "--expected-head",
+            "not-a-sha",
+        )
+    assert exc.value.code == 2
+
+
+def test_cli_rejects_expected_head_without_production_guard(mod, monkeypatch):
+    with pytest.raises(SystemExit) as exc:
+        _main_with_argv(
+            mod, monkeypatch, "--skip-seed", "--expected-head", "a" * 40
+        )
+    assert exc.value.code == 2
