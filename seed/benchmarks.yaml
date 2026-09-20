@@ -27888,3 +27888,33 @@
   tags: '["domain-specific", "multilingual"]'
   metadata: '{"paper": "https://arxiv.org/abs/2607.25953", "code_repo": "https://github.com/cordademocracy/Polistemics"}'
   review_status: draft
+
+# --- UK AISI inference-scaling cyber benchmarks (arXiv 2606.17930) ---
+# Privately held task sets: AISI shared headline aggregates only, so there is
+# no public dataset_repo and no transcripts in the datastore.
+
+- id: cyber-ctfs
+  preferred_metric: accuracy
+  display_name: Cyber CTFs
+  description: Capture-the-flag cybersecurity task suite used in the UK AISI inference-scaling study. Privately held; not publicly distributed.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["cybersecurity", "agentic"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - aisi-cyber-ctfs
+    - "Cyber CTFs"
+
+- id: the-last-ones
+  preferred_metric: aisi-mean-progress-score
+  display_name: The Last Ones
+  description: Single long-horizon cyber-range scenario (simulated corporate network attack, 32 attack-chain steps in 9 scored milestones) used in the UK AISI inference-scaling study. Privately held; not publicly distributed.
+  dataset_repo: null
+  parent_benchmark_id: null
+  tags: '["cybersecurity", "agentic"]'
+  metadata: '{}'
+  review_status: reviewed
+  aliases:
+    - aisi-the-last-ones
+    - "The Last Ones"

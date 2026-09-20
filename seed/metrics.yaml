@@ -4769,3 +4769,13 @@
   max_score: 1.0
   metadata: '{"family": "pass_rate", "definition": "Share of passed binary rubric sub-questions per response; each sub-question verdict is a strict majority vote of a three-model judge panel.", "paper": "https://arxiv.org/abs/2607.25953"}'
   review_status: draft
+
+- id: aisi-mean-progress-score
+  display_name: Mean Progress Score
+  aliases: ["Mean Progress Score", "aisi_inference_scaling.mean_progress_score"]
+  score_type: continuous
+  lower_is_better: false
+  min_score: 0.0
+  max_score: 1.0
+  metadata: '{}'
+  review_status: reviewed

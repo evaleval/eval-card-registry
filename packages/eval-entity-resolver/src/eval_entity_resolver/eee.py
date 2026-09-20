@@ -101,6 +101,10 @@ _METRIC_KEYWORDS: list[tuple[str, str]] = [
     (r"discrete[\s_-]*win[\s_-]*rate",   "Discrete Win Rate"),
     (r"win[\s_-]*rate",                  "Win Rate"),
     (r"mean[\s_-]*response[\s_-]*time",  "Mean Response Time"),
+    # "Mean Progress Score" is a distinct measurement (fraction of a
+    # scenario's steps completed), not a mean of scores — it must be caught
+    # before the generic `score` pattern swallows it.
+    (r"mean[\s_-]*progress[\s_-]*score", "Mean Progress Score"),
     (r"mean[\s_-]*score",                "Mean Score"),
     # HELM's near-miss exact-match variants are separately computed stats.
     (r"prefix[\s_-]*quasi[\s_-]*exact[\s_-]*match", "Prefix Quasi-Exact Match"),
