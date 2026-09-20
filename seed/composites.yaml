@@ -188,6 +188,8 @@ aisi-inference-scaling:
     - {config: terminalbench, org: uk-aisi}
     - {config: swebenchpro,   org: uk-aisi}
     - {config: frontiermath,  org: uk-aisi}
+    - {config: aisi-cyber-ctfs,    org: uk-aisi}
+    - {config: aisi-the-last-ones, org: uk-aisi}
 
 scale-seal-hle:
   display: Scale SEAL HLE Leaderboard
