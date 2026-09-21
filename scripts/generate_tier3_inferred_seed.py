@@ -51,6 +51,7 @@ import json
 import re
 import sys
 from collections import Counter
+from datetime import date
 from pathlib import Path
 from typing import Optional
 
@@ -88,6 +89,22 @@ BASE_FAMILY_TOKENS = [
     "gemini", "falcon", "bloom", "deepseek", "baichuan", "cohere", "command",
     "neural", "solar", "nous", "zephyr", "orca", "dolphin",
 ]
+
+# OpenAI o-series base tokens. Deliberately NOT in `BASE_FAMILY_TOKENS`: the
+# o-series pass (`o_series_edge`) runs ONLY where the family-token pass found
+# no edge at all, so every id that already earns one keeps exactly the edge it
+# has today. A `gpt-o3-…` spelling still goes through the `gpt` stem.
+O_SERIES_TOKENS = {"o1", "o3", "o4"}
+
+# Runtime effort / call-style tokens. These select how a release is SERVED, not
+# what was trained, so they earn an `axis: mode` edge rather than a `finetune`.
+# Only honoured when they FOLLOW a validated date (see
+# `split_date_mode_suffix`): on their own, `medium` and friends are product
+# tiers in other families (Mistral Medium), not modes.
+EFFORT_MODE_TOKENS = {
+    "high", "low", "medium", "minimal", "xhigh", "none",
+    "fc", "prompt", "thinking", "reasoning",
+}
 
 # Placeholder org prefixes. These are NOT real namespaces — the upstream
 # harness/leaderboard wrote them when it didn't know the developer (e.g.
@@ -399,6 +416,201 @@ def _is_pure_version_suffix(tokens: list[str]) -> bool:
     return False
 
 
+def _valid_ymd(y: int, m: int, d: int) -> bool:
+    try:
+        date(y, m, d)
+    except ValueError:
+        return False
+    return True
+
+
+def is_validated_date_suffix(tokens: list[str]) -> bool:
+    """Like `_is_pure_version_suffix`, but the calendar form must be a REAL
+    date: `2025-99-99`, `20250230` and `999999` are date-SHAPED and are
+    rejected. Grouping two models under a tail that only looks like a date
+    would assert they are the same release.
+
+    Kept separate from `_is_pure_version_suffix` on purpose: that helper gates
+    the long-standing family-token path, whose output must not move here.
+    Used by the o-series path and by `split_date_mode_suffix`."""
+    if not tokens:
+        return False
+    # vN(-N)* version strings (slugified v0.3 -> v0-3).
+    if re.fullmatch(r"v\d+(?:-\d+)*", "-".join(tokens)):
+        return True
+    if not all(t.isdigit() for t in tokens):
+        return False
+    if len(tokens) == 3:
+        y, m, d = tokens
+        return len(y) == 4 and len(m) == 2 and len(d) == 2 and _valid_ymd(int(y), int(m), int(d))
+    if len(tokens) == 2:
+        y, m = tokens
+        return len(y) == 4 and len(m) == 2 and _valid_ymd(int(y), int(m), 1)
+    if len(tokens) != 1:
+        return False
+    t = tokens[0]
+    if len(t) == 8:
+        return _valid_ymd(int(t[:4]), int(t[4:6]), int(t[6:]))
+    if len(t) == 6:
+        # Six digits are either YYYYMM (`202608`) or YYMMDD (`250416`). Only a
+        # leading `19`/`20` reads as a four-digit year.
+        if t[:2] in ("19", "20") and _valid_ymd(int(t[:4]), int(t[4:]), 1):
+            return True
+        return _valid_ymd(2000 + int(t[:2]), int(t[2:4]), int(t[4:]))
+    if len(t) == 4:
+        # Established 4-digit vendor tags: YYMM (`2411` = Nov 2024, Mistral) or
+        # MMDD (`0613`, `1106`). Still ambiguous in principle, but range-checked
+        # so a param count or opaque version (`4096`) is not read as a date.
+        a, b = int(t[:2]), int(t[2:])
+        if 20 <= a <= 29 and 1 <= b <= 12:
+            return True
+        return _valid_ymd(2000, a, b)   # MMDD; 2000 is a leap year
+    return False
+
+
+def split_date_mode_suffix(tokens: list[str]) -> Optional[tuple[list[str], list[str]]]:
+    """Split a delta suffix into (date tokens, mode tokens) when it is a
+    validated release date FOLLOWED by effort/mode tokens — `2025-04-16-high`
+    -> `(['2025','04','16'], ['high'])`. Such an id is the dated snapshot served
+    at one effort, so it belongs on the dated sibling under `axis: mode`.
+
+    Returns None for anything else, including a bare effort token with no date
+    in front of it: outside a dated release line those tokens are ambiguous
+    (product tier, routing pointer, or different weights) and the id stays
+    parentless for curation."""
+    for cut in range(len(tokens) - 1, 0, -1):
+        rest = tokens[cut:]
+        if all(t in EFFORT_MODE_TOKENS for t in rest) and is_validated_date_suffix(tokens[:cut]):
+            return tokens[:cut], rest
+    return None
+
+
+def strip_mode_suffix(cid: str, mode_tokens: list[str]) -> Optional[str]:
+    """`cid` with `mode_tokens` removed from its right-hand side, keeping the
+    id's own separators and casing (`openai/o3-2025-04-16-high` ->
+    `openai/o3-2025-04-16`). None when the tokens are not the literal tail."""
+    out = cid
+    for tok in reversed(mode_tokens):
+        m = re.search(r"[-_. ]" + re.escape(tok) + r"$", out, flags=re.IGNORECASE)
+        if m is None:
+            return None
+        out = out[: m.start()]
+    return out or None
+
+
+def same_dev_org(a: str, b: str, hf_to_dev: dict[str, str]) -> bool:
+    """True iff two org-qualified ids belong to the same developer, with the
+    curated org fold applied (`kimi/…` and `moonshotai/…` agree). A sentinel
+    prefix is a placeholder, not a namespace, so it never agrees with anything:
+    openness inheritance walks `variant` edges without an org check, so an
+    unverified `unknown/…` row must not acquire a real lab's verdict."""
+    if "/" not in a or "/" not in b:
+        return False
+    oa, ob = a.split("/", 1)[0].lower(), b.split("/", 1)[0].lower()
+    if oa in SENTINEL_ORGS or ob in SENTINEL_ORGS:
+        return False
+    return hf_to_dev.get(oa, oa).lower() == hf_to_dev.get(ob, ob).lower()
+
+
+def o_series_edge(
+    raw: str,
+    hf_to_dev: dict[str, str],
+    confirm,
+) -> tuple[Optional[dict], Optional[str], Optional[str]]:
+    """Parent inference for a residual whose model NAME leads with an OpenAI
+    o-series token. Returns `(parent_edge, dated_sibling, confirmed_base)`.
+
+    Runs only where the family-token pass produced nothing, so it cannot move
+    an existing classification. It emits exactly two shapes and nothing else:
+
+      - a validated date/version tail -> `variant/version` on the base;
+      - a validated date followed by effort/mode tokens -> a deferred
+        `variant/mode` on the dated sibling (see `resolve_mode_edges`), which
+        keeps both axes where a direct edge to the base would drop one.
+
+    Everything else stays PARENTLESS for curation. There is no `finetune`
+    fallback here: a named month (`o3-high-april-2025`) or a bare effort token
+    evidences neither a date nor retraining, and an o-series model has no
+    published weights to derive from in the first place.
+
+    Candidate bases are built org-qualified and the confirmed hit is org-checked
+    again, so a name-only match can never link two labs' release lines."""
+    from eval_entity_resolver.normalization import normalize as _rnz
+
+    if "/" not in raw:
+        return None, None, None
+    org_slug, name = raw.split("/", 1)
+    if not org_slug.strip() or not name.strip():
+        return None, None, None
+    if org_slug.strip().lower() in SENTINEL_ORGS:
+        return None, None, None
+    toks = _tokens(name)
+    # LEADING position only: a mid-name `o1` is the uploader's own label
+    # (`cursor-o1-7b` is a Qwen finetune), not a derivation of OpenAI o1.
+    if not toks or toks[0] not in O_SERIES_TOKENS:
+        return None, None, None
+
+    dev = hf_to_dev.get(org_slug.lower(), org_slug)
+    raw_nz, name_nz = _rnz(raw), _rnz(name)
+    for end in range(len(toks) - 1, 0, -1):
+        stem = "-".join(toks[:end])
+        for cand in dict.fromkeys((f"{dev}/{stem}", f"{org_slug}/{stem}")):
+            if _rnz(cand) == raw_nz:
+                continue
+            hit = confirm(cand)
+            if not hit or not same_dev_org(raw, hit, hf_to_dev):
+                continue
+            hit_name = hit.split("/", 1)[1] if "/" in hit else hit
+            if _rnz(hit) == raw_nz or _rnz(hit_name) == name_nz:
+                continue   # self-edge, not a base
+            suffix = toks[end:]
+            if is_validated_date_suffix(suffix):
+                return (
+                    {"id": hit, "relationship": "variant", "axis": "version"},
+                    None,
+                    hit,
+                )
+            split = split_date_mode_suffix(suffix)
+            if split is None:
+                return None, None, hit
+            return None, strip_mode_suffix(raw, split[1]), hit
+    return None, None, None
+
+
+def resolve_mode_edges(pending, minted_by_id: dict[str, dict], confirm) -> None:
+    """Attach the deferred `variant/mode` edges. Deferred because the dated
+    sibling is usually minted from its own residual raw in the SAME run and the
+    residual is not ordered, so the sibling's final id is only known once the
+    mint loop has finished. A sibling that neither this run nor the registry
+    provides leaves the child parentless rather than dangling.
+
+    A child and its dated sibling often disagree on separators
+    (`gpt-5-4-2026-03-05-high` vs `gpt-5.4-2026-03-05`), so a normalized match
+    is accepted too, but only when it is UNIQUE: two same-run mints sharing a
+    normalized form would otherwise pick whichever was minted first."""
+    from eval_entity_resolver.normalization import normalize as _rnz
+
+    by_norm: dict[str, set[str]] = {}
+    for entry in minted_by_id.values():
+        by_norm.setdefault(_rnz(entry["id"]), set()).add(entry["id"])
+    for entry, dated in pending:
+        exact = minted_by_id.get(dated.lower())
+        if exact is not None:
+            target = exact["id"]
+        else:
+            same_norm = by_norm.get(_rnz(dated)) or set()
+            if len(same_norm) > 1:
+                continue   # ambiguous; leave for collision folding / curation
+            target = next(iter(same_norm)) if same_norm else confirm(dated)
+        if not target or target == entry["id"] or entry.get("parents"):
+            continue
+        entry["parents"] = [{
+            "id": target,
+            "relationship": "variant",
+            "axis": "mode",
+        }]
+
+
 def _prior_committed_records() -> list[dict]:
     """The previously-committed tier3 output (full entries AND enrich records),
     read before this run overwrites the file. Input to the carry-forward floor:
@@ -613,6 +825,9 @@ def main() -> None:
     # `unknown/OpenHands`) fall through to the residual and mint org-less.
     minted: list[dict] = []
     minted_by_id: dict[str, dict] = {}
+    # (entry, dated sibling id) for `{date}-{mode}` children, settled once the
+    # mint loop has finished (see `resolve_mode_edges`).
+    pending_mode_edges: list[tuple[dict, str]] = []
     review: list[dict] = []
     buckets = Counter()
 
@@ -713,6 +928,7 @@ def main() -> None:
         # We only attempt confirmation when a base token is present.
         parent_edge: Optional[dict] = None
         confirmed_base: Optional[str] = None
+        dated_sibling: Optional[str] = None
         if base_tok:
             # Build a small set of conservative candidate base ids from the
             # name: progressively drop trailing derivation tokens to land on a
@@ -775,6 +991,14 @@ def main() -> None:
                     }
                 else:
                     parent_edge = {"id": confirmed_base, "relationship": "finetune"}
+
+        # o-series fallback, for names the family-token pass cannot reach
+        # (`o3-2025-04-16` has no token in BASE_FAMILY_TOKENS). Gated on the
+        # pass above finding NOTHING, so no existing classification moves.
+        if parent_edge is None and confirmed_base is None:
+            parent_edge, dated_sibling, confirmed_base = o_series_edge(
+                raw, hf_to_dev, _confirm_base
+            )
 
         # --- mint id + org -------------------------------------------------
         if has_org:
@@ -904,6 +1128,8 @@ def main() -> None:
         minted_by_id[cid.lower()] = entry   # case-insensitive dedup key
         minted_by_devkey.setdefault(_dev_key(cid), entry)
         buckets[bucket] += 1
+        if dated_sibling is not None:
+            pending_mode_edges.append((entry, dated_sibling))
 
         if org_id is None:
             proposed = (
@@ -921,6 +1147,8 @@ def main() -> None:
                 ),
                 "status": "unreviewed",
             })
+
+    resolve_mode_edges(pending_mode_edges, minted_by_id, _confirm_base)
 
     # --- carry-forward floor ("nothing is removed") --------------------------
     # A regen DROPS a previously-committed draft whenever its raw now resolves

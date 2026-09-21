@@ -1909,3 +1909,100 @@ def test_no_slash_in_benchmark_ids(benchmarks_df):
     collide with per-source composite/benchmark ids."""
     bad = [b for b in benchmarks_df["id"] if "/" in str(b)]
     assert bad == [], f"benchmark ids containing '/': {bad[:8]}"
+
+
+# ---------------------------------------------------------------------------
+# Dated snapshots inherit their base's openness
+# ---------------------------------------------------------------------------
+# A dated API snapshot (`openai/o3-2025-04-16`) is the same model identity as
+# its moving pointer (`openai/o3`) along the version line, and a reasoning
+# effort row is that dated snapshot served differently. Without the typed edges
+# they are parentless leaves with a null verdict, and the site renders an
+# API-only model as openness "Unknown". Each chain must therefore be present,
+# fold into the base's group and family, and carry the base's explicit
+# `open_weights` down, while every dated id stays its OWN canonical leaf so a
+# result reported against a snapshot is not silently collapsed onto the pointer.
+O3_CHAINS = [
+    # (id, parent id, axis, expected group/family base)
+    ("openai/o3-2025-04-16", "openai/o3", "version", "openai/o3"),
+    ("openai/o3-2025-04-16-fc", "openai/o3-2025-04-16", "mode", "openai/o3"),
+    ("openai/o3-2025-04-16-high", "openai/o3-2025-04-16", "mode", "openai/o3"),
+    ("openai/o3-2025-04-16-low", "openai/o3-2025-04-16", "mode", "openai/o3"),
+    ("openai/o3-2025-04-16-medium", "openai/o3-2025-04-16", "mode", "openai/o3"),
+    ("openai/o3-2025-04-16-prompt", "openai/o3-2025-04-16", "mode", "openai/o3"),
+    ("openai/o3-mini-2025-01-31", "openai/o3-mini", "version", "openai/o3-mini"),
+    ("openai/o3-mini-2025-01-31-high", "openai/o3-mini-2025-01-31", "mode", "openai/o3-mini"),
+    ("openai/o3-mini-2025-01-31-low", "openai/o3-mini-2025-01-31", "mode", "openai/o3-mini"),
+    ("openai/o3-mini-2025-01-31-medium", "openai/o3-mini-2025-01-31", "mode", "openai/o3-mini"),
+]
+
+
+@pytest.mark.parametrize("cid,parent,axis,base", O3_CHAINS, ids=[c[0] for c in O3_CHAINS])
+def test_dated_snapshot_chain_inherits_base_openness(models_df, resolver, cid, parent, axis, base):
+    row = models_df[models_df["id"] == cid]
+    assert len(row) == 1, f"{cid} missing from canonical_models"
+    row = row.iloc[0]
+
+    edges = _parse_parents(row["parents"])
+    assert [e.get("id") for e in edges] == [parent], (
+        f"{cid} parents are {row['parents']!r}, expected exactly [{parent}]"
+    )
+    assert edges[0].get("relationship") == "variant", edges[0]
+    assert edges[0].get("axis") == axis, edges[0]
+
+    assert row["model_group_id"] == base, row["model_group_id"]
+    assert row["model_family_id"] == base, row["model_family_id"]
+    assert bool(row["open_weights"]) is False and pd.notna(row["open_weights"]), (
+        f"{cid} open_weights={row['open_weights']!r}, expected inherited False"
+    )
+
+    res = resolver.resolve(cid, "model")
+    assert res.canonical_id == cid, (
+        f"{cid} resolves to {res.canonical_id!r} — the dated leaf must not "
+        f"collapse onto an alias of {base}"
+    )
+
+
+def test_o3_chain_rows_have_a_single_parent(models_df):
+    """The curated enrichment is UNIONed by parent id onto whatever a source
+    emits. A second edge from another layer would give one row two identities:
+    the group walk would follow the version/mode edge while the lineage walk
+    followed the other, so these rows must carry exactly one parent each."""
+    multi = {
+        cid: models_df[models_df["id"] == cid].iloc[0]["parents"]
+        for cid, _p, _a, _b in O3_CHAINS
+        if len(_parse_parents(models_df[models_df["id"] == cid].iloc[0]["parents"])) > 1
+    }
+    assert multi == {}, f"o3 chain row(s) with more than one parent: {multi}"
+
+
+# Legacy rows that already carry `axis: version` on a `finetune` edge. Curated
+# and generated layers field-merge an edge by parent id, so a layer that says
+# `finetune` and one that says `variant` produce this hybrid. The 8 below
+# predate the o3 chains; the count is a ratchet, not an endorsement.
+AXIS_ON_NON_VARIANT_FLOOR = 8
+
+
+def test_axis_only_ever_qualifies_a_variant_edge(models_df):
+    """`axis` is meaningful only on a `variant` edge. A non-variant edge
+    carrying one is the signature of a field-merge between two layers that
+    disagreed on the relationship, which silently changes what the lineage and
+    group walks mean. The o3 chains must be clean outright; the corpus must not
+    grow new instances."""
+    bad: list[tuple[str, dict]] = []
+    for cid, parents in zip(models_df["id"], models_df["parents"]):
+        for edge in _parse_parents(parents):
+            if edge.get("axis") is not None and edge.get("relationship") != "variant":
+                bad.append((str(cid), edge))
+    chain_ids = {cid for cid, _p, _a, _b in O3_CHAINS}
+    in_chain = [b for b in bad if b[0] in chain_ids]
+    assert in_chain == [], (
+        f"o3 chain edge(s) carry an axis on a non-variant relationship "
+        f"(a layer disagreed on the relationship and the merge kept both "
+        f"fields): {in_chain}"
+    )
+    assert len(bad) <= AXIS_ON_NON_VARIANT_FLOOR, (
+        f"{len(bad)} edge(s) carry an axis on a non-variant relationship, up "
+        f"from the known {AXIS_ON_NON_VARIANT_FLOOR}: "
+        f"{[b for b in bad][:10]}"
+    )

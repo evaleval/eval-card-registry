@@ -13292,6 +13292,56 @@
   - id: openai/o1
     relationship: variant
     axis: version
+- id: openai/o3-2025-04-16
+  parents:
+  - id: openai/o3
+    relationship: variant
+    axis: version
+- id: openai/o3-2025-04-16-fc
+  parents:
+  - id: openai/o3-2025-04-16
+    relationship: variant
+    axis: mode
+- id: openai/o3-2025-04-16-high
+  parents:
+  - id: openai/o3-2025-04-16
+    relationship: variant
+    axis: mode
+- id: openai/o3-2025-04-16-low
+  parents:
+  - id: openai/o3-2025-04-16
+    relationship: variant
+    axis: mode
+- id: openai/o3-2025-04-16-medium
+  parents:
+  - id: openai/o3-2025-04-16
+    relationship: variant
+    axis: mode
+- id: openai/o3-2025-04-16-prompt
+  parents:
+  - id: openai/o3-2025-04-16
+    relationship: variant
+    axis: mode
+- id: openai/o3-mini-2025-01-31
+  parents:
+  - id: openai/o3-mini
+    relationship: variant
+    axis: version
+- id: openai/o3-mini-2025-01-31-high
+  parents:
+  - id: openai/o3-mini-2025-01-31
+    relationship: variant
+    axis: mode
+- id: openai/o3-mini-2025-01-31-low
+  parents:
+  - id: openai/o3-mini-2025-01-31
+    relationship: variant
+    axis: mode
+- id: openai/o3-mini-2025-01-31-medium
+  parents:
+  - id: openai/o3-mini-2025-01-31
+    relationship: variant
+    axis: mode
 - id: openai/o3-pro-2025-06-10
   parents:
   - id: openai/o3-pro
