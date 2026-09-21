@@ -2079,6 +2079,25 @@
   metadata: '{"alias_platforms": {"qwen-3-8-27b": "neuralwatt", "qwen-3.8-27b": "neuralwatt"}, "providers": ["cerebras", "neuralwatt", "venice"], "underlying_key": "qwen-3-8-27b"}'
   review_status: draft
   resolution_source: models_dev
+- id: alibaba/qwen-3-8-27b-flex
+  display_name: Qwen3.8 27B Flex
+  org_id: alibaba
+  family: qwen-3-8-27b-flex
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-08-14'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen-3-8-27b-flex
+  - qwen-3.8-27b-flex
+  metadata: '{"alias_platforms": {"qwen-3-8-27b-flex": "neuralwatt", "qwen-3.8-27b-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "qwen-3-8-27b-flex"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: alibaba/qwen-3-8-flash
   display_name: Qwen 3.8 Flash
   org_id: alibaba
@@ -3432,6 +3451,25 @@
     "removed"}'
   review_status: draft
   resolution_source: models_dev
+- id: alibaba/qwen3-6-35b-flex
+  display_name: Qwen3.6 35B Flex
+  org_id: alibaba
+  family: qwen3-6-35b-flex
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-04-17'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-6-35b-flex
+  - qwen3.6-35b-flex
+  metadata: '{"alias_platforms": {"qwen3-6-35b-flex": "neuralwatt", "qwen3.6-35b-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "qwen3-6-35b-flex"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-cybersecurity
   display_name: Qwen 3.8 27B Cybersecurity
   org_id: alibaba
@@ -3466,6 +3504,24 @@
   aliases:
   - qwen3-8-27b-fable
   metadata: '{"alias_platforms": {"qwen3-8-27b-fable": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-fable"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-hemmingway
+  display_name: Qwen 3.8 27B Hemingway
+  org_id: alibaba
+  family: qwen3-8-27b-hemmingway
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-21'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-hemmingway
+  metadata: '{"alias_platforms": {"qwen3-8-27b-hemmingway": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-hemmingway"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-obliterated
@@ -3556,7 +3612,8 @@
   tags: []
   aliases:
   - qwen3-8-omni-flash
-  metadata: '{"alias_platforms": {"qwen3-8-omni-flash": "nano-gpt"}, "providers": ["nano-gpt", "vercel"], "underlying_key": "qwen3-8-omni-flash"}'
+  - qwen3.8-omni-flash
+  metadata: '{"alias_platforms": {"qwen3-8-omni-flash": "nano-gpt", "qwen3.8-omni-flash": "aihubmix"}, "providers": ["aihubmix", "nano-gpt", "vercel"], "underlying_key": "qwen3-8-omni-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-asr-flash
@@ -6314,7 +6371,7 @@
   tags: []
   aliases:
   - ernie-4-5-300b-a47b
-  metadata: '{"alias_platforms": {"ernie-4-5-300b-a47b": "siliconflow-cn"}, "providers": ["siliconflow", "siliconflow-cn"], "underlying_key": "ernie-4-5-300b-a47b"}'
+  metadata: '{"alias_platforms": {"ernie-4-5-300b-a47b": "siliconflow-cn"}, "providers": ["siliconflow", "siliconflow-cn"], "underlying_key": "ernie-4-5-300b-a47b", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: baidu/ernie-4-5-300b-a47b-paddle
@@ -9518,6 +9575,25 @@
   metadata: '{"alias_platforms": {"deepseek-v4-1-flash-beta": "vercel"}, "providers": ["vercel"], "underlying_key": "deepseek-v4-1-flash-beta", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
+- id: deepseek/deepseek-v4-1-flash-flex
+  display_name: DeepSeek V4.1 Flash Flex
+  org_id: deepseek
+  family: deepseek-v4-1-flash-flex
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-10'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - deepseek-v4-1-flash-flex
+  - deepseek-v4.1-flash-flex
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash-flex": "neuralwatt", "deepseek-v4.1-flash-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "deepseek-v4-1-flash-flex"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: deepseek/deepseek-v4-flash
   display_name: DeepSeek V4 Flash
   org_id: deepseek
@@ -9578,10 +9654,10 @@
   - deepseek-v4-flash-0731-fast
   - deepseek-v4-flash-0731@eu
   - deepseek/deepseek-v4-flash-0731:free
-  metadata: '{"alias_platforms": {"deepseek-v4-flash-0731": "ambient", "deepseek-v4-flash-0731-fast": "venice", "deepseek-v4-flash-0731@eu": "requesty", "deepseek/deepseek-v4-flash-0731:free": "openrouter"},
+  metadata: '{"alias_platforms": {"deepseek-v4-flash-0731": "ambient", "deepseek-v4-flash-0731-fast": "aihubmix", "deepseek-v4-flash-0731@eu": "requesty", "deepseek/deepseek-v4-flash-0731:free": "openrouter"},
     "openrouter_adopted": true, "providers": ["aihubmix", "alibaba", "ambient", "baseten", "chutes", "cloudflare-workers-ai", "cortecs", "crof", "deepinfra", "digitalocean", "fireworks-ai", "huggingface",
-    "inceptron", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "perplexity-agent", "requesty", "scaleway", "togetherai", "venice", "vercel", "wandb"], "underlying_key":
-    "deepseek-v4-flash-0731"}'
+    "inceptron", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "perplexity-agent", "requesty", "scaleway", "siliconflow", "togetherai", "venice", "vercel", "wandb"],
+    "underlying_key": "deepseek-v4-flash-0731"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-v4-flash-0731-cheaper
@@ -9636,6 +9712,24 @@
   aliases:
   - deepseek-v4-flash-flex
   metadata: '{"alias_platforms": {"deepseek-v4-flash-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "deepseek-v4-flash-flex"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: deepseek/deepseek-v4-flash-speed
+  display_name: DeepSeek V4 Flash (Speed)
+  org_id: deepseek
+  family: deepseek-v4-flash-speed
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-07-31'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - deepseek-v4-flash-speed
+  metadata: '{"alias_platforms": {"deepseek-v4-flash-speed": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "deepseek-v4-flash-speed"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-v4-flash-vision-exp
@@ -9711,8 +9805,8 @@
   - deepseek-v4-pro-0813
   - deepseek-v4-pro-0813@eu
   metadata: '{"alias_platforms": {"deepseek-v4-pro-0813": "nano-gpt", "deepseek-v4-pro-0813@eu": "requesty"}, "openrouter_adopted": true, "providers": ["aihubmix", "baseten", "cloudflare-workers-ai", "cortecs",
-    "crof", "deepinfra", "digitalocean", "fireworks-ai", "huggingface", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "requesty", "togetherai", "venice", "vercel",
-    "vivgrid", "wandb"], "underlying_key": "deepseek-v4-pro-0813"}'
+    "crof", "deepinfra", "digitalocean", "fireworks-ai", "huggingface", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "requesty", "siliconflow", "togetherai", "venice",
+    "vercel", "vivgrid", "wandb"], "underlying_key": "deepseek-v4-pro-0813"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-v4-pro-6bit
@@ -12048,7 +12142,7 @@
   - gemini-3.5-flash-lite
   - gemini-3.5-flash-lite@eu
   - google/gemini-3-5-flash-lite
-  metadata: '{"alias_platforms": {"gemini-3-5-flash-lite": "nano-gpt", "gemini-3.5-flash-lite": "sap-ai-core", "gemini-3.5-flash-lite@eu": "requesty", "google/gemini-3-5-flash-lite": "nano-gpt"}, "knowledge_cutoffs":
+  metadata: '{"alias_platforms": {"gemini-3-5-flash-lite": "nano-gpt", "gemini-3.5-flash-lite": "aihubmix", "gemini-3.5-flash-lite@eu": "requesty", "google/gemini-3-5-flash-lite": "nano-gpt"}, "knowledge_cutoffs":
     ["2026-03"], "openrouter_adopted": true, "release_dates": ["2026-07-21"], "snapshots": ["gemini-3.5-flash-lite"]}'
   review_status: reviewed
 - id: google/gemini-3.5-live-translate
@@ -12667,14 +12761,14 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2026-08-01'
+  release_date: '2026-06-09'
   input_modalities: null
   output_modalities: null
   tags:
   - open-weight
   aliases:
   - gemma-4-12b-it
-  metadata: '{"alias_platforms": {"gemma-4-12b-it": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "gemma-4-12b-it"}'
+  metadata: '{"alias_platforms": {"gemma-4-12b-it": "nano-gpt"}, "providers": ["nano-gpt", "siliconflow"], "underlying_key": "gemma-4-12b-it"}'
   review_status: draft
   resolution_source: models_dev
 - id: google/gemma-4-12b-it-semancer
@@ -14217,7 +14311,7 @@
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2025-10-07'
+  release_date: '2025-10-02'
   input_modalities: null
   output_modalities: null
   tags:
@@ -14820,7 +14914,7 @@
   aliases:
   - jev-1.13
   - jev-1.13-free
-  metadata: '{"alias_platforms": {"jev-1.13": "opencode", "jev-1.13-free": "opencode"}, "providers": ["opencode"], "underlying_key": "jev-1-13"}'
+  metadata: '{"alias_platforms": {"jev-1.13": "opencode", "jev-1.13-free": "opencode"}, "providers": ["opencode"], "underlying_key": "jev-1-13", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: k2-horizon-7b
@@ -15492,7 +15586,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: meituan/longcat-2.0
-  display_name: LongCat 2.0
+  display_name: LongCat-2.0
   org_id: meituan
   family: longcat-2-0
   architecture: null
@@ -15505,13 +15599,14 @@
   tags:
   - open-weight
   aliases:
+  - LongCat 2.0
   - longcat-2-0
   - longcat-2.0
   - longcat-2.0-free
   - longcat-2.0:thinking
   - meituan/longcat-2-0
   metadata: '{"alias_platforms": {"longcat-2-0": "nano-gpt", "longcat-2.0": "nano-gpt", "longcat-2.0-free": "opencode", "longcat-2.0:thinking": "nano-gpt", "meituan/longcat-2-0": "nano-gpt"}, "openrouter_adopted":
-    true, "providers": ["kilo", "nano-gpt", "opencode", "opencode-go", "openrouter"], "underlying_key": "longcat-2-0"}'
+    true, "providers": ["aihubmix", "kilo", "nano-gpt", "opencode", "opencode-go", "openrouter", "siliconflow"], "underlying_key": "longcat-2-0"}'
   review_status: draft
   resolution_source: models_dev
 - id: meituan/longcat-flash
@@ -17196,8 +17291,8 @@
   - meta/muse-spark-1-1
   - muse-spark-1-1
   - muse-spark-1.1
-  metadata: '{"alias_platforms": {"meta/muse-spark-1-1": "nano-gpt", "muse-spark-1-1": "nano-gpt", "muse-spark-1.1": "llmgateway"}, "openrouter_adopted": true, "providers": ["abacus", "kilo", "llmgateway",
-    "merge-gateway", "nano-gpt", "openrouter", "orcarouter", "vercel"], "underlying_key": "muse-spark-1-1"}'
+  metadata: '{"alias_platforms": {"meta/muse-spark-1-1": "nano-gpt", "muse-spark-1-1": "nano-gpt", "muse-spark-1.1": "aihubmix"}, "openrouter_adopted": true, "providers": ["abacus", "aihubmix", "kilo",
+    "llmgateway", "merge-gateway", "nano-gpt", "openrouter", "orcarouter", "vercel"], "underlying_key": "muse-spark-1-1"}'
   review_status: draft
   resolution_source: models_dev
 - id: meta/muse-spark-1.2
@@ -17216,8 +17311,8 @@
   - meta/muse-spark-1-2
   - muse-spark-1-2
   - muse-spark-1.2
-  metadata: '{"alias_platforms": {"meta/muse-spark-1-2": "nano-gpt", "muse-spark-1-2": "nano-gpt", "muse-spark-1.2": "llmgateway"}, "openrouter_adopted": true, "providers": ["abacus", "kilo", "llmgateway",
-    "merge-gateway", "nano-gpt", "opencode", "openrouter", "orcarouter", "vercel"], "underlying_key": "muse-spark-1-2"}'
+  metadata: '{"alias_platforms": {"meta/muse-spark-1-2": "nano-gpt", "muse-spark-1-2": "nano-gpt", "muse-spark-1.2": "aihubmix"}, "openrouter_adopted": true, "providers": ["abacus", "aihubmix", "kilo",
+    "llmgateway", "merge-gateway", "nano-gpt", "opencode", "openrouter", "orcarouter", "vercel"], "underlying_key": "muse-spark-1-2"}'
   review_status: draft
   resolution_source: models_dev
 - id: meta/muse-spark-1.3
@@ -17236,8 +17331,8 @@
   - meta/muse-spark-1-3
   - muse-spark-1-3
   - muse-spark-1.3
-  metadata: '{"alias_platforms": {"meta/muse-spark-1-3": "nano-gpt", "muse-spark-1-3": "nano-gpt", "muse-spark-1.3": "llmgateway"}, "openrouter_adopted": true, "providers": ["kilo", "llmgateway", "nano-gpt",
-    "opencode", "openrouter", "vercel"], "underlying_key": "muse-spark-1-3"}'
+  metadata: '{"alias_platforms": {"meta/muse-spark-1-3": "nano-gpt", "muse-spark-1-3": "nano-gpt", "muse-spark-1.3": "aihubmix"}, "openrouter_adopted": true, "providers": ["aihubmix", "kilo", "llmgateway",
+    "nano-gpt", "opencode", "openrouter", "vercel"], "underlying_key": "muse-spark-1-3"}'
   review_status: draft
   resolution_source: models_dev
 - id: meta/muse-spark-1.3-contributor
@@ -20736,22 +20831,23 @@
   review_status: draft
   resolution_source: models_dev
 - id: nex-agi/nex-n2-pro
-  display_name: Nex N2 Pro
+  display_name: Nex-N2-Pro
   org_id: nex-agi
   family: nex-n2-pro
   architecture: null
   params_billions: null
   parents: []
   open_weights: true
-  release_date: '2026-06-04'
+  release_date: '2026-06-02'
   input_modalities: null
   output_modalities: null
   tags:
   - open-weight
   aliases:
+  - Nex N2 Pro
   - Nex-N2-Pro (free)
   - nex-n2-pro
-  metadata: '{"alias_platforms": {"nex-n2-pro": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "nex-n2-pro", "upstream_status": "removed"}'
+  metadata: '{"alias_platforms": {"nex-n2-pro": "siliconflow"}, "providers": ["siliconflow"], "underlying_key": "nex-n2-pro"}'
   review_status: draft
   resolution_source: models_dev
 - id: nex-agi/nex-n2.5-mini
@@ -25957,8 +26053,8 @@
   - qwen3.8-2.4t-a95b
   - qwen3.8-2.4t-a95b@eu
   metadata: '{"alias_platforms": {"alibaba/qwen3-8-2-4t-a95b": "aihubmix", "qwen3-8-2-4t-a95b": "aihubmix", "qwen3.8-2.4T-A95B": "requesty", "qwen3.8-2.4T-A95B@eu": "requesty", "qwen3.8-2.4t-a95b": "aihubmix",
-    "qwen3.8-2.4t-a95b@eu": "requesty"}, "openrouter_adopted": true, "providers": ["aihubmix", "cortecs", "deepinfra", "huggingface", "kilo", "merge-gateway", "openrouter", "requesty", "vercel"], "underlying_key":
-    "qwen3-8-2-4t-a95b"}'
+    "qwen3.8-2.4t-a95b@eu": "requesty"}, "openrouter_adopted": true, "providers": ["aihubmix", "cortecs", "deepinfra", "huggingface", "kilo", "merge-gateway", "openrouter", "requesty", "siliconflow", "vercel"],
+    "underlying_key": "qwen3-8-2-4t-a95b"}'
   review_status: draft
   resolution_source: models_dev
 - id: qwen/qwen3.8-27b
@@ -27356,7 +27452,7 @@
   - step-3-7-flash
   - step-3.7-flash
   - stepfun/step-3-7-flash
-  metadata: '{"alias_platforms": {"step-3-7-flash": "ambient", "step-3.7-flash": "stepfun-ai", "stepfun/step-3-7-flash": "ambient"}, "knowledge_cutoffs": ["2026-03-01"], "openrouter_adopted": true, "release_dates":
+  metadata: '{"alias_platforms": {"step-3-7-flash": "ambient", "step-3.7-flash": "aihubmix", "stepfun/step-3-7-flash": "ambient"}, "knowledge_cutoffs": ["2026-03-01"], "openrouter_adopted": true, "release_dates":
     ["2026-05-29"], "snapshots": ["step-3.7-flash"]}'
   review_status: reviewed
 - id: stepfun/step-5-preview
@@ -27689,8 +27785,8 @@
   aliases:
   - hy3
   - hy3-free
-  metadata: '{"alias_platforms": {"hy3": "nano-gpt", "hy3-free": "opencode"}, "openrouter_adopted": true, "providers": ["deepinfra", "huggingface", "kilo", "llmgateway", "nano-gpt", "opencode", "opencode-go",
-    "openrouter", "orcarouter", "requesty", "tencent-tokenhub", "vercel"], "underlying_key": "hy3"}'
+  metadata: '{"alias_platforms": {"hy3": "nano-gpt", "hy3-free": "opencode"}, "openrouter_adopted": true, "providers": ["aihubmix", "deepinfra", "huggingface", "kilo", "llmgateway", "nano-gpt", "opencode",
+    "opencode-go", "openrouter", "orcarouter", "requesty", "siliconflow", "tencent-tokenhub", "vercel"], "underlying_key": "hy3"}'
   review_status: draft
   resolution_source: models_dev
 - id: tencent/hy3-preview
@@ -27710,7 +27806,7 @@
   - hy3-preview
   - hy3-preview-free
   - tencent-hy3-preview
-  metadata: '{"alias_platforms": {"hy3-preview": "aihubmix", "hy3-preview-free": "opencode"}, "openrouter_adopted": true, "providers": ["aihubmix", "kilo", "opencode", "openrouter", "siliconflow", "tencent-tokenhub",
+  metadata: '{"alias_platforms": {"hy3-preview": "aihubmix", "hy3-preview-free": "opencode"}, "openrouter_adopted": true, "providers": ["aihubmix", "kilo", "opencode", "openrouter", "tencent-tokenhub",
     "zenmux"], "underlying_key": "hy3-preview"}'
   review_status: draft
   resolution_source: models_dev
@@ -27729,8 +27825,8 @@
   - open-weight
   aliases:
   - hy4-preview
-  metadata: '{"alias_platforms": {"hy4-preview": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "llmgateway", "nano-gpt", "opencode-go", "openrouter", "tencent-tokenhub", "vercel"], "underlying_key":
-    "hy4-preview"}'
+  metadata: '{"alias_platforms": {"hy4-preview": "nano-gpt"}, "openrouter_adopted": true, "providers": ["aihubmix", "huggingface", "kilo", "llmgateway", "nano-gpt", "opencode-go", "openrouter", "tencent-tokenhub",
+    "vercel"], "underlying_key": "hy4-preview"}'
   review_status: draft
   resolution_source: models_dev
 - id: text-max
@@ -28063,7 +28159,7 @@
   output_modalities: null
   tags: []
   aliases: []
-  metadata: '{"providers": ["cloudflare-ai-gateway", "nano-gpt", "opencode", "vercel", "vivgrid"], "underlying_key": "jev"}'
+  metadata: '{"providers": ["cloudflare-ai-gateway", "nano-gpt", "opencode", "vercel", "vivgrid"], "underlying_key": "jev", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: umans-coder
@@ -28409,6 +28505,24 @@
   aliases: []
   metadata: '{"providers": ["venice"], "underlying_key": "venice-uncensored-role-play"}'
   review_status: reviewed
+  resolution_source: models_dev
+- id: viv
+  display_name: Viv Fast
+  org_id: null
+  family: viv
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-21'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - org-unknown
+  aliases:
+  - viv-fast
+  metadata: '{"alias_platforms": {"viv-fast": "vivgrid"}, "providers": ["vivgrid"], "underlying_key": "viv"}'
+  review_status: draft
   resolution_source: models_dev
 - id: voxtral-mini-3b
   display_name: Voxtral Mini 3B
@@ -29335,15 +29449,13 @@
   release_date: '2026-04-03'
   input_modalities:
   - image
-  - pdf
   - text
   output_modalities:
   - image
-  - pdf
   tags: []
   aliases:
   - grok-imagine-image-quality
-  metadata: '{"alias_platforms": {"grok-imagine-image-quality": "xai"}, "release_dates": ["2026-04-03"], "snapshots": ["grok-imagine-image-quality"], "upstream_status": "removed"}'
+  metadata: '{"alias_platforms": {"grok-imagine-image-quality": "xai"}, "release_dates": ["2026-04-03"], "snapshots": ["grok-imagine-image-quality"]}'
   review_status: reviewed
 - id: xai/grok-imagine-video
   display_name: Grok Imagine Video
@@ -30591,14 +30703,18 @@
 - id: zai/glm-4-6v-flash
   display_name: GLM-4.6V-Flash
   org_id: zai
-  family: glm-4-6v-flash
+  family: glm-4.6v-flash
   architecture: null
   params_billions: null
   parents: []
   open_weights: true
   release_date: '2025-12-08'
-  input_modalities: null
-  output_modalities: null
+  input_modalities:
+  - image
+  - text
+  - video
+  output_modalities:
+  - text
   tags:
   - open-weight
   aliases:
@@ -30606,9 +30722,9 @@
   - GLM-4.6V-Flash
   - glm-4-6v-flash
   - glm-4.6v-flash
-  metadata: '{"alias_platforms": {"glm-4-6v-flash": "huggingface", "glm-4.6v-flash": "llmgateway"}, "providers": ["huggingface", "zenmux"], "underlying_key": "glm-4-6v-flash"}'
-  review_status: draft
-  resolution_source: models_dev
+  - zai/glm-4.6v-flash
+  metadata: '{"alias_platforms": {"glm-4-6v-flash": "huggingface", "glm-4.6v-flash": "zhipuai"}, "release_dates": ["2025-12-08"], "snapshots": ["glm-4.6v-flash"]}'
+  review_status: reviewed
 - id: zai/glm-4-6v-flash-original
   display_name: glm-4-6v-flash-original
   org_id: zai
@@ -30679,7 +30795,7 @@
   aliases:
   - GLM 4.7 Flash Original Thinking
   - glm-4-7-flash-original
-  metadata: '{"alias_platforms": {"glm-4-7-flash-original": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "glm-4-7-flash-original"}'
+  metadata: '{"alias_platforms": {"glm-4-7-flash-original": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "glm-4-7-flash-original", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-4-7-original
@@ -31065,6 +31181,25 @@
   metadata: '{"alias_platforms": {"glm-5-3-flash-cybersecurity": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "glm-5-3-flash-cybersecurity"}'
   review_status: draft
   resolution_source: models_dev
+- id: zai/glm-5-3-flash-flex
+  display_name: GLM-5.3 Flash Flex
+  org_id: zai
+  family: glm-5-3-flash-flex
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-08-26'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-5-3-flash-flex
+  - glm-5.3-flash-flex
+  metadata: '{"alias_platforms": {"glm-5-3-flash-flex": "neuralwatt", "glm-5.3-flash-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "glm-5-3-flash-flex"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: zai/glm-5-3-flash-uncensored
   display_name: GLM 5.3 Flash Uncensored
   org_id: zai
@@ -31081,6 +31216,25 @@
   aliases:
   - glm-5-3-flash-uncensored
   metadata: '{"alias_platforms": {"glm-5-3-flash-uncensored": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "glm-5-3-flash-uncensored"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: zai/glm-5-3-flex
+  display_name: GLM 5.3 Flex
+  org_id: zai
+  family: glm-5-3-flex
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-08-14'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-5-3-flex
+  - glm-5.3-flex
+  metadata: '{"alias_platforms": {"glm-5-3-flex": "neuralwatt", "glm-5.3-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "glm-5-3-flex"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-5-3-highspeed

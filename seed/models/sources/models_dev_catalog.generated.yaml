@@ -910,6 +910,14 @@
   weak:
     release_date: '2026-08-14'
     open_weights: true
+- id: alibaba/qwen-3-8-27b-flex
+  aliases:
+  - qwen-3-8-27b-flex
+  - qwen-3.8-27b-flex
+  metadata: '{"alias_platforms": {"qwen-3-8-27b-flex": "neuralwatt", "qwen-3.8-27b-flex": "neuralwatt"}}'
+  weak:
+    release_date: '2026-08-14'
+    open_weights: true
 - id: alibaba/qwen-3-8-flash
   aliases:
   - qwen-3-8-flash
@@ -1318,6 +1326,14 @@
   weak:
     release_date: '2026-04-01'
     open_weights: true
+- id: alibaba/qwen3-6-35b-flex
+  aliases:
+  - qwen3-6-35b-flex
+  - qwen3.6-35b-flex
+  metadata: '{"alias_platforms": {"qwen3-6-35b-flex": "neuralwatt", "qwen3.6-35b-flex": "neuralwatt"}}'
+  weak:
+    release_date: '2026-04-17'
+    open_weights: true
 - id: alibaba/qwen3-8-27b-cybersecurity
   aliases:
   - qwen3-8-27b-cybersecurity
@@ -1331,6 +1347,13 @@
   metadata: '{"alias_platforms": {"qwen3-8-27b-fable": "nano-gpt"}}'
   weak:
     release_date: '2026-07-29'
+    open_weights: true
+- id: alibaba/qwen3-8-27b-hemmingway
+  aliases:
+  - qwen3-8-27b-hemmingway
+  metadata: '{"alias_platforms": {"qwen3-8-27b-hemmingway": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-21'
     open_weights: true
 - id: alibaba/qwen3-8-27b-obliterated
   aliases:
@@ -1365,7 +1388,8 @@
 - id: alibaba/qwen3-8-omni-flash
   aliases:
   - qwen3-8-omni-flash
-  metadata: '{"alias_platforms": {"qwen3-8-omni-flash": "nano-gpt"}}'
+  - qwen3.8-omni-flash
+  metadata: '{"alias_platforms": {"qwen3-8-omni-flash": "nano-gpt", "qwen3.8-omni-flash": "aihubmix"}}'
   weak:
     release_date: '2026-09-17'
     open_weights: false
@@ -2532,13 +2556,6 @@
   weak:
     release_date: '2025-03-16'
     open_weights: true
-- id: baidu/ernie-4-5-300b-a47b
-  aliases:
-  - ernie-4-5-300b-a47b
-  metadata: '{"alias_platforms": {"ernie-4-5-300b-a47b": "siliconflow-cn"}}'
-  weak:
-    release_date: '2025-07-02'
-    open_weights: false
 - id: baidu/ernie-4-5-300b-a47b-paddle
   aliases:
   - ernie-4-5-300b-a47b-paddle
@@ -3729,6 +3746,14 @@
   weak:
     release_date: '2024-01-01'
     open_weights: true
+- id: deepseek/deepseek-v4-1-flash-flex
+  aliases:
+  - deepseek-v4-1-flash-flex
+  - deepseek-v4.1-flash-flex
+  metadata: '{"alias_platforms": {"deepseek-v4-1-flash-flex": "neuralwatt", "deepseek-v4.1-flash-flex": "neuralwatt"}}'
+  weak:
+    release_date: '2026-09-10'
+    open_weights: true
 - id: deepseek/deepseek-v4-flash
   aliases:
   - TEE/deepseek-v4-flash
@@ -3756,7 +3781,7 @@
   - deepseek-v4-flash-0731-fast
   - deepseek-v4-flash-0731@eu
   - deepseek/deepseek-v4-flash-0731:free
-  metadata: '{"alias_platforms": {"deepseek-v4-flash-0731": "ambient", "deepseek-v4-flash-0731-fast": "venice", "deepseek-v4-flash-0731@eu": "requesty", "deepseek/deepseek-v4-flash-0731:free": "openrouter"}}'
+  metadata: '{"alias_platforms": {"deepseek-v4-flash-0731": "ambient", "deepseek-v4-flash-0731-fast": "aihubmix", "deepseek-v4-flash-0731@eu": "requesty", "deepseek/deepseek-v4-flash-0731:free": "openrouter"}}'
   weak:
     release_date: '2026-07-31'
     open_weights: true
@@ -3766,6 +3791,13 @@
   metadata: '{"alias_platforms": {"deepseek-v4-flash-flex": "neuralwatt"}}'
   weak:
     release_date: '2026-04-24'
+    open_weights: true
+- id: deepseek/deepseek-v4-flash-speed
+  aliases:
+  - deepseek-v4-flash-speed
+  metadata: '{"alias_platforms": {"deepseek-v4-flash-speed": "neuralwatt"}}'
+  weak:
+    release_date: '2026-07-31'
     open_weights: true
 - id: deepseek/deepseek-v4-flash-vision-exp
   aliases:
@@ -4585,7 +4617,7 @@
   - gemini-3.5-flash-lite
   - gemini-3.5-flash-lite@eu
   - google/gemini-3-5-flash-lite
-  metadata: '{"alias_platforms": {"gemini-3-5-flash-lite": "nano-gpt", "gemini-3.5-flash-lite": "sap-ai-core", "gemini-3.5-flash-lite@eu": "requesty", "google/gemini-3-5-flash-lite": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"gemini-3-5-flash-lite": "nano-gpt", "gemini-3.5-flash-lite": "aihubmix", "gemini-3.5-flash-lite@eu": "requesty", "google/gemini-3-5-flash-lite": "nano-gpt"}}'
   weak:
     release_date: '2026-07-21'
     open_weights: false
@@ -4875,7 +4907,7 @@
   - gemma-4-12b-it
   metadata: '{"alias_platforms": {"gemma-4-12b-it": "nano-gpt"}}'
   weak:
-    release_date: '2026-08-01'
+    release_date: '2026-06-09'
     open_weights: true
 - id: google/gemma-4-12b-it-semancer
   aliases:
@@ -5436,7 +5468,7 @@
   - ibm/granite-4-0-h-micro
   metadata: '{"alias_platforms": {"granite-4-0-h-micro": "kilo", "ibm/granite-4-0-h-micro": "kilo"}}'
   weak:
-    release_date: '2025-10-07'
+    release_date: '2025-10-02'
     open_weights: true
 - id: ibm-granite/granite-4.2-8b
   aliases:
@@ -5654,14 +5686,6 @@
   weak:
     release_date: '2024-06-01'
     open_weights: true
-- id: jev-1-13
-  aliases:
-  - jev-1.13
-  - jev-1.13-free
-  metadata: '{"alias_platforms": {"jev-1.13": "opencode", "jev-1.13-free": "opencode"}}'
-  weak:
-    release_date: '2026-09-15'
-    open_weights: false
 - id: kimi-k2-0711
   weak:
     release_date: '2025-01-01'
@@ -6261,7 +6285,7 @@
   - meta/muse-spark-1-1
   - muse-spark-1-1
   - muse-spark-1.1
-  metadata: '{"alias_platforms": {"meta/muse-spark-1-1": "nano-gpt", "muse-spark-1-1": "nano-gpt", "muse-spark-1.1": "llmgateway"}}'
+  metadata: '{"alias_platforms": {"meta/muse-spark-1-1": "nano-gpt", "muse-spark-1-1": "nano-gpt", "muse-spark-1.1": "aihubmix"}}'
   weak:
     release_date: '2026-04-08'
     open_weights: false
@@ -6270,7 +6294,7 @@
   - meta/muse-spark-1-2
   - muse-spark-1-2
   - muse-spark-1.2
-  metadata: '{"alias_platforms": {"meta/muse-spark-1-2": "nano-gpt", "muse-spark-1-2": "nano-gpt", "muse-spark-1.2": "llmgateway"}}'
+  metadata: '{"alias_platforms": {"meta/muse-spark-1-2": "nano-gpt", "muse-spark-1-2": "nano-gpt", "muse-spark-1.2": "aihubmix"}}'
   weak:
     release_date: '2026-08-05'
     open_weights: false
@@ -6288,7 +6312,7 @@
   - meta/muse-spark-1-3
   - muse-spark-1-3
   - muse-spark-1.3
-  metadata: '{"alias_platforms": {"meta/muse-spark-1-3": "nano-gpt", "muse-spark-1-3": "nano-gpt", "muse-spark-1.3": "llmgateway"}}'
+  metadata: '{"alias_platforms": {"meta/muse-spark-1-3": "nano-gpt", "muse-spark-1-3": "nano-gpt", "muse-spark-1.3": "aihubmix"}}'
   weak:
     release_date: '2026-09-02'
     open_weights: false
@@ -7728,6 +7752,13 @@
   weak:
     release_date: '2026-05-12'
     open_weights: false
+- id: nex-agi/nex-n2-pro
+  aliases:
+  - nex-n2-pro
+  metadata: '{"alias_platforms": {"nex-n2-pro": "siliconflow"}}'
+  weak:
+    release_date: '2026-06-02'
+    open_weights: true
 - id: nex-agi/nex-n2.5-mini
   aliases:
   - nex-agi/nex-n2-5-mini
@@ -10588,7 +10619,7 @@
   - step-3-7-flash
   - step-3.7-flash
   - stepfun/step-3-7-flash
-  metadata: '{"alias_platforms": {"step-3-7-flash": "ambient", "step-3.7-flash": "stepfun-ai", "stepfun/step-3-7-flash": "ambient"}}'
+  metadata: '{"alias_platforms": {"step-3-7-flash": "ambient", "step-3.7-flash": "aihubmix", "stepfun/step-3-7-flash": "ambient"}}'
   weak:
     release_date: '2026-05-29'
     open_weights: true
@@ -10815,10 +10846,6 @@
   weak:
     release_date: '2024-08-15'
     open_weights: false
-- id: typesafe/jev
-  weak:
-    release_date: '2026-09-15'
-    open_weights: false
 - id: umans-coder
   weak:
     release_date: '2026-08-26'
@@ -10936,6 +10963,13 @@
   weak:
     release_date: '2026-02-20'
     open_weights: true
+- id: viv
+  aliases:
+  - viv-fast
+  metadata: '{"alias_platforms": {"viv-fast": "vivgrid"}}'
+  weak:
+    release_date: '2026-09-21'
+    open_weights: false
 - id: voxtral-mini-3b
   weak:
     release_date: 2025-07
@@ -11269,6 +11303,18 @@
   weak:
     release_date: '2024-08-25'
     open_weights: false
+- id: xai/grok-imagine-image-quality
+  aliases:
+  - grok-imagine-image-quality
+  metadata: '{"alias_platforms": {"grok-imagine-image-quality": "xai"}}'
+  weak:
+    release_date: '2026-04-03'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - image
 - id: xai/grok-latest
   aliases:
   - grok-latest
@@ -11750,14 +11796,6 @@
   weak:
     release_date: '2025-12-11'
     open_weights: true
-- id: zai/glm-4-6v-flash
-  aliases:
-  - glm-4-6v-flash
-  - glm-4.6v-flash
-  metadata: '{"alias_platforms": {"glm-4-6v-flash": "huggingface", "glm-4.6v-flash": "llmgateway"}}'
-  weak:
-    release_date: '2025-12-08'
-    open_weights: true
 - id: zai/glm-4-6v-flashx
   aliases:
   - glm-4-6v-flashx
@@ -11772,13 +11810,6 @@
   metadata: '{"alias_platforms": {"glm-4-6v-original": "nano-gpt"}}'
   weak:
     release_date: '2025-12-08'
-    open_weights: true
-- id: zai/glm-4-7-flash-original
-  aliases:
-  - glm-4-7-flash-original
-  metadata: '{"alias_platforms": {"glm-4-7-flash-original": "nano-gpt"}}'
-  weak:
-    release_date: '2026-01-19'
     open_weights: true
 - id: zai/glm-4-7-original
   aliases:
@@ -11826,6 +11857,20 @@
     open_weights: true
     input_modalities:
     - text
+    output_modalities:
+    - text
+- id: zai/glm-4-6v-flash
+  aliases:
+  - glm-4-6v-flash
+  - glm-4.6v-flash
+  metadata: '{"alias_platforms": {"glm-4-6v-flash": "huggingface", "glm-4.6v-flash": "zhipuai"}}'
+  weak:
+    release_date: '2025-12-08'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    - video
     output_modalities:
     - text
 - id: zai/glm-4.7-flashx
@@ -11897,12 +11942,28 @@
   weak:
     release_date: '2026-09-19'
     open_weights: true
+- id: zai/glm-5-3-flash-flex
+  aliases:
+  - glm-5-3-flash-flex
+  - glm-5.3-flash-flex
+  metadata: '{"alias_platforms": {"glm-5-3-flash-flex": "neuralwatt", "glm-5.3-flash-flex": "neuralwatt"}}'
+  weak:
+    release_date: '2026-08-26'
+    open_weights: true
 - id: zai/glm-5-3-flash-uncensored
   aliases:
   - glm-5-3-flash-uncensored
   metadata: '{"alias_platforms": {"glm-5-3-flash-uncensored": "nano-gpt"}}'
   weak:
     release_date: '2026-07-29'
+    open_weights: true
+- id: zai/glm-5-3-flex
+  aliases:
+  - glm-5-3-flex
+  - glm-5.3-flex
+  metadata: '{"alias_platforms": {"glm-5-3-flex": "neuralwatt", "glm-5.3-flex": "neuralwatt"}}'
+  weak:
+    release_date: '2026-08-14'
     open_weights: true
 - id: zai/glm-5-3-highspeed
   aliases:
@@ -12035,6 +12096,32 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: baidu/ernie-4-5-300b-a47b
+  aliases:
+  - ernie-4-5-300b-a47b
+  metadata: '{"alias_platforms": {"ernie-4-5-300b-a47b": "siliconflow-cn"}}'
+  weak:
+    release_date: '2025-07-02'
+    open_weights: false
+- id: jev-1-13
+  aliases:
+  - jev-1.13
+  - jev-1.13-free
+  metadata: '{"alias_platforms": {"jev-1.13": "opencode", "jev-1.13-free": "opencode"}}'
+  weak:
+    release_date: '2026-09-15'
+    open_weights: false
+- id: typesafe/jev
+  weak:
+    release_date: '2026-09-15'
+    open_weights: false
+- id: zai/glm-4-7-flash-original
+  aliases:
+  - glm-4-7-flash-original
+  metadata: '{"alias_platforms": {"glm-4-7-flash-original": "nano-gpt"}}'
+  weak:
+    release_date: '2026-01-19'
+    open_weights: true
 - id: typesafe-ai/jev
   aliases:
   - jev
@@ -12092,20 +12179,6 @@
   weak:
     release_date: '2026-09-16'
     open_weights: false
-- id: xai/grok-imagine-image-quality
-  aliases:
-  - grok-imagine-image-quality
-  metadata: '{"alias_platforms": {"grok-imagine-image-quality": "xai"}}'
-  weak:
-    release_date: '2026-04-03'
-    open_weights: false
-    input_modalities:
-    - image
-    - pdf
-    - text
-    output_modalities:
-    - image
-    - pdf
 - id: kwaipilot/kat-coder-air-v2.5
   aliases:
   - kat-coder-air-v2-5
@@ -12278,13 +12351,6 @@
   metadata: '{"alias_platforms": {"nex-n2-mini": "nano-gpt"}}'
   weak:
     release_date: '2026-06-24'
-    open_weights: true
-- id: nex-agi/nex-n2-pro
-  aliases:
-  - nex-n2-pro
-  metadata: '{"alias_platforms": {"nex-n2-pro": "nano-gpt"}}'
-  weak:
-    release_date: '2026-06-04'
     open_weights: true
 - id: xai/grok-4-20-multi-agent-beta-0309
   aliases:
