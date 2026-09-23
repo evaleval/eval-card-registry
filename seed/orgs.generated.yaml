@@ -6259,3 +6259,10 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: nano
+  display_name: nano
+  hf_org: nano
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
