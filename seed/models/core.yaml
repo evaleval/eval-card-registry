@@ -13750,3 +13750,43 @@ entries:
   aliases:
   - EuroLLM-9B-it
   - EuroLLM-9B-Instruct
+- id: utter-project/EuroLLM-22B-2512
+  resolution_source: hf
+  display_name: EuroLLM 22B
+  org_id: utter-project
+  family: eurollm-22b
+  architecture: null
+  params_billions: 22.64
+  parents: []
+  open_weights: true
+  release_date: '2025-11-24'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{"hf_id": "utter-project/EuroLLM-22B-2512"}'
+  review_status: reviewed
+  aliases:
+  - utter-project/EuroLLM-22B
+  - EuroLLM-22B
+- id: utter-project/EuroLLM-22B-Instruct-2512
+  resolution_source: hf
+  display_name: EuroLLM 22B Instruct
+  org_id: utter-project
+  family: eurollm-22b
+  architecture: null
+  params_billions: 22.64
+  parents:
+  - id: utter-project/EuroLLM-22B-2512
+    relationship: finetune
+  open_weights: true
+  release_date: '2025-12-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  metadata: '{"hf_id": "utter-project/EuroLLM-22B-Instruct-2512"}'
+  review_status: reviewed
+  aliases:
+  - EuroLLM-22B-Instruct
+  - EuroLLM-22B-it

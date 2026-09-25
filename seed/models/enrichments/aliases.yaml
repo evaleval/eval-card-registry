@@ -221,6 +221,9 @@
 - id: LatitudeGames/wayfarer-large-70b-llama-3-3
   aliases:
   - meta/wayfarer-large-70b-llama-3-3
+- id: LLM360/K2-V2-Instruct
+  aliases:
+  - IFM/K2-V2-Instruct
 - id: MarinaraSpaghetti/nemomix-unleashed-12b
   aliases:
   - mistralai/nemomix-unleashed-12b
