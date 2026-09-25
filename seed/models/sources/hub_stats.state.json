@@ -1,5 +1,5 @@
 {
-  "parquet_etag": "f931ec7b5ff731bfb1afe729b92eb32703133b702b0bba41f0e48bdff047c9b3",
+  "parquet_etag": "49185778ef4b8b6501d60f6ac92a8546cea21430178aee7e9d00f713693eed77",
   "rows_checked_at_etag": [
     "0-hero/Matter-0.1-7B-DPO-preview",
     "0-hero/Matter-0.1-7B-boost-DPO-preview",
@@ -12608,6 +12608,9 @@
     "upstage/solar-pro2",
     "upstage/solar-pro3",
     "utkmst/chimera-beta-test2-lora-merged",
+    "utter-project/EuroLLM-22B",
+    "utter-project/EuroLLM-22B-2512",
+    "utter-project/EuroLLM-22B-Instruct-2512",
     "utter-project/EuroLLM-9B",
     "utter-project/EuroLLM-9B-Instruct",
     "uukuguy/speechless-code-mistral-7b-v1.0",
@@ -12966,6 +12969,7 @@
     "xiaomi/mimo-v2-5-tts-voiceclone",
     "xiaomi/mimo-v2-5-tts-voicedesign",
     "xiaomi/mimo-v2-6-flash",
+    "xiaomi/mimo-v2-6-flash-uncensored",
     "xiaomi/mimo-v2-6-pro",
     "xiaomi/mimo-v2-6-pro-ultraspeed",
     "xiaomi/mimo-v2-flash",
@@ -12988,6 +12992,7 @@
     "xiaomimimo/mimo-v2-5-tts",
     "xiaomimimo/mimo-v2-5-tts-voiceclone",
     "xiaomimimo/mimo-v2-5-tts-voicedesign",
+    "xiaomimimo/mimo-v2-6-flash-uncensored",
     "xiaomimimo/mimo-v2-flash-original",
     "xiaomimimo/mimo-v2-flash-thinking-original",
     "xiaomimimo/mimo-v2-omni",
