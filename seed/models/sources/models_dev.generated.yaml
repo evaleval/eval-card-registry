@@ -986,6 +986,7 @@
   aliases:
   - Qwen3 VL 8B Thinking
   - 'Qwen: Qwen3 VL 8B Thinking'
+  - 'Qwen: Qwen3 VL 8B Thinking (retires Oct 9)'
   - alibaba/qwen3-vl-8b
   - alibaba/qwen3-vl-8b-thinking
   - qwen/qwen3-vl-8b-thinking
@@ -21131,7 +21132,7 @@
   - nex-agi/nex-n2.5-mini:free
   - nex-n2-5-mini
   metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-mini": "kilo", "nex-agi/nex-n2.5-mini:free": "openrouter", "nex-n2-5-mini": "kilo"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter"],
-    "underlying_key": "nex-n2-5-mini"}'
+    "underlying_key": "nex-n2-5-mini", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: nex-agi/nex-n2.5-pro
@@ -21154,7 +21155,7 @@
   - nex-agi/nex-n2.5-pro:free
   - nex-n2-5-pro
   metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-pro": "kilo", "nex-agi/nex-n2.5-pro:free": "openrouter", "nex-n2-5-pro": "kilo"}, "openrouter_adopted": true, "providers": ["kilo", "openrouter"], "underlying_key":
-    "nex-n2-5-pro"}'
+    "nex-n2-5-pro", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: north-mini-code
@@ -30324,6 +30325,24 @@
   - mimo-v2.5-tts-voicedesign
   metadata: '{"alias_platforms": {"mimo-v2-5-tts-voicedesign": "xiaomi-token-plan-cn", "mimo-v2.5-tts-voicedesign": "xiaomi-token-plan-cn"}, "providers": ["xiaomi-token-plan-ams", "xiaomi-token-plan-cn",
     "xiaomi-token-plan-sgp"], "underlying_key": "mimo-v2-5-tts-voicedesign"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: xiaomi/mimo-v2-6-flash-uncensored
+  display_name: MiMo V2.6 Flash Uncensored
+  org_id: xiaomi
+  family: mimo-v2-6-flash-uncensored
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-25'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - mimo-v2-6-flash-uncensored
+  metadata: '{"alias_platforms": {"mimo-v2-6-flash-uncensored": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "mimo-v2-6-flash-uncensored"}'
   review_status: draft
   resolution_source: models_dev
 - id: xiaomi/mimo-v2-flash-original

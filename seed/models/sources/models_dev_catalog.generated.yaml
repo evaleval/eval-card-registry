@@ -484,6 +484,7 @@
   aliases:
   - Qwen3 VL 8B Thinking
   - 'Qwen: Qwen3 VL 8B Thinking'
+  - 'Qwen: Qwen3 VL 8B Thinking (retires Oct 9)'
   - alibaba/qwen3-vl-8b
   - alibaba/qwen3-vl-8b-thinking
   - qwen/qwen3-vl-8b-thinking
@@ -7852,24 +7853,6 @@
   weak:
     release_date: '2026-06-02'
     open_weights: true
-- id: nex-agi/nex-n2.5-mini
-  aliases:
-  - nex-agi/nex-n2-5-mini
-  - nex-agi/nex-n2.5-mini:free
-  - nex-n2-5-mini
-  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-mini": "kilo", "nex-agi/nex-n2.5-mini:free": "openrouter", "nex-n2-5-mini": "kilo"}}'
-  weak:
-    release_date: '2026-09-08'
-    open_weights: true
-- id: nex-agi/nex-n2.5-pro
-  aliases:
-  - nex-agi/nex-n2-5-pro
-  - nex-agi/nex-n2.5-pro:free
-  - nex-n2-5-pro
-  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-pro": "kilo", "nex-agi/nex-n2.5-pro:free": "openrouter", "nex-n2-5-pro": "kilo"}}'
-  weak:
-    release_date: '2026-09-08'
-    open_weights: true
 - id: nothingiisreal/l3-1-70b-celeste-v0-1
   weak:
     release_date: '2024-01-01'
@@ -11629,6 +11612,13 @@
   weak:
     release_date: '2026-04-22'
     open_weights: true
+- id: xiaomi/mimo-v2-6-flash-uncensored
+  aliases:
+  - mimo-v2-6-flash-uncensored
+  metadata: '{"alias_platforms": {"mimo-v2-6-flash-uncensored": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-25'
+    open_weights: true
 - id: xiaomi/mimo-v2-omni
   aliases:
   - mimo-v2-omni
@@ -12372,6 +12362,24 @@
   metadata: '{"alias_platforms": {"zai-org-glm-5-2": "venice"}}'
   weak:
     release_date: '2026-06-16'
+    open_weights: true
+- id: nex-agi/nex-n2.5-mini
+  aliases:
+  - nex-agi/nex-n2-5-mini
+  - nex-agi/nex-n2.5-mini:free
+  - nex-n2-5-mini
+  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-mini": "kilo", "nex-agi/nex-n2.5-mini:free": "openrouter", "nex-n2-5-mini": "kilo"}}'
+  weak:
+    release_date: '2026-09-08'
+    open_weights: true
+- id: nex-agi/nex-n2.5-pro
+  aliases:
+  - nex-agi/nex-n2-5-pro
+  - nex-agi/nex-n2.5-pro:free
+  - nex-n2-5-pro
+  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-pro": "kilo", "nex-agi/nex-n2.5-pro:free": "openrouter", "nex-n2-5-pro": "kilo"}}'
+  weak:
+    release_date: '2026-09-08'
     open_weights: true
 - id: nano/lumen-stealth
   aliases:
