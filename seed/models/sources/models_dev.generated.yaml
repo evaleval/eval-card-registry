@@ -3606,7 +3606,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-uncensored
-  display_name: Qwen 3.8 27B Uncensored
+  display_name: Qwen3.8 27B Uncensored TEE
   org_id: alibaba
   family: qwen3-8-27b-uncensored
   architecture: null
@@ -3619,8 +3619,10 @@
   tags:
   - open-weight
   aliases:
+  - Qwen 3.8 27B Uncensored
+  - TEE/qwen3.8-27b-uncensored
   - qwen3-8-27b-uncensored
-  metadata: '{"alias_platforms": {"qwen3-8-27b-uncensored": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-uncensored"}'
+  metadata: '{"alias_platforms": {"TEE/qwen3.8-27b-uncensored": "nano-gpt", "qwen3-8-27b-uncensored": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-uncensored"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-8-flash-next
@@ -4892,6 +4894,7 @@
   aliases:
   - 'Anthropic: Claude 3 Haiku'
   - Claude Haiku 3
+  - Claude-Haiku-3
   - anthropic--claude-3-haiku
   - anthropic-claude-3-haiku
   - anthropic/claude-haiku-3
@@ -9451,24 +9454,23 @@
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-pro-latest
-  display_name: DeepSeek Pro Latest
+  display_name: 'DeepSeek: DeepSeek Pro Latest'
   org_id: deepseek
   family: deepseek-pro-latest
   architecture: null
   params_billions: null
   parents: []
-  open_weights: true
-  release_date: '2026-08-12'
+  open_weights: false
+  release_date: '2026-09-14'
   input_modalities: null
   output_modalities: null
-  tags:
-  - open-weight
+  tags: []
   aliases:
   - DeepSeek Pro Latest
   - 'DeepSeek: DeepSeek Pro Latest'
   - deepseek-pro-latest
   - ~deepseek/deepseek-pro-latest
-  metadata: '{"alias_platforms": {"deepseek-pro-latest": "kilo", "~deepseek/deepseek-pro-latest": "openrouter"}, "providers": ["fireworks-ai", "kilo", "openrouter"], "underlying_key": "deepseek-pro"}'
+  metadata: '{"alias_platforms": {"deepseek-pro-latest": "kilo", "~deepseek/deepseek-pro-latest": "openrouter"}, "providers": ["kilo", "openrouter"], "underlying_key": "deepseek-pro"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-prover-v2-671b
@@ -15590,6 +15592,24 @@
   - llama-3.3-70b-damascus-r1
   metadata: '{"alias_platforms": {"Llama-3.3-70B-Damascus-R1": "nano-gpt", "llama-3.3-70b-damascus-r1": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "llama-3-3-70b-damascus-r1", "upstream_status":
     "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: longcat-2-5-preview
+  display_name: LongCat 2.5 Preview Free
+  org_id: null
+  family: longcat-2-5-preview
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-25'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - org-unknown
+  aliases:
+  - longcat-2.5-preview-free
+  metadata: '{"alias_platforms": {"longcat-2.5-preview-free": "opencode-go"}, "providers": ["opencode", "opencode-go"], "underlying_key": "longcat-2-5-preview"}'
   review_status: draft
   resolution_source: models_dev
 - id: lucidnova-rf1-100b
@@ -25765,6 +25785,25 @@
   metadata: '{"alias_platforms": {"perceptron-mk1": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "perceptron-mk1"}'
   review_status: draft
   resolution_source: models_dev
+- id: perceptron/perceptron-mk1.5
+  display_name: Perceptron Mk1.5
+  org_id: perceptron
+  family: perceptron-mk1-5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-25'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - perceptron-mk1-5
+  - perceptron/perceptron-mk1-5
+  metadata: '{"alias_platforms": {"perceptron-mk1-5": "nano-gpt", "perceptron/perceptron-mk1-5": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key":
+    "perceptron-mk1-5"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: perplexity-academic-researcher
   display_name: Perplexity Academic Researcher
   org_id: null
@@ -30528,7 +30567,7 @@
   - mimo-v2.6-pro
   - xiaomi/mimo-v2-6-pro
   metadata: '{"alias_platforms": {"mimo-v2-6-pro": "deepinfra", "mimo-v2.6-pro": "xiaomi-token-plan-cn", "xiaomi/mimo-v2-6-pro": "deepinfra"}, "openrouter_adopted": true, "providers": ["aihubmix", "deepinfra",
-    "kilo", "llmgateway", "nano-gpt", "opencode-go", "openrouter", "vercel", "xiaomi", "xiaomi-token-plan-ams", "xiaomi-token-plan-cn", "xiaomi-token-plan-sgp"], "underlying_key": "mimo-v2-6-pro"}'
+    "kilo", "llmgateway", "nano-gpt", "opencode-go", "openrouter", "vercel", "xiaomi", "xiaomi-token-plan-ams", "xiaomi-token-plan-cn", "xiaomi-token-plan-sgp", "zenmux"], "underlying_key": "mimo-v2-6-pro"}'
   review_status: reviewed
   resolution_source: models_dev
 - id: xiaomi/mimo-v2.6-pro-ultraspeed

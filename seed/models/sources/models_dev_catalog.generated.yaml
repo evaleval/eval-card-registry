@@ -1391,8 +1391,9 @@
     open_weights: true
 - id: alibaba/qwen3-8-27b-uncensored
   aliases:
+  - TEE/qwen3.8-27b-uncensored
   - qwen3-8-27b-uncensored
-  metadata: '{"alias_platforms": {"qwen3-8-27b-uncensored": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"TEE/qwen3.8-27b-uncensored": "nano-gpt", "qwen3-8-27b-uncensored": "nano-gpt"}}'
   weak:
     release_date: '2026-07-29'
     open_weights: true
@@ -1953,7 +1954,8 @@
   - anthropic/claude-haiku-3
   - claude-3-haiku
   - claude-haiku-3
-  metadata: '{"alias_platforms": {"anthropic--claude-3-haiku": "sap-ai-core", "anthropic-claude-3-haiku": "sap-ai-core", "anthropic/claude-haiku-3": "poe", "claude-3-haiku": "kilo", "claude-haiku-3": "poe"}}'
+  metadata: '{"alias_platforms": {"anthropic--claude-3-haiku": "sap-ai-core", "anthropic-claude-3-haiku": "sap-ai-core", "anthropic/claude-haiku-3": "poe", "claude-3-haiku": "vercel", "claude-haiku-3":
+    "poe"}}'
   weak:
     release_date: '2024-03-07'
     open_weights: false
@@ -3737,8 +3739,8 @@
   - ~deepseek/deepseek-pro-latest
   metadata: '{"alias_platforms": {"deepseek-pro-latest": "kilo", "~deepseek/deepseek-pro-latest": "openrouter"}}'
   weak:
-    release_date: '2026-08-12'
-    open_weights: true
+    release_date: '2026-09-14'
+    open_weights: false
 - id: deepseek/deepseek-prover-v2-671b
   aliases:
   - deepseek-prover-v2-671b
@@ -5905,6 +5907,13 @@
   metadata: '{"alias_platforms": {"nvidia--llama-3.2-nv-embedqa-1b": "sap-ai-core", "nvidia-llama-3.2-nv-embedqa-1b": "sap-ai-core"}}'
   weak:
     release_date: '2024-09-25'
+    open_weights: false
+- id: longcat-2-5-preview
+  aliases:
+  - longcat-2.5-preview-free
+  metadata: '{"alias_platforms": {"longcat-2.5-preview-free": "opencode-go"}}'
+  weak:
+    release_date: '2026-09-25'
     open_weights: false
 - id: lucidnova-rf1-100b
   weak:
@@ -9937,6 +9946,14 @@
   metadata: '{"alias_platforms": {"perceptron-mk1": "nano-gpt"}}'
   weak:
     release_date: '2026-05-12'
+    open_weights: false
+- id: perceptron/perceptron-mk1.5
+  aliases:
+  - perceptron-mk1-5
+  - perceptron/perceptron-mk1-5
+  metadata: '{"alias_platforms": {"perceptron-mk1-5": "nano-gpt", "perceptron/perceptron-mk1-5": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-25'
     open_weights: false
 - id: perplexity/pplx-embed-v1-0-6b
   aliases:
