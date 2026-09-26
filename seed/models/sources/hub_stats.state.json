@@ -1,5 +1,5 @@
 {
-  "parquet_etag": "49185778ef4b8b6501d60f6ac92a8546cea21430178aee7e9d00f713693eed77",
+  "parquet_etag": "0c09c922ed732d5a16682dcabd30de9f879c6e82f51fc0b203ceb7b6cc283ee3",
   "rows_checked_at_etag": [
     "0-hero/Matter-0.1-7B-DPO-preview",
     "0-hero/Matter-0.1-7B-boost-DPO-preview",
@@ -1747,6 +1747,7 @@
     "TEE/qwen3.6-35b-a3b",
     "TEE/qwen3.6-35b-a3b-uncensored",
     "TEE/qwen3.8-27b",
+    "TEE/qwen3.8-27b-uncensored",
     "THUDM/GLM-4-32B-0414",
     "THUDM/GLM-4-9B-0414",
     "THUDM/GLM-Z1-9B-0414",
@@ -9995,6 +9996,8 @@
     "paulml/ECE-ILAB-Q1",
     "peking-university/video-llava",
     "perceptron/perceptron-mk1",
+    "perceptron/perceptron-mk1-5",
+    "perceptron/perceptron-mk1.5",
     "perplexity-ai/pplx-embed-v1-0-6b",
     "perplexity-ai/pplx-embed-v1-4b",
     "perplexity-ai/sonar",
