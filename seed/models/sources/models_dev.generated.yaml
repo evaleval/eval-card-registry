@@ -4312,7 +4312,7 @@
   tags: []
   aliases:
   - qwen3p7-plus
-  metadata: '{"alias_platforms": {"qwen3p7-plus": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "qwen3p7-plus"}'
+  metadata: '{"alias_platforms": {"qwen3p7-plus": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "qwen3p7-plus", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3p8-2p4t-a95b
@@ -9743,9 +9743,9 @@
   - deepseek-v4-flash-0731@eu
   - deepseek/deepseek-v4-flash-0731:free
   metadata: '{"alias_platforms": {"deepseek-v4-flash-0731": "deepinfra", "deepseek-v4-flash-0731-fast": "venice", "deepseek-v4-flash-0731@eu": "requesty", "deepseek/deepseek-v4-flash-0731:free": "openrouter"},
-    "openrouter_adopted": true, "providers": ["aihubmix", "alibaba", "ambient", "baseten", "chutes", "cloudflare-workers-ai", "cortecs", "crof", "deepinfra", "digitalocean", "fireworks-ai", "huggingface",
-    "inceptron", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "perplexity-agent", "requesty", "scaleway", "siliconflow", "togetherai", "venice", "vercel", "wandb"],
-    "underlying_key": "deepseek-v4-flash-0731"}'
+    "openrouter_adopted": true, "providers": ["aihubmix", "alibaba", "ambient", "baseten", "chutes", "cloudflare-workers-ai", "cortecs", "crof", "deepinfra", "digitalocean", "huggingface", "inceptron",
+    "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "perplexity-agent", "requesty", "scaleway", "siliconflow", "togetherai", "venice", "vercel", "wandb"], "underlying_key":
+    "deepseek-v4-flash-0731"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-v4-flash-0731-cheaper
@@ -9893,8 +9893,8 @@
   - deepseek-v4-pro-0813
   - deepseek-v4-pro-0813@eu
   metadata: '{"alias_platforms": {"deepseek-v4-pro-0813": "deepinfra", "deepseek-v4-pro-0813@eu": "requesty"}, "openrouter_adopted": true, "providers": ["aihubmix", "baseten", "cloudflare-workers-ai", "cortecs",
-    "crof", "deepinfra", "digitalocean", "fireworks-ai", "huggingface", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "requesty", "siliconflow", "togetherai", "venice",
-    "vercel", "vivgrid", "wandb"], "underlying_key": "deepseek-v4-pro-0813"}'
+    "crof", "deepinfra", "digitalocean", "huggingface", "kilo", "merge-gateway", "nano-gpt", "nebius", "nvidia", "openrouter", "orcarouter", "requesty", "siliconflow", "togetherai", "venice", "vercel",
+    "vivgrid", "wandb"], "underlying_key": "deepseek-v4-pro-0813"}'
   review_status: draft
   resolution_source: models_dev
 - id: deepseek/deepseek-v4-pro-6bit
@@ -17475,8 +17475,8 @@
   aliases:
   - TEE/muse-glimmer-30b
   - muse-glimmer-30b
-  metadata: '{"alias_platforms": {"TEE/muse-glimmer-30b": "nano-gpt", "muse-glimmer-30b": "nano-gpt"}, "openrouter_adopted": true, "providers": ["fireworks-ai", "kilo", "llmgateway", "nano-gpt", "nvidia",
-    "openrouter", "requesty", "vercel"], "underlying_key": "muse-glimmer-30b"}'
+  metadata: '{"alias_platforms": {"TEE/muse-glimmer-30b": "nano-gpt", "muse-glimmer-30b": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "llmgateway", "nano-gpt", "nvidia", "openrouter",
+    "requesty", "vercel"], "underlying_key": "muse-glimmer-30b"}'
   review_status: reviewed
   resolution_source: models_dev
 - id: meta/muse-image-1-0
@@ -18058,7 +18058,7 @@
   - open-weight
   aliases:
   - minimax-m2p7
-  metadata: '{"alias_platforms": {"minimax-m2p7": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "minimax-m2p7"}'
+  metadata: '{"alias_platforms": {"minimax-m2p7": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "minimax-m2p7", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: minimax/minimax-m3
@@ -20749,7 +20749,7 @@
   aliases:
   - Kimi K2.7 Code Fast
   - kimi-k2p7-code
-  metadata: '{"alias_platforms": {"kimi-k2p7-code": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "kimi-k2p7-code"}'
+  metadata: '{"alias_platforms": {"kimi-k2p7-code": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "kimi-k2p7-code", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: moonshotai/kimi-k3
@@ -30367,7 +30367,7 @@
   review_status: draft
   resolution_source: models_dev
 - id: xiaomi/mimo-v2-6-flash-uncensored
-  display_name: MiMo V2.6 Flash Uncensored
+  display_name: MiMo V2.6 Flash Uncensored Thinking
   org_id: xiaomi
   family: mimo-v2-6-flash-uncensored
   architecture: null
@@ -30380,6 +30380,7 @@
   tags:
   - open-weight
   aliases:
+  - MiMo V2.6 Flash Uncensored
   - mimo-v2-6-flash-uncensored
   metadata: '{"alias_platforms": {"mimo-v2-6-flash-uncensored": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "mimo-v2-6-flash-uncensored"}'
   review_status: draft
@@ -31945,6 +31946,24 @@
   metadata: '{"alias_platforms": {"glm-5-3-promo-50": "vercel"}, "providers": ["vercel"], "underlying_key": "glm-5-3-promo-50", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
+- id: zai/glm-5-3-uncensored
+  display_name: GLM 5.3 Uncensored
+  org_id: zai
+  family: glm-5-3-uncensored
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-09-26'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-5-3-uncensored
+  metadata: '{"alias_platforms": {"glm-5-3-uncensored": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "glm-5-3-uncensored"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: zai/glm-5-original
   display_name: GLM 5 Original Thinking
   org_id: zai
@@ -31980,7 +31999,7 @@
   aliases:
   - GLM 5.2 Fast
   - glm-5p2
-  metadata: '{"alias_platforms": {"glm-5p2": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "glm-5p2"}'
+  metadata: '{"alias_platforms": {"glm-5p2": "fireworks-ai"}, "providers": ["fireworks-ai"], "underlying_key": "glm-5p2", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-5p3

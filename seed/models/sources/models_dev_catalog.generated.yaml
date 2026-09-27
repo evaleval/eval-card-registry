@@ -1691,13 +1691,6 @@
   weak:
     release_date: '2026-01-22'
     open_weights: true
-- id: alibaba/qwen3p7-plus
-  aliases:
-  - qwen3p7-plus
-  metadata: '{"alias_platforms": {"qwen3p7-plus": "fireworks-ai"}}'
-  weak:
-    release_date: '2026-06-12'
-    open_weights: false
 - id: alibaba/qwen3p8-2p4t-a95b
   aliases:
   - qwen3p8-2p4t-a95b
@@ -6611,13 +6604,6 @@
   weak:
     release_date: '2026-03-18'
     open_weights: true
-- id: minimax/minimax-m2p7
-  aliases:
-  - minimax-m2p7
-  metadata: '{"alias_platforms": {"minimax-m2p7": "fireworks-ai"}}'
-  weak:
-    release_date: '2026-03-18'
-    open_weights: true
 - id: minimax/minimax-m3
   aliases:
   - MiniMax-M3
@@ -7609,31 +7595,6 @@
     - video
     output_modalities:
     - text
-- id: moonshotai/Kimi-K2.6
-  aliases:
-  - Kimi K2.6
-  - Kimi-K2.6
-  - TEE/kimi-k2.6
-  - kimi-k2-6
-  - kimi-k2.6
-  - kimi-k2.6-fast
-  - kimi-k2.6@eu
-  - moonshotai/k2p6
-  - moonshotai/kimi-k2-6
-  - moonshotai/kimi-k2.6
-  - moonshotai/kimi-k2.6:free
-  - moonshotai/umans-kimi-k2-6
-  metadata: '{"alias_platforms": {"Kimi-K2.6": "wafer.ai", "TEE/kimi-k2.6": "nano-gpt", "kimi-k2-6": "deepinfra", "kimi-k2.6": "crof", "kimi-k2.6-fast": "neuralwatt", "kimi-k2.6@eu": "requesty", "moonshotai/kimi-k2-6":
-    "deepinfra", "moonshotai/kimi-k2.6:free": "openrouter"}}'
-  weak:
-    release_date: '2026-04-17'
-    open_weights: true
-    input_modalities:
-    - image
-    - text
-    - video
-    output_modalities:
-    - text
 - id: moonshotai/kimi-fast-latest
   aliases:
   - kimi-fast-latest
@@ -7715,6 +7676,31 @@
     - text
     output_modalities:
     - text
+- id: moonshotai/Kimi-K2.6
+  aliases:
+  - Kimi K2.6
+  - Kimi-K2.6
+  - TEE/kimi-k2.6
+  - kimi-k2-6
+  - kimi-k2.6
+  - kimi-k2.6-fast
+  - kimi-k2.6@eu
+  - moonshotai/k2p6
+  - moonshotai/kimi-k2-6
+  - moonshotai/kimi-k2.6
+  - moonshotai/kimi-k2.6:free
+  - moonshotai/umans-kimi-k2-6
+  metadata: '{"alias_platforms": {"Kimi-K2.6": "wafer.ai", "TEE/kimi-k2.6": "nano-gpt", "kimi-k2-6": "deepinfra", "kimi-k2.6": "crof", "kimi-k2.6-fast": "neuralwatt", "kimi-k2.6@eu": "requesty", "moonshotai/kimi-k2-6":
+    "deepinfra", "moonshotai/kimi-k2.6:free": "openrouter"}}'
+  weak:
+    release_date: '2026-04-21'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: moonshotai/kimi-k2.7-code
   aliases:
   - TEE/kimi-k2.7-code
@@ -7750,13 +7736,6 @@
     - video
     output_modalities:
     - text
-- id: moonshotai/kimi-k2p7-code
-  aliases:
-  - kimi-k2p7-code
-  metadata: '{"alias_platforms": {"kimi-k2p7-code": "fireworks-ai"}}'
-  weak:
-    release_date: '2026-06-12'
-    open_weights: true
 - id: moonshotai/kimi-k3
   aliases:
   - TEE/kimi-k3
@@ -12257,19 +12236,19 @@
   weak:
     release_date: '2026-08-14'
     open_weights: true
+- id: zai/glm-5-3-uncensored
+  aliases:
+  - glm-5-3-uncensored
+  metadata: '{"alias_platforms": {"glm-5-3-uncensored": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-26'
+    open_weights: true
 - id: zai/glm-5-original
   aliases:
   - glm-5-original
   metadata: '{"alias_platforms": {"glm-5-original": "nano-gpt"}}'
   weak:
     release_date: '2026-02-11'
-    open_weights: true
-- id: zai/glm-5p2
-  aliases:
-  - glm-5p2
-  metadata: '{"alias_platforms": {"glm-5p2": "fireworks-ai"}}'
-  weak:
-    release_date: '2026-06-16'
     open_weights: true
 - id: zai/glm-5p3
   aliases:
@@ -12377,6 +12356,34 @@
   aliases:
   - zai-org-glm-5-2
   metadata: '{"alias_platforms": {"zai-org-glm-5-2": "venice"}}'
+  weak:
+    release_date: '2026-06-16'
+    open_weights: true
+- id: alibaba/qwen3p7-plus
+  aliases:
+  - qwen3p7-plus
+  metadata: '{"alias_platforms": {"qwen3p7-plus": "fireworks-ai"}}'
+  weak:
+    release_date: '2026-06-12'
+    open_weights: false
+- id: minimax/minimax-m2p7
+  aliases:
+  - minimax-m2p7
+  metadata: '{"alias_platforms": {"minimax-m2p7": "fireworks-ai"}}'
+  weak:
+    release_date: '2026-03-18'
+    open_weights: true
+- id: moonshotai/kimi-k2p7-code
+  aliases:
+  - kimi-k2p7-code
+  metadata: '{"alias_platforms": {"kimi-k2p7-code": "fireworks-ai"}}'
+  weak:
+    release_date: '2026-06-12'
+    open_weights: true
+- id: zai/glm-5p2
+  aliases:
+  - glm-5p2
+  metadata: '{"alias_platforms": {"glm-5p2": "fireworks-ai"}}'
   weak:
     release_date: '2026-06-16'
     open_weights: true
