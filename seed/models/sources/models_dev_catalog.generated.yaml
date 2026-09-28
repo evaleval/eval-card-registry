@@ -889,7 +889,7 @@
   - qwen3-7-max
   - qwen3.7-max
   - qwen3.7-max:thinking
-  metadata: '{"alias_platforms": {"alibaba/qwen3-7-max": "deepinfra", "qwen-3-7-max": "venice", "qwen3-7-max": "deepinfra", "qwen3.7-max": "alibaba-coding-plan", "qwen3.7-max:thinking": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"alibaba/qwen3-7-max": "deepinfra", "qwen-3-7-max": "venice", "qwen3-7-max": "deepinfra", "qwen3.7-max": "abacus", "qwen3.7-max:thinking": "nano-gpt"}}'
   weak:
     release_date: '2026-05-22'
     open_weights: false
@@ -1312,15 +1312,6 @@
   weak:
     release_date: '2026-03-05'
     open_weights: true
-- id: alibaba/qwen3-5-flash
-  aliases:
-  - qwen3-5-flash
-  - qwen3.5-flash
-  - qwen3.5-flash:thinking
-  metadata: '{"alias_platforms": {"qwen3-5-flash": "nano-gpt", "qwen3.5-flash": "alibaba-cn", "qwen3.5-flash:thinking": "nano-gpt"}}'
-  weak:
-    release_date: '2026-02-23'
-    open_weights: false
 - id: alibaba/qwen3-5-omni-flash
   aliases:
   - qwen3-5-omni-flash
@@ -1406,6 +1397,14 @@
   weak:
     release_date: '2026-08-27'
     open_weights: true
+- id: alibaba/qwen3-8-max-preview
+  aliases:
+  - qwen3-8-max-preview
+  - qwen3.8-max-preview
+  metadata: '{"alias_platforms": {"qwen3-8-max-preview": "aihubmix", "qwen3.8-max-preview": "aihubmix"}}'
+  weak:
+    release_date: '2026-07-19'
+    open_weights: false
 - id: alibaba/qwen3-asr-flash
   aliases:
   - qwen3-asr-flash
@@ -1633,6 +1632,21 @@
     input_modalities:
     - image
     - text
+    output_modalities:
+    - text
+- id: alibaba/qwen3-5-flash
+  aliases:
+  - qwen3-5-flash
+  - qwen3.5-flash
+  - qwen3.5-flash:thinking
+  metadata: '{"alias_platforms": {"qwen3-5-flash": "nano-gpt", "qwen3.5-flash": "alibaba", "qwen3.5-flash:thinking": "nano-gpt"}}'
+  weak:
+    release_date: '2026-02-23'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    - video
     output_modalities:
     - text
 - id: alibaba/qwen3.5-plus
@@ -2985,6 +2999,13 @@
   weak:
     release_date: '2025-09-01'
     open_weights: true
+- id: bytedance/seed-2-0-code-preview-260328
+  aliases:
+  - seed-2-0-code-preview-260328
+  metadata: '{"alias_platforms": {"seed-2-0-code-preview-260328": "llmgateway"}}'
+  weak:
+    release_date: '2026-03-28'
+    open_weights: false
 - id: bytedance/seed-2.0-pro
   aliases:
   - bytedance/seed-2-0-pro
@@ -3521,7 +3542,7 @@
   - DeepSeek R1 Distill Llama 70B
   - deepseek-r1-distill-llama-70b
   - deepseek/deepseek-r1-distill-llama-70b
-  metadata: '{"alias_platforms": {"deepseek-r1-distill-llama-70b": "kilo", "deepseek/deepseek-r1-distill-llama-70b": "kilo"}}'
+  metadata: '{"alias_platforms": {"deepseek-r1-distill-llama-70b": "novita-ai", "deepseek/deepseek-r1-distill-llama-70b": "novita-ai"}}'
   weak:
     release_date: '2025-01-01'
     open_weights: true
@@ -3614,25 +3635,6 @@
   weak:
     release_date: '2025-12-01'
     open_weights: true
-- id: deepseek-ai/DeepSeek-V4-Pro
-  aliases:
-  - DeepSeek V4 Pro
-  - TEE/deepseek-v4-pro
-  - TEE/deepseek-v4-pro:thinking
-  - deepseek-v4-pro
-  - deepseek-v4-pro:0813
-  - deepseek-v4-pro@eu
-  - deepseek/deepseek-v4-pro
-  - deepseek/umans-deepseek-v4-pro-0813
-  metadata: '{"alias_platforms": {"TEE/deepseek-v4-pro": "nano-gpt", "TEE/deepseek-v4-pro:thinking": "nano-gpt", "deepseek-v4-pro": "deepinfra", "deepseek-v4-pro:0813": "ollama-cloud", "deepseek-v4-pro@eu":
-    "requesty"}}'
-  weak:
-    release_date: '2026-08-12'
-    open_weights: true
-    input_modalities:
-    - text
-    output_modalities:
-    - text
 - id: deepseek-chat-cheaper
   weak:
     release_date: '2025-04-15'
@@ -3846,6 +3848,25 @@
     - text
     output_modalities:
     - text
+- id: deepseek-ai/DeepSeek-V4-Pro
+  aliases:
+  - DeepSeek V4 Pro
+  - TEE/deepseek-v4-pro
+  - TEE/deepseek-v4-pro:thinking
+  - deepseek-v4-pro
+  - deepseek-v4-pro:0813
+  - deepseek-v4-pro@eu
+  - deepseek/deepseek-v4-pro
+  - deepseek/umans-deepseek-v4-pro-0813
+  metadata: '{"alias_platforms": {"TEE/deepseek-v4-pro": "nano-gpt", "TEE/deepseek-v4-pro:thinking": "nano-gpt", "deepseek-v4-pro": "deepinfra", "deepseek-v4-pro:0813": "ollama-cloud", "deepseek-v4-pro@eu":
+    "requesty"}}'
+  weak:
+    release_date: '2026-08-12'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: deepseek/deepseek-v4-pro-0423
   aliases:
   - deepseek-v4-pro-0423
@@ -3880,6 +3901,14 @@
   aliases:
   - deepseek-v4p1-flash
   metadata: '{"alias_platforms": {"deepseek-v4p1-flash": "fireworks-ai"}}'
+  weak:
+    release_date: '2026-09-10'
+    open_weights: true
+- id: deepseek/umans-deepseek-v4-1-flash
+  aliases:
+  - umans-deepseek-v4-1-flash
+  - umans-deepseek-v4.1-flash
+  metadata: '{"alias_platforms": {"umans-deepseek-v4-1-flash": "umans-ai-coding-plan", "umans-deepseek-v4.1-flash": "umans-ai-coding-plan"}}'
   weak:
     release_date: '2026-09-10'
     open_weights: true
@@ -5485,6 +5514,13 @@
   weak:
     release_date: '2024-03-27'
     open_weights: true
+- id: heabsy/cyberheabsy
+  aliases:
+  - cyberheabsy
+  metadata: '{"alias_platforms": {"cyberheabsy": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-27'
+    open_weights: false
 - id: holo3-35b-a3b
   aliases:
   - holo3-35b-a3b:thinking
@@ -5542,8 +5578,9 @@
 - id: ibm-granite/granite-4.2-8b
   aliases:
   - granite-4-2-8b
+  - granite-4.2-8b
   - ibm/granite-4-2-8b
-  metadata: '{"alias_platforms": {"granite-4-2-8b": "nano-gpt", "ibm/granite-4-2-8b": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"granite-4-2-8b": "nano-gpt", "granite-4.2-8b": "llmgateway", "ibm/granite-4-2-8b": "nano-gpt"}}'
   weak:
     release_date: '2026-08-24'
     open_weights: true
@@ -5696,7 +5733,8 @@
   aliases:
   - inclusionai/ling-3.0-flash-vl:free
   - ling-3-0-flash-vl
-  metadata: '{"alias_platforms": {"inclusionai/ling-3.0-flash-vl:free": "openrouter", "ling-3-0-flash-vl": "nano-gpt"}}'
+  - ling-3.0-flash-vl
+  metadata: '{"alias_platforms": {"inclusionai/ling-3.0-flash-vl:free": "openrouter", "ling-3-0-flash-vl": "nano-gpt", "ling-3.0-flash-vl": "llmgateway"}}'
   weak:
     release_date: '2026-09-08'
     open_weights: true
@@ -5901,13 +5939,6 @@
   weak:
     release_date: '2024-09-25'
     open_weights: false
-- id: longcat-2-5-preview
-  aliases:
-  - longcat-2.5-preview-free
-  metadata: '{"alias_platforms": {"longcat-2.5-preview-free": "opencode-go"}}'
-  weak:
-    release_date: '2026-09-25'
-    open_weights: false
 - id: lucidnova-rf1-100b
   weak:
     release_date: '2024-12-28'
@@ -5969,6 +6000,10 @@
   metadata: '{"alias_platforms": {"manta-pro-1-0": "nano-gpt"}}'
   weak:
     release_date: '2025-09-20'
+    open_weights: false
+- id: meituan/longcat-2-5-preview
+  weak:
+    release_date: '2026-09-25'
     open_weights: false
 - id: meituan/longcat-2.0
   aliases:
@@ -6620,6 +6655,15 @@
     - video
     output_modalities:
     - text
+- id: minimax/minimax-m3-1-flash-preview
+  aliases:
+  - MiniMax-M3.1-Flash-Preview
+  - minimax-m3-1-flash-preview
+  - minimax-m3.1-flash-preview
+  metadata: '{"alias_platforms": {"MiniMax-M3.1-Flash-Preview": "minimax-coding-plan", "minimax-m3-1-flash-preview": "minimax-coding-plan", "minimax-m3.1-flash-preview": "minimax-coding-plan"}}'
+  weak:
+    release_date: '2026-09-27'
+    open_weights: false
 - id: minimax/minimax-m3-preview
   aliases:
   - minimax-m3-preview
@@ -7841,6 +7885,24 @@
   weak:
     release_date: '2026-06-02'
     open_weights: true
+- id: nex-agi/nex-n2.5-mini
+  aliases:
+  - nex-agi/nex-n2-5-mini
+  - nex-agi/nex-n2.5-mini:free
+  - nex-n2-5-mini
+  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-mini": "kilo", "nex-agi/nex-n2.5-mini:free": "openrouter", "nex-n2-5-mini": "kilo"}}'
+  weak:
+    release_date: '2026-09-08'
+    open_weights: true
+- id: nex-agi/nex-n2.5-pro
+  aliases:
+  - nex-agi/nex-n2-5-pro
+  - nex-agi/nex-n2.5-pro:free
+  - nex-n2-5-pro
+  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-pro": "kilo", "nex-agi/nex-n2.5-pro:free": "openrouter", "nex-n2-5-pro": "kilo"}}'
+  weak:
+    release_date: '2026-09-08'
+    open_weights: true
 - id: nothingiisreal/l3-1-70b-celeste-v0-1
   weak:
     release_date: '2024-01-01'
@@ -8344,10 +8406,6 @@
   weak:
     release_date: '2025-01-01'
     open_weights: false
-- id: omen-alpha
-  weak:
-    release_date: '2026-09-04'
-    open_weights: false
 - id: openai/chatgpt-4o-latest
   aliases:
   - chatgpt-4o-latest
@@ -8392,6 +8450,25 @@
   weak:
     release_date: '2023-11-06'
     open_weights: false
+- id: openai/daybreak-blue
+  weak:
+    release_date: '2026-08-07'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
+- id: openai/daybreak-red
+  weak:
+    release_date: '2026-08-07'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
 - id: openai/gpt-3-5-turbo-0125
   aliases:
   - gpt-3-5-turbo-0125
@@ -9024,7 +9101,7 @@
   - gpt-5-5-pro
   - gpt-5.5-pro
   - openai/gpt-5-5-pro
-  metadata: '{"alias_platforms": {"gpt-5-5-pro": "poe", "gpt-5.5-pro": "opencode", "openai/gpt-5-5-pro": "poe"}}'
+  metadata: '{"alias_platforms": {"gpt-5-5-pro": "poe", "gpt-5.5-pro": "aihubmix", "openai/gpt-5-5-pro": "poe"}}'
   weak:
     release_date: '2026-04-23'
     open_weights: false
@@ -9899,7 +9976,7 @@
   - ox-alpha-free
   metadata: '{"alias_platforms": {"ox-alpha-free": "opencode-go"}}'
   weak:
-    release_date: '2026-08-21'
+    release_date: '2026-08-26'
     open_weights: true
 - id: baidu/paddleocr-vl
   aliases:
@@ -10002,6 +10079,10 @@
     - text
     output_modalities:
     - text
+- id: pixel-canary
+  weak:
+    release_date: '2026-09-25'
+    open_weights: false
 - id: poetools/claude-code
   aliases:
   - claude-code
@@ -10298,7 +10379,7 @@
   - alibaba/qwen3.6-flash
   - qwen3-6-flash
   - qwen3.6-flash
-  metadata: '{"alias_platforms": {"alibaba/qwen3-6-flash": "nano-gpt", "qwen3-6-flash": "nano-gpt", "qwen3.6-flash": "alibaba-coding-plan"}}'
+  metadata: '{"alias_platforms": {"alibaba/qwen3-6-flash": "nano-gpt", "qwen3-6-flash": "nano-gpt", "qwen3.6-flash": "302ai"}}'
   weak:
     release_date: '2026-04-27'
     open_weights: false
@@ -10311,13 +10392,20 @@
 - id: qwen/qwen3.7-flash
   aliases:
   - alibaba/qwen3-7-flash
+  - alibaba/qwen3.7-flash
   - qwen3-7-flash
   - qwen3.7-flash
   - qwen3.7-flash:thinking
-  metadata: '{"alias_platforms": {"alibaba/qwen3-7-flash": "nano-gpt", "qwen3-7-flash": "nano-gpt", "qwen3.7-flash": "aihubmix", "qwen3.7-flash:thinking": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"alibaba/qwen3-7-flash": "nano-gpt", "qwen3-7-flash": "nano-gpt", "qwen3.7-flash": "alibaba", "qwen3.7-flash:thinking": "nano-gpt"}}'
   weak:
     release_date: '2026-07-15'
     open_weights: false
+    input_modalities:
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: qwen/qwen3.8-2.4t-a95b
   aliases:
   - alibaba/qwen3-8-2-4t-a95b
@@ -10379,12 +10467,20 @@
     open_weights: false
 - id: alibaba/qwen3-8-omni-flash
   aliases:
+  - alibaba/qwen3.8-omni-flash
   - qwen3-8-omni-flash
   - qwen3.8-omni-flash
-  metadata: '{"alias_platforms": {"qwen3-8-omni-flash": "nano-gpt", "qwen3.8-omni-flash": "aihubmix"}}'
+  metadata: '{"alias_platforms": {"qwen3-8-omni-flash": "nano-gpt", "qwen3.8-omni-flash": "alibaba"}}'
   weak:
     release_date: '2026-09-17'
     open_weights: false
+    input_modalities:
+    - audio
+    - image
+    - text
+    - video
+    output_modalities:
+    - text
 - id: recraft/recraft-v2
   aliases:
   - recraft-v2
@@ -10950,7 +11046,7 @@
 - id: tencent/hy4-preview
   aliases:
   - hy4-preview
-  metadata: '{"alias_platforms": {"hy4-preview": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"hy4-preview": "deepinfra"}}'
   weak:
     release_date: '2026-08-28'
     open_weights: true
@@ -11377,7 +11473,7 @@
   - grok-4.7
   - xai/grok-4-7
   - xai/grok-4.7
-  metadata: '{"alias_platforms": {"grok-4-7": "nano-gpt", "grok-4.7": "xai", "xai/grok-4-7": "nano-gpt"}}'
+  metadata: '{"alias_platforms": {"grok-4-7": "nano-gpt", "grok-4.7": "302ai", "xai/grok-4-7": "nano-gpt"}}'
   weak:
     release_date: '2026-09-21'
     open_weights: false
@@ -11608,6 +11704,13 @@
   weak:
     release_date: '2026-04-22'
     open_weights: true
+- id: xiaomi/mimo-v2-6-flash-abliterated
+  aliases:
+  - mimo-v2-6-flash-abliterated
+  metadata: '{"alias_platforms": {"mimo-v2-6-flash-abliterated": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-25'
+    open_weights: true
 - id: xiaomi/mimo-v2-6-flash-uncensored
   aliases:
   - mimo-v2-6-flash-uncensored
@@ -11669,8 +11772,11 @@
   - mimo-v2-6-flash
   - mimo-v2.6-flash
   - mimo-v2.6-flash-free
+  - xiaomi-mimo-v2-6-flash
   - xiaomi/mimo-v2-6-flash
-  metadata: '{"alias_platforms": {"mimo-v2-6-flash": "deepinfra", "mimo-v2.6-flash": "xiaomi-token-plan-cn", "mimo-v2.6-flash-free": "opencode", "xiaomi/mimo-v2-6-flash": "deepinfra"}}'
+  - xiaomi/xiaomi-mimo-v2-6-flash
+  metadata: '{"alias_platforms": {"mimo-v2-6-flash": "deepinfra", "mimo-v2.6-flash": "xiaomi-token-plan-cn", "mimo-v2.6-flash-free": "opencode", "xiaomi-mimo-v2-6-flash": "venice", "xiaomi/mimo-v2-6-flash":
+    "deepinfra"}}'
   weak:
     release_date: '2026-09-22'
     open_weights: true
@@ -12359,6 +12465,17 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: longcat-2-5-preview
+  aliases:
+  - longcat-2.5-preview-free
+  metadata: '{"alias_platforms": {"longcat-2.5-preview-free": "opencode-go"}}'
+  weak:
+    release_date: '2026-09-25'
+    open_weights: false
+- id: omen-alpha
+  weak:
+    release_date: '2026-09-04'
+    open_weights: false
 - id: alibaba/qwen3p7-plus
   aliases:
   - qwen3p7-plus
@@ -12386,24 +12503,6 @@
   metadata: '{"alias_platforms": {"glm-5p2": "fireworks-ai"}}'
   weak:
     release_date: '2026-06-16'
-    open_weights: true
-- id: nex-agi/nex-n2.5-mini
-  aliases:
-  - nex-agi/nex-n2-5-mini
-  - nex-agi/nex-n2.5-mini:free
-  - nex-n2-5-mini
-  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-mini": "kilo", "nex-agi/nex-n2.5-mini:free": "openrouter", "nex-n2-5-mini": "kilo"}}'
-  weak:
-    release_date: '2026-09-08'
-    open_weights: true
-- id: nex-agi/nex-n2.5-pro
-  aliases:
-  - nex-agi/nex-n2-5-pro
-  - nex-agi/nex-n2.5-pro:free
-  - nex-n2-5-pro
-  metadata: '{"alias_platforms": {"nex-agi/nex-n2-5-pro": "kilo", "nex-agi/nex-n2.5-pro:free": "openrouter", "nex-n2-5-pro": "kilo"}}'
-  weak:
-    release_date: '2026-09-08'
     open_weights: true
 - id: nano/lumen-stealth
   aliases:
