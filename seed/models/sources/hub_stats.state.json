@@ -1,5 +1,5 @@
 {
-  "parquet_etag": "e7e1b8f0e7219533a120d22695b89ebcf13d569341f5f1407683ac198de5755d",
+  "parquet_etag": "e8ae6c95abb8baa298d2572c638d3ab448238a67e6587d593125114676c43fb5",
   "rows_checked_at_etag": [
     "0-hero/Matter-0.1-7B-DPO-preview",
     "0-hero/Matter-0.1-7B-boost-DPO-preview",
@@ -3644,6 +3644,7 @@
     "anthropic pbc/claude-sonnet-4.5-thinking",
     "anthropic pbc/claude-sonnet-4.6",
     "anthropic pbc/claude-sonnet-5",
+    "anthropic pbc/claude-sonnet-5.5",
     "anthropic pbc/claude-sonnet-latest",
     "anthropic, pbc/claude-3-haiku",
     "anthropic, pbc/claude-3.5-haiku",
@@ -3691,6 +3692,7 @@
     "anthropic, pbc/claude-sonnet-4.5-thinking",
     "anthropic, pbc/claude-sonnet-4.6",
     "anthropic, pbc/claude-sonnet-5",
+    "anthropic, pbc/claude-sonnet-5.5",
     "anthropic, pbc/claude-sonnet-latest",
     "anthropic/claude-3-5-haiku",
     "anthropic/claude-3-5-sonnet",
@@ -3782,6 +3784,8 @@
     "anthropic/claude-sonnet-4.5-thinking",
     "anthropic/claude-sonnet-4.6",
     "anthropic/claude-sonnet-5",
+    "anthropic/claude-sonnet-5-5",
+    "anthropic/claude-sonnet-5.5",
     "anthropic/claude-sonnet-latest",
     "apple inc./DCLM-7B",
     "apple machine learning research/DCLM-7B",
