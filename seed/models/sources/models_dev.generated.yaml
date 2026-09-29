@@ -5169,8 +5169,8 @@
   - claude-4-opus
   - claude-opus-4
   metadata: '{"alias_platforms": {"anthropic--claude-4-opus": "sap-ai-core", "anthropic-claude-4-opus": "sap-ai-core", "anthropic-claude-opus-4": "digitalocean", "anthropic/claude-4-opus": "sap-ai-core",
-    "claude-4-opus": "sap-ai-core", "claude-opus-4": "poe"}, "providers": ["abacus", "digitalocean", "google-vertex", "google-vertex-anthropic", "helicone", "jiekou", "merge-gateway", "nano-gpt", "poe",
-    "sap-ai-core", "vercel", "zenmux"], "underlying_key": "claude-4-opus"}'
+    "claude-4-opus": "sap-ai-core", "claude-opus-4": "poe"}, "providers": ["abacus", "digitalocean", "google-vertex", "google-vertex-anthropic", "helicone", "jiekou", "merge-gateway", "poe", "sap-ai-core",
+    "vercel", "zenmux"], "underlying_key": "claude-4-opus"}'
   review_status: draft
   resolution_source: models_dev
 - id: anthropic/claude-opus-4-0
@@ -5514,6 +5514,7 @@
   - anthropic/claude-opus-5-5
   - au.anthropic.claude-opus-5-5
   - claude-opus-5-5
+  - claude-opus-5-5-fast
   - claude-opus-5-5@default
   - claude-opus-5-5@eu
   - claude-opus-5.5
@@ -5522,9 +5523,9 @@
   - jp.anthropic.claude-opus-5-5
   - us.anthropic.claude-opus-5-5
   metadata: '{"alias_platforms": {"anthropic-claude-opus-5.5": "digitalocean", "anthropic.claude-opus-5-5": "amazon-bedrock", "anthropic/claude-opus-5-5": "nano-gpt", "au.anthropic.claude-opus-5-5": "amazon-bedrock",
-    "claude-opus-5-5": "nano-gpt", "claude-opus-5-5@default": "google-vertex-anthropic", "claude-opus-5-5@eu": "requesty", "claude-opus-5.5": "github-copilot", "eu.anthropic.claude-opus-5-5": "amazon-bedrock",
-    "global.anthropic.claude-opus-5-5": "amazon-bedrock", "jp.anthropic.claude-opus-5-5": "amazon-bedrock", "us.anthropic.claude-opus-5-5": "amazon-bedrock"}, "knowledge_cutoffs": ["2026-06"], "openrouter_adopted":
-    true, "release_dates": ["2026-09-22"], "snapshots": ["claude-opus-5-5"]}'
+    "claude-opus-5-5": "nano-gpt", "claude-opus-5-5-fast": "venice", "claude-opus-5-5@default": "google-vertex-anthropic", "claude-opus-5-5@eu": "requesty", "claude-opus-5.5": "github-copilot", "eu.anthropic.claude-opus-5-5":
+    "amazon-bedrock", "global.anthropic.claude-opus-5-5": "amazon-bedrock", "jp.anthropic.claude-opus-5-5": "amazon-bedrock", "us.anthropic.claude-opus-5-5": "amazon-bedrock"}, "knowledge_cutoffs": ["2026-06"],
+    "openrouter_adopted": true, "release_dates": ["2026-09-22"], "snapshots": ["claude-opus-5-5"]}'
   review_status: reviewed
 - id: anthropic/claude-opus-latest
   display_name: Claude Opus Latest
@@ -5906,6 +5907,33 @@
     "amazon-bedrock", "claude-5-sonnet": "digitalocean", "claude-sonnet-5": "nano-gpt", "claude-sonnet-5@default": "google-vertex-anthropic", "claude-sonnet-5@eu": "requesty", "eu.anthropic.claude-sonnet-5":
     "amazon-bedrock", "global.anthropic.claude-sonnet-5": "amazon-bedrock", "jp.anthropic.claude-sonnet-5": "amazon-bedrock", "us.anthropic.claude-sonnet-5": "amazon-bedrock"}, "knowledge_cutoffs": ["2026-01-31"],
     "openrouter_adopted": true, "release_dates": ["2026-06-29"], "snapshots": ["claude-sonnet-5"]}'
+  review_status: reviewed
+- id: anthropic/claude-sonnet-5.5
+  display_name: Claude Sonnet 5.5
+  org_id: anthropic
+  family: claude-sonnet-5.5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-28'
+  input_modalities:
+  - image
+  - pdf
+  - text
+  output_modalities:
+  - text
+  tags: []
+  aliases:
+  - anthropic-claude-sonnet-5.5
+  - anthropic/claude-sonnet-5-5
+  - claude-sonnet-5-5
+  - claude-sonnet-5-5@default
+  - claude-sonnet-5.5
+  - global.anthropic.claude-sonnet-5-5
+  metadata: '{"alias_platforms": {"anthropic-claude-sonnet-5.5": "digitalocean", "anthropic/claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5@default": "google-vertex-anthropic",
+    "claude-sonnet-5.5": "github-copilot", "global.anthropic.claude-sonnet-5-5": "amazon-bedrock"}, "knowledge_cutoffs": ["2026-06"], "openrouter_adopted": true, "release_dates": ["2026-09-28"], "snapshots":
+    ["claude-sonnet-5-5"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-latest
   display_name: Claude Sonnet Latest
@@ -18855,7 +18883,7 @@
   - open-weight
   aliases:
   - magistral-small
-  metadata: '{"alias_platforms": {"magistral-small": "mistral"}, "knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-03-17"], "snapshots": ["magistral-small"]}'
+  metadata: '{"alias_platforms": {"magistral-small": "mistral"}, "knowledge_cutoffs": ["2025-06"], "release_dates": ["2025-03-17"], "snapshots": ["magistral-small"], "upstream_status": "removed"}'
   review_status: reviewed
 - id: mistralai/ministral-14b
   display_name: Ministral 14B
@@ -23729,7 +23757,7 @@
   - openai-gpt-5.1-codex-max
   - openai/gpt-5-1-codex-max
   metadata: '{"alias_platforms": {"gpt-5-1-codex-max": "poe", "gpt-5.1-codex-max": "abacus", "openai-gpt-5.1-codex-max": "digitalocean", "openai/gpt-5-1-codex-max": "poe"}, "openrouter_adopted": true, "providers":
-    ["abacus", "azure", "digitalocean", "jiekou", "kilo", "nano-gpt", "opencode", "openrouter", "poe", "vercel", "vivgrid"], "underlying_key": "gpt-5-1-codex-max"}'
+    ["abacus", "azure", "azure-cognitive-services", "digitalocean", "jiekou", "kilo", "nano-gpt", "opencode", "openrouter", "poe", "vercel", "vivgrid"], "underlying_key": "gpt-5-1-codex-max"}'
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-5.1-codex-mini
@@ -24746,7 +24774,7 @@
   aliases:
   - gpt-image-2-5-flare
   - gpt-image-2.5-flare
-  metadata: '{"alias_platforms": {"gpt-image-2-5-flare": "azure", "gpt-image-2.5-flare": "azure"}, "providers": ["aihubmix", "azure", "vercel"], "underlying_key": "gpt-image-2-5-flare"}'
+  metadata: '{"alias_platforms": {"gpt-image-2-5-flare": "azure", "gpt-image-2.5-flare": "azure"}, "providers": ["aihubmix", "azure", "azure-cognitive-services", "vercel"], "underlying_key": "gpt-image-2-5-flare"}'
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-image-2-5-sunburst
@@ -24764,7 +24792,7 @@
   aliases:
   - gpt-image-2-5-sunburst
   - gpt-image-2.5-sunburst
-  metadata: '{"alias_platforms": {"gpt-image-2-5-sunburst": "azure", "gpt-image-2.5-sunburst": "azure"}, "providers": ["aihubmix", "azure", "vercel"], "underlying_key": "gpt-image-2-5-sunburst"}'
+  metadata: '{"alias_platforms": {"gpt-image-2-5-sunburst": "azure", "gpt-image-2.5-sunburst": "azure"}, "providers": ["aihubmix", "azure", "azure-cognitive-services", "vercel"], "underlying_key": "gpt-image-2-5-sunburst"}'
   review_status: draft
   resolution_source: models_dev
 - id: openai/gpt-latest
@@ -26684,7 +26712,7 @@
   - qwen3.8-27b:thinking
   metadata: '{"alias_platforms": {"Qwen3.8-27B": "llmgateway", "TEE/qwen3.8-27b": "nano-gpt", "alibaba/qwen3-8-27b": "deepinfra", "qwen/qwen3.8-27b:free": "openrouter", "qwen3-8-27b": "deepinfra", "qwen3.8-27b":
     "crof", "qwen3.8-27b:thinking": "nano-gpt"}, "openrouter_adopted": true, "providers": ["ambient", "berget", "chutes", "cloudflare-workers-ai", "cortecs", "crof", "deepinfra", "evroc", "groq", "huggingface",
-    "kilo", "llmgateway", "nano-gpt", "openrouter", "orcarouter", "ovhcloud", "regolo-ai", "vercel", "wandb"], "underlying_key": "qwen3-8-27b"}'
+    "kilo", "llmgateway", "nano-gpt", "nebius", "openrouter", "orcarouter", "ovhcloud", "regolo-ai", "vercel", "wandb"], "underlying_key": "qwen3-8-27b"}'
   review_status: draft
   resolution_source: models_dev
 - id: qwen/qwen3.8-flash

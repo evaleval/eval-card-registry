@@ -2343,6 +2343,7 @@
   - anthropic/claude-opus-5-5
   - au.anthropic.claude-opus-5-5
   - claude-opus-5-5
+  - claude-opus-5-5-fast
   - claude-opus-5-5@default
   - claude-opus-5-5@eu
   - claude-opus-5.5
@@ -2351,8 +2352,8 @@
   - jp.anthropic.claude-opus-5-5
   - us.anthropic.claude-opus-5-5
   metadata: '{"alias_platforms": {"anthropic-claude-opus-5.5": "digitalocean", "anthropic.claude-opus-5-5": "amazon-bedrock", "anthropic/claude-opus-5-5": "nano-gpt", "au.anthropic.claude-opus-5-5": "amazon-bedrock",
-    "claude-opus-5-5": "nano-gpt", "claude-opus-5-5@default": "google-vertex-anthropic", "claude-opus-5-5@eu": "requesty", "claude-opus-5.5": "github-copilot", "eu.anthropic.claude-opus-5-5": "amazon-bedrock",
-    "global.anthropic.claude-opus-5-5": "amazon-bedrock", "jp.anthropic.claude-opus-5-5": "amazon-bedrock", "us.anthropic.claude-opus-5-5": "amazon-bedrock"}}'
+    "claude-opus-5-5": "nano-gpt", "claude-opus-5-5-fast": "venice", "claude-opus-5-5@default": "google-vertex-anthropic", "claude-opus-5-5@eu": "requesty", "claude-opus-5.5": "github-copilot", "eu.anthropic.claude-opus-5-5":
+    "amazon-bedrock", "global.anthropic.claude-opus-5-5": "amazon-bedrock", "jp.anthropic.claude-opus-5-5": "amazon-bedrock", "us.anthropic.claude-opus-5-5": "amazon-bedrock"}}'
   weak:
     release_date: '2026-09-22'
     open_weights: false
@@ -2499,6 +2500,25 @@
     "amazon-bedrock", "global.anthropic.claude-sonnet-5": "amazon-bedrock", "jp.anthropic.claude-sonnet-5": "amazon-bedrock", "us.anthropic.claude-sonnet-5": "amazon-bedrock"}}'
   weak:
     release_date: '2026-06-29'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
+- id: anthropic/claude-sonnet-5.5
+  aliases:
+  - anthropic-claude-sonnet-5.5
+  - anthropic/claude-sonnet-5-5
+  - claude-sonnet-5-5
+  - claude-sonnet-5-5@default
+  - claude-sonnet-5.5
+  - global.anthropic.claude-sonnet-5-5
+  metadata: '{"alias_platforms": {"anthropic-claude-sonnet-5.5": "digitalocean", "anthropic/claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5@default": "google-vertex-anthropic",
+    "claude-sonnet-5.5": "github-copilot", "global.anthropic.claude-sonnet-5-5": "amazon-bedrock"}}'
+  weak:
+    release_date: '2026-09-28'
     open_weights: false
     input_modalities:
     - image
@@ -6941,17 +6961,6 @@
   aliases:
   - magistral-medium-latest
   metadata: '{"alias_platforms": {"magistral-medium-latest": "merge-gateway"}}'
-  weak:
-    release_date: '2025-03-17'
-    open_weights: true
-    input_modalities:
-    - text
-    output_modalities:
-    - text
-- id: mistralai/magistral-small
-  aliases:
-  - magistral-small
-  metadata: '{"alias_platforms": {"magistral-small": "mistral"}}'
   weak:
     release_date: '2025-03-17'
     open_weights: true
@@ -12465,6 +12474,17 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: mistralai/magistral-small
+  aliases:
+  - magistral-small
+  metadata: '{"alias_platforms": {"magistral-small": "mistral"}}'
+  weak:
+    release_date: '2025-03-17'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: longcat-2-5-preview
   aliases:
   - longcat-2.5-preview-free
