@@ -354,6 +354,23 @@
   weak:
     release_date: '2026-01-20'
     open_weights: true
+- id: LiquidAI/d1
+  display_name: Liquid d1
+  org_id: LiquidAI
+  family: d1
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-29'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - d1
+  metadata: '{"alias_platforms": {"d1": "vercel"}, "providers": ["vercel"], "underlying_key": "d1"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: LiquidAI/lfm-2-5-1-2b
   display_name: LFM2.5-1.2B-Thinking (free)
   org_id: LiquidAI
@@ -5926,14 +5943,16 @@
   tags: []
   aliases:
   - anthropic-claude-sonnet-5.5
+  - anthropic.claude-sonnet-5-5
   - anthropic/claude-sonnet-5-5
   - claude-sonnet-5-5
   - claude-sonnet-5-5@default
+  - claude-sonnet-5-5@eu
   - claude-sonnet-5.5
   - global.anthropic.claude-sonnet-5-5
-  metadata: '{"alias_platforms": {"anthropic-claude-sonnet-5.5": "digitalocean", "anthropic/claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5@default": "google-vertex-anthropic",
-    "claude-sonnet-5.5": "github-copilot", "global.anthropic.claude-sonnet-5-5": "amazon-bedrock"}, "knowledge_cutoffs": ["2026-06"], "openrouter_adopted": true, "release_dates": ["2026-09-28"], "snapshots":
-    ["claude-sonnet-5-5"]}'
+  metadata: '{"alias_platforms": {"anthropic-claude-sonnet-5.5": "digitalocean", "anthropic.claude-sonnet-5-5": "amazon-bedrock", "anthropic/claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5": "nano-gpt",
+    "claude-sonnet-5-5@default": "google-vertex-anthropic", "claude-sonnet-5-5@eu": "requesty", "claude-sonnet-5.5": "github-copilot", "global.anthropic.claude-sonnet-5-5": "amazon-bedrock"}, "knowledge_cutoffs":
+    ["2026-06"], "openrouter_adopted": true, "release_dates": ["2026-09-28"], "snapshots": ["claude-sonnet-5-5"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-latest
   display_name: Claude Sonnet Latest
@@ -14951,6 +14970,23 @@
   aliases:
   - ling-3.0-tiny-free
   metadata: '{"alias_platforms": {"ling-3.0-tiny-free": "opencode"}, "providers": ["opencode", "vercel"], "underlying_key": "ling-3-0-tiny", "upstream_status": "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: inclusionai/ling-3-1-flash
+  display_name: Ling 3.1 Flash
+  org_id: inclusionAI
+  family: ling-3-1-flash
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-29'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - ling-3-1-flash
+  metadata: '{"alias_platforms": {"ling-3-1-flash": "nano-gpt"}, "providers": ["nano-gpt", "vercel"], "underlying_key": "ling-3-1-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: inclusionai/ling-3.0-flash
@@ -24599,6 +24635,66 @@
   metadata: '{"alias_platforms": {"gpt-6-sol-pro": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "gpt-6-sol-pro"}'
   review_status: draft
   resolution_source: models_dev
+- id: openai/gpt-6.1-sol
+  display_name: GPT-6.1 Sol
+  org_id: openai
+  family: gpt-6.1-sol
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-29'
+  input_modalities:
+  - image
+  - pdf
+  - text
+  output_modalities:
+  - text
+  tags: []
+  aliases:
+  - gpt-6-1-sol
+  - gpt-6.1-sol
+  - gpt-6.1-sol@eu
+  - openai/gpt-6-1-sol
+  metadata: '{"alias_platforms": {"gpt-6-1-sol": "nano-gpt", "gpt-6.1-sol": "azure", "gpt-6.1-sol@eu": "requesty", "openai/gpt-6-1-sol": "nano-gpt"}, "knowledge_cutoffs": ["2026-04-30"], "openrouter_adopted":
+    true, "release_dates": ["2026-09-29"], "snapshots": ["gpt-6.1-sol"]}'
+  review_status: reviewed
+- id: openai/gpt-6.1-sol-pro
+  display_name: GPT 6.1 Sol Pro
+  org_id: openai
+  family: gpt-6-1-sol-pro
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-29'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gpt-6-1-sol-pro
+  - openai/gpt-6-1-sol-pro
+  metadata: '{"alias_platforms": {"gpt-6-1-sol-pro": "nano-gpt", "openai/gpt-6-1-sol-pro": "nano-gpt"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "gpt-6-1-sol-pro"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: openai/gpt-61-sol
+  display_name: gpt-61-sol
+  org_id: openai
+  family: gpt-61-sol
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-29'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - gpt-61-sol
+  - openai-gpt-61-sol
+  metadata: '{"alias_platforms": {"gpt-61-sol": "venice", "openai-gpt-61-sol": "venice"}, "providers": ["venice"], "underlying_key": "gpt-61-sol"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: openai/gpt-astra-latest
   display_name: GPT Astra Latest
   org_id: openai
@@ -26712,7 +26808,7 @@
   - qwen3.8-27b:thinking
   metadata: '{"alias_platforms": {"Qwen3.8-27B": "llmgateway", "TEE/qwen3.8-27b": "nano-gpt", "alibaba/qwen3-8-27b": "deepinfra", "qwen/qwen3.8-27b:free": "openrouter", "qwen3-8-27b": "deepinfra", "qwen3.8-27b":
     "crof", "qwen3.8-27b:thinking": "nano-gpt"}, "openrouter_adopted": true, "providers": ["ambient", "berget", "chutes", "cloudflare-workers-ai", "cortecs", "crof", "deepinfra", "evroc", "groq", "huggingface",
-    "kilo", "llmgateway", "nano-gpt", "nebius", "openrouter", "orcarouter", "ovhcloud", "regolo-ai", "vercel", "wandb"], "underlying_key": "qwen3-8-27b"}'
+    "kilo", "llmgateway", "nano-gpt", "nebius", "openrouter", "orcarouter", "ovhcloud", "regolo-ai", "scaleway", "vercel", "wandb"], "underlying_key": "qwen3-8-27b"}'
   review_status: draft
   resolution_source: models_dev
 - id: qwen/qwen3.8-flash
@@ -30450,6 +30546,25 @@
   - xai.grok-4.6
   metadata: '{"alias_platforms": {"global.xai.grok-4.6": "amazon-bedrock", "us.xai.grok-4.6": "amazon-bedrock", "xai.grok-4-6": "amazon-bedrock", "xai.grok-4.6": "amazon-bedrock"}, "providers": ["amazon-bedrock"],
     "underlying_key": "xai.grok-4-6"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: xai/xai.grok-4-7
+  display_name: Grok 4.7 (Global)
+  org_id: xai
+  family: xai.grok-4-7
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-09-21'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - global.xai.grok-4.7
+  - us.xai.grok-4.7
+  - xai.grok-4-7
+  metadata: '{"alias_platforms": {"global.xai.grok-4.7": "amazon-bedrock", "us.xai.grok-4.7": "amazon-bedrock", "xai.grok-4-7": "amazon-bedrock"}, "providers": ["amazon-bedrock"], "underlying_key": "xai.grok-4-7"}'
   review_status: draft
   resolution_source: models_dev
 - id: xiaomi/mimo-v2-5-pro-6bit
