@@ -6280,3 +6280,10 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: apodex
+  display_name: apodex
+  hf_org: apodex
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed

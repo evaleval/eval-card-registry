@@ -127,13 +127,6 @@
   weak:
     release_date: '2026-02-25'
     open_weights: true
-- id: LiquidAI/d1
-  aliases:
-  - d1
-  metadata: '{"alias_platforms": {"d1": "vercel"}}'
-  weak:
-    release_date: '2026-09-29'
-    open_weights: false
 - id: MarinaraSpaghetti/nemomix-unleashed-12b
   aliases:
   - nemomix-unleashed-12b
@@ -747,6 +740,10 @@
 - id: abliterated-model-large
   weak:
     release_date: '2026-07-25'
+    open_weights: false
+- id: abliteration-abliterated-model-large-v2
+  weak:
+    release_date: '2026-10-01'
     open_weights: false
 - id: agent-max
   weak:
@@ -2547,6 +2544,15 @@
   weak:
     release_date: '2025-09-02'
     open_weights: true
+- id: apodex/apodex-1.1-mini
+  aliases:
+  - apodex-1-1-mini
+  - apodex/apodex-1-1-mini
+  - apodex/apodex-1.1-mini:free
+  metadata: '{"alias_platforms": {"apodex-1-1-mini": "kilo", "apodex/apodex-1-1-mini": "kilo", "apodex/apodex-1.1-mini:free": "openrouter"}}'
+  weak:
+    release_date: '2026-10-01'
+    open_weights: false
 - id: arcee-ai/Trinity-Large-Thinking
   aliases:
   - Trinity Large Thinking
@@ -3495,6 +3501,25 @@
     - text
     output_modalities:
     - text
+- id: cohere/north-small-translate
+  weak:
+    release_date: '2026-09-09'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
+- id: cohere/north-small-translate-09-2026
+  aliases:
+  - north-small-translate-09-2026
+  metadata: '{"alias_platforms": {"north-small-translate-09-2026": "cohere"}}'
+  weak:
+    release_date: '2026-09-09'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: cohere/rerank-v3-5
   aliases:
   - rerank-v3-5
@@ -3516,6 +3541,50 @@
   weak:
     release_date: '2025-12-11'
     open_weights: false
+- id: cohere/tiny-aya-earth
+  aliases:
+  - tiny-aya-earth
+  metadata: '{"alias_platforms": {"tiny-aya-earth": "cohere"}}'
+  weak:
+    release_date: '2026-02-17'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
+- id: cohere/tiny-aya-fire
+  aliases:
+  - tiny-aya-fire
+  metadata: '{"alias_platforms": {"tiny-aya-fire": "cohere"}}'
+  weak:
+    release_date: '2026-02-17'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
+- id: CohereLabs/tiny-aya-global
+  aliases:
+  - tiny-aya-global
+  metadata: '{"alias_platforms": {"tiny-aya-global": "cohere"}}'
+  weak:
+    release_date: '2026-02-17'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
+- id: cohere/tiny-aya-water
+  aliases:
+  - tiny-aya-water
+  metadata: '{"alias_platforms": {"tiny-aya-water": "cohere"}}'
+  weak:
+    release_date: '2026-02-17'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
 - id: compound
   weak:
     release_date: '2025-09-04'
@@ -3535,14 +3604,6 @@
   weak:
     release_date: '2025-05-10'
     open_weights: true
-- id: deepcogito/cogito-v2.1-671b
-  aliases:
-  - cogito-v2-1-671b
-  - deepcogito/cogito-v2-1-671b
-  metadata: '{"alias_platforms": {"cogito-v2-1-671b": "togetherai", "deepcogito/cogito-v2-1-671b": "openrouter"}}'
-  weak:
-    release_date: '2025-11-13'
-    open_weights: false
 - id: deepseek-ai/DeepSeek-R1
   aliases:
   - DeepSeek-R1
@@ -4186,6 +4247,13 @@
   weak:
     release_date: '2026-03-01'
     open_weights: false
+- id: fledge-alpha
+  aliases:
+  - fledge-alpha-free
+  metadata: '{"alias_platforms": {"fledge-alpha-free": "opencode"}}'
+  weak:
+    release_date: '2026-10-01'
+    open_weights: false
 - id: free
   weak:
     release_date: '1970-01-01'
@@ -4308,6 +4376,13 @@
   metadata: '{"alias_platforms": {"diffusiongemma": "nano-gpt"}}'
   weak:
     release_date: '2026-09-19'
+    open_weights: true
+- id: google/diffusiongemma-26b-a4b-it
+  aliases:
+  - diffusiongemma-26b-a4b-it
+  metadata: '{"alias_platforms": {"diffusiongemma-26b-a4b-it": "nvidia"}}'
+  weak:
+    release_date: '2026-06-09'
     open_weights: true
 - id: google/gemini-2.0-flash
   aliases:
@@ -5035,7 +5110,7 @@
   - google/gemma-3n-e4b-it
   metadata: '{"alias_platforms": {"gemma-3n-e4b-it": "nvidia", "google/gemma-3n-e4b-it": "nvidia"}}'
   weak:
-    release_date: '2025-05-20'
+    release_date: '2025-06-03'
     open_weights: true
 - id: google/gemma-4-12b-it
   aliases:
@@ -6424,13 +6499,6 @@
   weak:
     release_date: '2024-07-23'
     open_weights: true
-- id: meta/meta-llama-3-8b-instruct-lite
-  aliases:
-  - meta-llama-3-8b-instruct-lite
-  metadata: '{"alias_platforms": {"meta-llama-3-8b-instruct-lite": "togetherai"}}'
-  weak:
-    release_date: '2024-04-18'
-    open_weights: true
 - id: meta/muse-glimmer-30b
   aliases:
   - TEE/muse-glimmer-30b
@@ -6533,6 +6601,55 @@
   weak:
     release_date: '2024-12-11'
     open_weights: true
+- id: microsoft/mai-transcribe-1-5
+  aliases:
+  - mai-transcribe-1-5
+  metadata: '{"alias_platforms": {"mai-transcribe-1-5": "vercel"}}'
+  weak:
+    release_date: '2026-06-01'
+    open_weights: false
+- id: microsoft/mai-transcribe-2
+  aliases:
+  - mai-transcribe-2
+  metadata: '{"alias_platforms": {"mai-transcribe-2": "vercel"}}'
+  weak:
+    release_date: '2026-09-03'
+    open_weights: false
+- id: microsoft/mai-transcribe-2-streaming
+  aliases:
+  - mai-transcribe-2-streaming
+  metadata: '{"alias_platforms": {"mai-transcribe-2-streaming": "vercel"}}'
+  weak:
+    release_date: '2026-10-01'
+    open_weights: false
+- id: microsoft/mai-voice-2
+  aliases:
+  - mai-voice-2
+  metadata: '{"alias_platforms": {"mai-voice-2": "vercel"}}'
+  weak:
+    release_date: '2026-06-02'
+    open_weights: false
+- id: microsoft/mai-voice-2-1
+  aliases:
+  - mai-voice-2-1
+  metadata: '{"alias_platforms": {"mai-voice-2-1": "vercel"}}'
+  weak:
+    release_date: '2026-10-01'
+    open_weights: false
+- id: microsoft/mai-voice-2-1-flash
+  aliases:
+  - mai-voice-2-1-flash
+  metadata: '{"alias_platforms": {"mai-voice-2-1-flash": "vercel"}}'
+  weak:
+    release_date: '2026-10-01'
+    open_weights: false
+- id: microsoft/mai-voice-2-flash
+  aliases:
+  - mai-voice-2-flash
+  metadata: '{"alias_platforms": {"mai-voice-2-flash": "vercel"}}'
+  weak:
+    release_date: '2026-07-23'
+    open_weights: false
 - id: microsoft/phi-4
   aliases:
   - Phi-4
@@ -10832,6 +10949,13 @@
   weak:
     release_date: '2026-05-30'
     open_weights: false
+- id: spacexai/grok-imagine-video-1-5-lite
+  aliases:
+  - grok-imagine-video-1-5-lite
+  metadata: '{"alias_platforms": {"grok-imagine-video-1-5-lite": "vercel"}}'
+  weak:
+    release_date: '2026-10-01'
+    open_weights: false
 - id: spacexai/grok-stt
   weak:
     release_date: '2026-03-16'
@@ -11205,7 +11329,7 @@
   aliases:
   - pareto-26-10-preview
   - unbiased/pareto-26-10-preview
-  metadata: '{"alias_platforms": {"pareto-26-10-preview": "kilo", "unbiased/pareto-26-10-preview": "kilo"}}'
+  metadata: '{"alias_platforms": {"pareto-26-10-preview": "nano-gpt", "unbiased/pareto-26-10-preview": "nano-gpt"}}'
   weak:
     release_date: '2026-10-01'
     open_weights: false
@@ -12567,6 +12691,28 @@
   metadata: '{"alias_platforms": {"zai-org-glm-5-2": "venice"}}'
   weak:
     release_date: '2026-06-16'
+    open_weights: true
+- id: LiquidAI/d1
+  aliases:
+  - d1
+  metadata: '{"alias_platforms": {"d1": "vercel"}}'
+  weak:
+    release_date: '2026-09-29'
+    open_weights: false
+- id: deepcogito/cogito-v2.1-671b
+  aliases:
+  - cogito-v2-1-671b
+  - deepcogito/cogito-v2-1-671b
+  metadata: '{"alias_platforms": {"cogito-v2-1-671b": "togetherai", "deepcogito/cogito-v2-1-671b": "openrouter"}}'
+  weak:
+    release_date: '2025-11-13'
+    open_weights: false
+- id: meta/meta-llama-3-8b-instruct-lite
+  aliases:
+  - meta-llama-3-8b-instruct-lite
+  metadata: '{"alias_platforms": {"meta-llama-3-8b-instruct-lite": "togetherai"}}'
+  weak:
+    release_date: '2024-04-18'
     open_weights: true
 - id: nvidia/Nemotron-Cascade-2-30B-A3B
   aliases:
