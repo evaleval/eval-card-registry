@@ -2540,6 +2540,28 @@
   weak:
     release_date: '2026-03-01'
     open_weights: false
+- id: anthropic/in.anthropic.claude-haiku-4-5-20251001
+  aliases:
+  - in.anthropic.claude-haiku-4-5-20251001
+  - in.anthropic.claude-haiku-4-5-20251001-v1:0
+  metadata: '{"alias_platforms": {"in.anthropic.claude-haiku-4-5-20251001": "amazon-bedrock", "in.anthropic.claude-haiku-4-5-20251001-v1:0": "amazon-bedrock"}}'
+  weak:
+    release_date: '2025-10-15'
+    open_weights: false
+- id: anthropic/in.anthropic.claude-opus-5
+  aliases:
+  - in.anthropic.claude-opus-5
+  metadata: '{"alias_platforms": {"in.anthropic.claude-opus-5": "amazon-bedrock"}}'
+  weak:
+    release_date: '2026-07-24'
+    open_weights: false
+- id: anthropic/in.anthropic.claude-sonnet-5
+  aliases:
+  - in.anthropic.claude-sonnet-5
+  metadata: '{"alias_platforms": {"in.anthropic.claude-sonnet-5": "amazon-bedrock"}}'
+  weak:
+    release_date: '2026-06-30'
+    open_weights: false
 - id: swiss-ai/Apertus-70B-2509
   weak:
     release_date: '2025-09-02'
@@ -3268,24 +3290,7 @@
     - text
     output_modalities:
     - text
-- id: CohereLabs/aya-expanse-8b
-  weak:
-    release_date: '2024-10-24'
-    open_weights: true
-    input_modalities:
-    - text
-    output_modalities:
-    - text
 - id: cohere/aya-vision-32b
-  weak:
-    release_date: '2025-03-04'
-    open_weights: true
-    input_modalities:
-    - image
-    - text
-    output_modalities:
-    - text
-- id: cohere/aya-vision-8b
   weak:
     release_date: '2025-03-04'
     open_weights: true
@@ -5812,13 +5817,6 @@
   weak:
     release_date: '2026-04-21'
     open_weights: true
-- id: inclusionai/ling-3-1-flash
-  aliases:
-  - ling-3-1-flash
-  metadata: '{"alias_platforms": {"ling-3-1-flash": "nano-gpt"}}'
-  weak:
-    release_date: '2026-09-29'
-    open_weights: false
 - id: inclusionai/ling-3.0-flash
   aliases:
   - inclusionai/ling-3-0-flash
@@ -5857,6 +5855,14 @@
   weak:
     release_date: '2026-09-08'
     open_weights: true
+- id: inclusionai/ling-3-1-flash
+  aliases:
+  - ling-3-1-flash
+  - ling-3.1-flash-free
+  metadata: '{"alias_platforms": {"ling-3-1-flash": "nano-gpt", "ling-3.1-flash-free": "opencode"}}'
+  weak:
+    release_date: '2026-09-29'
+    open_weights: false
 - id: inclusionai/ring-2.6-1t
   aliases:
   - inclusionai/ring-2-6-1t
@@ -5915,13 +5921,6 @@
 - id: kimi-k2-0711
   weak:
     release_date: '2025-01-01'
-    open_weights: false
-- id: kitani/clover-1-150b
-  aliases:
-  - clover-1-150b
-  metadata: '{"alias_platforms": {"clover-1-150b": "nano-gpt"}}'
-  weak:
-    release_date: '2026-09-24'
     open_weights: false
 - id: kling-v2-6
   weak:
@@ -10952,7 +10951,8 @@
 - id: spacexai/grok-imagine-video-1-5-lite
   aliases:
   - grok-imagine-video-1-5-lite
-  metadata: '{"alias_platforms": {"grok-imagine-video-1-5-lite": "vercel"}}'
+  - grok-imagine-video-1.5-lite
+  metadata: '{"alias_platforms": {"grok-imagine-video-1-5-lite": "xai", "grok-imagine-video-1.5-lite": "xai"}}'
   weak:
     release_date: '2026-10-01'
     open_weights: false
@@ -12692,6 +12692,30 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: CohereLabs/aya-expanse-8b
+  weak:
+    release_date: '2024-10-24'
+    open_weights: true
+    input_modalities:
+    - text
+    output_modalities:
+    - text
+- id: cohere/aya-vision-8b
+  weak:
+    release_date: '2025-03-04'
+    open_weights: true
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
+- id: kitani/clover-1-150b
+  aliases:
+  - clover-1-150b
+  metadata: '{"alias_platforms": {"clover-1-150b": "nano-gpt"}}'
+  weak:
+    release_date: '2026-09-24'
+    open_weights: false
 - id: LiquidAI/d1
   aliases:
   - d1

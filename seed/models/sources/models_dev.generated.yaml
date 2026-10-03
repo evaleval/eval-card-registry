@@ -6004,6 +6004,59 @@
   metadata: '{"alias_platforms": {"claude-sonnet-latest": "nano-gpt", "~anthropic/claude-sonnet-latest": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "claude-sonnet"}'
   review_status: draft
   resolution_source: models_dev
+- id: anthropic/in.anthropic.claude-haiku-4-5-20251001
+  display_name: Claude Haiku 4.5 (India)
+  org_id: anthropic
+  family: in.anthropic.claude-haiku-4-5-20251001
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2025-10-15'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - in.anthropic.claude-haiku-4-5-20251001
+  - in.anthropic.claude-haiku-4-5-20251001-v1:0
+  metadata: '{"alias_platforms": {"in.anthropic.claude-haiku-4-5-20251001": "amazon-bedrock", "in.anthropic.claude-haiku-4-5-20251001-v1:0": "amazon-bedrock"}, "providers": ["amazon-bedrock"], "underlying_key":
+    "in.anthropic.claude-haiku-4-5"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: anthropic/in.anthropic.claude-opus-5
+  display_name: Claude Opus 5 (India)
+  org_id: anthropic
+  family: in.anthropic.claude-opus-5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-07-24'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - in.anthropic.claude-opus-5
+  metadata: '{"alias_platforms": {"in.anthropic.claude-opus-5": "amazon-bedrock"}, "providers": ["amazon-bedrock"], "underlying_key": "in.anthropic.claude-opus-5"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: anthropic/in.anthropic.claude-sonnet-5
+  display_name: Claude Sonnet 5 (India)
+  org_id: anthropic
+  family: in.anthropic.claude-sonnet-5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-06-30'
+  input_modalities: null
+  output_modalities: null
+  tags: []
+  aliases:
+  - in.anthropic.claude-sonnet-5
+  metadata: '{"alias_platforms": {"in.anthropic.claude-sonnet-5": "amazon-bedrock"}, "providers": ["amazon-bedrock"], "underlying_key": "in.anthropic.claude-sonnet-5"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: apodex/apodex-1.1-mini
   display_name: 'Apodex: Apodex 1.1 Mini (free)'
   org_id: apodex
@@ -8573,7 +8626,7 @@
   - open-weight
   aliases:
   - Aya Vision 8B
-  metadata: '{"release_dates": ["2025-03-04"], "snapshots": ["c4ai-aya-vision-8b"]}'
+  metadata: '{"release_dates": ["2025-03-04"], "snapshots": ["c4ai-aya-vision-8b"], "upstream_status": "removed"}'
   review_status: reviewed
 - id: cohere/cohere-command-r-plus-08-2024
   display_name: cohere-command-r-plus-08-2024
@@ -15202,8 +15255,11 @@
   output_modalities: null
   tags: []
   aliases:
+  - inclusionai/ling-3.1-flash
   - ling-3-1-flash
-  metadata: '{"alias_platforms": {"ling-3-1-flash": "nano-gpt"}, "providers": ["nano-gpt", "vercel"], "underlying_key": "ling-3-1-flash"}'
+  - ling-3.1-flash-free
+  metadata: '{"alias_platforms": {"ling-3-1-flash": "nano-gpt", "ling-3.1-flash-free": "opencode"}, "openrouter_adopted": true, "providers": ["kilo", "nano-gpt", "opencode", "openrouter", "vercel"], "underlying_key":
+    "ling-3-1-flash"}'
   review_status: draft
   resolution_source: models_dev
 - id: inclusionai/ling-3.0-flash
@@ -15567,7 +15623,7 @@
   tags: []
   aliases:
   - clover-1-150b
-  metadata: '{"alias_platforms": {"clover-1-150b": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "clover-1-150b"}'
+  metadata: '{"alias_platforms": {"clover-1-150b": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "clover-1-150b", "upstream_status": "removed"}'
   review_status: draft
   resolution_source: models_dev
 - id: kling-v2-6
@@ -22492,7 +22548,7 @@
   - nvidia/nemotron-3-nano-30b-a3b:free
   - nvidia/nvidia-nemotron-3-nano-30b-a3b
   metadata: '{"alias_platforms": {"nemotron-3-nano-30b-a3b": "deepinfra", "nvidia-nemotron-3-nano-30b-a3b": "cortecs", "nvidia/nemotron-3-nano-30b-a3b:free": "openrouter"}, "openrouter_adopted": true, "providers":
-    ["deepinfra", "kilo", "nano-gpt", "nvidia", "openrouter", "vercel"], "underlying_key": "nemotron-3-nano-30b-a3b"}'
+    ["deepinfra", "kilo", "merge-gateway", "nano-gpt", "nvidia", "openrouter", "vercel"], "underlying_key": "nemotron-3-nano-30b-a3b"}'
   review_status: reviewed
   resolution_source: models_dev
 - id: nvidia/nemotron-3-nano-omni
@@ -28288,8 +28344,9 @@
   tags: []
   aliases:
   - grok-imagine-video-1-5-lite
-  metadata: '{"alias_platforms": {"grok-imagine-video-1-5-lite": "vercel"}, "providers": ["vercel"], "underlying_key": "grok-imagine-video-1-5-lite"}'
-  review_status: draft
+  - grok-imagine-video-1.5-lite
+  metadata: '{"alias_platforms": {"grok-imagine-video-1-5-lite": "xai", "grok-imagine-video-1.5-lite": "xai"}, "providers": ["vercel", "xai"], "underlying_key": "grok-imagine-video-1-5-lite"}'
+  review_status: reviewed
   resolution_source: models_dev
 - id: spacexai/grok-imagine-video-1-5-preview
   display_name: spacexai/grok-imagine-video-1-5-preview
