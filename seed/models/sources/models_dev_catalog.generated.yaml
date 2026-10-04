@@ -2520,9 +2520,12 @@
   - claude-sonnet-5-5@default
   - claude-sonnet-5-5@eu
   - claude-sonnet-5.5
+  - eu.anthropic.claude-sonnet-5-5
   - global.anthropic.claude-sonnet-5-5
+  - us.anthropic.claude-sonnet-5-5
   metadata: '{"alias_platforms": {"anthropic-claude-sonnet-5.5": "digitalocean", "anthropic.claude-sonnet-5-5": "amazon-bedrock", "anthropic/claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5": "nano-gpt",
-    "claude-sonnet-5-5@default": "google-vertex-anthropic", "claude-sonnet-5-5@eu": "requesty", "claude-sonnet-5.5": "github-copilot", "global.anthropic.claude-sonnet-5-5": "amazon-bedrock"}}'
+    "claude-sonnet-5-5@default": "google-vertex-anthropic", "claude-sonnet-5-5@eu": "requesty", "claude-sonnet-5.5": "github-copilot", "eu.anthropic.claude-sonnet-5-5": "amazon-bedrock", "global.anthropic.claude-sonnet-5-5":
+    "amazon-bedrock", "us.anthropic.claude-sonnet-5-5": "amazon-bedrock"}}'
   weak:
     release_date: '2026-09-28'
     open_weights: false
@@ -12657,6 +12660,14 @@
   metadata: '{"alias_platforms": {"olafangensan-glm-4-7-flash-heretic": "venice", "olafangensan-glm-4.7-flash-heretic": "venice"}}'
   weak:
     release_date: '2026-02-04'
+    open_weights: true
+- id: zai/umans-glm-5-3
+  aliases:
+  - umans-glm-5-3
+  - umans-glm-5.3
+  metadata: '{"alias_platforms": {"umans-glm-5-3": "umans-ai-coding-plan", "umans-glm-5.3": "umans-ai-coding-plan"}}'
+  weak:
+    release_date: '2026-08-14'
     open_weights: true
 - id: zai/umans-glm-5-3-flash
   aliases:

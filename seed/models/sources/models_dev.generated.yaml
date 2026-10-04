@@ -5979,10 +5979,12 @@
   - claude-sonnet-5-5@default
   - claude-sonnet-5-5@eu
   - claude-sonnet-5.5
+  - eu.anthropic.claude-sonnet-5-5
   - global.anthropic.claude-sonnet-5-5
+  - us.anthropic.claude-sonnet-5-5
   metadata: '{"alias_platforms": {"anthropic-claude-sonnet-5.5": "digitalocean", "anthropic.claude-sonnet-5-5": "amazon-bedrock", "anthropic/claude-sonnet-5-5": "nano-gpt", "claude-sonnet-5-5": "nano-gpt",
-    "claude-sonnet-5-5@default": "google-vertex-anthropic", "claude-sonnet-5-5@eu": "requesty", "claude-sonnet-5.5": "github-copilot", "global.anthropic.claude-sonnet-5-5": "amazon-bedrock"}, "knowledge_cutoffs":
-    ["2026-06"], "openrouter_adopted": true, "release_dates": ["2026-09-28"], "snapshots": ["claude-sonnet-5-5"]}'
+    "claude-sonnet-5-5@default": "google-vertex-anthropic", "claude-sonnet-5-5@eu": "requesty", "claude-sonnet-5.5": "github-copilot", "eu.anthropic.claude-sonnet-5-5": "amazon-bedrock", "global.anthropic.claude-sonnet-5-5":
+    "amazon-bedrock", "us.anthropic.claude-sonnet-5-5": "amazon-bedrock"}, "knowledge_cutoffs": ["2026-06"], "openrouter_adopted": true, "release_dates": ["2026-09-28"], "snapshots": ["claude-sonnet-5-5"]}'
   review_status: reviewed
 - id: anthropic/claude-sonnet-latest
   display_name: Claude Sonnet Latest
@@ -27734,7 +27736,7 @@
   output_modalities: null
   tags: []
   aliases: []
-  metadata: '{"openrouter_adopted": true, "providers": ["kilo", "merge-gateway", "openrouter"], "underlying_key": "sakana-namazu"}'
+  metadata: '{"openrouter_adopted": true, "providers": ["kilo", "merge-gateway", "nano-gpt", "openrouter"], "underlying_key": "sakana-namazu"}'
   review_status: draft
   resolution_source: models_dev
 - id: sao10K/l31-70b-euryale-v2-2
@@ -33157,6 +33159,25 @@
   - umans-glm-5.2
   metadata: '{"alias_platforms": {"umans-glm-5-2": "umans-ai-coding-plan", "umans-glm-5.2": "umans-ai-coding-plan"}, "providers": ["umans-ai-coding-plan"], "underlying_key": "umans-glm-5-2", "upstream_status":
     "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: zai/umans-glm-5-3
+  display_name: umans-glm-5-3
+  org_id: zai
+  family: umans-glm-5-3
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-08-14'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - umans-glm-5-3
+  - umans-glm-5.3
+  metadata: '{"alias_platforms": {"umans-glm-5-3": "umans-ai-coding-plan", "umans-glm-5.3": "umans-ai-coding-plan"}, "providers": ["umans-ai-coding-plan"], "underlying_key": "umans-glm-5-3"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/umans-glm-5-3-flash
