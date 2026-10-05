@@ -1349,12 +1349,26 @@
   weak:
     release_date: '2026-04-17'
     open_weights: true
+- id: alibaba/qwen3-8-27b-antislop
+  aliases:
+  - qwen3-8-27b-antislop
+  metadata: '{"alias_platforms": {"qwen3-8-27b-antislop": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
+    open_weights: true
 - id: alibaba/qwen3-8-27b-cybersecurity
   aliases:
   - qwen3-8-27b-cybersecurity
   metadata: '{"alias_platforms": {"qwen3-8-27b-cybersecurity": "nano-gpt"}}'
   weak:
     release_date: '2026-09-19'
+    open_weights: true
+- id: alibaba/qwen3-8-27b-darkidol
+  aliases:
+  - qwen3-8-27b-darkidol
+  metadata: '{"alias_platforms": {"qwen3-8-27b-darkidol": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
     open_weights: true
 - id: alibaba/qwen3-8-27b-fable
   aliases:
@@ -1363,12 +1377,40 @@
   weak:
     release_date: '2026-07-29'
     open_weights: true
+- id: alibaba/qwen3-8-27b-fimi
+  aliases:
+  - qwen3-8-27b-fimi
+  metadata: '{"alias_platforms": {"qwen3-8-27b-fimi": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
+    open_weights: true
 - id: alibaba/qwen3-8-27b-hemmingway
   aliases:
   - qwen3-8-27b-hemmingway
   metadata: '{"alias_platforms": {"qwen3-8-27b-hemmingway": "nano-gpt"}}'
   weak:
     release_date: '2026-09-21'
+    open_weights: true
+- id: alibaba/qwen3-8-27b-kimiko
+  aliases:
+  - qwen3-8-27b-kimiko
+  metadata: '{"alias_platforms": {"qwen3-8-27b-kimiko": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
+    open_weights: true
+- id: alibaba/qwen3-8-27b-kiwen
+  aliases:
+  - qwen3-8-27b-kiwen
+  metadata: '{"alias_platforms": {"qwen3-8-27b-kiwen": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
+    open_weights: true
+- id: alibaba/qwen3-8-27b-novelist
+  aliases:
+  - qwen3-8-27b-novelist
+  metadata: '{"alias_platforms": {"qwen3-8-27b-novelist": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
     open_weights: true
 - id: alibaba/qwen3-8-27b-obliterated
   aliases:
@@ -1383,6 +1425,20 @@
   metadata: '{"alias_platforms": {"qwen3-8-27b-queen": "nano-gpt"}}'
   weak:
     release_date: '2026-09-09'
+    open_weights: true
+- id: alibaba/qwen3-8-27b-swift
+  aliases:
+  - qwen3-8-27b-swift
+  metadata: '{"alias_platforms": {"qwen3-8-27b-swift": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
+    open_weights: true
+- id: alibaba/qwen3-8-27b-synthia
+  aliases:
+  - qwen3-8-27b-synthia
+  metadata: '{"alias_platforms": {"qwen3-8-27b-synthia": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
     open_weights: true
 - id: alibaba/qwen3-8-27b-uncensored
   aliases:
@@ -12533,6 +12589,20 @@
   metadata: '{"alias_platforms": {"glm-5-2-short-flex": "neuralwatt", "glm-5.2-short-flex": "neuralwatt"}}'
   weak:
     release_date: '2026-06-17'
+    open_weights: true
+- id: zai/glm-5-3-flash-apex
+  aliases:
+  - glm-5-3-flash-apex
+  metadata: '{"alias_platforms": {"glm-5-3-flash-apex": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
+    open_weights: true
+- id: zai/glm-5-3-flash-apex-abliterated
+  aliases:
+  - glm-5-3-flash-apex-abliterated
+  metadata: '{"alias_platforms": {"glm-5-3-flash-apex-abliterated": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-05'
     open_weights: true
 - id: zai/glm-5-3-flash-cybersecurity
   aliases:

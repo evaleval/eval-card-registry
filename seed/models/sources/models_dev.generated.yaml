@@ -3562,6 +3562,24 @@
   metadata: '{"alias_platforms": {"qwen3-6-35b-flex": "neuralwatt", "qwen3.6-35b-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "qwen3-6-35b-flex"}'
   review_status: draft
   resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-antislop
+  display_name: Qwen 3.8 27B Antislop
+  org_id: alibaba
+  family: qwen3-8-27b-antislop
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-antislop
+  metadata: '{"alias_platforms": {"qwen3-8-27b-antislop": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-antislop"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-cybersecurity
   display_name: Qwen 3.8 27B Cybersecurity
   org_id: alibaba
@@ -3578,6 +3596,24 @@
   aliases:
   - qwen3-8-27b-cybersecurity
   metadata: '{"alias_platforms": {"qwen3-8-27b-cybersecurity": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-cybersecurity"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-darkidol
+  display_name: Qwen 3.8 27B DarkIdol
+  org_id: alibaba
+  family: qwen3-8-27b-darkidol
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-darkidol
+  metadata: '{"alias_platforms": {"qwen3-8-27b-darkidol": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-darkidol"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-fable
@@ -3598,6 +3634,24 @@
   metadata: '{"alias_platforms": {"qwen3-8-27b-fable": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-fable"}'
   review_status: draft
   resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-fimi
+  display_name: Qwen 3.8 27B Fimi
+  org_id: alibaba
+  family: qwen3-8-27b-fimi
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-fimi
+  metadata: '{"alias_platforms": {"qwen3-8-27b-fimi": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-fimi"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-hemmingway
   display_name: Qwen 3.8 27B Hemingway
   org_id: alibaba
@@ -3614,6 +3668,60 @@
   aliases:
   - qwen3-8-27b-hemmingway
   metadata: '{"alias_platforms": {"qwen3-8-27b-hemmingway": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-hemmingway"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-kimiko
+  display_name: Qwen 3.8 27B Kimiko
+  org_id: alibaba
+  family: qwen3-8-27b-kimiko
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-kimiko
+  metadata: '{"alias_platforms": {"qwen3-8-27b-kimiko": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-kimiko"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-kiwen
+  display_name: Qwen 3.8 27B Kiwen
+  org_id: alibaba
+  family: qwen3-8-27b-kiwen
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-kiwen
+  metadata: '{"alias_platforms": {"qwen3-8-27b-kiwen": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-kiwen"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-novelist
+  display_name: Qwen 3.8 27B Novelist
+  org_id: alibaba
+  family: qwen3-8-27b-novelist
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-novelist
+  metadata: '{"alias_platforms": {"qwen3-8-27b-novelist": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-novelist"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-obliterated
@@ -3652,6 +3760,42 @@
   aliases:
   - qwen3-8-27b-queen
   metadata: '{"alias_platforms": {"qwen3-8-27b-queen": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-queen"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-swift
+  display_name: Qwen 3.8 27B Swift
+  org_id: alibaba
+  family: qwen3-8-27b-swift
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-swift
+  metadata: '{"alias_platforms": {"qwen3-8-27b-swift": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-swift"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: alibaba/qwen3-8-27b-synthia
+  display_name: Qwen 3.8 27B Synthia
+  org_id: alibaba
+  family: qwen3-8-27b-synthia
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - qwen3-8-27b-synthia
+  metadata: '{"alias_platforms": {"qwen3-8-27b-synthia": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "qwen3-8-27b-synthia"}'
   review_status: draft
   resolution_source: models_dev
 - id: alibaba/qwen3-8-27b-uncensored
@@ -28201,7 +28345,7 @@
   - org-unknown
   aliases:
   - stealth/space-bunny-alpha
-  metadata: '{"alias_platforms": {"stealth/space-bunny-alpha": "openrouter"}, "providers": ["kilo", "nano-gpt", "openrouter"], "underlying_key": "space-bunny-alpha"}'
+  metadata: '{"alias_platforms": {"stealth/space-bunny-alpha": "openrouter"}, "providers": ["nano-gpt"], "underlying_key": "space-bunny-alpha"}'
   review_status: draft
   resolution_source: models_dev
 - id: spacexai/grok-4-20-multi-agent-beta
@@ -32698,6 +32842,42 @@
   - glm-5-2-short-flex
   - glm-5.2-short-flex
   metadata: '{"alias_platforms": {"glm-5-2-short-flex": "neuralwatt", "glm-5.2-short-flex": "neuralwatt"}, "providers": ["neuralwatt"], "underlying_key": "glm-5-2-short-flex"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: zai/glm-5-3-flash-apex
+  display_name: Apex Flash 1
+  org_id: zai
+  family: glm-5-3-flash-apex
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-5-3-flash-apex
+  metadata: '{"alias_platforms": {"glm-5-3-flash-apex": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "glm-5-3-flash-apex"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: zai/glm-5-3-flash-apex-abliterated
+  display_name: Apex Flash 1 Abliterated
+  org_id: zai
+  family: glm-5-3-flash-apex-abliterated
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-05'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - glm-5-3-flash-apex-abliterated
+  metadata: '{"alias_platforms": {"glm-5-3-flash-apex-abliterated": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "glm-5-3-flash-apex-abliterated"}'
   review_status: draft
   resolution_source: models_dev
 - id: zai/glm-5-3-flash-cybersecurity
