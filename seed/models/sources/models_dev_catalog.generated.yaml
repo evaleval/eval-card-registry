@@ -89,13 +89,6 @@
   weak:
     release_date: '2025-01-15'
     open_weights: true
-- id: JetBrains/mellum2-12b-a2-5b-instruct
-  aliases:
-  - mellum2-12b-a2-5b-instruct
-  metadata: '{"alias_platforms": {"mellum2-12b-a2-5b-instruct": "wandb"}}'
-  weak:
-    release_date: '2026-06-01'
-    open_weights: true
 - id: KBLab/kb-whisper-large
   aliases:
   - kb-whisper-large
@@ -202,13 +195,6 @@
   metadata: '{"alias_platforms": {"hermes-3-llama-3-1-70b": "nano-gpt", "nous-research/hermes-3-llama-3-1-70b": "nano-gpt", "nousresearch/hermes-3-llama-3.1-70b": "openrouter"}}'
   weak:
     release_date: '2024-08-18'
-    open_weights: true
-- id: OpenPipe/qwen3-14b-instruct
-  aliases:
-  - qwen3-14b-instruct
-  metadata: '{"alias_platforms": {"qwen3-14b-instruct": "wandb"}}'
-  weak:
-    release_date: '2025-04-29'
     open_weights: true
 - id: PaddlePaddle/paddleocr-vl-1-5
   aliases:
@@ -2824,6 +2810,13 @@
   weak:
     release_date: '2025-11-25'
     open_weights: false
+- id: black-forest-labs/flux-3-image
+  aliases:
+  - flux-3-image
+  metadata: '{"alias_platforms": {"flux-3-image": "vercel"}}'
+  weak:
+    release_date: '2026-10-05'
+    open_weights: false
 - id: black-forest-labs/flux-3-video
   aliases:
   - flux-3-video
@@ -3542,6 +3535,20 @@
   metadata: '{"alias_platforms": {"embed-v4-0": "vercel"}}'
   weak:
     release_date: '2025-04-15'
+    open_weights: false
+- id: cohere/embed-v5-0
+  aliases:
+  - embed-v5-0
+  metadata: '{"alias_platforms": {"embed-v5-0": "vercel"}}'
+  weak:
+    release_date: '2026-09-30'
+    open_weights: false
+- id: cohere/embed-v5-0-pro
+  aliases:
+  - embed-v5-0-pro
+  metadata: '{"alias_platforms": {"embed-v5-0-pro": "vercel"}}'
+  weak:
+    release_date: '2026-09-30'
     open_weights: false
 - id: cohere/north-mini-code
   aliases:
@@ -5760,14 +5767,6 @@
   weak:
     release_date: '2026-08-24'
     open_weights: true
-- id: ibm-granite/granite-4.1-8b
-  aliases:
-  - granite-4-1-8b
-  - ibm/granite-4-1-8b
-  metadata: '{"alias_platforms": {"granite-4-1-8b": "wandb", "ibm/granite-4-1-8b": "nano-gpt"}}'
-  weak:
-    release_date: '2026-04-29'
-    open_weights: true
 - id: ideogramai/ideogram
   aliases:
   - ideogram
@@ -6214,11 +6213,12 @@
   - meta/llama-3-1-70b
   metadata: '{"alias_platforms": {"llama-3-1-70b": "vercel", "meta/llama-3-1-70b": "vercel"}}'
   weak:
-    release_date: '2024-07-16'
-    open_weights: true
+    release_date: '2024-07-23'
+    open_weights: false
 - id: meta-llama/Llama-3.1-70B-Instruct
   aliases:
   - Llama 3.1 70B Instruct
+  - Llama-3.1-70B-Instruct
   - Meta-Llama-3.1-70B-Instruct
   - llama-3-1-70b-instruct
   - llama-3.1-70b-instruct
@@ -6229,10 +6229,10 @@
   - meta/llama3-1-70b-instruct
   - meta/meta-llama-3-1-70b-instruct
   - us.meta.llama3-1-70b-instruct-v1:0
-  metadata: '{"alias_platforms": {"llama-3-1-70b-instruct": "nvidia", "llama-3.1-70b-instruct": "llmgateway", "llama3-1-70b-instruct": "amazon-bedrock", "meta-llama/llama-3.1-70b-instruct": "openrouter",
-    "meta.llama3-1-70b-instruct-v1:0": "amazon-bedrock", "meta/llama-3-1-70b-instruct": "nvidia", "us.meta.llama3-1-70b-instruct-v1:0": "amazon-bedrock"}}'
+  metadata: '{"alias_platforms": {"llama-3-1-70b-instruct": "kilo", "llama-3.1-70b-instruct": "llmgateway", "llama3-1-70b-instruct": "amazon-bedrock", "meta-llama/llama-3.1-70b-instruct": "openrouter",
+    "meta.llama3-1-70b-instruct-v1:0": "amazon-bedrock", "meta/llama-3-1-70b-instruct": "kilo", "us.meta.llama3-1-70b-instruct-v1:0": "amazon-bedrock"}}'
   weak:
-    release_date: '2024-07-23'
+    release_date: '2024-07-16'
     open_weights: true
 - id: meta-llama/Llama-3.1-8B
   aliases:
@@ -6739,8 +6739,8 @@
   - minimax-h3
   metadata: '{"alias_platforms": {"minimax-h3": "vercel"}}'
   weak:
-    release_date: '2026-07-30'
-    open_weights: false
+    release_date: '2026-07-31'
+    open_weights: true
 - id: minimax/minimax-h3-max
   aliases:
   - minimax-h3-max
@@ -7393,6 +7393,26 @@
   weak:
     release_date: '2025-12-02'
     open_weights: true
+- id: mistralai/mistral-large-4
+  aliases:
+  - mistral-large-4
+  - mistral-large-4@eu
+  metadata: '{"alias_platforms": {"mistral-large-4": "vercel", "mistral-large-4@eu": "requesty"}}'
+  weak:
+    release_date: '2026-10-06'
+    open_weights: false
+    input_modalities:
+    - image
+    - text
+    output_modalities:
+    - text
+- id: mistralai/mistral-large-4-0
+  aliases:
+  - mistral-large-4-0
+  metadata: '{"alias_platforms": {"mistral-large-4-0": "kilo"}}'
+  weak:
+    release_date: '2026-10-06'
+    open_weights: false
 - id: mistralai/mistral-large-latest
   aliases:
   - mistral-large-latest
@@ -10972,13 +10992,6 @@
   weak:
     release_date: '2026-09-23'
     open_weights: false
-- id: space-bunny-alpha
-  aliases:
-  - stealth/space-bunny-alpha
-  metadata: '{"alias_platforms": {"stealth/space-bunny-alpha": "openrouter"}}'
-  weak:
-    release_date: '2026-09-23'
-    open_weights: false
 - id: spacexai/grok-4-20-multi-agent-beta
   weak:
     release_date: '2026-03-11'
@@ -12773,6 +12786,35 @@
   weak:
     release_date: '2026-06-16'
     open_weights: true
+- id: JetBrains/mellum2-12b-a2-5b-instruct
+  aliases:
+  - mellum2-12b-a2-5b-instruct
+  metadata: '{"alias_platforms": {"mellum2-12b-a2-5b-instruct": "wandb"}}'
+  weak:
+    release_date: '2026-06-01'
+    open_weights: true
+- id: OpenPipe/qwen3-14b-instruct
+  aliases:
+  - qwen3-14b-instruct
+  metadata: '{"alias_platforms": {"qwen3-14b-instruct": "wandb"}}'
+  weak:
+    release_date: '2025-04-29'
+    open_weights: true
+- id: ibm-granite/granite-4.1-8b
+  aliases:
+  - granite-4-1-8b
+  - ibm/granite-4-1-8b
+  metadata: '{"alias_platforms": {"granite-4-1-8b": "wandb", "ibm/granite-4-1-8b": "nano-gpt"}}'
+  weak:
+    release_date: '2026-04-29'
+    open_weights: true
+- id: space-bunny-alpha
+  aliases:
+  - stealth/space-bunny-alpha
+  metadata: '{"alias_platforms": {"stealth/space-bunny-alpha": "openrouter"}}'
+  weak:
+    release_date: '2026-09-23'
+    open_weights: false
 - id: CohereLabs/aya-expanse-8b
   weak:
     release_date: '2024-10-24'
