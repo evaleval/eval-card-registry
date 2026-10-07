@@ -2,10 +2,12 @@ name: Refresh hub-stats source
 
 on:
   schedule:
-    # Daily at 09:30 UTC — 30 min after refresh-models so a same-day
-    # diff from each lands sequentially rather than racing the seed.yml
-    # downstream trigger.
-    - cron: "30 9 * * *"
+    # Daily at 09:37 UTC. The 30-minute gap after refresh-models is only a
+    # hint: scheduled runs have drifted by hours and the two crons regularly
+    # overlapped. The shared registry-seed-writer concurrency group below is
+    # what actually serialises the two writers. Both minutes sit off the hour
+    # because GitHub documents on-the-hour schedules as the most delayed.
+    - cron: "37 9 * * *"
   workflow_dispatch: {}
 
 # Direct-commit auto-sync (no PR review). Switch to PR mode if human review of
@@ -21,9 +23,16 @@ env:
   GENERATED_PATH: seed/models/sources/hub_stats.generated.yaml
   STATE_PATH: seed/models/sources/hub_stats.state.json
 
+# One writer to main at a time. The group name is hard-coded and SHARED with
+# refresh-models.yml on purpose: it must NOT include github.workflow, or the
+# two writers get separate lanes and can again race each other's push and
+# seed.yml dispatch when the crons drift into the same window.
 concurrency:
-  group: refresh-hub-stats
+  group: registry-seed-writer
   cancel-in-progress: false
+  # Hold every arrival; the default 'single' cancels the waiting writer, and a
+  # run that never starts cannot raise its own stall beacon.
+  queue: max
 
 jobs:
   refresh:
@@ -111,6 +120,7 @@ jobs:
           fi
 
       - name: Commit + push directly
+        id: commit
         if: steps.diff.outputs.data_changed == 'true' || steps.diff.outputs.state_changed == 'true'
         run: |
           set -euo pipefail
@@ -127,6 +137,7 @@ jobs:
           # A concurrent main update makes this push fail safely; rerun against
           # the new head instead.
           git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "pushed_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       # Retry a previous publish failure even when today's generated data is
       # unchanged; the sticky issue is the durable recovery signal.
@@ -150,15 +161,25 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          # Pin the child to the commit this run pushed, so a stale branch
+          # resolution of --ref main cannot make it publish someone else's tree.
+          expected="${{ steps.commit.outputs.pushed_sha }}"
+          # Beacon-retry path: nothing was committed today, so publish whatever
+          # main currently holds.
+          [ -n "$expected" ] || expected="$(git ls-remote origin refs/heads/main | cut -f1)"
           correlation="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           title="Seed + publish (${correlation})"
-          gh workflow run seed.yml --ref main -f source_run_id="${correlation}"
-          run_id=""
-          for attempt in $(seq 1 30); do
-            run_id=$(gh run list --workflow seed.yml --event workflow_dispatch --branch main --limit 50 --json databaseId,displayTitle --jq ".[] | select(.displayTitle == \"$title\") | .databaseId" | head -n 1)
-            [ -n "$run_id" ] && break
-            sleep 5
-          done
+          dispatch=$(gh workflow run seed.yml --ref main -f source_run_id="${correlation}" -f expected_sha="$expected" 2>&1 | tee /dev/stderr)
+          url=$(printf '%s\n' "$dispatch" | grep -oE 'actions/runs/[0-9]+' | head -n 1 || true)
+          run_id="${url##*/}"
+          if [ -z "$run_id" ]; then
+            # Fallback for a gh build that prints no run URL: correlate by title.
+            for attempt in $(seq 1 30); do
+              run_id=$(gh run list --workflow seed.yml --event workflow_dispatch --branch main --limit 50 --json databaseId,displayTitle --jq ".[] | select(.displayTitle == \"$title\") | .databaseId" | head -n 1)
+              [ -n "$run_id" ] && break
+              sleep 5
+            done
+          fi
           if [ -z "$run_id" ]; then
             echo "::error::could not locate the correlated seed.yml run"
             exit 1

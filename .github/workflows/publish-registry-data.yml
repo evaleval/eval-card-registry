@@ -42,14 +42,11 @@ on:
 permissions:
   contents: read
 
-# Keep each PR's verification separate from the single live-publish lane, so
-# merging a PR cannot cancel its dry-run. New commits may cancel an obsolete
-# dry-run for that PR; push/manual live publishes share one non-overlapping
-# production lane (GitHub may supersede an older pending run with the newest
-# checkout, which is safe because every live job below is restricted to main).
-concurrency:
-  group: ${{ github.event_name == 'pull_request' && format('publish-registry-data-pr-{0}', github.event.pull_request.number) || github.ref == 'refs/heads/main' && 'registry-data-publish' || format('publish-registry-data-nonproduction-{0}', github.run_id) }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+# Concurrency is declared per job below. The PR dry-run cancels an obsolete
+# run for the same PR; the production publish joins the `registry-data-publish`
+# lane shared with seed.yml, where every arrival must be held rather than
+# superseded (GitHub rejects `queue: max` together with cancellation, so the
+# two cannot share one workflow-level block).
 
 jobs:
   reject-nonproduction-manual-run:
@@ -64,6 +61,9 @@ jobs:
   dry-run:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    concurrency:
+      group: publish-registry-data-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     # Seeds, runs the full gate suite, then inspects those exact fixtures.
     # The seed grew with the carry-forward/enrichment work, so 15 min now
     # clips the trailing publish step after the gates have already passed.
@@ -104,6 +104,12 @@ jobs:
       github.ref == 'refs/heads/main' &&
       (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
+    # Same lane as seed.yml: hold every arrival; 'single' would let a queued
+    # publish and a dispatched seed child cancel each other.
+    concurrency:
+      group: registry-data-publish
+      cancel-in-progress: false
+      queue: max
     # Main must prove the exact checkout is seedable and regression-clean before
     # it can mutate the remote dataset. The full suite can take 15–25 minutes on
     # hosted runners, so leave bounded headroom for setup and upload.

@@ -38,6 +38,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -121,6 +122,22 @@ def _assert_checkout_is_current_main() -> None:
     if local_sha != remote_sha:
         raise RuntimeError(
             f"stale checkout {local_sha} is not current origin/main {remote_sha}; "
+            "refusing publish"
+        )
+
+
+def _assert_checkout_is_expected(expected: str) -> None:
+    """Re-assert the caller's pinned SHA at publish time, in case the dispatched
+    run was resolved to a different commit than the one it was asked for."""
+    local_sha = _git_sha()
+    if not local_sha:
+        raise RuntimeError(
+            f"cannot read checkout HEAD to compare against expected {expected}; "
+            "refusing publish"
+        )
+    if local_sha != expected:
+        raise RuntimeError(
+            f"checkout {local_sha} is not the expected head {expected}; "
             "refusing publish"
         )
 
@@ -307,7 +324,19 @@ def main() -> int:
         action="store_true",
         help="Fail unless checkout HEAD is the current remote main (production CI).",
     )
+    parser.add_argument(
+        "--expected-head",
+        metavar="SHA",
+        help="Fail unless checkout HEAD is this exact 40-hex commit (the SHA the "
+             "dispatching workflow pushed and asked the child to publish).",
+    )
     args = parser.parse_args()
+
+    if args.expected_head is not None:
+        if not re.fullmatch(r"[0-9a-f]{40}", args.expected_head):
+            parser.error("--expected-head must be a full 40-hex commit sha")
+        if not args.require_origin_main_head:
+            parser.error("--expected-head requires --require-origin-main-head")
 
     if args.skip_seed:
         print("[1/4] Using pre-seeded fixtures…", file=sys.stderr)
@@ -356,6 +385,13 @@ def main() -> int:
         return 0
 
     if args.require_origin_main_head:
+        if args.expected_head:
+            print("[4/4] Verifying checkout is the expected head…", file=sys.stderr)
+            try:
+                _assert_checkout_is_expected(args.expected_head)
+            except RuntimeError as exc:
+                print(f"  [error] {exc}", file=sys.stderr)
+                return 1
         print("[4/4] Verifying checkout is current origin/main…", file=sys.stderr)
         try:
             _assert_checkout_is_current_main()

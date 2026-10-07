@@ -18,6 +18,10 @@ on:
         description: "Refresh workflow run waiting for this release (optional)"
         required: false
         type: string
+      expected_sha:
+        description: "Full 40-hex commit the caller pushed; the run checks out and publishes exactly this"
+        required: false
+        type: string
 
 run-name: Seed + publish (${{ inputs.source_run_id || 'manual' }})
 
@@ -30,6 +34,10 @@ concurrency:
   # pending production release before the guard step rejects it.
   group: ${{ github.ref == 'refs/heads/main' && 'registry-data-publish' || format('seed-nonproduction-{0}', github.run_id) }}
   cancel-in-progress: false
+  # Hold every arrival instead of the default 'single', which cancels the older
+  # pending run. Two dispatched children must never displace each other while
+  # their parent refresh runs wait on them.
+  queue: max
 
 jobs:
   seed:
@@ -44,7 +52,26 @@ jobs:
           echo "::error::seed + publish is production-only and must run from refs/heads/main"
           exit 1
 
+      # A dispatch resolves `--ref main` to whatever branch head GitHub sees at
+      # that instant, which can predate the caller's just-landed push. When the
+      # caller pins expected_sha, check out that commit by SHA instead.
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.expected_sha || github.sha }}
+
+      # Fail before the ~12 minutes of seed + pytest, not in the publish guard
+      # at the end. github.sha stays the (possibly stale) branch resolution from
+      # the dispatch event, so log all three SHAs and never treat github.sha as
+      # the published revision.
+      - name: Assert checkout is the expected commit
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+        run: |
+          echo "event ref=${{ github.ref }} event sha=${{ github.sha }} checked-out HEAD=$(git rev-parse HEAD) expected=${EXPECTED_SHA:-<none>}"
+          if [ -n "$EXPECTED_SHA" ]; then
+            echo "$EXPECTED_SHA" | grep -Eq '^[0-9a-f]{40}$' || { echo "::error::expected_sha must be a full 40-hex sha"; exit 1; }
+            [ "$(git rev-parse HEAD)" = "$EXPECTED_SHA" ] || { echo "::error::checkout is not expected_sha"; exit 1; }
+          fi
 
       - name: Install uv
         uses: astral-sh/setup-uv@v8.2.0
@@ -66,6 +93,13 @@ jobs:
       - name: Publish tested registry data
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: >-
-          uv run python scripts/publish_registry_data.py --skip-seed
-          --require-origin-main-head
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+        run: |
+          set -euo pipefail
+          if [ -n "$EXPECTED_SHA" ]; then
+            uv run python scripts/publish_registry_data.py --skip-seed \
+              --require-origin-main-head --expected-head "$EXPECTED_SHA"
+          else
+            uv run python scripts/publish_registry_data.py --skip-seed \
+              --require-origin-main-head
+          fi
