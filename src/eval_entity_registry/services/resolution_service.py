@@ -20,9 +20,9 @@ from typing import Optional
 from eval_entity_resolver import AliasStore, CanonicalStore, Resolver, ResolverConfig, ResolutionResult
 from eval_entity_resolver.display import humanize_model_slug
 
-from eval_card_registry.config import settings
-from eval_card_registry.store.hf_store import RegistryStore
-from eval_card_registry.store import queries
+from eval_entity_registry.config import settings
+from eval_entity_registry.store.hf_store import RegistryStore
+from eval_entity_registry.store import queries
 
 
 # Tier-3 base-family lexicon (mirrors scripts/generate_tier3_inferred_seed.py).
@@ -186,7 +186,7 @@ class ResolutionService:
         # The runtime HF repo-id verifier (index + rate-limit-guarded live
         # Hub API fallback). Outlives resolver invalidations so its result
         # caches and breaker state survive entity churn within the process.
-        from eval_card_registry.services.hf_id_verifier import HfIdVerifier
+        from eval_entity_registry.services.hf_id_verifier import HfIdVerifier
         self._hf_id_verifier = HfIdVerifier(index_provider=self._build_hf_id_index)
 
     def _get_resolver(self) -> Resolver:
@@ -590,7 +590,7 @@ class ResolutionService:
 
         now = _now()
         if hf_confirmed:
-            from eval_card_registry.services.hub_stats import (
+            from eval_entity_registry.services.hub_stats import (
                 hf_id_to_canonical_cased,
             )
             hf_id = enrichment["hf_id"]
@@ -726,7 +726,7 @@ class ResolutionService:
             if isinstance(p, dict)
         ):
             return
-        from eval_card_registry.services.hub_stats import infer_family_parent_edge
+        from eval_entity_registry.services.hub_stats import infer_family_parent_edge
         try:
             aliases_to_canonical, _ = self._build_hub_stats_indices()
         except Exception:
@@ -781,7 +781,7 @@ class ResolutionService:
         if base_tok is None:
             return
 
-        from eval_card_registry.services.hub_stats import normalize as _nz
+        from eval_entity_registry.services.hub_stats import normalize as _nz
         raw_name_nz = _nz(name)
         org_prefix = (
             raw_value.split("/", 1)[0] if self._has_extractable_org(raw_value) else None
@@ -862,7 +862,7 @@ class ResolutionService:
             return None
         if row is None:
             return None
-        from eval_card_registry.services import hub_stats as _hs
+        from eval_entity_registry.services import hub_stats as _hs
         try:
             aliases_to_canonical, org_alias_map = self._build_hub_stats_indices()
             return _hs.enrich_draft_from_row(
@@ -875,7 +875,7 @@ class ResolutionService:
     def _get_hub_stats_client(self):
         """Lazy-init the hub-stats client. Reused across lookups."""
         if self._hub_stats_client is None:
-            from eval_card_registry.services.hub_stats import HubStatsClient
+            from eval_entity_registry.services.hub_stats import HubStatsClient
             self._hub_stats_client = HubStatsClient()
         return self._hub_stats_client
 
@@ -897,7 +897,7 @@ class ResolutionService:
             # Double-check after acquiring — another thread may have built it.
             if self._hub_stats_indices is not None:
                 return self._hub_stats_indices
-            from eval_card_registry.services.hub_stats import normalize as _hsnorm
+            from eval_entity_registry.services.hub_stats import normalize as _hsnorm
 
             aliases_df = self.store.table("aliases")
             models_df = self.store.table("canonical_models")
@@ -945,7 +945,7 @@ class ResolutionService:
         with self._hub_stats_indices_lock:
             if self._hf_id_index is not None:
                 return self._hf_id_index
-            from eval_card_registry.services.hub_stats import normalize as _hsnorm
+            from eval_entity_registry.services.hub_stats import normalize as _hsnorm
 
             index: dict[str, str] = {}
             if not self.store.has_table("hub_stats_index"):

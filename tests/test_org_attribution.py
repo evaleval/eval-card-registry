@@ -1,7 +1,7 @@
 """Seed-time org attribution + cross-spelling merge detection for malformed-org
 draft ids (no '/', org glued by -/.). Standalone drafts get org_id; drafts that
 duplicate a real repo are returned as a merge map for the fold."""
-from eval_card_registry.lib.org_attribution import attribute_orgs
+from eval_entity_registry.lib.org_attribution import attribute_orgs
 
 HF_TO_DEV = {"cohere": "cohere", "deepseek": "deepseek", "nvidia": "nvidia",
              "writer": "writer", "anthropic": "anthropic", "qwen": "alibaba"}

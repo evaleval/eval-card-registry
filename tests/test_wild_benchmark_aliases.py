@@ -1,6 +1,6 @@
 """WILD benchmark slugs resolve to the right canonical (added aliases + new
 canonicals). Guards the ARC disambiguation (AI2 Reasoning Challenge, not ARC-AGI).
-Skips if fixtures aren't built (run `eval-card-registry seed --local`)."""
+Skips if fixtures aren't built (run `eval-entity-registry seed --local`)."""
 from pathlib import Path
 
 import pytest
@@ -27,7 +27,7 @@ WILD_BENCHMARKS = {
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

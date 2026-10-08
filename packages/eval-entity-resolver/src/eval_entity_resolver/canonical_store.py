@@ -24,7 +24,7 @@ import pandas as pd
 
 logger = logging.getLogger(__name__)
 
-# Per-entity-type parquet filenames (matches the eval-card-registry
+# Per-entity-type parquet filenames (matches the eval-entity-registry
 # fixtures layout / HF Dataset config naming).
 _TABLES = {
     "model": "canonical_models",

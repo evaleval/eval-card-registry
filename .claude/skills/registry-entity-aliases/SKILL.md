@@ -2,7 +2,7 @@
 name: registry-entity-aliases
 description: >-
   Add or fix model / benchmark / metric / harness entities in the
-  eval-card-registry so a raw slug resolves to the right canonical id. Use when a
+  eval-entity-registry so a raw slug resolves to the right canonical id. Use when a
   model or benchmark name lands on `no_match` or an auto-created `draft`, when
   adding aliases or a new canonical to the seed, or when an EEE adapter's ids
   won't resolve.
@@ -72,7 +72,7 @@ It then resolves only for that config and can't leak across sources.
 
 ## Verify — prune stale fixtures FIRST (a stale `fixtures/` gives phantom pass/fail)
 ```bash
-find fixtures -name '*.parquet' -delete 2>/dev/null || true; uv run eval-card-registry seed --local
+find fixtures -name '*.parquet' -delete 2>/dev/null || true; uv run eval-entity-registry seed --local
 ```
 then, BEFORE adding an alias, check it doesn't already resolve elsewhere
 (last-write-wins collision — see Traps), and after adding it assert it resolves:

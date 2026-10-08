@@ -14,8 +14,8 @@ import pytest
 import yaml
 from typer.testing import CliRunner
 
-from eval_card_registry.cli import app
-from eval_card_registry.store import hf_store
+from eval_entity_registry.cli import app
+from eval_entity_registry.store import hf_store
 
 
 @pytest.fixture
@@ -974,7 +974,7 @@ def test_seeded_wildbench_folds_carry_both_source_conversions():
     repo_root = Path(__file__).resolve().parent.parent
     folds_parquet = repo_root / "fixtures" / "benchmark_metric_folds.parquet"
     if not folds_parquet.exists():
-        pytest.skip("fixtures not built; run `eval-card-registry seed --local`")
+        pytest.skip("fixtures not built; run `eval-entity-registry seed --local`")
 
     df = pd.read_parquet(folds_parquet)
     wb = df[(df["benchmark_id"] == "wildbench") & (df["from_metric_id"] == "score")]

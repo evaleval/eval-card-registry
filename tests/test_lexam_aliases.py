@@ -4,7 +4,7 @@ Every raw form here is one every_eval_ever's `lexam` adapter emits (dotted
 `evaluation_name`s, metric names, the harness name, and the 36 leaderboard
 model labels that this PR bridges). A regression fragments the LEXam results
 across two ids. Skips if fixtures aren't built (run
-`eval-card-registry seed --local` first).
+`eval-entity-registry seed --local` first).
 """
 import json
 from pathlib import Path
@@ -57,7 +57,7 @@ FAMILY_MEMBERS = {"lexam", "lexam-open-question", "lexam-mcq-4-choices"}
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

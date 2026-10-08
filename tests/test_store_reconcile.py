@@ -10,8 +10,8 @@ import json
 import pandas as pd
 import pytest
 
-from eval_card_registry.store.hf_store import _reconcile_schema
-from eval_card_registry.store import schemas
+from eval_entity_registry.store.hf_store import _reconcile_schema
+from eval_entity_registry.store import schemas
 
 
 def test_reconcile_legacy_parent_model_id_migrates_to_parents():

@@ -61,14 +61,14 @@ from typing import Optional
 import pandas as pd
 import yaml
 
-from eval_card_registry.lib.seed_io import (
+from eval_entity_registry.lib.seed_io import (
     build_hf_to_dev_from_orgs_yaml,
     resolve_oracle_path,
 )
 
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[1]            # eval-card-registry/
+REGISTRY_ROOT = Path(__file__).resolve().parents[1]            # eval-entity-registry/
 ORACLE = resolve_oracle_path()
 
 SEED = REGISTRY_ROOT / "seed"
@@ -117,7 +117,7 @@ def _load_curated_orgs() -> list[dict]:
 
 def build_hf_to_dev(curated_orgs: list[dict]) -> dict[str, str]:
     """HF-org-lowercase -> curated developer slug (see
-    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier lets
+    `eval_entity_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier lets
     ai2->allenai / aws->amazon / kimi->moonshotai / prime-intellect->PrimeIntellect
     resolve instead of dangling. `curated_orgs` is accepted for call-site
     compatibility; the org map is rebuilt from `ORGS_YAML` (identical result)."""
@@ -249,7 +249,7 @@ def main() -> None:
     # --- Incumbent index: which canonical does each HF/raw id resolve to TODAY?
     # The fixtures lag the YAML, so we read the seed YAML aliases (the truth)
     # plus each entry's own id. Two lookups: exact raw_value and normalized.
-    from eval_card_registry.services.hub_stats import normalize as _nz
+    from eval_entity_registry.services.hub_stats import normalize as _nz
 
     incumbent_exact: dict[str, str] = {}
     incumbent_norm: dict[str, str] = {}

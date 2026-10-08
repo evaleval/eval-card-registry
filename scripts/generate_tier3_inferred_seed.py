@@ -57,7 +57,7 @@ from typing import Optional
 
 import yaml
 
-from eval_card_registry.lib.seed_io import (
+from eval_entity_registry.lib.seed_io import (
     build_hf_to_dev_from_orgs_yaml,
     resolve_oracle_path,
 )
@@ -65,7 +65,7 @@ from eval_card_registry.lib.seed_io import (
 from eval_entity_resolver.resolver import Resolver
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
 
-REGISTRY_ROOT = Path(__file__).resolve().parents[1]            # eval-card-registry/
+REGISTRY_ROOT = Path(__file__).resolve().parents[1]            # eval-entity-registry/
 ORACLE = resolve_oracle_path()
 
 SEED = REGISTRY_ROOT / "seed"
@@ -249,7 +249,7 @@ def _load_curated_orgs() -> list[dict]:
 
 def build_hf_to_dev(curated_orgs: list[dict]) -> dict[str, str]:
     """HF-org-lowercase -> curated developer slug (see
-    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier folds
+    `eval_entity_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier folds
     ai2->allenai / aws->amazon / kimi->moonshotai / prime-intellect->PrimeIntellect.
     `curated_orgs` is accepted for call-site compatibility; the org map is
     rebuilt from `ORGS_YAML` (identical result)."""
@@ -728,8 +728,8 @@ def main() -> None:
     # resolves via the fold alias, the run after re-mints it — a two-state
     # oscillation). Detect the fold up front and emit the stable enrich
     # record instead. Same `_bsizes` guard as fold_collisions.
-    from eval_card_registry.lib.collision_fold import _bsizes as _ck_bsizes
-    from eval_card_registry.lib.collision_fold import collision_key as _ck
+    from eval_entity_registry.lib.collision_fold import _bsizes as _ck_bsizes
+    from eval_entity_registry.lib.collision_fold import collision_key as _ck
 
     ck_index: dict[str, str] = {}
     _clean_models = r.canonical_store._tables.get("model")
@@ -802,7 +802,7 @@ def main() -> None:
     # --- alias-confirmation index: normalized base candidate -> canonical id.
     # Built from the resolver's own alias/canonical universe so an inferred base
     # only yields an edge when it alias-confirms to something that exists.
-    from eval_card_registry.services.hub_stats import normalize as _nz
+    from eval_entity_registry.services.hub_stats import normalize as _nz
 
     def _confirm_base(candidate: str) -> Optional[str]:
         """Resolve a candidate base id through the live resolver. Accept only an

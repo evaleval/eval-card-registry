@@ -2,10 +2,10 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from eval_card_registry.main import app
-from eval_card_registry.services.log_writer import ResolveLogWriter
-from eval_card_registry.services.resolution_service import ResolutionService
-from eval_card_registry.store import hf_store, queries, schemas
+from eval_entity_registry.main import app
+from eval_entity_registry.services.log_writer import ResolveLogWriter
+from eval_entity_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.store import hf_store, queries, schemas
 
 
 @pytest.fixture(autouse=True)

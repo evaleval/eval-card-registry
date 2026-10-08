@@ -38,7 +38,7 @@ from pathlib import Path
 
 import duckdb
 
-from eval_card_registry.services.hub_stats import PARQUET_URL, resolve_parquet_source
+from eval_entity_registry.services.hub_stats import PARQUET_URL, resolve_parquet_source
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUT_PATH = REPO_ROOT / "fixtures" / "hub_stats_index.parquet"

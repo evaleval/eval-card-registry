@@ -1,5 +1,5 @@
 # Curated exceptions to the seed-time normalize-collision fold
-# (src/eval_card_registry/lib/collision_fold.py). The fold collapses canonicals
+# (src/eval_entity_registry/lib/collision_fold.py). The fold collapses canonicals
 # that are the SAME model under separator-stripping (gemini-1.5-pro vs
 # gemini-1-5-pro; gpt-5.2 vs the venice relabel gpt-52) into one canonical.
 #

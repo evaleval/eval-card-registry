@@ -1,6 +1,6 @@
 from fastapi import Depends, HTTPException
 
-from eval_card_registry.config import settings
+from eval_entity_registry.config import settings
 
 
 def check_writable():

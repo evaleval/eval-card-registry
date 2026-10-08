@@ -91,7 +91,7 @@ uv run python scripts/dedup_cross_source_aliases.py 2>&1 | tail -4
 
 log "STEP 6: seed (build fixtures for tier3)"
 rm -f fixtures/*.parquet
-uv run eval-card-registry seed --local 2>&1 | tail -3
+uv run eval-entity-registry seed --local 2>&1 | tail -3
 
 log "STEP 7: tier3 inferred (residual no_match tail)"
 uv run python scripts/generate_tier3_inferred_seed.py 2>&1 | tail -5
@@ -106,7 +106,7 @@ uv run python scripts/dedup_cross_source_aliases.py 2>&1 | tail -6
 
 log "STEP 8: final seed"
 rm -f fixtures/*.parquet
-uv run eval-card-registry seed --local 2>&1 | tail -4
+uv run eval-entity-registry seed --local 2>&1 | tail -4
 
 log "DONE: source id counts"
 grep -c '^- id:' seed/models/sources/*.generated.yaml 2>/dev/null || true

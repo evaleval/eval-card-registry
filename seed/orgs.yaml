@@ -10,7 +10,7 @@
 # to canonical `meta`).
 #
 # This is an ongoing seed: add new orgs as EEE surfaces them, or as new model
-# providers ship. Re-seeding is idempotent — `uv run eval-card-registry seed
+# providers ship. Re-seeding is idempotent — `uv run eval-entity-registry seed
 # --local` merges new entries and prunes removed ones.
 
 # --- Major closed-source labs ---

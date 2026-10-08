@@ -27,4 +27,4 @@ ENV READ_ONLY=true
 
 EXPOSE 7860
 
-CMD ["uvicorn", "eval_card_registry.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "eval_entity_registry.main:app", "--host", "0.0.0.0", "--port", "7860"]

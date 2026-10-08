@@ -5,7 +5,7 @@ Guards the entities minted for the Polistemics EEE_datastore submission
 canonicals, and the generic surface form "Rubric Score" must NOT resolve to
 the namespaced metric (display_name is benchmark-scoped precisely to avoid
 claiming other sources' raw rubric-score fields). Skips if fixtures aren't
-built (run `eval-card-registry seed --local` first).
+built (run `eval-entity-registry seed --local` first).
 """
 from pathlib import Path
 
@@ -23,7 +23,7 @@ ENTITY_CANONICALS = {
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

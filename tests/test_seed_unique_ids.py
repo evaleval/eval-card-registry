@@ -18,7 +18,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from eval_card_registry.cli import seed_collision_key
+from eval_entity_registry.cli import seed_collision_key
 
 SEED = Path(__file__).resolve().parent.parent / "seed"
 

@@ -31,7 +31,7 @@ the PR:
 #    the glob fails to match before rm runs — so use a portable form or
 #    `--prune-stale`.)
 find fixtures -name '*.parquet' -delete 2>/dev/null || true
-uv run eval-card-registry seed --local
+uv run eval-entity-registry seed --local
 
 # 2. Run the FULL test suite — this is what CI runs, not just the resolver tests.
 #    The gate suite is where seed regressions surface.
@@ -87,7 +87,7 @@ next regeneration. Curated model entries and overrides belong in
 
 ### Pre-PR checklist
 
-- [ ] `uv run eval-card-registry seed --local --prune-stale` succeeds (from a clean fixture state).
+- [ ] `uv run eval-entity-registry seed --local --prune-stale` succeeds (from a clean fixture state).
 - [ ] `uv run pytest` is green (gate suite included), run from a clean tree on your branch.
 - [ ] New aliases target an existing canonical; no canonical was renamed or duplicated.
 - [ ] Any org-split resolution is a merge (same uploader) or a justified allowlist entry (distinct uploaders).

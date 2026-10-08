@@ -7,8 +7,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from eval_card_registry.config import settings
-from eval_card_registry.services.hf_id_verifier import HfIdVerifier
+from eval_entity_registry.config import settings
+from eval_entity_registry.services.hf_id_verifier import HfIdVerifier
 
 
 class FakeClock:

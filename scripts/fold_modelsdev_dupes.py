@@ -45,7 +45,7 @@ from typing import Optional
 
 import yaml
 
-from eval_card_registry.lib.seed_io import (
+from eval_entity_registry.lib.seed_io import (
     build_hf_to_dev_from_orgs_yaml,
     resolve_oracle_path,
 )
@@ -82,7 +82,7 @@ def load_core() -> tuple[dict, list[dict]]:
 
 def build_hf_to_dev() -> dict[str, str]:
     """HF-org-lowercase -> curated developer slug (see
-    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier folds
+    `eval_entity_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the alias tier folds
     minimaxai->minimax, EnnoAi->Enno-Ai, etc. — so the dedup/shadow predicate
     here agrees with the generators + resolver + gate (no divergent weaker map)."""
     return build_hf_to_dev_from_orgs_yaml(ORGS_YAML)

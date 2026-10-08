@@ -20,7 +20,7 @@ import yaml
 _UNKNOWN_SENTINEL = "unknown"
 
 # seed/inference_platforms.yaml lives at the repo root's seed/ dir.
-# This file is src/eval_card_registry/lib/inference_platforms_map.py, so the
+# This file is src/eval_entity_registry/lib/inference_platforms_map.py, so the
 # repo root is four parents up.
 _SEED_PATH = (
     Path(__file__).resolve().parents[3] / "seed" / "inference_platforms.yaml"

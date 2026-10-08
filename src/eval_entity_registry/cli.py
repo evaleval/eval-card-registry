@@ -1,5 +1,5 @@
 """
-eval-card-registry CLI.
+eval-entity-registry CLI.
 
 Commands:
   seed      Load known entities from seed/ YAML files
@@ -73,11 +73,11 @@ def _legacy_parent_model_id_to_parents(entry: dict) -> None:
     if legacy:
         entry["parents"] = [{"id": legacy, "relationship": "variant", "axis": "size"}]
 
-from eval_card_registry.store.hf_store import get_store
-from eval_card_registry.store import queries, schemas
-from eval_card_registry.lib import collision_fold, org_attribution
-from eval_card_registry.lib.seed_io import WEAK_SCALAR_FIELDS, build_hf_to_dev_from_orgs_yaml
-from eval_card_registry.store.queries import _derive_release_date_from_id, _is_na
+from eval_entity_registry.store.hf_store import get_store
+from eval_entity_registry.store import queries, schemas
+from eval_entity_registry.lib import collision_fold, org_attribution
+from eval_entity_registry.lib.seed_io import WEAK_SCALAR_FIELDS, build_hf_to_dev_from_orgs_yaml
+from eval_entity_registry.store.queries import _derive_release_date_from_id, _is_na
 from eval_entity_resolver.normalization import normalize as _normalize_alias
 from eval_entity_resolver.display import humanize_model_slug
 
@@ -129,7 +129,7 @@ def _humanized_display(entry: dict) -> str:
         out = out[len("unknown/"):]
     return out
 
-app = typer.Typer(help="eval-card-registry CLI")
+app = typer.Typer(help="eval-entity-registry CLI")
 
 
 def _load_store():
@@ -1663,7 +1663,7 @@ def sync(
         typer.echo("Specify --config <name> or --all", err=True)
         raise typer.Exit(1)
 
-    from eval_card_registry.services.ingestion import run_sync
+    from eval_entity_registry.services.ingestion import run_sync
     import datasets as ds_lib
 
     store = _load_store()

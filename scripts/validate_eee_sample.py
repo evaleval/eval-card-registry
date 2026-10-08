@@ -14,7 +14,7 @@ and reports, per entity type: coverage (% non-null), strategy breakdown
 random sample of resolutions to eyeball for correctness.
 
 Needs network (pulls EEE configs from HF) + the seeded fixtures
-(`LOCAL_MODE=true uv run eval-card-registry seed --local` first).
+(`LOCAL_MODE=true uv run eval-entity-registry seed --local` first).
 
 Usage:
     LOCAL_MODE=true uv run python scripts/validate_eee_sample.py
@@ -34,7 +34,7 @@ FIXTURES = REGISTRY_ROOT / "fixtures"
 
 # Faithful raw-string extraction: reuse the exact helpers the ingestion pipeline
 # uses, so this measures what the producer would actually feed the resolver.
-from eval_card_registry.services.ingestion import _detect_sub_categories
+from eval_entity_registry.services.ingestion import _detect_sub_categories
 from eval_entity_resolver.eee import clean_eval_name, extract_metric
 from eval_entity_resolver.resolver import Resolver
 
@@ -128,7 +128,7 @@ def main() -> int:
     args = ap.parse_args()
 
     if not FIXTURES.exists() or not (FIXTURES / "aliases.parquet").exists():
-        print("[validate] missing fixtures — run `LOCAL_MODE=true uv run eval-card-registry "
+        print("[validate] missing fixtures — run `LOCAL_MODE=true uv run eval-entity-registry "
               "seed --local` first.", file=sys.stderr)
         return 1
 

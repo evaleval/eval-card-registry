@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
-from eval_card_registry.config import settings
+from eval_entity_registry.config import settings
 
 logger = logging.getLogger(__name__)
 

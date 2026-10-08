@@ -10,11 +10,11 @@ No HF credentials or network needed. Uses `fixtures/` as the data source.
 
 ```bash
 # Seed the fixtures with known entities
-uv run eval-card-registry seed --local
+uv run eval-entity-registry seed --local
 
 # Start the API in read-only mode
 LOCAL_MODE=true READ_ONLY=true \
-  uv run uvicorn eval_card_registry.main:app --host 127.0.0.1 --port 7860
+  uv run uvicorn eval_entity_registry.main:app --host 127.0.0.1 --port 7860
 ```
 
 In a second terminal, run the curl checks below. These were verified against a
@@ -91,7 +91,7 @@ curl -s "localhost:7860/api/v1/aliases?entity_type=benchmark" | jq '. | length'
 ### Confirm the draft counter didn't move
 
 ```bash
-uv run eval-card-registry stats --local
+uv run eval-entity-registry stats --local
 # benchmarks.draft should still be 0 — the no_match call above must NOT have
 # auto-created a draft entity (read-only mode blocks that path).
 ```
@@ -130,7 +130,7 @@ Re-run the curl checks from section 1 against `localhost:7860`. Same behaviour.
    # LOCAL_MODE=false
    # HF_TOKEN=hf_...
    # HF_DATASET_REPO=your-user/evalcard-registry-data
-   uv run eval-card-registry seed
+   uv run eval-entity-registry seed
    ```
 
    Running `sync --config <eee_config>` later populates `eval_results` for

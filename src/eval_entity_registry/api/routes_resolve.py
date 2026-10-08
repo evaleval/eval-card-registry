@@ -3,9 +3,9 @@ import uuid
 from fastapi import APIRouter, Depends, Request
 from datetime import datetime, timezone
 
-from eval_card_registry.api.schemas import ResolveRequest, ResolveResponse
-from eval_card_registry.services.resolution_service import ResolutionService
-from eval_card_registry.services.log_writer import ResolveLogWriter
+from eval_entity_registry.api.schemas import ResolveRequest, ResolveResponse
+from eval_entity_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.services.log_writer import ResolveLogWriter
 
 router = APIRouter()
 

@@ -303,6 +303,6 @@ def test_generate_reports_missing_org_ids(mod):
 
 
 # The refresh script does NOT merge overrides into the generated YAML: the seed
-# CLI loader (`_load_models_merged` in `eval_card_registry.cli`) applies
+# CLI loader (`_load_models_merged` in `eval_entity_registry.cli`) applies
 # `seed/models/core.yaml` and `seed/models/enrichments/aliases.yaml` at load time.
 # Override-merge coverage belongs against that loader, not this script.

@@ -53,12 +53,12 @@ import duckdb
 import httpx
 import yaml
 
-from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml, load_entries_from_yaml
+from eval_entity_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml, load_entries_from_yaml
 
 # Shared hub-stats helpers live in the package so the runtime resolver
 # (live lookup at draft creation) and this bulk refresh script stay
 # consistent on row-shape parsing.
-from eval_card_registry.services.hub_stats import (
+from eval_entity_registry.services.hub_stats import (
     HUB_STATS_LOCAL_PARQUET_ENV,
     PARQUET_URL,
     QUERY_COLUMNS,
@@ -108,7 +108,7 @@ _MODEL_SOURCES = (
 
 def build_hf_to_dev() -> dict[str, str]:
     """HF-org-lowercase -> developer/community slug (see
-    `eval_card_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the ALIAS tier lets a
+    `eval_entity_registry.lib.seed_io.build_hf_to_dev_from_orgs_yaml`). Reading the ALIAS tier lets a
     refresh honour a curated same-uploader merge (e.g. `EnnoAi` -> `Enno-Ai`)
     instead of re-emitting the community-twin spelling the org-fold merged."""
     return build_hf_to_dev_from_orgs_yaml(ORGS_PATH)

@@ -9,10 +9,10 @@ later lookup of that string is served from the alias row.
 """
 import pytest
 
-from eval_card_registry.store import queries
-from eval_card_registry.store import schemas as s
-from eval_card_registry.store.hf_store import RegistryStore
-from eval_card_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.store import queries
+from eval_entity_registry.store import schemas as s
+from eval_entity_registry.store.hf_store import RegistryStore
+from eval_entity_registry.services.resolution_service import ResolutionService
 
 
 def _fresh_store() -> RegistryStore:
