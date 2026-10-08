@@ -3914,7 +3914,7 @@ entries:
   architecture: null
   params_billions: 4.0
   parents:
-  - id: alibaba/qwen3-4b
+  - id: Qwen/Qwen3-4B
     relationship: variant
     axis: version
   open_weights: true
@@ -3932,7 +3932,7 @@ entries:
   architecture: null
   params_billions: 4.0
   parents:
-  - id: alibaba/qwen3-4b
+  - id: Qwen/Qwen3-4B
     relationship: variant
     axis: mode
   open_weights: true
@@ -3951,7 +3951,7 @@ entries:
   architecture: null
   params_billions: 4.0
   parents:
-  - id: alibaba/qwen3-4b
+  - id: Qwen/Qwen3-4B
     relationship: variant
     axis: mode
   open_weights: true
@@ -3970,7 +3970,7 @@ entries:
   architecture: null
   params_billions: 4.0
   parents:
-  - id: alibaba/qwen3-4b
+  - id: Qwen/Qwen3-4B
     relationship: variant
     axis: mode
   open_weights: true
@@ -3989,7 +3989,7 @@ entries:
   architecture: null
   params_billions: 4.0
   parents:
-  - id: alibaba/qwen3-4b
+  - id: Qwen/Qwen3-4B
     relationship: variant
     axis: mode
   open_weights: true
@@ -11666,7 +11666,7 @@ entries:
   architecture: null
   params_billions: 4.0
   parents:
-  - id: alibaba/qwen3-4b
+  - id: Qwen/Qwen3-4B
     relationship: quantized
   open_weights: true
   release_date: null
@@ -13625,7 +13625,7 @@ entries:
   architecture: null
   params_billions: null
   parents:
-  - id: z-ai/glm-4.5v
+  - id: zai-org/GLM-4.5V
     relationship: variant
     axis: mode
   open_weights: true

@@ -101,7 +101,7 @@
 - id: DeepMount00/Qwen2-1.5B-Ita_v5
   aliases:
   - Qwen2-1.5B-Ita_v5
-- id: Doctor-Shotgun/ms3-2-24b-magnum-diamond
+- id: Doctor-Shotgun/MS3.2-24B-Magnum-Diamond
   aliases:
   - mistralai/ms3-2-24b-magnum-diamond
 - id: DoppelReflEx/MN-12B-FoxFrame2-test
@@ -119,13 +119,13 @@
 - id: EVA-UNIT-01/EVA-Qwen2.5-72B-v0.2
   aliases:
   - alibaba/eva-qwen2-5-72b-v0-2
-- id: EVA-UNIT-01/eva-llama-3-33-70b-v0-0
+- id: EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.0
   aliases:
   - meta/eva-llama-3-33-70b-v0-0
-- id: EVA-UNIT-01/eva-llama-3-33-70b-v0-1
+- id: EVA-UNIT-01/EVA-LLaMA-3.33-70B-v0.1
   aliases:
   - meta/eva-llama-3-33-70b-v0-1
-- id: EVA-UNIT-01/eva-qwen2-5-32b-v0-2
+- id: EVA-UNIT-01/EVA-Qwen2.5-32B-v0.2
   aliases:
   - Qwen2.5-32B-EVA-v0.2
   - alibaba/eva-qwen2-5-32b-v0-2
@@ -141,10 +141,10 @@
 - id: Enno-Ai/EnnoAi-Pro-Llama-3.1-8B-v0.9
   aliases:
   - EnnoAi-Pro-Llama-3.1-8B-v0.9
-- id: Envoid/llama-3-05-nemotron-tenyxchat-storybreaker-70b
+- id: Envoid/Llama-3.05-Nemotron-Tenyxchat-Storybreaker-70B
   aliases:
   - nvidia/llama-3-05-nemotron-tenyxchat-storybreaker-70b
-- id: Envoid/llama-3-05-nt-storybreaker-ministral-70b
+- id: Envoid/Llama-3.05-NT-Storybreaker-Ministral-70B
   aliases:
   - meta/llama-3-05-nt-storybreaker-ministral-70b
 - id: Etherll/Replete-LLM-V3-Llama-3.1-8b
@@ -218,13 +218,13 @@
   aliases:
   - Mistral Nemo Inferor 12B
   - mistralai/mn-12b-inferor-v0-0
-- id: LatitudeGames/wayfarer-large-70b-llama-3-3
+- id: LatitudeGames/Wayfarer-Large-70B-Llama-3.3
   aliases:
   - meta/wayfarer-large-70b-llama-3-3
 - id: LLM360/K2-V2-Instruct
   aliases:
   - IFM/K2-V2-Instruct
-- id: MarinaraSpaghetti/nemomix-unleashed-12b
+- id: MarinaraSpaghetti/NemoMix-Unleashed-12B
   aliases:
   - mistralai/nemomix-unleashed-12b
 - id: Marsouuu/general3Bv2-ECE-PRYMMAL-Martial
@@ -569,6 +569,7 @@
 - id: Qwen/Qwen3-Coder-480B-A35B-Instruct
   aliases:
   - qwen3-coder-480b-a35b-instruct-turbo
+  - qwen.qwen3-coder-480b-a35b-v1:0
 - id: Qwen/Qwen3-Next-80B-A3B-Instruct
   aliases:
   - unknown/qwen3-next-80b-instruct
@@ -622,14 +623,14 @@
 - id: Qwen/WorldPM-72B
   aliases:
   - alibaba/WorldPM-72B
-- id: ReadyArt/ms3-2-the-omega-directive-24b-unslop-v2-0
+- id: ReadyArt/MS3.2-The-Omega-Directive-24B-Unslop-v2.0
   aliases:
   - meta/ms3-2-the-omega-directive-24b-unslop-v2-0
   - ms3-2-the-omega-directive-24b-unslop-v2-0
 - id: ReadyArt/the-omega-abomination-l-70b-v1-0
   aliases:
   - meta/the-omega-abomination-l-70b-v1-0
-- id: Salesforce/llama-xlam-2-70b-fc-r
+- id: Salesforce/Llama-xLAM-2-70b-fc-r
   aliases:
   - meta/llama-xlam-2-70b-fc-r
 - id: Sao10K/L3-8B-Stheno-v3.2
@@ -639,10 +640,10 @@
 - id: Sao10K/l3-1-70b-euryale-v2-2
   aliases:
   - meta/l3-1-70b-euryale-v2-2
-- id: sao10k/l3.1-70b-hanami-x1
+- id: Sao10K/L3.1-70B-Hanami-x1
   aliases:
   - meta/l3-1-70b-hanami-x1
-- id: Sao10K/l3-3-70b-euryale-v2-3
+- id: Sao10K/L3.3-70B-Euryale-v2.3
   aliases:
   - meta/l3-3-70b-euryale-v2-3
 - id: Sorawiz/Gemma-Creative-9B-Base
@@ -662,10 +663,10 @@
   aliases:
   - Steelskull Nevoria R1 70b
   - meta/l3-3-nevoria-r1-70b
-- id: Steelskull/l3-3-cu-mai-r1-70b
+- id: Steelskull/L3.3-Cu-Mai-R1-70b
   aliases:
   - meta/l3-3-cu-mai-r1-70b
-- id: Steelskull/l3-3-electra-r1-70b
+- id: Steelskull/L3.3-Electra-R1-70b
   aliases:
   - meta/l3-3-electra-r1-70b
 - id: Steelskull/l3-3-ms-evalebis-70b
@@ -676,43 +677,43 @@
   aliases:
   - l3-3-ms-evayale-70b
   - meta/l3-3-ms-evayale-70b
-- id: TheDrummer/anubis-70b-v1
+- id: TheDrummer/Anubis-70B-v1
   aliases:
   - meta/anubis-70b-v1
-- id: TheDrummer/anubis-70b-v1-1
+- id: TheDrummer/Anubis-70B-v1.1
   aliases:
   - Anubis 70B v1.1
   - anubis-70b-v1-1
   - meta/anubis-70b-v1-1
-- id: TheDrummer/cydonia-24b-v2
+- id: TheDrummer/Cydonia-24B-v2
   aliases:
   - cydonia-24b-v4
   - meta/cydonia-24b-v2
   - meta/cydonia-24b-v4
-- id: thedrummer/cydonia-24b-v4.1
+- id: TheDrummer/Cydonia-24B-v4.1
   aliases:
   - cydonia-24b-v4-1
   - meta/cydonia-24b-v4-1
-- id: TheDrummer/cydonia-24b-v4-3
+- id: TheDrummer/Cydonia-24B-v4.3
   aliases:
   - meta/cydonia-24b-v4-3
-- id: TheDrummer/magidonia-24b-v4-3
+- id: TheDrummer/Magidonia-24B-v4.3
   aliases:
   - magidonia-24b-v4-3
   - meta/magidonia-24b-v4-3
-- id: TheDrummer/rocinante-12b-v1-1
+- id: TheDrummer/Rocinante-12B-v1.1
   aliases:
   - meta/rocinante-12b-v1-1
-- id: thedrummer/skyfall-36b-v2
+- id: TheDrummer/Skyfall-36B-v2
   aliases:
   - meta/skyfall-36b-v2
-- id: TheDrummer/unslopnemo-12b-v4-1
+- id: TheDrummer/UnslopNemo-12B-v4.1
   aliases:
   - meta/unslopnemo-12b-v4-1
 - id: Tongyi-Zhiwen/qwenlong-l1-32b
   aliases:
   - alibaba/qwenlong-l1-32b
-- id: VongolaChouko/starcannon-unleashed-12b-v1-0
+- id: VongolaChouko/Starcannon-Unleashed-12B-v1.0
   aliases:
   - mistralai/starcannon-unleashed-12b-v1-0
 - id: Youlln/2PRYMMAL-Yi1.5-6B-SLERP
@@ -724,7 +725,7 @@
 - id: abacusai/Dracarys-72B-Instruct
   aliases:
   - meta/dracarys-72b-instruct
-- id: abacusai/dracarys-llama-3-1-70b-instruct
+- id: abacusai/Dracarys-Llama-3.1-70B-Instruct
   aliases:
   - nvidia/dracarys-llama-3-1-70b-instruct
 - id: ai21-labs/ai21-jamba-1-5-large
@@ -760,7 +761,7 @@
   aliases:
   - aion-1-0-mini
   - deepseek/aion-1-0-mini
-- id: aion-labs/aion-rp-llama-3.1-8b
+- id: aion-labs/Aion-RP-Llama-3.1-8B
   aliases:
   - meta/aion-rp-llama-3-1-8b
 - id: aleph-alpha/luminous-base
@@ -816,7 +817,7 @@
   aliases:
   - alibaba/qwen
   - qwen
-- id: alibaba/qwen2-5-vl-32b-instruct
+- id: Qwen/Qwen2.5-VL-32B-Instruct
   aliases:
   - unknown/qwen-2-5-vl-32b-instruct
   - unknown/qwen2-5-vl-instruct-32b
@@ -828,7 +829,7 @@
   aliases:
   - unknown/qwen-2-5-vl-7b
   - unknown/qwen2-5vl-7b
-- id: alibaba/qwen2.5-vl-7b-instruct
+- id: Qwen/Qwen2.5-VL-7B-Instruct
   aliases:
   - unknown/qwen2-5-vl-instruct-7b
 - id: alibaba/qwen3-0.6b-instruct
@@ -876,7 +877,7 @@
 - id: alibaba/qwen3-32b-instruct-reasoning
   aliases:
   - Qwen3 32B Instruct Reasoning
-- id: alibaba/qwen3-4b
+- id: Qwen/Qwen3-4B
   aliases:
   - unknown/qwen3-4b-emb
   - unknown/qwen3-4b-think
@@ -906,16 +907,11 @@
 - id: alibaba/qwen3-8b-instruct-reasoning
   aliases:
   - Qwen3 8B Instruct Reasoning
-- id: alibaba/qwen3-coder-30b-a3b
+- id: Qwen/Qwen3-Coder-30B-A3B-Instruct
   aliases:
   - unknown/qwen3-coder-a3b
-- id: qwen/qwen3-coder-30b-a3b-instruct
-  aliases:
   - unknown/qwen3-coder-30b-a3b-instruct-1
   - unknown/qwen3-coder-30b-a3b-instruct-2
-- id: alibaba/qwen3-coder-480b-a35b
-  aliases:
-  - qwen.qwen3-coder-480b-a35b-v1:0
 - id: alibaba/qwen3-embedding-0-6b
   aliases:
   - unknown/qwen3-0-6b-emb
@@ -1226,7 +1222,7 @@
 - id: baai/bge-m3
   aliases:
   - nvidia/bge-m3
-- id: baai/bge-multilingual-gemma2
+- id: BAAI/bge-multilingual-gemma2
   aliases:
   - google/bge-multilingual-gemma2
 - id: baebee/mergekit-ties-fnjenli
@@ -1276,17 +1272,18 @@
 - id: bittensor/bitagent-bounty-8b
   aliases:
   - BitAgent Bounty 8B
-- id: black-forest-labs/flux-1-kontext-dev
+- id: black-forest-labs/FLUX.1-Kontext-dev
   aliases:
   - black-forest-labs/FLUX.1-Kontext-dev
   - flux-1-kontext-dev
   - nvidia/flux-1-kontext-dev
-- id: black-forest-labs/flux-1-schnell
+- id: black-forest-labs/FLUX.1-schnell
   aliases:
   - black-forest-labs/FLUX.1-schnell
   - flux-1-schnell
   - nvidia/flux-1-schnell
-- id: black-forest-labs/flux.1-dev
+  - black-forest-labs/schnell
+- id: black-forest-labs/FLUX.1-dev
   aliases:
   - blackforestlabs/flux-1-dev
 - id: brgx53/3Bgeneralv2-ECE-PRYMMAL-Martial
@@ -1408,10 +1405,10 @@
 - id: cohere/command-a-03-2025
   aliases:
   - Command A (2025-03)
-- id: cohere/command-a-translate-08-2025
+- id: CohereLabs/command-a-translate-08-2025
   aliases:
   - Command A Translate (2025-08)
-- id: cohere/command-a-vision-07-2025
+- id: CohereLabs/command-a-vision-07-2025
   aliases:
   - Command A Vision (2025-07)
 - id: cohere/command-beta-52b
@@ -1455,7 +1452,7 @@
 - id: deepcogito/cogito-14b
   aliases:
   - Cogito 14B
-- id: deepcogito/cogito-v1-preview-qwen-32b
+- id: deepcogito/cogito-v1-preview-qwen-32B
   aliases:
   - alibaba/cogito-v1-preview-qwen-32b
 - id: deepcogito/cogito-v2-1-reasoning
@@ -1497,7 +1494,7 @@
   - deepseek-v3-671b
   - deepseek.v3-v1:0
   - unknown/deepseek-v3-671b
-- id: deepseek/deepseek-v3.2-exp
+- id: deepseek-ai/DeepSeek-V3.2-Exp
   aliases:
   - DeepSeek-V3.2-Exp
 - id: deepseek-ai/DeepSeek-V3.2
@@ -1524,7 +1521,7 @@
 - id: deepseek-ai/deepseek-r1-hide-reasoning
   aliases:
   - deepseek/deepseek-r1-hide-reasoning
-- id: deepseek/deepseek-v4-flash
+- id: deepseek-ai/DeepSeek-V4-Flash
   aliases:
   # artificial-analysis date LABEL for the launch build; no catalogue lists a
   # 0420 snapshot (base released 2026-04-23/24). Label-not-snapshot fold.
@@ -1941,20 +1938,20 @@
 - id: huggingface/smollm3-3b-nothink
   aliases:
   - Smollm3 3B Nothink
-- id: huihui-ai/deepseek-r1-distill-llama-70b-abliterated
+- id: huihui-ai/DeepSeek-R1-Distill-Llama-70B-abliterated
   aliases:
   - deepseek/deepseek-r1-distill-llama-70b-abliterated
-- id: huihui-ai/deepseek-r1-distill-qwen-32b-abliterated
+- id: huihui-ai/DeepSeek-R1-Distill-Qwen-32B-abliterated
   aliases:
   - alibaba/deepseek-r1-distill-qwen-32b-abliterated
 - id: huihui-ai/llama-3-1-nemotron-70b-instruct-hf-abliterated
   aliases:
   - llama-3-1-nemotron-70b-instruct-hf-abliterated
   - nvidia/llama-3-1-nemotron-70b-instruct-hf-abliterated
-- id: huihui-ai/llama-3-3-70b-instruct-abliterated
+- id: huihui-ai/Llama-3.3-70B-Instruct-abliterated
   aliases:
   - meta/llama-3-3-70b-instruct-abliterated
-- id: huihui-ai/qwen2-5-32b-instruct-abliterated
+- id: huihui-ai/Qwen2.5-32B-Instruct-abliterated
   aliases:
   - alibaba/qwen2-5-32b-instruct-abliterated
 - id: hunyuan-2-0
@@ -2105,7 +2102,7 @@
 - id: ai21/jamba-large-1.7
   aliases:
   - ai21labs/jamba-large-1.7
-- id: meta-llama/llama-3.2-11b-vision-instruct
+- id: meta-llama/Llama-3.2-11B-Vision-Instruct
   aliases:
   - meta/llama-3-2-instruct-11b-vision
 - id: lg/exaone-4-0-1-2b
@@ -2198,6 +2195,7 @@
   - llama3-1-70b-instruct
   - meta.llama3-1-70b-instruct-v1:0
   - unknown/llama3-1-70b-instruct
+  - meta/llama-3-1-instruct-70b
 - id: meta-llama/Llama-3.1-8B
   aliases:
   - llama3.1-8b
@@ -2209,15 +2207,23 @@
   - llama3-1-8b-instruct
   - meta.llama3-1-8b-instruct-v1:0
   - unknown/llama3-1-8b-instruct
+  - llama-3.1-8b-instant
+  - llama-3-1-8b-instant
+  - meta/llama-3-1-8b-instant
+  - Llama 3.1 8B Instant
+  - Meta Llama 3.1 8B Instant
+  - meta/llama-3-1-instruct-8b
 - id: meta-llama/Llama-3.2-90B-Vision-Instruct
   aliases:
   - Llama 3.2 90B
+  - meta/llama-3-2-instruct-90b-vision
 - id: meta-llama/Llama-3.3-70B-Instruct
   aliases:
   - Llama-3.3-70B-it
   - llama-3-3-70b-instruct-maas
   - meta-llama/Meta-Llama-3.3-70B-Instruct
   - meta/llama-3.3-70b-instruct-maas
+  - meta/llama-3-3-instruct-70b
 - id: meta-llama/Meta-Llama-3-70B
   aliases:
   - meta-llama/Llama-3-70B
@@ -2307,10 +2313,11 @@
   aliases:
   - esmfold
   - nvidia/esmfold
-- id: meta/llama-3-1-405b-instruct
+- id: meta-llama/Llama-3.1-405B-Instruct
   aliases:
   - meta-llama/Meta-Llama-3.1-405B-Instruct
   - Llama-3.1-405B-it
+  - meta/llama-3-1-instruct-405b
 - id: meta/llama-3-3-70b
   aliases:
   - meta/llama3-3-70b
@@ -2405,9 +2412,11 @@
 - id: minimax/minimax-m1
   aliases:
   - minimax-m1-40k
-- id: minimax/minimax-text-01
+- id: MiniMaxAI/MiniMax-Text-01
   aliases:
   - unknown/minimax
+  - minimax/minimax-text-01
+  - unknown/minimax-text-01
 - id: miromind-ai/mirothinker-v1-5-235b
   aliases:
   - openai/mirothinker-v1-5-235b
@@ -2644,7 +2653,7 @@
   - k2p6
   - kimi-k2.6-precision
   - umans-kimi-k2-6
-- id: moonshotai/kimi-k3
+- id: moonshotai/Kimi-K3
   aliases:
   # arc-agi doubles the org into the slug; effort tiers (-low/-high/-max)
   # strip in the resolver, leaving this stem, which normalized matching
@@ -2728,7 +2737,7 @@
 - id: nvidia/llama-3-1-nemotron-nano-4b-reasoning
   aliases:
   - Llama 3.1 Nemotron Nano 4B Reasoning
-- id: nvidia/llama-3-1-nemotron-safety-guard-8b-v3
+- id: nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3
   aliases:
   - meta/llama-3-1-nemotron-safety-guard-8b-v3
 - id: nvidia/llama-3-1-nemotron-ultra-253b-v1-reasoning
@@ -2952,7 +2961,7 @@
   - Osmosis Structure 0.6B
   - openai/osmosis-structure-0-6b
   - osmosis-structure-0-6b
-- id: pamanseau/openreasoning-nemotron-32b
+- id: pamanseau/OpenReasoning-Nemotron-32B
   aliases:
   - nvidia/openreasoning-nemotron-32b
 - id: pankajmathur/orca_mini_v9_2_14B
@@ -3047,7 +3056,7 @@
   aliases:
   - l3-euryale-70b
   - meta/l3-euryale-70b
-- id: sarvam/sarvam-m
+- id: sarvamai/sarvam-m
   aliases:
   - nvidia/sarvam-m
 - id: sarvam/sarvam-m-reasoning
@@ -3062,26 +3071,23 @@
 - id: sarvamai/sarvam-30b
   aliases:
   - sarvam-ai/sarvam-30b
-- id: schnell
-  aliases:
-  - black-forest-labs/schnell
-- id: shisa-ai/shisa-v2-1-llama3-3-70b
+- id: shisa-ai/shisa-v2.1-llama3.3-70b
   aliases:
   - Shisa V2.1 Llama 3.3 70B
   - meta/shisa-v2-1-llama3-3-70b
   - shisa-v2-1-llama3-3-70b
-- id: shisa-ai/shisa-v2-llama3-3-70b
+- id: shisa-ai/shisa-v2-llama3.3-70b
   aliases:
   - Shisa V2 Llama 3.3 70B
   - meta/shisa-v2-llama3-3-70b
   - shisa-v2-llama3-3-70b
-- id: soob3123/amoral-gemma3-27b-v2
+- id: soob3123/amoral-gemma3-27B-v2
   aliases:
   - google/amoral-gemma3-27b-v2
-- id: soob3123/grayline-qwen3-8b
+- id: soob3123/GrayLine-Qwen3-8B
   aliases:
   - alibaba/grayline-qwen3-8b
-- id: soob3123/veiled-calla-12b
+- id: soob3123/Veiled-Calla-12B
   aliases:
   - meta/veiled-calla-12b
 - id: speakleash/Bielik-11B-v2
@@ -3103,7 +3109,7 @@
 - id: stepfun-ai/Step-3.5-Flash
   aliases:
   - nvidia/step-3-5-flash
-- id: stepfun/step-3.7-flash
+- id: stepfun-ai/Step-3.7-Flash
   aliases:
   - nvidia/step-3-7-flash
   - step-3-7-flash
@@ -3142,6 +3148,7 @@
 - id: tiiuae/falcon-40b-instruct
   aliases:
   - unknown/falcon-instruct-40b
+  - tiiuae/Falcon-Instruct-40B
 - id: tiiuae/falcon-7b
   aliases:
   - unknown/falcon
@@ -3151,6 +3158,7 @@
   - unknown/falcon-instruct-7b
   - unknown/falcon-mamba-7b-instruct
   - unknown/falcon7b-instruct
+  - tiiuae/Falcon-Instruct-7B
 - id: together/redpajama-incite-7b
   aliases:
   - redpajama-incite-base-7b
@@ -3327,7 +3335,7 @@
 - id: xiaomi/mimo-v2-0206
   aliases:
   - Mimo V2 (0206)
-- id: xiaomi/mimo-v2.5-pro
+- id: XiaomiMiMo/MiMo-V2.5-Pro
   aliases:
   - mimo-v2.5-pro-precision
 - id: zai-org/GLM-4.5
@@ -3419,7 +3427,7 @@
 - id: zai/glm-4-7-non-reasoning
   aliases:
   - GLM-4.7 Non Reasoning
-- id: z-ai/glm-4.5v
+- id: zai-org/GLM-4.5V
   aliases:
   - unknown/glm-4-5-v-106b
   - unknown/glm-4-5v-106b
@@ -3518,3 +3526,28 @@
   aliases:
   - mistral/mistral-small-2409
   - mistralai/mistral-small-instruct-2409
+# Raw EEE spellings whose tier3 draft folded onto the HF-true repo
+# (scripts/rekey_promoted_ids.py); the raw must keep resolving.
+- id: MiniMaxAI/MiniMax-M2
+  aliases:
+  - minimax/minimax-m2
+  - unknown/minimax-m2
+- id: deepseek-ai/DeepSeek-V3-0324
+  aliases:
+  - deepseek/deepseek-v3-0324
+  - fireworks/deepseek-v3-0324
+- id: meta-llama/Llama-3.2-1B-Instruct
+  aliases:
+  - meta/llama-3-2-instruct-1b
+- id: meta-llama/Llama-3.2-3B-Instruct
+  aliases:
+  - meta/llama-3-2-instruct-3b
+- id: mistralai/Ministral-3-14B-Instruct-2512
+  aliases:
+  - mistral/ministral-3-14b-instruct-2512
+- id: mistralai/Ministral-3-3B-Instruct-2512
+  aliases:
+  - mistral/ministral-3-3b-instruct-2512
+- id: nvidia/Llama-3.1-Nemotron-70B-Instruct
+  aliases:
+  - nvidia/llama-3-1-nemotron-instruct-70b

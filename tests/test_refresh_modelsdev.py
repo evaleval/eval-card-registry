@@ -144,9 +144,9 @@ def test_generate_emits_mode_variants_as_children(mod):
     api = {
         "mistral": {
             "id": "mistral", "name": "Mistral", "models": {
-                "mistral-7b-instruct-v0-3": {
-                    "id": "mistral-7b-instruct-v0-3",
-                    "name": "Mistral 7B Instruct v0.3",
+                "mistral-9b-instruct-v0-3": {
+                    "id": "mistral-9b-instruct-v0-3",
+                    "name": "Mistral 9B Instruct v0.3",
                     "release_date": "2024-05-22",
                     "open_weights": True,
                 },
@@ -157,20 +157,20 @@ def test_generate_emits_mode_variants_as_children(mod):
     out, _missing = mod._generate_models(api, known)
     by_id = {e["id"]: e for e in out}
     # All three levels emitted:
-    assert "mistralai/mistral-7b" in by_id, "family root missing"
-    assert "mistralai/mistral-7b-instruct" in by_id, "instruct intermediate missing"
-    assert "mistralai/mistral-7b-instruct-v0-3" in by_id, "leaf snapshot missing"
+    assert "mistralai/mistral-9b" in by_id, "family root missing"
+    assert "mistralai/mistral-9b-instruct" in by_id, "instruct intermediate missing"
+    assert "mistralai/mistral-9b-instruct-v0-3" in by_id, "leaf snapshot missing"
     # Edges chain correctly:
-    assert by_id["mistralai/mistral-7b"]["parents"] == []
-    assert by_id["mistralai/mistral-7b-instruct"]["parents"] == [{
-        "id": "mistralai/mistral-7b", "relationship": "variant", "axis": "training_stage",
+    assert by_id["mistralai/mistral-9b"]["parents"] == []
+    assert by_id["mistralai/mistral-9b-instruct"]["parents"] == [{
+        "id": "mistralai/mistral-9b", "relationship": "variant", "axis": "training_stage",
     }]
-    assert by_id["mistralai/mistral-7b-instruct-v0-3"]["parents"] == [{
-        "id": "mistralai/mistral-7b-instruct", "relationship": "variant", "axis": "version",
+    assert by_id["mistralai/mistral-9b-instruct-v0-3"]["parents"] == [{
+        "id": "mistralai/mistral-9b-instruct", "relationship": "variant", "axis": "version",
     }]
     # Leaf carries the source release_date; intermediate is anchor-only.
-    assert by_id["mistralai/mistral-7b-instruct-v0-3"]["release_date"] == "2024-05-22"
-    assert by_id["mistralai/mistral-7b-instruct"]["release_date"] is None
+    assert by_id["mistralai/mistral-9b-instruct-v0-3"]["release_date"] == "2024-05-22"
+    assert by_id["mistralai/mistral-9b-instruct"]["release_date"] is None
 
 
 def test_generate_keeps_distinct_major_versions(mod):
@@ -197,9 +197,9 @@ def test_generate_propagates_open_weights_flag(mod):
         },
         "mistral": {
             "id": "mistral", "name": "Mistral", "models": {
-                "mistral-7b-instruct-v0-3": {
-                    "id": "mistral-7b-instruct-v0-3",
-                    "name": "Mistral 7B Instruct v0.3",
+                "mistral-9b-instruct-v0-3": {
+                    "id": "mistral-9b-instruct-v0-3",
+                    "name": "Mistral 9B Instruct v0.3",
                     "release_date": "2024-05-22", "open_weights": True,
                 },
             },
@@ -210,9 +210,9 @@ def test_generate_propagates_open_weights_flag(mod):
     # Closed-API: family root + child both False
     assert by_id["anthropic/claude-foo-1"]["open_weights"] is False
     # Open-weight: every level of the chain inherits True
-    assert by_id["mistralai/mistral-7b"]["open_weights"] is True
-    assert by_id["mistralai/mistral-7b-instruct"]["open_weights"] is True
-    assert by_id["mistralai/mistral-7b-instruct-v0-3"]["open_weights"] is True
+    assert by_id["mistralai/mistral-9b"]["open_weights"] is True
+    assert by_id["mistralai/mistral-9b-instruct"]["open_weights"] is True
+    assert by_id["mistralai/mistral-9b-instruct-v0-3"]["open_weights"] is True
 
 
 def test_generate_promotes_earliest_release_date(mod):

@@ -222,6 +222,45 @@ def test_parents_union_by_id_across_sources(fresh_seed_env):
     assert by_id["lab/parent-core-only"]["relationship"] == "finetune"
 
 
+def test_side_record_keyed_by_promoted_alias_folds_onto_hf_entry(fresh_seed_env):
+    """An HF-true canonical lists the invented id it replaced as an alias. An
+    enrichment still keyed by that old id (and a parents edge naming it) folds
+    onto the HF entry instead of minting a second canonical that collides on
+    the alias."""
+    import json
+    seed_dir, fixtures_dir = fresh_seed_env
+    sources_dir = seed_dir / "models" / "sources"
+    (sources_dir / "models_dev.generated.yaml").write_text(yaml.safe_dump([
+        {
+            "id": "Lab/Model-A-Instruct",
+            "display_name": "Model A Instruct",
+            "org_id": "lab",
+            "aliases": ["lab/model-a", "model-a"],
+            "metadata": json.dumps({"hf_deferred": True}),
+            "review_status": "reviewed",
+            "resolution_source": "models_dev",
+        },
+    ]))
+    (seed_dir / "models" / "enrichments" / "aliases.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-a", "aliases": ["Model A (old key)"]},
+    ]))
+    (seed_dir / "models" / "enrichments" / "parents.yaml").write_text(yaml.safe_dump([
+        {"id": "lab/model-a-reasoning", "display_name": "Model A Reasoning",
+         "review_status": "reviewed",
+         "parents": [{"id": "lab/model-a", "relationship": "variant", "axis": "mode"}]},
+    ]))
+    _seed(seed_dir)
+
+    df = _read_models(fixtures_dir)
+    assert "lab/model-a" not in set(df["id"])
+    aliases = _read_aliases(fixtures_dir)
+    owner = dict(zip(aliases["raw_value"], aliases["canonical_id"]))
+    assert owner["lab/model-a"] == "Lab/Model-A-Instruct"
+    assert owner["Model A (old key)"] == "Lab/Model-A-Instruct"
+    child = df[df["id"] == "lab/model-a-reasoning"].iloc[0]
+    assert [p["id"] for p in json.loads(child["parents"])] == ["Lab/Model-A-Instruct"]
+
+
 def test_metadata_merges_per_key_across_sources(fresh_seed_env):
     """metadata is a per-key JSON-object merge, not an opaque scalar: a later
     source's `{alias_platforms}` must not clobber an earlier source's hub-stats

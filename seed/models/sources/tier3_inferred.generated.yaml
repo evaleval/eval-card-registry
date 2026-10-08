@@ -6601,7 +6601,7 @@
   - alibaba/qwen3-4b-instruct-reasoning
   org_id: alibaba
   parents:
-  - id: alibaba/qwen3-4b
+  - id: Qwen/Qwen3-4B
     relationship: finetune
 - id: alibaba/qwen3-5-0-8b-non-reasoning
   display_name: alibaba/qwen3-5-0-8b-non-reasoning
@@ -10571,7 +10571,7 @@
   - deepseek/deepseek-v3-2-exp-prompt-thinking
   org_id: deepseek
   parents:
-  - id: deepseek/deepseek-v3.2-exp
+  - id: deepseek-ai/DeepSeek-V3.2-Exp
     relationship: finetune
 - id: deepseek/deepseek-v3-2-reasoning
   display_name: deepseek/deepseek-v3-2-reasoning
@@ -10631,7 +10631,7 @@
   - deepseek/deepseek-v4-flash-max
   org_id: deepseek
   parents:
-  - id: deepseek/deepseek-v4-flash
+  - id: deepseek-ai/DeepSeek-V4-Flash
     relationship: finetune
 - id: deepseek/deepseek-v4-pro-max
   display_name: deepseek/deepseek-v4-pro-max
@@ -13226,7 +13226,7 @@
   - meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
   org_id: meta
   parents:
-  - id: meta/llama-3-1-405b-instruct
+  - id: meta-llama/Llama-3.1-405B-Instruct
     relationship: finetune
 - id: meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
   display_name: meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
@@ -13575,75 +13575,6 @@
   parents:
   - id: meta-llama/llama-2
     relationship: finetune
-- id: meta/llama-3-1-instruct-405b
-  display_name: meta/llama-3-1-instruct-405b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-1-instruct-405b
-  org_id: meta
-- id: meta/llama-3-1-instruct-70b
-  display_name: meta/llama-3-1-instruct-70b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-1-instruct-70b
-  org_id: meta
-- id: meta/llama-3-1-instruct-8b
-  display_name: meta/llama-3-1-instruct-8b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-1-instruct-8b
-  org_id: meta
-  parents:
-  - id: meta/llama3-8b-instruct
-    relationship: finetune
-- id: meta/llama-3-2-instruct-1b
-  display_name: meta/llama-3-2-instruct-1b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-2-instruct-1b
-  org_id: meta
-- id: meta/llama-3-2-instruct-3b
-  display_name: meta/llama-3-2-instruct-3b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-2-instruct-3b
-  org_id: meta
-- id: meta/llama-3-2-instruct-90b-vision
-  display_name: meta/llama-3-2-instruct-90b-vision
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-2-instruct-90b-vision
-  org_id: meta
-- id: meta/llama-3-3-instruct-70b
-  display_name: meta/llama-3-3-instruct-70b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - meta/llama-3-3-instruct-70b
-  org_id: meta
-  parents:
-  - id: meta-llama/Llama-3.3-70B-Instruct
-    relationship: finetune
 - id: meta/llama-3-70b-chat
   display_name: meta/llama-3-70b-chat
   resolution_source: inferred
@@ -13705,7 +13636,7 @@
   - meta/llama-3.1-405b-instruct-turbo
   org_id: meta
   parents:
-  - id: meta/llama-3-1-405b-instruct
+  - id: meta-llama/Llama-3.1-405B-Instruct
     relationship: finetune
 - id: meta/llama-3.1-70b-instruct-turbo
   display_name: meta/llama-3.1-70b-instruct-turbo
@@ -13765,7 +13696,7 @@
   - meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
   org_id: meta
   parents:
-  - id: meta-llama/llama-3.2-11b-vision-instruct
+  - id: meta-llama/Llama-3.2-11B-Vision-Instruct
     relationship: finetune
 - id: meta/llama-3.2-90b-instruct
   display_name: meta/llama-3.2-90b-instruct
@@ -13937,15 +13868,6 @@
   aliases:
   - mistral/ministral-3-14b-base-2512
   org_id: mistralai
-- id: mistral/ministral-3-14b-instruct-2512
-  display_name: mistral/ministral-3-14b-instruct-2512
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistral/ministral-3-14b-instruct-2512
-  org_id: mistralai
 - id: mistral/ministral-3-3b-base-2512
   display_name: mistral/ministral-3-3b-base-2512
   resolution_source: inferred
@@ -13954,15 +13876,6 @@
   metadata: '{}'
   aliases:
   - mistral/ministral-3-3b-base-2512
-  org_id: mistralai
-- id: mistral/ministral-3-3b-instruct-2512
-  display_name: mistral/ministral-3-3b-instruct-2512
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - mistral/ministral-3-3b-instruct-2512
   org_id: mistralai
 - id: mistral/ministral-3-8b-base-2512
   display_name: mistral/ministral-3-8b-base-2512
@@ -14853,15 +14766,6 @@
   parents:
   - id: meta-llama/Llama-3.1-70B
     relationship: finetune
-- id: nvidia/llama-3-1-nemotron-instruct-70b
-  display_name: nvidia/llama-3-1-nemotron-instruct-70b
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - nvidia/llama-3-1-nemotron-instruct-70b
-  org_id: nvidia
 - id: nvidia/llama-3-1-nemotron-nano-4b-reasoning
   display_name: nvidia/llama-3-1-nemotron-nano-4b-reasoning
   resolution_source: inferred
@@ -17477,24 +17381,6 @@
   aliases:
   - tii-uae/falcon-h1r-7b
   org_id: tiiuae
-- id: tiiuae/Falcon-Instruct-40B
-  display_name: tiiuae/Falcon-Instruct-40B
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - tiiuae/Falcon-Instruct-40B
-  org_id: tiiuae
-- id: tiiuae/Falcon-Instruct-7B
-  display_name: tiiuae/Falcon-Instruct-7B
-  resolution_source: inferred
-  review_status: draft
-  resolution_granularity: variant
-  metadata: '{}'
-  aliases:
-  - tiiuae/Falcon-Instruct-7B
-  org_id: tiiuae
 - id: together/RedPajama-INCITE-Base-v1-3B
   display_name: together/RedPajama-INCITE-Base-v1-3B
   resolution_source: inferred
@@ -19381,9 +19267,6 @@
 - id: deepseek-ai/DeepSeek-V3
   aliases:
   - fireworks/deepseek-v3
-- id: deepseek/deepseek-v3-0324
-  aliases:
-  - fireworks/deepseek-v3-0324
 - id: google/gemini-2-0-flash-thinking-exp-01-21
   aliases:
   - google/gemini-2-0-flash-thinking-exp-0121
@@ -19463,12 +19346,6 @@
   aliases:
   - minimax/minimax-m1-40k
   - unknown/minimax-m1
-- id: minimax/minimax-m2
-  aliases:
-  - unknown/minimax-m2
-- id: minimax/minimax-text-01
-  aliases:
-  - unknown/minimax-text-01
 - id: mistralai/Mathstral-7B-v0.1
   aliases:
   - unknown/mathstral-7b-v0.1

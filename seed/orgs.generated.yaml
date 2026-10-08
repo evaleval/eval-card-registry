@@ -6287,3 +6287,10 @@
   tags: '[]'
   metadata: '{}'
   review_status: reviewed
+- id: topaz
+  display_name: topaz
+  hf_org: topaz
+  kind: community
+  tags: '[]'
+  metadata: '{}'
+  review_status: reviewed
