@@ -2796,6 +2796,31 @@
     - text
     output_modalities:
     - text
+- id: anthropic/claude-haiku-5.5
+  aliases:
+  - anthropic.claude-haiku-5-5
+  - anthropic/claude-haiku-5-5
+  - au.anthropic.claude-haiku-5-5
+  - claude-haiku-5-5
+  - claude-haiku-5-5@default
+  - claude-haiku-5-5@eu
+  - claude-haiku-5.5
+  - eu.anthropic.claude-haiku-5-5
+  - global.anthropic.claude-haiku-5-5
+  - jp.anthropic.claude-haiku-5-5
+  - us.anthropic.claude-haiku-5-5
+  metadata: '{"alias_platforms": {"anthropic.claude-haiku-5-5": "amazon-bedrock", "anthropic/claude-haiku-5-5": "nano-gpt", "au.anthropic.claude-haiku-5-5": "amazon-bedrock", "claude-haiku-5-5": "nano-gpt",
+    "claude-haiku-5-5@default": "google-vertex-anthropic", "claude-haiku-5-5@eu": "requesty", "claude-haiku-5.5": "github-copilot", "eu.anthropic.claude-haiku-5-5": "amazon-bedrock", "global.anthropic.claude-haiku-5-5":
+    "amazon-bedrock", "jp.anthropic.claude-haiku-5-5": "amazon-bedrock", "us.anthropic.claude-haiku-5-5": "amazon-bedrock"}}'
+  weak:
+    release_date: '2026-10-07'
+    open_weights: false
+    input_modalities:
+    - image
+    - pdf
+    - text
+    output_modalities:
+    - text
 - id: anthropic/claude-haiku-latest
   aliases:
   - claude-haiku-latest
@@ -4918,6 +4943,10 @@
   - google/gemma2-9b-it
   weak:
     release_date: '2024-06-25'
+    open_weights: false
+- id: glyph-cluster
+  weak:
+    release_date: '2026-10-07'
     open_weights: false
 - id: google/deep-research-max-preview-apr-21-2026
   weak:

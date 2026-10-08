@@ -5877,6 +5877,39 @@
     "claude-haiku-4-5-20251001": "anthropic", "claude-haiku-4-5@20251001": "google-vertex-anthropic", "eu.anthropic.claude-haiku-4-5-20251001-v1:0": "amazon-bedrock", "global.anthropic.claude-haiku-4-5-20251001-v1:0":
     "amazon-bedrock", "jp.anthropic.claude-haiku-4-5-20251001-v1:0": "amazon-bedrock", "us.anthropic.claude-haiku-4-5-20251001-v1:0": "amazon-bedrock"}}'
   review_status: reviewed
+- id: anthropic/claude-haiku-5.5
+  display_name: Claude Haiku 5.5
+  org_id: anthropic
+  family: claude-haiku-5.5
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-10-07'
+  input_modalities:
+  - image
+  - pdf
+  - text
+  output_modalities:
+  - text
+  tags: []
+  aliases:
+  - anthropic.claude-haiku-5-5
+  - anthropic/claude-haiku-5-5
+  - au.anthropic.claude-haiku-5-5
+  - claude-haiku-5-5
+  - claude-haiku-5-5@default
+  - claude-haiku-5-5@eu
+  - claude-haiku-5.5
+  - eu.anthropic.claude-haiku-5-5
+  - global.anthropic.claude-haiku-5-5
+  - jp.anthropic.claude-haiku-5-5
+  - us.anthropic.claude-haiku-5-5
+  metadata: '{"alias_platforms": {"anthropic.claude-haiku-5-5": "amazon-bedrock", "anthropic/claude-haiku-5-5": "nano-gpt", "au.anthropic.claude-haiku-5-5": "amazon-bedrock", "claude-haiku-5-5": "nano-gpt",
+    "claude-haiku-5-5@default": "google-vertex-anthropic", "claude-haiku-5-5@eu": "requesty", "claude-haiku-5.5": "github-copilot", "eu.anthropic.claude-haiku-5-5": "amazon-bedrock", "global.anthropic.claude-haiku-5-5":
+    "amazon-bedrock", "jp.anthropic.claude-haiku-5-5": "amazon-bedrock", "us.anthropic.claude-haiku-5-5": "amazon-bedrock"}, "knowledge_cutoffs": ["2026-06"], "openrouter_adopted": true, "release_dates":
+    ["2026-10-07"], "snapshots": ["claude-haiku-5-5"]}'
+  review_status: reviewed
 - id: anthropic/claude-haiku-latest
   display_name: Claude Haiku Latest
   org_id: anthropic
@@ -12236,6 +12269,23 @@
   - org-unknown
   aliases: []
   metadata: '{"providers": ["nano-gpt"], "underlying_key": "gemma-4-31b-it-novelist"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: glyph-cluster
+  display_name: Glyph Cluster
+  org_id: null
+  family: glyph-cluster
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: false
+  release_date: '2026-10-07'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - org-unknown
+  aliases: []
+  metadata: '{"providers": ["vercel"], "underlying_key": "glyph-cluster"}'
   review_status: draft
   resolution_source: models_dev
 - id: google/deep-research-max-preview-apr-21-2026
