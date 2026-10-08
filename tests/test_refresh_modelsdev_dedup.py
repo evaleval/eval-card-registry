@@ -2057,22 +2057,27 @@ def test_generator_emits_provider_alias_forms_from_snapshot(mod):
     assert missing == []
     out = mod._finalize_entries(out)
     by_id = {e["id"]: e for e in out}
-    leaf = by_id["mistralai/mistral-7b-instruct-v0.2"]
-    # Every provider spelling of the grouped serving survives as an alias:
-    # the slugified bare form, the dotted raw key, and the invented
-    # org-prefixed id the adoption renamed away.
+    # The author-lab path defers to the real HF repo (oracle hit). Every
+    # provider spelling of the grouped serving survives as an alias: the
+    # slugified bare form, the dotted raw key, the invented org-prefixed id
+    # and the OpenRouter key.
+    leaf = by_id["mistralai/Mistral-7B-Instruct-v0.2"]
     assert leaf["aliases"] == [
+        "Mistral 7B Instruct v0.2",
         "mistral-7b-instruct-v0-2",
         "mistral-7b-instruct-v0.2",
         "mistralai/mistral-7b-instruct-v0-2",
+        "mistralai/mistral-7b-instruct-v0.2",
     ]
     meta = json.loads(leaf["metadata"])
-    assert meta["openrouter_adopted"] is True
+    assert meta["hf_deferred"] is True
+    assert "openrouter_adopted" not in meta
     ap = meta["alias_platforms"]
     assert ap == {
         "mistral-7b-instruct-v0-2": "mistral",
         "mistral-7b-instruct-v0.2": "mistral",
         "mistralai/mistral-7b-instruct-v0-2": "mistral",
+        "mistralai/mistral-7b-instruct-v0.2": "openrouter",
     }
 
 
@@ -2231,3 +2236,401 @@ def test_catalog_carry_forward_case_only_respell_keeps_committed_casing(mod, tmp
     assert "zorgvid/zeo-x1" in by_id, "committed casing must win among equals"
     assert "zorgvid/Zeo-X1" not in by_id
     assert "zorgvid/Zeo-X1" in (by_id["zorgvid/zeo-x1"].get("aliases") or [])
+
+
+# ---------------------------------------------------------------------------
+# HF promotion: the hub_stats_index joins the frozen oracle as the "is this on
+# HF" authority, so a models.dev mint whose repo the index can name from the
+# record (canonical_model_id / provider id / name) becomes the HF-true id with
+# every models.dev spelling as an alias. Tiny in-memory index fixtures only.
+# ---------------------------------------------------------------------------
+
+def _tiny_index(tmp_path, rows):
+    import pandas as pd
+
+    p = tmp_path / "hub_stats_index.parquet"
+    pd.DataFrame(rows, columns=["id", "downloads"]).to_parquet(p, index=False)
+    return p
+
+
+def _rec(raw, name, cmid=None, provider="nano-gpt"):
+    record = {"id": raw, "name": name}
+    if cmid:
+        record["canonical_model_id"] = cmid
+    return {"provider": provider, "raw": raw, "name": name, "record": record}
+
+
+_PROMO_AUTH = {
+    "mistralai": {
+        "ministral 3 14b instruct 2512": "mistralai/Ministral-3-14B-Instruct-2512",
+        "ministral 3 14b reasoning 2512": "mistralai/Ministral-3-14B-Reasoning-2512",
+    },
+    "thedrummer": {
+        "unslopnemo 12b v4": "TheDrummer/UnslopNemo-12B-v4",
+        "unslopnemo 12b v4 1": "TheDrummer/UnslopNemo-12B-v4.1",
+    },
+    "deepseek": {
+        "deepseek v4 flash 0731": "deepseek-ai/DeepSeek-V4-Flash-0731",
+        "deepseek v4 1 flash": "deepseek-ai/DeepSeek-V4.1-Flash",
+        "deepseek v4 pro": "deepseek-ai/DeepSeek-V4-Pro",
+        "deepseek v4 pro 0813": "deepseek-ai/DeepSeek-V4-Pro-0813",
+    },
+    "ibm": {
+        "granite 4 0 micro": "ibm-granite/granite-4.0-micro",
+        "granite 4 0 h micro": "ibm-granite/granite-4.0-h-micro",
+    },
+    "moonshotai": {"kimi k3": "moonshotai/Kimi-K3"},
+    "alibaba": {"qwen3 vl 30b a3b thinking": "Qwen/Qwen3-VL-30B-A3B-Thinking"},
+}
+
+
+def test_index_authority_buckets_by_dev_org_and_oracle_wins(mod, tmp_path):
+    """The index is bucketed by curated dev org (`Qwen/`->alibaba,
+    `deepseek-ai/`->deepseek, uncurated orgs by lowercased slug) and keyed by
+    the resolver-normalized name; two repos sharing a name-norm resolve to the
+    higher download count; the frozen oracle wins a conflicting key."""
+    p = _tiny_index(tmp_path, [
+        ("Qwen/Qwen3-4B", 10),
+        ("Qwen/qwen3_4b", 50),
+        ("deepseek-ai/DeepSeek-OCR", 1),
+        ("TheDrummer/Anubis-70B-v1", 2),
+        ("mistralai/Ministral-3-3B-Instruct-2512", 3),
+    ])
+    ai = mod._build_org_alias_index()
+    auth = mod._build_index_authority(mod._load_hub_stats_index(p), ai)
+    assert auth["alibaba"]["qwen3 4b"] == "Qwen/qwen3_4b"
+    assert auth["deepseek"]["deepseek ocr"] == "deepseek-ai/DeepSeek-OCR"
+    assert auth[ai.get("thedrummer", "thedrummer")]["anubis 70b v1"] == "TheDrummer/Anubis-70B-v1"
+    assert auth["mistralai"]["ministral 3 3b instruct 2512"] == "mistralai/Ministral-3-3B-Instruct-2512"
+    merged = mod._merge_authorities({"alibaba": {"qwen3 4b": "Qwen/Qwen3-4B"}}, auth)
+    assert merged["alibaba"]["qwen3 4b"] == "Qwen/Qwen3-4B"
+    assert merged["deepseek"]["deepseek ocr"] == "deepseek-ai/DeepSeek-OCR"
+    # Org-spelling variants: a `mistral/...` canonical key resolves inside the
+    # `mistralai` bucket (lookups are leaf-only within the group's dev org).
+    assert mod._group_hf_target(
+        "mistralai/ministral-3b-2512", "mistralai",
+        [_rec("ministral-3b-2512", "Ministral 3 3B", "mistral/ministral-3-3b-instruct-2512", provider="mistral")],
+        ["ministral-3b-2512", "Ministral 3 3B"], ai, auth,
+    ) == "mistralai/Ministral-3-3B-Instruct-2512"
+
+
+def test_hub_stats_index_missing_fails_loudly(mod, tmp_path, monkeypatch):
+    """No local fixture and no dataset copy: the refresh must not silently
+    regress to minting what is on HF."""
+    import huggingface_hub
+
+    def _offline(**_kw):
+        raise OSError("offline")
+
+    monkeypatch.setattr(huggingface_hub, "hf_hub_download", _offline)
+    with pytest.raises(RuntimeError, match="hub_stats_index unavailable"):
+        mod._load_hub_stats_index(tmp_path / "missing.parquet")
+
+
+def test_group_hf_target_key_precedence(mod):
+    ai = mod._build_org_alias_index()
+    auth = _PROMO_AUTH
+    # Key 1: canonical_model_id names the repo (the record id/name do not).
+    assert mod._group_hf_target(
+        "mistralai/ministral-14b-2512", "mistralai",
+        [_rec("ministral-14b-2512", "Ministral 3 14B", "mistral/ministral-3-14b-instruct-2512", provider="mistral")],
+        ["ministral-14b-2512", "Ministral 3 14B"], ai, auth,
+    ) == "mistralai/Ministral-3-14B-Instruct-2512"
+    # Key 2: a verbatim `org/name` provider id beats a sloppier record name
+    # (`UnslopNemo 12b v4` would hit the v4 repo first by length); the cased
+    # uncurated org falls back to the lowercased bucket.
+    assert mod._group_hf_target(
+        "TheDrummer/unslopnemo-12b-v4-1", "TheDrummer",
+        [_rec("TheDrummer/UnslopNemo-12B-v4.1", "UnslopNemo 12b v4")],
+        ["TheDrummer/unslopnemo-12b-v4-1"], ai, auth,
+    ) == "TheDrummer/UnslopNemo-12B-v4.1"
+    # Key 3: a record name (not only the head display name) names the repo.
+    assert mod._group_hf_target(
+        "mistralai/ministral-14b-instruct-2512", "mistralai",
+        [_rec("mistralai/ministral-14b-instruct-2512", "Ministral 3 14B"),
+         _rec("mistralai/ministral-14b-instruct-2512", "Ministral 3 14B Instruct 2512", provider="nvidia")],
+        ["mistralai/ministral-14b-instruct-2512", "Ministral 3 14B"], ai, auth,
+    ) == "mistralai/Ministral-3-14B-Instruct-2512"
+    # Within key 1 the group's majority canonical key wins over a shorter
+    # minority one (a first-party record repointed at a newer release).
+    assert mod._group_hf_target(
+        "deepseek/deepseek-v4-flash", "deepseek",
+        [_rec("deepseek/deepseek-v4-flash", "DeepSeek V4 Flash", "deepseek/deepseek-v4-flash-0731"),
+         _rec("deepseek-v4-flash", "DeepSeek V4 Flash", "deepseek/deepseek-v4-flash-0731", provider="vivgrid"),
+         _rec("deepseek-v4-flash", "DeepSeek V4 Flash", "deepseek/deepseek-v4.1-flash", provider="deepseek")],
+        ["deepseek-v4-flash", "DeepSeek V4 Flash"], ai, auth,
+    ) == "deepseek-ai/DeepSeek-V4-Flash-0731"
+    # The would-be mint id itself is tried first: a rolling canonical key
+    # (`deepseek-v4-pro` -> the 0813 snapshot) never pulls a group off its own repo.
+    assert mod._group_hf_target(
+        "deepseek/deepseek-v4-pro", "deepseek",
+        [_rec("deepseek-v4-pro", "DeepSeek V4 Pro", "deepseek/deepseek-v4-pro-0813", provider="deepseek"),
+         _rec("deepseek/deepseek-v4-pro", "DeepSeek V4 Pro", "deepseek/deepseek-v4-pro-0813")],
+        ["deepseek-v4-pro", "DeepSeek V4 Pro"], ai, auth,
+    ) == "deepseek-ai/DeepSeek-V4-Pro"
+    # No hit / no org: unchanged MINT behaviour.
+    assert mod._group_hf_target(
+        "anthropic/claude-opus-4-5", "anthropic",
+        [_rec("claude-opus-4-5", "Claude Opus 4.5", provider="anthropic")],
+        ["claude-opus-4-5", "Claude Opus 4.5"], ai, auth,
+    ) is None
+    assert mod._group_hf_target(
+        "unslopnemo-12b-v4-1", None, [_rec("TheDrummer/UnslopNemo-12B-v4.1", "x")], [], ai, auth,
+    ) is None
+
+
+def test_group_hf_target_never_drops_mint_tokens_or_adds_variants(mod):
+    ai = mod._build_org_alias_index()
+    auth = _PROMO_AUTH
+    granite = [_rec("@cf/ibm-granite/granite-4.0-h-micro", "Granite 4.0 Micro", "ibm/granite-4-h-micro",
+                    provider="cloudflare-workers-ai")]
+    assert mod._group_hf_target(
+        "ibm/granite-4-0-h-micro", "ibm", granite, ["Granite 4.0 Micro"], ai, auth,
+    ) == "ibm-granite/granite-4.0-h-micro"
+    only_micro = {"ibm": {"granite 4 0 micro": "ibm-granite/granite-4.0-micro"}}
+    assert mod._group_hf_target(
+        "ibm/granite-4-0-h-micro", "ibm", granite, ["Granite 4.0 Micro"], ai, only_micro,
+    ) is None
+    # A rolling `-latest` key pointing at the current release stays a mint.
+    assert mod._group_hf_target(
+        "moonshotai/kimi-latest", "moonshotai",
+        [_rec("kimi-latest", "Kimi Latest", "moonshotai/kimi-k3", provider="moonshotai")],
+        ["kimi-latest", "Kimi Latest"], ai, auth,
+    ) is None
+    # A bare record never promotes to a `-thinking` repo its variant-stripped
+    # group also holds; the thinking record itself does.
+    thinking = [_rec("Qwen/Qwen3-VL-30B-A3B-Thinking", "Qwen3-VL-30B-A3B-Thinking", provider="siliconflow")]
+    assert mod._group_hf_target(
+        "alibaba/qwen3-vl-30b-a3b", "alibaba", thinking, ["qwen3-vl-30b-a3b"], ai, auth,
+    ) is None
+    assert mod._group_hf_target(
+        "alibaba/qwen3-vl-30b-a3b-thinking", "alibaba", thinking, ["qwen3-vl-30b-a3b-thinking"], ai, auth,
+    ) == "Qwen/Qwen3-VL-30B-A3B-Thinking"
+
+
+def test_hf_deferred_entry_aliases_only_the_matching_canonical_key(mod):
+    head = {"display_name": "DeepSeek-V3", "open_weights": True, "release_date": None, "root_key": "deepseek"}
+    recs = [
+        _rec("deepseek-ai/DeepSeek-V3", "DeepSeek-V3", "deepseek/deepseek-v3", provider="deepinfra"),
+        _rec("deepseek-reasoner", "DeepSeek Reasoner", "deepseek/deepseek-reasoner"),
+    ]
+    e = mod._hf_deferred_entry("deepseek-ai/DeepSeek-V3", "deepseek", head, recs, "deepseek/deepseek", "DeepSeek-V3")
+    assert json.loads(e["metadata"])["hf_deferred"] is True
+    assert {"deepseek/deepseek", "deepseek/deepseek-v3"} <= set(e["aliases"])
+    assert "deepseek/deepseek-reasoner" not in e["aliases"]
+
+
+def test_attach_provider_aliases_hf_deferred_target_takes_models_dev_forms(mod):
+    """An HF-deferred target attaches the raws whose identity matches one of
+    its id-shaped aliases (the would-be mint id), still never a variant raw,
+    and never a raw matching only through the display name (`_identity`
+    drops a parenthetical, so `(Thinking)` would read as the base)."""
+    def _entry(deferred):
+        meta = {"hf_deferred": True} if deferred else {}
+        return {
+            "id": "mistralai/Ministral-3-14B-Instruct-2512", "display_name": "Ministral 3 14B",
+            "org_id": "mistralai", "parents": [],
+            "aliases": ["mistralai/ministral-14b-2512", "Ministral 3 14B"],
+            "metadata": json.dumps(meta, sort_keys=True),
+        }
+    recs = [
+        {"provider": "nano-gpt", "raw": "mistralai/ministral-14b-2512"},
+        {"provider": "mistral", "raw": "ministral-14b-2512"},
+        {"provider": "nano-gpt", "raw": "mistralai/ministral-14b-2512-fp8"},
+        {"provider": "ollama-cloud", "raw": "ministral-3:14b"},
+    ]
+    deferred = _entry(True)
+    mod._attach_provider_aliases([deferred], recs, "mistralai")
+    ap = deferred["alias_platforms"]
+    assert {"ministral-14b-2512", "mistralai/ministral-14b-2512"} <= set(ap)
+    assert not any("fp8" in k for k in ap)
+    assert not any(k in ("ministral-3:14b", "ministral-3-14b", "mistralai/ministral-3-14b") for k in ap)
+    plain = _entry(False)
+    mod._attach_provider_aliases([plain], recs, "mistralai")
+    assert not plain.get("alias_platforms"), "a non-deferred target keeps the strict identity guard"
+
+
+def test_generation_promotes_ministral_group_to_hf_true_id(mod, monkeypatch):
+    """End-to-end over a tiny models.dev catalog: Mistral's first-party record
+    (author-lab family path) and the re-host group both land on the HF-true
+    id, with every models.dev spelling aliased; no `{org}/{slug}` mint and no
+    `mistralai/ministral-3-14b` family root is minted for them. A record the
+    authority cannot place still builds its family."""
+    for prov in ("mistral", "nano-gpt", "nvidia", "clarifai"):
+        assert prov in mod.PROVIDER_TO_INFERENCE_PLATFORM
+    assert "mistral" in mod.STRICT_AUTHOR
+
+    def _m(mid, name, cmid=None):
+        d = {"id": mid, "name": name, "open_weights": True, "release_date": "2025-12-02"}
+        if cmid:
+            d["canonical_model_id"] = cmid
+        return d
+
+    api = {
+        "mistral": {"models": {
+            "ministral-14b-2512": _m("ministral-14b-2512", "Ministral 3 14B", "mistral/ministral-3-14b-instruct-2512"),
+            "magistral-medium-2509": _m("magistral-medium-2509", "Magistral Medium 1.2"),
+        }},
+        "nano-gpt": {"models": {
+            "mistralai/ministral-14b-2512": _m("mistralai/ministral-14b-2512", "Ministral 14B"),
+            "mistralai/ministral-14b-instruct-2512": _m("mistralai/ministral-14b-instruct-2512", "Ministral 3 14B"),
+        }},
+        "nvidia": {"models": {
+            "mistralai/ministral-14b-instruct-2512": _m("mistralai/ministral-14b-instruct-2512", "Ministral 3 14B Instruct 2512"),
+        }},
+        "clarifai": {"models": {
+            "mistralai/completion/models/Ministral-3-14B-Reasoning-2512": _m(
+                "mistralai/completion/models/Ministral-3-14B-Reasoning-2512", "Ministral 3 14B Reasoning 2512"),
+        }},
+    }
+    monkeypatch.setattr(mod, "_HF_AUTHORITY", _PROMO_AUTH)
+    out, skipped = mod._generate_models(api, mod._load_known_org_ids())
+    assert skipped == []
+    out = mod._finalize_entries(out)
+    by_id = {e["id"]: e for e in out}
+    assert set(by_id) == {
+        "mistralai/Ministral-3-14B-Instruct-2512",
+        "mistralai/Ministral-3-14B-Reasoning-2512",
+        "mistralai/magistral-medium-1.2",
+    }, sorted(by_id)
+    inst = by_id["mistralai/Ministral-3-14B-Instruct-2512"]
+    assert json.loads(inst["metadata"])["hf_deferred"] is True
+    assert inst["review_status"] == "reviewed"
+    assert {
+        "mistralai/ministral-14b-2512", "mistralai/ministral-14b-instruct-2512",
+        "ministral-14b-2512", "ministral-14b-instruct-2512", "Ministral 3 14B",
+        "mistral/ministral-3-14b-instruct-2512",
+    } <= set(inst["aliases"]), inst["aliases"]
+    assert json.loads(by_id["mistralai/Ministral-3-14B-Reasoning-2512"]["metadata"])["hf_deferred"] is True
+    assert "magistral-medium-2509" in json.loads(by_id["mistralai/magistral-medium-1.2"]["metadata"])["snapshots"]
+
+
+def test_carry_forward_absorbs_committed_mint_aliased_on_hf_deferred_twin(cf_mod):
+    """A committed invented id the authority has since promoted shares no
+    token set with the HF-true id (`ministral-14b-2512` vs
+    `Ministral-3-14B-Instruct-2512`), so the twin keys cannot link them; the
+    fresh hf_deferred entry carrying the committed id as an alias is its twin
+    and absorbs it (fold keeps alias). A committed id aliased on a NON-deferred
+    fresh entry is not absorbed that way; a committed hf_deferred id never is."""
+    committed = [
+        dict(_cf_entry("mistralai/ministral-14b-2512", ["ministral-14b-2512"]), display_name="Ministral 14B"),
+        _cf_entry("mistralai/ministral-3-14b", ["ministral-3:14b"]),
+        _cf_entry("zorgx/zmod-old", ["zmod-old"]),
+        dict(_cf_entry("zorgx/ZMod-HF"), metadata=json.dumps({"hf_deferred": True}, sort_keys=True)),
+    ]
+    fresh = [
+        dict(_cf_entry("mistralai/Ministral-3-14B-Instruct-2512"), display_name="Ministral 3 14B",
+             aliases=["mistralai/ministral-14b-2512"],
+             metadata=json.dumps({"hf_deferred": True}, sort_keys=True)),
+        dict(_cf_entry("zorgx/zmod-new"), aliases=["zorgx/zmod-old"]),
+        dict(_cf_entry("zorgx/ZMod-Other"), aliases=["zorgx/ZMod-HF"],
+             metadata=json.dumps({"hf_deferred": True}, sort_keys=True)),
+    ]
+    batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    by_id = {e["id"]: e for e in batch}
+    assert "mistralai/ministral-14b-2512" not in by_id
+    surv = by_id["mistralai/Ministral-3-14B-Instruct-2512"]
+    assert {"mistralai/ministral-14b-2512", "ministral-14b-2512", "Ministral 14B"} <= set(surv["aliases"])
+    assert json.loads(surv["metadata"])["hf_deferred"] is True
+    assert claims["mistralai/ministral-14b-2512"] == "mistralai/Ministral-3-14B-Instruct-2512"
+    assert claims["ministral-14b-2512"] == "mistralai/Ministral-3-14B-Instruct-2512"
+    kept = by_id["mistralai/ministral-3-14b"]
+    assert json.loads(kept["metadata"])["upstream_status"] == "removed"
+    assert "zorgx/zmod-old" in by_id, "alias-equality twin applies to hf_deferred fresh entries only"
+    assert "zorgx/ZMod-HF" in by_id, "a committed HF id is never demoted to another HF id's alias"
+
+
+def test_reconcile_keeps_absorbed_mint_alias_on_promoted_entry(cf_mod, tmp_path):
+    """Order: the carry-forward absorbs the committed id BEFORE reconcile, so
+    the sibling-id strip sees no canonical by that id and the alias survives."""
+    core = tmp_path / "core.yaml"
+    core.write_text("entries: []\n")
+    committed = [_cf_entry("zorgx/zmod-3-2512", ["zmod-3-2512"])]
+    fresh = [dict(_cf_entry("zorgx/ZMod-3-Instruct-2512"), display_name="ZMod 3",
+                  aliases=["zorgx/zmod-3-2512"],
+                  metadata=json.dumps({"hf_deferred": True}, sort_keys=True))]
+    batch, claims = cf_mod._carry_forward_committed([dict(e) for e in fresh], committed)
+    out = cf_mod.reconcile_generated_against_existing(batch, sources=(core,), committed_claims=claims)
+    by_id = {e["id"]: e for e in out}
+    assert "zorgx/zmod-3-2512" not in by_id
+    assert {"zorgx/zmod-3-2512", "zmod-3-2512"} <= set(by_id["zorgx/ZMod-3-Instruct-2512"]["aliases"])
+
+
+# ---------------------------------------------------------------------------
+# Protected roots: a curated umbrella or a committed multi-child family root is
+# never deferred to an HF repo, whatever a first-party key equates it with.
+# ---------------------------------------------------------------------------
+
+
+def test_multi_child_roots_counts_distinct_children(mod, tmp_path, monkeypatch):
+    parents = tmp_path / "parents.yaml"
+    parents.write_text(yaml.safe_dump([
+        {"id": "Qwen/Qwen3-VL-235B-A22B-Instruct",
+         "parents": [{"id": "alibaba/qwen3-vl-235b-a22b", "relationship": "variant", "axis": "training_stage"}]},
+        {"id": "Qwen/Qwen3-VL-235B-A22B-Thinking",
+         "parents": [{"id": "alibaba/qwen3-vl-235b-a22b", "relationship": "variant", "axis": "mode"}]},
+        {"id": "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+         "parents": [{"id": "alibaba/qwen3-coder-480b-a35b", "relationship": "variant"}]},
+        {"id": "lab/self", "parents": [{"id": "lab/self", "relationship": "variant"}]},
+    ]))
+    for name in ("CORE_PATH", "HUB_STATS_PATH", "TIER3_PATH", "SEED_PATH"):
+        monkeypatch.setattr(mod, name, tmp_path / f"missing-{name}.yaml")
+    monkeypatch.setattr(mod, "PARENTS_ENRICH_PATH", parents)
+    assert mod._multi_child_roots() == frozenset({"alibaba/qwen3-vl-235b-a22b"})
+
+
+def test_group_hf_target_never_defers_a_protected_root(mod, monkeypatch):
+    authority = {"alibaba": {"qwen3 vl 235b a22b instruct": "Qwen/Qwen3-VL-235B-A22B-Instruct"}}
+    recs = [{"raw": "qwen3-vl-235b-a22b", "name": "Qwen3 VL 235B A22B",
+             "record": {"canonical_model_id": "qwen/qwen3-vl-235b-a22b-instruct"}}]
+    ai = mod._dev_alias_index()
+    monkeypatch.setattr(mod, "_PROTECTED_ROOTS", frozenset())
+    assert mod._group_hf_target(
+        "alibaba/qwen3-vl-235b-a22b", "alibaba", recs, ["qwen3-vl-235b-a22b"], ai, authority
+    ) == "Qwen/Qwen3-VL-235B-A22B-Instruct"
+    monkeypatch.setattr(mod, "_PROTECTED_ROOTS", frozenset({"alibaba/qwen3-vl-235b-a22b"}))
+    assert mod._group_hf_target(
+        "alibaba/qwen3-vl-235b-a22b", "alibaba", recs, ["qwen3-vl-235b-a22b"], ai, authority
+    ) is None
+
+
+def test_group_hf_target_rejects_size_and_format_drift(mod, monkeypatch):
+    ai = mod._dev_alias_index()
+    monkeypatch.setattr(mod, "_PROTECTED_ROOTS", frozenset())
+    auth = {"lab": {
+        "model 70b": "lab/Model-70B",
+        "model 7b gguf": "lab/Model-7B-GGUF",
+        "model 7b": "lab/Model-7B",
+    }}
+    rec = lambda raw, name: {"raw": raw, "name": name, "record": {}}
+    # `model7b` is a character subsequence of `model70b`: the size must match.
+    assert mod._group_hf_target("lab/model-7b", "lab", [rec("model-7b", "Model-70B")], ["model-7b", "Model-70B"], ai, auth) == "lab/Model-7B"
+    # A weight-format repo is a different upload.
+    assert mod._group_hf_target("lab/model-7b", "lab", [rec("model-7b", "Model-7B-GGUF")], ["model-7b", "Model-7B-GGUF"], ai, auth) == "lab/Model-7B"
+    assert mod._group_hf_target("lab/model-7b", "lab", [rec("model-7b", "Model-7B-GGUF")], ["model-7b", "Model-7B-GGUF"], ai, {"lab": {"model 7b gguf": "lab/Model-7B-GGUF"}}) is None
+
+
+def test_orgless_mint_folds_only_on_a_unique_open_weight_name(mod):
+    from eval_entity_resolver.normalization import normalize as _norm
+    hf = lambda i, name: {"id": i, "display_name": name, "aliases": [], "metadata": '{"hf_deferred": true}'}
+    bare = lambda i, name, ow: {"id": i, "display_name": name, "aliases": [], "open_weights": ow, "metadata": "{}"}
+    # Reuse the post-pass by driving it the way _generate_models does.
+    def fold(entries):
+        hf_by_name = {}
+        for e in entries:
+            if mod._entry_meta(e).get("hf_deferred") is True:
+                hf_by_name.setdefault(_norm(e["display_name"]), []).append(e)
+        kept = []
+        for e in entries:
+            cands = hf_by_name.get(_norm(e["display_name"]), []) if "/" not in e["id"] and e.get("open_weights") is True and mod._entry_meta(e).get("hf_deferred") is not True else []
+            if len(cands) == 1:
+                cands[0]["aliases"].append(e["id"])
+                continue
+            kept.append(e)
+        return kept
+    unique = fold([hf("lab/Flash-Pro", "Flash"), bare("flash", "Flash", True)])
+    assert [e["id"] for e in unique] == ["lab/Flash-Pro"]
+    ambiguous = fold([hf("lab/Flash-Pro", "Flash"), hf("other/Flash-Max", "Flash"), bare("flash", "Flash", True)])
+    assert "flash" in {e["id"] for e in ambiguous}
+    closed = fold([hf("lab/Flash-Pro", "Flash"), bare("private-flash", "Flash", False)])
+    assert "private-flash" in {e["id"] for e in closed}

@@ -459,9 +459,68 @@ def seed(
             # `non_lineage_bases`: underspecified umbrella ids that stay resolvable
             # but may never be a lineage PARENT (see collision_overrides.yaml).
             non_lineage_bases = set(ov.get("non_lineage_bases") or [])
+        # An HF-true canonical (oracle-sourced, or HF-promoted by the models.dev
+        # refresh with `hf_deferred`) carries the invented ids it replaced as
+        # aliases. A side source the refresh never rewrites (enrichments,
+        # tier3, hub_stats) may still key a record by such an id; left alone it
+        # materialises a second canonical that collides on the alias. Fold
+        # those records onto the HF entry, like a curated `merge` (core ids are
+        # never folded this way).
+        core_ids = {e["id"] for e in core_entries}
+        # A multi-child family root (`alibaba/qwen3-vl-235b-a22b` over Instruct
+        # and Thinking) is not one repo and stays a root, like an umbrella.
+        kids: dict[str, set[str]] = {}
+        for e in merged:
+            for p in collision_fold._edges(e.get("parents")):
+                if not isinstance(p, dict) or p.get("relationship") != "variant":
+                    continue
+                pid = p.get("id")
+                if isinstance(pid, str) and pid != e["id"]:
+                    kids.setdefault(pid, set()).add(e["id"])
+        multi_child = {pid for pid, k in kids.items() if len(k) >= 2}
+
+        def _own_name(old: str, hf_id: str) -> bool:
+            return seed_collision_key(old.rsplit("/", 1)[-1]) == seed_collision_key(hf_id.rsplit("/", 1)[-1])
+
+        def _hf_true(e: dict) -> bool:
+            meta = e.get("metadata")
+            if isinstance(meta, str):
+                try:
+                    meta = json.loads(meta)
+                except ValueError:
+                    meta = None
+            return e.get("resolution_source") == "hf" or (
+                isinstance(meta, dict) and meta.get("hf_deferred") is True
+            )
+
+        hf_true_ids = {e["id"] for e in merged if _hf_true(e)}
+        core_keys = {collision_fold.collision_key(i) for i in core_ids}
+        promoted_merge: dict[str, str] = {}
+        for e in merged:
+            if e["id"] not in hf_true_ids:
+                continue
+            for a in e.get("aliases") or []:
+                # Never a core id, a curated umbrella, another HF-true
+                # canonical, or a multi-child root under a different name.
+                if a in core_ids or a in non_lineage_bases or a in hf_true_ids:
+                    continue
+                if a in multi_child and not _own_name(a, e["id"]):
+                    continue
+                if a != e["id"] and a in by_id:
+                    promoted_merge.setdefault(a, e["id"])
+        # A loser that is itself a declared winner would make a cycle.
+        promoted_merge = {l: w for l, w in promoted_merge.items() if w not in promoted_merge}
+        for l, w in promoted_merge.items():
+            # A casing twin shares the collision key; pin the HF id as that
+            # group's winner so the group fold cannot pick the alias and leave
+            # the two remaps pointing at each other. A key a core entry owns
+            # keeps its core winner.
+            key = collision_fold.collision_key(w)
+            if collision_fold.collision_key(l) == key and key not in core_keys:
+                prefer.setdefault(key, w)
         merged, _remap = collision_fold.fold_collisions(
             merged, never_fold, prefer,
-            force_merge={**_org_merges, **curated_merge},
+            force_merge={**_org_merges, **promoted_merge, **curated_merge},
             non_lineage_bases=non_lineage_bases,
         )
 

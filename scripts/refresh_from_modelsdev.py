@@ -1108,6 +1108,21 @@ def _variant_identity(s: str) -> str:
     return _slugify(normalize_modelsdev_id(s, strip_variants=False)).rsplit("/", 1)[-1]
 
 
+_IDENTITY_VARIANT_TOKENS = frozenset(re.findall(r"\(-([a-z0-9]+)\$\)", _IDENTITY_VARIANT_RE.pattern)) | frozenset({
+    # Weight formats and quantizations an HF repo name carries that a served
+    # key never does: a hit adding one is a different upload, not the model.
+    "gguf", "exl2", "mlx", "nf4", "4bit", "8bit", "bnb", "hqq", "ggml", "onnx",
+    "q4", "q5", "q6", "q8", "fp4", "fp16", "fp32", "w4a16", "w8a8", "w8a16",
+})
+
+
+def _variant_tokens(s: str) -> set[str]:
+    """Identity-variant tokens anywhere in a spelling's leaf (the suffix regex
+    only sees a trailing one; `…-Reasoning-2512` carries one mid-name)."""
+    leaf = s.rsplit("/", 1)[-1].lower()
+    return set(re.split(r"[-_.:\s]+", leaf)) & _IDENTITY_VARIANT_TOKENS
+
+
 # ---------------------------------------------------------------------------
 # OpenRouter id adoption (specs/model-id-resolution/PLAN.md G1/G2).
 # The id ladder: a real HF id is adopted first, then an OpenRouter catalog key,
@@ -1337,6 +1352,22 @@ def _attach_provider_aliases(
     root = next((e for e in entries if not e.get("parents")), entries[0] if entries else None)
 
     _identity = _variant_identity  # module-level (shared with reconcile's merge)
+
+    def _target_sigs(target: dict) -> set[str]:
+        # An HF-deferred target's id carries tokens the models.dev spellings
+        # lack (`Ministral-3-14B-Instruct-2512` vs `ministral-14b-2512`); the
+        # authority already equated them, so its id-shaped aliases (mint id,
+        # canonical_model_id, attached raws) are identities a raw may match
+        # too. Display names are excluded (`_identity` drops a parenthetical,
+        # so "(Thinking)" would read as the base). The variant guard still
+        # holds: a `-fp8`/`-thinking` raw matches none of them.
+        sigs = {safe_sig(_identity(target["id"]))}
+        if _entry_meta(target).get("hf_deferred") is True:
+            for a in [*(target.get("aliases") or []), *(target.get("alias_platforms") or {})]:
+                if not re.search(r"\s", a):
+                    sigs.add(safe_sig(_identity(a)))
+        return sigs
+
     for r in group_recs:
         platform = PROVIDER_TO_INFERENCE_PLATFORM.get(r["provider"])
         raw = r["raw"]
@@ -1363,7 +1394,7 @@ def _attach_provider_aliases(
         # an OpenRouter-adopted target (`claude-3-haiku`) still matches the other
         # providers' spellings of the same identity (`claude-haiku-3`), while any
         # added/removed variant token keeps mismatching.
-        if safe_sig(_identity(raw)) != safe_sig(_identity(target["id"])):
+        if safe_sig(_identity(raw)) not in _target_sigs(target):
             continue
         ap = target.setdefault("alias_platforms", {})
         for form in _provider_alias_forms(raw, org_id, r.get("provider")):
@@ -1386,16 +1417,85 @@ def _attach_provider_aliases(
 # ---------------------------------------------------------------------------
 # Mint-decision rule. Before minting an off-HF {org}/{slug} canonical we
 # ask: is this underlying group already a real HF repo? The authority is the
-# frozen HF oracle (hf_model_id_resolution.json). We DEFER (no mint; the
-# canonical IS the real HF id) only on a normalized-identity match CORROBORATED
-# BY ORG AGREEMENT after the curated two-tier dev-org remap — never a loose
-# name-only match across different developers. Default to MINT when unsure.
+# frozen HF oracle (hf_model_id_resolution.json) plus the published
+# `hub_stats_index` (every HF repo with downloadable weights). We DEFER (no
+# mint; the canonical IS the real HF id) only on a normalized-identity match
+# CORROBORATED BY ORG AGREEMENT after the curated two-tier dev-org remap —
+# never a loose name-only match across different developers. Default to MINT
+# when unsure.
 # ---------------------------------------------------------------------------
 
 # The frozen HF oracle — in-repo at curation/ (CI), workspace-parent fallback (dev).
 HF_ORACLE_JSON = resolve_oracle_path()
 
+# The published HF id index (what scripts/build_hub_stats_index.py writes):
+# local fixture when present, else the dataset copy via hf_hub_download. The
+# only HF knowledge the generator has — no per-model HF API calls.
+HUB_STATS_INDEX_PATH = REPO_ROOT / "fixtures" / "hub_stats_index.parquet"
+HF_DATASET_REPO = "evaleval/entity-registry-data"
+HUB_STATS_INDEX_TABLE = "hub_stats_index"
+
 _HF_AUTHORITY: dict[str, dict[str, str]] | None = None
+_INDEX_AUTHORITY: dict[str, dict[str, str]] | None = None
+
+# Curated umbrella ids (`deepseek/deepseek`): underspecified family roots that
+# stay resolvable canonicals and are never one specific HF repo, so they are
+# never deferred, whatever a rolling first-party key claims today.
+COLLISION_OVERRIDES_PATH = REPO_ROOT / "seed" / "models" / "collision_overrides.yaml"
+PARENTS_ENRICH_PATH = REPO_ROOT / "seed" / "models" / "enrichments" / "parents.yaml"
+_NON_LINEAGE_BASES: frozenset[str] | None = None
+
+
+def _non_lineage_bases() -> frozenset[str]:
+    global _NON_LINEAGE_BASES
+    if _NON_LINEAGE_BASES is None:
+        data = (
+            safe_load_yaml(COLLISION_OVERRIDES_PATH.read_text())
+            if COLLISION_OVERRIDES_PATH.exists() else {}
+        ) or {}
+        _NON_LINEAGE_BASES = frozenset(data.get("non_lineage_bases") or [])
+    return _NON_LINEAGE_BASES
+
+
+_PROTECTED_ROOTS: frozenset[str] | None = None
+
+
+def _multi_child_roots() -> frozenset[str]:
+    """Ids that two or more committed entries name as a `variant` parent: a
+    family root (`alibaba/qwen3-vl-235b-a22b` over Instruct and Thinking) is
+    not one repo, whatever a first-party key equates its bare name with. A
+    repo with many finetunes or quantizations is still one repo."""
+    children: dict[str, set[str]] = defaultdict(set)
+    for path in (CORE_PATH, PARENTS_ENRICH_PATH, HUB_STATS_PATH, TIER3_PATH, SEED_PATH):
+        if not path.exists():
+            continue
+        data = safe_load_yaml(path.read_text()) or []
+        items = data.get("entries") if isinstance(data, dict) else data
+        for e in items or []:
+            if not isinstance(e, dict) or not e.get("id"):
+                continue
+            raw = e.get("parents")
+            if isinstance(raw, str):
+                try:
+                    raw = json.loads(raw)
+                except ValueError:
+                    raw = []
+            for p in raw or []:
+                if not isinstance(p, dict) or p.get("relationship") != "variant":
+                    continue
+                pid = p.get("id")
+                if isinstance(pid, str) and pid != e["id"]:
+                    children[pid].add(e["id"])
+    return frozenset(pid for pid, kids in children.items() if len(kids) >= 2)
+
+
+def _protected_roots() -> frozenset[str]:
+    """Ids never deferred, twin-absorbed or folded onto an HF repo: the curated
+    umbrellas plus every committed multi-child family root."""
+    global _PROTECTED_ROOTS
+    if _PROTECTED_ROOTS is None:
+        _PROTECTED_ROOTS = _non_lineage_bases() | _multi_child_roots()
+    return _PROTECTED_ROOTS
 
 # --- shared org-aware fold inputs (used by reconcile_generated_against_existing) ---
 _HF_TO_DEV: dict[str, str] | None = None
@@ -1466,10 +1566,98 @@ def _build_hf_authority(
     return out
 
 
+def _load_hub_stats_index(path: Path = HUB_STATS_INDEX_PATH):
+    """The published HF id index as a DataFrame (`id`, `downloads`). Local
+    fixture first, else the dataset copy; neither -> fail loudly, so the cron
+    never silently falls back to minting what is on HF."""
+    import pandas as pd
+
+    if path.exists():
+        return pd.read_parquet(path, columns=["id", "downloads"])
+    try:
+        from huggingface_hub import hf_hub_download
+
+        local = hf_hub_download(
+            repo_id=HF_DATASET_REPO,
+            filename=f"{HUB_STATS_INDEX_TABLE}/part-0.parquet",
+            repo_type="dataset",
+        )
+    except Exception as exc:
+        raise RuntimeError(
+            f"hub_stats_index unavailable: no {path} and the dataset copy "
+            f"({HF_DATASET_REPO}) could not be fetched: {exc}"
+        ) from exc
+    return pd.read_parquet(local, columns=["id", "downloads"])
+
+
+def _build_index_authority(
+    index, alias_index: dict[str, str] | None = None
+) -> dict[str, dict[str, str]]:
+    """{dev_org: {normalized_name: hf_id}} over the hub_stats index, bucketed
+    like `_build_hf_authority`. Two repos sharing a name-norm in one bucket:
+    the higher download count wins."""
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    ai = alias_index if alias_index is not None else _dev_alias_index()
+    out: dict[str, dict[str, str]] = defaultdict(dict)
+    ranked = index.sort_values(["downloads", "id"], ascending=[False, True])
+    for hf_id in ranked["id"].tolist():
+        if "/" not in hf_id:
+            continue
+        hf_org, hf_name = hf_id.split("/", 1)
+        dev_org = ai.get(hf_org.lower(), hf_org.lower())
+        out[dev_org].setdefault(_norm(hf_name), hf_id)
+    return out
+
+
+_INDEX_IDS: dict[str, str] | None = None
+
+
+def _index_authority() -> dict[str, dict[str, str]]:
+    global _INDEX_AUTHORITY, _INDEX_IDS
+    if _INDEX_AUTHORITY is None:
+        index = _load_hub_stats_index()
+        _INDEX_AUTHORITY = _build_index_authority(index)
+        # Verbatim repo ids (case-folded): a key that IS an HF repo id names
+        # its repo, whatever other namespace shares the name.
+        _INDEX_IDS = {}
+        for hf_id in index.sort_values(["downloads", "id"], ascending=[False, True])["id"].tolist():
+            _INDEX_IDS.setdefault(hf_id.lower(), hf_id)
+    return _INDEX_AUTHORITY
+
+
+def _index_ids() -> dict[str, str]:
+    if _INDEX_IDS is None:
+        _index_authority()
+    return _INDEX_IDS or {}
+
+
+def _merge_authorities(
+    oracle: dict[str, dict[str, str]], index: dict[str, dict[str, str]]
+) -> dict[str, dict[str, str]]:
+    """Oracle wins on a conflicting (dev_org, name-norm)."""
+    out: dict[str, dict[str, str]] = defaultdict(dict)
+    for dev_org, bucket in index.items():
+        out[dev_org].update(bucket)
+    for dev_org, bucket in oracle.items():
+        out[dev_org].update(bucket)
+    return out
+
+
+_ORACLE_AUTHORITY: dict[str, dict[str, str]] | None = None
+
+
+def _oracle_authority() -> dict[str, dict[str, str]]:
+    global _ORACLE_AUTHORITY
+    if _ORACLE_AUTHORITY is None:
+        _ORACLE_AUTHORITY = _build_hf_authority()
+    return _ORACLE_AUTHORITY
+
+
 def _hf_authority() -> dict[str, dict[str, str]]:
     global _HF_AUTHORITY
     if _HF_AUTHORITY is None:
-        _HF_AUTHORITY = _build_hf_authority()
+        _HF_AUTHORITY = _merge_authorities(_oracle_authority(), _index_authority())
     return _HF_AUTHORITY
 
 
@@ -1510,11 +1698,13 @@ def _hf_defer_target(
     spellings: list[str],
     alias_index: dict[str, str],
     authority: dict[str, dict[str, str]] | None = None,
+    accept: Callable[[str], bool] | None = None,
 ) -> str | None:
     """Decide DEFER vs MINT for a models.dev underlying group.
 
     Returns the real HF id to defer to when the group resolves to an HF repo
     with org agreement (after dev-org remap); returns None to MINT otherwise.
+    `accept` vetoes individual hits (the search continues past a vetoed one).
 
     Confident == normalized-identity match WITHIN THE SAME dev-org bucket. A
     group with no org, or whose normalized names match only under a DIFFERENT
@@ -1522,7 +1712,9 @@ def _hf_defer_target(
     if org_id is None:
         return None
     auth = authority if authority is not None else _hf_authority()
-    bucket = auth.get(org_id)
+    # Uncurated orgs are bucketed by their lowercased HF slug; a group's org_id
+    # keeps the raw prefix spelling (`TheDrummer`) in that case.
+    bucket = auth.get(org_id) or auth.get(org_id.lower())
     if not bucket:
         return None
     forms = list(spellings)
@@ -1540,6 +1732,129 @@ def _hf_defer_target(
         key=lambda n: (n.count(" "), len(n), n),
     ):
         hit = bucket.get(name_norm)
+        if hit is not None and (accept is None or accept(hit)):
+            return hit
+    return None
+
+
+def _group_hf_target(
+    mint_id: str,
+    org_id: str | None,
+    group_recs: list[dict],
+    spellings: list[str],
+    alias_index: dict[str, str],
+    authority: dict[str, dict[str, str]] | None = None,
+) -> str | None:
+    """`_hf_defer_target` over a models.dev group's keys, one tier at a time:
+    the would-be mint id itself, the records' `canonical_model_id`
+    (models.dev's own canonical key, most common first), the `org/name`-shaped
+    provider ids, then the remaining spellings and every record name. The
+    first tier that answers wins, so a dated canonical key is never outranked
+    by a shorter undated name, a verbatim HF id beats a provider's sloppy
+    display name, and a rolling first-party key (`deepseek-v4-pro` -> the 0813
+    snapshot) never pulls a group off its own repo.
+
+    A hit must keep the whole would-be mint name (alnum subsequence, after the
+    same brand strip `_candidate_name_norms` applies) and add no identity
+    variant (`_IDENTITY_VARIANT_RE` tokens) the mint lacks: `unslopnemo-12b-v4-1`
+    never promotes to the `…-v4` repo, `granite-4-0-h-micro` never to
+    `…-4.0-micro`, `kimi-latest` never to `Kimi-K3`, a bare `qwen3-vl-30b-a3b`
+    never to the `…-Thinking` repo its variant-stripped group also holds."""
+    if org_id is None or mint_id in _non_lineage_bases():
+        return None
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    # A committed multi-child family root stays a root unless an HF repo
+    # carries its own bare name (`z-ai/glm-4.5v` -> `zai-org/GLM-4.5V`); a
+    # first-party key equating the bare name with one child never folds it.
+    root_bound = mint_id in _protected_roots()
+
+    def _own_name(hf_id: str) -> bool:
+        return _norm(hf_id.rsplit("/", 1)[-1]) == _norm(mint_id.rsplit("/", 1)[-1])
+
+    # The frozen oracle first, exactly as the re-host path always consulted
+    # it (no tiers, no veto), so every committed deferral stays put; the
+    # guarded tiers below only add what the hub_stats index knows. A caller
+    # that injects `authority` is testing the tiers and gets no oracle.
+    oracle = _oracle_authority() if authority is None else {}
+    if oracle:
+        hit = _hf_defer_target(
+            mint_id, org_id, spellings, alias_index, oracle,
+            accept=_own_name if root_bound else None,
+        )
+        if hit is not None:
+            return hit
+    def _deglued(s: str) -> str | None:
+        # A serving key with the brand glued on by `.`/`:` (Bedrock's
+        # `openai.gpt-oss-safeguard-120b`): normalization would weld the
+        # brand into the name, so the bare name is tried as its own spelling.
+        m = re.match(r"^(?:[^/]+/)?([A-Za-z0-9_-]+)[.:](.+)$", s)
+        if m and (m.group(1).lower() == org_id or alias_index.get(m.group(1).lower()) == org_id):
+            return m.group(2)
+        return None
+
+    mint_forms = [mint_id] + [d for d in (_deglued(mint_id),) if d]
+    mint_keys = [
+        re.sub(r"[^a-z0-9]", "", n)
+        for n in _candidate_name_norms(mint_forms, org_id, alias_index)
+    ]
+    mint_variants = _variant_tokens(mint_id)
+
+    from eval_card_registry.lib.collision_fold import _bsizes
+
+    mint_sizes = _bsizes(mint_id.rsplit("/", 1)[-1])
+
+    def _keeps_mint_name(hf_id: str) -> bool:
+        if _variant_tokens(hf_id) - mint_variants:
+            return False
+        # A size the mint states must be the repo's size (`model-7b` is a
+        # character subsequence of `Model-70B`); a sizeless key may land on
+        # a sized repo (OpenRouter's `qwen3-coder` is the 480B).
+        if mint_sizes and _bsizes(hf_id.rsplit("/", 1)[-1]) != mint_sizes:
+            return False
+        hf_key = re.sub(r"[^a-z0-9]", "", hf_id.rsplit("/", 1)[-1].lower())
+        for key in mint_keys:
+            it = iter(hf_key)
+            if all(ch in it for ch in key):
+                return True
+        return False
+
+    cmid_counts = Counter(
+        c for r in group_recs
+        for c in ((r.get("record") or {}).get("canonical_model_id"),)
+        if isinstance(c, str) and c
+    )
+    # A key that IS an HF repo id, verbatim, names its repo: tried before any
+    # name match, so a same-named repo in a sibling namespace (`mistral/` vs
+    # `mistralai/`) cannot outrank it on downloads. Org agreement still holds.
+    if authority is None:
+        verbatim = [c for c, _n in sorted(cmid_counts.items(), key=lambda kv: (-kv[1], kv[0]))]
+        verbatim += [r["raw"] for r in group_recs if r.get("raw") and "/" in r["raw"]]
+        for cand in verbatim:
+            hf_id = _index_ids().get(cand.lower())
+            if hf_id is None:
+                continue
+            hf_org = hf_id.split("/", 1)[0].lower()
+            if alias_index.get(hf_org, hf_org) != org_id and hf_org != org_id.lower():
+                continue
+            if _keeps_mint_name(hf_id) and (not root_bound or _own_name(hf_id)):
+                return hf_id
+
+    tiers: list[list[str]] = [[mint_id]]
+    tiers += [
+        [c] for c, _n in sorted(cmid_counts.items(), key=lambda kv: (-kv[1], kv[0]))
+    ]
+    tiers.append([r["raw"] for r in group_recs if r.get("raw") and "/" in r["raw"]])
+    tiers.append([d for s in [mint_id, *(r["raw"] for r in group_recs if r.get("raw"))]
+                  for d in (_deglued(s),) if d])
+    tiers.append(spellings + [r["name"] for r in group_recs if r.get("name")])
+    for tier in tiers:
+        if not tier:
+            continue
+        hit = _hf_defer_target(
+            "", org_id, tier, alias_index, authority,
+            accept=lambda h: _keeps_mint_name(h) and (not root_bound or _own_name(h)),
+        )
         if hit is not None:
             return hit
     return None
@@ -1557,8 +1872,19 @@ def _hf_deferred_entry(
     models.dev metadata (providers / open_weights / release_date) merged on and
     the models.dev spellings (mint id + display name) added as aliases. Mirrors
     the hand-folds for Qwen/QwQ-32B and LiquidAI/LFM2-24B-A2B (no new mint)."""
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    # models.dev canonical keys that name THIS repo (a group can carry a
+    # minority key naming another model; that one must not become an alias).
+    hf_norm = _norm(hf_id.rsplit("/", 1)[-1])
+    cmids = sorted({
+        c for r in group_recs
+        for c in ((r.get("record") or {}).get("canonical_model_id"),)
+        if isinstance(c, str) and c
+        and hf_norm in _candidate_name_norms([c], org_id, _dev_alias_index())
+    })
     aliases = []
-    for a in (mint_id, display_name):
+    for a in (mint_id, display_name, *cmids):
         if a and a != hf_id and a not in aliases:
             aliases.append(a)
     return {
@@ -1665,7 +1991,7 @@ def _mint_or_defer_rehost(
     spellings = [mint_id, head_raw, display_name, slug]
     spellings += [r["raw"] for r in group_recs if r.get("raw")]
 
-    hf_id = _hf_defer_target(mint_id, org_id, spellings, alias_index)
+    hf_id = _group_hf_target(mint_id, org_id, group_recs, spellings, alias_index)
     if hf_id is not None:
         head = {**head, "root_key": root_key}
         return [_hf_deferred_entry(hf_id, org_id, head, group_recs, mint_id, display_name)]
@@ -1674,6 +2000,38 @@ def _mint_or_defer_rehost(
     # over the invented `{org}/{slug}` id (G1).
     _adopt_openrouter_ids(entries, group_recs, org_id, alias_index)
     return entries
+
+
+def _defer_author_records(
+    root_key: str,
+    org_id: str,
+    author_recs: list[dict],
+    group_recs: list[dict],
+    alias_index: dict[str, str],
+) -> tuple[list[dict], list[dict]]:
+    """Mint-decision for the author-lab family path, per record: a record that
+    names an HF repo (its own id, the group's `canonical_model_id` keys and
+    provider ids, its name) is emitted as an HF-deferred entry and left out of
+    the family build. Returns (deferred_entries, records_left_for_the_family)."""
+    deferred: list[dict] = []
+    remaining: list[dict] = []
+    for r in author_recs:
+        mint_id = f"{org_id}/{_slugify(r['raw'])}"
+        display_name = r.get("name") or humanize_model_slug(_slugify(r["raw"]))
+        hf_id = _group_hf_target(
+            mint_id, org_id, group_recs, [r["raw"], display_name], alias_index
+        )
+        if hf_id is None:
+            remaining.append(r)
+            continue
+        head = {
+            "display_name": r.get("name"),
+            "open_weights": bool(r.get("open_weights")),
+            "release_date": r.get("release"),
+            "root_key": root_key,
+        }
+        deferred.append(_hf_deferred_entry(hf_id, org_id, head, [r], mint_id, display_name))
+    return deferred, remaining
 
 
 def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict], list[str]]:
@@ -1737,8 +2095,12 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
                     f"{author_recs[0]['provider']} -> {org_id} (group {root_key})"
                 )
                 continue
-            # Build the author-lab family tree from the author records, grouped
-            # by family slug (a group may span a couple of stage/size siblings).
+            # Records that name a real HF repo defer to it; the rest build the
+            # author-lab family tree, grouped by family slug (a group may span
+            # a couple of stage/size siblings).
+            deferred, author_recs = _defer_author_records(
+                root_key, org_id, author_recs, recs, alias_index
+            )
             by_family: dict[str, list[dict]] = defaultdict(list)
             for r in author_recs:
                 by_family[_family_for(r["record"])].append(r["record"])
@@ -1750,6 +2112,9 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
                     org_id, family_slug, models,
                     group_recs=recs, alias_index=alias_index,
                 ))
+            # Family entries first: the deferred entries must not become the
+            # provider-alias fallback root while a family root exists.
+            group_entries.extend(deferred)
             if not group_entries:
                 group_entries = _mint_or_defer_rehost(root_key, org_id, head, recs, alias_index)
         else:
@@ -1767,6 +2132,37 @@ def _generate_models(api_json: dict, known_org_ids: set[str]) -> tuple[list[dict
             f"PROVIDER_TO_INFERENCE_PLATFORM",
             file=sys.stderr,
         )
+    # An org-less mint (`schnell`) cannot be bucketed against the HF
+    # authority; when its models.dev name is the name of an HF-deferred entry
+    # of this same run, it is that model served elsewhere and folds onto it.
+    from eval_entity_resolver.normalization import normalize as _norm
+
+    hf_by_name: dict[str, list[dict]] = defaultdict(list)
+    for e in out:
+        if _entry_meta(e).get("hf_deferred") is True and e.get("display_name"):
+            hf_by_name[_norm(e["display_name"])].append(e)
+    kept: list[dict] = []
+    for e in out:
+        # Only an open-weight, org-less mint whose name belongs to exactly one
+        # HF-deferred entry: an ambiguous name is no identity evidence.
+        cands = (
+            hf_by_name.get(_norm(e["display_name"]), [])
+            if "/" not in e["id"] and e.get("display_name") and e.get("open_weights") is True
+            and _entry_meta(e).get("hf_deferred") is not True else []
+        )
+        tgt = cands[0] if len(cands) == 1 else None
+        if tgt is None:
+            kept.append(e)
+            continue
+        aliases = list(tgt.get("aliases") or [])
+        for a in (e["id"], *(e.get("aliases") or [])):
+            if a and a != tgt["id"] and a not in aliases:
+                aliases.append(a)
+        tgt["aliases"] = aliases
+        if isinstance(e.get("alias_platforms"), dict):
+            tgt.setdefault("alias_platforms", {}).update(e["alias_platforms"])
+    out = kept
+
     # Dedup entries by id (a model that appears in two dedup groups, e.g. via
     # different snapshots, would otherwise emit twice). Merge aliases on collide.
     # Then reconcile within this output: merge same-model dups (org-aware) and
@@ -2356,7 +2752,12 @@ def _carry_forward_committed(
         # OpenRouter-adoption respellings the ordered collision key cannot.
         twin = None
         twin_via_form = False
-        if cur is None and cid not in skip and "display_name" in c:
+        # A curated umbrella (`deepseek/deepseek`) is retained as is: it is
+        # never one repo, so no fresh entry, HF-deferred or not, is its twin.
+        if (
+            cur is None and cid not in skip and "display_name" in c
+            and cid not in _non_lineage_bases()
+        ):
             t = _pick_twin_candidate(cid, by_twin.get(_twin_key(cid), []))
             if t is None:
                 t = _pick_twin_candidate(
@@ -2367,12 +2768,29 @@ def _carry_forward_committed(
                         for e in by_twin_ext.get(k, [])
                     ],
                 )
-            if t is None and "/" in cid and cid.split("/", 1)[0].lower() in _SERVING_HOSTS:
-                # A committed mint under a serving-host prefix (the pre-strip
-                # `TEE/...` uploader-org bug): the fresh batch carries that id
-                # as an alias on the stripped target — absorb onto it (a
-                # malformed serving-prefixed id never wins the stability rule).
+            if t is None:
+                # Form-level twins, absorbed onto the fresh entry that carries
+                # the committed id as an alias: a committed mint under a
+                # serving-host prefix (the pre-strip `TEE/...` uploader-org
+                # bug — a malformed id never wins the stability rule), or a
+                # committed invented id the HF authority has since promoted
+                # (the fresh hf_deferred entry aliases the would-be mint id;
+                # token sets differ, so the twin keys above cannot link them).
                 t = by_form.get(cid)
+                if t is not None and not (
+                    ("/" in cid and cid.split("/", 1)[0].lower() in _SERVING_HOSTS)
+                    or (
+                        _entry_meta(t).get("hf_deferred") is True
+                        and _entry_meta(c).get("hf_deferred") is not True
+                        # A multi-child family root only onto the repo that
+                        # carries its own bare name.
+                        and (
+                            cid not in _protected_roots()
+                            or _variant_identity(cid) == _variant_identity(t["id"])
+                        )
+                    )
+                ):
+                    t = None
                 twin_via_form = t is not None
             twin = t
         # STABILITY RULE, RUNG-MONOTONE: on a twin match the COMMITTED id wins
@@ -2734,6 +3152,9 @@ def reconcile_generated_against_existing(
     )
 
     def _fold_target(e: dict) -> str | None:
+        # A curated umbrella stays a canonical however its head is named today.
+        if e.get("id") in _non_lineage_bases():
+            return None
         f = decide_fold(e, _hf_ids, _alias_to_hf, _by_org_name, hf_to_dev)
         if f is None:
             return None
@@ -2992,6 +3413,10 @@ def reconcile_generated_against_existing(
         if isinstance(dn, str) and _foreign(dn):
             cand = cid.split("/", 1)[-1]
             e["display_name"] = cid if _foreign(cand) else cand
+            # The next pass unions the committed display back as an alias;
+            # declare it now so one pass already reaches the fixpoint.
+            if e["display_name"] != cid and e["display_name"] not in (e.get("aliases") or []):
+                e["aliases"] = sorted({*(e.get("aliases") or []), e["display_name"]})
 
     enrich_records: list[dict] = []
     for owner in sorted(set(enrich_aliases) | set(enrich_scalars)):
@@ -3277,6 +3702,10 @@ def regenerate_catalog(full: list[dict], adopt_migration: bool = False) -> None:
         if dn and _claimed(dn):
             cand = cid.split("/", 1)[-1]
             e["display_name"] = cand if not _claimed(cand) else cid
+            # The next pass unions the committed display back as an alias;
+            # declare it now so one pass already reaches the fixpoint.
+            if e["display_name"] != cid and e["display_name"] not in e["aliases"]:
+                e["aliases"] = sorted({*e["aliases"], e["display_name"]})
         for form in _forms_of(e):
             fresh_form_owner.setdefault(form, cid)
             existing_exact.setdefault(form, cid)
@@ -3930,8 +4359,16 @@ def main() -> int:
 
     SEED_PATH.parent.mkdir(parents=True, exist_ok=True)
     SEED_PATH.write_text(new_text)
+    deferred_ids = {
+        e["id"] for e in generated
+        if "display_name" in e and _entry_meta(e).get("hf_deferred") is True
+    }
+    # An hf_deferred id the frozen oracle does not name came from hub_stats_index.
+    index_promoted = deferred_ids - _oracle_fixed_ids()
     print(
-        f"[refresh] wrote {len(generated)} model entries to {SEED_PATH}",
+        f"[refresh] wrote {len(generated)} model entries to {SEED_PATH} "
+        f"({len(deferred_ids)} hf-deferred, {len(index_promoted)} HF-promoted "
+        f"via hub_stats_index)",
         file=sys.stderr,
     )
 

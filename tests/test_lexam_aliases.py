@@ -41,10 +41,10 @@ HARNESSES = {
 MODELS = {
     "DeepSeek-V3.2-chat": "deepseek-ai/DeepSeek-V3.2",
     "DeepSeek-V3.2-reasoner": "deepseek/deepseek-v3-2-reasoning",
-    "DeepSeek-V3.2-Exp": "deepseek/deepseek-v3.2-exp",
+    "DeepSeek-V3.2-Exp": "deepseek-ai/DeepSeek-V3.2-Exp",
     "Llama-3.1-8B-it": "meta-llama/Llama-3.1-8B-Instruct",
     "Llama-3.3-70B-it": "meta-llama/Llama-3.3-70B-Instruct",
-    "Llama-3.1-405B-it": "meta/llama-3-1-405b-instruct",
+    "Llama-3.1-405B-it": "meta-llama/Llama-3.1-405B-Instruct",
     "Qwen-2.5-7B-it": "Qwen/Qwen2.5-7B-Instruct",
     "EuroLLM-9B-it": "utter-project/EuroLLM-9B-Instruct",
     "EuroLLM-9B-Instruct": "utter-project/EuroLLM-9B-Instruct",

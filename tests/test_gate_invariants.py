@@ -1122,6 +1122,18 @@ _ORACLE_LINEAGE_EXEMPT: frozenset = frozenset({
     # Folds into the curated HF-true DeepSeek-Coder-V2-Lite-Base (a clean root);
     # its snapshot lineage_origin was the deepseek/deepseek umbrella.
     ("lineage_origin_model_id", "deepseek/deepseek-coder-v2-lite-base"),
+    # HF promotion (models.dev refresh + hub_stats_index): the snapshot family
+    # root of each of these was an invented mint of the SAME model
+    # (`alibaba/qwen3-coder-480b-a35b` over its only child, the Instruct
+    # repo), so the root folded into the repo and the repo is now its own
+    # single-member family.
+    ("model_family_id", "Qwen/Qwen3-Coder-480B-A35B-Instruct"),
+    ("model_family_id", "Qwen/Qwen3.6-35B-A3B"),
+    ("model_family_id", "alibaba/qwen3-coder-30b-a3b-instruct"),
+    # The undated Bedrock `mistralai/ministral-3-8b-instruct` and the dated
+    # tier3 draft are both the one HF repo Ministral-3-8B-Instruct-2512; the
+    # version edge between them collapsed with the fold.
+    ("model_group_id", "mistral/ministral-3-8b-instruct-2512"),
     ("model_group_id", "Qwen/Qwen3-235B-A22B-Instruct-2507"),
     ("model_group_id", "Qwen/Qwen3-VL-32B-Thinking"),
     ("model_group_id", "Qwen/Qwen3-VL-8B-Thinking"),
