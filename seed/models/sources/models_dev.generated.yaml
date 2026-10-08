@@ -12272,20 +12272,21 @@
   review_status: draft
   resolution_source: models_dev
 - id: glyph-cluster
-  display_name: Glyph Cluster
+  display_name: 'Stealth: Glyph Cluster (free)'
   org_id: null
   family: glyph-cluster
   architecture: null
   params_billions: null
   parents: []
   open_weights: false
-  release_date: '2026-10-07'
+  release_date: '2025-08-26'
   input_modalities: null
   output_modalities: null
   tags:
   - org-unknown
-  aliases: []
-  metadata: '{"providers": ["vercel"], "underlying_key": "glyph-cluster"}'
+  aliases:
+  - Glyph Cluster
+  metadata: '{"providers": ["kilo", "vercel"], "underlying_key": "glyph-cluster"}'
   review_status: draft
   resolution_source: models_dev
 - id: google/deep-research-max-preview-apr-21-2026
@@ -14080,6 +14081,24 @@
   weak:
     release_date: '2026-04-02'
     open_weights: true
+- id: google/gemma-4-26b-a4b-it-chimeraxheretic
+  display_name: Gemma 4 26B A4B Chimera X Heretic
+  org_id: google
+  family: gemma-4-26b-a4b-it-chimeraxheretic
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-08'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - gemma-4-26b-a4b-it-chimeraxheretic
+  metadata: '{"alias_platforms": {"gemma-4-26b-a4b-it-chimeraxheretic": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "gemma-4-26b-a4b-it-chimeraxheretic"}'
+  review_status: draft
+  resolution_source: models_dev
 - id: google/gemma-4-26b-a4b-it-cybersecurity
   display_name: Gemma 4 26B A4B Cybersecurity
   org_id: google
@@ -14305,6 +14324,24 @@
   - Gemma-4-31B-Gemopus
   - gemma-4-31b-gemopus
   metadata: '{"alias_platforms": {"Gemma-4-31B-Gemopus": "nano-gpt", "gemma-4-31b-gemopus": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "gemma-4-31b-gemopus", "upstream_status": "removed"}'
+  review_status: draft
+  resolution_source: models_dev
+- id: google/gemma-4-31b-it-scarlet
+  display_name: Gemma 4 31B Scarlet
+  org_id: google
+  family: gemma-4-31b-it-scarlet
+  architecture: null
+  params_billions: null
+  parents: []
+  open_weights: true
+  release_date: '2026-10-08'
+  input_modalities: null
+  output_modalities: null
+  tags:
+  - open-weight
+  aliases:
+  - gemma-4-31b-it-scarlet
+  metadata: '{"alias_platforms": {"gemma-4-31b-it-scarlet": "nano-gpt"}, "providers": ["nano-gpt"], "underlying_key": "gemma-4-31b-it-scarlet"}'
   review_status: draft
   resolution_source: models_dev
 - id: google/gemma-4-31b-k1-v5
@@ -29008,7 +29045,8 @@
   tags: []
   aliases:
   - step-5-preview
-  metadata: '{"alias_platforms": {"step-5-preview": "nano-gpt"}}'
+  - step-5-preview-free
+  metadata: '{"alias_platforms": {"step-5-preview": "nano-gpt", "step-5-preview-free": "opencode-go"}, "openrouter_adopted": true}'
   review_status: reviewed
 - id: stepfun/step-tts-2
   display_name: Step TTS 2

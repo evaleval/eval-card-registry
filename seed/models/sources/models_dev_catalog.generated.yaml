@@ -4946,7 +4946,7 @@
     open_weights: false
 - id: glyph-cluster
   weak:
-    release_date: '2026-10-07'
+    release_date: '2025-08-26'
     open_weights: false
 - id: google/deep-research-max-preview-apr-21-2026
   weak:
@@ -5779,6 +5779,13 @@
     - text
     output_modalities:
     - text
+- id: google/gemma-4-26b-a4b-it-chimeraxheretic
+  aliases:
+  - gemma-4-26b-a4b-it-chimeraxheretic
+  metadata: '{"alias_platforms": {"gemma-4-26b-a4b-it-chimeraxheretic": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-08'
+    open_weights: true
 - id: google/gemma-4-26b-a4b-it-cybersecurity
   aliases:
   - gemma-4-26b-a4b-it-cybersecurity
@@ -5881,6 +5888,13 @@
   metadata: '{"alias_platforms": {"Gemma-4-31B-GarnetV2": "nano-gpt", "gemma-4-31b-garnetv2": "nano-gpt"}}'
   weak:
     release_date: '2026-05-01'
+    open_weights: true
+- id: google/gemma-4-31b-it-scarlet
+  aliases:
+  - gemma-4-31b-it-scarlet
+  metadata: '{"alias_platforms": {"gemma-4-31b-it-scarlet": "nano-gpt"}}'
+  weak:
+    release_date: '2026-10-08'
     open_weights: true
 - id: google/gemma-4-31b-meromero-v2
   aliases:
@@ -11540,7 +11554,8 @@
 - id: stepfun/step-5-preview
   aliases:
   - step-5-preview
-  metadata: '{"alias_platforms": {"step-5-preview": "nano-gpt"}}'
+  - step-5-preview-free
+  metadata: '{"alias_platforms": {"step-5-preview": "nano-gpt", "step-5-preview-free": "opencode-go"}}'
   weak:
     release_date: '2026-09-16'
     open_weights: false
