@@ -13,7 +13,7 @@ build/
 # Sync output
 output/
 
-# Parquet files (fixtures are generated via `eval-card-registry seed --local`)
+# Parquet files (fixtures are generated via `eval-entity-registry seed --local`)
 *.parquet
 # ...except the tracked resolution oracle snapshot (the generator-layer
 # re-architecture's Phase-4 diff target — see specs/model-resolution-rework).

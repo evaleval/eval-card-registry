@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from eval_card_registry.store.hf_store import get_store, RegistryStore
+from eval_entity_registry.store.hf_store import get_store, RegistryStore
 
 router = APIRouter()
 

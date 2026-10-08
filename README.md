@@ -1,4 +1,4 @@
-# eval-card-registry
+# eval-entity-registry
 
 Entity resolution registry for AI evaluation data. Maps raw model, benchmark, metric, and harness names from the EEE datastore to stable canonical IDs, and stores resolved evaluation results in a flat mapping table (`eval_results`).
 
@@ -65,7 +65,7 @@ full endpoint list.
 
 ```bash
 git clone <repo>
-cd eval-card-registry
+cd eval-entity-registry
 uv sync
 cp .env.example .env          # defaults work for local dev
 ```
@@ -73,7 +73,7 @@ cp .env.example .env          # defaults work for local dev
 **1. Seed the registry with known entities:**
 
 ```bash
-uv run eval-card-registry seed --local
+uv run eval-entity-registry seed --local
 ```
 
 This loads orgs, models, benchmarks, metrics, and harnesses from `seed/` into `fixtures/*.parquet`. You should see counts printed for each entity type. (After any change that renames canonical ids, `rm fixtures/*.parquet` before reseeding — or pass `--prune-stale` — since the seed upserts by id and does not prune renamed-away rows.)
@@ -81,7 +81,7 @@ This loads orgs, models, benchmarks, metrics, and harnesses from `seed/` into `f
 **2. Check what's in the registry:**
 
 ```bash
-uv run eval-card-registry stats --local
+uv run eval-entity-registry stats --local
 ```
 
 Expected output:
@@ -105,7 +105,7 @@ populated `canonical_models` table, not an empty one.)
 **3. Sync an EEE config — resolve entities and populate the mapping table:**
 
 ```bash
-uv run eval-card-registry sync --config hfopenllm_v2 --local
+uv run eval-entity-registry sync --config hfopenllm_v2 --local
 ```
 
 This downloads the EEE dataset config from HuggingFace (first run will take a few minutes), resolves every raw string to a canonical entity, and writes results to `fixtures/eval_results.parquet` — the mapping table (one row per model × benchmark × metric result).
@@ -113,7 +113,7 @@ This downloads the EEE dataset config from HuggingFace (first run will take a fe
 **4. Verify results:**
 
 ```bash
-uv run eval-card-registry stats --local
+uv run eval-entity-registry stats --local
 ```
 
 You should now see `eval_results`, `aliases`, and entity counts populated. Each row in `eval_results` looks like:
@@ -236,7 +236,7 @@ drop ids from the merge:
 
 Field-level notes for the parts of the published tables whose meaning is not
 obvious from the column name. The full column list per table lives in
-`src/eval_card_registry/store/schemas.py`.
+`src/eval_entity_registry/store/schemas.py`.
 
 ### Source scope keys
 
@@ -337,9 +337,9 @@ and a new metric should reach for them before inventing a synonym:
 ## Project layout
 
 ```
-eval-card-registry/
+eval-entity-registry/
 ├── packages/eval-entity-resolver/        # Standalone resolver package (uv workspace member)
-├── src/eval_card_registry/               # FastAPI service + CLI
+├── src/eval_entity_registry/               # FastAPI service + CLI
 │   ├── api/                              # Route handlers
 │   ├── services/                         # resolution_service, ingestion pipeline
 │   └── store/                            # In-memory store backed by HF Dataset parquet
@@ -374,19 +374,19 @@ All commands require `uv run` prefix (or install the package first with `uv pip 
 
 ```bash
 # Seed known entities from seed/ YAML files
-uv run eval-card-registry seed --local
+uv run eval-entity-registry seed --local
 
 # Print entity counts, draft counts, uncertain aliases
-uv run eval-card-registry stats --local
+uv run eval-entity-registry stats --local
 
 # Sync one EEE config — resolves entities, writes to eval_results table
-uv run eval-card-registry sync --config hfopenllm_v2 --local
+uv run eval-entity-registry sync --config hfopenllm_v2 --local
 
 # Sync all configs
-uv run eval-card-registry sync --all --local
+uv run eval-entity-registry sync --all --local
 
 # Re-resolve everything (after updating seed data or fuzzy matching logic)
-uv run eval-card-registry sync --config hfopenllm_v2 --rerun --local
+uv run eval-entity-registry sync --config hfopenllm_v2 --rerun --local
 ```
 
 Drop `--local` and configure `.env` with HF credentials to read/write from HF Hub instead of `fixtures/`.
@@ -398,7 +398,7 @@ Drop `--local` and configure `.env` with HF credentials to read/write from HF Hu
 Start the server:
 
 ```bash
-LOCAL_MODE=true uv run uvicorn eval_card_registry.main:app --reload
+LOCAL_MODE=true uv run uvicorn eval_entity_registry.main:app --reload
 ```
 
 Base path: `http://localhost:8000/api/v1`
@@ -584,7 +584,7 @@ from eval_entity_resolver import Resolver, ResolverConfig
 resolver = Resolver.from_hf("evaleval/entity-registry-data",
                             config=ResolverConfig(threshold=0.85))
 
-# Or from a local parquet directory (e.g. after `eval-card-registry seed --local`):
+# Or from a local parquet directory (e.g. after `eval-entity-registry seed --local`):
 resolver = Resolver.from_parquet("./fixtures/")
 
 result = resolver.resolve(
@@ -710,14 +710,14 @@ For production, configure `.env`:
 ```
 LOCAL_MODE=false
 HF_TOKEN=hf_...
-HF_DATASET_REPO=org/eval-card-registry
+HF_DATASET_REPO=org/eval-entity-registry
 ```
 
 Then run the same commands without `--local`:
 
 ```bash
-uv run eval-card-registry seed
-uv run eval-card-registry sync --config hfopenllm_v2
+uv run eval-entity-registry seed
+uv run eval-entity-registry sync --config hfopenllm_v2
 ```
 
 Data is stored as one parquet config per table in the HF Dataset repo.
@@ -761,7 +761,7 @@ Configure the Space in HF Space Settings:
 **Local test of read-only mode:**
 
 ```bash
-READ_ONLY=true LOCAL_MODE=true uv run uvicorn eval_card_registry.main:app --reload
+READ_ONLY=true LOCAL_MODE=true uv run uvicorn eval_entity_registry.main:app --reload
 ```
 
 See `deploy/END_TO_END.md` for a step-by-step verification guide (local smoke

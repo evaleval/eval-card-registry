@@ -83,7 +83,7 @@ jobs:
       # any alias double-claim / schema breakage a refresh commit introduced
       # before we publish). LOCAL_MODE keeps it offline + credential-free.
       - name: Seed (validate merge)
-        run: LOCAL_MODE=true uv run eval-card-registry seed --local
+        run: LOCAL_MODE=true uv run eval-entity-registry seed --local
 
       - name: Run pytest
         run: LOCAL_MODE=true uv run pytest -q

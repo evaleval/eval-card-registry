@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Push the eval-card-registry to its HF Space.
+# Push the eval-entity-registry to its HF Space.
 #
 # Prerequisites:
 #   - huggingface-cli logged in (or HF_TOKEN set)
@@ -64,7 +64,7 @@ for attempt in range(5):
     try:
         api.upload_folder(
             folder_path=folder, repo_id=repo, repo_type="space",
-            commit_message="Deploy eval-card-registry service",
+            commit_message="Deploy eval-entity-registry service",
         )
         break
     except Exception as e:  # noqa: BLE001

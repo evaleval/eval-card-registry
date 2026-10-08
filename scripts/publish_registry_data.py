@@ -190,7 +190,7 @@ def _run_seed() -> int:
     env = dict(os.environ)
     env["LOCAL_MODE"] = "true"
     proc = subprocess.run(
-        ["uv", "run", "eval-card-registry", "seed", "--local"],
+        ["uv", "run", "eval-entity-registry", "seed", "--local"],
         cwd=REPO_ROOT,
         env=env,
     )

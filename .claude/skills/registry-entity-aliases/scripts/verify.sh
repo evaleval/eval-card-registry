@@ -8,5 +8,5 @@
 #         print(r.resolve('your-slug', entity_type='benchmark').canonical_id)"
 set -euo pipefail
 rm -f fixtures/*.parquet
-uv run eval-card-registry seed --local
+uv run eval-entity-registry seed --local
 echo "seed rebuilt -> fixtures/  (now run Resolver.from_parquet('fixtures/') + pytest)"

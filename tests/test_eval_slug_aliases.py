@@ -3,7 +3,7 @@
 Guards that each slug in SLUG_CANONICALS attaches to an existing canonical entity
 (not an alias-minted phantom) at its HF-true id, with no shadow duplicate under a
 different spelling or org namespace. Skips if fixtures aren't built (run
-`eval-card-registry seed --local` first).
+`eval-entity-registry seed --local` first).
 """
 import re
 from pathlib import Path
@@ -67,7 +67,7 @@ SLUG_CANONICALS = {
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

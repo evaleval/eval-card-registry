@@ -5,7 +5,7 @@ identity for the dotted names under it, once nothing else in the name resolves.
 B — the whole namespaced `metric_id` may itself be a registered alias.
 C — a versioned harness string resolves via its bare name.
 
-Skips if fixtures aren't built (run `eval-card-registry seed --local` first).
+Skips if fixtures aren't built (run `eval-entity-registry seed --local` first).
 """
 from pathlib import Path
 
@@ -18,7 +18,7 @@ CATCH_ALL = frozenset({"score", "mean-score", "overall"})
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

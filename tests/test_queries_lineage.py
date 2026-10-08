@@ -8,7 +8,7 @@ import json
 import pandas as pd
 import pytest
 
-from eval_card_registry.store import hf_store, queries, schemas
+from eval_entity_registry.store import hf_store, queries, schemas
 
 
 @pytest.fixture

@@ -1,16 +1,16 @@
 """Single-sourced host-token → inference_platform map for the fuzzy strategy.
 
 The resolver is a STANDALONE package — it must NOT hard-depend on
-``eval_card_registry``. But the host-token → ``inference_platforms.id``
+``eval_entity_registry``. But the host-token → ``inference_platforms.id``
 mapping has exactly ONE authority: ``seed/inference_platforms.yaml``. The
 registry exposes that data via
-``eval_card_registry.lib.inference_platforms_map``.
+``eval_entity_registry.lib.inference_platforms_map``.
 
 To keep the resolver standalone while still single-sourcing the DATA (no
 hand-copied literal of the host→platform pairs), this loader reads the same
 authored YAML through TWO fallback channels, in order:
 
-1. ``eval_card_registry.lib.inference_platforms_map`` — the registry's own
+1. ``eval_entity_registry.lib.inference_platforms_map`` — the registry's own
    accessor. Available whenever the registry package is importable (the
    workspace dev env, and the producer's path-dep env when the registry is
    installed alongside the resolver).
@@ -53,7 +53,7 @@ def _coerce_aliases(raw: Any) -> list[str]:
 def _load_via_registry_lib() -> Optional[dict[str, Optional[str]]]:
     """Channel 1: the registry's own single-source accessor, if importable."""
     try:
-        from eval_card_registry.lib.inference_platforms_map import (  # type: ignore
+        from eval_entity_registry.lib.inference_platforms_map import (  # type: ignore
             all_host_tokens,
             get_host_token_platform,
         )

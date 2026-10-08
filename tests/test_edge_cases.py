@@ -4,9 +4,9 @@ Edge case tests: degenerate inputs, alias uniqueness, normalization, API consist
 import pytest
 from fastapi.testclient import TestClient
 
-from eval_card_registry.main import app
-from eval_card_registry.store import hf_store, schemas, queries
-from eval_card_registry.services.resolution_service import ResolutionService, _slugify
+from eval_entity_registry.main import app
+from eval_entity_registry.store import hf_store, schemas, queries
+from eval_entity_registry.services.resolution_service import ResolutionService, _slugify
 from eval_entity_resolver.normalization import normalize
 
 

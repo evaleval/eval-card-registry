@@ -30,10 +30,10 @@ from typing import Any, Iterator, Optional
 
 from eval_entity_resolver.eee import clean_eval_name, extract_metric
 
-from eval_card_registry.config import settings
-from eval_card_registry.store.hf_store import RegistryStore
-from eval_card_registry.store import queries
-from eval_card_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.config import settings
+from eval_entity_registry.store.hf_store import RegistryStore
+from eval_entity_registry.store import queries
+from eval_entity_registry.services.resolution_service import ResolutionService
 
 
 def _iter_eee_config(source_config: str) -> Iterator[dict]:

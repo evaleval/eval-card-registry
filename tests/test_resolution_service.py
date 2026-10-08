@@ -2,14 +2,14 @@
 import json
 import pytest
 
-from eval_card_registry.store.hf_store import RegistryStore
-from eval_card_registry.store import schemas
-from eval_card_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.store.hf_store import RegistryStore
+from eval_entity_registry.store import schemas
+from eval_entity_registry.services.resolution_service import ResolutionService
 
 
 def _fresh_store() -> RegistryStore:
     store = RegistryStore()
-    from eval_card_registry.store import schemas as s
+    from eval_entity_registry.store import schemas as s
     store._tables = {name: s.empty(name) for name in [
         "canonical_orgs",
         "canonical_models", "canonical_benchmarks", "canonical_metrics",
@@ -20,7 +20,7 @@ def _fresh_store() -> RegistryStore:
 
 
 def _seed_benchmark(store: RegistryStore, id: str, display_name: str):
-    from eval_card_registry.store import queries
+    from eval_entity_registry.store import queries
     import json
     queries.upsert_entity(store, "canonical_benchmarks", {
         "id": id,
@@ -69,7 +69,7 @@ class TestHubStatsIndexPriority:
         )
         svc = ResolutionService(store)
         a2c, _ = svc._build_hub_stats_indices()
-        from eval_card_registry.services.hub_stats import normalize as _hsnorm
+        from eval_entity_registry.services.hub_stats import normalize as _hsnorm
 
         # ids-first: the contested form resolves to the ID owner (A), not the
         # alias owner (B) — a baseModels edge to DeepSeek-V3.1 points at the real
@@ -118,7 +118,7 @@ class TestResolutionService:
         assert result["review_status"] == "draft"
 
     def test_idempotent_on_second_call(self):
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         store = _fresh_store()
         svc = ResolutionService(store)
         r1 = svc.resolve("Novel Benchmark X", "benchmark", "cfg", None)
@@ -152,7 +152,7 @@ class TestResolutionService:
         """A subset aliased to a parent entity resolves to the parent, not a new entity."""
         store = _fresh_store()
         _seed_benchmark(store, "parent-bench", "Parent Bench")
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         queries.add_alias(store, {
             "raw_value": "Parent Bench Subset X",
             "entity_type": "benchmark",
@@ -184,7 +184,7 @@ class TestResolutionService:
         Regression: the previous implementation re-enriched via
         `build_result(canonical_id=root, ...)` which clobbered the leaf —
         guard that the leaf still flows through unmodified."""
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         store = _fresh_store()
         # Seed org so the model FK resolves.
         queries.upsert_entity(store, "canonical_orgs", {
@@ -253,7 +253,7 @@ class TestResolutionService:
         fix returns the resolver's `result` directly — the previous
         implementation called `build_result(canonical_id=root, ...)`
         which clobbered `resolved_leaf_id` to equal the root."""
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         store = _fresh_store()
         queries.upsert_entity(store, "canonical_orgs", {
             "id": "allenai", "display_name": "Allen AI", "parent_org_id": None,
@@ -310,7 +310,7 @@ class TestResolutionService:
 
 
 def _seed_org(store, org_id="meta"):
-    from eval_card_registry.store import queries
+    from eval_entity_registry.store import queries
     queries.upsert_entity(store, "canonical_orgs", {
         "id": org_id, "display_name": org_id, "parent_org_id": None,
         "website": None, "hf_org": org_id, "kind": "lab",
@@ -319,7 +319,7 @@ def _seed_org(store, org_id="meta"):
 
 
 def _seed_model(store, mid, org_id, *, aliases=None):
-    from eval_card_registry.store import queries
+    from eval_entity_registry.store import queries
     queries.upsert_entity(store, "canonical_models", {
         "id": mid, "display_name": mid,
         "developer": None, "org_id": org_id, "family": None,
@@ -358,7 +358,7 @@ class TestTier3Inference:
         r = svc.resolve("Cohere May 2024", "model", None, None)
         assert r["created_new"] is True
         assert r["resolution_source"] == "inferred"
-        from eval_card_registry.services.resolution_service import _table_with_pending
+        from eval_entity_registry.services.resolution_service import _table_with_pending
         mid = r["canonical_id"]
         row = _table_with_pending(store, "canonical_models")
         row = row[row["id"] == mid].iloc[0]
@@ -371,7 +371,7 @@ class TestTier3Inference:
         store = _fresh_store()
         svc = ResolutionService(store)
         r = svc.resolve("unknown/iSWE_Agent", "model", None, None)
-        from eval_card_registry.services.resolution_service import _table_with_pending
+        from eval_entity_registry.services.resolution_service import _table_with_pending
         mid = r["canonical_id"]
         row = _table_with_pending(store, "canonical_models")
         row = row[row["id"] == mid].iloc[0]

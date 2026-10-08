@@ -73,8 +73,8 @@ jobs:
           # catch a missing/corrupt oracle. Assert it loudly HERE so a relocated/
           # missing-oracle regression fails as an INFRA error in this smoke step
           # (distinct from, and as loud as, a data-regression in the next step).
-          uv run python -c "import json; from eval_card_registry.lib.seed_io import resolve_oracle_path as r; p=r(); assert p.exists(), f'oracle missing: {p}'; assert 'resolutions' in json.loads(p.read_text()), f'oracle malformed: {p}'"
-          LOCAL_MODE=true uv run eval-card-registry seed --local
+          uv run python -c "import json; from eval_entity_registry.lib.seed_io import resolve_oracle_path as r; p=r(); assert p.exists(), f'oracle missing: {p}'; assert 'resolutions' in json.loads(p.read_text()), f'oracle malformed: {p}'"
+          LOCAL_MODE=true uv run eval-entity-registry seed --local
           LOCAL_MODE=true uv run pytest tests/test_gate_invariants.py --collect-only -q
 
       # REGRESSION gate — the invariant suite over the fixtures that the smoke

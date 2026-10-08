@@ -33,9 +33,9 @@ from pathlib import Path
 
 import duckdb
 
-from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml, load_entries_from_yaml
+from eval_entity_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml, load_entries_from_yaml
 
-from eval_card_registry.services.hub_stats import PARQUET_URL, QUERY_COLUMNS
+from eval_entity_registry.services.hub_stats import PARQUET_URL, QUERY_COLUMNS
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 ORGS_PATH = REPO_ROOT / "seed" / "orgs.yaml"

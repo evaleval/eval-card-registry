@@ -4,7 +4,7 @@ Covers the GLUE / SuperGLUE / ANLI / HEAD-QA / LAMBADA task families and the
 harness metric vocabulary. Each expected id is the entity a harness-derived
 converter (every_eval_ever's lm_harmony adapter) joins on, so a regression here
 fragments one benchmark's results across two ids. Skips if fixtures aren't
-built (run `eval-card-registry seed --local` first).
+built (run `eval-entity-registry seed --local` first).
 """
 import json
 from pathlib import Path
@@ -96,7 +96,7 @@ FAMILIES = {
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

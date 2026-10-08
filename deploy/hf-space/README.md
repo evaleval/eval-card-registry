@@ -1,5 +1,5 @@
 ---
-title: eval-card-registry
+title: eval-entity-registry
 emoji: 🗂️
 colorFrom: blue
 colorTo: green
@@ -8,7 +8,7 @@ app_port: 7860
 pinned: false
 ---
 
-# eval-card-registry
+# eval-entity-registry
 
 Query-only disambiguation API for AI evaluation entity names. Resolves raw benchmark / model / metric / harness strings (e.g. `"MATH Level 5"`) to stable canonical IDs (`math`).
 

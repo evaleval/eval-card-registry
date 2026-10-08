@@ -33,7 +33,7 @@ import pandas as pd
 import pytest
 import yaml
 
-from eval_card_registry.lib.seed_io import resolve_oracle_path
+from eval_entity_registry.lib.seed_io import resolve_oracle_path
 
 from eval_entity_resolver.resolver import Resolver
 from eval_entity_resolver.strategies.fuzzy import _ORG_ALIASES
@@ -1543,7 +1543,7 @@ def test_no_two_full_entries_share_folded_identity(hf_to_dev):
     normalize alike); a size-signature difference also keeps entries apart
     (opt-1.3b vs opt-13b)."""
     rfm = _import_refresh_module()
-    from eval_card_registry.lib.collision_fold import _bsizes
+    from eval_entity_registry.lib.collision_fold import _bsizes
 
     oracle_fixed = set()
     for v in json.loads(ORACLE_PATH.read_text())["resolutions"].values():

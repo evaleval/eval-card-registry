@@ -7,15 +7,15 @@ from fastapi.responses import JSONResponse
 import math
 import json
 
-from eval_card_registry.config import settings
-from eval_card_registry.store.hf_store import get_store, QUERY_TABLE_NAMES
-from eval_card_registry.services.resolution_service import ResolutionService
-from eval_card_registry.services.log_writer import ResolveLogWriter
-from eval_card_registry.api.routes_resolve import router as resolve_router
-from eval_card_registry.api.routes_entities import router as entities_router
-from eval_card_registry.api.routes_aliases import router as aliases_router
-from eval_card_registry.api.routes_orgs import router as orgs_router
-from eval_card_registry.api.routes_health import router as health_router
+from eval_entity_registry.config import settings
+from eval_entity_registry.store.hf_store import get_store, QUERY_TABLE_NAMES
+from eval_entity_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.services.log_writer import ResolveLogWriter
+from eval_entity_registry.api.routes_resolve import router as resolve_router
+from eval_entity_registry.api.routes_entities import router as entities_router
+from eval_entity_registry.api.routes_aliases import router as aliases_router
+from eval_entity_registry.api.routes_orgs import router as orgs_router
+from eval_entity_registry.api.routes_health import router as health_router
 
 
 @asynccontextmanager
@@ -84,7 +84,7 @@ async def _validation_error(request: Request, exc: RequestValidationError):
 
 
 app = FastAPI(
-    title="eval-card-registry",
+    title="eval-entity-registry",
     description="Entity resolution registry for EEE evaluation data.",
     version="0.1.0",
     lifespan=lifespan,

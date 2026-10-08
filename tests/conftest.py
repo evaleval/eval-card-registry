@@ -3,8 +3,8 @@ import importlib.util
 from pathlib import Path
 
 import pytest
-from eval_card_registry.config import settings
-from eval_card_registry.store import queries, hf_store
+from eval_entity_registry.config import settings
+from eval_entity_registry.store import queries, hf_store
 
 # Repo root (parent of tests/) — scripts/ live one level up from this file.
 _REPO_ROOT = Path(__file__).resolve().parent.parent

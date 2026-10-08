@@ -13,9 +13,9 @@ import pytest
 import yaml
 from typer.testing import CliRunner
 
-from eval_card_registry.cli import app
-from eval_card_registry.lib.inference_platforms_map import get_host_token_platform
-from eval_card_registry.store import hf_store
+from eval_entity_registry.cli import app
+from eval_entity_registry.lib.inference_platforms_map import get_host_token_platform
+from eval_entity_registry.store import hf_store
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SEED_DIR = REPO_ROOT / "seed"

@@ -15,7 +15,7 @@ import pandas as pd
 import yaml
 from typer.testing import CliRunner
 
-from eval_card_registry.cli import app
+from eval_entity_registry.cli import app
 
 
 def _write(p: Path, data) -> None:

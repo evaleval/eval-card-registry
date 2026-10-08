@@ -18,8 +18,8 @@ from typing import Any, Callable, Optional
 
 import pandas as pd
 
-from eval_card_registry.store.hf_store import RegistryStore
-from eval_card_registry.store import schemas
+from eval_entity_registry.store.hf_store import RegistryStore
+from eval_entity_registry.store import schemas
 
 
 def _now() -> str:

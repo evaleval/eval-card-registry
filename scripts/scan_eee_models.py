@@ -90,8 +90,8 @@ def check_coverage(models: Counter) -> tuple[dict[str, dict], dict]:
     """Resolve each unique raw_id against the local registry. Returns
     (per-id results, summary stats)."""
     os.environ["LOCAL_MODE"] = "true"
-    from eval_card_registry.store.hf_store import get_store
-    from eval_card_registry.services.resolution_service import ResolutionService
+    from eval_entity_registry.store.hf_store import get_store
+    from eval_entity_registry.services.resolution_service import ResolutionService
 
     store = get_store()
     store.load()

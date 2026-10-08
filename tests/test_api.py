@@ -2,17 +2,17 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from eval_card_registry.main import app
-from eval_card_registry.store.hf_store import get_store
-from eval_card_registry.store import schemas as s
-from eval_card_registry.services.resolution_service import ResolutionService
-from eval_card_registry.services.log_writer import ResolveLogWriter
+from eval_entity_registry.main import app
+from eval_entity_registry.store.hf_store import get_store
+from eval_entity_registry.store import schemas as s
+from eval_entity_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.services.log_writer import ResolveLogWriter
 
 
 @pytest.fixture(autouse=True)
 def fresh_store(monkeypatch):
     """Replace the module-level store singleton with a fresh in-memory store."""
-    from eval_card_registry.store import hf_store
+    from eval_entity_registry.store import hf_store
 
     store = hf_store.RegistryStore()
     store._tables = {name: s.empty(name) for name in [

@@ -4,7 +4,7 @@ Every raw string below is one the every_eval_ever AlpacaEval converter
 (`every_eval_ever/converters/alpaca_eval/adapter.py`) hands to the registry.
 A miss there is not a resolver error — the converter falls back to a local
 `alpaca_eval.*` id, which fragments AlpacaEval results across two ids in the
-merged view. Skips if fixtures aren't built (run `eval-card-registry seed
+merged view. Skips if fixtures aren't built (run `eval-entity-registry seed
 --local` first).
 """
 from pathlib import Path
@@ -41,7 +41,7 @@ METRICS = {
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

@@ -105,8 +105,8 @@ def promotion_map() -> dict[str, str]:
         for m in re.finditer(r"(?m)^- id: (\S+)$", path.read_text())
     }
     sys.path.insert(0, str(REPO_ROOT / "src"))
-    from eval_card_registry.lib.collision_fold import _bsizes
-    from eval_card_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
+    from eval_entity_registry.lib.collision_fold import _bsizes
+    from eval_entity_registry.lib.seed_io import build_hf_to_dev_from_orgs_yaml
 
     hf_to_dev = build_hf_to_dev_from_orgs_yaml(REPO_ROOT / "seed" / "orgs.yaml")
 

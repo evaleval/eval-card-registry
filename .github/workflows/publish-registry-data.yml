@@ -88,7 +88,7 @@ jobs:
       # the seed under change. Seeding here makes the PR check actually exercise
       # the gates against the diff. Mirrors seed.yml.
       - name: Seed fixtures from the YAML under review
-        run: LOCAL_MODE=true uv run eval-card-registry seed --local
+        run: LOCAL_MODE=true uv run eval-entity-registry seed --local
 
       - name: Run pytest (gates validate the seeded fixtures)
         run: LOCAL_MODE=true uv run pytest
@@ -126,7 +126,7 @@ jobs:
         run: uv sync
 
       - name: Seed fixtures from the checkout being published
-        run: LOCAL_MODE=true uv run eval-card-registry seed --local
+        run: LOCAL_MODE=true uv run eval-entity-registry seed --local
 
       - name: Run pytest before publishing
         run: LOCAL_MODE=true uv run pytest

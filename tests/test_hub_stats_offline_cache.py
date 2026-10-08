@@ -64,7 +64,7 @@ def test_enrichment_reproduces_a_basemodels_parent_offline(mod):
     base to a canonical — so the test is independent of core.yaml's contents."""
     import json
 
-    from eval_card_registry.services.hub_stats import (
+    from eval_entity_registry.services.hub_stats import (
         QUERY_COLUMNS,
         enrich_draft_from_row,
         normalize as _nz,

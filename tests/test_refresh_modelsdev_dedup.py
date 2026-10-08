@@ -27,7 +27,7 @@ import yaml
 
 from conftest import load_script_module
 
-from eval_card_registry.lib.seed_io import resolve_oracle_path
+from eval_entity_registry.lib.seed_io import resolve_oracle_path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SPEC_DIR = REPO_ROOT  / "curation"

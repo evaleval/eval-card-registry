@@ -1,4 +1,4 @@
-# AGENTS.md — eval-card-registry
+# AGENTS.md — eval-entity-registry
 
 Entry point for coding agents in this repo. (Open standard — see https://agents.md.
 Claude Code also reads this file and any `.claude/skills/`.)
@@ -26,7 +26,7 @@ datastore) to stable **canonical ids**, and stores resolved results.
 - **Don't add mechanical variants** — the `normalized` matcher already collapses
   case + separators + dots. See `README.md` → `## ID conventions` for the id standards
   and `CONTRIBUTING.md` for the seed/verify workflow.
-- Verify with `find fixtures -name '*.parquet' -delete 2>/dev/null || true; uv run eval-card-registry seed --local`
+- Verify with `find fixtures -name '*.parquet' -delete 2>/dev/null || true; uv run eval-entity-registry seed --local`
   (prune stale fixtures first) → `Resolver.from_parquet("fixtures/")` → `pytest`.
   A PR states which slugs were `no_match` before and their new canonical.
 

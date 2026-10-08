@@ -1,7 +1,7 @@
 import pytest
 import yaml
 
-from eval_card_registry.lib.seed_io import safe_load_yaml
+from eval_entity_registry.lib.seed_io import safe_load_yaml
 
 
 def test_safe_load_yaml_keeps_safe_loader_semantics():

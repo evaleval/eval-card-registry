@@ -30,7 +30,7 @@ Usage:
     python scripts/refresh_from_modelsdev.py --dry-run    # diff vs current
 
 Re-running this is safe: it overwrites the generated YAML. The seed CLI
-(`uv run eval-card-registry seed --local`) is idempotent over the result.
+(`uv run eval-entity-registry seed --local`) is idempotent over the result.
 
 Source: https://models.dev (MIT, (c) 2025 models.dev)
 """
@@ -66,8 +66,8 @@ class UnionFind:
     def union(self, a: str, b: str) -> None:
         self._parent[self.find(a)] = self.find(b)
 
-from eval_card_registry.lib.collision_fold import _bsizes, collision_key
-from eval_card_registry.lib.seed_io import (
+from eval_entity_registry.lib.collision_fold import _bsizes, collision_key
+from eval_entity_registry.lib.seed_io import (
     WEAK_SCALAR_FIELDS,
     resolve_oracle_path,
     safe_load_yaml,
@@ -1800,7 +1800,7 @@ def _group_hf_target(
     ]
     mint_variants = _variant_tokens(mint_id)
 
-    from eval_card_registry.lib.collision_fold import _bsizes
+    from eval_entity_registry.lib.collision_fold import _bsizes
 
     mint_sizes = _bsizes(mint_id.rsplit("/", 1)[-1])
 
@@ -2660,7 +2660,7 @@ def _pick_twin_candidate(cid: str, candidates: list[dict]) -> dict | None:
     for unambiguous letter/digit respellings that ``_identity_sig`` intentionally
     keeps conservative.
     """
-    from eval_card_registry.lib.collision_fold import _bsizes
+    from eval_entity_registry.lib.collision_fold import _bsizes
 
     size_matches = [e for e in candidates if _bsizes(cid) == _bsizes(e["id"])]
     if not size_matches:

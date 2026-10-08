@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "eval-card-registry"
+name = "eval-entity-registry"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
@@ -22,10 +22,10 @@ dependencies = [
 ]
 
 [project.scripts]
-eval-card-registry = "eval_card_registry.cli:app"
+eval-entity-registry = "eval_entity_registry.cli:app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/eval_card_registry"]
+packages = ["src/eval_entity_registry"]
 
 [tool.uv.workspace]
 members = ["packages/eval-entity-resolver"]

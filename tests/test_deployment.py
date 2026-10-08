@@ -4,11 +4,11 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch
 
-from eval_card_registry.main import app
-from eval_card_registry.store import schemas as s
-from eval_card_registry.store.hf_store import RegistryStore, QUERY_TABLE_NAMES, TABLE_NAMES
-from eval_card_registry.services.resolution_service import ResolutionService
-from eval_card_registry.services.log_writer import ResolveLogWriter, _MAX_BUFFER_SIZE
+from eval_entity_registry.main import app
+from eval_entity_registry.store import schemas as s
+from eval_entity_registry.store.hf_store import RegistryStore, QUERY_TABLE_NAMES, TABLE_NAMES
+from eval_entity_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.services.log_writer import ResolveLogWriter, _MAX_BUFFER_SIZE
 
 
 # ---------------------------------------------------------------------------
@@ -62,7 +62,7 @@ def _seed_benchmark(store: RegistryStore):
 @pytest.fixture
 def full_store(monkeypatch):
     """Full store with all 8 tables (normal mode)."""
-    from eval_card_registry.store import hf_store
+    from eval_entity_registry.store import hf_store
     store = _make_store(TABLE_NAMES)
     monkeypatch.setattr(hf_store, "_store", store)
     app.state.resolution_service = ResolutionService(store)
@@ -73,7 +73,7 @@ def full_store(monkeypatch):
 @pytest.fixture
 def query_store(monkeypatch):
     """Store with only query tables (simulates read-only mode loading)."""
-    from eval_card_registry.store import hf_store
+    from eval_entity_registry.store import hf_store
     store = _make_store(QUERY_TABLE_NAMES)
     monkeypatch.setattr(hf_store, "_store", store)
     app.state.resolution_service = ResolutionService(store)
@@ -134,7 +134,7 @@ class TestHealthMissingTables:
 class TestReadOnlyGating:
     @pytest.fixture(autouse=True)
     def _set_read_only(self, monkeypatch, full_store):
-        from eval_card_registry import config
+        from eval_entity_registry import config
         monkeypatch.setattr(config.settings, "read_only", True)
         yield
         monkeypatch.setattr(config.settings, "read_only", False)
@@ -241,7 +241,7 @@ class TestInputValidation:
 class TestReadOnlyResolve:
     @pytest.fixture(autouse=True)
     def _set_read_only(self, monkeypatch, full_store):
-        from eval_card_registry import config
+        from eval_entity_registry import config
         monkeypatch.setattr(config.settings, "read_only", True)
         _seed_benchmark(full_store)
         # Rebuild the singleton so it picks up the seeded data
@@ -401,7 +401,7 @@ class TestResolveLogWriter:
 class TestReadOnlyResolveEdgeCases:
     @pytest.fixture(autouse=True)
     def _set_read_only(self, monkeypatch, full_store):
-        from eval_card_registry import config
+        from eval_entity_registry import config
         monkeypatch.setattr(config.settings, "read_only", True)
         app.state.resolution_service = ResolutionService(full_store)
 

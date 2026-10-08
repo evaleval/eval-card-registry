@@ -11,10 +11,10 @@ from unittest.mock import patch
 
 import pytest
 
-from eval_card_registry.config import settings
-from eval_card_registry.services import hub_stats as _hs
-from eval_card_registry.services.resolution_service import ResolutionService
-from eval_card_registry.store import hf_store, queries, schemas
+from eval_entity_registry.config import settings
+from eval_entity_registry.services import hub_stats as _hs
+from eval_entity_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.store import hf_store, queries, schemas
 
 
 @pytest.fixture

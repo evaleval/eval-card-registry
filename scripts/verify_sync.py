@@ -8,7 +8,7 @@ Usage:
 import os
 os.environ["LOCAL_MODE"] = "true"
 
-from eval_card_registry.store.hf_store import get_store
+from eval_entity_registry.store.hf_store import get_store
 
 store = get_store()
 store.load()

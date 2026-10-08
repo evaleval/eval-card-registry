@@ -126,7 +126,7 @@ class HfIdVerifier:
             return None
         if not index:
             return None
-        from eval_card_registry.services.hub_stats import normalize as _hsnorm
+        from eval_entity_registry.services.hub_stats import normalize as _hsnorm
 
         entry = index.get(_hsnorm(raw_value))
         if not entry:
@@ -143,7 +143,7 @@ class HfIdVerifier:
         return self._hit(raw_value, entry, "hub_stats_index")
 
     def _check_live(self, raw_value: str, key: str) -> Optional[HfIdHit]:
-        from eval_card_registry.config import settings
+        from eval_entity_registry.config import settings
 
         if not settings.hf_live_id_check_enabled:
             return None
@@ -172,7 +172,7 @@ class HfIdVerifier:
                 self._in_flight.discard(key)
 
     def _live_lookup(self, raw_value: str, key: str) -> Optional[HfIdHit]:
-        from eval_card_registry.config import settings
+        from eval_entity_registry.config import settings
 
         try:
             from huggingface_hub import HfApi

@@ -3,7 +3,7 @@ separator spellings collapses into ONE canonical, with size-conflict and curated
 guards against false merges."""
 import json
 
-from eval_card_registry.lib.collision_fold import fold_collisions, collision_key
+from eval_entity_registry.lib.collision_fold import fold_collisions, collision_key
 
 
 def _e(id, source=None, aliases=None, parents=None, **kw):

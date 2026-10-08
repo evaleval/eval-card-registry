@@ -132,7 +132,7 @@ KNOWN_EXTRACTION_MISROUTES = frozenset({
 
 pytestmark = pytest.mark.skipif(
     not (_FIXTURES / "aliases.parquet").exists(),
-    reason="fixtures not built; run `eval-card-registry seed --local`",
+    reason="fixtures not built; run `eval-entity-registry seed --local`",
 )
 
 

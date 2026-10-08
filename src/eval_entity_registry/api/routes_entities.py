@@ -3,16 +3,16 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from eval_card_registry.api.deps import writable as _writable
-from eval_card_registry.api.schemas import (
+from eval_entity_registry.api.deps import writable as _writable
+from eval_entity_registry.api.schemas import (
     BenchmarkCreate, BenchmarkPatch,
     HarnessCreate, HarnessPatch,
     MetricCreate, MetricPatch,
     ModelCreate, ModelPatch,
     ReviewStatus,
 )
-from eval_card_registry.store.hf_store import get_store, RegistryStore
-from eval_card_registry.store import queries
+from eval_entity_registry.store.hf_store import get_store, RegistryStore
+from eval_entity_registry.store import queries
 
 router = APIRouter()
 

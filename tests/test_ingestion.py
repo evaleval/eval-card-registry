@@ -1,13 +1,13 @@
 """Tests for ingestion pipeline: sub-category detection, per-record processing, and eval_results table."""
 import pytest
 
-from eval_card_registry.services.ingestion import (
+from eval_entity_registry.services.ingestion import (
     _detect_sub_categories, process_record,
 )
-from eval_card_registry.store.hf_store import RegistryStore
-from eval_card_registry.services.resolution_service import ResolutionService
-from eval_card_registry.store import schemas as s
-from eval_card_registry.store import queries
+from eval_entity_registry.store.hf_store import RegistryStore
+from eval_entity_registry.services.resolution_service import ResolutionService
+from eval_entity_registry.store import schemas as s
+from eval_entity_registry.store import queries
 
 
 def _fresh_store() -> RegistryStore:
@@ -164,7 +164,7 @@ class TestProcessRecord:
     def test_process_record_returns_flat_result_rows(self):
         store = _fresh_store()
         svc = ResolutionService(store)
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         run_id = queries.start_sync_run(store, "test_config", False)
 
         record = self._make_record()
@@ -183,7 +183,7 @@ class TestProcessRecord:
     def test_process_record_missing_model_returns_none(self):
         store = _fresh_store()
         svc = ResolutionService(store)
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         run_id = queries.start_sync_run(store, "test_config", False)
 
         record = {"model_info": {}, "evaluation_results": []}
@@ -194,7 +194,7 @@ class TestProcessRecord:
         """One EEE record with 3 benchmarks → 3 flat rows."""
         store = _fresh_store()
         svc = ResolutionService(store)
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         run_id = queries.start_sync_run(store, "test_config", False)
 
         record = {
@@ -226,7 +226,7 @@ class TestProcessRecord:
         """A score of 0 or 0.0 must not be treated as missing."""
         store = _fresh_store()
         svc = ResolutionService(store)
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         run_id = queries.start_sync_run(store, "test_config", False)
 
         record = {
@@ -248,7 +248,7 @@ class TestProcessRecord:
         """If an eval result has no evaluation_name, it's skipped but indices stay stable."""
         store = _fresh_store()
         svc = ResolutionService(store)
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         run_id = queries.start_sync_run(store, "test_config", False)
 
         record = {
@@ -274,7 +274,7 @@ class TestProcessRecord:
         """Record with model but no evaluation_results → empty list (not None)."""
         store = _fresh_store()
         svc = ResolutionService(store)
-        from eval_card_registry.store import queries
+        from eval_entity_registry.store import queries
         run_id = queries.start_sync_run(store, "test_config", False)
 
         record = {
